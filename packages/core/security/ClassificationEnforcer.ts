@@ -104,7 +104,7 @@ export class ClassificationEnforcer {
   async enforceClassification()
     classification: DataClassificationLevel,
     operation: OperationContext,
-    currentControls: string[] = []
+    currentControls: string[] = [],
   ): Promise<EnforcementResult> {
     const auditId = this.generateAuditId(operation);
     try {
@@ -123,13 +123,13 @@ export class ClassificationEnforcer {
         );
       }
       // Validate access requirements
-      const accessViolations = await this.validateAccessRequirements(;)
+      const accessViolations = await this.validateAccessRequirements(;);
         requirements.access,
         operation,
         currentControls
       );
       // Validate operation-specific requirements
-      const operationViolations = await this.validateOperationRequirements(;)
+      const operationViolations = await this.validateOperationRequirements(;);
         classification,
         operation,
         requirements,
@@ -138,21 +138,21 @@ export class ClassificationEnforcer {
       // Combine all violations
       const allViolations = [...accessViolations, ...operationViolations];
       // Calculate risk score
-      const riskScore = this.calculateRiskScore(;)
+      const riskScore = this.calculateRiskScore(;);
         classification,
         operation,
         allViolations,
         currentControls
       );
       // Determine if operation is allowed
-      const allowed = this.shouldAllowOperation(;)
+      const allowed = this.shouldAllowOperation(;);
         allViolations,
         riskScore,
         classification,
         operation
       );
       // Get required controls
-      const requiredControls = this.getRequiredControls(;)
+      const requiredControls = this.getRequiredControls(;);
         classification,
         operation,
         requirements
@@ -233,12 +233,12 @@ export class ClassificationEnforcer {
       environment: context.environment || 'production',
       timestamp: new Date(),
       source: context.source || 'api',
-      requestId: context.requestId || this.generateRequestId()
+      requestId: context.requestId || this.generateRequestId(),
     };
     // Get handling requirements
     const requirements = this.getEffectiveRequirements(classification);
     // Check authentication requirements
-    const authDecision = this.checkAuthenticationRequirements(;)
+    const authDecision = this.checkAuthenticationRequirements(;);
       requirements.access,
       fullContext
     );
@@ -250,7 +250,7 @@ export class ClassificationEnforcer {
       };
     }
     // Check authorization requirements
-    const authzDecision = this.checkAuthorizationRequirements(;)
+    const authzDecision = this.checkAuthorizationRequirements(;);
       requirements.access,
       fullContext,
       classification
@@ -268,20 +268,20 @@ export class ClassificationEnforcer {
       if (!timeDecision.met) {
         return {
           granted: false,
-          reason: timeDecision.reason || 'Outside allowed time window'
+          reason: timeDecision.reason || 'Outside allowed time window',
         };
       }
     }
     // Check purpose limitation
     if (requirements.access.purposeLimitation) {
-      const purposeDecision = this.checkPurposeLimitation(;)
+      const purposeDecision = this.checkPurposeLimitation(;);
         fullContext.purpose,
         classification
       );
       if (!purposeDecision.met) {
         return {
           granted: false,
-          reason: 'Purpose not allowed for this classification'
+          reason: 'Purpose not allowed for this classification',
         };
       }
     }
@@ -672,7 +672,7 @@ export class ClassificationEnforcer {
       PUBLIC: 24 * 30, // 30 days
       INTERNAL: 24 * 7, // 7 days
       CONFIDENTIAL: 24, // 1 day
-      RESTRICTED: 4 // 4 hours
+      RESTRICTED: 4 // 4 hours,
     };
     const hours = expirationHours[classification];
     return new Date(now.getTime() + hours * 60 * 60 * 1000);
@@ -801,7 +801,7 @@ export class ClassificationEnforcer {
         networkRestrictions: this.getNetworkRestrictionsForClassification(classification),
         loggingLevel: dataReqs.transfer.logging as any,
         compressionAllowed: classification === 'PUBLIC' || classification === 'INTERNAL',
-        endToEndEncryption: dataReqs.encryption.inTransit && (classification === 'RESTRICTED' || classification === 'CONFIDENTIAL')
+        endToEndEncryption: dataReqs.encryption.inTransit && (classification === 'RESTRICTED' || classification === 'CONFIDENTIAL'),
       },
       processing: {,
         approvedEnvironments: dataReqs.processingEnvironments || ['production'],
@@ -811,11 +811,11 @@ export class ClassificationEnforcer {
           encryptionRequired: classification !== 'PUBLIC',
           maxTtlSeconds: this.getCacheTtlForClassification(classification),
           purgeOnAccess: classification === 'RESTRICTED',
-          secureEviction: classification !== 'PUBLIC'
+          secureEviction: classification !== 'PUBLIC',
         },
         thirdPartyProcessing: classification === 'PUBLIC' || classification === 'INTERNAL',
         isolationRequired: classification === 'RESTRICTED',
-        auditTrailRequired: classification !== 'PUBLIC'
+        auditTrailRequired: classification !== 'PUBLIC',
       },
       access: {,
         authenticationLevel: authLevelMap[dataReqs.accessControl.authentication] || 'STANDARD',
@@ -824,7 +824,7 @@ export class ClassificationEnforcer {
         timeRestrictions: classification === 'RESTRICTED' || classification === 'CONFIDENTIAL',
         purposeLimitation: classification !== 'PUBLIC',
         auditLogging: auditLevelMap[dataReqs.accessControl.monitoring] || 'STANDARD',
-        exportRestrictions: dataReqs.transfer.restrictions?.includes('export-control') || classification === 'RESTRICTED'
+        exportRestrictions: dataReqs.transfer.restrictions?.includes('export-control') || classification === 'RESTRICTED',
       },
       monitoring: {,
         alertingEnabled: classification !== 'PUBLIC',
@@ -832,7 +832,7 @@ export class ClassificationEnforcer {
         alertThreshold: monitoringLevelMap[dataReqs.accessControl.monitoring] || 'LOW',
         realtimeMonitoring: dataReqs.accessControl.monitoring === 'continuous',
         complianceChecks: classification !== 'PUBLIC',
-        incidentResponse: classification === 'RESTRICTED' || classification === 'CONFIDENTIAL'
+        incidentResponse: classification === 'RESTRICTED' || classification === 'CONFIDENTIAL',
       }
     };
   }
@@ -906,7 +906,7 @@ export class ClassificationEnforcer {
       PUBLIC: 3600, // 1 hour
       INTERNAL: 900, // 15 minutes
       CONFIDENTIAL: 300, // 5 minutes
-      RESTRICTED: 0 // No caching
+      RESTRICTED: 0 // No caching,
     };
     return ttl[classification];
   }
@@ -979,7 +979,7 @@ export class ClassificationEnforcer {
  * Factory function for creating enforcers with presets
  */
 export function createClassificationEnforcer()
-  preset: 'development' | 'staging' | 'production' = 'production'
+  preset: 'development' | 'staging' | 'production' = 'production',
 ): ClassificationEnforcer {
   const configs: Record<string, Partial<ClassificationEnforcementConfig>> = {
     development: {,

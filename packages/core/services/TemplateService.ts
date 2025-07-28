@@ -181,7 +181,7 @@ export class TemplateService {
     const annotations = this.extractAnnotations(nodes, edges);
     // Create graph data with annotations
     const graphData: GraphData = {
-      nodes: nodes.map(node => ({)
+      nodes: nodes.map(node => ({),
         ...node,
         // Clean position data for template storage
         position: { ...node.position }
@@ -274,7 +274,7 @@ export class TemplateService {
       metadata: {,
         ...template.metadata,
         usageCount: template.metadata.usageCount + 1,
-        lastModified: new Date().toISOString()
+        lastModified: new Date().toISOString(),
       }
     });
     // Clone template graph data
@@ -288,7 +288,7 @@ export class TemplateService {
         ...node,
         position: {,
           x: node.position.x + offsetX,
-          y: node.position.y + offsetY
+          y: node.position.y + offsetY,
         }
       }));
       // Update sticky note positions
@@ -296,7 +296,7 @@ export class TemplateService {
         ...note,
         position: {,
           x: note.position.x + offsetX,
-          y: note.position.y + offsetY
+          y: note.position.y + offsetY,
         }
       }));
       // Update region group bounds
@@ -305,7 +305,7 @@ export class TemplateService {
         bounds: {,
           ...region.bounds,
           x: region.bounds.x + offsetX,
-          y: region.bounds.y + offsetY
+          y: region.bounds.y + offsetY,
         }
       }));
     }
@@ -336,7 +336,7 @@ export class TemplateService {
         ...edge,
         id: `${edge.id}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,}
         source: idMap.get(edge.source) || edge.source,
-        target: idMap.get(edge.target) || edge.target
+        target: idMap.get(edge.target) || edge.target,
       }));
       // Update annotation references
       graphData.annotations.nodeLabels = Object.fromEntries()
@@ -347,7 +347,7 @@ export class TemplateService {
       );
       graphData.annotations.regionGroups = graphData.annotations.regionGroups.map(region => ({)
         ...region,
-        nodeIds: region.nodeIds.map(nodeId => idMap.get(nodeId) || nodeId)
+        nodeIds: region.nodeIds.map(nodeId => idMap.get(nodeId) || nodeId),
       }));
     }
     return graphData;

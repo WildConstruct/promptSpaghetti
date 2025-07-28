@@ -592,7 +592,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
           possibleCauses: ['System error', 'Configuration issue', 'Resource constraints'],
           riskAssessment: 'High - integrity verification failed',
           businessImpact: 'Cannot verify data integrity',
-          technicalImpact: 'Integrity monitoring compromised'
+          technicalImpact: 'Integrity monitoring compromised',
         },
         resolution: {,
           status: 'open',
@@ -612,7 +612,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
   /**
    * Get integrity check results
    */
-  getCheckResults()
+  getCheckResults();
     checkId: string,
     limit: number = 10,
     status?: IntegrityCheckResult['status']
@@ -686,7 +686,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
     findingId: string,
     actionId: string,
     priority: number = 1,
-    delay: number = 0
+    delay: number = 0,
   ): Promise<boolean> {
     const finding = this.activeFindings.get(findingId);
     if (!finding) return false;
@@ -695,7 +695,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
       findingId,
       actionId,
       priority,
-      scheduledTime: Date.now() + delay
+      scheduledTime: Date.now() + delay,
     });
     // Sort queue by priority and scheduled time
     this.remediationQueue.sort((a, b) => {
@@ -717,9 +717,9 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
   /**
    * Generate integrity report
    */
-  generateIntegrityReport()
+  generateIntegrityReport();
     timeRange: { start: number; end: number },
-    includeDetails: boolean = false
+    includeDetails: boolean = false,
   ): {
     summary: {,
       reportId: string;
@@ -763,7 +763,6 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
       compliant: boolean;
       issues: string[];
     }[];
-  } {
     const reportId = this.generateReportId();
     // Filter results and findings for time range
     const relevantResults = this.getResultsInTimeRange(timeRange);
@@ -847,7 +846,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
               possibleCauses: ['Data tampering', 'Corruption', 'System error'],
               riskAssessment: 'High - potential data tampering detected',
               businessImpact: 'Data integrity compromised',
-              technicalImpact: 'Hash verification failed'
+              technicalImpact: 'Hash verification failed',
             },
             resolution: {,
               status: 'open',
@@ -912,7 +911,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
               possibleCauses: ['Data format change', 'Application error', 'Manual data entry'],
               riskAssessment: 'Medium - data format inconsistency',
               businessImpact: 'Potential data processing issues',
-              technicalImpact: 'Schema validation failed'
+              technicalImpact: 'Schema validation failed',
             },
             resolution: {,
               status: 'open',
@@ -964,14 +963,14 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
               },
               evidence: {,
                 actualValue: referenceValue,
-                expectedValue: 'Valid reference'
+                expectedValue: 'Valid reference',
               },
               context: {,
                 relatedFindings: [],
                 possibleCauses: ['Deleted reference', 'Data migration error', 'Cascade delete failure'],
                 riskAssessment: 'Medium - referential integrity compromised',
                 businessImpact: 'Potential data relationship issues',
-                technicalImpact: 'Reference validation failed'
+                technicalImpact: 'Reference validation failed',
               },
               resolution: {,
                 status: 'open',
@@ -1037,7 +1036,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
                 possibleCauses: ['Clock synchronization issue', 'Data replay attack', 'System error'],
                 riskAssessment: 'High - temporal integrity compromised',
                 businessImpact: 'Audit trail reliability affected',
-                technicalImpact: 'Timestamp ordering violated'
+                technicalImpact: 'Timestamp ordering violated',
               },
               resolution: {,
                 status: 'open',
@@ -1071,7 +1070,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
                 possibleCauses: ['System downtime', 'Bulk data import', 'Normal operational gap'],
                 riskAssessment: 'Low - unusual time pattern',
                 businessImpact: 'Potential operational issue',
-                technicalImpact: 'Time gap analysis required'
+                technicalImpact: 'Time gap analysis required',
               },
               resolution: {,
                 status: 'open',
@@ -1123,7 +1122,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
                 location: check.target.location,
                 recordIds: [record.id],
                 fields: ruleResult.affectedFields || [],
-                estimatedImpact: ruleResult.impact || 'medium'
+                estimatedImpact: ruleResult.impact || 'medium',
               },
               evidence: {,
                 actualValue: ruleResult.actualValue,
@@ -1134,7 +1133,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
                 possibleCauses: ruleResult.possibleCauses || ['Data entry error', 'Process violation'],
                 riskAssessment: ruleResult.riskAssessment || 'Medium - business rule violated',
                 businessImpact: ruleResult.businessImpact || 'Business process integrity compromised',
-                technicalImpact: ruleResult.technicalImpact || 'Rule validation failed'
+                technicalImpact: ruleResult.technicalImpact || 'Rule validation failed',
               },
               resolution: {,
                 status: 'open',
@@ -1171,7 +1170,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
       try {
         result.summary.recordsChecked++;
         if (record.digitalSignature) {
-          const isValid = await this.verifyDigitalSignature(;)
+          const isValid = await this.verifyDigitalSignature(;);
             record.data,
             record.digitalSignature,
             signatureConfig
@@ -1192,14 +1191,14 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
               evidence: {,
                 digitalSignature: record.digitalSignature,
                 actualValue: 'Invalid signature',
-                expectedValue: 'Valid signature'
+                expectedValue: 'Valid signature',
               },
               context: {,
                 relatedFindings: [],
                 possibleCauses: ['Data tampering', 'Key compromise', 'Signature corruption'],
                 riskAssessment: 'Critical - potential data tampering or key compromise',
                 businessImpact: 'Data authenticity cannot be verified',
-                technicalImpact: 'Digital signature verification failed'
+                technicalImpact: 'Digital signature verification failed',
               },
               resolution: {,
                 status: 'open',
@@ -1229,14 +1228,14 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
             },
             evidence: {,
               actualValue: null,
-              expectedValue: 'Digital signature required'
+              expectedValue: 'Digital signature required',
             },
             context: {,
               relatedFindings: [],
               possibleCauses: ['Configuration error', 'Process failure', 'System error'],
               riskAssessment: 'High - signature requirement not met',
               businessImpact: 'Cannot verify data authenticity',
-              technicalImpact: 'Missing digital signature'
+              technicalImpact: 'Missing digital signature',
             },
             resolution: {,
               status: 'open',
@@ -1268,7 +1267,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
           field1: `value_${i}`,}
           field2: Math.random() * 100,
           field3: i % 2 === 0,
-          timestamp: Date.now() - (i * 1000)
+          timestamp: Date.now() - (i * 1000),
         },
         digitalSignature: i % 10 === 0 ? null : `signature_${i}` // Some missing signatures}
       });
@@ -1339,12 +1338,12 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
       'rule_001': {
         name: 'Amount Positive',
         description: 'Transaction amounts must be positive',
-        evaluate: (data: any) => data.amount > 0
+        evaluate: (data: any) => data.amount > 0,
       },
       'rule_002': {
         name: 'Date Range Valid',
         description: 'Dates must be within valid business range',
-        evaluate: (data: any) => {
+        evaluate: (data: any) => {,
           const date = new Date(data.timestamp);
           const now = new Date();
           return date <= now && date >= new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
@@ -1373,7 +1372,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
       possibleCauses: passed ? undefined : ['Data entry error', 'Process violation', 'System error'],
       riskAssessment: passed ? undefined : 'Medium - business rule violated',
       businessImpact: passed ? undefined : 'Business process integrity affected',
-      technicalImpact: passed ? undefined : 'Rule validation failed'
+      technicalImpact: passed ? undefined : 'Rule validation failed',
     };
   }
   private async verifyDigitalSignature()
@@ -1422,12 +1421,11 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
   }
   private findSimilarFinding(finding: IntegrityFinding): IntegrityFinding | null {
     for (const existing of this.activeFindings.values()) {
-      if ()
+      if ();
         existing.category === finding.category &&
         existing.affectedData.location === finding.affectedData.location &&
         existing.title === finding.title &&
         existing.resolution.status === 'open'
-      ) {
         return existing;
       }
     }
@@ -1493,7 +1491,7 @@ export class SecurityDataIntegrityMonitor extends EventEmitter {
     result: IntegrityCheckResult,
   ): Promise<void> {
     if (!this.config.alerting.enabled) return;
-    const criticalFindings = result.findings.filter(f => ;)
+    const criticalFindings = result.findings.filter(f => ;);
       f.severity === 'critical' || f.severity === 'high'
     );
     if (criticalFindings.length === 0) return;
@@ -1698,14 +1696,14 @@ View full report: /integrity/reports/${result.executionId}
         target: {,
           dataType: 'audit_logs' as const,
           location: 'audit_logs_table',
-          scope: 'incremental' as const
+          scope: 'incremental' as const,
         },
         parameters: {,
-          hashAlgorithm: 'sha256' as const
+          hashAlgorithm: 'sha256' as const,
         },
         schedule: {,
           enabled: true,
-          frequency: 'hourly' as const
+          frequency: 'hourly' as const,
         },
         thresholds: {,
           errorThreshold: 5,
@@ -1732,7 +1730,7 @@ View full report: /integrity/reports/${result.executionId}
         target: {,
           dataType: 'security_events' as const,
           location: 'security_events_table',
-          scope: 'incremental' as const
+          scope: 'incremental' as const,
         },
         parameters: {,
           expectedSchema: {,
@@ -1745,7 +1743,7 @@ View full report: /integrity/reports/${result.executionId}
         },
         schedule: {,
           enabled: true,
-          frequency: 'daily' as const
+          frequency: 'daily' as const,
         },
         thresholds: {,
           errorThreshold: 10,
@@ -1825,7 +1823,7 @@ View full report: /integrity/reports/${result.executionId}
   private getResultsInTimeRange(timeRange: { start: number; end: number }): IntegrityCheckResult[] {
     const results: IntegrityCheckResult[] = [];
     for (const history of this.checkHistory.values()) {
-      const filtered = history.filter(result => ;)
+      const filtered = history.filter(result => ;);
         result.startTime >= timeRange.start && result.startTime <= timeRange.end
       );
       results.push(...filtered);
@@ -1874,7 +1872,7 @@ View full report: /integrity/reports/${result.executionId}
         const check = this.integrityChecks.get(result.checkId);
         checkMap.set(result.checkId, {)
           executions: [],
-          name: check?.name || 'Unknown Check'
+          name: check?.name || 'Unknown Check',
         });
       }
       checkMap.get(result.checkId)!.executions.push(result);
@@ -1949,7 +1947,7 @@ View full report: /integrity/reports/${result.executionId}
       .map(([action, stats]) => ({)
         action,
         count: stats.count,
-        successRate: stats.successful / stats.count
+        successRate: stats.successful / stats.count,
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
@@ -2002,7 +2000,7 @@ View full report: /integrity/reports/${result.executionId}
       // Framework-specific compliance checks
       switch (framework) {
         case 'SOX':
-          const financialFindings = findings.filter(f => ;)
+          const financialFindings = findings.filter(f => ;);
             f.affectedData.location.includes('financial') || 
             f.category === 'business_rule_violation'
           );
@@ -2011,7 +2009,7 @@ View full report: /integrity/reports/${result.executionId}
           }
           break;
         case 'GDPR':
-          const personalDataFindings = findings.filter(f =>;)
+          const personalDataFindings = findings.filter(f =>;);
             f.affectedData.location.includes('user') ||
             f.affectedData.location.includes('personal')
           );
@@ -2020,7 +2018,7 @@ View full report: /integrity/reports/${result.executionId}
           }
           break;
         case 'HIPAA':
-          const healthDataFindings = findings.filter(f =>;)
+          const healthDataFindings = findings.filter(f =>;);
             f.affectedData.location.includes('health') ||
             f.affectedData.location.includes('medical')
           );

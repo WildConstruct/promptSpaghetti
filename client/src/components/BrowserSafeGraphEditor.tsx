@@ -11,12 +11,10 @@ import ReactFlow, {
   Background,
   BackgroundVariant,
 } from 'reactflow';
-
 interface BrowserSafeGraphEditorProps {
   initialNodes?: unknown[];
   initialEdges?: unknown[];
 }
-
 interface NodeData {
   label?: string;
   description?: string;
@@ -24,13 +22,13 @@ interface NodeData {
 
 // Sample node types for the basic editor
 const nodeTypes = {
-  default: ({ data }: { data: NodeData }) => (
+  default: ({ data }: { data: NodeData }) => ()
     <div style={{
       padding: '10px',
       border: '1px solid #ddd',
       borderRadius: '6px',
       background: 'white',
-      minWidth: '150px'
+      minWidth: '150px',
     }}>
       <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>
         {data.label || 'Node'}
@@ -40,13 +38,13 @@ const nodeTypes = {
       </div>
     </div>
   ),
-  input: ({ data }: { data: NodeData }) => (
+  input: ({ data }: { data: NodeData }) => ()
     <div style={{
       padding: '10px',
       border: '2px solid #4CAF50',
       borderRadius: '6px',
       background: '#f9fff9',
-      minWidth: '150px'
+      minWidth: '150px',
     }}>
       <div style={{ fontWeight: 'bold', color: '#4CAF50', marginBottom: '5px' }}>
         📥 {data.label || 'Input'}
@@ -56,13 +54,13 @@ const nodeTypes = {
       </div>
     </div>
   ),
-  output: ({ data }: { data: NodeData }) => (
+  output: ({ data }: { data: NodeData }) => ()
     <div style={{
       padding: '10px',
       border: '2px solid #FF9800',
       borderRadius: '6px',
       background: '#fff9f0',
-      minWidth: '150px'
+      minWidth: '150px',
     }}>
       <div style={{ fontWeight: 'bold', color: '#FF9800', marginBottom: '5px' }}>
         📤 {data.label || 'Output'}
@@ -72,13 +70,13 @@ const nodeTypes = {
       </div>
     </div>
   ),
-  process: ({ data }: { data: NodeData }) => (
+  process: ({ data }: { data: NodeData }) => ()
     <div style={{
       padding: '10px',
       border: '2px solid #2196F3',
       borderRadius: '6px',
       background: '#f0f9ff',
-      minWidth: '150px'
+      minWidth: '150px',
     }}>
       <div style={{ fontWeight: 'bold', color: '#2196F3', marginBottom: '5px' }}>
         ⚙️ {data.label || 'Process'}
@@ -87,9 +85,7 @@ const nodeTypes = {
         {data.description || 'Processing node'}
       </div>
     </div>
-  )
 };
-
 const defaultNodes: Node[] = [
   {
     id: '1',
@@ -110,53 +106,47 @@ const defaultNodes: Node[] = [
     data: { label: 'End', description: 'Final output' },
   },
 ];
-
 const defaultEdges: Edge[] = [
   { id: 'e1-2', source: '1', target: '2' },
   { id: 'e2-3', source: '2', target: '3' },
 ];
 
-export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
+export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({)
   initialNodes = [],
   initialEdges = []
 }) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(
+  const [nodes, setNodes, onNodesChange] = useNodesState()
     initialNodes.length > 0 ? (initialNodes as Node[]) : defaultNodes
   );
-  const [edges, setEdges, onEdgesChange] = useEdgesState(
+  const [edges, setEdges, onEdgesChange] = useEdgesState()
     initialEdges.length > 0 ? (initialEdges as Edge[]) : defaultEdges
   );
-
-  const onConnect = useCallback(
+  const onConnect = useCallback(;)
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
-
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
-
-  const onNodeClick = useCallback(
+  const onNodeClick = useCallback(;)
     (_event: React.MouseEvent, node: Node) => {
       setSelectedNode(node);
     },
     []
   );
-
   const addNode = useCallback((type: string) => {
     const newNode: Node = {
-      id: `node_${Date.now()}`,
+      id: `node_${Date.now()}`,}
       type,
-      position: { 
+      position: { ,
         x: Math.random() * 400 + 100, 
-        y: Math.random() * 300 + 100 
+        y: Math.random() * 300 + 100 ,
       },
-      data: { 
-        label: `New ${type}`, 
-        description: `${type} node created ${new Date().toLocaleTimeString()}` 
+      data: { ,
+        label: `New ${type}`, }
+        description: `${type} node created ${new Date().toLocaleTimeString()}` }
       },
     };
     setNodes((nds) => [...nds, newNode]);
   }, [setNodes]);
-
   const deleteSelectedNode = useCallback(() => {
     if (selectedNode) {
       setNodes((nds) => nds.filter((node) => node.id !== selectedNode.id));
@@ -166,14 +156,12 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
       setSelectedNode(null);
     }
   }, [selectedNode, setNodes, setEdges]);
-
   const clearGraph = useCallback(() => {
     setNodes([]);
     setEdges([]);
     setSelectedNode(null);
   }, [setNodes, setEdges]);
-
-  return (
+  return ()
     <div style={{ width: '100%', height: '100%', display: 'flex' }}>
       {/* Main Graph Area */}
       <div style={{ flex: 1, height: '100%' }}>
@@ -193,17 +181,15 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
         </ReactFlow>
       </div>
-
       {/* Side Panel */}
       <div style={{
         width: '300px',
         borderLeft: '1px solid #ddd',
         backgroundColor: 'white',
         padding: '20px',
-        overflowY: 'auto'
+        overflowY: 'auto',
       }}>
         <h3 style={{ margin: '0 0 20px 0', color: '#333' }}>🎨 Graph Tools</h3>
-        
         {/* Add Node Section */}
         <div style={{ marginBottom: '30px' }}>
           <h4 style={{ margin: '0 0 10px 0', color: '#666', fontSize: '14px' }}>Add Nodes</h4>
@@ -217,7 +203,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
                 background: '#f9fff9',
                 color: '#4CAF50',
                 cursor: 'pointer',
-                fontSize: '12px'
+                fontSize: '12px',
               }}
             >
               📥 Input Node
@@ -231,7 +217,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
                 background: '#f0f9ff',
                 color: '#2196F3',
                 cursor: 'pointer',
-                fontSize: '12px'
+                fontSize: '12px',
               }}
             >
               ⚙️ Process Node
@@ -245,14 +231,13 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
                 background: '#fff9f0',
                 color: '#FF9800',
                 cursor: 'pointer',
-                fontSize: '12px'
+                fontSize: '12px',
               }}
             >
               📤 Output Node
             </button>
           </div>
         </div>
-
         {/* Graph Actions */}
         <div style={{ marginBottom: '30px' }}>
           <h4 style={{ margin: '0 0 10px 0', color: '#666', fontSize: '14px' }}>Graph Actions</h4>
@@ -267,7 +252,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
                 background: selectedNode ? '#fff0f0' : '#f5f5f5',
                 color: selectedNode ? '#f44336' : '#999',
                 cursor: selectedNode ? 'pointer' : 'not-allowed',
-                fontSize: '12px'
+                fontSize: '12px',
               }}
             >
               🗑️ Delete Selected
@@ -281,23 +266,22 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
                 background: '#f8f9fa',
                 color: '#666',
                 cursor: 'pointer',
-                fontSize: '12px'
+                fontSize: '12px',
               }}
             >
               🧹 Clear All
             </button>
           </div>
         </div>
-
         {/* Node Inspector */}
-        {selectedNode && (
+        {selectedNode && ()
           <div style={{ marginBottom: '20px' }}>
             <h4 style={{ margin: '0 0 10px 0', color: '#666', fontSize: '14px' }}>Selected Node</h4>
             <div style={{
               padding: '12px',
               border: '1px solid #ddd',
               borderRadius: '4px',
-              background: '#f8f9fa'
+              background: '#f8f9fa',
             }}>
               <div style={{ fontSize: '12px', marginBottom: '8px' }}>
                 <strong>ID:</strong> {selectedNode.id}
@@ -314,7 +298,6 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
             </div>
           </div>
         )}
-
         {/* Graph Stats */}
         <div>
           <h4 style={{ margin: '0 0 10px 0', color: '#666', fontSize: '14px' }}>Graph Statistics</h4>
@@ -323,7 +306,7 @@ export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
             border: '1px solid #ddd',
             borderRadius: '4px',
             background: '#f8f9fa',
-            fontSize: '12px'
+            fontSize: '12px',
           }}>
             <div style={{ marginBottom: '4px' }}>📊 Nodes: {nodes.length}</div>
             <div style={{ marginBottom: '4px' }}>🔗 Edges: {edges.length}</div>

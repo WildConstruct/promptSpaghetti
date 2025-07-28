@@ -193,7 +193,7 @@ export class NodeMetadataManager {
         period: { start: 1600, end: 1750 },
         region: ['europe', 'italy', 'france', 'spain', 'germany'],
         accuracy: 'high',
-        description: 'Artistic and architectural style characterized by ornate detail and dramatic effects'
+        description: 'Artistic and architectural style characterized by ornate detail and dramatic effects',
       },
       {
         id: 'enlightenment',
@@ -201,7 +201,7 @@ export class NodeMetadataManager {
         period: { start: 1650, end: 1800 },
         region: ['europe', 'france', 'britain', 'germany'],
         accuracy: 'high',
-        description: 'Intellectual and philosophical movement emphasizing reason and individualism'
+        description: 'Intellectual and philosophical movement emphasizing reason and individualism',
       },
       {
         id: 'industrial',
@@ -209,7 +209,7 @@ export class NodeMetadataManager {
         period: { start: 1760, end: 1840 },
         region: ['britain', 'europe', 'america'],
         accuracy: 'high',
-        description: 'Period of major industrialization and technological advancement'
+        description: 'Period of major industrialization and technological advancement',
       },
       {
         id: 'victorian',
@@ -217,7 +217,7 @@ export class NodeMetadataManager {
         period: { start: 1837, end: 1901 },
         region: ['britain', 'british-empire'],
         accuracy: 'high',
-        description: 'Period of British history during Queen Victoria\'s reign'
+        description: 'Period of British history during Queen Victoria\'s reign',
       },
       {
         id: 'modern',
@@ -225,7 +225,7 @@ export class NodeMetadataManager {
         period: { start: 1900, end: 2000 },
         region: ['global'],
         accuracy: 'high',
-        description: 'Modern historical period of the 20th century'
+        description: 'Modern historical period of the 20th century',
       }
     ];
     eras.forEach(era => this.eraDefinitions.set(era.id, era));
@@ -392,13 +392,13 @@ export class NodeMetadataManager {
       era: metadata.era || existing?.era || [],
       genre: metadata.genre || existing?.genre || [],
       style: metadata.style || existing?.style || [],
-      quality: metadata.quality || existing?.quality || {
+      quality: metadata.quality || existing?.quality || {,
         authenticity: 0.5,
         completeness: 0.5,
         sources: [],
         verification: 'unverified',
       },
-      historicalContext: metadata.historicalContext || existing?.historicalContext || {
+      historicalContext: metadata.historicalContext || existing?.historicalContext || {,
         socialClass: 'unknown',
         usage: 'daily',
         rarity: 'common',
@@ -408,7 +408,7 @@ export class NodeMetadataManager {
       },
       created: existing?.created || now,
       updated: now,
-      author: metadata.author || existing?.author || 'system'
+      author: metadata.author || existing?.author || 'system',
     };
     this.nodeMetadata.set(nodeId, updatedMetadata);
   }
@@ -506,7 +506,7 @@ export class NodeMetadataManager {
     sourceNodeType: string,
     targetNodeType: string,
   ): void {
-    const applicableRules = Array.from(this.inheritanceRules.values()).filter(rule => ;)
+    const applicableRules = Array.from(this.inheritanceRules.values()).filter(rule => ;);
       rule.enabled && 
       rule.sourceType === sourceNodeType && 
       rule.targetType === targetNodeType
@@ -544,7 +544,7 @@ export class NodeMetadataManager {
     switch (transformation.type) {
       case 'copy':
         const tagTypes = transformation.config.tagTypes as string[];
-        const tagsToInherit = sourceMetadata.tags.filter(tag => ;)
+        const tagsToInherit = sourceMetadata.tags.filter(tag => ;);
           tagTypes.includes(tag.type)
         );
         if (tagsToInherit.length > 0) {
@@ -690,7 +690,6 @@ export class NodeMetadataManager {
     tagsByType: Record<string, number>;
     averageTagsPerNode: number;
     topTags: { value: string; count: number }[];
-  } {
     const totalNodes = this.nodeMetadata.size;
     const taggedNodes = totalNodes;
     let totalTags = 0;

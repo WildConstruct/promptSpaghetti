@@ -47,7 +47,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       const spec = createTestSpec();
       const handler = new AdvancedIOHandler(spec);
       // Valid inputs
-      const validInputs = new Map([;)
+      const validInputs = new Map([;);
         ['text', 'hello'],
         ['number', 50]
       ]);
@@ -59,7 +59,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       const missingResult = handler.validateInputs(missingRequired);
       expect(missingResult.valid).toBe(true); // Has default value
       // Invalid type
-      const invalidType = new Map([;)
+      const invalidType = new Map([;);
         ['text', 'hello'],
         ['number', 'not-a-number']
       ]);
@@ -73,7 +73,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       const spec = createTestSpec();
       const handler = new AdvancedIOHandler(spec);
       // Value below minimum
-      const belowMin = new Map([;)
+      const belowMin = new Map([;);
         ['text', 'hello'],
         ['number', -5]
       ]);
@@ -81,7 +81,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       expect(belowResult.valid).toBe(false);
       expect(belowResult.errors).toContain('Value -5 is below minimum 0');
       // Value above maximum
-      const aboveMax = new Map([;)
+      const aboveMax = new Map([;);
         ['text', 'hello'],
         ['number', 150]
       ]);
@@ -171,7 +171,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       };
       const handler = new AdvancedIOHandler(spec);
       // Valid inputs
-      const validInputs = new Map([;)
+      const validInputs = new Map([;);
         ['string', 'hello'],
         ['number', 42],
         ['boolean', true],
@@ -186,7 +186,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       const result = handler.validateInputs(validInputs);
       expect(result.valid).toBe(true);
       // Invalid types
-      const invalidInputs = new Map([;)
+      const invalidInputs = new Map([;);
         ['string', 123],
         ['number', 'not-a-number'],
         ['boolean', 'true'],
@@ -308,7 +308,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
             dataType: 'string',
             required: true,
             constraints: {,
-              customValidator: (value) => {
+              customValidator: (value) => {,
                 if (value === 'forbidden') {
                   return ValidationHelpers.createInvalidResult()
                     ['Value \'forbidden\' is not allowed'],
@@ -404,7 +404,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       expect(simple.outputs[0].label).toBe('Output Text');
     });
     it('creates multi-input specifications', () => {
-      const multi = IOSpecBuilder.createMultiInput(;)
+      const multi = IOSpecBuilder.createMultiInput(;);
         ['First', 'Second', 'Third'],
         'Combined'
       );
@@ -422,7 +422,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
           dataType: 'object',
           required: true,
           constraints: {,
-            customValidator: (value) => {
+            customValidator: (value) => {,
               if (!value.hasOwnProperty('required')) {
                 return ValidationHelpers.createInvalidResult([)
                   'Object must have \'required\' property'
@@ -439,7 +439,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
   });
   describe('TypedInputs', () => {
     const createResolvedInputs = (): ResolvedInputs => ({)
-      values: new Map([)
+      values: new Map([),
         ['str', 'hello'],
         ['num', 42],
         ['bool', true],
@@ -448,13 +448,13 @@ describe('Runtime IO System - Comprehensive Tests', () => {
         ['null', null],
         ['undefined', undefined]
       ]),
-      metadata: new Map([)
+      metadata: new Map([),
         ['str', { source: 'connection', warnings: [] }],
         ['num', { source: 'default', warnings: [] }],
         ['bool', {
           source: 'connection',
           typeCoercion: { from: 'string', to: 'boolean' },
-          warnings: ['Type coerced from string to boolean']
+          warnings: ['Type coerced from string to boolean'],
         }]
       ])
     });
@@ -492,7 +492,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
     it('converts array elements to strings', () => {
       const resolved: ResolvedInputs = {
         values: new Map([['mixed', [1, 'two', true, null]]]),
-        metadata: new Map()
+        metadata: new Map(),
       };
       const inputs = new TypedInputs(resolved);
       expect(inputs.getStringArray('mixed')).toEqual(['1', 'two', 'true', 'null']);
@@ -557,7 +557,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       };
       const handler = new AdvancedIOHandler(spec);
       // Single value to array
-      const singleValues = new Map([;)
+      const singleValues = new Map([;);
         ['arr', 'single'],
         ['strArr', 123],
         ['numArr', '456']

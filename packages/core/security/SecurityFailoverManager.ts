@@ -588,7 +588,6 @@ export class SecurityFailoverManager extends EventEmitter {
     redundancy_groups: number;
     load_distribution: Record<string, number>;
     recent_events: FailoverEvent[];
-  } {
     const nodes = Array.from(this.nodes.values());
     const healthyNodes = nodes.filter(n => n.status === 'healthy').length;
     const degradedNodes = nodes.filter(n => n.status === 'degraded').length;
@@ -688,7 +687,7 @@ export class SecurityFailoverManager extends EventEmitter {
   private async executeFailoverPhase()
     event: FailoverEvent,
     phase: FailoverTimelineEntry['phase'],
-    executor: () => Promise<void>
+    executor: () => Promise<void>,
   ): Promise<void> {
     const timelineEntry: FailoverTimelineEntry = {
       id: this.generateTimelineId(),
@@ -796,7 +795,7 @@ export class SecurityFailoverManager extends EventEmitter {
         this.loadBalancer.addNode(event.source_node.id, {)
           weight: event.source_node.load_balancing.weight,
           capacity: event.source_node.load_balancing.processing_capacity,
-          health_score: 50 // Reduced health after rollback
+          health_score: 50 // Reduced health after rollback,
         });
       }
       event.results.rollback_performed = true;
@@ -809,7 +808,7 @@ export class SecurityFailoverManager extends EventEmitter {
     sourceNode: SecuritySystemNode,
     policy: FailoverPolicy,
   ): Promise<SecuritySystemNode | null> {
-    const candidates = Array.from(this.nodes.values()).filter(node => ;)
+    const candidates = Array.from(this.nodes.values()).filter(node => ;);
       node.id !== sourceNode.id &&
       node.role === sourceNode.role &&
       node.status === 'healthy' &&
@@ -817,7 +816,7 @@ export class SecurityFailoverManager extends EventEmitter {
     );
     if (candidates.length === 0) {
       // Try cross-region candidates
-      const crossRegionCandidates = Array.from(this.nodes.values()).filter(node => ;)
+      const crossRegionCandidates = Array.from(this.nodes.values()).filter(node => ;);
         node.id !== sourceNode.id &&
         node.role === sourceNode.role &&
         node.status === 'healthy'
@@ -856,7 +855,7 @@ export class SecurityFailoverManager extends EventEmitter {
     }
   }
   private findBestFailoverPolicy(node: SecuritySystemNode): FailoverPolicy | null {
-    const applicablePolicies = Array.from(this.policies.values()).filter(policy => ;)
+    const applicablePolicies = Array.from(this.policies.values()).filter(policy => ;);
       policy.enabled
     );
     if (applicablePolicies.length === 0) return null;
@@ -869,7 +868,7 @@ export class SecurityFailoverManager extends EventEmitter {
     }, this.config.health_check.interval);
   }
   private async performAllHealthChecks(): Promise<void> {
-    const healthCheckPromises = Array.from(this.nodes.keys()).map(nodeId =>;)
+    const healthCheckPromises = Array.from(this.nodes.keys()).map(nodeId =>;);
       this.performHealthCheck(nodeId)
     );
     if (this.config.health_check.parallel_checks) {
@@ -941,7 +940,7 @@ export class SecurityFailoverManager extends EventEmitter {
       return;
     }
     // Find applicable policies that trigger on node failure
-    const applicablePolicies = Array.from(this.policies.values()).filter(policy =>;)
+    const applicablePolicies = Array.from(this.policies.values()).filter(policy =>;);
       policy.enabled && policy.triggers.node_failure.enabled
     );
     for (const policy of applicablePolicies) {
@@ -1240,7 +1239,7 @@ export class SecurityFailoverManager extends EventEmitter {
   }
   private async sendFailoverNotification()
     event: FailoverEvent,
-    status: 'initiated' | 'completed' | 'failed'
+    status: 'initiated' | 'completed' | 'failed',
   ): Promise<void> {
     const message = this.createFailoverNotificationMessage(event, status);
     for (const recipient of this.config.notifications.immediate_recipients) {
@@ -1250,7 +1249,7 @@ export class SecurityFailoverManager extends EventEmitter {
   }
   private createFailoverNotificationMessage()
     event: FailoverEvent,
-    status: 'initiated' | 'completed' | 'failed'
+    status: 'initiated' | 'completed' | 'failed',
   ): string {
     return `
 🔄 SECURITY SYSTEM FAILOVER ${status.toUpperCase()}
@@ -1531,7 +1530,7 @@ class ConnectionPool {
     return {
       nodeId: this.nodeId,
       connected: true,
-      release: () => {
+      release: () => {,
         this.activeConnections--;
       }
     };

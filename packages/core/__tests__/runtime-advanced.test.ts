@@ -75,7 +75,6 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
         this.id,
         'StatefulTest',
         this.config,
-        {}
       );
     }
   }
@@ -305,7 +304,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
       expect(result.warnings).toEqual([]);
     });
     it('creates invalid result', () => {
-      const result = ValidationHelpers.createInvalidResult(;)
+      const result = ValidationHelpers.createInvalidResult(;);
         ['Error 1', 'Error 2'],
         ['Warning 1']
       );
@@ -358,7 +357,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
         cacheable: false,
         stateful: true,
       };
-      const nodeData = SerializationHelpers.createAdvancedNodeData(;)
+      const nodeData = SerializationHelpers.createAdvancedNodeData(;);
         'node-id',
         'NodeType',
         config,
@@ -384,32 +383,32 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
       };
       expect(SerializationHelpers.validateSerializedData(validData).valid).toBe(true);
       // Missing fields
-      expect()
+      expect();
         SerializationHelpers.validateSerializedData({)
           ...validData,
           id: '',
         } as any).valid
       ).toBe(false);
-      expect()
+      expect();
         SerializationHelpers.validateSerializedData({)
           ...validData,
           type: undefined,
         } as any).valid
       ).toBe(false);
-      expect()
+      expect();
         SerializationHelpers.validateSerializedData({)
           ...validData,
           config: null,
         } as any).valid
       ).toBe(false);
-      expect()
+      expect();
         SerializationHelpers.validateSerializedData({)
           ...validData,
           data: undefined,
         } as any).valid
       ).toBe(false);
       // Invalid config types
-      expect()
+      expect();
         SerializationHelpers.validateSerializedData({)
           ...validData,
           config: {,
@@ -424,7 +423,7 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
   describe('AdvancedRuntimeNodeWithIO', () => {
     class TestNodeWithIO extends AdvancedRuntimeNodeWithIO<string> {
       constructor(id: string) {
-        super()
+        super();
           id,
           {
             deterministic: true,
@@ -442,7 +441,6 @@ describe('Advanced Runtime System - Comprehensive Tests', () => {
           this.id,
           'TestWithIO',
           this.config,
-          {}
         );
       }
       protected validateNodeConfig() {

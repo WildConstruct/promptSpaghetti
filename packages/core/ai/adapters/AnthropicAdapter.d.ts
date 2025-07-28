@@ -28,7 +28,7 @@ export interface AnthropicRequestOptions {
 }
 export interface ClaudeMessage {
     role: 'user' | 'assistant';
-    content: string | Array<{
+    content: string | Array<{,
         type: 'text' | 'image';
         text?: string;
         source?: {

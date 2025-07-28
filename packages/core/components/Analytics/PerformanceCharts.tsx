@@ -53,7 +53,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({)
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
   if (loading) {
-    return ()
+    return ();
       <Card>
         <CardHeader>
           <CardTitle className="text-sm text-gray-600">{title}</CardTitle>
@@ -67,7 +67,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({)
     );
   }
   if (error) {
-    return ()
+    return ();
       <Card>
         <CardHeader>
           <CardTitle className="text-sm text-gray-600">{title}</CardTitle>
@@ -82,7 +82,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({)
     );
   }
   if (!data || data.length === 0) {
-    return ()
+    return ();
       <Card>
         <CardHeader>
           <CardTitle className="text-sm text-gray-600">{title}</CardTitle>
@@ -95,7 +95,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({)
       </Card>
     );
   }
-  return ()
+  return ();
     <Card>
       <CardHeader>
         <CardTitle className="text-sm text-gray-600">{title}</CardTitle>
@@ -211,13 +211,12 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
       errors: {}
     }));
     // Load all metrics in parallel
-    const results = await Promise.allSettled(;)
+    const results = await Promise.allSettled(;);
       metrics.map(metric =>)
         analyticsClient.getTimeSeries(metric, {)
           ...timeRange,
           granularity: state.granularity,
         })
-      )
     );
     const newState = {
       executionsData: [],
@@ -282,7 +281,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
     return {
       direction: change > 5 ? 'up' : change < -5 ? 'down' : 'stable',
       value: Math.abs(change),
-      isPositive: change > 0
+      isPositive: change > 0,
     };
   }, []);
   /**
@@ -301,7 +300,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
   const tokensTrend = calculateTrend(state.tokensData);
   const costTrend = calculateTrend(state.costData);
   const errorsTrend = calculateTrend(state.errorsData);
-  return ()
+  return ();
     <div className="performance-charts">
       {/* Charts Header */}
       <div className="charts-header">

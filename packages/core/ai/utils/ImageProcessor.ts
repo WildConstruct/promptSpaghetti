@@ -103,7 +103,7 @@ export class ImageProcessor {
         format: options.format || 'png',
         size: this._estimateDataURLSize(processedData),
         quality: options.quality,
-        compressionRatio: originalMetadata.size / this._estimateDataURLSize(processedData)
+        compressionRatio: originalMetadata.size / this._estimateDataURLSize(processedData),
       };
       return {
         data: processedData,
@@ -126,7 +126,7 @@ export class ImageProcessor {
             height: image.height,
             format,
             size: this._estimateDataURLSize(imageData),
-            hasAlpha: format === 'png' || format === 'webp'
+            hasAlpha: format === 'png' || format === 'webp',
           };
         }
         // Handle URL - would need to fetch and analyze
@@ -143,7 +143,7 @@ export class ImageProcessor {
   async compress()
     imageData: string,
     quality: number = 80,
-    format: 'jpeg' | 'webp' = 'jpeg'
+    format: 'jpeg' | 'webp' = 'jpeg',
   ): Promise<{ data: string; compressionRatio: number; originalSize: number; compressedSize: number }> {
     const originalSize = this._estimateDataURLSize(imageData);
     const compressed = await this.convertFormat(imageData, {)
@@ -165,13 +165,13 @@ export class ImageProcessor {
     imageData: string,
     width: number,
     height?: number,
-    maintainAspectRatio: boolean = true
+    maintainAspectRatio: boolean = true,
   ): Promise<string> {
     const result = await this.convertFormat(imageData, {)
       width,
       height,
       maintainAspectRatio,
-      format: this._getFormatFromDataURL(imageData) as any
+      format: this._getFormatFromDataURL(imageData) as any,
     });
     return result.data;
   }
@@ -210,7 +210,7 @@ export class ImageProcessor {
           return {
             original: imageData,
             processed: imageData, // Return original on failure
-            metadata: await this.extractMetadata(imageData)
+            metadata: await this.extractMetadata(imageData),
           };
         }
       });
@@ -364,7 +364,7 @@ export class ImageProcessor {
       format: 'png',
       size: dataView.byteLength,
       colorDepth: bitDepth,
-      hasAlpha: colorType === 4 || colorType === 6
+      hasAlpha: colorType === 4 || colorType === 6,
     };
   }
   private _parseJPEGHeaders(dataView: DataView): ImageMetadata {
@@ -483,7 +483,7 @@ export class ImageProcessor {
       case 'center':
         return { 
           x: (canvasWidth - itemWidth) / 2, 
-          y: (canvasHeight - itemHeight) / 2 + itemHeight 
+          y: (canvasHeight - itemHeight) / 2 + itemHeight ,
         };
       default:
         return { x: padding, y: itemHeight + padding };

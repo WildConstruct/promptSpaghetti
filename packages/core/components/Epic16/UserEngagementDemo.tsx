@@ -128,13 +128,13 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
       completionRewards: {,
         xp: 200,
         badge: 'Marketplace Explorer',
-        certificate: 'Getting Started Certificate'
+        certificate: 'Getting Started Certificate',
       },
       tags: ['beginner', 'basics', 'marketplace'],
       rating: 4.8,
       completionCount: 1247,
       createdAt: new Date('2024-01-01'),
-      updatedAt: new Date('2024-07-01')
+      updatedAt: new Date('2024-07-01'),
     },
     {
       id: 'template-creation-advanced',
@@ -198,13 +198,13 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
       completionRewards: {,
         xp: 750,
         badge: 'Template Master',
-        certificate: 'Advanced Template Creation Certificate'
+        certificate: 'Advanced Template Creation Certificate',
       },
       tags: ['advanced', 'creation', 'design', 'publishing'],
       rating: 4.9,
       completionCount: 342,
       createdAt: new Date('2024-02-15'),
-      updatedAt: new Date('2024-07-10')
+      updatedAt: new Date('2024-07-10'),
     },
     {
       id: 'collaboration-workflows',
@@ -266,13 +266,13 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
       completionRewards: {,
         xp: 500,
         badge: 'Collaboration Expert',
-        certificate: 'Team Collaboration Certificate'
+        certificate: 'Team Collaboration Certificate',
       },
       tags: ['collaboration', 'teams', 'workflow', 'intermediate'],
       rating: 4.7,
       completionCount: 589,
       createdAt: new Date('2024-03-01'),
-      updatedAt: new Date('2024-07-05')
+      updatedAt: new Date('2024-07-05'),
     }
   ];
   useEffect(() => {
@@ -354,7 +354,7 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
   };
   const getRecommendedTutorials = () => {
     // Simple recommendation logic: suggest tutorials based on completed ones
-    const completedTutorials = Object.keys(userTutorialProgress).filter(;)
+    const completedTutorials = Object.keys(userTutorialProgress).filter(;);
       id => userTutorialProgress[id].completed
     );
     return mockTutorials.filter(tutorial => {)
@@ -367,7 +367,7 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
       return true;
     }).slice(0, 3);
   };
-  const renderOverview = () => (;)
+  const renderOverview = () => (;);
     <div className="space-y-6">
       {/* Learning Progress Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -467,7 +467,7 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
                 const tutorial = mockTutorials.find(t => t.id === tutorialId);
                 if (!tutorial) return null;
                 const progressPercentage = (progress.currentStepIndex / tutorial.steps.length) * 100;
-                return ()
+                return ();
                   <div key={tutorialId} className="flex items-center gap-3 p-4 border rounded-lg">
                     <div className="flex-1">
                       <h3 className="font-medium">{tutorial.title}</h3>
@@ -496,7 +496,7 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
       </Card>
     </div>
   );
-  return ()
+  return ();
     <div className={`max-w-6xl mx-auto p-6 ${className}`}>}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Learning & Progress Dashboard</h1>

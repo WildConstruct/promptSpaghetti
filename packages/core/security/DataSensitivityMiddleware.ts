@@ -77,7 +77,6 @@ const DEFAULT_CONFIG: DataSensitivityMiddlewareConfig = {
  */
 export function createDataSensitivityMiddleware()
   config: Partial<DataSensitivityMiddlewareConfig> = {}
-) {
   const finalConfig = { ...DEFAULT_CONFIG, ...config };
   return async (req: SensitivityAwareRequest, res: Response, next: NextFunction) => {
     try {
@@ -109,7 +108,7 @@ export function createDataSensitivityMiddleware()
               method: req.method,
               sensitivityLevel: sensitivityAnalysis.level,
               violations: enforcementResult.violations,
-              timestamp: new Date().toISOString()
+              timestamp: new Date().toISOString(),
             });
           }
         }
@@ -156,7 +155,7 @@ async function analyzeSensitivity()
     // Determine highest sensitivity level
     for (const element of detectedElements) {
       if (element.sensitivityLevel) {
-        const comparison = DataSensitivityUtils.compareSensitivityLevels(;)
+        const comparison = DataSensitivityUtils.compareSensitivityLevels(;);
           highestLevel,
           element.sensitivityLevel
         );
@@ -171,7 +170,7 @@ async function analyzeSensitivity()
   }
   // Override with configured maximum level if set
   if (config.maxSensitivityLevel) {
-    const comparison = DataSensitivityUtils.compareSensitivityLevels(;)
+    const comparison = DataSensitivityUtils.compareSensitivityLevels(;);
       highestLevel,
       config.maxSensitivityLevel
     );
@@ -184,7 +183,7 @@ async function analyzeSensitivity()
     encrypted: req.secure || req.headers['x-forwarded-proto'] === 'https',
     accessControl: extractAccessControlFromRequest(req),
     monitoring: 'basic', // This would come from your monitoring setup
-    retention: 'indefinite' // This would come from your data retention policies
+    retention: 'indefinite' // This would come from your data retention policies,
   };
   // Create a synthetic enhanced element for policy enforcement
   const aggregateElement: EnhancedDataElement = {
@@ -203,7 +202,7 @@ async function analyzeSensitivity()
     handlingRequirements: DataSensitivityUtils.getHandlingRequirements(highestLevel),
   };
   // Enforce policies
-  const policyEnforcement = DataClassificationHelpers.enforceSecurityPolicies(;)
+  const policyEnforcement = DataClassificationHelpers.enforceSecurityPolicies(;);
     aggregateElement,
     currentSecurity
   );
@@ -232,7 +231,7 @@ function analyzeObjectForSensitivity()
       dataType: typeof value,
       context: { source, path },
       source: source,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
     // Enhance with sensitivity detection
     const enhanced = DataClassificationHelpers.enhanceDataElement(element);
@@ -279,7 +278,7 @@ function analyzeHeadersForSensitivity(headers: Record<string, any>): EnhancedDat
         dataType: typeof value,
         context: { source: 'headers', headerType: key.toLowerCase() },
         source: 'http_headers',
-        timestamp: new Date()
+        timestamp: new Date(),
       };
       const enhanced = DataClassificationHelpers.enhanceDataElement(element);
       elements.push(enhanced);
@@ -331,7 +330,7 @@ async function enforceSensitivityPolicies()
   const { level, policyEnforcement } = req.dataSensitivity;
   // Check if request exceeds maximum allowed sensitivity level
   if (config.maxSensitivityLevel) {
-    const comparison = DataSensitivityUtils.compareSensitivityLevels(;)
+    const comparison = DataSensitivityUtils.compareSensitivityLevels(;);
       level,
       config.maxSensitivityLevel
     );
@@ -468,15 +467,14 @@ export function createEndpointSensitivityMiddleware()
     requiredControls?: string[];
     customValidation?: (req: SensitivityAwareRequest) => Promise<boolean>;
   }
-) {
   return createDataSensitivityMiddleware({)
     maxSensitivityLevel: endpointConfig.maxSensitivityLevel,
     blockViolations: true,
-    customValidation: endpointConfig.customValidation ? async (req) => {
+    customValidation: endpointConfig.customValidation ? async (req) => {,
       const result = await endpointConfig.customValidation!(req);
       return {
         allowed: result,
-        reasons: result ? [] : ['Custom endpoint validation failed']
+        reasons: result ? [] : ['Custom endpoint validation failed'],
       };
     } : undefined
   });

@@ -17,7 +17,7 @@ jest.mock('react-beautiful-dnd', () => ({)
     const provided = {
       droppableProps: {},
       innerRef: jest.fn<unknown[], unknown>(),
-      placeholder: <div data-testid="placeholder" />
+      placeholder: <div data-testid="placeholder" />,
     };
     const snapshot = { isDraggingOver: false };
     return <div data-testid="droppable">{children(provided, snapshot)}</div>;
@@ -139,7 +139,7 @@ describe('DragReorderWeightManager', () => {
     test('respects min and max weight constraints', async () => {
       const user = userEvent.setup();
       const onChange = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <DragReorderWeightManager 
           {...defaultProps} 
           onChange={onChange}
@@ -295,7 +295,7 @@ describe('DragReorderWeightManager', () => {
         { id: '1', text: 'Option 1', weight: 10, category: 'Category A' },
         { id: '2', text: 'Option 2', weight: 20, category: 'Category B' }
       ];
-      render()
+      render();
         <DragReorderWeightManager 
           options={optionsWithCategories}
           onChange={jest.fn<unknown[], unknown>()}
@@ -344,7 +344,7 @@ describe('DragReorderWeightManager', () => {
       const manyOptions: WeightedOption[] = Array.from({ length: 100 }, (_, i) => ({)
         id: `option-${i}`,}
         text: `Option ${i + 1}`,}
-        weight: Math.random() * 100
+        weight: Math.random() * 100,
       }));
       const startTime = performance.now();
       render(<DragReorderWeightManager options={manyOptions} onChange={jest.fn<unknown[], unknown>()} />);

@@ -4,7 +4,6 @@
  * Administrative interface for backup configuration and management
  * Part of Epic 17.4.6 - Backup System (Backstage Admin Controls)
  */
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/Card';
 import { Button } from '../../ui/Button';
@@ -36,18 +35,16 @@ export interface AdminBackupConfiguration {
   description: string;
   enabled: boolean;
   backup_type: 'full' | 'incremental' | 'differential';
-  
   // Schedule configuration
-  schedule: {
+  schedule: {,
     frequency: 'hourly' | 'daily' | 'weekly' | 'monthly';
     time_of_day: string; // HH:MM format
     days_of_week?: number[]; // 0-6 for weekly
     day_of_month?: number; // 1-31 for monthly
     timezone: string;
   };
-  
   // Data scope
-  data_scope: {
+  data_scope: {,
     include_admin_configs: boolean;
     include_user_permissions: boolean;
     include_system_settings: boolean;
@@ -56,9 +53,8 @@ export interface AdminBackupConfiguration {
     custom_tables: string[];
     exclude_tables: string[];
   };
-  
   // Retention policy
-  retention_policy: {
+  retention_policy: {,
     keep_hourly: number; // hours
     keep_daily: number; // days  
     keep_weekly: number; // weeks
@@ -66,18 +62,16 @@ export interface AdminBackupConfiguration {
     compliance_hold_days?: number;
     archive_after_days?: number;
   };
-  
   // Storage configuration
-  storage: {
+  storage: {,
     provider: 'local' | 'aws_s3' | 'gcp_storage' | 'azure_blob';
     location: string;
     encryption_enabled: boolean;
     compression_enabled: boolean;
     storage_class?: string;
   };
-  
   // Notification settings
-  notifications: {
+  notifications: {,
     on_success: boolean;
     on_failure: boolean;
     on_completion: boolean;
@@ -85,7 +79,6 @@ export interface AdminBackupConfiguration {
     slack_webhook?: string;
     email_template?: string;
   };
-  
   created_by: string;
   created_at: Date;
   updated_at: Date;
@@ -98,30 +91,25 @@ export interface BackupExecution {
   config_id: string;
   recovery_point_id?: string;
   status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
-  
   started_at: Date;
   completed_at?: Date;
   duration_seconds?: number;
-  
   backup_size_bytes?: number;
   compressed_size_bytes?: number;
   record_count?: number;
-  
-  progress: {
+  progress: {,
     current_step: string;
     steps_completed: number;
     total_steps: number;
     percentage: number;
     estimated_remaining_seconds?: number;
   };
-  
   error_details?: {
     error_code: string;
     error_message: string;
     stack_trace?: string;
     retry_count: number;
   };
-  
   validation_results?: {
     checksum_valid: boolean;
     record_counts_match: boolean;
@@ -135,34 +123,29 @@ export interface BackupMetrics {
   active_configurations: number;
   total_recovery_points: number;
   total_storage_bytes: number;
-  
-  recent_executions: {
+  recent_executions: {,
     successful: number;
     failed: number;
     average_duration_minutes: number;
     last_24h_count: number;
   };
-  
-  storage_breakdown: {
+  storage_breakdown: {,
     provider: string;
     size_bytes: number;
     cost_estimate?: number;
     usage_percentage: number;
   }[];
-  
-  upcoming_backups: {
+  upcoming_backups: {,
     config_name: string;
     next_run: Date;
     estimated_duration: number;
   }[];
-  
-  health_status: {
+  health_status: {,
     overall_status: 'healthy' | 'warning' | 'critical';
     issues: string[];
     recommendations: string[];
   };
 }
-
 const BackupDashboard: React.FC = () => {
   // State management
   const [configurations, setConfigurations] = useState<AdminBackupConfiguration[]>([]);
@@ -172,29 +155,26 @@ const BackupDashboard: React.FC = () => {
   const [_selectedConfig, _setSelectedConfig] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
-
   // Load dashboard data
   useEffect(() => {
     loadBackupData();
-    const interval = setInterval(loadBackupData, 30000); // Refresh every 30 seconds
+    const interval = setInterval(loadBackupData, 30000); // Refresh every 30 seconds;
     return () => clearInterval(interval);
   }, []);
-
   const loadBackupData = async (): Promise<void> => {
     setLoading(true);
     try {
-      const [configsRes, executionsRes, metricsRes] = await Promise.all([
-        fetch('/api/admin/backup/configurations', {
+      const [configsRes, executionsRes, metricsRes] = await Promise.all([)
+        fetch('/api/admin/backup/configurations', {)
           headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
         }),
-        fetch('/api/admin/backup/executions?limit=50', {
+        fetch('/api/admin/backup/executions?limit=50', {)
           headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
         }),
-        fetch('/api/admin/backup/metrics', {
+        fetch('/api/admin/backup/metrics', {)
           headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
         })
       ]);
-
       if (configsRes.ok) setConfigurations(await configsRes.json());
       if (executionsRes.ok) setExecutions(await executionsRes.json());
       if (metricsRes.ok) setMetrics(await metricsRes.json());
@@ -203,14 +183,12 @@ const BackupDashboard: React.FC = () => {
     }
     setLoading(false);
   };
-
   const handleRunBackup = async (configId: string): Promise<void> => {
     try {
-      const response = await fetch(`/api/admin/backup/configurations/${configId}/run`, {
+      const response = await fetch(`/api/admin/backup/configurations/${configId}/run`, {)}
         method: 'POST',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
       });
-      
       if (response.ok) {
         loadBackupData(); // Refresh data
       }
@@ -218,41 +196,36 @@ const BackupDashboard: React.FC = () => {
       console.error('Failed to run backup:', error);
     }
   };
-
   const handleToggleConfiguration = async (configId: string, enabled: boolean): Promise<void> => {
     try {
-      const response = await fetch(`/api/admin/backup/configurations/${configId}`, {
+      const response = await fetch(`/api/admin/backup/configurations/${configId}`, {)}
         method: 'PUT',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`}
         },
         body: JSON.stringify({ enabled })
       });
-      
       if (response.ok) {
-        setConfigurations(prev => 
-          prev.map(config => 
+        setConfigurations(prev => )
+          prev.map(config => )
             config.config_id === configId ? { ...config, enabled } : config
-          )
         );
       }
     } catch (error) {
       console.error('Failed to update configuration:', error);
     }
   };
-
   const getStatusColor = (status: string): string => {
     const colors = {
       completed: 'bg-green-100 text-green-800',
       running: 'bg-blue-100 text-blue-800',
       pending: 'bg-yellow-100 text-yellow-800',
       failed: 'bg-red-100 text-red-800',
-      cancelled: 'bg-gray-100 text-gray-800'
+      cancelled: 'bg-gray-100 text-gray-800',
     };
     return colors[status as keyof typeof colors] || colors.pending;
   };
-
   const formatBytes = (bytes: number): string => {
     if (bytes === 0) return '0 B';
     const k = 1024;
@@ -260,22 +233,19 @@ const BackupDashboard: React.FC = () => {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
-
   const formatDuration = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    
-    if (hours > 0) return `${hours}h ${minutes}m`;
-    if (minutes > 0) return `${minutes}m ${secs}s`;
-    return `${secs}s`;
+    if (hours > 0) return `${hours}h ${minutes}m`;}
+    if (minutes > 0) return `${minutes}m ${secs}s`;}
+    return `${secs}s`;}
   };
-
-  const renderOverviewTab = (): JSX.Element => (
+  const renderOverviewTab = (): JSX.Element => (;)
     <div className="overview-content">
       {/* Health Status Cards */}
       <div className="status-cards">
-        {metrics && (
+        {metrics && ()
           <>
             <Card className="status-card">
               <CardContent className="p-6">
@@ -290,7 +260,6 @@ const BackupDashboard: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-
             <Card className="status-card">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
@@ -302,7 +271,6 @@ const BackupDashboard: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-
             <Card className="status-card">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
@@ -316,7 +284,6 @@ const BackupDashboard: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-
             <Card className="status-card">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
@@ -324,7 +291,7 @@ const BackupDashboard: React.FC = () => {
                     <p className="text-sm text-gray-600">Success Rate</p>
                     <p className="text-2xl font-bold text-orange-600">
                       {metrics.recent_executions.successful > 0 
-                        ? Math.round((metrics.recent_executions.successful / 
+                        ? Math.round((metrics.recent_executions.successful / )
                           (metrics.recent_executions.successful + metrics.recent_executions.failed)) * 100)
                         : 0}%
                     </p>
@@ -336,9 +303,8 @@ const BackupDashboard: React.FC = () => {
           </>
         )}
       </div>
-
       {/* System Health */}
-      {metrics?.health_status && (
+      {metrics?.health_status && ()
         <Card className="health-status">
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -354,22 +320,21 @@ const BackupDashboard: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {metrics.health_status.issues.length > 0 && (
+            {metrics.health_status.issues.length > 0 && ()
               <div className="issues-section mb-4">
                 <h4 className="font-semibold text-red-700 mb-2">Issues</h4>
                 <ul className="list-disc list-inside space-y-1">
-                  {metrics.health_status.issues.map((issue, index) => (
+                  {metrics.health_status.issues.map((issue, index) => ()
                     <li key={index} className="text-red-600 text-sm">{issue}</li>
                   ))}
                 </ul>
               </div>
             )}
-            
-            {metrics.health_status.recommendations.length > 0 && (
+            {metrics.health_status.recommendations.length > 0 && ()
               <div className="recommendations-section">
                 <h4 className="font-semibold text-blue-700 mb-2">Recommendations</h4>
                 <ul className="list-disc list-inside space-y-1">
-                  {metrics.health_status.recommendations.map((rec, index) => (
+                  {metrics.health_status.recommendations.map((rec, index) => ()
                     <li key={index} className="text-blue-600 text-sm">{rec}</li>
                   ))}
                 </ul>
@@ -378,9 +343,8 @@ const BackupDashboard: React.FC = () => {
           </CardContent>
         </Card>
       )}
-
       {/* Upcoming Backups */}
-      {metrics?.upcoming_backups && metrics.upcoming_backups.length > 0 && (
+      {metrics?.upcoming_backups && metrics.upcoming_backups.length > 0 && ()
         <Card className="upcoming-backups">
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -390,7 +354,7 @@ const BackupDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="backup-schedule-list">
-              {metrics.upcoming_backups.slice(0, 5).map((backup, index) => (
+              {metrics.upcoming_backups.slice(0, 5).map((backup, index) => ()
                 <div key={index} className="backup-schedule-item">
                   <div className="backup-info">
                     <h4 className="backup-name">{backup.config_name}</h4>
@@ -412,8 +376,7 @@ const BackupDashboard: React.FC = () => {
       )}
     </div>
   );
-
-  const renderConfigurationsTab = (): JSX.Element => (
+  const renderConfigurationsTab = (): JSX.Element => (;)
     <div className="configurations-content">
       <div className="configurations-header">
         <div className="header-actions">
@@ -422,14 +385,13 @@ const BackupDashboard: React.FC = () => {
             New Configuration
           </Button>
           <Button variant="outline" onClick={loadBackupData}>
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />}
             Refresh
           </Button>
         </div>
       </div>
-
       <div className="configurations-grid">
-        {configurations.map(config => (
+        {configurations.map(config => ()
           <Card key={config.config_id} className="config-card">
             <CardHeader className="pb-3">
               <div className="config-header">
@@ -454,7 +416,6 @@ const BackupDashboard: React.FC = () => {
                 </div>
               </div>
             </CardHeader>
-            
             <CardContent>
               <div className="config-details">
                 <div className="detail-item">
@@ -463,15 +424,13 @@ const BackupDashboard: React.FC = () => {
                     {config.backup_type} backup • {config.schedule.frequency}
                   </span>
                 </div>
-                
                 <div className="detail-item">
                   <HardDrive className="w-4 h-4 text-gray-400" />
                   <span className="text-sm">
                     {config.storage.provider} • {config.storage.encryption_enabled ? 'Encrypted' : 'Unencrypted'}
                   </span>
                 </div>
-                
-                {config.last_run_at && (
+                {config.last_run_at && ()
                   <div className="detail-item">
                     <Clock className="w-4 h-4 text-gray-400" />
                     <span className="text-sm">
@@ -479,8 +438,7 @@ const BackupDashboard: React.FC = () => {
                     </span>
                   </div>
                 )}
-                
-                {config.next_run_at && (
+                {config.next_run_at && ()
                   <div className="detail-item">
                     <Timer className="w-4 h-4 text-gray-400" />
                     <span className="text-sm">
@@ -489,7 +447,6 @@ const BackupDashboard: React.FC = () => {
                   </div>
                 )}
               </div>
-              
               <div className="config-toggle">
                 <label className="toggle-switch">
                   <input
@@ -509,8 +466,7 @@ const BackupDashboard: React.FC = () => {
       </div>
     </div>
   );
-
-  const renderExecutionsTab = (): JSX.Element => (
+  const renderExecutionsTab = (): JSX.Element => (;)
     <div className="executions-content">
       <Card>
         <CardHeader>
@@ -520,11 +476,10 @@ const BackupDashboard: React.FC = () => {
               Recent Executions
             </span>
             <Button variant="outline" size="sm" onClick={loadBackupData}>
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />}
             </Button>
           </CardTitle>
         </CardHeader>
-        
         <CardContent className="p-0">
           <div className="executions-table">
             <div className="table-header">
@@ -535,8 +490,7 @@ const BackupDashboard: React.FC = () => {
               <div className="header-cell">Size</div>
               <div className="header-cell">Actions</div>
             </div>
-            
-            {executions.map(execution => (
+            {executions.map(execution => ()
               <div key={execution.execution_id} className="table-row">
                 <div className="table-cell">
                   <div className="execution-config">
@@ -545,12 +499,11 @@ const BackupDashboard: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                
                 <div className="table-cell">
                   <Badge className={getStatusColor(execution.status)}>
                     {execution.status}
                   </Badge>
-                  {execution.status === 'running' && (
+                  {execution.status === 'running' && ()
                     <div className="progress-bar">
                       <div 
                         className="progress-fill" 
@@ -559,24 +512,21 @@ const BackupDashboard: React.FC = () => {
                     </div>
                   )}
                 </div>
-                
                 <div className="table-cell">
                   <span className="text-sm">
                     {new Date(execution.started_at).toLocaleString()}
                   </span>
                 </div>
-                
                 <div className="table-cell">
                   <span className="text-sm">
                     {execution.duration_seconds 
                       ? formatDuration(execution.duration_seconds)
                       : execution.status === 'running' 
-                        ? `${Math.floor((Date.now() - new Date(execution.started_at).getTime()) / 1000)}s`
+                        ? `${Math.floor((Date.now() - new Date(execution.started_at).getTime()) / 1000)}s`}
                         : '-'
                     }
                   </span>
                 </div>
-                
                 <div className="table-cell">
                   <span className="text-sm">
                     {execution.backup_size_bytes 
@@ -585,13 +535,12 @@ const BackupDashboard: React.FC = () => {
                     }
                   </span>
                 </div>
-                
                 <div className="table-cell">
                   <div className="action-buttons">
                     <Button size="sm" variant="outline">
                       <Eye className="w-4 h-4" />
                     </Button>
-                    {execution.recovery_point_id && (
+                    {execution.recovery_point_id && ()
                       <Button size="sm" variant="outline">
                         <Download className="w-4 h-4" />
                       </Button>
@@ -605,14 +554,13 @@ const BackupDashboard: React.FC = () => {
       </Card>
     </div>
   );
-
-  return (
+  return ()
     <div style={{
       maxWidth: '1400px',
       margin: '0 auto',
       padding: '24px',
       background: '#f8fafc',
-      minHeight: '100vh'
+      minHeight: '100vh',
     }}>
       <div style={{
         background: 'white',
@@ -631,27 +579,22 @@ const BackupDashboard: React.FC = () => {
           </div>
         </div>
       </div>
-
       <Tabs value={activeTab} onValueChange={setActiveTab} className="dashboard-tabs">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="configurations">Configurations</TabsTrigger>
           <TabsTrigger value="executions">Executions</TabsTrigger>
         </TabsList>
-
         <TabsContent value="overview">
           {renderOverviewTab()}
         </TabsContent>
-
         <TabsContent value="configurations">
           {renderConfigurationsTab()}
         </TabsContent>
-
         <TabsContent value="executions">
           {renderExecutionsTab()}
         </TabsContent>
       </Tabs>
-
     </div>
   );
 };

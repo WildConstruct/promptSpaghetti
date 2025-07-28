@@ -178,7 +178,7 @@ export function useStateSubscription<T = any>()
       setIsLoading(false);
       return;
     }
-    const unsubscribe = manager.current.subscribeToStateChanges(;)
+    const unsubscribe = manager.current.subscribeToStateChanges(;);
       domain,
       callback,
       filters,
@@ -346,7 +346,7 @@ export function useDomainState<T = any>()
         setIsLoading(false);
       }
     };
-    const unsubscribe = manager.current.subscribeToStateChanges(;)
+    const unsubscribe = manager.current.subscribeToStateChanges(;);
       domain,
       handleStateChange,
       [], // No filters
@@ -434,10 +434,10 @@ export function useCollaboration(domain: string) {
   return {
     collaborators,
     cursors,
-    updateCursor: (position: any) => {
+    updateCursor: (position: any) => {,
       // Update cursor position
     },
-    sendPresence: (data: any) => {
+    sendPresence: (data: any) => {,
       // Send presence data
     }
   };
@@ -491,7 +491,6 @@ export function useBatchMutation(domain: string) {
       await Promise.all()
         batch.map(mutation => )
           globalRealTimeManager.optimisticUpdate(domain, mutation)
-        )
       );
       setBatch([]);
     } catch (error) {

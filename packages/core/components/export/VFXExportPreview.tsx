@@ -45,13 +45,13 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
           },
           project: {,
             name: 'Preview Project',
-            scene: 'Preview Scene'
+            scene: 'Preview Scene',
           },
           export: {,
             format: 'vfx-pipeline-v1',
             quality: (exportData.export_options?.quality as any) || 'production',
             includeDebugInfo: exportData.export_options?.include_debug_info || false,
-            includeHistoricalData: exportData.export_options?.include_historical_data || true
+            includeHistoricalData: exportData.export_options?.include_historical_data || true,
           },
           compatibility: {,
             controlNet: exportData.export_options?.enable_controlnet_support || true,
@@ -68,7 +68,7 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
             setting: ['crumbling stone ruins', 'ancient temple'],
             mood: ['dramatic', 'golden hour lighting', 'mist swirling'],
             technical: ['cinematic composition', 'depth of field', '8K resolution'],
-            style: ['photorealistic rendering']
+            style: ['photorealistic rendering'],
           },
           variables: {},
           variants: [],
@@ -142,7 +142,7 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
                   positioning: {,
                     screenPosition: 'center',
                     depth: 'midground',
-                    relationship: ['dominates ruins']
+                    relationship: ['dominates ruins'],
                   },
                   // ControlNet subject metadata tags
                   marsMetadataTags: {,
@@ -247,7 +247,7 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
                 films: ['The Lord of the Rings', 'Game of Thrones'],
                 artwork: ['Frank Frazetta', 'Boris Vallejo'],
                 photography: ['National Geographic wildlife'],
-                other: ['Dragon mythology']
+                other: ['Dragon mythology'],
               }
             }
           },
@@ -364,13 +364,13 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
                   seed: 1024576,
                   description: 'Director\'s preferred composition and lighting',
                   approvalStatus: 'approved',
-                  notes: 'Final approved version for production'
+                  notes: 'Final approved version for production',
                 },
                 'alternate_angle': {
                   seed: 1024577,
                   description: 'Alternative low-angle approach',
                   approvalStatus: 'review',
-                  notes: 'Backup option if main version needs adjustment'
+                  notes: 'Backup option if main version needs adjustment',
                 }
               }
             },
@@ -389,7 +389,7 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
               },
               hardwareFingerprint: 'gpu:rtx4090-cpu:i9-13900k',
               lastValidated: new Date().toISOString(),
-              validationNotes: 'Validated on reference hardware configuration'
+              validationNotes: 'Validated on reference hardware configuration',
             },
             compliance: {,
               studioCertification: true,
@@ -431,13 +431,13 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
               schedule: {,
                 prep: '2 weeks for asset creation and lighting tests',
                 shoot: '1 day for plates and reference',
-                post: '3-4 weeks for final creature animation and compositing'
+                post: '3-4 weeks for final creature animation and compositing',
               },
               resources: {,
                 crew: ['VFX Supervisor', 'Creature Animator', 'Lighting TD', 'Compositor'],
                 equipment: ['Creature motion capture system', 'High-res cameras for reference', 'Atmospheric effects units'],
                 locations: ['Temple ruins backlot or suitable location'],
-                talent: ['N/A - full CG creature']
+                talent: ['N/A - full CG creature'],
               },
               dependencies: {,
                 prerequisites: ['Dragon asset modeling complete', 'Ruins set construction', 'Lighting tests approved'],
@@ -451,19 +451,19 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
                   reviewers: ['Director', 'Producer', 'VFX Supervisor'],
                   criteria: ['Creative vision alignment', 'Technical feasibility', 'Budget compliance'],
                   deliverables: ['Concept art', 'Technical breakdown', 'Budget estimate'],
-                  timeline: '3-5 days'
+                  timeline: '3-5 days',
                 },
                 'previs': {
                   reviewers: ['Director', 'Cinematographer', 'VFX Supervisor'],
                   criteria: ['Composition', 'Camera work', 'Creature performance'],
                   deliverables: ['Animated previs', 'Lighting tests', 'Camera breakdown'],
-                  timeline: '1 week'
+                  timeline: '1 week',
                 },
                 'final': {
                   reviewers: ['Director', 'Producer', 'VFX Supervisor', 'Editor'],
                   criteria: ['Final image quality', 'Story integration', 'Technical delivery'],
                   deliverables: ['Final rendered shot', 'Technical documentation', 'Archive materials'],
-                  timeline: '2-3 days'
+                  timeline: '2-3 days',
                 }
               },
               signOffs: {,
@@ -484,7 +484,7 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
               referenceImages: ['Classical dragon artwork', 'Temple architecture references', 'Golden hour photography'],
               testFootage: ['Dragon movement tests', 'Lighting studies', 'Atmospheric effect tests'],
               alternativeVersions: ['Night version', 'Stormy weather variant', 'Different dragon poses'],
-              archiveNotes: 'Hero dragon asset to be preserved for future sequences. Lighting setup documented for consistency.'
+              archiveNotes: 'Hero dragon asset to be preserved for future sequences. Lighting setup documented for consistency.',
             }
           },
           // ControlNet integration metadata tags
@@ -510,7 +510,7 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
                   pipelineStage: 'previs',
                   qualityLevel: 'final',
                   lastValidated: new Date().toISOString(),
-                  validationNotes: ['Camera parameters validated for epic fantasy composition']
+                  validationNotes: ['Camera parameters validated for epic fantasy composition'],
                 }
               }
             },
@@ -619,7 +619,7 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
     }
   };
   if (loading) {
-    return ()
+    return ();
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <span className="ml-2 text-gray-600 dark:text-gray-300">Generating VFX export preview...</span>
@@ -627,13 +627,13 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
     );
   }
   if (!previewData || !validation) {
-    return ()
+    return ();
       <div className="text-center p-8 text-gray-500 dark:text-gray-400">
         Failed to generate preview
       </div>
     );
   }
-  const renderPreviewTab = () => (;)
+  const renderPreviewTab = () => (;);
     <div className="space-y-6">
       {/* Export Overview */}
       <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
@@ -745,7 +745,7 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
       </div>
     </div>
   );
-  const renderValidationTab = () => (;)
+  const renderValidationTab = () => (;);
     <div className="space-y-6">
       {/* Validation Status */}
       <div className={`rounded-lg p-4 ${
@@ -818,22 +818,22 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
             { 
               label: 'ControlNet Support', 
               status: validation.compatibility.controlNet,
-              description: 'Enables AI-driven pose and composition control'
+              description: 'Enables AI-driven pose and composition control',
             },
             { 
               label: 'Animation Framework', 
               status: validation.compatibility.animation,
-              description: 'Supports keyframe animation and video generation'
+              description: 'Supports keyframe animation and video generation',
             },
             { 
               label: 'Rendering Pipeline', 
               status: validation.compatibility.rendering,
-              description: 'Compatible with professional rendering engines'
+              description: 'Compatible with professional rendering engines',
             },
             { 
               label: 'Exact Reproducibility', 
               status: validation.compatibility.reproducibility?.exact || false,
-              description: 'Can reproduce identical results with same seed'
+              description: 'Can reproduce identical results with same seed',
             }
           ].map((item) => ()
             <div key={item.label} className="flex items-start space-x-3">
@@ -852,7 +852,7 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
       </div>
     </div>
   );
-  const renderJsonTab = () => (;)
+  const renderJsonTab = () => (;);
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -873,7 +873,7 @@ export const VFXExportPreview: React.FC<VFXExportPreviewProps> = ({)
       </div>
     </div>
   );
-  return ()
+  return ();
     <div className="vfx-export-preview">
       {/* Tab Navigation */}
       <div className="border-b border-gray-200 dark:border-gray-700 mb-6">

@@ -50,7 +50,7 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({)
   const canUpdate = isInstalled && status.updateAvailable && onUpdate;
   const canConfigure = isInstalled && onConfigure;
   const canInstall = !isInstalled && onInstall;
-  return ()
+  return ();
     <div className="extension-detail-view">
       {/* Header */}
       <div className="extension-detail-header">

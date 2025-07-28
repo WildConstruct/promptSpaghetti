@@ -27,11 +27,11 @@ describe('Validation Module - Full Coverage (95% target)', () => {
       expect(errors).toHaveLength(2);
       expect(errors[0]).toEqual({)
         edgeId: 'e1',
-        message: 'Edge is a self-loop'
+        message: 'Edge is a self-loop',
       });
       expect(errors[1]).toEqual({)
         edgeId: 'e2',
-        message: 'Edge is a self-loop'
+        message: 'Edge is a self-loop',
       });
     });
     it('should detect duplicate edges', () => {
@@ -44,11 +44,11 @@ describe('Validation Module - Full Coverage (95% target)', () => {
       expect(errors).toHaveLength(2); // First is valid, second and third are duplicates
       expect(errors[0]).toEqual({)
         edgeId: 'e2',
-        message: 'Duplicate edge'
+        message: 'Duplicate edge',
       });
       expect(errors[1]).toEqual({)
         edgeId: 'e3',
-        message: 'Duplicate edge'
+        message: 'Duplicate edge',
       });
     });
   });
@@ -78,7 +78,7 @@ describe('Validation Module - Full Coverage (95% target)', () => {
       expect(errors).toHaveLength(1); // Only e3 is a self-loop ('' === '')
       expect(errors[0]).toEqual({)
         edgeId: 'e3',
-        message: 'Edge is a self-loop'
+        message: 'Edge is a self-loop',
       });
     });
     it('should handle null/undefined edge properties gracefully', () => {
@@ -91,7 +91,7 @@ describe('Validation Module - Full Coverage (95% target)', () => {
       expect(errors).toHaveLength(1); // undefined === undefined is a self-loop
       expect(errors[0]).toEqual({)
         edgeId: 'e3',
-        message: 'Edge is a self-loop'
+        message: 'Edge is a self-loop',
       });
     });
   });
@@ -188,7 +188,7 @@ describe('Validation Module - Full Coverage (95% target)', () => {
     it('should correctly type validation errors', () => {
       const error: ValidationError = {
         edgeId: 'test-id',
-        message: 'test message'
+        message: 'test message',
       };
       expect(error.edgeId).toBe('test-id');
       expect(error.message).toBe('test message');

@@ -470,7 +470,6 @@ export class AnalyticsAdapterManager {
     adapters: number;
     enabledAdapters: number;
     eventBusMetrics: any;
-  } {
     const enabledAdapters = Array.from(this.adapters.values());
       .filter(adapter => adapter.getStatus().enabled).length;
     return {

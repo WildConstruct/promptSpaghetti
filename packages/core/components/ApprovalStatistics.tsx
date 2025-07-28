@@ -173,14 +173,14 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({)
     </div>
   );
   if (loading && !statistics) {
-    return ()
+    return ();
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <XCircleIcon className="h-5 w-5 text-red-400" />
@@ -192,7 +192,7 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">

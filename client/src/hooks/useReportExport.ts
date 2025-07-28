@@ -6,12 +6,11 @@
  * 
  * Task: T-1752989143998-788 - Add report export options
  */
-
 import { useState, useCallback } from 'react';
 
 // Types
 interface ReportData {
-  metadata: {
+  metadata: {,
     title: string;
     description: string;
     generatedAt: Date;
@@ -32,7 +31,6 @@ interface ReportData {
     type: 'text' | 'table' | 'chart' | 'html';
   }>;
 }
-
 interface ExportConfig {
   format: 'pdf' | 'excel' | 'csv' | 'json' | 'xml' | 'html';
   delivery: 'file' | 'email' | 'webhook' | 'api';
@@ -64,7 +62,6 @@ interface ExportConfig {
     };
   };
 }
-
 interface ExportResult {
   id: string;
   success: boolean;
@@ -76,20 +73,19 @@ interface ExportResult {
   deliveredAt?: Date;
   error?: string;
   downloadUrl?: string;
-  metadata: {
+  metadata: {,
     recordCount: number;
     processingTime: number;
     compressionRatio?: number;
   };
 }
-
 interface ScheduledExport {
   id: string;
   name: string;
   description: string;
   reportQuery: string;
   exportConfig: ExportConfig;
-  schedule: {
+  schedule: {,
     frequency: 'daily' | 'weekly' | 'monthly' | 'custom';
     time: string;
     dayOfWeek?: number;
@@ -101,11 +97,10 @@ interface ScheduledExport {
   nextRun?: Date;
   createdBy: string;
 }
-
 interface ExportFormats {
   formats: string[];
   deliveryMethods: string[];
-  supportedFeatures: {
+  supportedFeatures: {,
     compression: boolean;
     encryption: boolean;
     scheduling: boolean;
@@ -116,7 +111,6 @@ interface ExportFormats {
     webhooks: boolean;
   };
 }
-
 interface UseReportExportReturn {
   // State
   isExporting: boolean;
@@ -125,10 +119,9 @@ interface UseReportExportReturn {
   exportHistory: ExportResult[];
   scheduledExports: ScheduledExport[];
   exportFormats: ExportFormats | null;
-  
   // Actions
   exportReport: (reportData: ReportData, config: ExportConfig) => Promise<ExportResult>;
-  bulkExportReports: (reports: Array<{
+  bulkExportReports: (reports: Array<{),
     name: string;
     reportData: ReportData;
     config: ExportConfig;
@@ -142,18 +135,16 @@ interface UseReportExportReturn {
   previewReport: (reportData: ReportData, format: string) => Promise<{
     format: string;
     preview: string;
-    metadata: {
+    metadata: {,
       recordCount: number;
       estimatedSize: number;
       previewTruncated: boolean;
     };
   }>;
-  
   // Data loading
   loadExportHistory: (limit?: number, formatFilter?: string, deliveryFilter?: string) => Promise<void>;
   loadScheduledExports: () => Promise<void>;
   loadExportFormats: () => Promise<void>;
-  
   // Management
   cancelScheduledExport: (scheduleId: string) => Promise<boolean>;
   downloadExport: (exportId: string) => void;
@@ -168,45 +159,37 @@ export const useReportExport = (): UseReportExportReturn => {
   const [exportHistory, setExportHistory] = useState<ExportResult[]>([]);
   const [scheduledExports, setScheduledExports] = useState<ScheduledExport[]>([]);
   const [exportFormats, setExportFormats] = useState<ExportFormats | null>(null);
-
   // Export report immediately
   const exportReport = useCallback(async (reportData: ReportData, config: ExportConfig): Promise<ExportResult> => {
     setIsExporting(true);
-    
     try {
-      const response = await fetch('/api/reports/export', {
+      const response = await fetch('/api/reports/export', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           reportData,
           config
         })
       });
-
       if (!response.ok) {
-        throw new Error(`Export failed: ${response.statusText}`);
+        throw new Error(`Export failed: ${response.statusText}`);}
       }
-
       const result = await response.json();
-      
       if (!result.success) {
         throw new Error(result.error || 'Export failed');
       }
-
       // Refresh export history
       await loadExportHistory();
-
       return result.data;
     } finally {
       setIsExporting(false);
     }
   }, []);
-
   // Bulk export multiple reports
-  const bulkExportReports = useCallback(async (
-    reports: Array<{
+  const bulkExportReports = useCallback(async (;)
+    reports: Array<{,
       name: string;
       reportData: ReportData;
       config: ExportConfig;
@@ -218,130 +201,104 @@ export const useReportExport = (): UseReportExportReturn => {
     }
   ) => {
     setIsExporting(true);
-    
     try {
-      const response = await fetch('/api/reports/bulk-export', {
+      const response = await fetch('/api/reports/bulk-export', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           reports,
           options
         })
       });
-
       if (!response.ok) {
-        throw new Error(`Bulk export failed: ${response.statusText}`);
+        throw new Error(`Bulk export failed: ${response.statusText}`);}
       }
-
       const result = await response.json();
-      
       // Refresh export history
       await loadExportHistory();
-
       return result.data;
     } finally {
       setIsExporting(false);
     }
   }, []);
-
   // Schedule recurring export
   const scheduleExport = useCallback(async (schedule: Omit<ScheduledExport, 'id'>): Promise<ScheduledExport> => {
-    const response = await fetch('/api/reports/schedule', {
+    const response = await fetch('/api/reports/schedule', {)
       method: 'POST',
-      headers: {
+      headers: {,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(schedule)
+      body: JSON.stringify(schedule),
     });
-
     if (!response.ok) {
-      throw new Error(`Scheduling failed: ${response.statusText}`);
+      throw new Error(`Scheduling failed: ${response.statusText}`);}
     }
-
     const result = await response.json();
-    
     if (!result.success) {
       throw new Error(result.error || 'Scheduling failed');
     }
-
     // Refresh scheduled exports
     await loadScheduledExports();
-
     return result.data;
   }, []);
-
   // Test export with sample data
   const testExport = useCallback(async (format: string, delivery: string = 'file'): Promise<ExportResult> => {
     setIsExporting(true);
-    
     try {
-      const response = await fetch('/api/reports/test-export', {
+      const response = await fetch('/api/reports/test-export', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           format,
           delivery
         })
       });
-
       if (!response.ok) {
-        throw new Error(`Test export failed: ${response.statusText}`);
+        throw new Error(`Test export failed: ${response.statusText}`);}
       }
-
       const result = await response.json();
-      
       if (!result.success) {
         throw new Error(result.error || 'Test export failed');
       }
-
       return result.data;
     } finally {
       setIsExporting(false);
     }
   }, []);
-
   // Preview report before export
   const previewReport = useCallback(async (reportData: ReportData, format: string) => {
-    const response = await fetch('/api/reports/preview', {
+    const response = await fetch('/api/reports/preview', {)
       method: 'POST',
-      headers: {
+      headers: {,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
+      body: JSON.stringify({),
         reportData,
         format
       })
     });
-
     if (!response.ok) {
-      throw new Error(`Preview failed: ${response.statusText}`);
+      throw new Error(`Preview failed: ${response.statusText}`);}
     }
-
     const result = await response.json();
-    
     if (!result.success) {
       throw new Error(result.error || 'Preview failed');
     }
-
     return result.data;
   }, []);
-
   // Load export history
   const loadExportHistory = useCallback(async (limit: number = 100, formatFilter?: string, deliveryFilter?: string) => {
     setIsLoadingHistory(true);
-    
     try {
       const params = new URLSearchParams({ limit: limit.toString() });
       if (formatFilter) params.append('format', formatFilter);
       if (deliveryFilter) params.append('delivery', deliveryFilter);
-
-      const response = await fetch(`/api/reports/history?${params}`);
+      const response = await fetch(`/api/reports/history?${params}`);}
       const result = await response.json();
-      
       if (result.success) {
         setExportHistory(result.data);
       }
@@ -351,15 +308,12 @@ export const useReportExport = (): UseReportExportReturn => {
       setIsLoadingHistory(false);
     }
   }, []);
-
   // Load scheduled exports
   const loadScheduledExports = useCallback(async () => {
     setIsLoadingSchedules(true);
-    
     try {
       const response = await fetch('/api/reports/schedules');
       const result = await response.json();
-      
       if (result.success) {
         setScheduledExports(result.data);
       }
@@ -369,13 +323,11 @@ export const useReportExport = (): UseReportExportReturn => {
       setIsLoadingSchedules(false);
     }
   }, []);
-
   // Load available export formats and options
   const loadExportFormats = useCallback(async () => {
     try {
       const response = await fetch('/api/reports/options');
       const result = await response.json();
-      
       if (result.success) {
         setExportFormats(result.data);
       }
@@ -383,14 +335,12 @@ export const useReportExport = (): UseReportExportReturn => {
       console.error('Failed to load export formats:', error);
     }
   }, []);
-
   // Cancel scheduled export
   const cancelScheduledExport = useCallback(async (scheduleId: string): Promise<boolean> => {
     try {
-      const response = await fetch(`/api/reports/schedules/${scheduleId}`, {
-        method: 'DELETE'
+      const response = await fetch(`/api/reports/schedules/${scheduleId}`, {)}
+        method: 'DELETE',
       });
-
       if (response.ok) {
         // Refresh scheduled exports
         await loadScheduledExports();
@@ -402,18 +352,15 @@ export const useReportExport = (): UseReportExportReturn => {
       return false;
     }
   }, [loadScheduledExports]);
-
   // Download exported report
   const downloadExport = useCallback((exportId: string) => {
-    window.open(`/api/reports/download/${exportId}`, '_blank');
+    window.open(`/api/reports/download/${exportId}`, '_blank');}
   }, []);
-
   // Get export statistics
   const getExportStatistics = useCallback(async () => {
     try {
       const response = await fetch('/api/reports/statistics');
       const result = await response.json();
-      
       if (result.success) {
         return result.data;
       }
@@ -423,7 +370,6 @@ export const useReportExport = (): UseReportExportReturn => {
       return null;
     }
   }, []);
-
   return {
     // State
     isExporting,
@@ -432,19 +378,16 @@ export const useReportExport = (): UseReportExportReturn => {
     exportHistory,
     scheduledExports,
     exportFormats,
-    
     // Actions
     exportReport,
     bulkExportReports,
     scheduleExport,
     testExport,
     previewReport,
-    
     // Data loading
     loadExportHistory,
     loadScheduledExports,
     loadExportFormats,
-    
     // Management
     cancelScheduledExport,
     downloadExport,

@@ -58,7 +58,7 @@ describe('ClassificationEnforcer', () => {
       requestId: 'req789',
     };
     it('should allow PUBLIC data access with minimal controls', async () => {
-      const result = await enforcer.enforceClassification(;)
+      const result = await enforcer.enforceClassification(;);
         'PUBLIC',
         baseOperation,
         ['auth-standard', 'audit-standard']
@@ -69,7 +69,7 @@ describe('ClassificationEnforcer', () => {
       expect(result.riskScore).toBeLessThan(30);
     });
     it('should enforce INTERNAL data requirements', async () => {
-      const result = await enforcer.enforceClassification(;)
+      const result = await enforcer.enforceClassification(;);
         'INTERNAL',
         baseOperation,
         ['auth-standard']
@@ -79,7 +79,7 @@ describe('ClassificationEnforcer', () => {
       expect(result.violations).toHaveLength(0);
     });
     it('should enforce CONFIDENTIAL data requirements', async () => {
-      const result = await enforcer.enforceClassification(;)
+      const result = await enforcer.enforceClassification(;);
         'CONFIDENTIAL',
         baseOperation,
         ['auth-mfa']
@@ -88,7 +88,7 @@ describe('ClassificationEnforcer', () => {
       expect(result.violations).toContain('Authorization required but not present');
     });
     it('should enforce RESTRICTED data requirements strictly', async () => {
-      const result = await enforcer.enforceClassification(;)
+      const result = await enforcer.enforceClassification(;);
         'RESTRICTED',
         baseOperation,
         ['auth-standard']
@@ -102,7 +102,7 @@ describe('ClassificationEnforcer', () => {
         ...baseOperation,
         operation: 'write',
       };
-      const result = await enforcer.enforceClassification(;)
+      const result = await enforcer.enforceClassification(;);
         'CONFIDENTIAL',
         writeOperation,
         ['auth-mfa']
@@ -114,7 +114,7 @@ describe('ClassificationEnforcer', () => {
         ...baseOperation,
         operation: 'export',
       };
-      const result = await enforcer.enforceClassification(;)
+      const result = await enforcer.enforceClassification(;);
         'RESTRICTED',
         exportOperation,
         ['auth-strong_mfa']
@@ -128,7 +128,7 @@ describe('ClassificationEnforcer', () => {
         ...baseOperation,
         operation: 'share',
       };
-      const result = await enforcer.enforceClassification(;)
+      const result = await enforcer.enforceClassification(;);
         'CONFIDENTIAL',
         shareOperation,
         ['auth-mfa']
@@ -141,7 +141,7 @@ describe('ClassificationEnforcer', () => {
         ...baseOperation,
         environment: 'development',
       };
-      const result = await enforcer.enforceClassification(;)
+      const result = await enforcer.enforceClassification(;);
         'RESTRICTED',
         devOperation,
         ['auth-strong_mfa']
@@ -153,7 +153,7 @@ describe('ClassificationEnforcer', () => {
         gracePeriodDays: 30,
         blockViolations: true,
       });
-      const result = await gracePeriodEnforcer.enforceClassification(;)
+      const result = await gracePeriodEnforcer.enforceClassification(;);
         'RESTRICTED',
         baseOperation,
         []
@@ -165,7 +165,7 @@ describe('ClassificationEnforcer', () => {
       const strictEnforcer = new ClassificationEnforcer({)
         strictMode: true,
       });
-      const result = await strictEnforcer.enforceClassification(;)
+      const result = await strictEnforcer.enforceClassification(;);
         'CONFIDENTIAL',
         baseOperation,
         []
@@ -179,7 +179,7 @@ describe('ClassificationEnforcer', () => {
           users: ['user123'],
         }
       });
-      const result = await exemptedEnforcer.enforceClassification(;)
+      const result = await exemptedEnforcer.enforceClassification(;);
         'RESTRICTED',
         baseOperation,
         []
@@ -189,7 +189,7 @@ describe('ClassificationEnforcer', () => {
     });
     it('should apply policy overrides', async () => {
       const overrideEnforcer = new ClassificationEnforcer({)
-        policyOverrides: new Map([)
+        policyOverrides: new Map([),
           ['CONFIDENTIAL', {
             access: {,
               authenticationLevel: 'STANDARD',
@@ -203,7 +203,7 @@ describe('ClassificationEnforcer', () => {
           }]
         ])
       });
-      const result = await overrideEnforcer.enforceClassification(;)
+      const result = await overrideEnforcer.enforceClassification(;);
         'CONFIDENTIAL',
         baseOperation,
         ['auth-standard']
@@ -212,12 +212,12 @@ describe('ClassificationEnforcer', () => {
       expect(result.violations).toHaveLength(0);
     });
     it('should calculate risk scores appropriately', async () => {
-      const publicResult = await enforcer.enforceClassification(;)
+      const publicResult = await enforcer.enforceClassification(;);
         'PUBLIC',
         baseOperation,
         ['auth-standard', 'audit-standard']
       );
-      const restrictedResult = await enforcer.enforceClassification(;)
+      const restrictedResult = await enforcer.enforceClassification(;);
         'RESTRICTED',
         baseOperation,
         []
@@ -226,12 +226,12 @@ describe('ClassificationEnforcer', () => {
       expect(restrictedResult.riskScore).toBeGreaterThan(80);
     });
     it('should generate audit IDs', async () => {
-      const result1 = await enforcer.enforceClassification(;)
+      const result1 = await enforcer.enforceClassification(;);
         'INTERNAL',
         baseOperation,
         []
       );
-      const result2 = await enforcer.enforceClassification(;)
+      const result2 = await enforcer.enforceClassification(;);
         'INTERNAL',
         baseOperation,
         []
@@ -241,7 +241,7 @@ describe('ClassificationEnforcer', () => {
       expect(result1.auditId).not.toBe(result2.auditId);
     });
     it('should provide recommendations for violations', async () => {
-      const result = await enforcer.enforceClassification(;)
+      const result = await enforcer.enforceClassification(;);
         'CONFIDENTIAL',
         baseOperation,
         []
@@ -254,9 +254,9 @@ describe('ClassificationEnforcer', () => {
       // Create operation that might cause internal errors
       const badOperation: OperationContext = {
         ...baseOperation,
-        operation: 'invalid-op' as OperationContext['operation']
+        operation: 'invalid-op' as OperationContext['operation'],
       };
-      const result = await enforcer.enforceClassification(;)
+      const result = await enforcer.enforceClassification(;);
         'CONFIDENTIAL',
         badOperation,
         []
@@ -268,7 +268,7 @@ describe('ClassificationEnforcer', () => {
   });
   describe('makeAccessDecision', () => {
     it('should grant access for properly authenticated users', async () => {
-      const decision = await enforcer.makeAccessDecision(;)
+      const decision = await enforcer.makeAccessDecision(;);
         'user123',
         'data456',
         'PUBLIC',
@@ -284,12 +284,11 @@ describe('ClassificationEnforcer', () => {
       expect(decision.expiresAt).toBeDefined();
     });
     it('should deny access for insufficient authentication', async () => {
-      const decision = await enforcer.makeAccessDecision(;)
+      const decision = await enforcer.makeAccessDecision(;);
         'user123',
         'data456',
         'RESTRICTED',
         'read',
-        {}
       );
       expect(decision.granted).toBe(false);
       expect(decision.reason).toBe('Insufficient authentication level');
@@ -298,12 +297,11 @@ describe('ClassificationEnforcer', () => {
     it('should check time restrictions for sensitive operations', async () => {
       // Set time to outside business hours
       jest.setSystemTime(new Date('2025-01-21T22:00:00.000Z'));
-      const decision = await enforcer.makeAccessDecision(;)
+      const decision = await enforcer.makeAccessDecision(;);
         'user123',
         'data456',
         'CONFIDENTIAL',
         'export',
-        {}
       );
       expect(decision.granted).toBe(false);
       expect(decision.reason).toBe('Operation not allowed outside business hours');
@@ -311,18 +309,17 @@ describe('ClassificationEnforcer', () => {
     it('should check weekend restrictions', async () => {
       // Set time to Saturday
       jest.setSystemTime(new Date('2025-01-25T12:00:00.000Z'));
-      const decision = await enforcer.makeAccessDecision(;)
+      const decision = await enforcer.makeAccessDecision(;);
         'user123',
         'data456',
         'CONFIDENTIAL',
         'share',
-        {}
       );
       expect(decision.granted).toBe(false);
       expect(decision.reason).toBe('Operation not allowed on weekends');
     });
     it('should check purpose limitations', async () => {
-      const decision = await enforcer.makeAccessDecision(;)
+      const decision = await enforcer.makeAccessDecision(;);
         'user123',
         'data456',
         'RESTRICTED',
@@ -335,14 +332,13 @@ describe('ClassificationEnforcer', () => {
       expect(decision.reason).toBe('Purpose not allowed for this classification');
     });
     it('should set appropriate access expiration', async () => {
-      const publicDecision = await enforcer.makeAccessDecision(;)
+      const publicDecision = await enforcer.makeAccessDecision(;);
         'user123',
         'data456',
         'PUBLIC',
         'read',
-        {}
       );
-      const restrictedDecision = await enforcer.makeAccessDecision(;)
+      const restrictedDecision = await enforcer.makeAccessDecision(;);
         'user123',
         'data456',
         'RESTRICTED',
@@ -359,7 +355,7 @@ describe('ClassificationEnforcer', () => {
       expect(restrictedExpiration).toBe(4 * 60 * 60 * 1000);
     });
     it('should include appropriate access conditions', async () => {
-      const decision = await enforcer.makeAccessDecision(;)
+      const decision = await enforcer.makeAccessDecision(;);
         'user123',
         'data456',
         'RESTRICTED',
@@ -385,7 +381,7 @@ describe('ClassificationEnforcer', () => {
       requestId: 'req789',
     };
     it('should validate read operations', async () => {
-      const result = await enforcer.validateOperation(;)
+      const result = await enforcer.validateOperation(;);
         baseOperation,
         'CONFIDENTIAL',
         { id: 'data123' }
@@ -398,7 +394,7 @@ describe('ClassificationEnforcer', () => {
         ...baseOperation,
         operation: 'write',
       };
-      const result = await enforcer.validateOperation(;)
+      const result = await enforcer.validateOperation(;);
         writeOp,
         'CONFIDENTIAL',
         { id: 'data123' }
@@ -412,7 +408,7 @@ describe('ClassificationEnforcer', () => {
         ...baseOperation,
         operation: 'delete',
       };
-      const result = await enforcer.validateOperation(;)
+      const result = await enforcer.validateOperation(;);
         deleteOp,
         'CONFIDENTIAL',
         { id: 'data123' }
@@ -426,7 +422,7 @@ describe('ClassificationEnforcer', () => {
         ...baseOperation,
         operation: 'export',
       };
-      const result = await enforcer.validateOperation(;)
+      const result = await enforcer.validateOperation(;);
         exportOp,
         'RESTRICTED',
         { id: 'data123' }
@@ -441,7 +437,7 @@ describe('ClassificationEnforcer', () => {
         ...baseOperation,
         operation: 'share',
       };
-      const result = await enforcer.validateOperation(;)
+      const result = await enforcer.validateOperation(;);
         shareOp,
         'CONFIDENTIAL',
         { id: 'data123' }
@@ -457,7 +453,7 @@ describe('ClassificationEnforcer', () => {
         operation: 'write',
         environment: 'development',
       };
-      const result = await enforcer.validateOperation(;)
+      const result = await enforcer.validateOperation(;);
         devOp,
         'RESTRICTED',
         { id: 'data123' }
@@ -470,7 +466,7 @@ describe('ClassificationEnforcer', () => {
         ...baseOperation,
         source: 'third-party',
       };
-      const result = await enforcer.validateOperation(;)
+      const result = await enforcer.validateOperation(;);
         thirdPartyOp,
         'RESTRICTED',
         { id: 'data123' }
@@ -555,7 +551,7 @@ describe('ClassificationEnforcer', () => {
   describe('Integration Scenarios', () => {
     it('should handle complete authentication flow', async () => {
       // Start with basic auth
-      let result = await enforcer.enforceClassification(;)
+      let result = await enforcer.enforceClassification(;);
         'INTERNAL',
         {
           operation: 'read',
@@ -607,7 +603,7 @@ describe('ClassificationEnforcer', () => {
       const dataId = 'data123';
       const userId = 'user456';
       // Create - should require encryption
-      let result = await enforcer.validateOperation(;)
+      let result = await enforcer.validateOperation(;);
         {
           operation: 'write',
           userId,

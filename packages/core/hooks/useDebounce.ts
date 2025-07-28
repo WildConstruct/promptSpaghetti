@@ -27,8 +27,7 @@ export function useDebounce<T extends (...args: any[]) => void>()
  */
 export function useWeightChangeDebounce()
   onWeightChange: (weights: any[]) => void,
-  delay: number = 300
-) {
+  delay: number = 300,
   const debouncedWeightChange = useDebounce(onWeightChange, delay);
   const handleWeightChange = useCallback((newWeights: any[]) => {
     // Log for Epic 8.5 debugging

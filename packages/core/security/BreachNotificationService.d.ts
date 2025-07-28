@@ -210,7 +210,7 @@ export declare class BreachNotificationService extends EventEmitter {
     /**
      * Send notification to specified recipients
      */
-    sendNotification()
+    sendNotification();
       incidentId: string,
       type: NotificationType,
       recipients: string[],

@@ -141,7 +141,7 @@ export declare class AdaptiveRateLimitingIntegration extends EventEmitter {
     private decisionHistory;
     private learningData;
     private performanceMetrics;
-    constructor()
+    constructor();
       rateLimitingService: RateLimitingService,
       throttlingEngine: AdaptiveThrottlingRulesEngine,
       config?: Partial<IntegrationConfig>

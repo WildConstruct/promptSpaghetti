@@ -188,7 +188,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
         tokensPerMinute: 20000,
       },
       tags: ['text-to-speech', 'voice-cloning', 'custom-voices', 'multilingual'],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     const capabilities: ModelCapabilities = {
       inputTypes: ['text'],
@@ -276,7 +276,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
         usage: {,
           characters: text.length,
           cost: this._calculateCost(text.length),
-          quota_remaining: this.quotaInfo?.character_limit - this.quotaInfo?.character_count
+          quota_remaining: this.quotaInfo?.character_limit - this.quotaInfo?.character_count,
         }
       };
       this._lastActivity = new Date();
@@ -387,7 +387,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
       model_id: processedOptions.model_id,
       voice_settings: processedOptions.voice_settings,
     };
-    const response = await fetch(;)
+    const response = await fetch(;);
       `${this.config.baseURL || 'https://api.elevenlabs.io'}/v1/text-to-speech/${voiceId}/stream`,}
       {
         method: 'POST',
@@ -520,7 +520,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
     }
     // Validate model_id exists and supports TTS
     if (this.availableModels.length > 0) {
-      const modelExists = this.availableModels.some(m => ;)
+      const modelExists = this.availableModels.some(m => ;);
         m.model_id === processed.model_id && m.can_do_text_to_speech
       );
       if (!modelExists) {
@@ -547,7 +547,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
       model_id: options.model_id,
       voice_settings: options.voice_settings,
     };
-    const response = await this._makeRequest(;)
+    const response = await this._makeRequest(;);
       `/v1/text-to-speech/${options.voice_id}`,}
       'POST',
       payload,
@@ -582,7 +582,7 @@ export class ElevenLabsAdapter extends BaseAIModel {
     const options: RequestInit = {
       method,
       headers,
-      signal: AbortSignal.timeout(this.config.timeout || 60000)
+      signal: AbortSignal.timeout(this.config.timeout || 60000),
     };
     if (method !== 'GET' && payload) {
       options.body = payload instanceof FormData ? payload : JSON.stringify(payload);

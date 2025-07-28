@@ -118,7 +118,7 @@ export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({)
     if (size < 1024 * 1024 * 1024) return `${(size / (1024 * 1024)).toFixed(1)} MB`;}
     return `${(size / (1024 * 1024 * 1024)).toFixed(1)} GB`;}
   };
-  return ()
+  return ();
     <div className={`flex items-center space-x-2 ${className}`}>}
       <span 
         className={`text-sm ${getStatusColor(encryptionState.status)}`}
@@ -184,7 +184,7 @@ export const EncryptionStatusIcon: React.FC<{
     decrypting: '#f59e0b',    // yellow
     not_encrypted: '#f97316', // orange
     error: '#ef4444',         // red
-    unknown: '#6b7280'        // gray
+    unknown: '#6b7280'        // gray,
   }[encryptionState.status];
   const statusIcon = {
     encrypted: '🔒',
@@ -194,7 +194,7 @@ export const EncryptionStatusIcon: React.FC<{
     error: '⚠️',
     unknown: '❓',
   }[encryptionState.status];
-  return ()
+  return ();
     <div 
       className="cursor-pointer flex items-center space-x-1" 
       onClick={onClick}
@@ -258,7 +258,7 @@ export const EncryptionDetails: React.FC<{
       return 'Unknown encryption strength';
     }
   };
-  return ()
+  return ();
     <div className="p-4 bg-white rounded-lg shadow-lg border w-80">
       <div className="space-y-3">
         <div className="flex items-center justify-between">

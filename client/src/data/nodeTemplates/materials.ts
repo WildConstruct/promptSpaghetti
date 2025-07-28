@@ -2,71 +2,70 @@
  * Material configurations for retro-futuristic equipment surfaces
  * REFACTOR-001: EnhancedGraphEditor Data Extraction
  */
-
 import { NodeTemplate } from './types';
 
 export const materialsTemplate: NodeTemplate = {
   id: "materials-7",
   type: "transform",
   position: { x: 800, y: 350 },
-  data: {
+  data: {,
     label: "Key Materials",
     description: "Painted Metal, Bakelite, Aged Plastic, Cast Iron, etc.",
     category: "transform",
-    options: [
+    options: [,
       {
         label: "Painted Metal (Chipped, Industrial)",
         value: "Painted Metal",
         weight: 3,
-        description: "Heavy-duty metal with industrial paint showing wear"
+        description: "Heavy-duty metal with industrial paint showing wear",
       },
       {
         label: "Bakelite & Early Plastics (Brown, Yellowed)",
         value: "Bakelite",
         weight: 2,
-        description: "Early synthetic materials with characteristic aging"
+        description: "Early synthetic materials with characteristic aging",
       },
       {
         label: "Aged Plastic (UV Faded, Brittle)",
         value: "Aged Plastic",
         weight: 2,
-        description: "Weathered plastic showing sun damage and wear"
+        description: "Weathered plastic showing sun damage and wear",
       },
       {
         label: "Cast Iron & Steel (Rust Patina)",
         value: "Cast Iron",
         weight: 2,
-        description: "Heavy metal construction with natural oxidation"
+        description: "Heavy metal construction with natural oxidation",
       },
       {
         label: "Chrome & Polished Metal (Tarnished)",
         value: "Chrome",
         weight: 1,
-        description: "Reflective metals showing age and fingerprints"
+        description: "Reflective metals showing age and fingerprints",
       },
       {
         label: "Rubber & Vinyl (Cracked, Perished)",
         value: "Rubber",
         weight: 1.5,
-        description: "Flexible materials showing degradation over time"
+        description: "Flexible materials showing degradation over time",
       },
       {
         label: "Glass & Ceramics (Scratched, Stained)",
         value: "Glass",
         weight: 1,
-        description: "Hard surfaces with accumulated damage and marks"
+        description: "Hard surfaces with accumulated damage and marks",
       },
       {
         label: "Composite Materials (Layered, Delaminating)",
         value: "Composite",
         weight: 1,
-        description: "Advanced materials showing structural failure"
+        description: "Advanced materials showing structural failure",
       },
       {
         label: "Fabric & Padding (Worn, Compressed)",
         value: "Fabric",
         weight: 0.5,
-        description: "Soft materials showing heavy use and wear"
+        description: "Soft materials showing heavy use and wear",
       }
     ]
   }

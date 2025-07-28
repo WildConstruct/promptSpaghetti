@@ -76,7 +76,7 @@ export declare class CodeGenerationService {
     /**
      * Validate a code against stored hash
      */
-    validateCode()
+    validateCode();
       inputCode: string,
       storedData: GeneratedCode,
       options?: CodeValidationOptions

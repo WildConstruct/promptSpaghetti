@@ -60,7 +60,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
     dueDate: initialData.dueDate,
     estimatedHours: initialData.estimatedHours,
     tags: initialData.tags || [],
-    evidence: initialData.evidence || []
+    evidence: initialData.evidence || [],
   });
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
@@ -169,14 +169,14 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
     // Prepare final form data
     const finalFormData: RevisionRequestFormData = {
       ...formData,
-      evidence: evidenceItems.map(item => item.file).filter(Boolean) as File[]
+      evidence: evidenceItems.map(item => item.file).filter(Boolean) as File[],
     };
     try {
       await onSubmit(finalFormData);
     } catch (error) {
       console.error('Failed to submit revision request:', error);
       setValidationErrors({)
-        submit: error instanceof Error ? error.message : 'Failed to submit revision request'
+        submit: error instanceof Error ? error.message : 'Failed to submit revision request',
       });
     }
   }, [formData, evidenceItems, validateStep, onSubmit]);
@@ -229,13 +229,13 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
     case RevisionRequestPriority.LOW: return 'text-gray-800 bg-gray-100';
     }
   };
-  const renderStepIndicator = () => (;)
+  const renderStepIndicator = () => (;);
     <div className="flex items-center justify-center mb-8">
       {Array.from({ length: totalSteps }, (_, index) => {
         const stepNumber = index + 1;
         const isActive = stepNumber === currentStep;
         const isCompleted = stepNumber < currentStep;
-        return ()
+        return ();
           <React.Fragment key={stepNumber}>
             <div className={`
               flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-semibold
@@ -256,7 +256,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
       })}
     </div>
   );
-  const renderStep1 = () => (;)
+  const renderStep1 = () => (;);
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900">Basic Information</h3>
       {/* Title */}
@@ -346,7 +346,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
       )}
     </div>
   );
-  const renderStep2 = () => (;)
+  const renderStep2 = () => (;);
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900">Request Details</h3>
       {/* Requested Changes */}
@@ -436,7 +436,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
       </div>
     </div>
   );
-  const renderStep3 = () => (;)
+  const renderStep3 = () => (;);
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900">Timeline & Estimation</h3>
       <p className="text-sm text-gray-600">
@@ -522,7 +522,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
       </div>
     </div>
   );
-  const renderStep4 = () => (;)
+  const renderStep4 = () => (;);
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900">Evidence & Attachments</h3>
       <p className="text-sm text-gray-600">
@@ -642,7 +642,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
       )}
     </div>
   );
-  return ()
+  return ();
     <div className={`max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden ${className}`}>}
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">

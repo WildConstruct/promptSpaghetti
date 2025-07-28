@@ -156,11 +156,10 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
   private ioHandler: AdvancedIOHandler;
   private sequence: string[];
   private pattern: SequencePattern;
-  constructor()
+  constructor();
     id: string, 
     sequence: string[] = [],
-    pattern: SequencePattern = new LinearPattern()
-  ) {
+    pattern: SequencePattern = new LinearPattern(),
     // Configure as deterministic, non-cacheable (stateful), stateful
     const nodeConfig: AdvancedNodeConfig = {
       deterministic: true,
@@ -182,7 +181,7 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
         dataType: 'stringArray',
         required: false,
         defaultValue: [],
-        description: 'Array of items to sequence through'
+        description: 'Array of items to sequence through',
       })
       .addInput({)
         id: 'pattern',
@@ -198,7 +197,7 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
         dataType: 'object',
         required: false,
         defaultValue: {},
-        description: 'Configuration object for the selected pattern'
+        description: 'Configuration object for the selected pattern',
       })
       .addTextOutput('result', 'Sequential Result')
       .build();
@@ -262,7 +261,7 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
             startTime: Date.now(),
             executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,}
             nodeExecutionOrder: [],
-            performanceMetrics: new Map()
+            performanceMetrics: new Map(),
           }
         };
         weightedPattern.getNext(this.sequence, { index: 0, history: [] }, validationContext);
@@ -297,16 +296,15 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
         sequence: this.sequence,
         pattern: {,
           type: this.pattern.type,
-          config: this.pattern instanceof WeightedPattern ? 
+          config: this.pattern instanceof WeightedPattern ? ,
             { weights: (this.pattern as any).config.weights } :
             this.pattern instanceof RandomPattern ?
               { allowRepeats: (this.pattern as any).config.allowRepeats } :
-              {}
         }
       },
       metadata: {,
         version: '1.0.0',
-        created: new Date().toISOString()
+        created: new Date().toISOString(),
       }
     };
   }

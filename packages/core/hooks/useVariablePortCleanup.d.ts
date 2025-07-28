@@ -32,7 +32,7 @@ export declare const useVariablePortCleanup: (options?: VariablePortCleanupOptio
     performCleanup: (immediate?: boolean) => void;
     handleNodesChange: (nodes: Node[]) => void;
     forceCleanup: () => void;
-    getCleanupStats: () => {
+    getCleanupStats: () => {,
         totalEdges: number;
         orphanedEdges: number;
         validHandles: number;

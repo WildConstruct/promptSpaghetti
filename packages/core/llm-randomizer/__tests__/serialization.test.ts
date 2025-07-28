@@ -249,7 +249,7 @@ test_node:
         const content = `version: 1.0.0;
 checksum: abc123,
 metadata:
-  name: "Test Graph"
+  name: "Test Graph",
   author: "claude",
 ---NODES---
 choice1:

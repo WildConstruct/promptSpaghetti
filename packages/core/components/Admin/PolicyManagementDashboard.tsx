@@ -91,7 +91,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       description: 'Enforces minimum trust score requirements for marketplace participation',
       version: '1.2.0',
       createdBy: 'admin-jane',
-      updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+      updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
     },
     {
       id: 'policy-fraud-001',
@@ -106,7 +106,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       description: 'Detects and flags potentially fraudulent transaction patterns',
       version: '2.1.0',
       createdBy: 'admin-security',
-      updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+      updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
     },
     {
       id: 'policy-content-001',
@@ -121,7 +121,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       description: 'Enforces quality standards for marketplace templates',
       version: '1.0.0',
       createdBy: 'admin-content',
-      updatedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)
+      updatedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
     }
   ]);
   const [violations, _____setViolations] = useState<PolicyViolationData[]>([)
@@ -135,7 +135,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       severity: 'high',
       detectedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
       status: 'pending',
-      description: 'User trust score (45) below minimum threshold (60)'
+      description: 'User trust score (45) below minimum threshold (60)',
     },
     {
       violationId: 'violation-002',
@@ -148,7 +148,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       detectedAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
       status: 'reviewed',
       reviewedBy: 'admin-security',
-      description: 'Multiple failed payment attempts from different cards'
+      description: 'Multiple failed payment attempts from different cards',
     }
   ]);
   const getStatusColor = (status: string) => {
@@ -184,7 +184,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
         policy.id === policyId 
           ? { ...policy, enabled: !policy.enabled }
           : policy
-      )
     );
   };
   const filteredPolicies = policies.filter(policy => {)
@@ -200,7 +199,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
     const activePolicies = policies.filter(p => p.enabled).length;
     const totalViolations = violations.length;
     const pendingViolations = violations.filter(v => v.status === 'pending').length;
-    return ()
+    return ();
       <div className="overview-section">
         <div className="metrics-grid">
           <Card className="metric-card">
@@ -291,7 +290,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </div>
     );
   };
-  const renderPolicies = () => (;)
+  const renderPolicies = () => (;);
     <div className="policies-section">
       <div className="policies-controls">
         <div className="search-filters">
@@ -410,7 +409,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </div>
     </div>
   );
-  const renderViolations = () => (;)
+  const renderViolations = () => (;);
     <div className="violations-section">
       <Card>
         <CardHeader>
@@ -475,7 +474,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </Card>
     </div>
   );
-  return ()
+  return ();
     <div className={`policy-management-dashboard ${className}`}>}
       <div className="dashboard-header">
         <div className="header-info">
@@ -759,10 +758,10 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
           transition: 0.3s;
           border-radius: 50%;
         }
-        input:checked + .toggle-slider {
+        input:checked + .toggle-slider {,
           background-color: #3b82f6;
         }
-        input:checked + .toggle-slider:before {
+        input:checked + .toggle-slider:before {,
           transform: translateX(26px);
         }
         .policy-stats {

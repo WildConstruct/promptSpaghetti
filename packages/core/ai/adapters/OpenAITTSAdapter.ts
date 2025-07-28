@@ -98,10 +98,10 @@ export class OpenAITTSAdapter extends BaseAIModel {
       maxConcurrency: 10,
       rateLimit: {,
         requestsPerMinute: 50,
-        tokensPerMinute: 50000 // Character limit
+        tokensPerMinute: 50000 // Character limit,
       },
       tags: ['text-to-speech', 'voice-synthesis', 'audio-generation', 'openai'],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     const capabilities: ModelCapabilities = {
       inputTypes: ['text', 'ssml'],
@@ -348,7 +348,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
           voice: 'alloy',
           response_format: 'mp3',
         }),
-        signal: AbortSignal.timeout(this.config.timeout || 10000)
+        signal: AbortSignal.timeout(this.config.timeout || 10000),
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
@@ -422,7 +422,7 @@ export class OpenAITTSAdapter extends BaseAIModel {
           method: 'POST',
           headers,
           body: JSON.stringify(payload),
-          signal: AbortSignal.timeout(this.config.timeout || 60000)
+          signal: AbortSignal.timeout(this.config.timeout || 60000),
         });
         if (!response.ok) {
           const errorData = await response.json().catch(() => null);

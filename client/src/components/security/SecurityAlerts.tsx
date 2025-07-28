@@ -1,6 +1,5 @@
 // Epic 19.4 - Security Alerts Component
 // Task: T-1752989145014 - Create frontend components for Security Monitoring & Incident Response
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Bell,
@@ -22,7 +21,6 @@ import {
   Shield
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-
 interface SecurityAlert {
   id: string;
   type: 'critical' | 'high' | 'medium' | 'low' | 'info';
@@ -36,21 +34,18 @@ interface SecurityAlert {
   metadata?: Record<string, unknown>;
   escalation_level: number;
 }
-
 interface AlertAction {
   id: string;
   label: string;
   type: 'primary' | 'secondary' | 'danger';
   action: 'block_ip' | 'quarantine_user' | 'escalate' | 'investigate' | 'dismiss';
 }
-
 interface SecurityAlertsProps {
   onAlertAction?: (alertId: string, action: string) => void;
   maxVisible?: number;
   showDismissed?: boolean;
 }
-
-const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ 
+const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ )
   onAlertAction, 
   maxVisible = 50, 
   showDismissed = false 
@@ -62,19 +57,15 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
   const [sortBy, setSortBy] = useState<'timestamp' | 'severity'>('timestamp');
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
-
   useEffect(() => {
     loadAlerts();
-    
     // Set up polling for new alerts
-    const interval = setInterval(loadAlerts, 10000); // 10 seconds
+    const interval = setInterval(loadAlerts, 10000); // 10 seconds;
     return () => clearInterval(interval);
   }, [loadAlerts]);
-
   useEffect(() => {
     filterAndSortAlerts();
   }, [filterAndSortAlerts]);
-
   const loadAlerts = useCallback(async () => {
     try {
       // Mock data - replace with actual API call
@@ -89,7 +80,7 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
           source: 'Authentication Service',
           status: 'unread',
           escalation_level: 3,
-          actions: [
+          actions: [,
             { id: 'block-ip', label: 'Block IP', type: 'danger', action: 'block_ip' },
             { id: 'investigate', label: 'Investigate', type: 'secondary', action: 'investigate' }
           ],
@@ -105,7 +96,7 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
           source: 'API Gateway',
           status: 'read',
           escalation_level: 2,
-          actions: [
+          actions: [,
             { id: 'rate-limit', label: 'Apply Rate Limit', type: 'primary', action: 'block_ip' },
             { id: 'investigate', label: 'Investigate', type: 'secondary', action: 'investigate' }
           ]
@@ -120,7 +111,7 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
           source: 'Authorization Service',
           status: 'acknowledged',
           escalation_level: 1,
-          actions: [
+          actions: [,
             { id: 'quarantine', label: 'Quarantine User', type: 'danger', action: 'quarantine_user' },
             { id: 'review', label: 'Review Permissions', type: 'secondary', action: 'investigate' }
           ]
@@ -134,7 +125,7 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
           timestamp: new Date(Date.now() - 45 * 60 * 1000),
           source: 'Security Scanner',
           status: 'read',
-          escalation_level: 0
+          escalation_level: 0,
         },
         {
           id: 'alert-5',
@@ -145,18 +136,15 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
           timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
           source: 'Network Monitor',
           status: 'dismissed',
-          escalation_level: 2
+          escalation_level: 2,
         }
       ];
-
       setAlerts(mockAlerts);
       setIsLoading(false);
-
       // Play sound for new critical alerts
-      const newCriticalAlerts = mockAlerts.filter(
+      const newCriticalAlerts = mockAlerts.filter(;)
         alert => alert.type === 'critical' && alert.status === 'unread'
       );
-      
       if (newCriticalAlerts.length > 0 && soundEnabled) {
         playAlertSound();
       }
@@ -165,14 +153,12 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
       setIsLoading(false);
     }
   }, [soundEnabled]);
-
   const filterAndSortAlerts = useCallback(() => {
-    const filtered = alerts.filter(alert => {
+    const filtered = alerts.filter(alert => {)
       if (!showDismissed && alert.status === 'dismissed') return false;
       if (selectedFilters.length === 0) return true;
       return selectedFilters.includes(alert.type) || selectedFilters.includes(alert.category);
     });
-
     // Sort alerts
     filtered.sort((a, b) => {
       if (sortBy === 'timestamp') {
@@ -182,30 +168,23 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
         return severityOrder[b.type] - severityOrder[a.type];
       }
     });
-
     setFilteredAlerts(filtered.slice(0, maxVisible));
   }, [alerts, selectedFilters, sortBy, showDismissed, maxVisible]);
-
   const playAlertSound = () => {
     // Create audio context and play alert sound
     const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
-    
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
-    
     oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
     oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.1);
     oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.2);
-    
     gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-    
     oscillator.start(audioContext.currentTime);
     oscillator.stop(audioContext.currentTime + 0.3);
   };
-
   const getAlertIcon = (type: SecurityAlert['type']) => {
     switch (type) {
     case 'critical':
@@ -222,7 +201,6 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
       return <Bell className="h-4 w-4 text-gray-600" />;
     }
   };
-
   const getStatusIcon = (status: SecurityAlert['status']) => {
     switch (status) {
     case 'unread':
@@ -237,45 +215,36 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
       return null;
     }
   };
-
   const handleAlertAction = async (alertId: string, actionType: string) => {
     try {
       // Update local state immediately for better UX
-      setAlerts(prevAlerts => 
-        prevAlerts.map(alert => 
+      setAlerts(prevAlerts => )
+        prevAlerts.map(alert => )
           alert.id === alertId 
             ? { ...alert, status: 'acknowledged' as const }
             : alert
-        )
       );
-
       // Call parent handler
       onAlertAction?.(alertId, actionType);
-
       // Here you would make the actual API call
-      console.log(`Performing action: ${actionType} on alert: ${alertId}`);
+      console.log(`Performing action: ${actionType} on alert: ${alertId}`);}
     } catch (error) {
       console.error('Failed to perform alert action:', error);
     }
   };
-
   const handleStatusChange = (alertId: string, newStatus: SecurityAlert['status']) => {
-    setAlerts(prevAlerts =>
-      prevAlerts.map(alert =>
+    setAlerts(prevAlerts =>)
+      prevAlerts.map(alert =>)
         alert.id === alertId ? { ...alert, status: newStatus } : alert
-      )
     );
   };
-
   const dismissAlert = (alertId: string) => {
     handleStatusChange(alertId, 'dismissed');
   };
-
   const unreadCount = alerts.filter(alert => alert.status === 'unread').length;
   const criticalCount = alerts.filter(alert => alert.type === 'critical' && alert.status !== 'dismissed').length;
-
   if (isLoading) {
-    return (
+    return ()
       <div className="security-alerts loading">
         <div className="flex items-center justify-center h-32">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -284,26 +253,24 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="security-alerts">
       {/* Header */}
       <div className="alerts-header">
         <div className="header-title">
           <div className="alert-icon-container">
             <Bell className="h-5 w-5 text-blue-600" />
-            {unreadCount > 0 && (
+            {unreadCount > 0 && ()
               <span className="unread-badge">{unreadCount}</span>
             )}
           </div>
           <h3>Security Alerts</h3>
-          {criticalCount > 0 && (
+          {criticalCount > 0 && ()
             <span className="critical-badge">
               {criticalCount} Critical
             </span>
           )}
         </div>
-
         <div className="header-controls">
           <button
             className={`control-btn ${showFilters ? 'active' : ''}`}
@@ -312,7 +279,6 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
           >
             <Filter className="h-4 w-4" />
           </button>
-          
           <button
             className={`control-btn ${soundEnabled ? 'active' : ''}`}
             onClick={() => setSoundEnabled(!soundEnabled)}
@@ -320,20 +286,18 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
           >
             {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
           </button>
-
           <button className="control-btn" title="Alert settings">
             <Settings className="h-4 w-4" />
           </button>
         </div>
       </div>
-
       {/* Filters */}
-      {showFilters && (
+      {showFilters && ()
         <div className="alerts-filters">
           <div className="filter-section">
             <label>Severity</label>
             <div className="filter-options">
-              {['critical', 'high', 'medium', 'low', 'info'].map(severity => (
+              {['critical', 'high', 'medium', 'low', 'info'].map(severity => ()
                 <label key={severity} className="filter-checkbox">
                   <input
                     type="checkbox"
@@ -351,11 +315,10 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
               ))}
             </div>
           </div>
-
           <div className="filter-section">
             <label>Category</label>
             <div className="filter-options">
-              {['authentication', 'authorization', 'data_access', 'system', 'api', 'network'].map(category => (
+              {['authentication', 'authorization', 'data_access', 'system', 'api', 'network'].map(category => ()
                 <label key={category} className="filter-checkbox">
                   <input
                     type="checkbox"
@@ -373,7 +336,6 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
               ))}
             </div>
           </div>
-
           <div className="filter-section">
             <label>Sort by</label>
             <select
@@ -387,26 +349,24 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
           </div>
         </div>
       )}
-
       {/* Alert Count */}
       <div className="alerts-count">
         Showing {filteredAlerts.length} of {alerts.length} alerts
-        {selectedFilters.length > 0 && (
+        {selectedFilters.length > 0 && ()
           <span className="filter-count">
             ({selectedFilters.length} filter{selectedFilters.length !== 1 ? 's' : ''} active)
           </span>
         )}
       </div>
-
       {/* Alerts List */}
       <div className="alerts-list">
-        {filteredAlerts.length === 0 ? (
+        {filteredAlerts.length === 0 ? ()
           <div className="no-alerts">
             <CheckCircle className="h-8 w-8 text-green-500" />
             <p>No security alerts match your current filters.</p>
           </div>
-        ) : (
-          filteredAlerts.map(alert => (
+        ) : ()
+          filteredAlerts.map(alert => ()
             <div 
               key={alert.id} 
               className={`alert-item ${alert.type} ${alert.status}`}
@@ -414,7 +374,6 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
               <div className="alert-indicator">
                 {getAlertIcon(alert.type)}
               </div>
-
               <div className="alert-content">
                 <div className="alert-header">
                   <h4 className="alert-title">{alert.title}</h4>
@@ -425,24 +384,21 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
                     </span>
                   </div>
                 </div>
-
                 <p className="alert-message">{alert.message}</p>
-
                 <div className="alert-details">
                   <span className="alert-source">Source: {alert.source}</span>
                   <span className="alert-category">
                     Category: {alert.category.replace('_', ' ')}
                   </span>
-                  {alert.escalation_level > 0 && (
+                  {alert.escalation_level > 0 && ()
                     <span className="escalation-level">
                       Escalation Level: {alert.escalation_level}
                     </span>
                   )}
                 </div>
-
-                {alert.actions && alert.actions.length > 0 && (
+                {alert.actions && alert.actions.length > 0 && ()
                   <div className="alert-actions">
-                    {alert.actions.map(action => (
+                    {alert.actions.map(action => ()
                       <button
                         key={action.id}
                         className={`alert-action-btn ${action.type}`}
@@ -455,9 +411,8 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
                   </div>
                 )}
               </div>
-
               <div className="alert-controls">
-                {alert.status === 'unread' && (
+                {alert.status === 'unread' && ()
                   <button
                     className="control-btn"
                     onClick={() => handleStatusChange(alert.id, 'read')}
@@ -466,8 +421,7 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
                     <Eye className="h-3 w-3" />
                   </button>
                 )}
-                
-                {alert.status !== 'acknowledged' && (
+                {alert.status !== 'acknowledged' && ()
                   <button
                     className="control-btn"
                     onClick={() => handleStatusChange(alert.id, 'acknowledged')}
@@ -476,7 +430,6 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
                     <CheckCircle className="h-3 w-3" />
                   </button>
                 )}
-
                 <button
                   className="control-btn danger"
                   onClick={() => dismissAlert(alert.id)}
@@ -489,9 +442,8 @@ const SecurityAlerts: React.FC<SecurityAlertsProps> = ({
           ))
         )}
       </div>
-
       {/* Load More */}
-      {alerts.length > maxVisible && (
+      {alerts.length > maxVisible && ()
         <div className="load-more">
           <button 
             className="btn btn-secondary btn-sm"

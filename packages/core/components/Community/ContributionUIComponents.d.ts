@@ -78,7 +78,7 @@ export declare class ContributionErrorBoundary extends React.Component<{
 }
 export interface ContributionFormProps {
     initialData?: Partial<ContributionFormData>;
-    onSubmit: (data: ContributionFormData) => Promise<{
+    onSubmit: (data: ContributionFormData) => Promise<{,
         success: boolean;
         error?: ContributionError;
     }>;

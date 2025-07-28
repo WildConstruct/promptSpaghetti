@@ -230,7 +230,7 @@ export class LoadBalancer {
       concurrentRequests: 0,
       totalRequests: 0,
       costPerRequest: 0,
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     });
   }
   removeModel(modelId: string): void {
@@ -396,27 +396,26 @@ export class ModelManager {
   private pools: Map<string, ModelPool> = new Map();
   private loadBalancingConfig: LoadBalancingConfig;
   private warmupStrategy: WarmupStrategy;
-  constructor()
+  constructor();
     factoryConfig: FactoryConfig = {},
-    cacheConfig: CacheConfig = {
+    cacheConfig: CacheConfig = {,
       maxSize: 10,
       ttl: 3600000, // 1 hour
       evictionPolicy: 'hybrid',
     },
-    loadBalancingConfig: LoadBalancingConfig = {
+    loadBalancingConfig: LoadBalancingConfig = {,
       strategy: 'capability-based',
       healthCheckInterval: 30000,
       maxConcurrentRequests: 100,
       enableFailover: true,
       failoverThreshold: 0.1,
     },
-    warmupStrategy: WarmupStrategy = {
+    warmupStrategy: WarmupStrategy = {,
       enabled: true,
       concurrency: 3,
       sampleRequests: [{ role: 'user', content: 'Hello' }],
       timeout: 10000,
     }
-  ) {
     this.factory = new AIModelFactory(factoryConfig);
     this.cache = new ModelCache(cacheConfig);
     this.loadBalancingConfig = loadBalancingConfig;
@@ -452,7 +451,7 @@ export class ModelManager {
       loadBalancer,
       healthMonitor,
       currentLoad: 0,
-      lastUsed: new Date()
+      lastUsed: new Date(),
     };
     this.pools.set(poolId, pool);
     healthMonitor.start();
@@ -519,7 +518,7 @@ export class ModelManager {
       totalPools: this.pools.size,
       cacheStats: this.cache.getStats(),
       factoryStats: this.factory.getStatistics(),
-      pools: Array.from(this.pools.keys()).map(id => this.getPoolStats(id))
+      pools: Array.from(this.pools.keys()).map(id => this.getPoolStats(id)),
     };
   }
   async destroyPool(poolId: string): Promise<void> {
@@ -554,13 +553,12 @@ export class ModelManager {
             id: `warmup-${model.id}-${Date.now()}`,}
             input: sampleInput,
             options: { max_tokens: 1 },
-            createdAt: new Date()
+            createdAt: new Date(),
           };
           await Promise.race([)
             model.executeRequest(request),
             new Promise((_, reject) => 
               setTimeout(() => reject(new Error('Warmup timeout')), this.warmupStrategy.timeout)
-            )
           ]);
         }
       } catch (error) {

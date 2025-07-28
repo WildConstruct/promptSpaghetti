@@ -118,7 +118,7 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
       const manifest = parseExtensionManifest(content);
       setParsedManifest(manifest);
       // Check compatibility
-      const compatibility = extensionCompatibilityChecker.checkExtensionCompatibility(;)
+      const compatibility = extensionCompatibilityChecker.checkExtensionCompatibility(;);
         manifest,
         {
           systemVersion: '1.0.0',
@@ -145,7 +145,7 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
       setError(`Installation failed: ${err}`);}
     }
   };
-  const renderSelectStep = () => (;)
+  const renderSelectStep = () => (;);
     <div className="install-step select-step">
       <h3>Choose Installation Method</h3>
       <div className="install-methods">
@@ -249,7 +249,7 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
       </div>
     </div>
   );
-  const renderValidateStep = () => (;)
+  const renderValidateStep = () => (;);
     <div className="install-step validate-step">
       <h3>Extension Validation</h3>
       {parsedManifest && ()
@@ -342,7 +342,7 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
       </div>
     </div>
   );
-  const renderConfirmStep = () => (;)
+  const renderConfirmStep = () => (;);
     <div className="install-step confirm-step">
       <h3>Confirm Installation</h3>
       {parsedManifest && ()
@@ -398,7 +398,7 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
       </div>
     </div>
   );
-  return ()
+  return ();
     <div className="extension-install-dialog-overlay">
       <div className="extension-install-dialog">
         <div className="dialog-header">

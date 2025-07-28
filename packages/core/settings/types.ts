@@ -111,7 +111,7 @@ export const SettingItemSchema = z.object({)
   placeholder: z.string().optional(),
   helpText: z.string().optional(),
   disabled: z.boolean().default(false),
-  advanced: z.boolean().default(false) // Show only in advanced mode
+  advanced: z.boolean().default(false) // Show only in advanced mode,
 });
 
 // TypeScript type exports

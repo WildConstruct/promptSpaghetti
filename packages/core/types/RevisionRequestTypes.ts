@@ -486,7 +486,7 @@ export const DEFAULT_REVISION_REQUEST_CONFIG: RevisionRequestConfig = {
   enableComplexityScoring: true,
   enableImpactScoring: true,
   enablePredictiveAnalytics: false,
-  retentionDays: 2555 // ~7 years
+  retentionDays: 2555 // ~7 years,
 };
 
 // Utility types for forms and UI

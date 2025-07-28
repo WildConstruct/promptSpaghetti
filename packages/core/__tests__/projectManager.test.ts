@@ -84,7 +84,7 @@ describe('ProjectManager', () => {
   });
   describe('saveProjectToDevice', () => {
     test('successfully saves project with all options', async () => {
-      const result = await ProjectManager.saveProjectToDevice(;)
+      const result = await ProjectManager.saveProjectToDevice(;);
         mockGraphData,
         mockSaveOptions,
         mockSettings
@@ -98,7 +98,7 @@ describe('ProjectManager', () => {
         ...mockSaveOptions,
         description: undefined,
       };
-      const result = await ProjectManager.saveProjectToDevice(;)
+      const result = await ProjectManager.saveProjectToDevice(;);
         mockGraphData,
         optionsWithoutDescription,
         mockSettings
@@ -110,7 +110,7 @@ describe('ProjectManager', () => {
         ...mockSaveOptions,
         fileName: undefined,
       };
-      const result = await ProjectManager.saveProjectToDevice(;)
+      const result = await ProjectManager.saveProjectToDevice(;);
         mockGraphData,
         optionsWithoutFileName,
         mockSettings
@@ -123,7 +123,7 @@ describe('ProjectManager', () => {
         ...mockSaveOptions,
         fileName: 'test<>file?.psg',
       };
-      const result = await ProjectManager.saveProjectToDevice(;)
+      const result = await ProjectManager.saveProjectToDevice(;);
         mockGraphData,
         optionsWithInvalidFileName,
         mockSettings
@@ -132,7 +132,7 @@ describe('ProjectManager', () => {
       expect(result.fileName).toBe('test_file_.psg');
     });
     test('calls serialization functions', async () => {
-      const result = await ProjectManager.saveProjectToDevice(;)
+      const result = await ProjectManager.saveProjectToDevice(;);
         mockGraphData,
         mockSaveOptions,
         mockSettings

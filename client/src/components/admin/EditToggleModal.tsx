@@ -1,18 +1,15 @@
 // Epic 17.1.3 - Edit Toggle Modal Component
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { X, Save, AlertCircle, Info } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { ValidationMessage } from '../common/ValidationMessage';
 import { LoadingSpinner } from '../common/LoadingSpinner';
-
 interface EditToggleModalProps {
   isOpen: boolean;
   onClose: () => void;
   toggleId: string;
   onSave: () => void;
 }
-
 interface ToggleData {
   id: string;
   key: string;
@@ -25,7 +22,7 @@ interface ToggleData {
   version: number;
 }
 
-export const EditToggleModal: React.FC<EditToggleModalProps> = ({
+export const EditToggleModal: React.FC<EditToggleModalProps> = ({)
   isOpen,
   onClose,
   toggleId,
@@ -37,34 +34,30 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [reason, setReason] = useState('');
-
   useEffect(() => {
     if (isOpen && toggleId) {
       fetchToggle();
     }
   }, [isOpen, toggleId, fetchToggle]);
-
   const fetchToggle = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {)}
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
         }
       });
-
       if (!response.ok) {
         throw new Error('Failed to load toggle');
       }
-
       const data = await response.json();
       setToggle(data);
-      setFormData({
+      setFormData({)
         name: data.name,
         description: data.description,
         value: data.value,
         claudeImpact: data.claudeImpact,
-        enabled: data.enabled
+        enabled: data.enabled,
       });
     } catch (error) {
       setErrors({ fetch: error instanceof Error ? error.message : 'Failed to load toggle' });
@@ -72,55 +65,46 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
       setLoading(false);
     }
   }, [toggleId]);
-
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
-
     if (!formData.name?.trim()) {
       newErrors.name = 'Name is required';
     }
-
     if (!reason.trim()) {
       newErrors.reason = 'Reason for change is required';
     }
-
     // Validate type-specific values
     if (toggle?.type === 'percentage_rollout') {
-      if (typeof formData.value?.percentage !== 'number' || 
+      if (typeof formData.value?.percentage !== 'number' || )
           formData.value.percentage < 0 || 
           formData.value.percentage > 100) {
         newErrors.value = 'Percentage must be between 0 and 100';
       }
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleSave = async () => {
     if (!validateForm()) {
       return;
     }
-
     setSaving(true);
     try {
-      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {
+      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {)}
         method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           ...formData,
           reason
         })
       });
-
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Failed to update toggle');
       }
-
       onSave();
       onClose();
     } catch (error) {
@@ -129,19 +113,17 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
       setSaving(false);
     }
   };
-
   const renderValueEditor = () => {
     if (!toggle) return null;
-
     switch (toggle.type) {
     case 'boolean':
-      return (
+      return ()
         <div className="form-group">
           <label>
             <input
               type="checkbox"
               checked={formData.value?.enabled || false}
-              onChange={(e) => setFormData(prev => ({
+              onChange={(e) => setFormData(prev => ({)
                 ...prev,
                 value: { enabled: e.target.checked }
               }))}
@@ -150,9 +132,8 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
           </label>
         </div>
       );
-
     case 'percentage_rollout':
-      return (
+      return ()
         <div className="form-group">
           <label>Rollout Percentage</label>
           <input
@@ -160,7 +141,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
             min="0"
             max="100"
             value={formData.value?.percentage || 0}
-            onChange={(e) => setFormData(prev => ({
+            onChange={(e) => setFormData(prev => ({)
               ...prev,
               value: { ...prev.value, percentage: parseInt(e.target.value) || 0 }
             }))}
@@ -171,16 +152,15 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
           </div>
         </div>
       );
-
     case 'multivariate':
-      return (
+      return ()
         <div className="form-group">
           <label>Variants</label>
           <div className="variants-editor">
-            {formData.value?.variants?.map((
+            {formData.value?.variants?.map(()
               variant: { key?: string; value?: string; percentage?: number }, 
-              index: number
-            ) => (
+              index: number,
+            ) => ()
               <div key={index} className="variant-row">
                 <input
                   type="text"
@@ -189,7 +169,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
                   onChange={(e) => {
                     const newVariants = [...(formData.value?.variants || [])];
                     newVariants[index] = { ...variant, key: e.target.value };
-                    setFormData(prev => ({
+                    setFormData(prev => ({)
                       ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
@@ -202,7 +182,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
                   onChange={(e) => {
                     const newVariants = [...(formData.value?.variants || [])];
                     newVariants[index] = { ...variant, value: e.target.value };
-                    setFormData(prev => ({
+                    setFormData(prev => ({)
                       ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
@@ -217,7 +197,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
                   onChange={(e) => {
                     const newVariants = [...(formData.value?.variants || [])];
                     newVariants[index] = { ...variant, percentage: parseInt(e.target.value) || 0 };
-                    setFormData(prev => ({
+                    setFormData(prev => ({)
                       ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
@@ -228,7 +208,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
                   className="btn-icon btn-danger"
                   onClick={() => {
                     const newVariants = (formData.value?.variants || []).filter((_: unknown, i: number) => i !== index);
-                    setFormData(prev => ({
+                    setFormData(prev => ({)
                       ...prev,
                       value: { ...prev.value, variants: newVariants }
                     }));
@@ -243,11 +223,11 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
               className="btn btn-secondary btn-sm"
               onClick={() => {
                 const newVariants = [...(formData.value?.variants || []), {
-                  key: `variant_${String.fromCharCode(65 + (formData.value?.variants?.length || 0))}`,
+                  key: `variant_${String.fromCharCode(65 + (formData.value?.variants?.length || 0))}`,}
                   value: '',
-                  percentage: 0
+                  percentage: 0,
                 }];
-                setFormData(prev => ({
+                setFormData(prev => ({)
                   ...prev,
                   value: { ...prev.value, variants: newVariants }
                 }));
@@ -258,9 +238,8 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
           </div>
         </div>
       );
-
     case 'scheduled':
-      return (
+      return ()
         <div className="form-group">
           <label>Schedule Configuration</label>
           <div className="schedule-editor">
@@ -268,33 +247,31 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
               <input
                 type="checkbox"
                 checked={formData.value?.enabled || false}
-                onChange={(e) => setFormData(prev => ({
+                onChange={(e) => setFormData(prev => ({)
                   ...prev,
                   value: { ...prev.value, enabled: e.target.checked }
                 }))}
               />
                 Schedule is active
             </label>
-              
             <div className="date-inputs">
               <div>
                 <label>Start Time</label>
                 <input
                   type="datetime-local"
                   value={formData.value?.startTime || ''}
-                  onChange={(e) => setFormData(prev => ({
+                  onChange={(e) => setFormData(prev => ({)
                     ...prev,
                     value: { ...prev.value, startTime: e.target.value }
                   }))}
                 />
               </div>
-                
               <div>
                 <label>End Time</label>
                 <input
                   type="datetime-local"
                   value={formData.value?.endTime || ''}
-                  onChange={(e) => setFormData(prev => ({
+                  onChange={(e) => setFormData(prev => ({)
                     ...prev,
                     value: { ...prev.value, endTime: e.target.value }
                   }))}
@@ -304,9 +281,8 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
           </div>
         </div>
       );
-
     default:
-      return (
+      return ()
         <div className="form-group">
           <label>Configuration</label>
           <textarea
@@ -329,16 +305,14 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
       );
     }
   };
-
   if (!isOpen) return null;
-
-  return (
+  return ()
     <div className="modal-overlay">
       <div className="modal-content edit-toggle-modal">
         <div className="modal-header">
           <div className="header-left">
             <h2>Edit Toggle</h2>
-            {toggle && (
+            {toggle && ()
               <div className="header-meta">
                 <code className="toggle-key">{toggle.key}</code>
                 <span className="version">v{toggle.version}</span>
@@ -348,28 +322,24 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
               </div>
             )}
           </div>
-          
           <button className="modal-close" onClick={onClose}>
             <X size={20} />
           </button>
         </div>
-
         <div className="modal-body">
-          {loading ? (
+          {loading ? ()
             <div className="loading-state">
               <LoadingSpinner />
               <p>Loading toggle...</p>
             </div>
-          ) : toggle ? (
+          ) : toggle ? ()
             <>
-              {errors.submit && (
+              {errors.submit && ()
                 <ValidationMessage type="error" message={errors.submit} />
               )}
-              
-              {errors.fetch && (
+              {errors.fetch && ()
                 <ValidationMessage type="error" message={errors.fetch} />
               )}
-
               {/* Change Reason */}
               <div className="form-group change-reason">
                 <label>Reason for Change *</label>
@@ -386,7 +356,6 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
                   This will be recorded in the audit log
                 </div>
               </div>
-
               {/* Basic Fields */}
               <div className="form-group">
                 <label>Name *</label>
@@ -398,7 +367,6 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
                 />
                 {errors.name && <ValidationMessage type="error" message={errors.name} />}
               </div>
-
               <div className="form-group">
                 <label>Description</label>
                 <textarea
@@ -407,7 +375,6 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
                   rows={3}
                 />
               </div>
-
               {/* Toggle Status */}
               <div className="form-group">
                 <label>
@@ -423,15 +390,14 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
                   Changing this will immediately affect users
                 </div>
               </div>
-
               {/* Claude Impact */}
               <div className="form-group">
                 <label>Claude Impact Level</label>
                 <select
                   value={formData.claudeImpact || 'NONE'}
-                  onChange={(e) => setFormData(prev => ({ 
+                  onChange={(e) => setFormData(prev => ({ )
                     ...prev, 
-                    claudeImpact: e.target.value 
+                    claudeImpact: e.target.value ,
                   }))}
                 >
                   <option value="NONE">None - No Claude impact</option>
@@ -441,7 +407,6 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
                   <option value="HALLUCINATION_RISK">Hallucination Risk - May increase hallucinations</option>
                 </select>
               </div>
-
               {/* Type-specific Value Editor */}
               <div className="value-editor-section">
                 <h3>Configuration</h3>
@@ -454,7 +419,6 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
             </>
           ) : null}
         </div>
-
         <div className="modal-footer">
           <button
             type="button"

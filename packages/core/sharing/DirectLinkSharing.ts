@@ -842,7 +842,7 @@ export class DirectLinkSharing extends EventEmitter {
     linkIds: string[],
     timeRange?: { start: Date; end: Date }
   ): Promise<BulkAnalyticsReport> {
-    const reports = await Promise.all(;)
+    const reports = await Promise.all(;);
       linkIds.map(id => this.getLinkAnalytics(id, timeRange))
     );
     return this.aggregateAnalyticsReports(reports);
@@ -851,10 +851,10 @@ export class DirectLinkSharing extends EventEmitter {
     userId: string,
     timeRange?: { start: Date; end: Date }
   ): Promise<UserAnalyticsReport> {
-    const userLinks = Array.from(this.links.values()).filter(;)
+    const userLinks = Array.from(this.links.values()).filter(;);
       link => link.creator.id === userId
     );
-    const reports = await Promise.all(;)
+    const reports = await Promise.all(;);
       userLinks.map(link => this.getLinkAnalytics(link.id, timeRange))
     );
     return this.aggregateUserAnalytics(userLinks, reports);
@@ -888,7 +888,7 @@ export class DirectLinkSharing extends EventEmitter {
           warnings: [],
         }
       },
-      created: new Date()
+      created: new Date(),
     };
     this.bulkOperations.set(operationId, operation);
     // Process in background
@@ -933,7 +933,7 @@ export class DirectLinkSharing extends EventEmitter {
       request,
       schedule,
       status: 'pending',
-      created: new Date()
+      created: new Date(),
     };
     // Store and process schedule
     await this.processScheduledShare(scheduledShare);
@@ -954,7 +954,7 @@ export class DirectLinkSharing extends EventEmitter {
       id: teamId,
       name: '', // Would be fetched from team service
       members: [],
-      permissions: permissions.map(p => ({)
+      permissions: permissions.map(p => ({),
         action: p,
         resource: 'link',
       }))
@@ -981,7 +981,7 @@ export class DirectLinkSharing extends EventEmitter {
       averageClicksPerLink: this.links.size > 0 ? allClicks.length / this.links.size : 0,
       topDomains: this.getTopDomains(),
       recentActivity: this.getRecentActivity(),
-      performanceMetrics: await this.getPerformanceMetrics()
+      performanceMetrics: await this.getPerformanceMetrics(),
     };
   }
   // Private Methods
@@ -1207,7 +1207,7 @@ export class DirectLinkSharing extends EventEmitter {
         allowedUsers: request.security?.allowedUsers || [],
         allowedRoles: request.security?.allowedRoles || [],
         restrictions: request.security?.restrictions || [],
-        verification: request.security?.verification || {
+        verification: request.security?.verification || {,
           requireEmail: false,
           requirePhone: false,
           requireCaptcha: false,
@@ -1423,7 +1423,7 @@ export class DirectLinkSharing extends EventEmitter {
         method: 'GET',
         headers: context.headers || {},
         queryParams: context.queryParams || {},
-        timestamp: new Date()
+        timestamp: new Date(),
       },
       response: {,
         statusCode: 302,
@@ -1501,7 +1501,7 @@ export class DirectLinkSharing extends EventEmitter {
       link,
       message,
       clickEvent,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
   private async isUniqueVisitor(linkId: string, context: AccessContext): Promise<boolean> {
@@ -1572,7 +1572,7 @@ export class DirectLinkSharing extends EventEmitter {
         byHour: {}
       },
       trends: [],
-      generatedAt: new Date()
+      generatedAt: new Date(),
     };
   }
   private aggregateAnalyticsReports(reports: LinkAnalyticsReport[]): BulkAnalyticsReport {
@@ -1586,7 +1586,7 @@ export class DirectLinkSharing extends EventEmitter {
       },
       topPerformers: [],
       trends: [],
-      generatedAt: new Date()
+      generatedAt: new Date(),
     };
   }
   private aggregateUserAnalytics(links: ShareLink[], reports: LinkAnalyticsReport[]): UserAnalyticsReport {
@@ -1601,7 +1601,7 @@ export class DirectLinkSharing extends EventEmitter {
         averageClicksPerDay: 0,
       },
       topLinks: [],
-      generatedAt: new Date()
+      generatedAt: new Date(),
     };
   }
   private getTopDomains(): Array<{ domain: string; count: number }> {

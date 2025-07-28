@@ -68,7 +68,7 @@ export const TrustIndicator: React.FC<TrustIndicatorProps> = ({)
   className = ''
 }) => {
   if (!trustScore) {
-    return ()
+    return ();
       <div className={`trust-indicator unverified ${size} ${className}`}>}
         <Shield className="trust-icon unverified-icon" />
         {showLabel && <span className="trust-label">Unverified</span>}
@@ -107,7 +107,7 @@ export const TrustIndicator: React.FC<TrustIndicatorProps> = ({)
     default: return 'Unverified';
     }
   };
-  const indicator = (;)
+  const indicator = (;);
     <div className={`trust-indicator ${getTrustColor(trustScore.tier)} ${size} ${variant} ${className}`}>}
       {getTrustIcon(trustScore.tier)}
       {showLabel && ()
@@ -121,7 +121,7 @@ export const TrustIndicator: React.FC<TrustIndicatorProps> = ({)
   if (!showTooltip) {
     return indicator;
   }
-  return ()
+  return ();
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
@@ -182,7 +182,7 @@ export const CreatorTrustBadge: React.FC<CreatorTrustBadgeProps> = ({)
 }) => {
   const hasHighTrust = trustScore && trustScore.overall >= 80;
   const hasVerifications = verifications.length > 0;
-  return ()
+  return ();
     <div className={`creator-trust-badge ${className}`}>}
       <div className="creator-info">
         <div className="creator-avatar">
@@ -232,7 +232,7 @@ export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({)
   orientation = 'horizontal',
   className = ''
 }) => {
-  return ()
+  return ();
     <div className={`trust-score-display ${orientation} ${className}`}>}
       <div className="overall-score">
         <div className="score-circle">
@@ -318,7 +318,7 @@ export const VerificationBadges: React.FC<VerificationBadgesProps> = ({)
   };
   const displayedVerifications = verifications.slice(0, maxDisplay);
   const remainingCount = verifications.length - maxDisplay;
-  return ()
+  return ();
     <div className={`verification-badges ${size} ${className}`}>}
       {displayedVerifications.map((verification, index) => ()
         <TooltipProvider key={index}>
@@ -377,7 +377,7 @@ export const TemplateTrustIndicator: React.FC<TemplateTrustIndicatorProps> = ({)
   const qualityInfo = getQualityLevel(templateQualityScore);
   const isPopular = downloadCount > 100;
   const isHighRated = rating > 4.0;
-  return ()
+  return ();
     <div className={`template-trust-indicator ${className}`}>}
       <div className="trust-elements">
         {isVerifiedCreator && ()
@@ -437,7 +437,7 @@ export const InlineTrustStatus: React.FC<InlineTrustStatusProps> = ({)
   if (!isVerified && trustTier === 'unverified') {
     return null;
   }
-  return ()
+  return ();
     <span className={`inline-trust-status ${size} ${className}`}>}
       {trustTier === 'expert' && <Crown className="inline-icon expert" />}
       {trustTier === 'professional' && <Award className="inline-icon professional" />}

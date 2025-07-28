@@ -571,11 +571,10 @@ export class MarketplaceTutorialSystemService implements MarketplaceTutorialServ
   private apiClient: any;
   private skillAssessmentEngine: SkillAssessmentEngine;
   private contributionRepository: ContributionRepository;
-  constructor()
+  constructor();
     apiClient: any,
     skillAssessmentEngine: SkillAssessmentEngine,
     contributionRepository: ContributionRepository,
-  ) {
     this.apiClient = apiClient;
     this.skillAssessmentEngine = skillAssessmentEngine;
     this.contributionRepository = contributionRepository;
@@ -593,14 +592,14 @@ export class MarketplaceTutorialSystemService implements MarketplaceTutorialServ
       // Get tutorials matching user's role and skill level
       const candidateTutorials = await this.fetchTutorialsByContext(context);
       // Apply intelligent filtering and ranking
-      const rankedTutorials = await this.rankTutorialsByRelevance(;)
+      const rankedTutorials = await this.rankTutorialsByRelevance(;);
         candidateTutorials,
         userProfile,
         skillGaps,
         context
       );
       // Apply personalization
-      const personalizedTutorials = await this.applyTutorialPersonalization(;)
+      const personalizedTutorials = await this.applyTutorialPersonalization(;);
         rankedTutorials,
         userProfile,
         context
@@ -619,17 +618,17 @@ export class MarketplaceTutorialSystemService implements MarketplaceTutorialServ
       // Get user's updated skill profile after tutorial completion
       const updatedProfile = await this.getUserSkillProfile(userId);
       // Analyze the completed tutorial's outcomes
-      const completionAnalysis = await this.analyzeTutorialCompletion(;)
+      const completionAnalysis = await this.analyzeTutorialCompletion(;);
         userId,
         completedTutorialId
       );
       // Identify logical next steps based on skill progression
-      const nextStepTutorials = await this.findProgressionTutorials(;)
+      const nextStepTutorials = await this.findProgressionTutorials(;);
         completedTutorialId,
         completionAnalysis
       );
       // Apply collaborative filtering for community recommendations
-      const communityRecommendations = await this.getCollaborativeRecommendations(;)
+      const communityRecommendations = await this.getCollaborativeRecommendations(;);
         userId,
         completedTutorialId
       );
@@ -651,7 +650,7 @@ export class MarketplaceTutorialSystemService implements MarketplaceTutorialServ
     try {
       const userProfile = await this.getUserSkillProfile(userId);
       // Generate optimal learning sequence
-      const tutorialSequence = await this.optimizeLearningSequence(;)
+      const tutorialSequence = await this.optimizeLearningSequence(;);
         userProfile,
         goals
       );
@@ -666,18 +665,18 @@ export class MarketplaceTutorialSystemService implements MarketplaceTutorialServ
           prerequisite_tutorials: await this.identifyPrerequisites(userProfile, goals),
           core_tutorial_sequence: tutorialSequence,
           optional_enrichment_tutorials: await this.findEnrichmentTutorials(goals),
-          capstone_project: await this.designCapstoneProject(goals)
+          capstone_project: await this.designCapstoneProject(goals),
         },
         skill_progression: {,
           entry_requirements: this.mapGoalsToRequirements(goals),
           intermediate_milestones: await this.defineMilestones(tutorialSequence),
           completion_outcomes: this.mapGoalsToOutcomes(goals),
-          continuing_education_paths: await this.findContinuingPaths(goals)
+          continuing_education_paths: await this.findContinuingPaths(goals),
         },
         personalization: {,
           role_based_variations: await this.createRoleVariations(userProfile),
           skill_based_adaptations: await this.createSkillAdaptations(userProfile),
-          context_based_modifications: await this.createContextModifications(userProfile)
+          context_based_modifications: await this.createContextModifications(userProfile),
         },
         success_tracking: {,
           completion_criteria: this.defineCompletionCriteria(goals),
@@ -704,13 +703,13 @@ export class MarketplaceTutorialSystemService implements MarketplaceTutorialServ
       const userProfile = await this.getUserSkillProfile(userId);
       const tutorial = await this.getTutorial(tutorialId);
       // Apply personalization settings
-      const personalization = await this.calculatePersonalizationSettings(;)
+      const personalization = await this.calculatePersonalizationSettings(;);
         userProfile,
         tutorial,
         context
       );
       // Set up real-world context if applicable
-      const realWorldContext = await this.setupRealWorldContext(;)
+      const realWorldContext = await this.setupRealWorldContext(;);
         tutorial,
         context,
         userProfile
@@ -718,7 +717,7 @@ export class MarketplaceTutorialSystemService implements MarketplaceTutorialServ
       // Initialize progress tracking
       const progressTracking = this.initializeProgressTracking(tutorial, userProfile);
       // Gather support resources
-      const supportResources = await this.assembleSupportResources(;)
+      const supportResources = await this.assembleSupportResources(;);
         tutorial,
         userProfile,
         context
@@ -773,29 +772,29 @@ export class MarketplaceTutorialSystemService implements MarketplaceTutorialServ
       const session = await this.getSession(sessionId);
       const tutorial = await this.getTutorial(session.tutorial_id);
       // Generate completion certificate
-      const certificate = await this.generateCompletionCertificate(;)
+      const certificate = await this.generateCompletionCertificate(;);
         session,
         tutorial,
         completionData
       );
       // Update user's skill levels
-      const skillUpdates = await this.updateUserSkillLevels(;)
+      const skillUpdates = await this.updateUserSkillLevels(;);
         session.user_id,
         completionData.skills_acquired
       );
       // Award achievements and recognition
       const achievements = await this.awardAchievements(session, completionData);
-      const communityRecognition = await this.processCommunityRecognition(;)
+      const communityRecognition = await this.processCommunityRecognition(;);
         session,
         completionData
       );
       // Calculate marketplace benefits
-      const marketplaceBenefits = await this.calculateMarketplaceBenefits(;)
+      const marketplaceBenefits = await this.calculateMarketplaceBenefits(;);
         session,
         completionData
       );
       // Generate next tutorial recommendations
-      const nextRecommendations = await this.recommendNextTutorials(;)
+      const nextRecommendations = await this.recommendNextTutorials(;);
         session.user_id,
         session.tutorial_id
       );
@@ -854,7 +853,7 @@ export class MarketplaceTutorialSystemService implements MarketplaceTutorialServ
         priority_level: this.calculateReviewPriority(reviewData),
         submitted_at: new Date().toISOString(),
         review_duration_hours: reviewData.review_duration_hours || 0,
-        follow_up_required: reviewData.improvement_recommendations.length > 0
+        follow_up_required: reviewData.improvement_recommendations.length > 0,
       });
       // Process educational-specific validation results
       await this.processTutorialValidationResults(contributionId, reviewData);

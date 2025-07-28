@@ -170,29 +170,29 @@ export function usePresence(documentId: string, userId: string, userName?: strin
     documentId,
     userId,
     authToken: undefined, // Add your auth token here
-    onPresenceSync: (data) => {
+    onPresenceSync: (data) => {,
       const usersMap = new Map();
       data.users.forEach((user: any) => {
         usersMap.set(user.userId, user);
       });
       setOtherUsers(usersMap);
     },
-    onPresenceUpdate: (presence) => {
+    onPresenceUpdate: (presence) => {,
       if (presence.userId !== userId) {
         setOtherUsers(prev => new Map(prev.set(presence.userId, presence)));
       }
     },
-    onCursorUpdate: (data) => {
+    onCursorUpdate: (data) => {,
       if (data.userId !== userId) {
         setUserCursors(prev => new Map(prev.set(data.userId, data.cursor)));
       }
     },
-    onSelectionUpdate: (data) => {
+    onSelectionUpdate: (data) => {,
       if (data.userId !== userId) {
         setUserSelections(prev => new Map(prev.set(data.userId, data.selection)));
       }
     },
-    onActivityUpdate: (data) => {
+    onActivityUpdate: (data) => {,
       if (data.userId !== userId) {
         setUserActivity(prev => new Map(prev.set(data.userId, {)
           currentTool: data.currentTool,
@@ -201,10 +201,10 @@ export function usePresence(documentId: string, userId: string, userName?: strin
         })));
       }
     },
-    onUserJoin: (user) => {
+    onUserJoin: (user) => {,
       // User will be added via presence_sync
     },
-    onUserLeave: (user) => {
+    onUserLeave: (user) => {,
       setOtherUsers(prev => {)
         const next = new Map(prev);
         next.delete(user.userId);
@@ -226,7 +226,7 @@ export function usePresence(documentId: string, userId: string, userName?: strin
         return next;
       });
     },
-    onUserStatusChanged: (data) => {
+    onUserStatusChanged: (data) => {,
       setOtherUsers(prev => {)
         const user = prev.get(data.userId);
         if (user) {
@@ -254,7 +254,7 @@ export function usePresence(documentId: string, userId: string, userName?: strin
     if (tool !== undefined) setCurrentTool(tool);
     if (typing !== undefined) setIsTyping(typing);
     if (focusedNode !== undefined) setFocusedNodeId(focusedNode);
-    sendActivityUpdate()
+    sendActivityUpdate();
       tool !== undefined ? tool : currentTool,
       typing !== undefined ? typing : isTyping,
       focusedNode !== undefined ? focusedNode : focusedNodeId

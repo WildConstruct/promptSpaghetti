@@ -13,7 +13,6 @@ import { ScheduleConfig } from './ScheduleConfig';
 import { ReportPreview } from './ReportPreview';
 import { analyticsService } from '../../../services/analyticsService';
 import './ReportBuilder.css';
-
 interface ReportBuilderProps {
   creatorId: string;
   existingReport?: CustomReport;
@@ -22,7 +21,7 @@ interface ReportBuilderProps {
   className?: string;
 }
 
-export const ReportBuilder: React.FC<ReportBuilderProps> = ({
+export const ReportBuilder: React.FC<ReportBuilderProps> = ({)
   creatorId,
   existingReport,
   onSave,
@@ -32,52 +31,48 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
   const [step, setStep] = useState<'query' | 'visualization' | 'schedule' | 'preview'>('query');
   const [reportName, setReportName] = useState(existingReport?.name || '');
   const [reportDescription, setReportDescription] = useState(existingReport?.description || '');
-  const [query, setQuery] = useState<AnalyticsQuery>(
+  const [query, setQuery] = useState<AnalyticsQuery>()
     existingReport?.configuration.query || {
       metric_types: [MetricType.VIEWS],
       time_range: TimeRange.LAST_30D,
       aggregation: AggregationType.COUNT,
       limit: 100,
-      offset: 0
+      offset: 0,
     }
   );
-  const [visualization, setVisualization] = useState(
+  const [visualization, setVisualization] = useState()
     existingReport?.configuration.visualization || {
       chart_type: 'line',
       layout: DashboardLayout.GRID,
       show_legend: true,
       show_grid: true,
-      color_scheme: 'default'
+      color_scheme: 'default',
     }
   );
-  const [scheduling, setScheduling] = useState({
+  const [scheduling, setScheduling] = useState({)
     is_scheduled: existingReport?.is_scheduled || false,
-    schedule: existingReport?.schedule || {
+    schedule: existingReport?.schedule || {,
       frequency: 'weekly' as const,
       time: '09:00',
-      recipients: []
+      recipients: [],
     }
   });
   const [previewData, setPreviewData] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-
   // Validation states
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-
   // Load preview data when query changes
   const loadPreviewData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      
-      const data = await analyticsService.queryAnalytics({
+      const data = await analyticsService.queryAnalytics({)
         ...query,
         creator_id: creatorId,
-        limit: 10 // Limit preview data
+        limit: 10 // Limit preview data,
       });
-      
       setPreviewData(data);
     } catch (err) {
       console.error('Failed to load preview data:', err);
@@ -86,18 +81,15 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
       setLoading(false);
     }
   }, [query, creatorId]);
-
   // Load preview data when entering preview step
   useEffect(() => {
     if (step === 'preview') {
       loadPreviewData();
     }
   }, [step, loadPreviewData]);
-
   // Validate current step
   const validateStep = (): boolean => {
     const errors: Record<string, string> = {};
-
     switch (step) {
     case 'query':
       if (!reportName.trim()) {
@@ -113,11 +105,9 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
         errors.metrics = 'At least one metric must be selected';
       }
       break;
-        
     case 'visualization':
       // Visualization validation if needed
       break;
-        
     case 'schedule':
       if (scheduling.is_scheduled) {
         if (!scheduling.schedule.frequency) {
@@ -132,22 +122,18 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
       }
       break;
     }
-
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
-
   // Handle step navigation
   const handleNext = () => {
     if (!validateStep()) return;
-
     const steps = ['query', 'visualization', 'schedule', 'preview'] as const;
     const currentIndex = steps.indexOf(step);
     if (currentIndex < steps.length - 1) {
       setStep(steps[currentIndex + 1]);
     }
   };
-
   const handlePrevious = () => {
     const steps = ['query', 'visualization', 'schedule', 'preview'] as const;
     const currentIndex = steps.indexOf(step);
@@ -155,38 +141,32 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
       setStep(steps[currentIndex - 1]);
     }
   };
-
   // Handle save report
   const handleSave = async () => {
     if (!validateStep()) return;
-
     try {
       setSaving(true);
       setError(null);
-
       const reportData: Partial<CustomReport> = {
         name: reportName,
         description: reportDescription || undefined,
-        configuration: {
-          query: {
+        configuration: {,
+          query: {,
             ...query,
-            creator_id: creatorId
+            creator_id: creatorId,
           },
           visualization,
-          refresh_interval: visualization.chart_type === 'table' ? undefined : 300 // 5 minutes
+          refresh_interval: visualization.chart_type === 'table' ? undefined : 300 // 5 minutes,
         },
         is_scheduled: scheduling.is_scheduled,
-        schedule: scheduling.is_scheduled ? scheduling.schedule : undefined
+        schedule: scheduling.is_scheduled ? scheduling.schedule : undefined,
       };
-
       let savedReport: CustomReport;
-      
       if (existingReport) {
         savedReport = await analyticsService.updateCustomReport(existingReport.id, reportData);
       } else {
         savedReport = await analyticsService.createCustomReport(reportData);
       }
-
       onSave?.(savedReport);
     } catch (err) {
       console.error('Failed to save report:', err);
@@ -195,7 +175,6 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
       setSaving(false);
     }
   };
-
   // Get step title
   const getStepTitle = () => {
     switch (step) {
@@ -206,15 +185,13 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
     default: return 'Build Report';
     }
   };
-
-  return (
-    <div className={`report-builder ${className}`}>
+  return ()
+    <div className={`report-builder ${className}`}>}
       <div className="report-builder-header">
         <div className="header-content">
           <h2>{existingReport ? 'Edit Report' : 'Create New Report'}</h2>
           <p>{getStepTitle()}</p>
         </div>
-        
         <div className="header-actions">
           <button
             className="cancel-button"
@@ -223,8 +200,7 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
           >
             Cancel
           </button>
-          
-          {step === 'preview' && (
+          {step === 'preview' && ()
             <button
               className="save-button"
               onClick={handleSave}
@@ -235,50 +211,40 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
           )}
         </div>
       </div>
-
       {/* Progress Steps */}
       <div className="progress-steps">
-        <div className={`step ${step === 'query' ? 'active' : ''} ${['visualization', 'schedule', 'preview'].includes(step) ? 'completed' : ''}`}>
+        <div className={`step ${step === 'query' ? 'active' : ''} ${['visualization', 'schedule', 'preview'].includes(step) ? 'completed' : ''}`}>}
           <div className="step-number">1</div>
           <div className="step-label">Query</div>
         </div>
-        
         <div className="step-connector"></div>
-        
-        <div className={`step ${step === 'visualization' ? 'active' : ''} ${['schedule', 'preview'].includes(step) ? 'completed' : ''}`}>
+        <div className={`step ${step === 'visualization' ? 'active' : ''} ${['schedule', 'preview'].includes(step) ? 'completed' : ''}`}>}
           <div className="step-number">2</div>
           <div className="step-label">Visualization</div>
         </div>
-        
         <div className="step-connector"></div>
-        
-        <div className={`step ${step === 'schedule' ? 'active' : ''} ${step === 'preview' ? 'completed' : ''}`}>
+        <div className={`step ${step === 'schedule' ? 'active' : ''} ${step === 'preview' ? 'completed' : ''}`}>}
           <div className="step-number">3</div>
           <div className="step-label">Schedule</div>
         </div>
-        
         <div className="step-connector"></div>
-        
-        <div className={`step ${step === 'preview' ? 'active' : ''}`}>
+        <div className={`step ${step === 'preview' ? 'active' : ''}`}>}
           <div className="step-number">4</div>
           <div className="step-label">Preview</div>
         </div>
       </div>
-
-      {error && (
+      {error && ()
         <div className="error-message">
           <span className="error-icon">⚠️</span>
           {error}
         </div>
       )}
-
       <div className="report-builder-content">
-        {step === 'query' && (
+        {step === 'query' && ()
           <div className="step-content">
             {/* Basic Information */}
             <div className="basic-info-section">
               <h3>Report Information</h3>
-              
               <div className="form-group">
                 <label htmlFor="reportName">Report Name *</label>
                 <input
@@ -289,11 +255,10 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
                   placeholder="Enter report name"
                   className={validationErrors.reportName ? 'error' : ''}
                 />
-                {validationErrors.reportName && (
+                {validationErrors.reportName && ()
                   <div className="field-error">{validationErrors.reportName}</div>
                 )}
               </div>
-              
               <div className="form-group">
                 <label htmlFor="reportDescription">Description</label>
                 <textarea
@@ -304,12 +269,11 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
                   rows={3}
                   className={validationErrors.reportDescription ? 'error' : ''}
                 />
-                {validationErrors.reportDescription && (
+                {validationErrors.reportDescription && ()
                   <div className="field-error">{validationErrors.reportDescription}</div>
                 )}
               </div>
             </div>
-            
             {/* Query Builder */}
             <QueryBuilder
               query={query}
@@ -318,8 +282,7 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
             />
           </div>
         )}
-
-        {step === 'visualization' && (
+        {step === 'visualization' && ()
           <div className="step-content">
             <VisualizationConfig
               config={visualization}
@@ -328,8 +291,7 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
             />
           </div>
         )}
-
-        {step === 'schedule' && (
+        {step === 'schedule' && ()
           <div className="step-content">
             <ScheduleConfig
               config={scheduling}
@@ -338,8 +300,7 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
             />
           </div>
         )}
-
-        {step === 'preview' && (
+        {step === 'preview' && ()
           <div className="step-content">
             <ReportPreview
               reportName={reportName}
@@ -354,7 +315,6 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
           </div>
         )}
       </div>
-
       {/* Navigation */}
       <div className="report-builder-footer">
         <div className="navigation-buttons">
@@ -365,8 +325,7 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
           >
             Previous
           </button>
-          
-          {step !== 'preview' && (
+          {step !== 'preview' && ()
             <button
               className="next-button"
               onClick={handleNext}

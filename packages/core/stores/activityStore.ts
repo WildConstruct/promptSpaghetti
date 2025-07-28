@@ -232,28 +232,28 @@ export const useActivityStore = create<ActivityStore>()()
     ...initialState,
     // Data Actions
     setActivities: (activities) => set({ activities }),
-    addActivity: (activity) => set((state) => ({)
+    addActivity: (activity) => set((state) => ({),
       activities: [activity, ...state.activities],
       recentActivities: [activity, ...state.recentActivities.slice(0, 19)] // Keep last 20
     })),
     updateActivity: (id, updates) => set((state) => ({)
-      activities: state.activities.map(activity =>)
+      activities: state.activities.map(activity =>),
         activity.id === id ? { ...activity, ...updates } : activity
       ),
-      currentActivity: state.currentActivity?.id === id
+      currentActivity: state.currentActivity?.id === id,
         ? { ...state.currentActivity, ...updates }
         : state.currentActivity
     })),
-    removeActivity: (id) => set((state) => ({)
+    removeActivity: (id) => set((state) => ({),
       activities: state.activities.filter(activity => activity.id !== id),
       selectedActivityIds: state.selectedActivityIds.filter(selectedId => selectedId !== id),
-      currentActivity: state.currentActivity?.id === id ? null : state.currentActivity
+      currentActivity: state.currentActivity?.id === id ? null : state.currentActivity,
     })),
     setCurrentActivity: (activity) => set({ currentActivity: activity }),
     setMetrics: (metrics) => set({ metrics }),
     // Query Actions
     setQuery: (query) => set({ currentQuery: query }),
-    updateQuery: (updates) => set((state) => ({)
+    updateQuery: (updates) => set((state) => ({),
       currentQuery: { ...state.currentQuery, ...updates }
     })),
     setQueryResult: (result) => set({ queryResult: result }),
@@ -263,26 +263,26 @@ export const useActivityStore = create<ActivityStore>()()
     addFilter: (key, value) => set((state) => ({)
       activeFilters: { ...state.activeFilters, [key]: value }
     })),
-    removeFilter: (key) => set((state) => {
+    removeFilter: (key) => set((state) => {,
       const newFilters = { ...state.activeFilters };
       delete newFilters[key];
       return { activeFilters: newFilters };
     }),
     clearFilters: () => set({ activeFilters: {} }),
     // Selection Actions
-    selectActivity: (id) => set((state) => ({)
+    selectActivity: (id) => set((state) => ({),
       selectedActivityIds: state.selectedActivityIds.includes(id),
         ? state.selectedActivityIds
         : [...state.selectedActivityIds, id]
     })),
-    deselectActivity: (id) => set((state) => ({)
-      selectedActivityIds: state.selectedActivityIds.filter(selectedId => selectedId !== id)
+    deselectActivity: (id) => set((state) => ({),
+      selectedActivityIds: state.selectedActivityIds.filter(selectedId => selectedId !== id),
     })),
-    selectAllActivities: () => set((state) => ({)
-      selectedActivityIds: state.activities.map(activity => activity.id)
+    selectAllActivities: () => set((state) => ({),
+      selectedActivityIds: state.activities.map(activity => activity.id),
     })),
     clearSelection: () => set({ selectedActivityIds: [] }),
-    toggleActivitySelection: (id) => set((state) => ({)
+    toggleActivitySelection: (id) => set((state) => ({),
       selectedActivityIds: state.selectedActivityIds.includes(id),
         ? state.selectedActivityIds.filter(selectedId => selectedId !== id)
         : [...state.selectedActivityIds, id]
@@ -294,21 +294,21 @@ export const useActivityStore = create<ActivityStore>()()
     // Pagination Actions
     setPage: (page) => set({ currentPage: page }),
     setPageSize: (size) => set({ pageSize: size }),
-    nextPage: () => set((state) => ({)
-      currentPage: state.hasNextPage ? state.currentPage + 1 : state.currentPage
+    nextPage: () => set((state) => ({),
+      currentPage: state.hasNextPage ? state.currentPage + 1 : state.currentPage,
     })),
-    previousPage: () => set((state) => ({)
-      currentPage: state.hasPreviousPage ? state.currentPage - 1 : state.currentPage
+    previousPage: () => set((state) => ({),
+      currentPage: state.hasPreviousPage ? state.currentPage - 1 : state.currentPage,
     })),
     // Real-time Actions
     setStreamConnected: (connected) => set({ isStreamConnected: connected }),
     setStreamSubscriptionId: (id) => set({ streamSubscriptionId: id }),
-    addRecentActivity: (activity) => set((state) => ({)
+    addRecentActivity: (activity) => set((state) => ({),
       recentActivities: [activity, ...state.recentActivities.slice(0, 19)]
     })),
     clearRecentActivities: () => set({ recentActivities: [] }),
     // Async Actions
-    loadActivities: async (query) => {
+    loadActivities: async (query) => {,
       const state = get();
       const queryToUse = query || { ...state.currentQuery, ...state.activeFilters };
       set({ isLoading: true, error: null });
@@ -320,7 +320,7 @@ export const useActivityStore = create<ActivityStore>()()
           lastQueryTime: new Date().toISOString(),
           isLoading: false,
           hasNextPage: (queryToUse.offset || 0) + result.activities.length < result.totalCount,
-          hasPreviousPage: (queryToUse.offset || 0) > 0
+          hasPreviousPage: (queryToUse.offset || 0) > 0,
         });
       } catch (error) {
         set({)
@@ -329,7 +329,7 @@ export const useActivityStore = create<ActivityStore>()()
         });
       }
     },
-    loadMetrics: async (query) => {
+    loadMetrics: async (query) => {,
       const state = get();
       const queryToUse = query || { ...state.currentQuery, ...state.activeFilters };
       try {
@@ -339,25 +339,25 @@ export const useActivityStore = create<ActivityStore>()()
         set({ error: error instanceof Error ? error.message : 'Failed to load metrics' });
       }
     },
-    refreshData: async () => {
+    refreshData: async () => {,
       const { loadActivities, loadMetrics } = get();
       await Promise.all([loadActivities(), loadMetrics()]);
     },
     // Utility Actions
     setLoading: (loading) => set({ isLoading: loading }),
     setError: (error) => set({ error }),
-    reset: () => set(initialState)
+    reset: () => set(initialState),
   }))
 );
 
 // Selectors for computed values
 export const activitySelectors = {
   // Get filtered activities based on current filters
-  getFilteredActivities: (state: ActivityStore) => {
+  getFilteredActivities: (state: ActivityStore) => {,
     return state.activities; // Filtering is done server-side
   },
   // Get activities grouped by the specified field
-  getGroupedActivities: (state: ActivityStore) => {
+  getGroupedActivities: (state: ActivityStore) => {,
     const activities = state.activities;
     if (state.groupBy === 'none') {
       return { 'All Activities': activities };
@@ -375,17 +375,17 @@ export const activitySelectors = {
     return grouped;
   },
   // Get selected activities
-  getSelectedActivities: (state: ActivityStore) => {
+  getSelectedActivities: (state: ActivityStore) => {,
     return state.activities.filter(activity => )
       state.selectedActivityIds.includes(activity.id)
     );
   },
   // Check if there are any active filters
-  hasActiveFilters: (state: ActivityStore) => {
+  hasActiveFilters: (state: ActivityStore) => {,
     return Object.keys(state.activeFilters).length > 0;
   },
   // Get summary statistics
-  getSummaryStats: (state: ActivityStore) => {
+  getSummaryStats: (state: ActivityStore) => {,
     const activities = state.activities;
     return {
       total: activities.length,
@@ -398,7 +398,7 @@ export const activitySelectors = {
         return acc;
       }, {} as Record<string, number>),
       errors: activities.filter(a => a.status === 'failed').length,
-      recent: activities.filter(a => )
+      recent: activities.filter(a => ),
         new Date(a.timestamp) > new Date(Date.now() - 24 * 60 * 60 * 1000)
       ).length
     };

@@ -21,7 +21,7 @@ describe('EncryptionStatus Components', () => {
   };
   const mockErrorState: EncryptionState = {
     status: 'error',
-    error: 'Failed to encrypt data: Invalid key'
+    error: 'Failed to encrypt data: Invalid key',
   };
   const mockNotEncryptedState: EncryptionState = {
     status: 'not_encrypted',
@@ -163,7 +163,7 @@ describe('EncryptionStatus Components', () => {
       expect(screen.getByText('1.5 KB')).toBeInTheDocument();
       const gbDataState: EncryptionState = { 
         status: 'encrypted', 
-        dataSize: 1024 * 1024 * 1024 * 2.5 
+        dataSize: 1024 * 1024 * 1024 * 2.5 ,
       };
       rerender(<EncryptionDetails encryptionState={gbDataState} />);
       expect(screen.getByText('2.5 GB')).toBeInTheDocument();

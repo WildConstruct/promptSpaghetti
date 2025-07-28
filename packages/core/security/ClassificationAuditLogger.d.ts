@@ -173,7 +173,7 @@ export declare class ClassificationAuditLogger extends EventEmitter {
     /**
      * Log a classification event
      */
-    logClassification()
+    logClassification();
       dataElement: DataElement,
       result: ClassificationResult,
       actor: AuditLogEntry['actor'],
@@ -182,7 +182,7 @@ export declare class ClassificationAuditLogger extends EventEmitter {
     /**
      * Log a classification update
      */
-    logClassificationUpdate()
+    logClassificationUpdate();
       dataId: string,
       oldLevel: ClassificationLevel,
       newLevel: ClassificationLevel,
@@ -202,7 +202,7 @@ export declare class ClassificationAuditLogger extends EventEmitter {
     /**
      * Log data access event
      */
-    logDataAccess()
+    logDataAccess();
       dataId: string,
       accessGranted: boolean,
       reason: string,

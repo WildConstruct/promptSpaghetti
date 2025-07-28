@@ -294,7 +294,7 @@ export class EmailDeliveryTracker extends EventEmitter {
         attemptNumber: 1,
         timestamp: new Date(),
         status: DeliveryStatus.FAILED,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
     }
     return emailId;
@@ -461,7 +461,7 @@ export class EmailDeliveryTracker extends EventEmitter {
         attemptNumber: record.attempts.length + 1,
         timestamp: new Date(),
         status: DeliveryStatus.FAILED,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
       return false;
     }
@@ -484,7 +484,7 @@ export class EmailDeliveryTracker extends EventEmitter {
       attemptNumber: record.attempts.length + 1,
       timestamp: new Date(),
       status: DeliveryStatus.SENT,
-      providerResponse: 'Email queued for delivery'
+      providerResponse: 'Email queued for delivery',
     });
     // Store email content for potential retries
     record.providerData.htmlContent = request.content.html;
@@ -524,7 +524,7 @@ export class EmailDeliveryTracker extends EventEmitter {
       this.emit('emailDelivered', {)
         emailId: record.id,
         record,
-        deliveryTime: record.deliveredAt!.getTime() - record.createdAt.getTime()
+        deliveryTime: record.deliveredAt!.getTime() - record.createdAt.getTime(),
       });
     }
   }
@@ -547,7 +547,7 @@ export class EmailDeliveryTracker extends EventEmitter {
     this.emit('spamReport', {)
       emailId: record.id,
       record,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   private parseWebhookPayload(provider: EmailProvider, payload: any): any[] {

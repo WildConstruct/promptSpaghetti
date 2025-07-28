@@ -3,11 +3,9 @@
  * 
  * Provides unified styling, navigation, and branding for all auth pages
  */
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
-
 interface AuthLayoutProps {
   children: React.ReactNode;
   title: string;
@@ -18,7 +16,7 @@ interface AuthLayoutProps {
   backgroundPattern?: boolean;
 }
 
-export const AuthLayout: React.FC<AuthLayoutProps> = ({
+export const AuthLayout: React.FC<AuthLayoutProps> = ({)
   children,
   title,
   subtitle,
@@ -29,46 +27,40 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
 }) => {
   const location = useLocation();
   const { error, clearError, isLoading } = useAuthStore();
-
   // Clear errors when location changes
   React.useEffect(() => {
     if (error) {
       clearError();
     }
   }, [location.pathname, error, clearError]);
-
   const getNavigationLinks = () => {
     const currentPath = location.pathname;
-    
-    const links = [
+    const links = [;
       {
         path: '/login',
         label: 'Sign In',
-        description: 'Access your account'
+        description: 'Access your account',
       },
       {
         path: '/register', 
         label: 'Create Account',
-        description: 'Join Prompt Spaghetti'
+        description: 'Join Prompt Spaghetti',
       },
       {
         path: '/reset-password',
         label: 'Reset Password',
-        description: 'Recover your account'
+        description: 'Recover your account',
       }
     ];
-
     return links.filter(link => link.path !== currentPath);
   };
-
   const backgroundStyle = backgroundPattern ? {
-    backgroundImage: `
+    backgroundImage: `,
       radial-gradient(circle at 1px 1px, rgba(0,123,255,0.15) 1px, transparent 0)
     `,
-    backgroundSize: '20px 20px'
+    backgroundSize: '20px 20px',
   } : {};
-
-  return (
+  return ()
     <div style={{
       minHeight: '100vh',
       display: 'flex',
@@ -87,9 +79,8 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
         bottom: 0,
         opacity: 0.05,
         backgroundImage: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23000000" fill-opacity="1"%3E%3Ccircle cx="7" cy="7" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-        pointerEvents: 'none'
+        pointerEvents: 'none',
       }} />
-
       <div style={{
         maxWidth,
         width: '100%',
@@ -98,20 +89,20 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
         padding: '48px',
         position: 'relative',
-        zIndex: 1
+        zIndex: 1,
       }}>
         {/* Branding Header */}
-        {showBranding && (
+        {showBranding && ()
           <div style={{
             textAlign: 'center',
-            marginBottom: '40px'
+            marginBottom: '40px',
           }}>
             <Link 
               to="/" 
               style={{ 
                 textDecoration: 'none',
                 color: 'inherit',
-                display: 'inline-block'
+                display: 'inline-block',
               }}
             >
               <div style={{
@@ -125,7 +116,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
                 margin: '0 auto 16px',
                 fontSize: '24px',
                 color: 'white',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
               }}>
                 🧠
               </div>
@@ -133,48 +124,46 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
                 fontSize: '20px',
                 fontWeight: 'bold',
                 color: '#333',
-                margin: '0 0 4px 0'
+                margin: '0 0 4px 0',
               }}>
                 Prompt Spaghetti
               </h1>
               <p style={{
                 fontSize: '14px',
                 color: '#666',
-                margin: 0
+                margin: 0,
               }}>
                 Visual Prompt Engineering
               </p>
             </Link>
           </div>
         )}
-
         {/* Page Title */}
         <div style={{
           textAlign: 'center',
-          marginBottom: '32px'
+          marginBottom: '32px',
         }}>
           <h2 style={{
             fontSize: '28px',
             fontWeight: 'bold',
             color: '#333',
-            marginBottom: '8px'
+            marginBottom: '8px',
           }}>
             {title}
           </h2>
-          {subtitle && (
+          {subtitle && ()
             <p style={{
               color: '#666',
               fontSize: '16px',
               lineHeight: '1.5',
-              margin: 0
+              margin: 0,
             }}>
               {subtitle}
             </p>
           )}
         </div>
-
         {/* Global Error Display */}
-        {error && (
+        {error && ()
           <div style={{
             backgroundColor: '#fee',
             border: '1px solid #fcc',
@@ -185,7 +174,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
             fontSize: '14px',
             display: 'flex',
             alignItems: 'flex-start',
-            gap: '12px'
+            gap: '12px',
           }}>
             <span style={{ fontSize: '16px', flexShrink: 0 }}>⚠️</span>
             <div style={{ flex: 1 }}>
@@ -201,7 +190,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
                 fontSize: '16px',
                 padding: '0',
                 lineHeight: '1',
-                flexShrink: 0
+                flexShrink: 0,
               }}
               title="Dismiss"
             >
@@ -209,9 +198,8 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
             </button>
           </div>
         )}
-
         {/* Loading Indicator */}
-        {isLoading && (
+        {isLoading && ()
           <div style={{
             backgroundColor: '#e7f3ff',
             border: '1px solid #bee5eb',
@@ -224,7 +212,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '12px'
+            gap: '12px',
           }}>
             <div style={{
               width: '16px',
@@ -232,29 +220,27 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
               border: '2px solid #0c5460',
               borderTop: '2px solid transparent',
               borderRadius: '50%',
-              animation: 'spin 1s linear infinite'
+              animation: 'spin 1s linear infinite',
             }} />
             Processing...
           </div>
         )}
-
         {/* Main Content */}
         <div style={{ marginBottom: showNavigation ? '32px' : '24px' }}>
           {children}
         </div>
-
         {/* Navigation Links */}
-        {showNavigation && (
+        {showNavigation && ()
           <div style={{
             textAlign: 'center',
-            fontSize: '14px'
+            fontSize: '14px',
           }}>
             <div style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '12px'
+              gap: '12px',
             }}>
-              {getNavigationLinks().map(link => (
+              {getNavigationLinks().map(link => ()
                 <Link
                   key={link.path}
                   to={link.path}
@@ -264,7 +250,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
                     padding: '8px',
                     borderRadius: '6px',
                     transition: 'background-color 0.2s',
-                    display: 'block'
+                    display: 'block',
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = '#f8f9fa';
@@ -282,13 +268,12 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
             </div>
           </div>
         )}
-
         {/* Footer */}
         <div style={{
           marginTop: '32px',
           paddingTop: '24px',
           borderTop: '1px solid #eee',
-          textAlign: 'center'
+          textAlign: 'center',
         }}>
           <div style={{ fontSize: '12px', color: '#666', marginBottom: '12px' }}>
             By continuing, you agree to our{' '}
@@ -300,7 +285,6 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
               Privacy Policy
             </Link>
           </div>
-          
           <Link
             to="/"
             style={{
@@ -309,14 +293,13 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
               fontSize: '12px',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '4px'
+              gap: '4px',
             }}
           >
             ← Back to Editor
           </Link>
         </div>
       </div>
-      
       {/* CSS Animations */}
       <style>{`
         @keyframes spin {

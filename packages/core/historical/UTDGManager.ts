@@ -76,7 +76,7 @@ export class UTDGManager {
         forbidden_elements: config.forbidden_elements,
       },
       limit: 20,
-      min_authenticity: config.historical_accuracy === 'strict' ? 0.8 : 
+      min_authenticity: config.historical_accuracy === 'strict' ? 0.8 : ,
         config.historical_accuracy === 'moderate' ? 0.6 : 0.4
     };
     // Query for relevant content
@@ -100,7 +100,7 @@ export class UTDGManager {
         generation_time: performance.now() - startTime,
         accuracy_score: accuracyScore,
         creativity_score: creativityScore,
-        historical_basis: selectedNodes.map(node => node.external_source?.url || node.metadata.source).filter(Boolean)
+        historical_basis: selectedNodes.map(node => node.external_source?.url || node.metadata.source).filter(Boolean),
       }
     };
   }
@@ -279,7 +279,7 @@ export class UTDGManager {
         source_reliability: reliabilityScore,
         freshness: freshnessScore,
       }),
-      last_validated: new Date().toISOString()
+      last_validated: new Date().toISOString(),
     };
   }
   /**
@@ -384,7 +384,7 @@ export class UTDGManager {
         generation_time: performance.now() - startTime,
         accuracy_score: accuracyScore,
         creativity_score: config.creativity_factor,
-        historical_basis: nodes.map(node => node.metadata.source)
+        historical_basis: nodes.map(node => node.metadata.source),
       }
     };
   }
@@ -402,14 +402,14 @@ export class UTDGManager {
   private filterByConfiguration(nodes: UTDGNode[], config: ContentGenerationConfig): UTDGNode[] {
     return nodes.filter(node => {)
       if (config.required_elements) {
-        const hasRequired = config.required_elements.some(element =>;)
+        const hasRequired = config.required_elements.some(element =>;);
           node.content.toLowerCase().includes(element.toLowerCase()) ||
           node.metadata.tags.some(tag => tag.toLowerCase().includes(element.toLowerCase()))
         );
         if (!hasRequired) return false;
       }
       if (config.forbidden_elements) {
-        const hasForbidden = config.forbidden_elements.some(element =>;)
+        const hasForbidden = config.forbidden_elements.some(element =>;);
           node.content.toLowerCase().includes(element.toLowerCase()) ||
           node.metadata.tags.some(tag => tag.toLowerCase().includes(element.toLowerCase()))
         );

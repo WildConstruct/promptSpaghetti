@@ -27,7 +27,7 @@ export const SharePreview: React.FC<SharePreviewProps> = ({)
     { id: 'discord', label: 'Discord', icon: '💬' },
     { id: 'embed', label: 'Embed Code', icon: '📄' }
   ];
-  const renderOpenGraphPreview = () => (;)
+  const renderOpenGraphPreview = () => (;);
     <div style={{
       border: '1px solid #e1e5e9',
       borderRadius: '8px',
@@ -73,7 +73,7 @@ export const SharePreview: React.FC<SharePreviewProps> = ({)
       </div>
     </div>
   );
-  const renderTwitterPreview = () => (;)
+  const renderTwitterPreview = () => (;);
     <div style={{
       border: '1px solid #cfd9de',
       borderRadius: '16px',
@@ -119,7 +119,7 @@ export const SharePreview: React.FC<SharePreviewProps> = ({)
       </div>
     </div>
   );
-  const renderLinkedInPreview = () => (;)
+  const renderLinkedInPreview = () => (;);
     <div style={{
       border: '1px solid #d0d0d0',
       borderRadius: '8px',
@@ -165,7 +165,7 @@ export const SharePreview: React.FC<SharePreviewProps> = ({)
       </div>
     </div>
   );
-  const renderDiscordPreview = () => (;)
+  const renderDiscordPreview = () => (;);
     <div style={{
       backgroundColor: '#2f3136',
       padding: '16px',
@@ -211,12 +211,12 @@ export const SharePreview: React.FC<SharePreviewProps> = ({)
       </div>
     </div>
   );
-  const renderEmbedPreview = () => (;)
+  const renderEmbedPreview = () => (;);
     <div style={{
       backgroundColor: '#f8fafc',
       padding: '16px',
       borderRadius: '8px',
-      border: '1px solid #e2e8f0'
+      border: '1px solid #e2e8f0',
     }}>
       <div style={{
         marginBottom: '12px',
@@ -302,12 +302,12 @@ export const SharePreview: React.FC<SharePreviewProps> = ({)
       return renderOpenGraphPreview();
     }
   };
-  return ()
+  return ();
     <div style={{
       backgroundColor: 'white',
       borderRadius: '12px',
       padding: '24px',
-      border: '1px solid #e5e7eb'
+      border: '1px solid #e5e7eb',
     }}>
       <h3 style={{
         margin: '0 0 20px 0',

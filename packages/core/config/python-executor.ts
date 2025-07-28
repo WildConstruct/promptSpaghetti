@@ -271,7 +271,7 @@ export class PythonExecutorConfigManager {
         enableMetrics: true,
         enableTracing: true,
         strictMode: false,
-        timeout: 60000 // Longer timeout for development
+        timeout: 60000 // Longer timeout for development,
       };
     case 'staging':
       return {

@@ -118,7 +118,7 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({)
     onExport,
     onTimeRangeChange
   };
-  return ()
+  return ();
     <DashboardContext.Provider value={contextValue}>
       {children}
     </DashboardContext.Provider>

@@ -316,7 +316,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
       falsePositiveRate: 0,
       processingLatency: 0,
       ruleEffectiveness: new Map(),
-      threatPatternStats: new Map()
+      threatPatternStats: new Map(),
     };
     this.initializeCorrelationRules();
     if (this.config.enableRealTimeCorrelation) {
@@ -343,7 +343,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
   public async correlateEvents(timeWindow?: number): Promise<CorrelatedEventGroup[]> {
     const windowMs = (timeWindow || this.config.correlationTimeWindow) * 60 * 1000;
     const now = Date.now();
-    const recentEvents = this.eventBuffer.filter(event => ;)
+    const recentEvents = this.eventBuffer.filter(event => ;);
       now - event.timestamp.getTime() < windowMs
     );
     const correlatedGroups = await this.performCorrelation(recentEvents);
@@ -408,10 +408,10 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
     return { ...this.analytics };
   }
   public async generateReport(timeRange: { start: Date; end: Date }): Promise<CorrelationReport> {
-    const groups = Array.from(this.correlatedGroups.values()).filter(group =>;)
+    const groups = Array.from(this.correlatedGroups.values()).filter(group =>;);
       group.createdAt >= timeRange.start && group.createdAt <= timeRange.end
     );
-    const events = this.eventBuffer.filter(event =>;)
+    const events = this.eventBuffer.filter(event =>;);
       event.timestamp >= timeRange.start && event.timestamp <= timeRange.end
     );
     const summary = this.calculateCorrelationSummary(groups, events);
@@ -532,7 +532,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
     const processedEvents = new Set<string>();
     for (const rule of this.correlationRules.values()) {
       if (!rule.enabled) continue;
-      const matchingEvents = events.filter(event => ;)
+      const matchingEvents = events.filter(event => ;);
         !processedEvents.has(event.id) && this.evaluateRule(rule, event, events)
       );
       if (matchingEvents.length >= rule.threshold) {
@@ -549,7 +549,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
     const requiredConditions = rule.conditions.filter(c => c.required);
     const optionalConditions = rule.conditions.filter(c => !c.required);
     // All required conditions must match
-    const requiredMatch = requiredConditions.every(condition => ;)
+    const requiredMatch = requiredConditions.every(condition => ;);
       this.evaluateCondition(condition, event, allEvents)
     );
     if (!requiredMatch) return false;
@@ -721,7 +721,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
         eventType: event.type,
         description: event.description || `${event.type} event`,}
         impact: this.calculateEventImpact(event),
-        source: event.source || 'unknown'
+        source: event.source || 'unknown',
       }));
   }
   private calculateEventImpact(event: SecurityEvent): number {
@@ -769,7 +769,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
   private generateGroupRecommendations(events: SecurityEvent[], rule: CorrelationRule): GroupRecommendation[] {
     const recommendations: GroupRecommendation[] = [];
     // High severity events need immediate action
-    const highSeverityCount = events.filter(e => ;)
+    const highSeverityCount = events.filter(e => ;);
       e.severity === 'high' || e.severity === 'critical'
     ).length;
     if (highSeverityCount > 0) {
@@ -839,7 +839,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
         accuracyRate: 0,
         falsePositiveRate: 0,
         averageConfidence: 0,
-        lastTriggered: new Date()
+        lastTriggered: new Date(),
       };
       this.analytics.ruleEffectiveness.set(ruleId, effectiveness);
     }
@@ -851,7 +851,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
     const correlatedEvents = groups.reduce((sum, group) => sum + group.events.length, 0);
     const activeGroups = groups.filter(g => g.status === GroupStatus.ACTIVE).length;
     const resolvedGroups = groups.filter(g => g.status === GroupStatus.RESOLVED).length;
-    const highSeverityGroups = groups.filter(g => ;)
+    const highSeverityGroups = groups.filter(g => ;);
       g.severity === AnomalySeverity.HIGH || g.severity === AnomalySeverity.CRITICAL
     ).length;
     return {
@@ -879,7 +879,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
               eventCount: 0,
               groupCount: 0,
               severitySum: 0,
-              indicators: new Set()
+              indicators: new Set(),
             });
           }
           const stats = threatStats.get(threatType)!;
@@ -934,7 +934,7 @@ export class SecurityEventCorrelationEngine extends EventEmitter {
       executionCount: rule.triggeredCount,
       successRate: 0.85, // TODO: Calculate based on feedback
       averageExecutionTime: 50, // TODO: Track actual execution time
-      impactScore: rule.priority * rule.triggeredCount
+      impactScore: rule.priority * rule.triggeredCount,
     }));
   }
   private generateSystemRecommendations(): SystemRecommendation[] {

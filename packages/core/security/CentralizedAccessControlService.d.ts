@@ -99,7 +99,7 @@ export declare class CentralizedAccessControlService extends EventEmitter {
     private auditLog;
     private metrics;
     private policies;
-    constructor()
+    constructor();
       config: AccessControlConfig,
       inheritanceFramework: InheritanceFramework,
       dataClassifier: DataClassifier,

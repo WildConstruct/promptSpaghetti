@@ -55,6 +55,6 @@ export const useGraphState = () => {
     hasEdges: state.graph.edges.length > 0,
     hasSelection: state.selectedNodeIds.length > 0,
     hasErrors: state.validationErrors.length > 0,
-    isValid: state.validationErrors.length === 0
+    isValid: state.validationErrors.length === 0,
   };
 };

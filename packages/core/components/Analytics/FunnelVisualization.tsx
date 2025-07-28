@@ -154,13 +154,13 @@ export const FunnelVisualization: React.FC<FunnelVisualizationProps> = ({)
         endDate: timeRange.end,
         metrics: ['conversion_rate', 'user_count', 'revenue', 'drop_off_rate'],
         groupBy: configuration.grouping.dimension !== 'none' ? [configuration.grouping.dimension as any] : undefined,
-        filters: configuration.filterCriteria.map(filter => ({)
+        filters: configuration.filterCriteria.map(filter => ({),
           field: getFilterField(filter.type),
           operator: filter.operator,
           value: filter.value,
         })),
         aggregation: {,
-          interval: configuration.grouping.interval || 'day'
+          interval: configuration.grouping.interval || 'day',
         }
       };
       const metricResults = await analyticsInfrastructure.queryMetrics(query);
@@ -206,7 +206,7 @@ export const FunnelVisualization: React.FC<FunnelVisualizationProps> = ({)
   if (error || !funnelMetrics) {
     return <FunnelErrorState error={error || 'No data available'} onRetry={loadFunnelData} />;
   }
-  return ()
+  return ();
     <div className="funnel-visualization">
       <FunnelHeader 
         funnelDefinition={funnelDefinition}
@@ -256,7 +256,7 @@ const FunnelHeader: React.FC<FunnelHeaderProps> = ({)
   configuration,
   onConfigChange
 }) => {
-  return ()
+  return ();
     <div className="funnel-header">
       <div className="funnel-title">
         <h2>{funnelDefinition.name}</h2>
@@ -306,7 +306,7 @@ interface SummaryMetricProps {
 }
 const SummaryMetric: React.FC<SummaryMetricProps> = ({ label, value, change }) => {
   const changeDirection = change > 0 ? 'up' : change < 0 ? 'down' : 'neutral';
-  return ()
+  return ();
     <div className="summary-metric">
       <div className="metric-label">{label}</div>
       <div className="metric-value">{value}</div>
@@ -329,7 +329,7 @@ const FunnelConfigurationControls: React.FC<FunnelConfigurationControlsProps> = 
   configuration,
   onConfigChange
 }) => {
-  return ()
+  return ();
     <div className="funnel-configuration-controls">
       <div className="control-group">
         <label>Display Mode</label>
@@ -409,7 +409,7 @@ const FunnelFilters: React.FC<FunnelFiltersProps> = ({)
     );
     onFiltersChange(newFilters);
   }, [filters, onFiltersChange]);
-  return ()
+  return ();
     <div className="funnel-filters">
       <div className="filters-header">
         <h3>Filters</h3>
@@ -451,7 +451,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({)
     onAddFilter(filter);
     setIsOpen(false);
   };
-  return ()
+  return ();
     <div className="filter-dropdown">
       <button onClick={() => setIsOpen(!isOpen)}>
         Add Filter +
@@ -500,7 +500,7 @@ interface FilterTagProps {
   onRemove: () => void;
 }
 const FilterTag: React.FC<FilterTagProps> = ({ filter, onUpdate, onRemove }) => {
-  return ()
+  return ();
     <div className="filter-tag">
       <span className="filter-type">{filter.type}:</span>
       <input
@@ -548,7 +548,7 @@ const FunnelChart: React.FC<FunnelChartProps> = ({)
         return <StandardFunnelChart metrics={metrics} configuration={configuration} onStepClick={onStepClick} />;
     }
   }, [configuration.displayMode, metrics, configuration, onStepClick]);
-  return ()
+  return ();
     <div className="funnel-chart-container">
       {chartComponent}
     </div>
@@ -568,12 +568,12 @@ const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({)
   onStepClick
 }) => {
   const maxUsers = Math.max(...metrics.stepMetrics.map(s => s.totalUsers));
-  return ()
+  return ();
     <div className="standard-funnel-chart">
       {metrics.stepMetrics.map((stepMetric, index) => {
         const width = (stepMetric.totalUsers / maxUsers) * 100;
         const isLastStep = index === metrics.stepMetrics.length - 1;
-        return ()
+        return ();
           <div key={stepMetric.stepId} className="funnel-step">
             <div
               className={`step-bar ${getStepColorClass(stepMetric, configuration.colorScheme)}`}
@@ -633,7 +633,7 @@ const FunnelComparison: React.FC<FunnelComparisonProps> = ({)
   comparisonData,
   configuration
 }) => {
-  return ()
+  return ();
     <div className="funnel-comparison">
       <h3>Comparison Analysis</h3>
       <div className="comparison-overview">
@@ -696,7 +696,7 @@ const ComparisonMetric: React.FC<ComparisonMetricProps> = ({)
         return value.toLocaleString();
     }
   };
-  return ()
+  return ();
     <div className="comparison-metric">
       <div className="metric-label">{label}</div>
       <div className="metric-values">
@@ -717,7 +717,7 @@ interface InsightCardProps {
   insight: ComparisonInsight;
 }
 const InsightCard: React.FC<InsightCardProps> = ({ insight }) => {
-  return ()
+  return ();
     <div className={`insight-card ${insight.type}`}>}
       <div className="insight-header">
         <span className="insight-type">{insight.type}</span>
@@ -754,7 +754,7 @@ const FunnelInsights: React.FC<FunnelInsightsProps> = ({)
   const insights = useMemo(() => {
     return generateFunnelInsights(metrics, comparisonData, funnelDefinition);
   }, [metrics, comparisonData, funnelDefinition]);
-  return ()
+  return ();
     <div className="funnel-insights">
       <h3>Funnel Insights</h3>
       <div className="insights-grid">
@@ -883,7 +883,7 @@ async function processFunnelMetrics()
     funnelId: funnelDefinition.id,
     totalEntries: stepMetrics[0]?.totalUsers || 0,
     totalConversions: stepMetrics[stepMetrics.length - 1]?.convertedUsers || 0,
-    overallConversionRate: stepMetrics.length > 0 ? 
+    overallConversionRate: stepMetrics.length > 0 ? ,
       ((stepMetrics[stepMetrics.length - 1]?.convertedUsers || 0) / (stepMetrics[0]?.totalUsers || 1)) * 100 : 0,
     averageTimeToConvert: stepMetrics.reduce((sum, step) => sum + step.averageTimeSpent, 0),
     totalValue: stepMetrics.reduce((sum, step) => sum + step.valueGenerated, 0),
@@ -901,7 +901,6 @@ function generateFunnelInsights()
   metrics: FunnelMetrics,
   comparisonData: FunnelComparisonData | null,
   funnelDefinition: ConversionFunnelDefinition,
-) {
   // Simplified implementation
   return {
     biggestDropOffs: metrics.stepMetrics,
@@ -911,7 +910,7 @@ function generateFunnelInsights()
       .map(step => ({)
         stepName: step.name,
         dropOffRate: step.dropOffRate,
-        affectedUsers: Math.floor(step.totalUsers * step.dropOffRate / 100)
+        affectedUsers: Math.floor(step.totalUsers * step.dropOffRate / 100),
       })),
     opportunities: [,
       {
@@ -926,11 +925,11 @@ function generateFunnelInsights()
     trends: [,
       {
         description: 'Conversion rate trending upward over last 7 days',
-        direction: 'up' as const
+        direction: 'up' as const,
       },
       {
         description: 'Average time to convert decreasing',
-        direction: 'down' as const
+        direction: 'down' as const,
       }
     ]
   };

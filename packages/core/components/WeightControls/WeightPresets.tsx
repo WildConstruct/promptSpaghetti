@@ -34,7 +34,7 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     category: 'basic',
     icon: '⚖️',
     preview: '25% 25% 25% 25%',
-    pattern: (options) => {
+    pattern: (options) => {,
       const equalWeight = Math.round(100 / options.length);
       return options.map(() => equalWeight);
     }
@@ -46,7 +46,7 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     category: 'basic',
     icon: '🎯',
     preview: '70% 10% 10% 10%',
-    pattern: (options) => {
+    pattern: (options) => {,
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
       const remainingWeight = 100 - 70;
@@ -61,7 +61,7 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     category: 'basic',
     icon: '🏁',
     preview: '10% 10% 10% 70%',
-    pattern: (options) => {
+    pattern: (options) => {,
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
       const remainingWeight = 100 - 70;
@@ -77,7 +77,7 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     category: 'creative',
     icon: '📉',
     preview: '40% 30% 20% 10%',
-    pattern: (options) => {
+    pattern: (options) => {,
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
       const weights: number[] = [];
@@ -99,7 +99,7 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     category: 'creative',
     icon: '📈',
     preview: '10% 20% 30% 40%',
-    pattern: (options) => {
+    pattern: (options) => {,
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
       const weights: number[] = [];
@@ -121,7 +121,7 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     category: 'creative',
     icon: '🔔',
     preview: '15% 35% 35% 15%',
-    pattern: (options) => {
+    pattern: (options) => {,
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
       if (options.length === 2) return [50, 50];
@@ -148,7 +148,7 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     category: 'advanced',
     icon: '📉📉',
     preview: '50% 25% 13% 12%',
-    pattern: (options) => {
+    pattern: (options) => {,
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
       const weights: number[] = [];
@@ -169,7 +169,7 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     category: 'advanced',
     icon: '🌀',
     preview: '8% 13% 21% 58%',
-    pattern: (options) => {
+    pattern: (options) => {,
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
       // Generate Fibonacci numbers
@@ -189,7 +189,7 @@ export const BUILT_IN_PRESETS: WeightPreset[] = [
     category: 'advanced',
     icon: '🏛️',
     preview: '62% 23% 9% 6%',
-    pattern: (options) => {
+    pattern: (options) => {,
       if (options.length === 0) return [];
       if (options.length === 1) return [100];
       const phi = 1.618033988749; // Golden ratio;
@@ -255,7 +255,7 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({)
     }
   };
   if (compact) {
-    return ()
+    return ();
       <div className={`weight-presets compact ${className}`} style={{}
         display: 'flex',
         gap: '4px',
@@ -300,7 +300,7 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`weight-presets ${className}`} style={{}
       background: '#2d3748',
       borderRadius: 6,
@@ -395,7 +395,7 @@ export const WeightPresets: React.FC<WeightPresetsProps> = ({)
               color: '#e2e8f0',
               cursor: 'pointer',
               textAlign: 'left',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = '#718096';

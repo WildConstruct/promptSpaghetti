@@ -156,7 +156,7 @@ export class DomainManager {
         name,
         loaded: false,
         initialized: false,
-        error: error as Error
+        error: error as Error,
       });
       throw error;
     }

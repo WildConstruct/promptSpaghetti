@@ -13,7 +13,7 @@ import { usePreviewSync } from '../../../hooks/usePreviewSync';
 jest.mock('../../../stores/previewStateStore');
 jest.mock('../../../hooks/usePreviewSync');
 jest.mock('../../../graphStore', () => ({)
-  useGraphStore: () => ({)
+  useGraphStore: () => ({),
     getGraphData: jest.fn(() => ({ nodes: [], edges: [] }))
   })
 }));
@@ -37,7 +37,7 @@ const mockPreviewResults = [;
     error: 'Test error',
     executionTimeMs: 45,
     locked: true,
-    lockedNote: 'Important result'
+    lockedNote: 'Important result',
   }
 ];
 const mockStoreState = {
@@ -63,7 +63,7 @@ const mockSyncState = {
   syncCount: 5,
   enableSync: jest.fn<unknown[], unknown>(),
   forceSyncNow: jest.fn<unknown[], unknown>(),
-  getChangeAnalysis: jest.fn(() => ({)
+  getChangeAnalysis: jest.fn(() => ({),
     changeType: 'content',
     significance: 0.6,
     affectedNodes: ['node-1'],

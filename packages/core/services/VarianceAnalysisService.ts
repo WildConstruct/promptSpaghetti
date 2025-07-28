@@ -69,7 +69,7 @@ export class VarianceAnalysisService {
     const varianceScore = this.calculateOverallVarianceScore(diversityMetrics, creativeRange);
     const overallVariance = this.categorizeVariance(varianceScore);
     // Generate suggestions
-    const suggestions = this.generateVarianceSuggestions(;)
+    const suggestions = this.generateVarianceSuggestions(;);
       diversityMetrics,
       creativeRange,
       overallVariance,
@@ -142,21 +142,21 @@ export class VarianceAnalysisService {
         background: '#fef2f2',
         border: '#fecaca',
         icon: '🔴',
-        description: 'Results are very similar - consider adding more randomization'
+        description: 'Results are very similar - consider adding more randomization',
       },
       medium: {,
         color: '#f59e0b',
         background: '#fffbeb',
         border: '#fed7aa',
         icon: '🟡',
-        description: 'Good balance of consistency and variety'
+        description: 'Good balance of consistency and variety',
       },
       high: {,
         color: '#10b981',
         background: '#f0fdf4',
         border: '#bbf7d0',
         icon: '🟢',
-        description: 'High creative diversity - excellent range of outputs'
+        description: 'High creative diversity - excellent range of outputs',
       }
     };
     return info[level];
@@ -197,7 +197,7 @@ export class VarianceAnalysisService {
   }
   private calculateVocabularyDiversity(outputs: string[]): number {
     if (outputs.length < 2) return 0;
-    const allWords = outputs.flatMap(output => ;)
+    const allWords = outputs.flatMap(output => ;);
       output.toLowerCase()
         .replace(/[^\w\s]/g, ' ')
         .split(/\s+/)
@@ -309,7 +309,7 @@ export class VarianceAnalysisService {
     } = diversityMetrics;
     const { creativityScore } = creativeRange;
     // Weighted combination of all metrics
-    return ()
+    return ();
       outputLengthVariance * 0.2 +
       vocabularyDiversity * 0.25 +
       structuralDiversity * 0.25 +

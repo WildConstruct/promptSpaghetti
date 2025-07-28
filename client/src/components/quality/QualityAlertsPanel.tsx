@@ -6,7 +6,6 @@
  * 
  * Task: E18-1753114562561-695DBB - Create quality dashboards
  */
-
 import React, { useState } from 'react';
 import {
   Card,
@@ -40,7 +39,7 @@ export interface QualityAlertsPanelProps {
   className?: string;
 }
 
-export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
+export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({)
   alerts,
   onAlertAction,
   compact = false,
@@ -50,7 +49,6 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'acknowledged' | 'resolved'>('all');
   const [sortBy, setSortBy] = useState<'timestamp' | 'severity' | 'metric'>('timestamp');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-
   // Helper function to get severity icon
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
@@ -66,7 +64,6 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
       return <AlertTriangle className="w-4 h-4 text-gray-500" />;
     }
   };
-
   // Helper function to get severity color
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -82,7 +79,6 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
       return 'outline';
     }
   };
-
   // Helper function to get status icon
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -96,18 +92,15 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
       return <Clock className="w-3 h-3" />;
     }
   };
-
   // Filter alerts
-  const filteredAlerts = alerts.filter(alert => {
+  const filteredAlerts = alerts.filter(alert => {)
     const severityMatch = severityFilter === 'all' || alert.severity === severityFilter;
     const statusMatch = statusFilter === 'all' || alert.status === statusFilter;
     return severityMatch && statusMatch;
   });
-
   // Sort alerts
   const sortedAlerts = [...filteredAlerts].sort((a, b) => {
     let comparison = 0;
-    
     switch (sortBy) {
     case 'timestamp':
       comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
@@ -124,25 +117,21 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
     default:
       comparison = 0;
     }
-    
     return sortOrder === 'asc' ? comparison : -comparison;
   });
-
   // Handle alert actions
   const handleAlertAction = (alertId: string, action: 'acknowledge' | 'resolve' | 'dismiss') => {
     if (onAlertAction) {
       onAlertAction(alertId, action);
     }
   };
-
   // Toggle sort order
   const toggleSort = () => {
     setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
   };
-
   if (compact) {
-    return (
-      <div className={`quality-alerts-panel-compact ${className}`}>
+    return ()
+      <div className={`quality-alerts-panel-compact ${className}`}>}
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center justify-between">
@@ -154,7 +143,7 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
           </CardHeader>
           <CardContent>
             <div className="space-y-2 max-h-64 overflow-y-auto">
-              {sortedAlerts.slice(0, 5).map((alert) => (
+              {sortedAlerts.slice(0, 5).map((alert) => ()
                 <div key={alert.id} className="flex items-center justify-between p-2 bg-gray-50 rounded-md">
                   <div className="flex items-center space-x-2 flex-1">
                     {getSeverityIcon(alert.severity)}
@@ -172,13 +161,13 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
                   </Badge>
                 </div>
               ))}
-              {sortedAlerts.length === 0 && (
+              {sortedAlerts.length === 0 && ()
                 <div className="text-center py-4 text-gray-500">
                   <CheckCircle className="w-8 h-8 mx-auto mb-2 text-green-500" />
                   <p className="text-sm">No active alerts</p>
                 </div>
               )}
-              {sortedAlerts.length > 5 && (
+              {sortedAlerts.length > 5 && ()
                 <div className="text-center pt-2">
                   <p className="text-xs text-gray-500">
                     and {sortedAlerts.length - 5} more alerts...
@@ -191,9 +180,8 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`quality-alerts-panel ${className}`}>
+  return ()
+    <div className={`quality-alerts-panel ${className}`}>}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -205,7 +193,6 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
               {filteredAlerts.length} of {alerts.length} alerts
             </Badge>
           </div>
-
           {/* Filters and Controls */}
           <div className="flex items-center space-x-4 pt-4">
             {/* Severity Filter */}
@@ -222,7 +209,6 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
                 <SelectItem value="info">Info</SelectItem>
               </SelectContent>
             </Select>
-
             {/* Status Filter */}
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-32">
@@ -235,7 +221,6 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
                 <SelectItem value="resolved">Resolved</SelectItem>
               </SelectContent>
             </Select>
-
             {/* Sort Controls */}
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-32">
@@ -247,16 +232,14 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
                 <SelectItem value="metric">Metric</SelectItem>
               </SelectContent>
             </Select>
-
             <Button variant="outline" size="sm" onClick={toggleSort}>
               <ArrowUpDown className="w-4 h-4" />
             </Button>
           </div>
         </CardHeader>
-
         <CardContent>
           <div className="space-y-4 max-h-96 overflow-y-auto">
-            {sortedAlerts.map((alert) => (
+            {sortedAlerts.map((alert) => ()
               <div key={alert.id} className="border border-gray-200 rounded-lg p-4">
                 {/* Alert Header */}
                 <div className="flex items-start justify-between mb-3">
@@ -274,7 +257,6 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
                       </p>
                     </div>
                   </div>
-
                   <div className="flex items-center space-x-2">
                     {getStatusIcon(alert.status)}
                     <span className="text-xs text-gray-500 capitalize">
@@ -282,20 +264,19 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
                     </span>
                   </div>
                 </div>
-
                 {/* Alert Details */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
                   <div>
                     <span className="font-medium text-gray-700">Current:</span>
                     <div>{alert.currentValue}</div>
                   </div>
-                  {alert.thresholdValue && (
+                  {alert.thresholdValue && ()
                     <div>
                       <span className="font-medium text-gray-700">Threshold:</span>
                       <div>{alert.thresholdValue}</div>
                     </div>
                   )}
-                  {alert.previousValue && (
+                  {alert.previousValue && ()
                     <div>
                       <span className="font-medium text-gray-700">Previous:</span>
                       <div>{alert.previousValue}</div>
@@ -306,21 +287,19 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
                     <div>{alert.timestamp.toLocaleString()}</div>
                   </div>
                 </div>
-
                 {/* Component/File Info */}
-                {(alert.component || alert.file) && (
+                {(alert.component || alert.file) && ()
                   <div className="mb-4 p-2 bg-gray-50 rounded text-sm">
-                    {alert.component && (
+                    {alert.component && ()
                       <div><span className="font-medium">Component:</span> {alert.component}</div>
                     )}
-                    {alert.file && (
+                    {alert.file && ()
                       <div><span className="font-medium">File:</span> {alert.file}</div>
                     )}
                   </div>
                 )}
-
                 {/* Actions */}
-                {alert.status === 'active' && (
+                {alert.status === 'active' && ()
                   <div className="flex space-x-2">
                     <Button
                       size="sm"
@@ -345,22 +324,20 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
                     </Button>
                   </div>
                 )}
-
                 {/* Acknowledged/Resolved Info */}
-                {(alert.status === 'acknowledged' || alert.status === 'resolved') && (
+                {(alert.status === 'acknowledged' || alert.status === 'resolved') && ()
                   <div className="text-xs text-gray-500">
-                    {alert.status === 'acknowledged' && alert.acknowledgedBy && alert.acknowledgedAt && (
+                    {alert.status === 'acknowledged' && alert.acknowledgedBy && alert.acknowledgedAt && ()
                       <p>Acknowledged by {alert.acknowledgedBy} on {alert.acknowledgedAt.toLocaleString()}</p>
                     )}
-                    {alert.status === 'resolved' && alert.resolvedAt && (
+                    {alert.status === 'resolved' && alert.resolvedAt && ()
                       <p>Resolved on {alert.resolvedAt.toLocaleString()}</p>
                     )}
                   </div>
                 )}
               </div>
             ))}
-
-            {sortedAlerts.length === 0 && (
+            {sortedAlerts.length === 0 && ()
               <div className="text-center py-12">
                 <CheckCircle className="w-16 h-16 mx-auto mb-4 text-green-500" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">

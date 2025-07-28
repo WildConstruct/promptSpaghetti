@@ -94,7 +94,7 @@ export declare class PerformanceMonitor extends EventEmitter {
     /**
      * End monitoring a node execution
      */
-    endExecution()
+    endExecution();
       trackingId: string,
       context: AdvancedExecutionContext,
       result?: any,

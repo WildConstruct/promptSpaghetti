@@ -591,7 +591,7 @@ export const CONTRIBUTION_WORKFLOW_TEMPLATES = {
     quality_gates: ['automated_quality', 'expedited_review'],
     review_requirements: { min_reviewers: 1, specialist_required: false },
     auto_publish_threshold: 80,
-    max_review_time: 24 // hours
+    max_review_time: 24 // hours,
   }
 } as const;
 

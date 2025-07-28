@@ -72,7 +72,7 @@ export const NodeLabelsManager: React.FC<NodeLabelsManagerProps> = ({)
   if (disabled) {
     return null;
   }
-  return ()
+  return ();
     <NodeLabelsLayer
       nodes={nodes}
       labelConfigs={annotations.nodeLabelConfigs}

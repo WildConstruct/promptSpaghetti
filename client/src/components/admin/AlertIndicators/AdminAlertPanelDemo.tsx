@@ -7,39 +7,33 @@
  * Demonstration of how to use AdminAlertPanel in different admin sections.
  * This can be used as a reference for integrating alerts into specific dashboards.
  */
-
 import React, { useState } from 'react';
 import AdminAlertPanel from './AdminAlertPanel';
 import { AlertCount, AlertItem, createEmptyAlertCount } from './index';
-
 const AdminAlertPanelDemo: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-
   // Mock alert data for different admin sections
   const featureToggleAlerts: AlertCount = {
     critical: 1,
     high: 2,
     medium: 3,
     low: 1,
-    info: 0
+    info: 0,
   };
-
   const userManagementAlerts: AlertCount = {
     critical: 0,
     high: 1,
     medium: 2,
     low: 0,
-    info: 1
+    info: 1,
   };
-
   const systemAlerts: AlertCount = {
     critical: 2,
     high: 3,
     medium: 1,
     low: 0,
-    info: 0
+    info: 0,
   };
-
   const mockRecentAlerts: AlertItem[] = [
     {
       id: 'alert-1',
@@ -50,7 +44,7 @@ const AdminAlertPanelDemo: React.FC = () => {
       timestamp: new Date(Date.now() - 5 * 60 * 1000), // 5 minutes ago
       source: 'system-monitor',
       status: 'active',
-      affectedComponent: 'API Gateway'
+      affectedComponent: 'API Gateway',
     },
     {
       id: 'alert-2',
@@ -62,7 +56,7 @@ const AdminAlertPanelDemo: React.FC = () => {
       source: 'auth-service',
       status: 'active',
       userId: 'user-123',
-      userName: 'john.doe@example.com'
+      userName: 'john.doe@example.com',
     },
     {
       id: 'alert-3',
@@ -73,7 +67,7 @@ const AdminAlertPanelDemo: React.FC = () => {
       timestamp: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
       source: 'feature-toggle-service',
       status: 'acknowledged',
-      affectedComponent: 'Search Service'
+      affectedComponent: 'Search Service',
     },
     {
       id: 'alert-4',
@@ -86,7 +80,7 @@ const AdminAlertPanelDemo: React.FC = () => {
       status: 'resolved',
       userId: 'admin-456',
       userName: 'admin@example.com',
-      affectedComponent: 'User Database'
+      affectedComponent: 'User Database',
     },
     {
       id: 'alert-5',
@@ -97,10 +91,9 @@ const AdminAlertPanelDemo: React.FC = () => {
       timestamp: new Date(Date.now() - 60 * 60 * 1000), // 1 hour ago
       source: 'maintenance-scheduler',
       status: 'resolved',
-      affectedComponent: 'Primary Database'
+      affectedComponent: 'Primary Database',
     }
   ];
-
   const handleRefresh = async () => {
     setIsLoading(true);
     // Simulate API call
@@ -108,23 +101,19 @@ const AdminAlertPanelDemo: React.FC = () => {
       setIsLoading(false);
     }, 1000);
   };
-
   const handleViewAll = () => {
     console.log('Navigate to full alerts dashboard');
   };
-
   const handleAcknowledgeAll = () => {
     console.log('Acknowledge all active alerts');
   };
-
-  return (
+  return ()
     <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Alert Indicators Demo</h1>
         <p className="text-gray-600 mb-8">
           This demonstrates how alert indicators can be integrated into different admin sections.
         </p>
-
         {/* Feature Toggle Alerts */}
         <AdminAlertPanel
           title="Feature Toggle Alerts"
@@ -137,7 +126,6 @@ const AdminAlertPanelDemo: React.FC = () => {
           onAcknowledgeAll={handleAcknowledgeAll}
           className="mb-6"
         />
-
         {/* User Management Alerts */}
         <AdminAlertPanel
           title="User Management Alerts"
@@ -150,7 +138,6 @@ const AdminAlertPanelDemo: React.FC = () => {
           onAcknowledgeAll={handleAcknowledgeAll}
           className="mb-6"
         />
-
         {/* System Alerts */}
         <AdminAlertPanel
           title="System Health Alerts"
@@ -163,7 +150,6 @@ const AdminAlertPanelDemo: React.FC = () => {
           onAcknowledgeAll={handleAcknowledgeAll}
           className="mb-6"
         />
-
         {/* No Alerts Example */}
         <AdminAlertPanel
           title="API Management Alerts"
@@ -175,7 +161,6 @@ const AdminAlertPanelDemo: React.FC = () => {
           onViewAll={handleViewAll}
           className="mb-6"
         />
-
         {/* Integration Notes */}
         <div className="bg-white rounded-lg p-6 border border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">Integration Notes</h3>

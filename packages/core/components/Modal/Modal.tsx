@@ -79,7 +79,7 @@ export const Modal: React.FC<ModalProps> = ({)
       // Focus modal after animation
       const timer = setTimeout(() => {
         if (modalRef.current) {
-          const firstFocusable = modalRef.current.querySelector(;)
+          const firstFocusable = modalRef.current.querySelector(;);
             'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
           ) as HTMLElement;
           if (firstFocusable) {
@@ -109,7 +109,7 @@ export const Modal: React.FC<ModalProps> = ({)
       }
       // Tab navigation containment
       if (event.key === 'Tab' && modalRef.current) {
-        const focusableElements = modalRef.current.querySelectorAll(;)
+        const focusableElements = modalRef.current.querySelectorAll(;);
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
         const firstElement = focusableElements[0] as HTMLElement;
@@ -149,7 +149,7 @@ export const Modal: React.FC<ModalProps> = ({)
     }
   };
   if (!isOpen) return null;
-  const modalContent = (;)
+  const modalContent = (;);
     <div 
       className={`modal-overlay ${overlayClassName}`}
       style={{

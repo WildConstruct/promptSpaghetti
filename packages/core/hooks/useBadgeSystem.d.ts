@@ -22,10 +22,10 @@ export declare const useBadgeSystem: (config?: BadgeSystemHookConfig) => {
     getBadgeProgress: (badgeId: string) => number;
     getBadgesByCategory: (category: BadgeCategory) => Badge[];
     getBadgesByTier: (badges?: Badge[]) => Record<string, Badge[]>;
-    getNextBadges: (limit?: number) => Array<Badge & {
+    getNextBadges: (limit?: number) => Array<Badge & {,
         progress: number;
     }>;
-    getStatistics: () => {
+    getStatistics: () => {,
         templatesCreated: number;
         templatesDownloaded: number;
         projectsCompleted: number;

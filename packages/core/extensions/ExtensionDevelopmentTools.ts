@@ -60,7 +60,7 @@ ${exports}
     }
     // Interface validation
     if (typeValidation.type) {
-      const interfaceValidation = extensionInterfaceValidator.validateInterface(;)
+      const interfaceValidation = extensionInterfaceValidator.validateInterface(;);
         extension,
         `${typeValidation.type.charAt(0).toUpperCase() + typeValidation.type.slice(1)}Extension`}
       );
@@ -259,15 +259,14 @@ abstract class BaseExtensionImpl implements BaseExtension {
   protected context?: ExtensionContext;
   protected config: any = {};
   protected healthy: boolean = true;
-  constructor()
+  constructor();
     id: string,
     name: string,
     version: string,
     description: string,
     author: string,
     dependencies: string[] = [],
-    permissions: string[] = []
-  ) {
+    permissions: string[] = [],
     this.id = id;
     this.name = name;
     this.version = version;
@@ -301,7 +300,7 @@ abstract class BaseExtensionImpl implements BaseExtension {
     return {
       status: this.healthy ? 'healthy' : 'error',
       message: this.healthy ? 'Extension is healthy' : 'Extension has errors',
-      lastChecked: new Date()
+      lastChecked: new Date(),
     };
   }
 }`;
@@ -317,7 +316,7 @@ abstract class BaseExtensionImpl implements BaseExtension {
 export class ${this.toPascalCase(id)}Extension extends BaseExtensionImpl implements ${interfaceName} {}
   public readonly extensionType = '${type}' as const;}
   constructor() {
-    super()
+    super();
       '${id}',}
       '${name}',}
       '1.0.0',
@@ -592,7 +591,7 @@ class TestExtension implements BaseExtension {
     return {
       status: this.healthy ? 'healthy' : 'error',
       message: this.healthy ? 'Extension is healthy' : 'Extension has errors',
-      lastChecked: new Date()
+      lastChecked: new Date(),
     };
   }
   public setHealthy(healthy: boolean): void {

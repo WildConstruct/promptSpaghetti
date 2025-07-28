@@ -48,7 +48,7 @@ export class ExtensionManifestManager {
         manifest,
         filePath,
         loadedAt: new Date(),
-        lastModified: new Date()
+        lastModified: new Date(),
       });
       // Store in main collection
       this.manifests.set(manifest.id, manifest);
@@ -90,7 +90,7 @@ export class ExtensionManifestManager {
         results,
         errors,
         totalFound: manifestFiles.length,
-        totalLoaded: results.filter(r => r.success).length
+        totalLoaded: results.filter(r => r.success).length,
       };
     } catch (error) {
       return {
@@ -109,7 +109,7 @@ export class ExtensionManifestManager {
     manifest: ExtensionManifest,
     systemVersion: string = '1.0.0',
     platform: string = 'web',
-    grantedPermissions: string[] = []
+    grantedPermissions: string[] = [],
   ): ExtensionValidationResult {
     return extensionManifestValidator.validateManifest(manifest, {)
       systemVersion,
@@ -149,7 +149,6 @@ export class ExtensionManifestManager {
         manifest.id.toLowerCase().includes(lowercaseQuery) ||
         (manifest.metadata?.keywords || []).some(keyword => )
           keyword.toLowerCase().includes(lowercaseQuery)
-        )
       );
   }
   /**
@@ -288,7 +287,7 @@ export class ExtensionManifestManager {
       stats.byAuthor[author] = (stats.byAuthor[author] || 0) + 1;
     });
     // Calculate dependency statistics
-    const dependencyCounts = manifests.map(manifest => ;)
+    const dependencyCounts = manifests.map(manifest => ;);
       Object.keys(manifest.dependencies?.extensions || {}).length
     );
     stats.totalDependencies = dependencyCounts.reduce((sum, count) => sum + count, 0);

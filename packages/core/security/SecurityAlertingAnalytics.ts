@@ -623,13 +623,13 @@ export class SecurityAlertingAnalytics extends EventEmitter {
       this.emit('alertProcessed', {)
         alert,
         timestamp: new Date(),
-        analysisResults: await this.getAlertAnalysis(alert.id)
+        analysisResults: await this.getAlertAnalysis(alert.id),
       });
     } catch (error) {
       this.emit('processingError', {)
         alert,
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -642,7 +642,6 @@ export class SecurityAlertingAnalytics extends EventEmitter {
     threatSummary: ThreatSummary[];
     recommendations: MitigationRecommendation[];
     performance: PerformanceImpact;
-    } {
     return {
       metrics: this.getMetrics(),
       activePatterns: this.getActivePatterns(),
@@ -676,7 +675,7 @@ export class SecurityAlertingAnalytics extends EventEmitter {
    * Perform correlation analysis
    */
   public async performCorrelationAnalysis()
-    timeWindow: number = 3600000 // 1 hour default
+    timeWindow: number = 3600000 // 1 hour default,
   ): Promise<AlertPattern[]> {
     const recentAlerts = this.getRecentAlerts(timeWindow);
     const correlatedPatterns: AlertPattern[] = [];
@@ -701,7 +700,6 @@ export class SecurityAlertingAnalytics extends EventEmitter {
     recommendations: string[];
     trends: TrendAnalysis;
     compliance: ComplianceImpact[];
-    } {
     const overallRiskScore = this.calculateOverallRiskScore();
     const topThreats = this.getTopThreats(10);
     const riskByClassification = this.calculateRiskByClassification();
@@ -803,7 +801,7 @@ export class SecurityAlertingAnalytics extends EventEmitter {
       this.emit('threatIntelligenceMatch', {)
         alert,
         matches,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }

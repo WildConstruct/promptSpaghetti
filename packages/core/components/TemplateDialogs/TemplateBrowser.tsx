@@ -64,7 +64,7 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
         searchTerm: browserState.searchQuery || undefined,
         sortBy: browserState.sortBy,
         sortOrder: 'desc',
-        author: browserState.showOnlyMyTemplates ? currentAuthor : undefined
+        author: browserState.showOnlyMyTemplates ? currentAuthor : undefined,
       };
       const loadedTemplates = await templateService.searchTemplates(filter);
       setTemplates(loadedTemplates);
@@ -111,7 +111,7 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
     return templates; // Server-side filtering already applied
   }, [templates]);
   if (!isOpen) return null;
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 0,
@@ -299,7 +299,7 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({)
               padding: '12px',
               backgroundColor: '#f9fafb',
               borderRadius: '6px',
-              borderTop: '1px solid #e5e7eb'
+              borderTop: '1px solid #e5e7eb',
             }}>
               <h4 style={{ margin: '0 0 8px 0', fontSize: '13px', fontWeight: '500' }}>
                 Apply Options
@@ -472,7 +472,7 @@ const TemplateCard: React.FC<{
   onDelete: () => void;
   showDelete: boolean;
 }> = ({ template, onPreview, onApply, onDelete, showDelete }) => {
-  return ()
+  return ();
     <div style={{
       border: '1px solid #e5e7eb',
       borderRadius: '8px',
@@ -591,7 +591,7 @@ const TemplateListItem: React.FC<{
   onDelete: () => void;
   showDelete: boolean;
 }> = ({ template, onPreview, onApply, onDelete, showDelete }) => {
-  return ()
+  return ();
     <div style={{
       border: '1px solid #e5e7eb',
       borderRadius: '6px',
@@ -601,7 +601,7 @@ const TemplateListItem: React.FC<{
       alignItems: 'center',
       gap: '16px',
       cursor: 'pointer',
-      transition: 'background-color 0.2s'
+      transition: 'background-color 0.2s',
     }}
     onMouseEnter={(e) => {
       e.currentTarget.style.backgroundColor = '#f9fafb';
@@ -697,7 +697,7 @@ const TemplatePreview: React.FC<{
   onClose: () => void;
   onApply: () => void;
 }> = ({ template, onClose, onApply }) => {
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 0,
@@ -792,7 +792,7 @@ const TemplatePreview: React.FC<{
           justifyContent: 'flex-end',
           gap: '12px',
           paddingTop: '16px',
-          borderTop: '1px solid #e5e7eb'
+          borderTop: '1px solid #e5e7eb',
         }}>
           <button
             onClick={onClose}

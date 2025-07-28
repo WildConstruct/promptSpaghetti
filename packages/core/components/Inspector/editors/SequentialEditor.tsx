@@ -42,7 +42,7 @@ export const SequentialEditor: React.FC<SequentialEditorProps> = ({ _____nodeId,
       // Ensure weights array matches sequence length for weighted pattern
       patternConfig: {,
         ...patternConfig,
-        weights: patternType === 'weighted' 
+        weights: patternType === 'weighted' ,
           ? newSequence.map((_, index) => weights[index] || 1)
           : weights
       }
@@ -126,7 +126,7 @@ export const SequentialEditor: React.FC<SequentialEditorProps> = ({ _____nodeId,
     examples: ['Linear: 1→2→3→3...', 'Cyclical: 1→2→3→1→2...', 'Random: 2→1→3→1...'],
     priority: 'medium',
   });
-  return ()
+  return ();
     <div className="sequential-editor">
       {/* BASIC LEVEL: Essential fields for filmmakers */}
       <ProgressiveDisclosureSection
@@ -244,7 +244,7 @@ export const SequentialEditor: React.FC<SequentialEditorProps> = ({ _____nodeId,
                 const percentage = weights.length > 0 ;
                   ? Math.round((weight / weights.reduce((sum, w) => sum + w, 0)) * 100)
                   : Math.round(100 / sequence.length);
-                return ()
+                return ();
                   <div 
                     key={index} 
                     style={{ 
@@ -523,7 +523,7 @@ export const SequentialEditor: React.FC<SequentialEditorProps> = ({ _____nodeId,
                   {sequence.map((item, index) => {
                     const weight = weights[index] || 1;
                     const percentage = Math.round((weight / weights.reduce((sum, w) => sum + w, 0)) * 100);
-                    return ()
+                    return ();
                       <div key={index} style={{ 
                         display: 'flex', 
                         justifyContent: 'space-between',

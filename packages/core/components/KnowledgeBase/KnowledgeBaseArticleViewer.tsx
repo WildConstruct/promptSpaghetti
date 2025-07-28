@@ -68,7 +68,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
           viewedArticles: [article.id],
           userRole: 'user',
           userExperience: 'intermediate',
-          timestamp: new Date()
+          timestamp: new Date(),
         });
         setViewerState(prev => ({ ...prev, recommendations }));
       } catch (error) {
@@ -119,13 +119,13 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
       await knowledgeService.rateArticle(article.id, {)
         userId,
         rating,
-        helpful: rating >= 4
+        helpful: rating >= 4,
       });
       setViewerState(prev => ({ ...prev, userRating: rating }));
     } catch (error) {
       setViewerState(prev => ({)
         ...prev,
-        error: error instanceof Error ? error.message : 'Failed to submit rating'
+        error: error instanceof Error ? error.message : 'Failed to submit rating',
       }));
     }
   }, [article.id, knowledgeService, userId]);
@@ -138,7 +138,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
         userId,
         type: viewerState.feedbackType,
         message: viewerState.userFeedback,
-        status: 'new' as any
+        status: 'new' as any,
       });
       setViewerState(prev => ({)
         ...prev,
@@ -150,7 +150,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
       setViewerState(prev => ({)
         ...prev,
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to submit feedback'
+        error: error instanceof Error ? error.message : 'Failed to submit feedback',
       }));
     }
   }, [article.id, knowledgeService, userId, viewerState.feedbackType, viewerState.userFeedback]);
@@ -191,7 +191,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
     };
     switch (section.type) {
     case SectionType.CODE:
-      return ()
+      return ();
         <div ref={setSectionRef} id={section.anchor} className="mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">{section.title}</h3>
           <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
@@ -200,7 +200,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
         </div>
       );
     case SectionType.WARNING:
-      return ()
+      return ();
         <div ref={setSectionRef} id={section.anchor} className="mb-6">
           <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
             <div className="flex">
@@ -220,7 +220,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
         </div>
       );
     case SectionType.TIP:
-      return ()
+      return ();
         <div ref={setSectionRef} id={section.anchor} className="mb-6">
           <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
             <div className="flex">
@@ -240,7 +240,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
         </div>
       );
     default:
-      return ()
+      return ();
         <div ref={setSectionRef} id={section.anchor} className="mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">{section.title}</h3>
           <div className="prose max-w-none text-gray-700">
@@ -252,7 +252,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
   }, []);
   // Render stars
   const renderStars = useCallback((rating: number, interactive = false, onRate?: (rating: number) => void) => {
-    return ()
+    return ();
       <div className="flex items-center">
         {[1, 2, 3, 4, 5].map(star => ()
           <button
@@ -275,7 +275,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
       </div>
     );
   }, []);
-  return ()
+  return ();
     <div className="knowledge-base-article-viewer h-full flex bg-gray-50">
       {/* Reading Progress */}
       <div className="fixed top-0 left-0 right-0 h-1 bg-gray-200 z-50">

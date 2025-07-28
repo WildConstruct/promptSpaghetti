@@ -11,7 +11,7 @@ declare function processDataOperation()
   userId: string,
   dataId: string,
   operation: 'read' | 'write' | 'delete',
-  classification: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED'
+  classification: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED',
 ): Promise<void>;
 declare function batchProcessData(userId: string, dataItems: Array<{)
     id: string;

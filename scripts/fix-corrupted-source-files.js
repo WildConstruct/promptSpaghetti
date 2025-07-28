@@ -83,6 +83,41 @@ class SourceFileRepairer {
         if (line.includes('Expression expected') || line.match(/^\s*\w+\s*\|\s*$/)) {
           issues.push({ line: lineNum, type: 'expression_expected', content: line });
         }
+
+        // Pattern 10: Declaration or statement expected
+        if (line.match(/^\s*}\s*[),]\s*$/) || line.match(/^\s*[),]\s*$/)) {
+          issues.push({ line: lineNum, type: 'orphaned_bracket', content: line });
+        }
+
+        // Pattern 11: Malformed function calls
+        if (line.match(/^\s*[a-zA-Z_]\w*\s*\(\s*\)\s*$/) && !line.includes(';')) {
+          issues.push({ line: lineNum, type: 'incomplete_function_call', content: line });
+        }
+
+        // Pattern 12: Property assignment expected
+        if (line.match(/^\s*\w+\s*:\s*[^,;}]*[^,;}]\s*$/) && !line.includes(',') && !line.includes(';')) {
+          issues.push({ line: lineNum, type: 'missing_property_terminator', content: line });
+        }
+
+        // Pattern 13: Malformed object/array syntax
+        if (line.match(/^\s*[{[(]\s*[),}]\s*$/) || line.match(/^\s*[),}]\s*[{[(]\s*$/)) {
+          issues.push({ line: lineNum, type: 'malformed_brackets', content: line });
+        }
+
+        // Pattern 14: Unterminated string literals (especially in CSS)
+        if (line.includes('gridTemplateColumns:') && line.includes("('") && !line.includes("')")) {
+          issues.push({ line: lineNum, type: 'unterminated_string', content: line });
+        }
+
+        // Pattern 15: Malformed JSX expressions with broken braces
+        if (line.match(/\}\}>[^<]*$/) || line.match(/\&gt;$/) || line.match(/\&rbrace;$/)) {
+          issues.push({ line: lineNum, type: 'broken_jsx_closing', content: line });
+        }
+
+        // Pattern 16: Incomplete template literals
+        if (line.match(/`[^`]*$/) && !line.includes('//') && !line.includes('`')) {
+          issues.push({ line: lineNum, type: 'incomplete_template_literal', content: line });
+        }
       }
 
       return issues.length > 0 ? { needsRepair: true, issues } : { needsRepair: false };
@@ -165,6 +200,31 @@ class SourceFileRepairer {
             }
             break;
 
+          case 'unterminated_string':
+            // Fix unterminated string literals in CSS grid templates
+            if (originalLine.includes('gridTemplateColumns:') && originalLine.includes("('")) {
+              // Look ahead to find the closing pattern
+              let fixedLine = originalLine;
+              let nextLineIndex = lineIndex + 1;
+              while (nextLineIndex < lines.length && nextLineIndex < lineIndex + 5) {
+                const nextLine = lines[nextLineIndex];
+                if (nextLine.includes(")")) {
+                  // Combine lines and fix the CSS template
+                  const combinedContent = lines.slice(lineIndex, nextLineIndex + 1).join(' ').trim();
+                  fixedLine = combinedContent.replace(/,\s*\)/g, ')');
+                  lines[lineIndex] = fixedLine;
+                  // Clear the combined lines
+                  for (let i = lineIndex + 1; i <= nextLineIndex; i++) {
+                    lines[i] = '';
+                  }
+                  repaired = true;
+                  break;
+                }
+                nextLineIndex++;
+              }
+            }
+            break;
+
           case 'missing_semicolon':
             // Add missing semicolons
             lines[lineIndex] = originalLine + ';';
@@ -207,6 +267,62 @@ class SourceFileRepairer {
             // Remove lines with expression expected errors (likely corrupted)
             if (originalLine.includes('Expression expected')) {
               lines[lineIndex] = '';
+              repaired = true;
+            }
+            break;
+
+          case 'orphaned_bracket':
+            // Remove orphaned brackets/parentheses
+            if (originalLine.match(/^\s*[),}]\s*$/)) {
+              lines[lineIndex] = '';
+              repaired = true;
+            }
+            break;
+
+          case 'incomplete_function_call':
+            // Add semicolon to incomplete function calls
+            if (originalLine.match(/^\s*[a-zA-Z_]\w*\s*\(\s*\)\s*$/)) {
+              lines[lineIndex] = originalLine + ';';
+              repaired = true;
+            }
+            break;
+
+          case 'missing_property_terminator':
+            // Add comma to property assignments
+            if (originalLine.match(/^\s*\w+\s*:\s*[^,;}]*[^,;}]\s*$/)) {
+              lines[lineIndex] = originalLine + ',';
+              repaired = true;
+            }
+            break;
+
+          case 'malformed_brackets':
+            // Remove malformed bracket combinations
+            if (originalLine.match(/^\s*[{[(]\s*[),}]\s*$/) || originalLine.match(/^\s*[),}]\s*[{[(]\s*$/)) {
+              lines[lineIndex] = '';
+              repaired = true;
+            }
+            break;
+
+          case 'broken_jsx_closing':
+            // Fix broken JSX closing tags
+            let fixedJsxLine = originalLine;
+            if (fixedJsxLine.includes('&gt;')) {
+              fixedJsxLine = fixedJsxLine.replace(/\&gt;/g, '>');
+              repaired = true;
+            }
+            if (fixedJsxLine.includes('&rbrace;')) {
+              fixedJsxLine = fixedJsxLine.replace(/\&rbrace;/g, '}');
+              repaired = true;
+            }
+            if (repaired) {
+              lines[lineIndex] = fixedJsxLine;
+            }
+            break;
+
+          case 'incomplete_template_literal':
+            // Add closing backtick to incomplete template literals
+            if (originalLine.match(/`[^`]*$/) && !originalLine.includes('//')) {
+              lines[lineIndex] = originalLine + '`';
               repaired = true;
             }
             break;
@@ -274,7 +390,8 @@ class SourceFileRepairer {
     }
 
     const targetDirs = [
-      'packages/core'
+      'packages/core',
+      'client/src'
     ];
 
     for (const dir of targetDirs) {

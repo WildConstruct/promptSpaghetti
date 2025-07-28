@@ -320,7 +320,6 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
       responseTime: number;
       threatDetectionRate: number;
     }>;
-  } {
     const systems = Array.from(this.systemHealthMap.values());
     const alerts = this.getSecurityAlerts(false);
     const metrics = Array.from(this.securityMetrics.values());
@@ -346,10 +345,10 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
     // Incident statistics
     const incidentStats = {
       activeIncidents: metrics.reduce((sum, metric) => sum + metric.incidentResponseMetrics.incidentCount, 0),
-      meanDetectionTime: metrics.length > 0
+      meanDetectionTime: metrics.length > 0,
         ? metrics.reduce((sum, metric) => sum + metric.incidentResponseMetrics.meanTimeToDetection, 0) / metrics.length
         : 0,
-      meanResponseTime: metrics.length > 0
+      meanResponseTime: metrics.length > 0,
         ? metrics.reduce((sum, metric) => sum + metric.incidentResponseMetrics.meanTimeToResponse, 0) / metrics.length
         : 0
     };
@@ -397,7 +396,6 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
       performanceTrend: 'improving' | 'stable' | 'degrading';
     };
     recommendations: string[];
-  } {
     const metrics = Array.from(this.securityMetrics.values());
     const systems = Array.from(this.systemHealthMap.values());
     // Calculate summary statistics
@@ -738,7 +736,7 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
   private correlateSecurityAlerts(): void {
     // Correlate security events across systems to identify patterns
     const allEvents = Array.from(this.threatCorrelation.values()).flat();
-    const recentEvents = allEvents.filter(event => ;)
+    const recentEvents = allEvents.filter(event => ;);
       Date.now() - event.timestamp < this.config.securityConfig.alertCorrelationWindow
     );
     // Simple correlation: group by IP address
@@ -758,7 +756,7 @@ export class SecurityAnalyticsMonitor extends EventEmitter {
           type: 'ip_correlation',
           ip,
           eventCount: events.length,
-          events: events.map(e => e.id)
+          events: events.map(e => e.id),
         });
       }
     });

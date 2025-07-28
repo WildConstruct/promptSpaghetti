@@ -89,7 +89,7 @@ export const VersionRestoreDialog: React.FC<VersionRestoreDialogProps> = ({)
     try {
       setLoading(true);
       setError('');
-      const previewData = await restoreManager.createRestorePreview(;)
+      const previewData = await restoreManager.createRestorePreview(;);
         snapshot.id,
         currentGraphData,
         restoreOptions
@@ -115,7 +115,7 @@ export const VersionRestoreDialog: React.FC<VersionRestoreDialogProps> = ({)
   };
   const handleConflictsNext = () => {
     // Validate that all conflicts have resolutions
-    const unresolvedConflicts = conflicts.filter(c => ;)
+    const unresolvedConflicts = conflicts.filter(c => ;);
       !conflictResolutions[c.id] || conflictResolutions[c.id] === 'manual'
     );
     if (unresolvedConflicts.length > 0) {
@@ -142,7 +142,7 @@ export const VersionRestoreDialog: React.FC<VersionRestoreDialogProps> = ({)
         current_step: 'Starting restore...',
         total_steps: 8,
         completed_steps: 0,
-        started_at: new Date().toISOString()
+        started_at: new Date().toISOString(),
       });
       // Wait for result
       try {
@@ -185,7 +185,7 @@ export const VersionRestoreDialog: React.FC<VersionRestoreDialogProps> = ({)
     }
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div className={`version-restore-dialog ${className} fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4`}>}
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
@@ -335,7 +335,7 @@ interface RestoreOptionsStepProps {
   snapshot: VersionSnapshot;
 }
 const RestoreOptionsStep: React.FC<RestoreOptionsStepProps> = ({ options, onChange, snapshot }) => {
-  return ()
+  return ();
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">Restore Options</h3>
@@ -515,7 +515,7 @@ const ConflictResolutionStep: React.FC<ConflictResolutionStepProps> = ({)
     acc[conflict.type].push(conflict);
     return acc;
   }, {} as Record<string, RestoreConflict[]>);
-  return ()
+  return ();
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-2">Resolve Conflicts</h3>
@@ -616,7 +616,7 @@ const RestorePreviewStep: React.FC<RestorePreviewStepProps> = ({)
   conflicts,
   getRiskLevelColor
 }) => {
-  return ()
+  return ();
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-2">Restore Preview</h3>
@@ -719,7 +719,7 @@ interface RestoreProgressStepProps {
   onCancel: () => void;
 }
 const RestoreProgressStep: React.FC<RestoreProgressStepProps> = ({ restoreState, onCancel }) => {
-  return ()
+  return ();
     <div className="space-y-6 text-center">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-2">Restore in Progress</h3>
@@ -764,7 +764,7 @@ interface RestoreResultStepProps {
   onClose: () => void;
 }
 const RestoreResultStep: React.FC<RestoreResultStepProps> = ({ result, onClose }) => {
-  return ()
+  return ();
     <div className="space-y-6 text-center">
       <div>
         {result.success ? ()

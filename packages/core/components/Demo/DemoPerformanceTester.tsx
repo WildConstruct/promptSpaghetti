@@ -237,7 +237,7 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
       {
         name: 'Simple Film Prompt',
         nodeCount: 15,
-        description: 'Basic character + action + setting workflow'
+        description: 'Basic character + action + setting workflow',
       },
       {
         name: 'Complex Scene Builder',
@@ -247,17 +247,17 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
       {
         name: 'Enterprise Workflow',
         nodeCount: 100,
-        description: 'Full production pipeline with multiple outputs'
+        description: 'Full production pipeline with multiple outputs',
       },
       {
         name: 'Stress Test',
         nodeCount: 200,
-        description: 'Maximum complexity for performance validation'
+        description: 'Maximum complexity for performance validation',
       }
     ];
     return scenarios;
   }, []);
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 60,
@@ -297,7 +297,7 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
             padding: '8px 12px',
             cursor: isRunning ? 'not-allowed' : 'pointer',
             fontSize: '12px',
-            opacity: isRunning ? 0.6 : 1
+            opacity: isRunning ? 0.6 : 1,
           }}
         >
           Run Full Test Suite
@@ -317,7 +317,7 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
               cursor: isRunning ? 'not-allowed' : 'pointer',
               fontSize: '11px',
               textAlign: 'left',
-              opacity: isRunning ? 0.6 : 1
+              opacity: isRunning ? 0.6 : 1,
             }}
           >
             <div style={{ fontWeight: 500 }}>{scenario.name}</div>
@@ -346,7 +346,7 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
                   {result.nodeCount} nodes ({result.edgeCount} edges)
                   <span style={{ 
                     float: 'right',
-                    color: result.passedThreshold ? '#4CAF50' : '#f44336'
+                    color: result.passedThreshold ? '#4CAF50' : '#f44336',
                   }}>
                     {result.passedThreshold ? '✓' : '✗'}
                   </span>

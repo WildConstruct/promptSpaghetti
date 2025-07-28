@@ -9,7 +9,7 @@ import { GraphEditor } from '../GraphEditor';
 // Mock usePreviewSeeds so we can observe calls without running async logic
 jest.mock('../usePreviewSeeds', () => {
   return {
-    usePreviewSeeds: () => ({)
+    usePreviewSeeds: () => ({),
       loading: false,
       error: null,
       results: [],

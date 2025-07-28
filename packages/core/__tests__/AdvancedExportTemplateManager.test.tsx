@@ -17,7 +17,7 @@ const mockUseExport = {
   getTemplateStats: jest.fn<unknown[], unknown>()
 };
 jest.mock('../hooks/useExport', () => ({)
-  useExport: () => mockUseExport
+  useExport: () => mockUseExport,
 }));
 import { AdvancedExportTemplateManager } from '../components/export/AdvancedExportTemplateManager';
 
@@ -50,7 +50,7 @@ const mockTemplates = [;
     created_by: 'system',
   }
 ];
-const mockTemplateStats = new Map([;)
+const mockTemplateStats = new Map([;);
   ['template-1', {
     id: 'template-1',
     usageCount: 145,
@@ -180,7 +180,7 @@ describe('AdvancedExportTemplateManager', () => {
       expect(screen.getByText('➕ Create New Template')).toBeInTheDocument();
     });
     it('hides sharing tabs when disabled', async () => {
-      render()
+      render();
         <AdvancedExportTemplateManager 
           {...defaultProps} 
           enableSharing={false}

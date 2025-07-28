@@ -313,7 +313,7 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
       forumReputation: forumContext?.reputation || 0,
       hasPostedInForum: forumContext?.hasPosted || false,
       isNewUser: userRole === 'new-user',
-      isCreator: userRole === 'creator'
+      isCreator: userRole === 'creator',
     };
   }, [currentPage, userRole, selectedTemplate, cartItems, purchaseStage, forumContext]);
   // Find relevant marketplace help content based on context
@@ -395,7 +395,7 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
     if (activeOverlay) {
       onHelpInteraction?.('overlay_closed', {)
         helpId: activeOverlay.id,
-        timeShown: Date.now() // Could track duration
+        timeShown: Date.now() // Could track duration,
       });
     }
     setActiveOverlay(null);
@@ -404,7 +404,7 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
   }, [activeOverlay, onHelpInteraction]);
   // Start guided tour
   const startGuidedTour = useCallback((tourType: string) => {
-    const tourContent = marketplaceHelpDatabase.filter(help => ;)
+    const tourContent = marketplaceHelpDatabase.filter(help => ;);
       help.type === tourType || 
       (help.marketplaceContext.page === currentPage && help.level === 'beginner')
     );
@@ -423,7 +423,7 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
   // Next tour step
   const nextTourStep = useCallback(() => {
     if (!currentTour) return;
-    const tourContent = marketplaceHelpDatabase.filter(help => ;)
+    const tourContent = marketplaceHelpDatabase.filter(help => ;);
       help.type === currentTour ||
       (help.marketplaceContext.page === currentPage && help.level === 'beginner')
     );
@@ -485,7 +485,7 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
     };
   }, [showHelpOverlay, hideOverlay, startGuidedTour]);
   if (!showMarketplaceHelp) return null;
-  return ()
+  return ();
     <div className="marketplace-help-overlay">
       {/* Help Overlay */}
       {isOverlayVisible && activeOverlay && ()

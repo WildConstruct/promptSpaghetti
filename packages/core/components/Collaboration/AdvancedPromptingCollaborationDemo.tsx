@@ -65,7 +65,7 @@ export const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingColla
       vfx_artist: 'Creative artist who implements VFX work using MARS-structured technical specifications',
       cinematographer: 'Visual storyteller who bridges creative vision with technical camera requirements',
       producer: 'Project manager who oversees workflow coordination and resource allocation',
-      script_supervisor: 'Continuity expert who ensures narrative consistency across scenes'
+      script_supervisor: 'Continuity expert who ensures narrative consistency across scenes',
     };
     return descriptions[role] || 'Film industry professional';
   };
@@ -77,7 +77,7 @@ export const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingColla
       vfx_artist: '#f59e0b', // Orange - Creative implementation
       cinematographer: '#ef4444', // Red - Visual storytelling
       producer: '#6b7280', // Gray - Management
-      script_supervisor: '#14b8a6' // Teal - Continuity
+      script_supervisor: '#14b8a6' // Teal - Continuity,
     };
     return colors[role] || '#6b7280';
   };
@@ -118,7 +118,7 @@ export const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingColla
     'Develop Zada patterns for natural language creativity',
     'Generate VFX pipeline export for production handoff'
   ];
-  return ()
+  return ();
     <div className={`advanced-prompting-collaboration-demo ${className}`} style={{}
       background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
       borderRadius: 16,
@@ -179,7 +179,7 @@ export const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingColla
               height: '100%',
               background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)',
               width: `${((demoStep + 1) / demoSteps.length) * 100}%`,}
-              transition: 'width 0.5s ease'
+              transition: 'width 0.5s ease',
             }} />
           </div>
         </div>
@@ -391,7 +391,7 @@ export const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingColla
                 fontSize: 16,
                 fontWeight: 600,
                 color: '#10b981',
-                margin: '0 0 12px 0'
+                margin: '0 0 12px 0',
               }}>
                 🚀 VFX Pipeline Export Generated
               </h4>
@@ -423,7 +423,7 @@ export const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingColla
           fontSize: 14,
           fontWeight: 600,
           color: '#e2e8f0',
-          margin: '0 0 8px 0'
+          margin: '0 0 8px 0',
         }}>
           💡 Demo Features
         </h4>

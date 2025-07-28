@@ -542,7 +542,7 @@ export class SecurityDashboardFramework extends EventEmitter {
         message: 'Failed to register dashboard',
         details: {,
           dashboardId: config.id,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         }
       });
       return false;
@@ -573,7 +573,7 @@ export class SecurityDashboardFramework extends EventEmitter {
         message: 'Failed to register widget type',
         details: {,
           widgetType: definition.type,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         }
       });
       return false;

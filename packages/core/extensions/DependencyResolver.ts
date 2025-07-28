@@ -60,10 +60,9 @@ export class DependencyResolver {
   private options: DependencyResolutionOptions;
   private lastDependencyGraph?: DependencyGraph;
   private lastLoadOrder?: LoadOrder;
-  constructor()
+  constructor();
     versionManager: ExtensionVersionManager,
     options: Partial<DependencyResolutionOptions> = {}
-  ) {
     this.versionManager = versionManager;
     this.options = {
       allowOptionalDependencies: true,

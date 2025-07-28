@@ -190,7 +190,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
     }
   }, []);
   // Render KPI card
-  const renderKPICard = (title: string, value: string | number, subtitle?: string, trend?: string, onClick?: () => void) => (;)
+  const renderKPICard = (title: string, value: string | number, subtitle?: string, trend?: string, onClick?: () => void) => (;);
     <div
       onClick={onClick}
       style={{
@@ -228,7 +228,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
         fontWeight: 700,
         color: themeStyles.text,
         lineHeight: 1,
-        marginBottom: subtitle ? '4px' : '0'
+        marginBottom: subtitle ? '4px' : '0',
       }}>
         {value}
       </div>
@@ -254,7 +254,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
       if (score >= 40) return themeStyles.error;
       return themeStyles.critical;
     };
-    return ()
+    return ();
       <div style={{
         background: themeStyles.surface,
         border: `1px solid ${themeStyles.border}`,}
@@ -321,7 +321,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
     );
   };
   // Render risk level indicator
-  const renderRiskLevelIndicator = () => (;)
+  const renderRiskLevelIndicator = () => (;);
     <div style={{
       background: themeStyles.surface,
       border: `1px solid ${themeStyles.border}`,}
@@ -369,7 +369,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
     </div>
   );
   // Render incidents summary
-  const renderIncidentsSummary = () => (;)
+  const renderIncidentsSummary = () => (;);
     <div style={{
       background: themeStyles.surface,
       border: `1px solid ${themeStyles.border}`,}
@@ -456,7 +456,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
     </div>
   );
   // Render financial impact
-  const renderFinancialImpact = () => (;)
+  const renderFinancialImpact = () => (;);
     <div style={{
       background: themeStyles.surface,
       border: `1px solid ${themeStyles.border}`,}
@@ -526,7 +526,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
           <div style={{
             fontSize: '24px',
             fontWeight: 700,
-            color: metrics.financialImpact.roi > 0 ? themeStyles.success : themeStyles.error
+            color: metrics.financialImpact.roi > 0 ? themeStyles.success : themeStyles.error,
           }}>
             {metrics.financialImpact.roi > 0 ? '+' : ''}{metrics.financialImpact.roi}%
           </div>
@@ -545,7 +545,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
     const topInsights = insights;
       .filter(insight => insight.priority === 'critical' || insight.priority === 'high')
       .slice(0, 3);
-    return ()
+    return ();
       <div style={{
         background: themeStyles.surface,
         border: `1px solid ${themeStyles.border}`,}
@@ -629,7 +629,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
       </div>
     );
   };
-  return ()
+  return ();
     <div style={{
       background: themeStyles.background,
       color: themeStyles.text,
@@ -646,7 +646,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
           justifyContent: 'space-between',
           alignItems: 'center',
           maxWidth: '1400px',
-          margin: '0 auto'
+          margin: '0 auto',
         }}>
           <div>
             <h1 style={{
@@ -695,7 +695,7 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
       <div style={{
         padding: '24px',
         maxWidth: '1400px',
-        margin: '0 auto'
+        margin: '0 auto',
       }}>
         {/* Top Row - Key Metrics */}
         <div style={{

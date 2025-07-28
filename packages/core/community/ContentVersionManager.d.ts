@@ -274,7 +274,7 @@ export declare class ContentVersionManager {
         publish_date?: string;
         notify_subscribers?: boolean;
     }): Promise<ContentVersion>;
-    addReviewFeedback()
+    addReviewFeedback();
       versionId: string,
       feedback: Omit<ReviewFeedback,
       'id' | 'reviewer_id' | 'reviewer_name' | 'review_date'>

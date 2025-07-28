@@ -603,11 +603,10 @@ export class MarketplaceContentFilteringServiceImpl implements MarketplaceConten
   private apiClient: any;
   private configuration: FilteringConfiguration;
   private filteringRules: FilteringRule[] = [];
-  constructor()
+  constructor();
     moderationService: AutomatedModerationService,
     apiClient: any,
     configuration?: Partial<FilteringConfiguration>
-  ) {
     this.moderationService = moderationService;
     this.apiClient = apiClient;
     this.configuration = this.initializeDefaultConfiguration(configuration);
@@ -634,14 +633,14 @@ export class MarketplaceContentFilteringServiceImpl implements MarketplaceConten
       // Step 7: Evaluate learning effectiveness (if applicable)
       const learningEffectiveness = await this.evaluateLearningEffectiveness(request);
       // Step 8: Identify issues and generate suggestions
-      const issuesAndSuggestions = await this.identifyIssuesAndSuggestions(;)
+      const issuesAndSuggestions = await this.identifyIssuesAndSuggestions(;);
         request,
         categoryResults,
         qualityAssessment,
         moderationResult
       );
       // Step 9: Determine overall decision
-      const overallDecision = this.determineOverallDecision(;)
+      const overallDecision = this.determineOverallDecision(;);
         moderationResult,
         categoryResults,
         qualityAssessment,
@@ -651,7 +650,7 @@ export class MarketplaceContentFilteringServiceImpl implements MarketplaceConten
       const complianceStatus = await this.assessCompliance(request, categoryResults);
       const safetyAssessment = await this.assessSafety(request, moderationResult);
       // Step 11: Determine review requirements
-      const reviewRequirements = this.determineReviewRequirements(;)
+      const reviewRequirements = this.determineReviewRequirements(;);
         overallDecision,
         moderationResult,
         categoryResults,
@@ -801,7 +800,7 @@ export class MarketplaceContentFilteringServiceImpl implements MarketplaceConten
           template_type: templateData.category,
           pricing_tier: templateData.price > 50 ? 'premium' : templateData.price > 0 ? 'premium' : 'free',
           target_market: templateData.target_audience,
-          revenue_impact: templateData.price > 100 ? 'high' : 'medium'
+          revenue_impact: templateData.price > 100 ? 'high' : 'medium',
         }
       },
       integration_data: {,
@@ -961,13 +960,13 @@ export class MarketplaceContentFilteringServiceImpl implements MarketplaceConten
       },
       author: {,
         userId: request.context.user_id,
-        trustScore: 75 // Would be fetched from user service
+        trustScore: 75 // Would be fetched from user service,
       },
       context: {,
         source: 'marketplace_filtering',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
-      priority: request.filtering_config.priority === 'urgent' ? 'urgent' : 'normal'
+      priority: request.filtering_config.priority === 'urgent' ? 'urgent' : 'normal',
     };
   }
   private mapContentType(contentType: MarketplaceContentType): BaseModerationContentType {
@@ -1033,7 +1032,7 @@ export class MarketplaceContentFilteringServiceImpl implements MarketplaceConten
       language_quality: Math.floor(Math.random() * 10) + 90,
       technical_accuracy: Math.floor(Math.random() * 25) + 75,
       user_experience_score: Math.floor(Math.random() * 20) + 80,
-      accessibility_score: Math.floor(Math.random() * 30) + 70
+      accessibility_score: Math.floor(Math.random() * 30) + 70,
     };
   }
   // Additional helper methods would be implemented here...

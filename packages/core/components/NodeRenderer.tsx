@@ -52,7 +52,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({)
     const properties = Object.entries(data || {})
       .filter(([k]) => k !== 'label' && k !== 'variations' && k !== 'type')
       .slice(0, 3); // Limit to 3 properties for clean display
-    return ()
+    return ();
       <div
         ref={nodeRef}
         role="button"
@@ -82,7 +82,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({)
           borderRadius: 'var(--radius-md)',
           minWidth: 180, // Slightly larger for professional appearance
           minHeight: 90,
-          boxShadow: (() => {
+          boxShadow: (() => {,
             if (selected) return 'var(--shadow-node-selected)';
             if (isHovered) return 'var(--shadow-node-hover)';
             return 'var(--shadow-node)';
@@ -94,18 +94,18 @@ export const NodeRenderer = memo<NodeRendererProps>(({)
           transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
           willChange: 'transform, box-shadow, filter',
           // Transform for selected/hover states with hardware acceleration
-          transform: (() => {
+          transform: (() => {,
             if (selected) return 'translateY(-2px) translateZ(0) scale(1.02)';
             if (isHovered && !selected) return 'translateY(-3px) translateZ(0)';
             return 'translateY(0) translateZ(0)';
           })(),
           // Filter effects for enhanced visual feedback
-          filter: (() => {
+          filter: (() => {,
             if (selected) return 'brightness(1.08) contrast(1.02)';
             if (isHovered && !selected) return 'brightness(1.05)';
             return 'brightness(1)';
           })(),
-          zIndex: (() => {
+          zIndex: (() => {,
             if (selected) return 3;
             if (isHovered) return 2;
             return 1;
@@ -164,7 +164,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({)
                 fontSize: 10,
                 fontWeight: 'bold',
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)',
-                transition: 'all 0.2s ease'
+                transition: 'all 0.2s ease',
               }}
               title={`${data.variations.length} variations`}
             >
@@ -188,7 +188,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({)
             lineHeight: 1.3,
             // Subtle glow for selected state
             ...(selected && {)
-              textShadow: '0 0 8px var(--accent-orange)40'
+              textShadow: '0 0 8px var(--accent-orange)40',
             })
           }}>
             {data?.label || nodeMeta.label || nodeType || id}
@@ -199,7 +199,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({)
               fontSize: 'var(--font-size-xs)', 
               color: 'var(--text-secondary)', 
               lineHeight: 1.4,
-              fontFamily: 'var(--font-mono)' // Monospace for technical properties
+              fontFamily: 'var(--font-mono)' // Monospace for technical properties,
             }}>
               {properties.map(([k, v], idx) => ()
                 <div key={k} style={{ 
@@ -293,7 +293,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({)
   } catch (error) {
     console.error('NodeRenderer error:', error, 'Props:', { id, data });
     // Professional error state
-    return ()
+    return ();
       <div
         style={{
           cursor: 'pointer',

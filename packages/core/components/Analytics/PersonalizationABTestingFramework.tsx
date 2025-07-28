@@ -100,7 +100,7 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
       parameters: {,
         threshold: Math.random() * 0.5 + 0.5,
         learningRate: Math.random() * 0.01 + 0.001,
-        regularization: Math.random() * 0.1
+        regularization: Math.random() * 0.1,
       },
       targetSegments: ['new_users', 'returning_users', 'premium_users'].slice(0, Math.floor(Math.random() * 3) + 1),
       adaptationRules: [],
@@ -115,7 +115,7 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
       clickThroughRate: Math.random() * 0.15 + 0.05,
       conversionRate: Math.random() * 0.08 + 0.02,
       engagementScore: Math.random() * 40 + 60,
-      userSatisfaction: Math.random() * 2 + 3
+      userSatisfaction: Math.random() * 2 + 3,
     }
   }));
   return {
@@ -144,14 +144,14 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
       audience: 'all_users',
       segments: ['new_users', 'returning_users'],
       filters: [],
-      sampleSize: Math.floor(Math.random() * 10000) + 5000
+      sampleSize: Math.floor(Math.random() * 10000) + 5000,
     },
-    results: Math.random() > 0.5 ? {
+    results: Math.random() > 0.5 ? {,
       testId,
       startDate: Date.now() - Math.random() * 30 * 86400000,
       endDate: Date.now() - Math.random() * 7 * 86400000,
       participants: Math.floor(Math.random() * 8000) + 2000,
-      results: variants.map(variant => ({)
+      results: variants.map(variant => ({),
         variantId: variant.variantId,
         participants: Math.floor(Math.random() * 2000) + 500,
         metrics: [,
@@ -161,7 +161,7 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
             standardError: Math.random() * 0.01 + 0.005,
             confidenceInterval: {,
               lower: Math.random() * 0.05 + 0.05,
-              upper: Math.random() * 0.05 + 0.15
+              upper: Math.random() * 0.05 + 0.15,
             }
           },
           {
@@ -170,18 +170,18 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
             standardError: Math.random() * 0.005 + 0.002,
             confidenceInterval: {,
               lower: Math.random() * 0.02 + 0.02,
-              upper: Math.random() * 0.02 + 0.08
+              upper: Math.random() * 0.02 + 0.08,
             }
           }
         ],
         confidence: Math.random() * 0.3 + 0.7,
-        statisticalPower: Math.random() * 0.2 + 0.8
+        statisticalPower: Math.random() * 0.2 + 0.8,
       })),
       statisticalSignificance: {,
         pValue: Math.random() * 0.05,
         confidence: Math.random() * 0.05 + 0.95,
         effect: Math.random() * 0.3 + 0.1,
-        significance: Math.random() < 0.7
+        significance: Math.random() < 0.7,
       },
       winningVariant: Math.random() > 0.3 ? variants[Math.floor(Math.random() * variants.length)].variantId : null,
       insights: [],
@@ -191,7 +191,7 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
       plannedStart: Date.now() + Math.random() * 7 * 86400000,
       plannedEnd: Date.now() + Math.random() * 21 * 86400000,
       actualStart: Date.now() - Math.random() * 14 * 86400000,
-      actualEnd: Math.random() > 0.5 ? Date.now() - Math.random() * 7 * 86400000 : null
+      actualEnd: Math.random() > 0.5 ? Date.now() - Math.random() * 7 * 86400000 : null,
     },
     configuration: {,
       confidenceLevel: 0.95,
@@ -199,7 +199,7 @@ const generatePersonalizationABTest = (): PersonalizationABTest => {
       maximumDuration: Math.floor(Math.random() * 30) + 14,
       earlyStoppingEnabled: Math.random() > 0.5,
       multipleTestingCorrection: Math.random() > 0.5,
-      sequentialTesting: Math.random() > 0.7
+      sequentialTesting: Math.random() > 0.7,
     }
   };
 };
@@ -294,7 +294,7 @@ export const PersonalizationABTestingFramework: React.FC<PersonalizationABTestin
   const selectedTestData = useMemo(() => {
     return selectedTest ? tests.find(t => t.testId === selectedTest) : null;
   }, [selectedTest, tests]);
-  return ()
+  return ();
     <div className="personalization-ab-testing">
       <div className="testing-header">
         <div className="header-section">
@@ -517,7 +517,7 @@ export const PersonalizationABTestingFramework: React.FC<PersonalizationABTestin
                   const variant = selectedTestData.variants.find(v => v.variantId === result.variantId);
                   const ctrMetric = result.metrics.find(m => m.metricId === 'click_through_rate');
                   const convMetric = result.metrics.find(m => m.metricId === 'conversion_rate');
-                  return ()
+                  return ();
                     <div key={result.variantId} className="table-row">
                       <div>{variant?.name || result.variantId}</div>
                       <div>{result.participants.toLocaleString()}</div>

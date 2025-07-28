@@ -411,7 +411,7 @@ export const ATTRIBUTION_DEFAULTS = {
     HOUR: 60 * 60 * 1000,
     DAY: 24 * 60 * 60 * 1000,
     WEEK: 7 * 24 * 60 * 60 * 1000,
-    MONTH: 30 * 24 * 60 * 60 * 1000
+    MONTH: 30 * 24 * 60 * 60 * 1000,
   }
 } as const;
 
@@ -421,7 +421,7 @@ export const CHANGE_TYPE_DESCRIPTIONS = {
   delete: 'Resource deleted',
   move: 'Resource position changed',
   property_change: 'Resource property modified',
-  connection_change: 'Resource connections modified'
+  connection_change: 'Resource connections modified',
 } as const;
 
 export const AUTHOR_TYPE_DESCRIPTIONS = {
@@ -429,7 +429,7 @@ export const AUTHOR_TYPE_DESCRIPTIONS = {
   anonymous: 'Anonymous user',
   guest: 'Guest user',
   system: 'System operation',
-  api: 'API operation'
+  api: 'API operation',
 } as const;
 
 export const RESOURCE_TYPE_DESCRIPTIONS = {
@@ -437,7 +437,7 @@ export const RESOURCE_TYPE_DESCRIPTIONS = {
   edge: 'Graph edge',
   property: 'Resource property',
   position: 'Node position',
-  graph: 'Graph metadata'
+  graph: 'Graph metadata',
 } as const;
 
 // Event types for real-time updates

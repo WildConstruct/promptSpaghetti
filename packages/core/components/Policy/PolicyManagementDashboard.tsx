@@ -152,7 +152,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       }
     }
   };
-  const renderOverview = () => (;)
+  const renderOverview = () => (;);
     <div className="policy-overview space-y-6">
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -216,7 +216,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
             <div className="space-y-3">
               {Object.entries(statistics.byDomain).map(([domain, count]) => {
                 const Icon = getDomainIcon(domain as PolicyDomain);
-                return ()
+                return ();
                   <div key={domain} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Icon className="w-4 h-4 text-gray-600" />
@@ -258,7 +258,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </div>
     </div>
   );
-  const renderPolicyList = () => (;)
+  const renderPolicyList = () => (;);
     <div className="policy-list space-y-4">
       {/* Filters and Search */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
@@ -304,7 +304,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
         {filteredPolicies.map((policy) => {
           const Icon = getDomainIcon(policy.domain);
-          return ()
+          return ();
             <Card key={policy.id} className="hover:shadow-md transition-shadow">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
@@ -414,7 +414,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       )}
     </div>
   );
-  const renderEvaluations = () => (;)
+  const renderEvaluations = () => (;);
     <div className="evaluations space-y-4">
       <Card>
         <CardHeader>
@@ -469,7 +469,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </Card>
     </div>
   );
-  const renderCompliance = () => (;)
+  const renderCompliance = () => (;);
     <div className="compliance space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {frameworks.map(framework => ()
@@ -492,7 +492,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
     </div>
   );
   if (error) {
-    return ()
+    return ();
       <div className="p-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
         <p className="text-red-800 text-lg mb-2">Policy Management Error</p>
@@ -500,7 +500,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`policy-management-dashboard ${className}`}>}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Policy Management</h1>

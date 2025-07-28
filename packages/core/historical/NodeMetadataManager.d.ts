@@ -155,7 +155,7 @@ export declare class NodeMetadataManager {
     /**
      * Apply tag inheritance rules
      */
-    applyTagInheritance()
+    applyTagInheritance();
       sourceNodeId: string,
       targetNodeId: string,
       sourceNodeType: string,

@@ -5,7 +5,7 @@
 import { VarianceAnalysisService } from './VarianceAnalysisService';
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 const varianceService = new VarianceAnalysisService();
-const createMockResult = (;)
+const createMockResult = (;);
   seed: number, 
   output: string, 
   executionTime: number = 100,
@@ -16,7 +16,7 @@ const createMockResult = (;)
   executionTimeMs: executionTime,
   usedNodeIds: ['node1', 'node2'],
   usedEdgeIds: ['edge1'],
-  executionPath: executionPath || {
+  executionPath: executionPath || {,
     id: `exec_${seed}`,}
     seed,
     startTime: Date.now() - 1000,
@@ -114,13 +114,12 @@ describe('VarianceAnalysisService', () => {
       const results = [;
         createMockResult(1, 'Short.'),
         createMockResult(2, 'This is a medium length sentence with some complexity, punctuation, and structure.'),
-        createMockResult()
+        createMockResult();
           3,
           'A very long and elaborate sentence that contains multiple clauses, ' +
           'extensive detail, ' +
           'sophisticated vocabulary, ' +
           'and complex grammatical structures that demonstrate significant variation in writing style and approach!'
-        )
       ];
       const analysis = varianceService.analyzeVariance(results);
       expect(analysis.diversityMetrics.outputLengthVariance).toBeGreaterThan(0.5);

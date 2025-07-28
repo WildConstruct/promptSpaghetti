@@ -197,7 +197,7 @@ const GraphEditorWithProvidersInner: React.FC<GraphEditorWithProvidersProps> = (
   onProviderUnregistered,
   onProviderError
 }) => {
-  return ()
+  return ();
     <EditorProviderWrapper
       initialNodes={initialNodes}
       initialEdges={initialEdges}
@@ -369,7 +369,7 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
     [editorActions, graphStore]
   );
   // Handle drop on canvas: create node of given type at position
-  const handleDrop = useCallback(;)
+  const handleDrop = useCallback(;);
     (event: React.DragEvent) => {
       event.preventDefault();
       const nodeType = event.dataTransfer.getData('application/node-type');
@@ -448,7 +448,7 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
   const renderProviderStatus = () => {
     const hooks = registry.getHooks();
     const activeHooks = hooks.length;
-    return ()
+    return ();
       <div style={{
         position: 'absolute',
         top: '10px',
@@ -464,7 +464,7 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
       </div>
     );
   };
-  return ()
+  return ();
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       {renderProviderStatus()}
       <div style={{ display: 'flex', height: '100%' }}>
@@ -531,7 +531,7 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
         errors={errors}
         onPreview={handlePreview}
         onSaveJson={() => {
-          const blob = new Blob([;)
+          const blob = new Blob([;);
             JSON.stringify({ nodes, edges }, null, 2)
           ], { type: 'application/json' });
           const url = URL.createObjectURL(blob);
@@ -588,7 +588,7 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
 
 // Wrapper component with ReactFlowProvider
 export const GraphEditorWithProviders: React.FC<GraphEditorWithProvidersProps> = (props) => {
-  return ()
+  return ();
     <ReactFlowProvider>
       <GraphEditorWithProvidersInner {...props} />
     </ReactFlowProvider>
@@ -597,17 +597,17 @@ export const GraphEditorWithProviders: React.FC<GraphEditorWithProvidersProps> =
 
 // Example usage and built-in providers
 export },
-  onNodeAdd: (node) => {
+  onNodeAdd: (node) => {,
     console.log('[Analytics] Node added:', node.data?.nodeType);
     // Could send analytics event here
     return node;
   },
-  onExecutionError: (error) => {
+  onExecutionError: (error) => {,
     console.error('[Analytics] Execution error:', error.message);
     // Could send error analytics here
   },
   customActions: {,
-    getAnalytics: (context) => ({)
+    getAnalytics: (context) => ({),
       nodeCount: context.nodes.length,
       edgeCount: context.edges.length,
       nodeTypes: context.nodes.reduce((acc, node) => {

@@ -383,8 +383,7 @@ export class CrossSystemAlertingSystem {
       response_time_trend: Array<{ date: string; avg_response_time: number }>;
     };
     recommendations: string[];
-  } {
-    const events = this.eventHistory.filter(e => ;)
+    const events = this.eventHistory.filter(e => ;);
       e.timestamp >= timeRange.start && e.timestamp <= timeRange.end
     );
     const criticalAlerts = events.filter(e => e.severity === 'critical');
@@ -466,7 +465,7 @@ export class CrossSystemAlertingSystem {
     }
     // Check frequency threshold
     if (conditions.frequency_threshold) {
-      const recentSimilarEvents = this.getRecentSimilarEvents(;)
+      const recentSimilarEvents = this.getRecentSimilarEvents(;);
         event,
         conditions.frequency_threshold.time_window
       );
@@ -506,7 +505,7 @@ export class CrossSystemAlertingSystem {
     // Check for recent similar alerts
     const recentSimilarAlerts = Array.from(this.activeAlerts.values()).filter(alert => {)
       const timeDiff = now - alert.timestamp;
-      return ()
+      return ();
         timeDiff <= suppressionWindow &&
         alert.type === event.type &&
         alert.source === event.source &&
@@ -528,13 +527,13 @@ export class CrossSystemAlertingSystem {
     if (event1.severity === event2.severity) similarity += 0.1;
     factors += 0.1;
     // Details similarity (simplified)
-    const commonIPs = event1.details.ip_addresses?.filter(ip => ;)
+    const commonIPs = event1.details.ip_addresses?.filter(ip => ;);
       event2.details.ip_addresses?.includes(ip)
     ).length || 0;
     if (commonIPs > 0) similarity += 0.2;
     factors += 0.2;
     // User similarity
-    const commonUsers = event1.details.affected_users?.filter(user =>;)
+    const commonUsers = event1.details.affected_users?.filter(user =>;);
       event2.details.affected_users?.includes(user)  
     ).length || 0;
     if (commonUsers > 0) similarity += 0.2;
@@ -753,7 +752,7 @@ Alert ID: ${alert.id}`;}
     this.alertMetrics.alerts_by_source[event.source]++;
   }
   private calculateMetricsForTimeRange(timeRange: { start: number; end: number }): AlertMetrics {
-    const events = this.eventHistory.filter(e => ;)
+    const events = this.eventHistory.filter(e => ;);
       e.timestamp >= timeRange.start && e.timestamp <= timeRange.end
     );
     const metrics = this.initializeMetrics();
@@ -851,7 +850,7 @@ Alert ID: ${alert.id}`;}
   private calculateFalsePositiveRate(events: SecurityEvent[]): number {
     const resolvedEvents = events.filter(e => e.status === 'resolved');
     if (resolvedEvents.length === 0) return 0;
-    const falsePositives = resolvedEvents.filter(e => ;)
+    const falsePositives = resolvedEvents.filter(e => ;);
       e.resolution?.notes.toLowerCase().includes('false positive')
     );
     return falsePositives.length / resolvedEvents.length;

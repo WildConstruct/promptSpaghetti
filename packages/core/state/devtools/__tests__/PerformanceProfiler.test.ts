@@ -11,7 +11,7 @@ const mockPerformance = {
   memory: {,
     usedJSHeapSize: 50 * 1024 * 1024, // 50MB
     totalJSHeapSize: 100 * 1024 * 1024, // 100MB
-    jsHeapSizeLimit: 2 * 1024 * 1024 * 1024 // 2GB
+    jsHeapSizeLimit: 2 * 1024 * 1024 * 1024 // 2GB,
   }
 };
 global.performance = mockPerformance as any;
@@ -129,7 +129,7 @@ describe('PerformanceProfiler', () => {
         }
         return 'result';
       };
-      const result = profiler.sampleOperation(;)
+      const result = profiler.sampleOperation(;);
         'test-domain',
         'test-operation',
         testOperation,

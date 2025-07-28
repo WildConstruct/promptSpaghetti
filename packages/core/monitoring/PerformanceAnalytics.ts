@@ -356,7 +356,6 @@ export class PerformanceAnalytics extends EventEmitter {
     insights: PerformanceInsight[];
     benchmarks: PerformanceBenchmark[];
     reports: Array<{ timestamp: number; report: PerformanceReport }>;
-    } {
     return {
       insights: Array.from(this.insights.values()),
       benchmarks: Array.from(this.benchmarks.values()),
@@ -543,7 +542,7 @@ export class PerformanceAnalytics extends EventEmitter {
       .map(([type, frequency]) => ({)
         type,
         frequency,
-        severity: alerts.find(a => a.type === type)?.severity || 'medium'
+        severity: alerts.find(a => a.type === type)?.severity || 'medium',
       }));
     return {
       critical,

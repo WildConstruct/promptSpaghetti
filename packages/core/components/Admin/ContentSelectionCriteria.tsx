@@ -137,7 +137,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       usage_count: 45,
       created_by: 'system',
       created_at: new Date('2024-01-15'),
-      last_used: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+      last_used: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
     },
     {
       id: 'template-quality',
@@ -159,7 +159,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       usage_count: 78,
       created_by: 'system',
       created_at: new Date('2024-01-10'),
-      last_used: new Date(Date.now() - 24 * 60 * 60 * 1000)
+      last_used: new Date(Date.now() - 24 * 60 * 60 * 1000),
     }
   ]);
   const [previewData] = useState<ContentSelectionPreview>({)
@@ -221,7 +221,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
     };
     return colors[category] || 'text-gray-600 bg-gray-100';
   };
-  const renderCriteriaBuilder = () => (;)
+  const renderCriteriaBuilder = () => (;);
     <div className="criteria-builder">
       <div className="builder-sections">
         {/* Quality Filters */}
@@ -245,7 +245,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     value={currentCriteria.min_rating || ''}
                     onChange={(e) => setCurrentCriteria({)
                       ...currentCriteria,
-                      min_rating: parseFloat(e.target.value) || undefined
+                      min_rating: parseFloat(e.target.value) || undefined,
                     })}
                     className="criteria-input"
                     placeholder="4.0"
@@ -262,7 +262,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     value={currentCriteria.min_download_count || ''}
                     onChange={(e) => setCurrentCriteria({)
                       ...currentCriteria,
-                      min_download_count: parseInt(e.target.value) || undefined
+                      min_download_count: parseInt(e.target.value) || undefined,
                     })}
                     className="criteria-input"
                     placeholder="100"
@@ -280,7 +280,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     value={currentCriteria.quality_score_threshold || ''}
                     onChange={(e) => setCurrentCriteria({)
                       ...currentCriteria,
-                      quality_score_threshold: parseInt(e.target.value) || undefined
+                      quality_score_threshold: parseInt(e.target.value) || undefined,
                     })}
                     className="criteria-input"
                     placeholder="80"
@@ -319,7 +319,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                           } else {
                             setCurrentCriteria({)
                               ...currentCriteria,
-                              categories: categories.filter(c => c !== category)
+                              categories: categories.filter(c => c !== category),
                             });
                           }
                         }}
@@ -347,7 +347,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                           } else {
                             setCurrentCriteria({)
                               ...currentCriteria,
-                              content_types: types.filter(t => t !== type)
+                              content_types: types.filter(t => t !== type),
                             });
                           }
                         }}
@@ -381,7 +381,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     value={currentCriteria.min_conversion_rate || ''}
                     onChange={(e) => setCurrentCriteria({)
                       ...currentCriteria,
-                      min_conversion_rate: parseFloat(e.target.value) || undefined
+                      min_conversion_rate: parseFloat(e.target.value) || undefined,
                     })}
                     className="criteria-input"
                     placeholder="5.0"
@@ -399,7 +399,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     value={currentCriteria.min_engagement_score || ''}
                     onChange={(e) => setCurrentCriteria({)
                       ...currentCriteria,
-                      min_engagement_score: parseInt(e.target.value) || undefined
+                      min_engagement_score: parseInt(e.target.value) || undefined,
                     })}
                     className="criteria-input"
                     placeholder="70"
@@ -438,7 +438,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                           } else {
                             setCurrentCriteria({)
                               ...currentCriteria,
-                              creator_tiers: tiers.filter(t => t !== tier)
+                              creator_tiers: tiers.filter(t => t !== tier),
                             });
                           }
                         }}
@@ -456,7 +456,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     currentCriteria.published_after.toISOString().split('T')[0] : ''}
                   onChange={(e) => setCurrentCriteria({)
                     ...currentCriteria,
-                    published_after: e.target.value ? new Date(e.target.value) : undefined
+                    published_after: e.target.value ? new Date(e.target.value) : undefined,
                   })}
                   className="criteria-input"
                 />
@@ -482,7 +482,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   value={currentCriteria.max_content_count || ''}
                   onChange={(e) => setCurrentCriteria({)
                     ...currentCriteria,
-                    max_content_count: parseInt(e.target.value) || undefined
+                    max_content_count: parseInt(e.target.value) || undefined,
                   })}
                   className="criteria-input"
                   placeholder="50"
@@ -538,7 +538,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       </div>
     </div>
   );
-  const renderTemplates = () => (;)
+  const renderTemplates = () => (;);
     <div className="templates-section">
       <div className="templates-header">
         <h3>Selection Criteria Templates</h3>
@@ -619,7 +619,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       </div>
     </div>
   );
-  const renderPreview = () => (;)
+  const renderPreview = () => (;);
     <div className="preview-section">
       <div className="preview-header">
         <h3>Selection Preview</h3>
@@ -748,7 +748,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       </div>
     </div>
   );
-  return ()
+  return ();
     <div className={`content-selection-criteria ${className}`}>}
       <div className="criteria-header">
         <div className="header-info">

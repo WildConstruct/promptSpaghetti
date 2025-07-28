@@ -34,7 +34,7 @@ class BrowserEventEmitter {
 
 // Browser-compatible crypto utility
 const browserCrypto = {
-  randomBytes: (size: number): string => {
+  randomBytes: (size: number): string => {,
     const array = new Uint8Array(size);
     if (typeof window !== 'undefined' && )
         typeof (window as any).crypto !== 'undefined' && 
@@ -222,7 +222,7 @@ export class AuditLogger extends BrowserEventEmitter {
       asyncLogging: config?.asyncLogging ?? true,
       compressionEnabled: config?.compressionEnabled ?? false,
       alertOnAnomaly: config?.alertOnAnomaly ?? true,
-      alertThresholds: config?.alertThresholds ?? {
+      alertThresholds: config?.alertThresholds ?? {,
         failedAccessAttempts: 5,
         sensitiveDataAccess: 10,
         highRiskOperations: 3,

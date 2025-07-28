@@ -78,7 +78,7 @@ export class RandomizerSystem {
   async quickGenerate()
     purpose: string,
     complexity: ComplexityLevelType = 'moderate',
-    provider: LLMProviderType = 'openai'
+    provider: LLMProviderType = 'openai',
   ): Promise<WorkflowResult> {
     const parameters = this.parameterManager.createCompleteParameters({)
       purpose,
@@ -109,7 +109,7 @@ export class RandomizerSystem {
    */
   async generateVariations()
     parameters: RandomizerParameters,
-    count: number = 3
+    count: number = 3,
   ): Promise<WorkflowResult[]> {
     return this.workflow.generateVariations(parameters, count);
   }

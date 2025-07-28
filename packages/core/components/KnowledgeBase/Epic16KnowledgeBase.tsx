@@ -183,7 +183,7 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({)
   }, []);
   // Render loading state
   if (kbState.loading && !kbState.selectedArticle) {
-    return ()
+    return ();
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -194,7 +194,7 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({)
   }
   // Render error state
   if (kbState.error && !kbState.selectedArticle) {
-    return ()
+    return ();
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <div className="flex-shrink-0">
@@ -220,7 +220,7 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="epic16-knowledge-base h-full">
       {kbState.currentView === 'search' && ()
         <div>

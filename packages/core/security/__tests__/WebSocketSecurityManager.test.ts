@@ -98,7 +98,7 @@ describe('WebSocketSecurityManager', () => {
       riskScore: 15,
       factors: [],
       recommendations: [],
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     mockTrustedDeviceManager.checkDeviceTrust.mockResolvedValue({)
       trusted: false,
@@ -134,7 +134,7 @@ describe('WebSocketSecurityManager', () => {
       metadata: {,
         id: 'session-key-123',
         name: 'test-session-key',
-        status: 'ACTIVE' as any
+        status: 'ACTIVE' as any,
       },
       keyData: Buffer.from('test-encryption-key-data'),
     } as any);
@@ -154,7 +154,7 @@ describe('WebSocketSecurityManager', () => {
   });
   describe('Connection Initialization', () => {
     test('should initialize connection security context', async () => {
-      const context = await securityManager.initializeConnection(;)
+      const context = await securityManager.initializeConnection(;);
         'conn-123',
         'user-456',
         testConnectionRequest
@@ -194,9 +194,9 @@ describe('WebSocketSecurityManager', () => {
           { category: 'behavior', factor: 'suspicious_patterns', impact: 0.7, confidence: 85, description: 'Suspicious patterns' }
         ],
         recommendations: ['require_mfa'],
-        timestamp: new Date()
+        timestamp: new Date(),
       });
-      const context = await securityManager.initializeConnection(;)
+      const context = await securityManager.initializeConnection(;);
         'conn-123',
         'user-456',
         testConnectionRequest
@@ -218,7 +218,7 @@ describe('WebSocketSecurityManager', () => {
           timingNormal: true,
         }
       } as any);
-      const context = await securityManager.initializeConnection(;)
+      const context = await securityManager.initializeConnection(;);
         'conn-123',
         'user-456',
         testConnectionRequest
@@ -269,10 +269,10 @@ describe('WebSocketSecurityManager', () => {
         riskScore: 85,
         factors: [],
         recommendations: [],
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       // Initialize a high-risk connection
-      const highRiskContext = await securityManager.initializeConnection(;)
+      const highRiskContext = await securityManager.initializeConnection(;);
         'conn-456',
         'user-456',
         testConnectionRequest
@@ -359,7 +359,7 @@ describe('WebSocketSecurityManager', () => {
         encryptionRequired: true,
         retentionPeriod: '7 years',
         accessControls: [],
-        reasoning: ['PII detected']
+        reasoning: ['PII detected'],
       });
       const message = {
         type: 'user_data',
@@ -420,7 +420,7 @@ describe('WebSocketSecurityManager', () => {
         expect.objectContaining({)
           type: 'threat_detected',
           severity: 'warning',
-          description: 'Rate limit exceeded'
+          description: 'Rate limit exceeded',
         })
       );
     });
@@ -431,7 +431,7 @@ describe('WebSocketSecurityManager', () => {
       const largeMessage = {
         type: 'large_data',
         payload: {,
-          data: 'x'.repeat(50000) // 50KB of data
+          data: 'x'.repeat(50000) // 50KB of data,
         }
       };
       // Send some normal messages first to establish baseline
@@ -448,7 +448,7 @@ describe('WebSocketSecurityManager', () => {
         expect.objectContaining({)
           type: 'anomaly',
           severity: 'warning',
-          description: 'Unusually large message detected'
+          description: 'Unusually large message detected',
         })
       );
     });
@@ -475,12 +475,12 @@ describe('WebSocketSecurityManager', () => {
   });
   describe('Connection Management', () => {
     test('should track multiple connections', async () => {
-      const context1 = await securityManager.initializeConnection(;)
+      const context1 = await securityManager.initializeConnection(;);
         'conn-1',
         'user-1',
         testConnectionRequest
       );
-      const context2 = await securityManager.initializeConnection(;)
+      const context2 = await securityManager.initializeConnection(;);
         'conn-2',
         'user-2',
         testConnectionRequest
@@ -491,7 +491,7 @@ describe('WebSocketSecurityManager', () => {
       expect(stats.totalConnections).toBe(2);
     });
     test('should clean up connection resources', async () => {
-      const context = await securityManager.initializeConnection(;)
+      const context = await securityManager.initializeConnection(;);
         'conn-123',
         'user-456',
         testConnectionRequest
@@ -553,7 +553,7 @@ describe('WebSocketSecurityManager', () => {
       expect(securityManager.getConnectionContext('conn-2')).toBeNull();
     });
     test('should handle key rotation', async () => {
-      const context = await securityManager.initializeConnection(;)
+      const context = await securityManager.initializeConnection(;);
         'conn-123',
         'user-456',
         testConnectionRequest
@@ -567,7 +567,7 @@ describe('WebSocketSecurityManager', () => {
   });
   describe('Error Handling', () => {
     test('should handle encryption errors gracefully', async () => {
-      const context = await securityManager.initializeConnection(;)
+      const context = await securityManager.initializeConnection(;);
         'conn-123',
         'user-456',
         testConnectionRequest
@@ -585,7 +585,7 @@ describe('WebSocketSecurityManager', () => {
       mockDataClassifier.classify.mockImplementation(() => {
         throw new Error('Classification failed');
       });
-      const context = await securityManager.initializeConnection(;)
+      const context = await securityManager.initializeConnection(;);
         'conn-123',
         'user-456',
         testConnectionRequest

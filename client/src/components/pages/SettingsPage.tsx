@@ -2,34 +2,31 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { ArrowLeft } from 'lucide-react';
-
 const SettingsPage: React.FC = () => {
   const { user: _user } = useAuthStore(); // eslint-disable-line @typescript-eslint/no-unused-vars
   const navigate = useNavigate();
-  const [settings, setSettings] = useState({
-    notifications: {
+  const [settings, setSettings] = useState({)
+    notifications: {,
       email: true,
       browser: true,
       taskUpdates: true,
-      systemAlerts: false
+      systemAlerts: false,
     },
-    preferences: {
+    preferences: {,
       theme: 'system',
       language: 'en',
       autoSave: true,
-      showTips: true
+      showTips: true,
     },
-    privacy: {
+    privacy: {,
       profileVisible: true,
       activityTracking: true,
-      analyticsOptIn: false
+      analyticsOptIn: false,
     }
   });
-
   const [activeSection, setActiveSection] = useState('notifications');
-
   const handleSettingChange = (section: string, key: string, value: Error) => {
-    setSettings(prev => ({
+    setSettings(prev => ({)
       ...prev,
       [section]: {
         ...prev[section as keyof typeof prev],
@@ -37,14 +34,12 @@ const SettingsPage: React.FC = () => {
       }
     }));
   };
-
   const handleSaveSettings = () => {
     // In a real app, this would save to backend
     console.log('Saving settings:', settings);
     alert('Settings saved successfully!');
   };
-
-  const renderToggle = (checked: boolean, onChange: (checked: boolean) => void) => (
+  const renderToggle = (checked: boolean, onChange: (checked: boolean) => void) => (;)
     <button
       onClick={() => onChange(!checked)}
       style={{
@@ -55,7 +50,7 @@ const SettingsPage: React.FC = () => {
         cursor: 'pointer',
         backgroundColor: checked ? '#3b82f6' : '#d1d5db',
         position: 'relative',
-        transition: 'background-color 0.2s'
+        transition: 'background-color 0.2s',
       }}
     >
       <div
@@ -67,31 +62,29 @@ const SettingsPage: React.FC = () => {
           position: 'absolute',
           top: '2px',
           left: checked ? '22px' : '2px',
-          transition: 'left 0.2s'
+          transition: 'left 0.2s',
         }}
       />
     </button>
   );
-
-  const sections = [
+  const sections = [;
     { id: 'notifications', label: 'Notifications', icon: '🔔' },
     { id: 'preferences', label: 'Preferences', icon: '⚙️' },
     { id: 'privacy', label: 'Privacy', icon: '🔒' },
     { id: 'account', label: 'Account', icon: '👤' }
   ];
-
-  return (
+  return ()
     <div style={{
       padding: '40px',
       maxWidth: '1000px',
       margin: '0 auto',
       backgroundColor: '#ffffff',
-      minHeight: '100vh'
+      minHeight: '100vh',
     }}>
       <div style={{
         marginBottom: '32px',
         borderBottom: '1px solid #e5e7eb',
-        paddingBottom: '16px'
+        paddingBottom: '16px',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
           <button
@@ -107,7 +100,7 @@ const SettingsPage: React.FC = () => {
               cursor: 'pointer',
               fontSize: '14px',
               color: '#374151',
-              textDecoration: 'none'
+              textDecoration: 'none',
             }}
           >
             <ArrowLeft size={16} />
@@ -117,7 +110,7 @@ const SettingsPage: React.FC = () => {
             fontSize: '24px',
             fontWeight: '700',
             color: '#111827',
-            margin: 0
+            margin: 0,
           }}>
             Settings
           </h1>
@@ -125,17 +118,16 @@ const SettingsPage: React.FC = () => {
         <p style={{
           color: '#6b7280',
           fontSize: '14px',
-          margin: 0
+          margin: 0,
         }}>
           Customize your experience and manage your account preferences
         </p>
       </div>
-
       <div style={{ display: 'flex', gap: '32px' }}>
         {/* Settings Navigation */}
         <div style={{ width: '200px' }}>
           <nav>
-            {sections.map(section => (
+            {sections.map(section => ()
               <button
                 key={section.id}
                 onClick={() => setActiveSection(section.id)}
@@ -153,7 +145,7 @@ const SettingsPage: React.FC = () => {
                   fontSize: '14px',
                   fontWeight: activeSection === section.id ? '500' : '400',
                   color: activeSection === section.id ? '#111827' : '#6b7280',
-                  textAlign: 'left'
+                  textAlign: 'left',
                 }}
               >
                 <span>{section.icon}</span>
@@ -162,10 +154,9 @@ const SettingsPage: React.FC = () => {
             ))}
           </nav>
         </div>
-
         {/* Settings Content */}
         <div style={{ flex: 1 }}>
-          {activeSection === 'notifications' && (
+          {activeSection === 'notifications' && ()
             <div>
               <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '20px' }}>
                 Notification Settings
@@ -178,12 +169,11 @@ const SettingsPage: React.FC = () => {
                       Receive email updates about your tasks and projects
                     </div>
                   </div>
-                  {renderToggle(
+                  {renderToggle()
                     settings.notifications.email,
                     (checked) => handleSettingChange('notifications', 'email', checked)
                   )}
                 </div>
-
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <div style={{ fontWeight: '500', marginBottom: '4px' }}>Browser Notifications</div>
@@ -191,12 +181,11 @@ const SettingsPage: React.FC = () => {
                       Show desktop notifications in your browser
                     </div>
                   </div>
-                  {renderToggle(
+                  {renderToggle()
                     settings.notifications.browser,
                     (checked) => handleSettingChange('notifications', 'browser', checked)
                   )}
                 </div>
-
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <div style={{ fontWeight: '500', marginBottom: '4px' }}>Task Updates</div>
@@ -204,12 +193,11 @@ const SettingsPage: React.FC = () => {
                       Get notified when tasks are assigned or updated
                     </div>
                   </div>
-                  {renderToggle(
+                  {renderToggle()
                     settings.notifications.taskUpdates,
                     (checked) => handleSettingChange('notifications', 'taskUpdates', checked)
                   )}
                 </div>
-
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <div style={{ fontWeight: '500', marginBottom: '4px' }}>System Alerts</div>
@@ -217,7 +205,7 @@ const SettingsPage: React.FC = () => {
                       Important system maintenance and security alerts
                     </div>
                   </div>
-                  {renderToggle(
+                  {renderToggle()
                     settings.notifications.systemAlerts,
                     (checked) => handleSettingChange('notifications', 'systemAlerts', checked)
                   )}
@@ -225,8 +213,7 @@ const SettingsPage: React.FC = () => {
               </div>
             </div>
           )}
-
-          {activeSection === 'preferences' && (
+          {activeSection === 'preferences' && ()
             <div>
               <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '20px' }}>
                 User Preferences
@@ -244,7 +231,7 @@ const SettingsPage: React.FC = () => {
                       border: '1px solid #d1d5db',
                       borderRadius: '6px',
                       fontSize: '14px',
-                      backgroundColor: '#ffffff'
+                      backgroundColor: '#ffffff',
                     }}
                   >
                     <option value="light">Light</option>
@@ -252,7 +239,6 @@ const SettingsPage: React.FC = () => {
                     <option value="system">System</option>
                   </select>
                 </div>
-
                 <div>
                   <label style={{ display: 'block', fontWeight: '500', marginBottom: '8px' }}>
                     Language
@@ -265,7 +251,7 @@ const SettingsPage: React.FC = () => {
                       border: '1px solid #d1d5db',
                       borderRadius: '6px',
                       fontSize: '14px',
-                      backgroundColor: '#ffffff'
+                      backgroundColor: '#ffffff',
                     }}
                   >
                     <option value="en">English</option>
@@ -273,7 +259,6 @@ const SettingsPage: React.FC = () => {
                     <option value="fr">French</option>
                   </select>
                 </div>
-
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <div style={{ fontWeight: '500', marginBottom: '4px' }}>Auto-save</div>
@@ -281,12 +266,11 @@ const SettingsPage: React.FC = () => {
                       Automatically save your work as you edit
                     </div>
                   </div>
-                  {renderToggle(
+                  {renderToggle()
                     settings.preferences.autoSave,
                     (checked) => handleSettingChange('preferences', 'autoSave', checked)
                   )}
                 </div>
-
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <div style={{ fontWeight: '500', marginBottom: '4px' }}>Show Tips</div>
@@ -294,7 +278,7 @@ const SettingsPage: React.FC = () => {
                       Display helpful tips and tutorials
                     </div>
                   </div>
-                  {renderToggle(
+                  {renderToggle()
                     settings.preferences.showTips,
                     (checked) => handleSettingChange('preferences', 'showTips', checked)
                   )}
@@ -302,8 +286,7 @@ const SettingsPage: React.FC = () => {
               </div>
             </div>
           )}
-
-          {activeSection === 'privacy' && (
+          {activeSection === 'privacy' && ()
             <div>
               <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '20px' }}>
                 Privacy Settings
@@ -316,12 +299,11 @@ const SettingsPage: React.FC = () => {
                       Allow others to see your profile information
                     </div>
                   </div>
-                  {renderToggle(
+                  {renderToggle()
                     settings.privacy.profileVisible,
                     (checked) => handleSettingChange('privacy', 'profileVisible', checked)
                   )}
                 </div>
-
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <div style={{ fontWeight: '500', marginBottom: '4px' }}>Activity Tracking</div>
@@ -329,12 +311,11 @@ const SettingsPage: React.FC = () => {
                       Track your activity for better insights
                     </div>
                   </div>
-                  {renderToggle(
+                  {renderToggle()
                     settings.privacy.activityTracking,
                     (checked) => handleSettingChange('privacy', 'activityTracking', checked)
                   )}
                 </div>
-
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <div style={{ fontWeight: '500', marginBottom: '4px' }}>Analytics Opt-in</div>
@@ -342,7 +323,7 @@ const SettingsPage: React.FC = () => {
                       Help improve the platform by sharing anonymous usage data
                     </div>
                   </div>
-                  {renderToggle(
+                  {renderToggle()
                     settings.privacy.analyticsOptIn,
                     (checked) => handleSettingChange('privacy', 'analyticsOptIn', checked)
                   )}
@@ -350,8 +331,7 @@ const SettingsPage: React.FC = () => {
               </div>
             </div>
           )}
-
-          {activeSection === 'account' && (
+          {activeSection === 'account' && ()
             <div>
               <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '20px' }}>
                 Account Settings
@@ -361,7 +341,7 @@ const SettingsPage: React.FC = () => {
                   backgroundColor: '#fef3c7',
                   border: '1px solid #f59e0b',
                   borderRadius: '8px',
-                  padding: '16px'
+                  padding: '16px',
                 }}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '8px', color: '#92400e' }}>
                     Change Password
@@ -378,19 +358,18 @@ const SettingsPage: React.FC = () => {
                       borderRadius: '6px',
                       fontSize: '14px',
                       cursor: 'pointer',
-                      fontWeight: '500'
+                      fontWeight: '500',
                     }}
                     onClick={() => alert('Password change functionality would be implemented here')}
                   >
                     Change Password
                   </button>
                 </div>
-
                 <div style={{
                   backgroundColor: '#fee2e2',
                   border: '1px solid #ef4444',
                   borderRadius: '8px',
-                  padding: '16px'
+                  padding: '16px',
                 }}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '8px', color: '#dc2626' }}>
                     Delete Account
@@ -407,7 +386,7 @@ const SettingsPage: React.FC = () => {
                       borderRadius: '6px',
                       fontSize: '14px',
                       cursor: 'pointer',
-                      fontWeight: '500'
+                      fontWeight: '500',
                     }}
                     onClick={() => alert('Account deletion would require additional confirmation')}
                   >
@@ -417,12 +396,11 @@ const SettingsPage: React.FC = () => {
               </div>
             </div>
           )}
-
           {/* Save Button */}
           <div style={{
             marginTop: '32px',
             paddingTop: '20px',
-            borderTop: '1px solid #e5e7eb'
+            borderTop: '1px solid #e5e7eb',
           }}>
             <button
               onClick={handleSaveSettings}
@@ -434,7 +412,7 @@ const SettingsPage: React.FC = () => {
                 borderRadius: '6px',
                 fontSize: '14px',
                 cursor: 'pointer',
-                fontWeight: '500'
+                fontWeight: '500',
               }}
             >
               Save Settings

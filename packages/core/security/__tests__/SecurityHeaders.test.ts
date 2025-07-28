@@ -356,7 +356,6 @@ function validateCSPReport(report: any): boolean {
 function calculateSecurityScore(headers: Record<string, string>): {
   total: number;
   checks: Record<string, boolean>;
-} {
   const checks = {
     hsts: !!headers['strict-transport-security'],
     csp: !!headers['content-security-policy'],
@@ -443,7 +442,7 @@ export class SecurityHeaderScanner {
       summary: {,
         totalEndpoints: scanResults.length,
         averageScore: scanResults.reduce((sum, r) => sum + r.score, 0) / scanResults.length,
-        criticalIssues: scanResults.filter(r => r.score < 60).length
+        criticalIssues: scanResults.filter(r => r.score < 60).length,
       },
       details: scanResults,
       recommendations: [,

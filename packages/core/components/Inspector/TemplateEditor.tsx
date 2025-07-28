@@ -246,7 +246,7 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
     }
     return result;
   };
-  return ()
+  return ();
     <div className={`template-editor ${className}`} style={{ position: 'relative' }}>}
       {/* Main Template Input */}
       <div style={{ position: 'relative' }}>
@@ -270,7 +270,7 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
             width: '100%',
             minHeight: 80,
             padding: 12,
-            border: parseResult.isValid ? 
+            border: parseResult.isValid ? ,
               (isFocused ? '2px solid #4299e1' : '1px solid #4a5568') :
               '2px solid #e53e3e',
             borderRadius: 6,
@@ -331,7 +331,7 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
                 padding: '8px 12px',
                 cursor: 'pointer',
                 background: index === suggestionIndex ? '#4a5568' : 'transparent',
-                borderBottom: index < suggestions.length - 1 ? '1px solid #4a5568' : 'none'
+                borderBottom: index < suggestions.length - 1 ? '1px solid #4a5568' : 'none',
               }}
               onMouseEnter={() => setSuggestionIndex(index)}
             >
@@ -461,7 +461,7 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
                   border: '2px solid #4a5568',
                   borderTop: '2px solid #4299e1',
                   borderRadius: '50%',
-                  animation: 'spin 1s linear infinite'
+                  animation: 'spin 1s linear infinite',
                 }}></div>
               )}
               <button
@@ -475,7 +475,7 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
                   border: 'none',
                   borderRadius: 4,
                   cursor: isGenerating ? 'not-allowed' : 'pointer',
-                  opacity: isGenerating || hasTemplateErrors ? 0.5 : 1
+                  opacity: isGenerating || hasTemplateErrors ? 0.5 : 1,
                 }}
               >
                 Refresh
@@ -527,7 +527,7 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
                     padding: 8,
                     background: '#2d3748',
                     borderRadius: 4,
-                    border: '1px solid #4a5568'
+                    border: '1px solid #4a5568',
                   }}
                 >
                   <div style={{
@@ -643,7 +643,7 @@ const getCategoryColor = (category: string): string => {
     action: '#f6ad55',     // orange
     mood: '#fc8181',       // red
     object: '#68d391',     // green
-    custom: '#a0aec0'      // gray
+    custom: '#a0aec0'      // gray,
   };
   return colors[category] || colors.custom;
 };

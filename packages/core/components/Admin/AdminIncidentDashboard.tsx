@@ -169,7 +169,7 @@ export const AdminIncidentDashboard: React.FC<AdminIncidentDashboardProps> = ({)
   const [_____filters, _____setFilters] = useState({)
     severity: [] as ActionSeverity[],
     systems: [] as Epic17System[],
-    timeRange: '24h' as '1h' | '24h' | '7d' | '30d'
+    timeRange: '24h' as '1h' | '24h' | '7d' | '30d',
   });
   // Load dashboard data
   const loadDashboardData = useCallback(async () => {
@@ -341,7 +341,7 @@ export const AdminIncidentDashboard: React.FC<AdminIncidentDashboardProps> = ({)
     }
   };
   if (loading) {
-    return ()
+    return ();
       <div className={`admin-incident-dashboard loading ${className}`}>}
         <div className="loading-spinner">
           <RefreshCw className="animate-spin" size={24} />
@@ -351,7 +351,7 @@ export const AdminIncidentDashboard: React.FC<AdminIncidentDashboardProps> = ({)
     );
   }
   if (!dashboardState) {
-    return ()
+    return ();
       <div className={`admin-incident-dashboard error ${className}`}>}
         <div className="error-message">
           <AlertCircle size={24} />
@@ -361,7 +361,7 @@ export const AdminIncidentDashboard: React.FC<AdminIncidentDashboardProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`admin-incident-dashboard ${className}`}>}
       {/* Dashboard Header */}
       <div className="dashboard-header">
@@ -479,7 +479,7 @@ const OverviewTab: React.FC<{
   onPlaybookExecute: (playbookId: string, options: ExecutionOptions) => Promise<void>;
   onIncidentCreate: (incident: IncidentCreationData) => Promise<void>;
 }> = ({ dashboardState, onPlaybookExecute: _onPlaybookExecute, onIncidentCreate: _onIncidentCreate }) => {
-  return ()
+  return ();
     <div className="overview-tab">
       {/* Critical Alerts Section */}
       <div className="critical-section">
@@ -563,9 +563,9 @@ const IncidentCard: React.FC<{ incident: ActiveIncident }> = ({ incident }) => {
     critical: 'border-red-500 bg-red-50',
     high: 'border-orange-500 bg-orange-50',
     medium: 'border-yellow-500 bg-yellow-50',
-    low: 'border-blue-500 bg-blue-50'
+    low: 'border-blue-500 bg-blue-50',
   };
-  return ()
+  return ();
     <div className={`incident-card ${severityColors[incident.severity]}`}>}
       <div className="card-header">
         <span className="incident-id">{incident.id}</span>
@@ -593,7 +593,7 @@ const IncidentCard: React.FC<{ incident: ActiveIncident }> = ({ incident }) => {
   );
 };
 const AlertCard: React.FC<{ alert: Alert }> = ({ alert }) => {
-  return ()
+  return ();
     <div className={`alert-card ${alert.severity}`}>}
       <div className="alert-header">
         <Bell size={16} />
@@ -617,9 +617,9 @@ const SystemHealthCard: React.FC<{ health: SystemHealthStatus }> = ({ health }) 
     healthy: 'text-green-500 bg-green-50',
     degraded: 'text-yellow-500 bg-yellow-50',
     unhealthy: 'text-red-500 bg-red-50',
-    unknown: 'text-gray-500 bg-gray-50'
+    unknown: 'text-gray-500 bg-gray-50',
   };
-  return ()
+  return ();
     <div className="system-health-card">
       <div className="system-header">
         <span className="system-name">{health.system.replace('_', ' ')}</span>
@@ -655,7 +655,7 @@ const PlaybookExecutionCard: React.FC<{ execution: PlaybookExecution }> = ({ exe
     failed: <XCircle className="text-red-500" size={16} />,
     cancelled: <Pause className="text-gray-500" size={16} />
   };
-  return ()
+  return ();
     <div className="playbook-execution-card">
       <div className="execution-header">
         {statusIcons[execution.status]}
@@ -688,9 +688,9 @@ const MetricCard: React.FC<{
   const trendIcons = {
     up: <ArrowUp className={good ? 'text-green-500' : 'text-red-500'} size={16} />,
     down: <ArrowDown className={good ? 'text-green-500' : 'text-red-500'} size={16} />,
-    stable: <div className="w-4 h-1 bg-gray-400" />
+    stable: <div className="w-4 h-1 bg-gray-400" />,
   };
-  return ()
+  return ();
     <div className="metric-card">
       <div className="metric-header">
         <span className="metric-label">{label}</span>
@@ -708,7 +708,7 @@ const IncidentsTab: React.FC<{
   incidents: ActiveIncident[];
   onIncidentCreate: (incident: IncidentCreationData) => Promise<void>;
 }> = ({ incidents, onIncidentCreate: _onIncidentCreate }) => {
-  return ()
+  return ();
     <div className="incidents-tab">
       <div className="tab-header">
         <h2>Active Incidents</h2>
@@ -726,7 +726,7 @@ const PlaybooksTab: React.FC<{
   executions: PlaybookExecution[];
   onPlaybookExecute: (playbookId: string, options: ExecutionOptions) => Promise<void>;
 }> = ({ executions, onPlaybookExecute: _onPlaybookExecute }) => {
-  return ()
+  return ();
     <div className="playbooks-tab">
       <div className="tab-header">
         <h2>Playbook Executions</h2>
@@ -744,7 +744,7 @@ const SystemsTab: React.FC<{
   systemHealth: SystemHealthStatus[];
   alertsSummary: AlertsSummary;
 }> = ({ systemHealth, alertsSummary }) => {
-  return ()
+  return ();
     <div className="systems-tab">
       <div className="tab-header">
         <h2>System Health</h2>
@@ -764,7 +764,7 @@ const AnalyticsTab: React.FC<{
   performanceMetrics: PerformanceMetrics;
   recentActivity: ActivityLog[];
 }> = ({ performanceMetrics, recentActivity: _recentActivity }) => {
-  return ()
+  return ();
     <div className="analytics-tab">
       <div className="tab-header">
         <h2>Performance Analytics</h2>

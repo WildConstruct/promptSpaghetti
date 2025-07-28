@@ -236,7 +236,7 @@ export class AccessibilityManager extends EventEmitter {
     const profile: UserAccessibilityProfile = {
       userId,
       needs: profileData.needs || [],
-      severityLevels: profileData.severityLevels || {
+      severityLevels: profileData.severityLevels || {,
         [AccessibilityNeed.VISUAL_IMPAIRMENT]: SeverityLevel.MILD,
         [AccessibilityNeed.HEARING_IMPAIRMENT]: SeverityLevel.MILD,
         [AccessibilityNeed.MOTOR_IMPAIRMENT]: SeverityLevel.MILD,
@@ -267,7 +267,7 @@ export class AccessibilityManager extends EventEmitter {
       emergencyContacts: profileData.emergencyContacts || [],
       documentation: profileData.documentation || {},
       lastUpdated: new Date(),
-      isActive: profileData.isActive !== false
+      isActive: profileData.isActive !== false,
     };
     this.userProfiles.set(userId, profile);
     this.emit('profileUpdated', { userId, profile, isNew: !existingProfile });
@@ -385,7 +385,7 @@ export class AccessibilityManager extends EventEmitter {
         type: 'critical',
         description: 'Authentication flow lacks keyboard navigation support',
         wcagReference: 'WCAG 2.1.1',
-        recommendation: 'Ensure all interactive elements are keyboard accessible'
+        recommendation: 'Ensure all interactive elements are keyboard accessible',
       });
       score -= 30;
     }
@@ -395,7 +395,7 @@ export class AccessibilityManager extends EventEmitter {
         type: 'critical',
         description: 'Missing screen reader support',
         wcagReference: 'WCAG 4.1.2',
-        recommendation: 'Add proper ARIA labels and semantic markup'
+        recommendation: 'Add proper ARIA labels and semantic markup',
       });
       score -= 25;
     }
@@ -405,7 +405,7 @@ export class AccessibilityManager extends EventEmitter {
         type: 'major',
         description: 'Timeout too short for users with disabilities',
         wcagReference: 'WCAG 2.2.1',
-        recommendation: 'Provide at least 5 minutes or timeout extension option'
+        recommendation: 'Provide at least 5 minutes or timeout extension option',
       });
       score -= 15;
     }
@@ -415,7 +415,7 @@ export class AccessibilityManager extends EventEmitter {
         type: 'major',
         description: 'Insufficient color contrast',
         wcagReference: 'WCAG 1.4.3',
-        recommendation: 'Ensure minimum 4.5:1 contrast ratio for normal text'
+        recommendation: 'Ensure minimum 4.5:1 contrast ratio for normal text',
       });
       score -= 10;
     }
@@ -425,7 +425,7 @@ export class AccessibilityManager extends EventEmitter {
         type: 'major',
         description: 'Audio content lacks text alternative',
         wcagReference: 'WCAG 1.2.1',
-        recommendation: 'Provide text alternative for audio content'
+        recommendation: 'Provide text alternative for audio content',
       });
       score -= 10;
     }
@@ -435,7 +435,7 @@ export class AccessibilityManager extends EventEmitter {
         type: 'minor',
         description: 'Animations do not respect reduced motion preference',
         wcagReference: 'WCAG 2.3.3',
-        recommendation: 'Respect prefers-reduced-motion CSS media query'
+        recommendation: 'Respect prefers-reduced-motion CSS media query',
       });
       score -= 5;
     }
@@ -447,7 +447,7 @@ export class AccessibilityManager extends EventEmitter {
           type: 'critical',
           description: 'No audio fallback for visually impaired user',
           wcagReference: 'WCAG 1.1.1',
-          recommendation: 'Provide audio alternative for visual content'
+          recommendation: 'Provide audio alternative for visual content',
         });
         score -= 20;
       }
@@ -493,7 +493,7 @@ export class AccessibilityManager extends EventEmitter {
     reason: string,
     authorizedBy: string,
     durationHours: number = 24,
-    maxUsages: number = 3
+    maxUsages: number = 3,
   ): Promise<string> {
     const bypass: EmergencyBypass = {
       id: crypto.randomUUID(),
@@ -545,7 +545,7 @@ export class AccessibilityManager extends EventEmitter {
     this.emit('emergencyBypassUsed', { bypass, context });
     return {
       allowed: true,
-      remainingUses: bypass.maxUsages - bypass.usageCount
+      remainingUses: bypass.maxUsages - bypass.usageCount,
     };
   }
   /**
@@ -566,7 +566,6 @@ export class AccessibilityManager extends EventEmitter {
       description: string;
     }>;
     estimatedImpact: number; // 0-100 improvement score
-  } {
     const profile = this.userProfiles.get(userId);
     const adaptations: unknown[] = [];
     if (!profile) {
@@ -583,7 +582,7 @@ export class AccessibilityManager extends EventEmitter {
             'line-height': `${profile.customSettings.fontSize * 1.5}px`}
           }
         },
-        description: 'Increase font size for better readability'
+        description: 'Increase font size for better readability',
       });
     }
     // Contrast enhancement
@@ -598,7 +597,7 @@ export class AccessibilityManager extends EventEmitter {
             'color': '#ffffff'
           }
         },
-        description: 'Enhance contrast for better visibility'
+        description: 'Enhance contrast for better visibility',
       });
     }
     // Motion reduction
@@ -613,7 +612,7 @@ export class AccessibilityManager extends EventEmitter {
             'transform': 'none'
           }
         },
-        description: 'Reduce motion and animations'
+        description: 'Reduce motion and animations',
       });
     }
     // Timeout extension
@@ -624,7 +623,7 @@ export class AccessibilityManager extends EventEmitter {
         implementation: {,
           js: `window.authTimeout *= ${profile.customSettings.timeoutMultiplier};`}
         },
-        description: 'Extend timeout duration for authentication'
+        description: 'Extend timeout duration for authentication',
       });
     }
     // Color blindness adaptations
@@ -665,7 +664,6 @@ export class AccessibilityManager extends EventEmitter {
       frequency: number;
       severity: 'critical' | 'major' | 'minor';
     }>;
-    } {
     const profiles = Array.from(this.userProfiles.values());
     const activeProfiles = profiles.filter(p => p.isActive);
     // Count accessibility needs
@@ -698,7 +696,7 @@ export class AccessibilityManager extends EventEmitter {
       emergencyBypasses: {,
         active: bypasses.filter(b => b.expiresAt > now).length,
         used: bypasses.filter(b => b.usageCount > 0).length,
-        expired: bypasses.filter(b => b.expiresAt <= now).length
+        expired: bypasses.filter(b => b.expiresAt <= now).length,
       },
       topIssues: [,
         { issue: 'Insufficient color contrast', frequency: 35, severity: 'major' },
@@ -758,19 +756,19 @@ export class AccessibilityManager extends EventEmitter {
         method: 'Email Verification',
         accessibility: 95,
         estimated_time: 120,
-        requirements: ['Email access']
+        requirements: ['Email access'],
       },
       {
         method: 'SMS Verification',
         accessibility: 90,
         estimated_time: 60,
-        requirements: ['Phone access']
+        requirements: ['Phone access'],
       },
       {
         method: 'Backup Codes',
         accessibility: 85,
         estimated_time: 30,
-        requirements: ['Pre-generated codes']
+        requirements: ['Pre-generated codes'],
       },
       {
         method: 'Voice Authentication',
@@ -782,7 +780,7 @@ export class AccessibilityManager extends EventEmitter {
         method: 'Human Assistance',
         accessibility: 100,
         estimated_time: 300,
-        requirements: ['Support availability']
+        requirements: ['Support availability'],
       }
     ];
     // Adjust scores based on user profile and context

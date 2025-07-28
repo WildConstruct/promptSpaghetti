@@ -51,7 +51,7 @@ export declare class ReproducibilityValidator {
     /**
      * Comprehensive validation of VFX export reproducibility
      */
-    validateReproducibility()
+    validateReproducibility();
       exportData: VFXExportFormat,
       options?: ReproducibilityValidationOptions
     ): ReproducibilityValidationReport;

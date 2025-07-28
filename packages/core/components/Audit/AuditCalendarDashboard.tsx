@@ -131,7 +131,7 @@ export const AuditCalendarDashboard: React.FC = () => {
           activity_types: filters.activityTypes.length > 0 ? filters.activityTypes : undefined,
           priorities: filters.priorities.length > 0 ? filters.priorities : undefined,
           statuses: filters.statuses.length > 0 ? filters.statuses : undefined,
-          assignees: filters.assignees.length > 0 ? filters.assignees : undefined
+          assignees: filters.assignees.length > 0 ? filters.assignees : undefined,
         },
         display_options: {,
           show_completed: filters.showCompleted,
@@ -167,10 +167,10 @@ export const AuditCalendarDashboard: React.FC = () => {
   };
   // Calendar event renderer
   const dateCellRender = (value: Moment) => {
-    const dayEvents = calendarState.calendarEvents.filter(event =>;)
+    const dayEvents = calendarState.calendarEvents.filter(event =>;);
       moment(event.start).isSame(value, 'day')
     );
-    return ()
+    return ();
       <ul className="events" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
         {dayEvents.slice(0, 3).map(event => ()
           <li key={event.id} style={{ marginBottom: 2 }}>
@@ -258,7 +258,7 @@ export const AuditCalendarDashboard: React.FC = () => {
     try {
       auditCalendarSystem.completeSchedule(scheduleId, {)
         actual_end: new Date(),
-        completion_notes: 'Completed via dashboard'
+        completion_notes: 'Completed via dashboard',
       });
       loadCalendarData();
       setDrawerVisible(false);
@@ -267,7 +267,7 @@ export const AuditCalendarDashboard: React.FC = () => {
     }
   };
   // Render main calendar view
-  const renderCalendarView = () => (;)
+  const renderCalendarView = () => (;);
     <Card 
       title={
         <Space>
@@ -317,7 +317,7 @@ export const AuditCalendarDashboard: React.FC = () => {
     </Card>
   );
   // Render upcoming deadlines
-  const renderUpcomingDeadlines = () => (;)
+  const renderUpcomingDeadlines = () => (;);
     <Card 
       title={<><BellOutlined /> Upcoming Deadlines</>}
       style={{ marginBottom: 16 }}
@@ -354,7 +354,7 @@ export const AuditCalendarDashboard: React.FC = () => {
   // Render overdue schedules alert
   const renderOverdueAlert = () => {
     if (calendarState.overdueSchedules.length === 0) return null;
-    return ()
+    return ();
       <Alert
         message={`${calendarState.overdueSchedules.length} Overdue Schedule${calendarState.overdueSchedules.length > 1 ? 's' : ''}`}
         description="The following audit activities are past their scheduled completion dates and require immediate attention."
@@ -372,11 +372,11 @@ export const AuditCalendarDashboard: React.FC = () => {
   // Render statistics cards
   const renderStatistics = () => {
     const totalSchedules = calendarState.calendarEvents.length;
-    const completedToday = calendarState.calendarEvents.filter(e => ;)
+    const completedToday = calendarState.calendarEvents.filter(e => ;);
       e.status === ScheduleStatus.COMPLETED && moment(e.end).isSame(moment(), 'day')
     ).length;
     const inProgress = calendarState.calendarEvents.filter(e => e.status === ScheduleStatus.IN_PROGRESS).length;
-    return ()
+    return ();
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col span={6}>
           <Card>
@@ -422,7 +422,7 @@ export const AuditCalendarDashboard: React.FC = () => {
     );
   };
   // Render schedule details drawer
-  const renderScheduleDrawer = () => (;)
+  const renderScheduleDrawer = () => (;);
     <Drawer
       title={calendarState.selectedSchedule?.title || 'Schedule Details'}
       width={600}
@@ -447,7 +447,6 @@ export const AuditCalendarDashboard: React.FC = () => {
               </Button>
             )}
           </Space>
-        )
       }
     >
       {calendarState.selectedSchedule && ()
@@ -458,7 +457,7 @@ export const AuditCalendarDashboard: React.FC = () => {
       )}
     </Drawer>
   );
-  return ()
+  return ();
     <div style={{ padding: '24px' }}>
       <div style={{ marginBottom: 24 }}>
         <h1>🗓️ Audit Calendar & Scheduling</h1>
@@ -534,7 +533,7 @@ const AgendaView: React.FC<{
       .sort(([a], [b]) => a.localeCompare(b))
       .slice(0, 30); // Show next 30 days
   }, [events]);
-  return ()
+  return ();
     <div style={{ height: 600, overflowY: 'auto' }}>
       {groupedEvents.map(([date, dayEvents]) => ()
         <div key={date} style={{ marginBottom: 24 }}>
@@ -693,35 +692,31 @@ const ScheduleListView: React.FC<{
         <Button type="link" onClick={() => onScheduleClick(record)}>
           {title}
         </Button>
-      )
     },
     {
       title: 'Activity Type',
       dataIndex: 'type',
       key: 'type',
-      render: (type: AuditActivityType) => ()
+      render: (type: AuditActivityType) => (),
         <Tag>{type.replace('_', ' ').toUpperCase()}</Tag>
-      )
     },
     {
       title: 'Priority',
       dataIndex: 'priority',
       key: 'priority',
-      render: (priority: SchedulePriority) => ()
+      render: (priority: SchedulePriority) => (),
         <Tag color={getPriorityColor(priority)}>
           {priority.toUpperCase()}
         </Tag>
-      )
     },
     {
       title: 'Status',
       dataIndex: 'status', 
       key: 'status',
-      render: (status: ScheduleStatus) => ()
+      render: (status: ScheduleStatus) => (),
         <Tag color={getStatusColor(status)}>
           {status.replace('_', ' ').toUpperCase()}
         </Tag>
-      )
     },
     {
       title: 'Scheduled Start',
@@ -736,7 +731,7 @@ const ScheduleListView: React.FC<{
       render: (assignee: string) => assignee ? <Tag icon={<TeamOutlined />}>{assignee}</Tag> : 'Unassigned'
     }
   ];
-  return ()
+  return ();
     <Card title="All Schedules">
       <Table
         columns={columns}
@@ -778,7 +773,7 @@ const CalendarFiltersPanel: React.FC<unknown> = ({ filters, onFiltersChange }) =
 );
 const CreateScheduleModal: React.FC<unknown> = ({ visible, onCancel, onSubmit }) => {
   const [form] = Form.useForm();
-  return ()
+  return ();
     <Modal
       title="Create Audit Schedule"
       visible={visible}
@@ -849,14 +844,14 @@ const getViewDateRange = (view: string, selectedDate: Moment) => {
       startDate: selectedDate.clone().startOf('day'),
       endDate: selectedDate.clone().endOf('day'),
     };
-  default: // month
+  default: // month,
     return {
       startDate: selectedDate.clone().startOf('month'),
       endDate: selectedDate.clone().endOf('month'),
     };
   }
 };
-const getEventBadgeStatus = (;)
+const getEventBadgeStatus = (;);
   priority: SchedulePriority,
   status: ScheduleStatus,
 ): 'error' | 'success' | 'processing' | 'warning' | 'default' => {
@@ -928,7 +923,7 @@ const EditScheduleModal: React.FC<{
       form.resetFields();
     });
   };
-  return ()
+  return ();
     <Modal
       title={`Edit Schedule: ${schedule?.title || ''}`}
       visible={visible}
@@ -1047,31 +1042,28 @@ const OverdueSchedulesView: React.FC<{
             {title}
           </Space>
         </Button>
-      )
     },
     {
       title: 'Activity Type',
       dataIndex: 'activity_type',
       key: 'activity_type',
-      render: (type: AuditActivityType) => ()
+      render: (type: AuditActivityType) => (),
         <Tag>{type.replace('_', ' ').toUpperCase()}</Tag>
-      )
     },
     {
       title: 'Priority',
       dataIndex: 'priority',
       key: 'priority',
-      render: (priority: SchedulePriority) => ()
+      render: (priority: SchedulePriority) => (),
         <Tag color={getPriorityColor(priority)}>
           {priority.toUpperCase()}
         </Tag>
-      )
     },
     {
       title: 'Original Due Date',
       dataIndex: 'scheduled_end',
       key: 'scheduled_end',
-      render: (date: Date) => ()
+      render: (date: Date) => (),
         <Space>
           <ClockCircleOutlined />
           {moment(date).format('MMM DD, YYYY HH:mm')}
@@ -1085,7 +1077,7 @@ const OverdueSchedulesView: React.FC<{
       key: 'days_overdue',
       render: (_, record: AuditSchedule) => {
         const daysOverdue = moment().diff(moment(record.scheduled_end), 'days');
-        return ()
+        return ();
           <Tag color="red">
             <ExclamationTriangleOutlined /> {daysOverdue} days
           </Tag>
@@ -1101,9 +1093,8 @@ const OverdueSchedulesView: React.FC<{
       title: 'Assignee',
       dataIndex: 'assignee_id',
       key: 'assignee_id',
-      render: (assignee: string) => ()
+      render: (assignee: string) => (),
         assignee ? <Tag icon={<TeamOutlined />}>{assignee}</Tag> : 'Unassigned'
-      )
     },
     {
       title: 'Actions',
@@ -1126,10 +1117,9 @@ const OverdueSchedulesView: React.FC<{
             Reschedule
           </Button>
         </Space>
-      )
     }
   ];
-  return ()
+  return ();
     <div>
       <Card 
         title={
@@ -1194,7 +1184,7 @@ const CalendarAnalyticsView: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState<[Moment, Moment]>([)
     moment().subtract(30, 'days'),
-    moment()
+    moment();
   ]);
   useEffect(() => {
     loadAnalyticsData();
@@ -1214,7 +1204,7 @@ const CalendarAnalyticsView: React.FC = () => {
     }
   }, [dateRange]);
   if (loading) {
-    return ()
+    return ();
       <Card>
         <div style={{ textAlign: 'center', padding: '40px' }}>
           <SyncOutlined spin style={{ fontSize: '24px' }} />
@@ -1223,7 +1213,7 @@ const CalendarAnalyticsView: React.FC = () => {
       </Card>
     );
   }
-  return ()
+  return ();
     <div>
       <Card 
         title="📊 Audit Calendar Analytics"
@@ -1257,7 +1247,7 @@ const CalendarAnalyticsView: React.FC = () => {
               suffix="%"
               prefix={<CheckCircleOutlined />}
               valueStyle={{ 
-                color: (analyticsData?.summary.completion_rate || 0) >= 80 ? '#52c41a' : '#faad14'
+                color: (analyticsData?.summary.completion_rate || 0) >= 80 ? '#52c41a' : '#faad14',
               }}
             />
           </Col>

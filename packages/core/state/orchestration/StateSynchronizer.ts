@@ -124,11 +124,10 @@ export class StateSynchronizer extends EventEmitter {
   private config: SyncConfiguration;
   private isServer: boolean;
   private clientId: string;
-  constructor()
+  constructor();
     config: Partial<SyncConfiguration> = {},
     isServer: boolean = false,
     clientId?: string
-  ) {
     super();
     this.config = {
       batchInterval: 50, // 50ms batching
@@ -367,7 +366,7 @@ export class StateSynchronizer extends EventEmitter {
     });
     try {
       // Use the global conflict resolver
-      const resolutions = await globalConflictResolver.detectAndResolveConflicts(;)
+      const resolutions = await globalConflictResolver.detectAndResolveConflicts(;);
         [conflict.localChange],
         [conflict.remoteChange],
         this.domains.get(conflict.domain)?.getState(),

@@ -369,7 +369,7 @@ export class DataValidationSystem {
           startTime: timeRange?.start,
           endTime: timeRange?.end,
         },
-        limit: 10000 // Reasonable limit for consistency checking
+        limit: 10000 // Reasonable limit for consistency checking,
       });
       // Validate all events
       const violations = await this.validateEventBatch(events);
@@ -394,7 +394,7 @@ export class DataValidationSystem {
           validRecords,
           invalidRecords,
           warningRecords,
-          errorRate: Math.round(errorRate * 100) / 100
+          errorRate: Math.round(errorRate * 100) / 100,
         },
         violations,
         recommendations,
@@ -425,7 +425,7 @@ export class DataValidationSystem {
         startTime: timeRange?.start,
         endTime: timeRange?.end,
       },
-      limit: 50000 // Large sample for quality metrics
+      limit: 50000 // Large sample for quality metrics,
     });
     const totalEvents = events.length;
     if (totalEvents === 0) {
@@ -442,7 +442,7 @@ export class DataValidationSystem {
     // Integrity metrics
     const integrity = this.calculateIntegrityMetrics(events);
     // Overall score and grade
-    const overallScore = (;)
+    const overallScore = (;);
       completeness.score * 0.25 +
       accuracy.score * 0.25 +
       consistency.score * 0.2 +
@@ -615,7 +615,7 @@ export class DataValidationSystem {
         break;
       case 'sum_equals':
         const numericValues = fieldValues.filter((v: unknown) => typeof v === 'number');
-        const sum = numericValues.reduce(;)
+        const sum = numericValues.reduce(;);
           (a: unknown,)
           b: unknown,
         ) => (typeof a === 'number' ? a : 0) + (typeof b === 'number' ? b : 0), 0);
@@ -625,7 +625,7 @@ export class DataValidationSystem {
         break;
       case 'sequential':
         // Check if numeric values are in ascending order
-        const sortedValues = [...fieldValues].sort(;)
+        const sortedValues = [...fieldValues].sort(;);
           (a: unknown,)
           b: unknown,
         ) => (typeof a === 'number' ? a : 0) - (typeof b === 'number' ? b : 0));
@@ -829,7 +829,7 @@ export class DataValidationSystem {
     return {
       score: Math.round(completenessScore * 100) / 100,
       missingFields,
-      requiredFieldsCoverage: Math.round(((requiredFields.length - Object.keys(missingFields).length) / requiredFields.length) * 100)
+      requiredFieldsCoverage: Math.round(((requiredFields.length - Object.keys(missingFields).length) / requiredFields.length) * 100),
     };
   }
   /**
@@ -948,7 +948,7 @@ export class DataValidationSystem {
       }
     }
     const totalTimelinessChecks = events.length;
-    const totalTimelinessIssues = lateArrivals + futureTimestamps + Math.min(;)
+    const totalTimelinessIssues = lateArrivals + futureTimestamps + Math.min(;);
       timestampGaps,
       events.length * 0.1
     ); // Cap gaps at 10%
@@ -1193,7 +1193,6 @@ export class DataValidationSystem {
     recentValidations: number;
     recentFailures: number;
     failureRate: number;
-  } {
     const recentCutoff = Date.now() - (24 * 60 * 60 * 1000); // Last 24 hours;
     const recentValidations = this.validationHistory.filter(v => v.timestamp > recentCutoff);
     const recentFailures = recentValidations.filter(v => !v.passed);
@@ -1202,7 +1201,7 @@ export class DataValidationSystem {
       enabledRules: Array.from(this.validationRules.values()).filter(r => r.enabled).length,
       recentValidations: recentValidations.length,
       recentFailures: recentFailures.length,
-      failureRate: recentValidations.length > 0 ? (recentFailures.length / recentValidations.length) * 100 : 0
+      failureRate: recentValidations.length > 0 ? (recentFailures.length / recentValidations.length) * 100 : 0,
     };
   }
 }

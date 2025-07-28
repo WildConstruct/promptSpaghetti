@@ -7,7 +7,6 @@
  * Comprehensive user listing interface with search, filtering, bulk operations,
  * and detailed user management capabilities for the Backstage Admin Controls system.
  */
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -36,7 +35,6 @@ interface User {
   permissions?: string[];
   teams?: string[];
 }
-
 interface UserFilters {
   searchTerm: string;
   roleFilter: string;
@@ -44,7 +42,6 @@ interface UserFilters {
   departmentFilter: string;
   locationFilter: string;
 }
-
 interface UserManagementState {
   users: User[];
   loading: boolean;
@@ -59,23 +56,21 @@ interface UserManagementState {
   showBulkActions: boolean;
   showAdvancedFilters: boolean;
 }
-
 const UserManagementDashboard: React.FC = () => {
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user: currentUser } = useAuthStore();
-  
   // State management
-  const [state, setState] = useState<UserManagementState>({
+  const [state, setState] = useState<UserManagementState>({)
     users: [],
     loading: true,
     error: null,
-    filters: {
+    filters: {,
       searchTerm: '',
       roleFilter: '',
       statusFilter: '',
       departmentFilter: '',
-      locationFilter: ''
+      locationFilter: '',
     },
     selectedUsers: new Set<string>(),
     viewMode: 'table',
@@ -84,9 +79,8 @@ const UserManagementDashboard: React.FC = () => {
     sortBy: 'name',
     sortOrder: 'asc',
     showBulkActions: false,
-    showAdvancedFilters: false
+    showAdvancedFilters: false,
   });
-
   // Mock data for demonstration - wrapped in useMemo to prevent recreation
   const mockUsers: User[] = useMemo(() => [
     {
@@ -119,7 +113,7 @@ const UserManagementDashboard: React.FC = () => {
       lastLogin: '2025-07-22T18:45:00Z',
       createdAt: '2023-03-10T14:30:00Z',
       permissions: ['project-management'],
-      teams: ['Engineering']
+      teams: ['Engineering'],
     },
     {
       id: 'user-3',
@@ -134,7 +128,7 @@ const UserManagementDashboard: React.FC = () => {
       status: 'pending',
       createdAt: '2025-07-20T09:15:00Z',
       permissions: ['developer'],
-      teams: ['Engineering']
+      teams: ['Engineering'],
     },
     {
       id: 'user-4',
@@ -150,7 +144,7 @@ const UserManagementDashboard: React.FC = () => {
       lastLogin: '2025-07-15T12:00:00Z',
       createdAt: '2023-08-22T11:45:00Z',
       permissions: ['designer'],
-      teams: ['Design']
+      teams: ['Design'],
     },
     {
       id: 'user-5',
@@ -169,7 +163,6 @@ const UserManagementDashboard: React.FC = () => {
       teams: ['Engineering', 'QA']
     }
   ], []); // Empty dependency array since this is static mock data
-
   // Load users data
   useEffect(() => {
     const loadUsers = async () => {
@@ -177,78 +170,67 @@ const UserManagementDashboard: React.FC = () => {
       try {
         // In a real app, this would be an API call
         await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate loading
-        setState(prev => ({ 
+        setState(prev => ({ )
           ...prev, 
           users: mockUsers, 
-          loading: false 
+          loading: false ,
         }));
       } catch {
-        setState(prev => ({ 
+        setState(prev => ({ )
           ...prev, 
           error: 'Failed to load users', 
-          loading: false 
+          loading: false ,
         }));
       }
     };
-
     loadUsers();
   }, [mockUsers]);
-
   // Filter and sort users
   const filteredAndSortedUsers = useMemo(() => {
-    const filtered = state.users.filter(user => {
-      const searchMatch = !state.filters.searchTerm || 
+    const filtered = state.users.filter(user => {)
+      const searchMatch = !state.filters.searchTerm || ;
         user.name.toLowerCase().includes(state.filters.searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(state.filters.searchTerm.toLowerCase()) ||
         user.department?.toLowerCase().includes(state.filters.searchTerm.toLowerCase());
-      
       const roleMatch = !state.filters.roleFilter || user.role === state.filters.roleFilter;
       const statusMatch = !state.filters.statusFilter || user.status === state.filters.statusFilter;
       const deptMatch = !state.filters.departmentFilter || user.department === state.filters.departmentFilter;
       const locationMatch = !state.filters.locationFilter || user.location === state.filters.locationFilter;
-
       return searchMatch && roleMatch && statusMatch && deptMatch && locationMatch;
     });
-
     // Sort users
     filtered.sort((a, b) => {
       const aValue = a[state.sortBy as keyof User] as string;
       const bValue = b[state.sortBy as keyof User] as string;
-      
       if (state.sortOrder === 'asc') {
         return aValue.localeCompare(bValue);
       } else {
         return bValue.localeCompare(aValue);
       }
     });
-
     return filtered;
   }, [state.users, state.filters, state.sortBy, state.sortOrder]);
-
   // Pagination
   const totalPages = Math.ceil(filteredAndSortedUsers.length / state.pageSize);
   const startIndex = (state.currentPage - 1) * state.pageSize;
   const paginatedUsers = filteredAndSortedUsers.slice(startIndex, startIndex + state.pageSize);
-
   // Event handlers
   const handleFilterChange = (key: keyof UserFilters, value: string) => {
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
       filters: { ...prev.filters, [key]: value },
-      currentPage: 1 // Reset to first page when filtering
+      currentPage: 1 // Reset to first page when filtering,
     }));
   };
-
   const handleSort = (field: string) => {
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
       sortBy: field,
-      sortOrder: prev.sortBy === field && prev.sortOrder === 'asc' ? 'desc' : 'asc'
+      sortOrder: prev.sortBy === field && prev.sortOrder === 'asc' ? 'desc' : 'asc',
     }));
   };
-
   const handleSelectUser = (userId: string) => {
-    setState(prev => {
+    setState(prev => {)
       const newSelected = new Set(prev.selectedUsers);
       if (newSelected.has(userId)) {
         newSelected.delete(userId);
@@ -258,23 +240,21 @@ const UserManagementDashboard: React.FC = () => {
       return {
         ...prev,
         selectedUsers: newSelected,
-        showBulkActions: newSelected.size > 0
+        showBulkActions: newSelected.size > 0,
       };
     });
   };
-
   const handleSelectAll = () => {
-    setState(prev => {
+    setState(prev => {)
       const allSelected = prev.selectedUsers.size === paginatedUsers.length;
       const newSelected = allSelected ? new Set<string>() : new Set(paginatedUsers.map(u => u.id));
       return {
         ...prev,
         selectedUsers: newSelected,
-        showBulkActions: newSelected.size > 0
+        showBulkActions: newSelected.size > 0,
       };
     });
   };
-
   const getStatusColor = (status: string) => {
     switch (status) {
     case 'active': return '#10b981';
@@ -284,7 +264,6 @@ const UserManagementDashboard: React.FC = () => {
     default: return '#9ca3af';
     }
   };
-
   const getStatusIcon = (status: string) => {
     switch (status) {
     case 'active': return '🟢';
@@ -294,37 +273,31 @@ const UserManagementDashboard: React.FC = () => {
     default: return '⚫';
     }
   };
-
   const formatLastLogin = (lastLogin?: string) => {
     if (!lastLogin) return 'Never';
     const date = new Date(lastLogin);
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    
     if (diffHours < 1) return 'Just now';
-    if (diffHours < 24) return `${diffHours}h ago`;
-    
+    if (diffHours < 24) return `${diffHours}h ago`;}
     const diffDays = Math.floor(diffHours / 24);
-    if (diffDays < 7) return `${diffDays}d ago`;
-    
+    if (diffDays < 7) return `${diffDays}d ago`;}
     return date.toLocaleDateString();
   };
-
   // Get unique values for filters
   const uniqueRoles = [...new Set(state.users.map(u => u.role))];
   const uniqueDepartments = [...new Set(state.users.map(u => u.department).filter(Boolean))];
   const uniqueLocations = [...new Set(state.users.map(u => u.location).filter(Boolean))];
-
   if (state.loading) {
-    return (
+    return ()
       <div className="user-management-loading" style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         height: '400px',
         flexDirection: 'column',
-        gap: '16px'
+        gap: '16px',
       }}>
         <div style={{
           width: '40px',
@@ -332,18 +305,17 @@ const UserManagementDashboard: React.FC = () => {
           border: '3px solid #f3f4f6',
           borderTop: '3px solid #3b82f6',
           borderRadius: '50%',
-          animation: 'spin 1s linear infinite'
+          animation: 'spin 1s linear infinite',
         }} />
         <p style={{ color: '#6b7280' }}>Loading user directory...</p>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="user-management-dashboard" style={{
       padding: '24px',
       backgroundColor: '#f8f9fa',
-      minHeight: '100vh'
+      minHeight: '100vh',
     }}>
       {/* Header */}
       <div style={{
@@ -358,26 +330,25 @@ const UserManagementDashboard: React.FC = () => {
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'center',
-          marginBottom: '16px'
+          marginBottom: '16px',
         }}>
           <div>
             <h1 style={{
               fontSize: '24px',
               fontWeight: '700',
               color: '#111827',
-              margin: '0 0 8px 0'
+              margin: '0 0 8px 0',
             }}>
               👥 User Management Dashboard
             </h1>
             <p style={{
               color: '#6b7280',
               fontSize: '14px',
-              margin: 0
+              margin: 0,
             }}>
               Manage users, roles, and permissions • Total: {state.users.length} users
             </p>
           </div>
-          
           <div style={{ display: 'flex', gap: '12px' }}>
             <button
               onClick={() => navigate('/')}
@@ -391,7 +362,7 @@ const UserManagementDashboard: React.FC = () => {
                 borderRadius: '6px',
                 cursor: 'pointer',
                 fontSize: '14px',
-                color: '#374151'
+                color: '#374151',
               }}
             >
               <ChevronLeft size={16} />
@@ -399,45 +370,44 @@ const UserManagementDashboard: React.FC = () => {
             </button>
           </div>
         </div>
-
         {/* Quick Stats */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-          gap: '16px'
+          gap: '16px',
         }}>
           {[
             { 
               label: 'Total Users', 
               value: state.users.length, 
               icon: '👥',
-              change: '+23 this week'
+              change: '+23 this week',
             },
             { 
               label: 'Active Users', 
               value: state.users.filter(u => u.status === 'active').length,
               icon: '✅',
-              change: '87.3% online'
+              change: '87.3% online',
             },
             { 
               label: 'Pending', 
               value: state.users.filter(u => u.status === 'pending').length,
               icon: '🔄',
-              change: 'Verification'
+              change: 'Verification',
             },
             { 
               label: 'Issues', 
               value: state.users.filter(u => u.status === 'suspended').length,
               icon: '⚠️',
-              change: 'Violations'
+              change: 'Violations',
             }
-          ].map((stat, index) => (
+          ].map((stat, index) => ()
             <div key={index} style={{
               backgroundColor: '#f9fafb',
               padding: '16px',
               borderRadius: '8px',
               textAlign: 'center',
-              border: '1px solid #e5e7eb'
+              border: '1px solid #e5e7eb',
             }}>
               <div style={{ fontSize: '24px', marginBottom: '4px' }}>
                 {stat.icon}
@@ -446,14 +416,14 @@ const UserManagementDashboard: React.FC = () => {
                 fontSize: '20px', 
                 fontWeight: '700', 
                 color: '#111827',
-                marginBottom: '2px' 
+                marginBottom: '2px' ,
               }}>
                 {stat.value}
               </div>
               <div style={{ 
                 fontSize: '12px', 
                 color: '#6b7280',
-                marginBottom: '2px' 
+                marginBottom: '2px' ,
               }}>
                 {stat.label}
               </div>
@@ -464,14 +434,13 @@ const UserManagementDashboard: React.FC = () => {
           ))}
         </div>
       </div>
-
       {/* Filters and Actions */}
       <div style={{
         backgroundColor: '#ffffff',
         padding: '20px',
         borderRadius: '12px',
         marginBottom: '24px',
-        border: '1px solid #e5e7eb'
+        border: '1px solid #e5e7eb',
       }}>
         {/* Search and Primary Filters */}
         <div style={{ 
@@ -479,7 +448,7 @@ const UserManagementDashboard: React.FC = () => {
           gap: '16px', 
           alignItems: 'center',
           marginBottom: '16px',
-          flexWrap: 'wrap'
+          flexWrap: 'wrap',
         }}>
           {/* Search Input */}
           <div style={{ position: 'relative', minWidth: '300px', flex: '1' }}>
@@ -490,7 +459,7 @@ const UserManagementDashboard: React.FC = () => {
                 left: '12px',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                color: '#9ca3af'
+                color: '#9ca3af',
               }}
             />
             <input
@@ -504,11 +473,10 @@ const UserManagementDashboard: React.FC = () => {
                 border: '1px solid #d1d5db',
                 borderRadius: '8px',
                 fontSize: '14px',
-                backgroundColor: '#ffffff'
+                backgroundColor: '#ffffff',
               }}
             />
           </div>
-
           {/* Role Filter */}
           <select
             value={state.filters.roleFilter}
@@ -519,15 +487,14 @@ const UserManagementDashboard: React.FC = () => {
               borderRadius: '8px',
               fontSize: '14px',
               backgroundColor: '#ffffff',
-              minWidth: '120px'
+              minWidth: '120px',
             }}
           >
             <option value="">All Roles</option>
-            {uniqueRoles.map(role => (
+            {uniqueRoles.map(role => ()
               <option key={role} value={role}>{role}</option>
             ))}
           </select>
-
           {/* Status Filter */}
           <select
             value={state.filters.statusFilter}
@@ -538,7 +505,7 @@ const UserManagementDashboard: React.FC = () => {
               borderRadius: '8px',
               fontSize: '14px',
               backgroundColor: '#ffffff',
-              minWidth: '120px'
+              minWidth: '120px',
             }}
           >
             <option value="">All Status</option>
@@ -547,12 +514,11 @@ const UserManagementDashboard: React.FC = () => {
             <option value="suspended">Suspended</option>
             <option value="inactive">Inactive</option>
           </select>
-
           {/* Advanced Filters Toggle */}
           <button
-            onClick={() => setState(prev => ({
+            onClick={() => setState(prev => ({)
               ...prev, 
-              showAdvancedFilters: !prev.showAdvancedFilters
+              showAdvancedFilters: !prev.showAdvancedFilters,
             }))}
             style={{
               display: 'flex',
@@ -564,27 +530,26 @@ const UserManagementDashboard: React.FC = () => {
               border: '1px solid #d1d5db',
               borderRadius: '8px',
               cursor: 'pointer',
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           >
             <Filter size={16} />
             Advanced
           </button>
         </div>
-
         {/* Advanced Filters Panel */}
-        {state.showAdvancedFilters && (
+        {state.showAdvancedFilters && ()
           <div style={{
             backgroundColor: '#f9fafb',
             padding: '16px',
             borderRadius: '8px',
             border: '1px solid #e5e7eb',
-            marginBottom: '16px'
+            marginBottom: '16px',
           }}>
             <div style={{ 
               display: 'grid', 
               gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: '16px'
+              gap: '16px',
             }}>
               <div>
                 <label style={{
@@ -592,7 +557,7 @@ const UserManagementDashboard: React.FC = () => {
                   fontSize: '12px',
                   fontWeight: '500',
                   color: '#374151',
-                  marginBottom: '4px'
+                  marginBottom: '4px',
                 }}>
                   Department
                 </label>
@@ -605,23 +570,22 @@ const UserManagementDashboard: React.FC = () => {
                     border: '1px solid #d1d5db',
                     borderRadius: '6px',
                     fontSize: '14px',
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
                   }}
                 >
                   <option value="">All Departments</option>
-                  {uniqueDepartments.map(dept => (
+                  {uniqueDepartments.map(dept => ()
                     <option key={dept} value={dept}>{dept}</option>
                   ))}
                 </select>
               </div>
-
               <div>
                 <label style={{
                   display: 'block',
                   fontSize: '12px',
                   fontWeight: '500',
                   color: '#374151',
-                  marginBottom: '4px'
+                  marginBottom: '4px',
                 }}>
                   Location
                 </label>
@@ -634,29 +598,28 @@ const UserManagementDashboard: React.FC = () => {
                     border: '1px solid #d1d5db',
                     borderRadius: '6px',
                     fontSize: '14px',
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
                   }}
                 >
                   <option value="">All Locations</option>
-                  {uniqueLocations.map(location => (
+                  {uniqueLocations.map(location => ()
                     <option key={location} value={location}>{location}</option>
                   ))}
                 </select>
               </div>
             </div>
-
             <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
               <button
-                onClick={() => setState(prev => ({
+                onClick={() => setState(prev => ({)
                   ...prev,
-                  filters: {
+                  filters: {,
                     searchTerm: '',
                     roleFilter: '',
                     statusFilter: '',
                     departmentFilter: '',
-                    locationFilter: ''
+                    locationFilter: '',
                   },
-                  currentPage: 1
+                  currentPage: 1,
                 }))}
                 style={{
                   padding: '6px 12px',
@@ -665,7 +628,7 @@ const UserManagementDashboard: React.FC = () => {
                   border: 'none',
                   borderRadius: '6px',
                   cursor: 'pointer',
-                  fontSize: '12px'
+                  fontSize: '12px',
                 }}
               >
                 Clear All Filters
@@ -673,14 +636,13 @@ const UserManagementDashboard: React.FC = () => {
             </div>
           </div>
         )}
-
         {/* Action Buttons */}
         <div style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '12px'
+          gap: '12px',
         }}>
           <div style={{ display: 'flex', gap: '12px' }}>
             <button
@@ -695,13 +657,12 @@ const UserManagementDashboard: React.FC = () => {
                 borderRadius: '8px',
                 cursor: 'pointer',
                 fontSize: '14px',
-                fontWeight: '500'
+                fontWeight: '500',
               }}
             >
               <UserPlus size={16} />
               Add User
             </button>
-            
             <button
               style={{
                 display: 'flex',
@@ -713,13 +674,12 @@ const UserManagementDashboard: React.FC = () => {
                 border: '1px solid #d1d5db',
                 borderRadius: '8px',
                 cursor: 'pointer',
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             >
               <Download size={16} />
               Export
             </button>
-            
             <button
               style={{
                 display: 'flex',
@@ -731,14 +691,13 @@ const UserManagementDashboard: React.FC = () => {
                 border: '1px solid #d1d5db',
                 borderRadius: '8px',
                 cursor: 'pointer',
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             >
               <RefreshCw size={16} />
               Sync Directory
             </button>
           </div>
-
           {/* View Mode Toggle */}
           <div style={{ display: 'flex', gap: '4px' }}>
             <button
@@ -750,7 +709,7 @@ const UserManagementDashboard: React.FC = () => {
                 border: '1px solid #d1d5db',
                 borderRadius: '6px 0 0 6px',
                 cursor: 'pointer',
-                fontSize: '12px'
+                fontSize: '12px',
               }}
             >
               <List size={14} />
@@ -764,7 +723,7 @@ const UserManagementDashboard: React.FC = () => {
                 border: '1px solid #d1d5db',
                 borderRadius: '0 6px 6px 0',
                 cursor: 'pointer',
-                fontSize: '12px'
+                fontSize: '12px',
               }}
             >
               <Grid size={14} />
@@ -772,9 +731,8 @@ const UserManagementDashboard: React.FC = () => {
           </div>
         </div>
       </div>
-
       {/* Bulk Actions Panel */}
-      {state.showBulkActions && (
+      {state.showBulkActions && ()
         <div style={{
           backgroundColor: '#3b82f6',
           color: '#ffffff',
@@ -783,7 +741,7 @@ const UserManagementDashboard: React.FC = () => {
           marginBottom: '24px',
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
         }}>
           <div>
             <strong>{state.selectedUsers.size} users selected</strong>
@@ -800,7 +758,7 @@ const UserManagementDashboard: React.FC = () => {
                 border: '1px solid rgba(255,255,255,0.3)',
                 borderRadius: '6px',
                 cursor: 'pointer',
-                fontSize: '12px'
+                fontSize: '12px',
               }}
             >
               Update Status
@@ -813,16 +771,16 @@ const UserManagementDashboard: React.FC = () => {
                 border: '1px solid rgba(255,255,255,0.3)',
                 borderRadius: '6px',
                 cursor: 'pointer',
-                fontSize: '12px'
+                fontSize: '12px',
               }}
             >
               Send Email
             </button>
             <button
-              onClick={() => setState(prev => ({ 
+              onClick={() => setState(prev => ({ )
                 ...prev, 
                 selectedUsers: new Set(), 
-                showBulkActions: false 
+                showBulkActions: false ,
               }))}
               style={{
                 padding: '6px 12px',
@@ -831,7 +789,7 @@ const UserManagementDashboard: React.FC = () => {
                 border: 'none',
                 borderRadius: '6px',
                 cursor: 'pointer',
-                fontSize: '12px'
+                fontSize: '12px',
               }}
             >
               Cancel
@@ -839,13 +797,12 @@ const UserManagementDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* User List */}
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: '12px',
         border: '1px solid #e5e7eb',
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}>
         {/* Table Header */}
         <div style={{
@@ -854,27 +811,25 @@ const UserManagementDashboard: React.FC = () => {
           borderBottom: '1px solid #e5e7eb',
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
         }}>
           <h3 style={{
             fontSize: '16px',
             fontWeight: '600',
             color: '#111827',
-            margin: 0
+            margin: 0,
           }}>
             User Directory ({filteredAndSortedUsers.length} users)
           </h3>
-          
           <div style={{ fontSize: '14px', color: '#6b7280' }}>
-            Showing {startIndex + 1}-{Math.min(
+            Showing {startIndex + 1}-{Math.min()
               startIndex + state.pageSize,
               filteredAndSortedUsers.length
             )} of {filteredAndSortedUsers.length}
           </div>
         </div>
-
         {/* Table View */}
-        {state.viewMode === 'table' && (
+        {state.viewMode === 'table' && ()
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
@@ -883,7 +838,7 @@ const UserManagementDashboard: React.FC = () => {
                     padding: '12px 16px', 
                     textAlign: 'left',
                     borderBottom: '1px solid #e5e7eb',
-                    width: '40px'
+                    width: '40px',
                   }}>
                     <input
                       type="checkbox"
@@ -899,7 +854,7 @@ const UserManagementDashboard: React.FC = () => {
                     { key: 'status', label: 'Status', sortable: true },
                     { key: 'lastLogin', label: 'Last Login', sortable: true },
                     { key: 'actions', label: 'Actions', sortable: false }
-                  ].map(column => (
+                  ].map(column => ()
                     <th
                       key={column.key}
                       onClick={column.sortable ? () => handleSort(column.key) : undefined}
@@ -911,12 +866,12 @@ const UserManagementDashboard: React.FC = () => {
                         fontWeight: '600',
                         color: '#374151',
                         cursor: column.sortable ? 'pointer' : 'default',
-                        userSelect: 'none'
+                        userSelect: 'none',
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                         {column.label}
-                        {column.sortable && state.sortBy === column.key && (
+                        {column.sortable && state.sortBy === column.key && ()
                           <span style={{ fontSize: '10px' }}>
                             {state.sortOrder === 'asc' ? '↑' : '↓'}
                           </span>
@@ -927,7 +882,7 @@ const UserManagementDashboard: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginatedUsers.map(user => (
+                {paginatedUsers.map(user => ()
                   <tr key={user.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
                     <td style={{ padding: '16px' }}>
                       <input
@@ -949,7 +904,7 @@ const UserManagementDashboard: React.FC = () => {
                           alignItems: 'center',
                           justifyContent: 'center',
                           fontSize: '14px',
-                          fontWeight: '600'
+                          fontWeight: '600',
                         }}>
                           {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                         </div>
@@ -957,13 +912,13 @@ const UserManagementDashboard: React.FC = () => {
                           <div style={{ 
                             fontSize: '14px', 
                             fontWeight: '500', 
-                            color: '#111827' 
+                            color: '#111827' ,
                           }}>
                             {user.name}
                           </div>
                           <div style={{ 
                             fontSize: '12px', 
-                            color: '#6b7280' 
+                            color: '#6b7280' ,
                           }}>
                             {user.email}
                           </div>
@@ -985,8 +940,8 @@ const UserManagementDashboard: React.FC = () => {
                         borderRadius: '12px',
                         fontSize: '12px',
                         fontWeight: '500',
-                        backgroundColor: `${getStatusColor(user.status)}20`,
-                        color: getStatusColor(user.status)
+                        backgroundColor: `${getStatusColor(user.status)}20`,}
+                        color: getStatusColor(user.status),
                       }}>
                         {getStatusIcon(user.status)}
                         {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
@@ -1003,7 +958,7 @@ const UserManagementDashboard: React.FC = () => {
                           border: '1px solid #d1d5db',
                           borderRadius: '6px',
                           cursor: 'pointer',
-                          color: '#6b7280'
+                          color: '#6b7280',
                         }}
                       >
                         <MoreVertical size={16} />
@@ -1015,16 +970,15 @@ const UserManagementDashboard: React.FC = () => {
             </table>
           </div>
         )}
-
         {/* Cards View */}
-        {state.viewMode === 'cards' && (
+        {state.viewMode === 'cards' && ()
           <div style={{
             padding: '20px',
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-            gap: '20px'
+            gap: '20px',
           }}>
-            {paginatedUsers.map(user => (
+            {paginatedUsers.map(user => ()
               <div
                 key={user.id}
                 style={{
@@ -1033,7 +987,7 @@ const UserManagementDashboard: React.FC = () => {
                   borderRadius: '12px',
                   padding: '20px',
                   transition: 'transform 0.2s, box-shadow 0.2s',
-                  position: 'relative'
+                  position: 'relative',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
@@ -1047,7 +1001,7 @@ const UserManagementDashboard: React.FC = () => {
                 <div style={{
                   position: 'absolute',
                   top: '16px',
-                  right: '16px'
+                  right: '16px',
                 }}>
                   <input
                     type="checkbox"
@@ -1056,7 +1010,6 @@ const UserManagementDashboard: React.FC = () => {
                     style={{ cursor: 'pointer' }}
                   />
                 </div>
-
                 <div style={{ textAlign: 'center', marginBottom: '16px' }}>
                   <div style={{
                     width: '60px',
@@ -1069,28 +1022,25 @@ const UserManagementDashboard: React.FC = () => {
                     justifyContent: 'center',
                     fontSize: '20px',
                     fontWeight: '600',
-                    margin: '0 auto 12px'
+                    margin: '0 auto 12px',
                   }}>
                     {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                   </div>
-                  
                   <h3 style={{
                     fontSize: '16px',
                     fontWeight: '600',
                     color: '#111827',
-                    margin: '0 0 4px 0'
+                    margin: '0 0 4px 0',
                   }}>
                     {user.name}
                   </h3>
-                  
                   <p style={{
                     fontSize: '14px',
                     color: '#6b7280',
-                    margin: '0 0 8px 0'
+                    margin: '0 0 8px 0',
                   }}>
                     {user.email}
                   </p>
-
                   <div style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -1099,50 +1049,45 @@ const UserManagementDashboard: React.FC = () => {
                     borderRadius: '12px',
                     fontSize: '12px',
                     fontWeight: '500',
-                    backgroundColor: `${getStatusColor(user.status)}20`,
-                    color: getStatusColor(user.status)
+                    backgroundColor: `${getStatusColor(user.status)}20`,}
+                    color: getStatusColor(user.status),
                   }}>
                     {getStatusIcon(user.status)}
                     {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
                   </div>
                 </div>
-
                 <div style={{
                   display: 'grid',
                   gap: '8px',
                   fontSize: '14px',
                   color: '#374151',
-                  marginBottom: '16px'
+                  marginBottom: '16px',
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <Shield size={14} style={{ color: '#6b7280' }} />
                     <span>{user.role}</span>
                   </div>
-                  
-                  {user.department && (
+                  {user.department && ()
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <Users size={14} style={{ color: '#6b7280' }} />
                       <span>{user.department}</span>
                     </div>
                   )}
-                  
-                  {user.location && (
+                  {user.location && ()
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <MapPin size={14} style={{ color: '#6b7280' }} />
                       <span>{user.location}</span>
                     </div>
                   )}
-                  
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <Clock size={14} style={{ color: '#6b7280' }} />
                     <span>Last: {formatLastLogin(user.lastLogin)}</span>
                   </div>
                 </div>
-
                 <div style={{
                   display: 'flex',
                   gap: '8px',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
                 }}>
                   <button
                     style={{
@@ -1154,7 +1099,7 @@ const UserManagementDashboard: React.FC = () => {
                       borderRadius: '6px',
                       cursor: 'pointer',
                       fontSize: '12px',
-                      fontWeight: '500'
+                      fontWeight: '500',
                     }}
                   >
                     View Profile
@@ -1168,7 +1113,7 @@ const UserManagementDashboard: React.FC = () => {
                       border: '1px solid #d1d5db',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     Edit
@@ -1178,16 +1123,15 @@ const UserManagementDashboard: React.FC = () => {
             ))}
           </div>
         )}
-
         {/* Pagination */}
-        {totalPages > 1 && (
+        {totalPages > 1 && ()
           <div style={{
             backgroundColor: '#f9fafb',
             padding: '16px 20px',
             borderTop: '1px solid #e5e7eb',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <label style={{ fontSize: '14px', color: '#374151' }}>
@@ -1195,17 +1139,17 @@ const UserManagementDashboard: React.FC = () => {
               </label>
               <select
                 value={state.pageSize}
-                onChange={(e) => setState(prev => ({
+                onChange={(e) => setState(prev => ({)
                   ...prev,
                   pageSize: parseInt(e.target.value),
-                  currentPage: 1
+                  currentPage: 1,
                 }))}
                 style={{
                   padding: '4px 8px',
                   border: '1px solid #d1d5db',
                   borderRadius: '6px',
                   fontSize: '14px',
-                  backgroundColor: '#ffffff'
+                  backgroundColor: '#ffffff',
                 }}
               >
                 <option value={10}>10</option>
@@ -1215,10 +1159,9 @@ const UserManagementDashboard: React.FC = () => {
               </select>
               <span style={{ fontSize: '14px', color: '#6b7280' }}>per page</span>
             </div>
-
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <button
-                onClick={() => setState(prev => ({ 
+                onClick={() => setState(prev => ({ )
                   ...prev, 
                   currentPage: Math.max(1, prev.currentPage - 1) 
                 }))}
@@ -1233,23 +1176,21 @@ const UserManagementDashboard: React.FC = () => {
                   border: '1px solid #d1d5db',
                   borderRadius: '6px',
                   cursor: state.currentPage <= 1 ? 'not-allowed' : 'pointer',
-                  fontSize: '14px'
+                  fontSize: '14px',
                 }}
               >
                 <ChevronLeft size={14} />
                 Previous
               </button>
-
               <span style={{ 
                 fontSize: '14px', 
                 color: '#374151',
-                padding: '0 16px'
+                padding: '0 16px',
               }}>
                 Page {state.currentPage} of {totalPages}
               </span>
-
               <button
-                onClick={() => setState(prev => ({ 
+                onClick={() => setState(prev => ({ )
                   ...prev, 
                   currentPage: Math.min(totalPages, prev.currentPage + 1) 
                 }))}
@@ -1264,7 +1205,7 @@ const UserManagementDashboard: React.FC = () => {
                   border: '1px solid #d1d5db',
                   borderRadius: '6px',
                   cursor: state.currentPage >= totalPages ? 'not-allowed' : 'pointer',
-                  fontSize: '14px'
+                  fontSize: '14px',
                 }}
               >
                 Next
@@ -1274,7 +1215,6 @@ const UserManagementDashboard: React.FC = () => {
           </div>
         )}
       </div>
-
       {/* Loading Animation */}
       <style>{`
         @keyframes spin {

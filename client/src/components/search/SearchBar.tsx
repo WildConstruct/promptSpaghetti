@@ -6,10 +6,8 @@
  * Primary search input with real-time search, history, and suggestions.
  * Integrates with SearchContext for unified state management.
  */
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useSearch } from './SearchContext';
-
 interface SearchBarProps {
   placeholder?: string;
   autoFocus?: boolean;
@@ -19,7 +17,7 @@ interface SearchBarProps {
   className?: string;
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({
+export const SearchBar: React.FC<SearchBarProps> = ({)
   placeholder = 'Search...',
   autoFocus = false,
   showHistory = true,
@@ -36,9 +34,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     hasActiveFilters,
     resetQuery
   } = useSearch();
-
   const [isOpen, setIsOpen] = useState(false);
-  const [suggestions] = useState<string[]>([
+  const [suggestions] = useState<string[]>([)
     'name:',
     'type:',
     'modified:',
@@ -46,17 +43,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     'author:',
     'created:'
   ]); // Field suggestions for advanced search
-
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setText(value);
     setIsOpen(value.length > 0 || showHistory);
   };
-
   // Handle search submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,34 +60,29 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       inputRef.current?.blur();
     }
   };
-
   // Handle history item click
   const handleHistoryClick = (historyQuery: unknown) => {
     setText(historyQuery.text);
     setIsOpen(false);
     onSearch?.(historyQuery.text);
   };
-
   // Handle suggestion click
   const handleSuggestionClick = (suggestion: string) => {
     const currentText = query.text;
     const lastSpaceIndex = currentText.lastIndexOf(' ');
-    const newText = lastSpaceIndex >= 0 
+    const newText = lastSpaceIndex >= 0 ;
       ? currentText.substring(0, lastSpaceIndex + 1) + suggestion
       : suggestion;
-    
     setText(newText);
     inputRef.current?.focus();
     setIsOpen(false);
   };
-
   // Handle clear
   const handleClear = () => {
     resetQuery();
     setIsOpen(false);
     inputRef.current?.focus();
   };
-
   // Handle escape key
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
@@ -101,46 +90,39 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       inputRef.current?.blur();
     }
   };
-
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
+      if ()
         dropdownRef.current && 
         !dropdownRef.current.contains(event.target as Node) &&
         !inputRef.current?.contains(event.target as Node)
-      ) {
         setIsOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
   // Auto-focus if requested
   useEffect(() => {
     if (autoFocus && inputRef.current) {
       inputRef.current.focus();
     }
   }, [autoFocus]);
-
   const searchBarStyle: React.CSSProperties = {
     position: 'relative',
-    width: '100%'
+    width: '100%',
   };
-
   const inputContainerStyle: React.CSSProperties = {
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    border: `2px solid ${error ? '#dc2626' : hasActiveFilters ? '#3b82f6' : '#e5e7eb'}`,
+    border: `2px solid ${error ? '#dc2626' : hasActiveFilters ? '#3b82f6' : '#e5e7eb'}`,}
     borderRadius: '8px',
     transition: 'border-color 0.2s, box-shadow 0.2s',
     boxShadow: isOpen ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none'
   };
-
   const inputStyle: React.CSSProperties = {
     flex: 1,
     padding: '12px 16px',
@@ -149,9 +131,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     fontSize: '14px',
     outline: 'none',
     backgroundColor: 'transparent',
-    color: '#1f2937'
+    color: '#1f2937',
   };
-
   const iconButtonStyle: React.CSSProperties = {
     padding: '8px',
     border: 'none',
@@ -161,9 +142,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     fontSize: '16px',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   };
-
   const dropdownStyle: React.CSSProperties = {
     position: 'absolute',
     top: '100%',
@@ -178,11 +158,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     overflowY: 'auto',
     boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
   };
-
   const sectionStyle: React.CSSProperties = {
-    padding: '8px 0'
+    padding: '8px 0',
   };
-
   const sectionHeaderStyle: React.CSSProperties = {
     padding: '8px 16px',
     fontSize: '12px',
@@ -190,9 +168,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     color: '#6b7280',
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
-    borderBottom: '1px solid #f3f4f6'
+    borderBottom: '1px solid #f3f4f6',
   };
-
   const itemStyle: React.CSSProperties = {
     padding: '8px 16px',
     cursor: 'pointer',
@@ -201,17 +178,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    transition: 'background-color 0.1s'
+    transition: 'background-color 0.1s',
   };
-
-  const filteredSuggestions = suggestions.filter(s => 
+  const filteredSuggestions = suggestions.filter(s => ;)
     query.text.toLowerCase().includes(s.toLowerCase())
   );
-
   const recentHistory = searchHistory.slice(0, 5);
-
-  return (
-    <div className={`search-bar ${className}`} style={searchBarStyle}>
+  return ()
+    <div className={`search-bar ${className}`} style={searchBarStyle}>}
       <form onSubmit={handleSubmit}>
         <div style={inputContainerStyle}>
           <input
@@ -225,9 +199,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             style={inputStyle}
             disabled={isLoading}
           />
-          
           {/* Loading indicator */}
-          {isLoading && (
+          {isLoading && ()
             <div style={iconButtonStyle}>
               <div style={{
                 width: '16px',
@@ -235,13 +208,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 border: '2px solid #e5e7eb',
                 borderTopColor: '#3b82f6',
                 borderRadius: '50%',
-                animation: 'spin 1s linear infinite'
+                animation: 'spin 1s linear infinite',
               }} />
             </div>
           )}
-          
           {/* Clear button */}
-          {!isLoading && (query.text || hasActiveFilters) && (
+          {!isLoading && (query.text || hasActiveFilters) && ()
             <button
               type="button"
               onClick={handleClear}
@@ -251,7 +223,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               ✕
             </button>
           )}
-          
           {/* Search button */}
           <button
             type="submit"
@@ -260,7 +231,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               backgroundColor: '#3b82f6',
               color: '#FFFFFF',
               borderRadius: '6px',
-              margin: '4px'
+              margin: '4px',
             }}
             disabled={isLoading || !query.text.trim()}
             title="Search"
@@ -269,9 +240,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           </button>
         </div>
       </form>
-
       {/* Error message */}
-      {error && (
+      {error && ()
         <div style={{
           marginTop: '4px',
           padding: '6px 12px',
@@ -279,14 +249,13 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           border: '1px solid #fecaca',
           borderRadius: '4px',
           fontSize: '12px',
-          color: '#dc2626'
+          color: '#dc2626',
         }}>
           {error}
         </div>
       )}
-
       {/* Active filters indicator */}
-      {hasActiveFilters && (
+      {hasActiveFilters && ()
         <div style={{
           marginTop: '4px',
           padding: '4px 8px',
@@ -297,7 +266,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           color: '#1d4ed8',
           display: 'flex',
           alignItems: 'center',
-          gap: '4px'
+          gap: '4px',
         }}>
           <span>🔽 Filters active</span>
           <button
@@ -308,22 +277,21 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               color: '#1d4ed8',
               cursor: 'pointer',
               fontSize: '11px',
-              textDecoration: 'underline'
+              textDecoration: 'underline',
             }}
           >
             Clear all
           </button>
         </div>
       )}
-
       {/* Dropdown */}
-      {isOpen && (showHistory || showSuggestions) && (
+      {isOpen && (showHistory || showSuggestions) && ()
         <div ref={dropdownRef} style={dropdownStyle}>
           {/* Search suggestions */}
-          {showSuggestions && filteredSuggestions.length > 0 && (
+          {showSuggestions && filteredSuggestions.length > 0 && ()
             <div style={sectionStyle}>
               <div style={sectionHeaderStyle}>Search Fields</div>
-              {filteredSuggestions.map(suggestion => (
+              {filteredSuggestions.map(suggestion => ()
                 <div
                   key={suggestion}
                   style={itemStyle}
@@ -349,12 +317,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               ))}
             </div>
           )}
-
           {/* Search history */}
-          {showHistory && recentHistory.length > 0 && (
+          {showHistory && recentHistory.length > 0 && ()
             <div style={sectionStyle}>
               <div style={sectionHeaderStyle}>Recent Searches</div>
-              {recentHistory.map((historyItem, index) => (
+              {recentHistory.map((historyItem, index) => ()
                 <div
                   key={index}
                   style={itemStyle}
@@ -368,13 +335,13 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 >
                   <span style={{ color: '#6b7280' }}>🕐</span>
                   <span>{historyItem.text}</span>
-                  {historyItem.filters.length > 0 && (
+                  {historyItem.filters.length > 0 && ()
                     <span style={{
                       fontSize: '11px',
                       color: '#3b82f6',
                       backgroundColor: '#dbeafe',
                       padding: '2px 6px',
-                      borderRadius: '10px'
+                      borderRadius: '10px',
                     }}>
                       +{historyItem.filters.length} filters
                     </span>
@@ -383,22 +350,20 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               ))}
             </div>
           )}
-
           {/* Empty state */}
           {(!showHistory || recentHistory.length === 0) && 
-           (!showSuggestions || filteredSuggestions.length === 0) && (
+           (!showSuggestions || filteredSuggestions.length === 0) && ()
             <div style={{
               padding: '20px',
               textAlign: 'center',
               color: '#9ca3af',
-              fontSize: '14px'
+              fontSize: '14px',
             }}>
               Start typing to search...
             </div>
           )}
         </div>
       )}
-
       <style>{`
         @keyframes spin {
           to {

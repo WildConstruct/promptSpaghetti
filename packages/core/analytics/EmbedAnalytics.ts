@@ -501,7 +501,7 @@ export class EmbedAnalytics extends EventEmitter {
       retentionDays: config.retentionDays || 90,
       samplingRate: config.samplingRate || 1.0,
       batchSize: config.batchSize || 100,
-      flushInterval: config.flushInterval || 30000
+      flushInterval: config.flushInterval || 30000,
     };
     this.initializeTracking();
   }
@@ -568,7 +568,7 @@ export class EmbedAnalytics extends EventEmitter {
       error: {,
         name: error.name,
         message: error.message,
-        stack: this.config.privacyLevel === 'detailed' ? error.stack : undefined
+        stack: this.config.privacyLevel === 'detailed' ? error.stack : undefined,
       },
       ...context
     });
@@ -662,7 +662,7 @@ export class EmbedAnalytics extends EventEmitter {
     type: ReportType,
     timeRange: TimeRange,
     filters: ReportFilter[] = [],
-    metrics: ReportMetric[] = []
+    metrics: ReportMetric[] = [],
   ): Promise<AnalyticsReport> {
     const reportId = this.generateReportId();
     try {
@@ -750,7 +750,6 @@ export class EmbedAnalytics extends EventEmitter {
     queueSize: number;
     sessionCount: number;
     errors: number;
-    } {
     return {
       tracking: this.isTracking,
       queueSize: this.eventQueue.length,
@@ -1011,7 +1010,7 @@ export class EmbedAnalytics extends EventEmitter {
   }
   private trackPerformanceEntry(entry: PerformanceEntry): void {
     const metrics: Partial<PerformanceMetrics> = {
-      timestamp: new Date(entry.startTime)
+      timestamp: new Date(entry.startTime),
     };
     if (entry.entryType === 'navigation') {
       const navEntry = entry as PerformanceNavigationTiming;
@@ -1229,7 +1228,7 @@ export class EmbedAnalytics extends EventEmitter {
         description: 'User engagement has increased by 15% over the past week',
         confidence: 0.85,
         actionable: true,
-        recommendation: 'Continue current engagement strategies'
+        recommendation: 'Continue current engagement strategies',
       }
     ];
   }

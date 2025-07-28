@@ -231,7 +231,7 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
       console.error('Failed to execute bulk assignment:', error);
     }
   };
-  return ()
+  return ();
     <div className="bulk-assignment-tools">
       <BulkAssignmentHeader
         assignmentType={assignmentType}
@@ -243,7 +243,7 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
             ...prev,
             template,
             parameters: { ...prev.parameters, ...template.defaultParameters },
-            resources: availableResources.filter(r => template.defaultResources.includes(r.id))
+            resources: availableResources.filter(r => template.defaultResources.includes(r.id)),
           }));
         }}
         availableTemplates={availableTemplates}
@@ -366,10 +366,10 @@ const BulkAssignmentHeader: React.FC<BulkAssignmentHeaderProps> = ({)
     };
     return icons[assignmentType];
   };
-  const applicableTemplates = availableTemplates.filter(;)
+  const applicableTemplates = availableTemplates.filter(;);
     template => template.assignmentType === assignmentType && template.operationType === operationType
   );
-  return ()
+  return ();
     <div className="bulk-assignment-header">
       <div className="operation-title">
         <span className="operation-icon">{getOperationIcon()}</span>
@@ -420,7 +420,7 @@ const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
   onStepChange,
   canProceed
 }) => {
-  return ()
+  return ();
     <div className="bulk-assignment-wizard">
       {steps.map((step) => ()
         <div
@@ -491,7 +491,7 @@ const TargetSelectionStep: React.FC<TargetSelectionStepProps> = ({)
       onTargetsChange(filteredTargets);
     }
   };
-  return ()
+  return ();
     <div className="target-selection-step">
       <div className="selection-controls">
         <div className="search-filters">
@@ -600,11 +600,11 @@ const TargetCard: React.FC<TargetCardProps> = ({)
     };
     return icons[type as keyof typeof icons] || '📄';
   };
-  const currentAssignments = target.currentAssignments?.filter(;)
+  const currentAssignments = target.currentAssignments?.filter(;);
     assignment => assignment.assignmentType === assignmentType
   ) || [];
   const conflicts = target.conflicts || [];
-  return ()
+  return ();
     <div className={`target-card ${selected ? 'selected' : ''}`}>}
       <div className="target-header">
         <input
@@ -705,7 +705,7 @@ const BulkAssignmentActions: React.FC<BulkAssignmentActionsProps> = ({)
   isExecuting,
   readonly
 }) => {
-  return ()
+  return ();
     <div className="bulk-assignment-actions">
       <div className="primary-actions">
         {currentStep > 1 && ()

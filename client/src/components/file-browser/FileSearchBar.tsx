@@ -7,7 +7,6 @@
  * - Keyboard shortcuts
  * - Clear and reset functionality
  */
-
 import React, { useState, useEffect, useMemo } from 'react';
 
 export interface FileSearchOptions {
@@ -29,7 +28,7 @@ export interface FileSearchBarProps {
   className?: string;
 }
 
-export const FileSearchBar: React.FC<FileSearchBarProps> = ({
+export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
   value,
   onChange,
   placeholder = 'Search files...',
@@ -42,64 +41,54 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
   const [localValue, setLocalValue] = useState(value);
   const [isFocused, setIsFocused] = useState(false);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
-  const [searchOptions, setSearchOptions] = useState<FileSearchOptions>({
+  const [searchOptions, setSearchOptions] = useState<FileSearchOptions>({)
     includeContents: false,
     caseSensitive: false,
     useRegex: false,
     includeFolders: true,
     fileTypes: ['.psg', '.txt', '.md', '.json']
   });
-
   // Debounced search
-  const debouncedOnChange = useMemo(
+  const debouncedOnChange = useMemo(;)
     () => debounce((searchValue: string) => {
       onChange(searchValue);
     }, debounceMs),
     [onChange, debounceMs]
   );
-
   useEffect(() => {
     debouncedOnChange(localValue);
   }, [localValue, debouncedOnChange]);
-
   // Update local value when prop value changes
   useEffect(() => {
     setLocalValue(value);
   }, [value]);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocalValue(e.target.value);
   };
-
   const handleClear = () => {
     setLocalValue('');
     onChange('');
   };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       handleClear();
       (e.target as HTMLInputElement).blur();
     }
   };
-
   const handleAdvancedOptionChange = (option: keyof FileSearchOptions, value: boolean) => {
     const newOptions = { ...searchOptions, [option]: value };
     setSearchOptions(newOptions);
     onAdvancedSearch?.(newOptions);
   };
-
   const handleFileTypeChange = (fileType: string, checked: boolean) => {
-    const newFileTypes = checked 
+    const newFileTypes = checked ;
       ? [...searchOptions.fileTypes, fileType]
       : searchOptions.fileTypes.filter(type => type !== fileType);
-    
     const newOptions = { ...searchOptions, fileTypes: newFileTypes };
     setSearchOptions(newOptions);
     onAdvancedSearch?.(newOptions);
   };
-
-    return (
+    return ()
     <div 
       className={`file-search-bar ${className}`}
       style={{
@@ -107,7 +96,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
         display: 'flex',
         alignItems: 'center',
         flex: 1,
-        maxWidth: '400px'
+        maxWidth: '400px',
       }}
     >
       {/* Main search input */}
@@ -117,10 +106,10 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
           display: 'flex',
           alignItems: 'center',
           flex: 1,
-          border: `1px solid ${isFocused ? '#007bff' : '#ddd'}`,
+          border: `1px solid ${isFocused ? '#007bff' : '#ddd'}`,}
           borderRadius: '4px',
           backgroundColor: '#fff',
-          transition: 'border-color 0.2s ease'
+          transition: 'border-color 0.2s ease',
         }}
       >
         {/* Search icon */}
@@ -129,12 +118,11 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
             padding: '0 8px',
             color: '#666',
             fontSize: '16px',
-            pointerEvents: 'none'
+            pointerEvents: 'none',
           }}
         >
           🔍
         </div>
-
         {/* Input field */}
         <input
           type="text"
@@ -150,12 +138,11 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
             border: 'none',
             outline: 'none',
             fontSize: '14px',
-            backgroundColor: 'transparent'
+            backgroundColor: 'transparent',
           }}
         />
-
         {/* Clear button */}
-        {localValue && (
+        {localValue && ()
           <button
             onClick={handleClear}
             style={{
@@ -167,7 +154,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
               fontSize: '16px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
             onMouseEnter={(e) => {
               (e.target as HTMLElement).style.backgroundColor = '#f0f0f0';
@@ -181,9 +168,8 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
           </button>
         )}
       </div>
-
       {/* Advanced search toggle */}
-      {showAdvanced && (
+      {showAdvanced && ()
         <button
           onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}
           style={{
@@ -194,16 +180,15 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
             borderRadius: '4px',
             cursor: 'pointer',
             fontSize: '12px',
-            color: showAdvancedOptions ? '#1976d2' : '#666'
+            color: showAdvancedOptions ? '#1976d2' : '#666',
           }}
           title="Advanced search options"
         >
           ⚙️
         </button>
       )}
-
       {/* Advanced search options panel */}
-      {showAdvancedOptions && (
+      {showAdvancedOptions && ()
         <div
           style={{
             position: 'absolute',
@@ -216,13 +201,12 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
             padding: '12px',
             zIndex: 100,
-            marginTop: '4px'
+            marginTop: '4px',
           }}
         >
           <div style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '8px' }}>
             Search Options
           </div>
-          
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <label style={{ display: 'flex', alignItems: 'center', fontSize: '12px' }}>
               <input 
@@ -261,13 +245,12 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
               Include folders
             </label>
           </div>
-
           <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid #eee' }}>
             <div style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '4px' }}>
               File Types
             </div>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              {['.psg', '.txt', '.md', '.json'].map(ext => (
+              {['.psg', '.txt', '.md', '.json'].map(ext => ()
                 <label key={ext} style={{ display: 'flex', alignItems: 'center', fontSize: '11px' }}>
                   <input 
                     type="checkbox" 
@@ -287,9 +270,9 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
 };
 
 // Debounce utility function
-function debounce<T extends (...args: unknown[]) => unknown>(
+function debounce<T extends (...args: unknown[]) => unknown>()
   func: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {

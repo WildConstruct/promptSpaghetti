@@ -461,7 +461,7 @@ export const BRANCHING_DEFAULTS = {
   REQUIRE_REVIEW_BY_DEFAULT: false,
   ALLOW_FORCE_PUSH_BY_DEFAULT: false,
   CONFLICT_RESOLUTION_TIMEOUT: 300000, // 5 minutes
-  MERGE_TIMEOUT: 600000 // 10 minutes
+  MERGE_TIMEOUT: 600000 // 10 minutes,
 } as const;
 
 export const BRANCH_TYPE_DESCRIPTIONS = {
@@ -469,26 +469,26 @@ export const BRANCH_TYPE_DESCRIPTIONS = {
   feature: 'Feature development branch',
   hotfix: 'Hotfix branch for urgent fixes',
   release: 'Release preparation branch',
-  experiment: 'Experimental branch for testing'
+  experiment: 'Experimental branch for testing',
 } as const;
 
 export const BRANCH_STATUS_DESCRIPTIONS = {
   active: 'Active development branch',
   merged: 'Branch has been merged',
   abandoned: 'Branch has been abandoned',
-  archived: 'Branch has been archived'
+  archived: 'Branch has been archived',
 } as const;
 
 export const PROTECTION_LEVEL_DESCRIPTIONS = {
   none: 'No protection - anyone can push',
   protected: 'Protected - requires review',
-  locked: 'Locked - only admins can push'
+  locked: 'Locked - only admins can push',
 } as const;
 
 export const MERGE_STRATEGY_DESCRIPTIONS = {
   merge: 'Create a merge commit',
   squash: 'Squash commits into one',
-  rebase: 'Rebase and merge'
+  rebase: 'Rebase and merge',
 } as const;
 
 // Event types for real-time updates

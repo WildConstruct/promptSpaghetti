@@ -60,14 +60,13 @@ export class GenericHTTPAdapter extends BaseAIModel {
   private config: HTTPConfig;
   private requestMapping: HTTPRequestMapping;
   private defaultEndpoint: string;
-  constructor()
+  constructor();
     id: string, 
     config: HTTPConfig, 
     metadata: Partial<ModelMetadata>,
     capabilities: Partial<ModelCapabilities>,
     requestMapping: HTTPRequestMapping,
-    defaultEndpoint: string = '/generate'
-  ) {
+    defaultEndpoint: string = '/generate',
     const fullMetadata: ModelMetadata = {
       name: metadata.name || 'Generic HTTP Model',
       version: metadata.version || '1.0',
@@ -77,12 +76,12 @@ export class GenericHTTPAdapter extends BaseAIModel {
       costPerToken: metadata.costPerToken || 0,
       averageLatency: metadata.averageLatency || 2000,
       maxConcurrency: metadata.maxConcurrency || 10,
-      rateLimit: metadata.rateLimit || {
+      rateLimit: metadata.rateLimit || {,
         requestsPerMinute: 100,
         tokensPerMinute: 10000,
       },
       tags: metadata.tags || ['custom', 'http'],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     const fullCapabilities: ModelCapabilities = {
       inputTypes: capabilities.inputTypes || ['text', 'json'],
@@ -169,7 +168,7 @@ export class GenericHTTPAdapter extends BaseAIModel {
       const response = await fetch(url, {)
         method: 'GET',
         headers: this._buildHeaders(),
-        signal: AbortSignal.timeout(this.config.timeout || 10000)
+        signal: AbortSignal.timeout(this.config.timeout || 10000),
       });
       if (!response.ok) {
         throw new Error(`Health check failed: ${response.status} ${response.statusText}`);}
@@ -191,7 +190,7 @@ export class GenericHTTPAdapter extends BaseAIModel {
         ...this._buildHeaders(),
         ...options?.headers
       },
-      signal: AbortSignal.timeout(options?.timeout || this.config.timeout || 30000)
+      signal: AbortSignal.timeout(options?.timeout || this.config.timeout || 30000),
     };
     if (method !== 'GET' && payload) {
       fetchOptions.body = JSON.stringify(payload);

@@ -46,7 +46,7 @@ async function basicAuditLogging() {
     purpose: 'quarterly report',
     ipAddress: '192.168.1.100',
     sessionId: 'session-abc-123',
-    requestedAt: new Date()
+    requestedAt: new Date(),
   };
   await auditLogger.logDataAccess()
     context,
@@ -72,7 +72,7 @@ async function basicAuditLogging() {
     metadata: {,
       grantedTo: 'user789',
       permissions: ['read', 'export'],
-      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days,
     }
   });
   console.log('✓ Logged access grant operation');
@@ -183,7 +183,7 @@ async function integratedAuditExample() {
     email: 'john.doe@example.com',
     ssn: '123-45-6789',
     creditCard: '4111-1111-1111-1111',
-    address: '123 Main St'
+    address: '123 Main St',
   };
   const context: OperationContext = {
     userId: 'support_agent_001',
@@ -191,7 +191,7 @@ async function integratedAuditExample() {
     purpose: 'customer verification',
     ipAddress: '192.168.10.25',
     sessionId: 'support-session-456',
-    requestedAt: new Date()
+    requestedAt: new Date(),
   };
   // This will automatically classify the data and check enforcement
   await auditIntegration.logDataAccess()
@@ -225,7 +225,7 @@ async function integratedAuditExample() {
       userId: 'admin001',
       userRole: 'security_admin',
       ipAddress: '10.0.0.5',
-      requestedAt: new Date()
+      requestedAt: new Date(),
     },
     {
       userId: 'analyst002',
@@ -236,7 +236,7 @@ async function integratedAuditExample() {
     {
       approvedBy: 'ciso',
       expiresIn: '30 days',
-      justification: 'Annual audit requirement'
+      justification: 'Annual audit requirement',
     }
   );
   console.log('✓ Logged administrative access grant');
@@ -253,7 +253,7 @@ async function integratedAuditExample() {
   );
   console.log('✓ Logged security anomaly event');
   // Generate compliance report
-  const report = await auditIntegration.generateComplianceReport(;)
+  const report = await auditIntegration.generateComplianceReport(;);
     new Date(Date.now() - 24 * 60 * 60 * 1000), // Last 24 hours
     new Date(),
     { includeDetails: false }
@@ -306,7 +306,7 @@ async function auditEventsExample() {
     userRole: 'temp_contractor',
     purpose: 'data_export',
     ipAddress: '203.0.113.0', // External IP
-    requestedAt: new Date()
+    requestedAt: new Date(),
   };
   // Multiple failed access attempts
   for (let i = 0; i < 4; i++) {
@@ -320,7 +320,7 @@ async function auditEventsExample() {
       success: false,
       denialReason: 'Insufficient privileges',
       anomalyDetected: true,
-      riskScore: 75 + i * 5
+      riskScore: 75 + i * 5,
     });
   }
   console.log('\n✓ Simulated suspicious activity logged');
@@ -339,9 +339,9 @@ async function workflowAuditExample() {
     userRole: 'data_scientist',
     purpose: 'model_training',
     systemId: 'ml_pipeline',
-    requestedAt: new Date()
+    requestedAt: new Date(),
   };
-  const correlationId = await auditIntegration.startAuditTrail(;)
+  const correlationId = await auditIntegration.startAuditTrail(;);
     'ml_training_workflow_001',
     workflowContext,
     {
@@ -381,7 +381,7 @@ async function workflowAuditExample() {
   console.log('\n📋 Workflow Audit Trail Summary:');
   console.log(`  Correlation ID: ${correlationId}`);}
   console.log(`  Total Steps: ${correlatedLogs.length}`);}
-  console.log(`  Duration: ${)
+  console.log(`  Duration: ${)}
     correlatedLogs.length > 0 
       ? new Date(correlatedLogs[correlatedLogs.length - 1].timestamp).getTime() - 
         new Date(correlatedLogs[0].timestamp).getTime() 

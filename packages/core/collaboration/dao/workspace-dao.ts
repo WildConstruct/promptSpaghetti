@@ -281,7 +281,6 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .where('workspace_id = $1 AND user_id = $2', )
         bindParams.workspaceId(workspaceId), 
         bindParams.userId(userId)
-      )
       .build();
     const result = await this.db.query(query, params);
     if (result.rowCount === 0) {
@@ -299,7 +298,6 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .where('workspace_id = $1 AND user_id = $2', )
         bindParams.workspaceId(workspaceId), 
         bindParams.userId(userId)
-      )
       .returning()
       .build();
     const result = await this.db.query<WorkspaceMember>(query, params);
@@ -344,7 +342,6 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .where('project_id = $1 AND user_id = $2', )
         bindParams.projectId(projectId), 
         bindParams.userId(userId)
-      )
       .build();
     const result = await this.db.query(query, params);
     if (result.rowCount === 0) {
@@ -362,7 +359,6 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .where('project_id = $1 AND user_id = $2', )
         bindParams.projectId(projectId), 
         bindParams.userId(userId)
-      )
       .returning()
       .build();
     const result = await this.db.query<ProjectMember>(query, params);
@@ -402,7 +398,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
   async getWorkspaceActivity()
     workspaceId: WorkspaceId, 
     limit: number = 50, 
-    offset: number = 0
+    offset: number = 0,
   ): Promise<ActivityEvent[]> {
     const { query, params } = QueryBuilder
       .select()

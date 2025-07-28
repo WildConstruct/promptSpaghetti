@@ -37,14 +37,14 @@ const initialState: LockingState = {
 };
 
 export const useLockingStore = create<LockingStore>()()
-  devtools()
+  devtools();
     (set, get) => ({)
       ...initialState,
       // Utility actions
       clearError: () => set({ error: null }),
       setLoading: (loading: boolean) => set({ isLoading: loading }),
       // Lock management
-      fetchLocks: async (workspaceId: string) => {
+      fetchLocks: async (workspaceId: string) => {,
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_BASE}/api/locking/workspaces/${workspaceId}/locks`);}
@@ -58,7 +58,7 @@ export const useLockingStore = create<LockingStore>()()
           });
         }
       },
-      acquireLock: async (request: LockRequest) => {
+      acquireLock: async (request: LockRequest) => {,
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_BASE}/api/locking/locks/acquire`, {)}
@@ -167,7 +167,7 @@ export const useLockingStore = create<LockingStore>()()
           }
           // Update conflict in local state
           set(state => ({)
-            conflicts: state.conflicts.map(conflict =>)
+            conflicts: state.conflicts.map(conflict =>),
               conflict.id === conflictId
                 ? { ...conflict, status: 'resolved' as const, resolved_at: new Date().toISOString() }
                 : conflict
@@ -182,7 +182,7 @@ export const useLockingStore = create<LockingStore>()()
         }
       },
       // Queue management
-      fetchQueue: async (workspaceId: string) => {
+      fetchQueue: async (workspaceId: string) => {,
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_BASE}/api/locking/workspaces/${workspaceId}/lock-queue`);}
@@ -238,7 +238,7 @@ export const useLockingStore = create<LockingStore>()()
           });
         }
       },
-      markNotificationAsRead: async (notificationId: string) => {
+      markNotificationAsRead: async (notificationId: string) => {,
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_BASE}/api/locking/lock-notifications/${notificationId}/read`, {)}
@@ -251,7 +251,7 @@ export const useLockingStore = create<LockingStore>()()
           }
           // Update notification in local state
           set(state => ({)
-            notifications: state.notifications.map(notification =>)
+            notifications: state.notifications.map(notification =>),
               notification.id === notificationId
                 ? { ...notification, read_at: new Date().toISOString() }
                 : notification
@@ -266,7 +266,7 @@ export const useLockingStore = create<LockingStore>()()
         }
       },
       // Statistics
-      fetchStatistics: async (workspaceId: string) => {
+      fetchStatistics: async (workspaceId: string) => {,
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_BASE}/api/locking/workspaces/${workspaceId}/lock-statistics`);}
@@ -281,7 +281,7 @@ export const useLockingStore = create<LockingStore>()()
         }
       },
       // Policy management
-      fetchPolicy: async (workspaceId: string) => {
+      fetchPolicy: async (workspaceId: string) => {,
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_BASE}/api/locking/workspaces/${workspaceId}/lock-policy`);}
@@ -319,7 +319,6 @@ export const useLockingStore = create<LockingStore>()()
     }),
     {
       name: 'locking-store',
-      enabled: process.env.NODE_ENV === 'development'
+      enabled: process.env.NODE_ENV === 'development',
     }
-  )
 );

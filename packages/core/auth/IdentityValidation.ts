@@ -235,7 +235,7 @@ export class IdentityValidationService {
         ipAddress: metadata.ipAddress || '127.0.0.1',
         userAgent: metadata.userAgent || 'Unknown',
         sessionId: metadata.sessionId || 'session_' + Date.now(),
-        requestSource: metadata.requestSource || 'manual_request'
+        requestSource: metadata.requestSource || 'manual_request',
       }
     };
     this.validationRequests.set(requestId, request);
@@ -320,7 +320,7 @@ export class IdentityValidationService {
       confidence = 85;
       break;
     case 'social_media_verification':
-      const socialResult = await this.socialMediaVerificationService.verify(;)
+      const socialResult = await this.socialMediaVerificationService.verify(;);
           request.data.socialMediaProfiles!
       );
       evidence.push({)
@@ -548,7 +548,7 @@ export class IdentityValidationService {
     });
     // Activity score would come from user behavior metrics
     activityScore = 75; // Mock for now
-    const overall = Math.round(;)
+    const overall = Math.round(;);
       (identityScore * 0.3 + professionalScore * 0.35 + communityScore * 0.2 + activityScore * 0.15)
     );
     let tier: TrustScore['tier'] = 'unverified';
@@ -606,7 +606,6 @@ export class IdentityValidationService {
     trustScore: TrustScore | null;
     completedValidations: IdentityValidationType[];
     missingValidations: IdentityValidationType[];
-  } {
     const userRequests = this.getUserValidations(userId);
     const userResults = Array.from(this.validationResults.values());
       .filter(result => result.userId === userId);
@@ -618,7 +617,7 @@ export class IdentityValidationService {
       'email_verification', 'phone_verification', 'government_id',
       'professional_credentials', 'portfolio_verification', 'social_media_verification'
     ];
-    const missingValidations = allValidationTypes.filter(type => ;)
+    const missingValidations = allValidationTypes.filter(type => ;);
       !completedValidations.includes(type)
     );
     return {
@@ -656,7 +655,7 @@ class PhoneVerificationService {
     return {
       valid: isValidFormat,
       confidence: isValidFormat ? 90 : 20,
-      type: isValidFormat ? 'mobile' : 'unknown'
+      type: isValidFormat ? 'mobile' : 'unknown',
     };
   }
 }

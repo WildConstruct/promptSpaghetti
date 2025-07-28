@@ -161,7 +161,7 @@ export class ContextValidationFramework extends EventEmitter {
       this.emit('context_validated', {)
         contextId: context.executionMeta?.executionId || 'unknown',
         result,
-        validationTime: performance.now() - startTime
+        validationTime: performance.now() - startTime,
       });
       return result;
     } catch (error) {
@@ -181,7 +181,7 @@ export class ContextValidationFramework extends EventEmitter {
       this.emit('validation_error', {)
         contextId: context.executionMeta?.executionId || 'unknown',
         error,
-        validationTime: performance.now() - startTime
+        validationTime: performance.now() - startTime,
       });
       return errorResult;
     }
@@ -220,7 +220,6 @@ export class ContextValidationFramework extends EventEmitter {
       timestamp: number;
       valid: boolean;
     }>;
-    } {
     const total = this.validationHistory.length;
     if (total === 0) {
       return {
@@ -239,7 +238,7 @@ export class ContextValidationFramework extends EventEmitter {
       averageScore: totalScore / total,
       errorRate: (errorCount / total) * 100,
       warningRate: (warningCount / total) * 100,
-      recentValidations: this.validationHistory.slice(-10).map(v => ({)
+      recentValidations: this.validationHistory.slice(-10).map(v => ({),
         contextId: v.contextId,
         score: v.result.score,
         timestamp: v.timestamp,
@@ -290,7 +289,7 @@ export class ContextValidationFramework extends EventEmitter {
       description: 'Validates that variable count is within acceptable limits',
       category: 'warning',
       weight: 1.0,
-      validate: (context) => {
+      validate: (context) => {,
         const count = Object.keys(context.variables).length;
         const maxCount = this.config.maxVariableCount;
         if (count > maxCount) {
@@ -299,7 +298,7 @@ export class ContextValidationFramework extends EventEmitter {
             score: Math.max(0, 100 - ((count - maxCount) / maxCount) * 100),
             message: `Too many variables: ${count} (max: ${maxCount})`,}
             details: { ,
-              recommendation: 'Consider reducing variable count or increasing max limit' 
+              recommendation: 'Consider reducing variable count or increasing max limit' ,
             }
           };
         }
@@ -315,7 +314,7 @@ export class ContextValidationFramework extends EventEmitter {
       description: 'Validates variable type consistency and integrity',
       category: 'critical',
       weight: 1.5,
-      validate: (context) => {
+      validate: (context) => {,
         let typeErrors = 0;
         let totalVariables = 0;
         for (const [name, value] of Object.entries(context.variables)) {
@@ -343,7 +342,7 @@ export class ContextValidationFramework extends EventEmitter {
           details: {,
             typeErrors,
             totalVariables,
-            recommendation: typeErrors > 0 ? 'Review variable assignments for type consistency' : undefined
+            recommendation: typeErrors > 0 ? 'Review variable assignments for type consistency' : undefined,
           }
         };
       }
@@ -356,7 +355,7 @@ export class ContextValidationFramework extends EventEmitter {
       description: 'Validates node state consistency and integrity',
       category: 'critical',
       weight: 2.0,
-      validate: (context) => {
+      validate: (context) => {,
         const stateCount = context.nodeStates.size;
         let inconsistencies = 0;
         // Check for state size issues
@@ -376,7 +375,7 @@ export class ContextValidationFramework extends EventEmitter {
             stateCount,
             evaluationDepth: context.evaluationDepth,
             maxDepth: this.config.maxDepth,
-            recommendation: inconsistencies > 0 ? 'Review state management and execution depth' : undefined
+            recommendation: inconsistencies > 0 ? 'Review state management and execution depth' : undefined,
           }
         };
       }
@@ -389,7 +388,7 @@ export class ContextValidationFramework extends EventEmitter {
       description: 'Validates cache size and efficiency',
       category: 'warning',
       weight: 1.0,
-      validate: (context) => {
+      validate: (context) => {,
         const cacheSize = context.cache.size;
         const maxSize = this.config.maxCacheSize;
         let score = 100;
@@ -408,7 +407,7 @@ export class ContextValidationFramework extends EventEmitter {
           details: {,
             cacheSize,
             maxSize,
-            recommendation: cacheSize > maxSize ? 'Implement cache cleanup or increase limits' : undefined
+            recommendation: cacheSize > maxSize ? 'Implement cache cleanup or increase limits' : undefined,
           }
         };
       }
@@ -421,7 +420,7 @@ export class ContextValidationFramework extends EventEmitter {
       description: 'Validates execution metadata completeness and performance indicators',
       category: 'critical',
       weight: 1.0,
-      validate: (context) => {
+      validate: (context) => {,
         const meta = context.executionMeta;
         let score = 100;
         const issues: string[] = [];
@@ -429,7 +428,7 @@ export class ContextValidationFramework extends EventEmitter {
           return {
             passed: false,
             score: 0,
-            message: 'Missing execution metadata'
+            message: 'Missing execution metadata',
           };
         }
         if (!meta.executionId) {
@@ -450,7 +449,7 @@ export class ContextValidationFramework extends EventEmitter {
           message: issues.length > 0 ? `Metadata issues: ${issues.join(', ')}` : undefined,}
           details: {,
             issues,
-            recommendation: issues.length > 0 ? 'Ensure complete execution metadata initialization' : undefined
+            recommendation: issues.length > 0 ? 'Ensure complete execution metadata initialization' : undefined,
           }
         };
       }
@@ -463,12 +462,12 @@ export class ContextValidationFramework extends EventEmitter {
       description: 'Validates pseudorandom number generator configuration',
       category: 'critical',
       weight: 1.5,
-      validate: (context) => {
+      validate: (context) => {,
         if (!context.prng) {
           return {
             passed: false,
             score: 0,
-            message: 'Missing PRNG function'
+            message: 'Missing PRNG function',
           };
         }
         // Test PRNG functionality
@@ -490,7 +489,7 @@ export class ContextValidationFramework extends EventEmitter {
             score: 0,
             message: 'PRNG function throws errors',
             details: {,
-              error: error instanceof Error ? error.message : 'Unknown error'
+              error: error instanceof Error ? error.message : 'Unknown error',
             }
           };
         }
@@ -506,14 +505,14 @@ export class ContextValidationFramework extends EventEmitter {
       description: 'Validates seed configuration for deterministic execution',
       category: 'warning',
       weight: 1.0,
-      validate: (context) => {
+      validate: (context) => {,
         if (context.seed === undefined || context.seed === null) {
           return {
             passed: false,
             score: 50,
             message: 'Missing seed value for deterministic execution',
             details: {,
-              recommendation: 'Provide seed value for reproducible results'
+              recommendation: 'Provide seed value for reproducible results',
             }
           };
         }
@@ -524,7 +523,7 @@ export class ContextValidationFramework extends EventEmitter {
             message: 'Seed should be a number',
             details: {,
               seedType: typeof context.seed,
-              recommendation: 'Use numeric seed for consistent behavior'
+              recommendation: 'Use numeric seed for consistent behavior',
             }
           };
         }
@@ -588,7 +587,7 @@ export class ContextValidationUtils {
         startTime: Date.now(),
         executionId: `test-${Math.random().toString(36).substr(2, 9)}`,}
         nodeExecutionOrder: [],
-        performanceMetrics: new Map()
+        performanceMetrics: new Map(),
       },
       ...overrides
     };
@@ -600,7 +599,7 @@ export class ContextValidationUtils {
     if (context === null || context === undefined || typeof context !== 'object') {
       return false;
     }
-    return ()
+    return ();
       typeof context.variables === 'object' &&
       // seed is optional for structural validity
       context.nodeStates instanceof Map &&
@@ -627,12 +626,11 @@ export class ContextValidationUtils {
       cache: number;
       metadata: number;
     };
-  } {
     const breakdown = {
       variables: this.estimateObjectMemory(context.variables),
       nodeStates: this.estimateMapMemory(context.nodeStates),
       cache: this.estimateMapMemory(context.cache),
-      metadata: JSON.stringify(context.executionMeta).length * 2 // UTF-16
+      metadata: JSON.stringify(context.executionMeta).length * 2 // UTF-16,
     };
     return {
       totalBytes: Object.values(breakdown).reduce((sum, bytes) => sum + bytes, 0),

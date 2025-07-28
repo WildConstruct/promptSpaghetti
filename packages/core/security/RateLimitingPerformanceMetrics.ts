@@ -159,11 +159,10 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
   private dashboardWidgets: Map<string, DashboardWidget> = new Map();
   private metricsCollectionTimer?: NodeJS.Timeout;
   private startTime: Date;
-  constructor()
+  constructor();
     rateLimitingService: RateLimitingService,
     throttlingEngine?: AdaptiveThrottlingRulesEngine,
     config?: Partial<RateLimitingMetricsConfig>
-  ) {
     super();
     this.rateLimitingService = rateLimitingService;
     this.throttlingEngine = throttlingEngine;
@@ -175,14 +174,14 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
         responseTime: 100, // ms
         throughput: 1000, // requests/second
         errorRate: 5, // percentage
-        blockRate: 10 // percentage
+        blockRate: 10 // percentage,
       },
       visualizationOptions: {,
         enableCharts: true,
         enableHeatmaps: true,
         enableTimeseries: true,
         enableGeospatialMaps: true,
-        refreshInterval: 5 // seconds
+        refreshInterval: 5 // seconds,
       },
       alerting: {,
         enableAlerts: true,
@@ -229,7 +228,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
       this.metricsCollectionTimer = undefined;
     }
     this.emit('metricsCollectionStopped', {)
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -270,12 +269,12 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
       // Emit metrics update event
       this.emit('metricsUpdated', {)
         metrics: this.currentMetrics,
-        collectionTime: Date.now() - startTime
+        collectionTime: Date.now() - startTime,
       });
     } catch (error) {
       this.emit('metricsCollectionError', {)
         error: error,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -306,7 +305,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
       requestsPerSecond: totalRequests / timeWindow,
       allowedPerSecond: (totalRequests - blockedRequests) / timeWindow,
       blockedPerSecond: blockedRequests / timeWindow,
-      throttledPerSecond: blockedRequests * 0.3 / timeWindow // Estimate throttled portion
+      throttledPerSecond: blockedRequests * 0.3 / timeWindow // Estimate throttled portion,
     };
   }
   /**
@@ -321,7 +320,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
       blockedRequests,
       errorRequests,
       blockRate: (blockedRequests / totalRequests) * 100,
-      errorRate: (errorRequests / totalRequests) * 100
+      errorRate: (errorRequests / totalRequests) * 100,
     };
   }
   /**
@@ -333,7 +332,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
       memoryUsage: memoryUsage.heapUsed / 1024 / 1024, // Convert to MB
       cpuUsage: Math.random() * 100, // Simulated - would use actual CPU monitoring
       cacheHitRate: 85 + Math.random() * 10, // Simulated cache hit rate
-      activeConnections: Math.floor(Math.random() * 1000) + 100
+      activeConnections: Math.floor(Math.random() * 1000) + 100,
     };
   }
   /**
@@ -345,7 +344,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
       threatDistribution: threatLevels,
       suspiciousActivities: Object.values(threatLevels).reduce((sum: number, count: any) => sum + (count || 0), 0),
       blockedThreats: stats.blockedAttempts || 0,
-      adaptiveAdjustments: Math.floor(Math.random() * 10) // Simulated adaptive adjustments
+      adaptiveAdjustments: Math.floor(Math.random() * 10) // Simulated adaptive adjustments,
     };
   }
   // ========================================
@@ -371,7 +370,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
       default:
         startTime.setHours(endTime.getHours() - 1);
     }
-    const relevantMetrics = this.metricsHistory.filter(;)
+    const relevantMetrics = this.metricsHistory.filter(;);
       metric => metric.timestamp >= startTime && metric.timestamp <= endTime
     );
     return {
@@ -379,7 +378,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
       responseTime: relevantMetrics.map(m => m.responseTime.average),
       throughput: relevantMetrics.map(m => m.throughput.requestsPerSecond),
       blockRate: relevantMetrics.map(m => m.errorRates.blockRate),
-      errorRate: relevantMetrics.map(m => m.errorRates.errorRate)
+      errorRate: relevantMetrics.map(m => m.errorRates.errorRate),
     };
   }
   /**
@@ -416,12 +415,12 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
       { city: 'Sydney', lat: -33.8688, lng: 151.2093 }
     ];
     return {
-      locations: locations.map(loc => ({)
+      locations: locations.map(loc => ({),
         latitude: loc.lat,
         longitude: loc.lng,
         requestCount: Math.floor(Math.random() * 10000) + 1000,
         blockCount: Math.floor(Math.random() * 1000) + 10,
-        threatLevel: Math.random() > 0.7 ? ThreatLevel.HIGH : 
+        threatLevel: Math.random() > 0.7 ? ThreatLevel.HIGH : ,
                     Math.random() > 0.4 ? ThreatLevel.MEDIUM : ThreatLevel.LOW
       }))
     };
@@ -558,7 +557,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
     this.dashboardWidgets.set(widget.widgetId, widget);
     this.emit('widgetAdded', {)
       widgetId: widget.widgetId,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -569,7 +568,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
     if (removed) {
       this.emit('widgetRemoved', {)
         widgetId,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
     return removed;
@@ -780,14 +779,14 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
       this.emit('rateLimitEvent', {)
         type: 'exceeded',
         data,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     });
     this.rateLimitingService.on('attemptRecorded', (attempt) => {
       this.emit('rateLimitEvent', {)
         type: 'attempt',
         data: attempt,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     });
     // Listen for throttling events if available
@@ -796,7 +795,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
         this.emit('throttlingEvent', {)
           type: 'applied',
           data,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       });
     }
@@ -815,9 +814,8 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
       configuredEndpoints: number;
       metricsCollected: number;
     };
-  } {
     return {
-      status: this.activeAlerts.size === 0 ? 'healthy' : 
+      status: this.activeAlerts.size === 0 ? 'healthy' : ,
              this.activeAlerts.size < 3 ? 'warning' : 'critical',
       uptime: Date.now() - this.startTime.getTime(),
       metrics: this.currentMetrics,
@@ -846,7 +844,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
         'memoryUsage',
         'cpuUsage'
       ];
-      const rows = this.metricsHistory.map(metric => [;)
+      const rows = this.metricsHistory.map(metric => [;);
         metric.timestamp.toISOString(),
         metric.responseTime.average.toFixed(2),
         metric.responseTime.p95.toFixed(2),
@@ -863,7 +861,7 @@ export class RateLimitingPerformanceMetrics extends EventEmitter {
       metricsCount: this.metricsHistory.length,
       timeRange: {,
         start: this.metricsHistory[0]?.timestamp,
-        end: this.metricsHistory[this.metricsHistory.length - 1]?.timestamp
+        end: this.metricsHistory[this.metricsHistory.length - 1]?.timestamp,
       },
       metrics: this.metricsHistory,
       currentMetrics: this.currentMetrics,

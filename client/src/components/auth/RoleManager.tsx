@@ -1,9 +1,7 @@
 // Epic 11.3 Role Manager Component
 // Administrative interface for creating, editing, and managing roles and permissions
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronDown, ChevronRight, Edit, Trash2, Plus, Users, Shield, Settings, Filter, Search } from 'lucide-react';
-
 interface Permission {
   id: string;
   roleId: string;
@@ -13,7 +11,6 @@ interface Permission {
   conditions?: Record<string, unknown>;
   createdAt: string;
 }
-
 interface Role {
   id: string;
   name: string;
@@ -23,25 +20,22 @@ interface Role {
   createdAt: string;
   updatedAt: string;
 }
-
 interface RoleWithDetails extends Role {
   permissions: Permission[];
   assignedUsers: unknown[];
 }
-
 interface CreateRoleData {
   name: string;
   description?: string;
   scope: 'global' | 'organization' | 'team';
   organizationId?: string;
-  permissions: {
+  permissions: {,
     resource: string;
     action: string;
     scope: 'global' | 'organization' | 'team' | 'own';
     conditions?: Record<string, unknown>;
   }[];
 }
-
 interface RoleStats {
   totalRoles: number;
   rolesByScope: Record<string, number>;
@@ -57,64 +51,57 @@ export const RoleManager: React.FC = () => {
   const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState(false);
   const [expandedRoles, setExpandedRoles] = useState<Set<string>>(new Set());
-  
   // Filters and search
   const [scopeFilter, setScopeFilter] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [organizationFilter, setOrganizationFilter] = useState<string>('');
-
   // Form state
-  const [formData, setFormData] = useState<CreateRoleData>({
+  const [formData, setFormData] = useState<CreateRoleData>({)
     name: '',
     description: '',
     scope: 'global',
-    permissions: []
+    permissions: [],
   });
-
   // Permission templates for common role types
   const permissionTemplates = {
-    admin: [
+    admin: [,
       { resource: 'users', action: 'read', scope: 'global' as const },
       { resource: 'users', action: 'write', scope: 'global' as const },
       { resource: 'roles', action: 'read', scope: 'global' as const },
       { resource: 'roles', action: 'write', scope: 'global' as const },
       { resource: 'system', action: 'admin', scope: 'global' as const }
     ],
-    editor: [
+    editor: [,
       { resource: 'graphs', action: 'read', scope: 'global' as const },
       { resource: 'graphs', action: 'write', scope: 'own' as const },
       { resource: 'graphs', action: 'execute', scope: 'global' as const }
     ],
-    viewer: [
+    viewer: [,
       { resource: 'graphs', action: 'read', scope: 'global' as const },
       { resource: 'graphs', action: 'execute', scope: 'global' as const }
     ]
   };
-
   useEffect(() => {
     loadData();
   }, [scopeFilter, searchQuery, organizationFilter, loadData]);
-
   const loadData = useCallback(async () => {
     try {
-      const [rolesResponse, statsResponse] = await Promise.all([
-        fetch('/api/auth/rbac/roles?' + new URLSearchParams({
+      const [rolesResponse, statsResponse] = await Promise.all([)
+        fetch('/api/auth/rbac/roles?' + new URLSearchParams({)
           ...(scopeFilter && { scope: scopeFilter }),
           ...(searchQuery && { search: searchQuery }),
           ...(organizationFilter && { organizationId: organizationFilter })
         }), {
-          credentials: 'include'
+          credentials: 'include',
         }),
-        fetch('/api/auth/rbac/stats', {
-          credentials: 'include'
+        fetch('/api/auth/rbac/stats', {)
+          credentials: 'include',
         })
       ]);
-
       if (rolesResponse.ok) {
         const rolesData = await rolesResponse.json();
         setRoles(rolesData.roles);
       }
-
       if (statsResponse.ok) {
         const statsData = await statsResponse.json();
         setStats(statsData);
@@ -125,47 +112,42 @@ export const RoleManager: React.FC = () => {
       setLoading(false);
     }
   }, [scopeFilter, searchQuery, organizationFilter]);
-
   const loadRoleDetails = async (roleId: string) => {
     try {
-      const response = await fetch(`/api/auth/rbac/roles/${roleId}`, {
-        credentials: 'include'
+      const response = await fetch(`/api/auth/rbac/roles/${roleId}`, {)}
+        credentials: 'include',
       });
-
       if (response.ok) {
         const data = await response.json();
-        setSelectedRole({
+        setSelectedRole({)
           ...data.role,
           permissions: data.permissions,
-          assignedUsers: data.assignedUsers
+          assignedUsers: data.assignedUsers,
         });
       }
     } catch (error) {
       console.error('Failed to load role details:', error);
     }
   };
-
   const handleCreateRole = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-      const response = await fetch('/api/auth/rbac/roles', {
+      const response = await fetch('/api/auth/rbac/roles', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
-
       if (response.ok) {
         setCreating(false);
-        setFormData({
+        setFormData({)
           name: '',
           description: '',
           scope: 'global',
-          permissions: []
+          permissions: [],
         });
         await loadData();
       } else {
@@ -179,18 +161,15 @@ export const RoleManager: React.FC = () => {
       setLoading(false);
     }
   };
-
   const handleDeleteRole = async (roleId: string) => {
     if (!confirm('Are you sure you want to delete this role? This action cannot be undone.')) {
       return;
     }
-
     try {
-      const response = await fetch(`/api/auth/rbac/roles/${roleId}`, {
+      const response = await fetch(`/api/auth/rbac/roles/${roleId}`, {)}
         method: 'DELETE',
-        credentials: 'include'
+        credentials: 'include',
       });
-
       if (response.ok) {
         await loadData();
         if (selectedRole?.id === roleId) {
@@ -205,7 +184,6 @@ export const RoleManager: React.FC = () => {
       alert('Failed to delete role');
     }
   };
-
   const toggleRoleExpansion = (roleId: string) => {
     const newExpanded = new Set(expandedRoles);
     if (newExpanded.has(roleId)) {
@@ -216,46 +194,40 @@ export const RoleManager: React.FC = () => {
     }
     setExpandedRoles(newExpanded);
   };
-
   const applyPermissionTemplate = (template: keyof typeof permissionTemplates) => {
-    setFormData({
+    setFormData({)
       ...formData,
-      permissions: [...permissionTemplates[template]]
+      permissions: [...permissionTemplates[template]],
     });
   };
-
   const addPermission = () => {
-    setFormData({
+    setFormData({)
       ...formData,
-      permissions: [
+      permissions: [,
         ...formData.permissions,
         { resource: '', action: '', scope: 'global' }
       ]
     });
   };
-
   const updatePermission = (index: number, field: string, value: string) => {
     const newPermissions = [...formData.permissions];
     newPermissions[index] = { ...newPermissions[index], [field]: value };
     setFormData({ ...formData, permissions: newPermissions });
   };
-
   const removePermission = (index: number) => {
-    setFormData({
+    setFormData({)
       ...formData,
       permissions: formData.permissions.filter((_, i) => i !== index)
     });
   };
-
   if (loading && !roles.length) {
-    return (
+    return ()
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="max-w-7xl mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -271,9 +243,8 @@ export const RoleManager: React.FC = () => {
           <span>Create Role</span>
         </button>
       </div>
-
       {/* Statistics */}
-      {stats && (
+      {stats && ()
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-lg border border-gray-200">
             <div className="flex items-center justify-between">
@@ -313,7 +284,6 @@ export const RoleManager: React.FC = () => {
           </div>
         </div>
       )}
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Role List */}
         <div className="lg:col-span-2 space-y-4">
@@ -359,11 +329,10 @@ export const RoleManager: React.FC = () => {
               </div>
             </div>
           </div>
-
           {/* Role List */}
           <div className="bg-white rounded-lg border border-gray-200">
             <div className="divide-y divide-gray-200">
-              {roles.map((role) => (
+              {roles.map((role) => ()
                 <div key={role.id}>
                   <div className="p-4 hover:bg-gray-50 transition-colors">
                     <div className="flex items-center justify-between">
@@ -372,15 +341,15 @@ export const RoleManager: React.FC = () => {
                           onClick={() => toggleRoleExpansion(role.id)}
                           className="text-gray-400 hover:text-gray-600"
                         >
-                          {expandedRoles.has(role.id) ? (
+                          {expandedRoles.has(role.id) ? ()
                             <ChevronDown className="w-4 h-4" />
-                          ) : (
+                          ) : ()
                             <ChevronRight className="w-4 h-4" />
                           )}
                         </button>
                         <div>
                           <h3 className="font-medium text-gray-900">{role.name}</h3>
-                          {role.description && (
+                          {role.description && ()
                             <p className="text-sm text-gray-600">{role.description}</p>
                           )}
                           <div className="flex items-center space-x-2 mt-1">
@@ -417,15 +386,14 @@ export const RoleManager: React.FC = () => {
                       </div>
                     </div>
                   </div>
-
                   {/* Expanded Role Details */}
-                  {expandedRoles.has(role.id) && selectedRole?.id === role.id && (
+                  {expandedRoles.has(role.id) && selectedRole?.id === role.id && ()
                     <div className="px-4 pb-4 bg-gray-50 border-t border-gray-200">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                         <div>
                           <h4 className="font-medium text-gray-900 mb-2">Permissions</h4>
                           <div className="space-y-1">
-                            {selectedRole.permissions.map((permission) => (
+                            {selectedRole.permissions.map((permission) => ()
                               <div
                                 key={permission.id}
                                 className="flex items-center justify-between text-sm bg-white px-3 py-2 rounded border"
@@ -446,7 +414,7 @@ export const RoleManager: React.FC = () => {
                         <div>
                           <h4 className="font-medium text-gray-900 mb-2">Assigned Users ({selectedRole.assignedUsers.length})</h4>
                           <div className="space-y-1 max-h-32 overflow-y-auto">
-                            {selectedRole.assignedUsers.map((user) => (
+                            {selectedRole.assignedUsers.map((user) => ()
                               <div key={user.id} className="flex items-center space-x-2 text-sm">
                                 <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">
                                   {user.displayName?.charAt(0) || user.email.charAt(0).toUpperCase()}
@@ -464,9 +432,8 @@ export const RoleManager: React.FC = () => {
             </div>
           </div>
         </div>
-
         {/* Create/Edit Role Form */}
-        {(creating || editing) && (
+        {(creating || editing) && ()
           <div className="bg-white p-6 rounded-lg border border-gray-200 h-fit">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-900">
@@ -476,11 +443,11 @@ export const RoleManager: React.FC = () => {
                 onClick={() => {
                   setCreating(false);
                   setEditing(false);
-                  setFormData({
+                  setFormData({)
                     name: '',
                     description: '',
                     scope: 'global',
-                    permissions: []
+                    permissions: [],
                   });
                 }}
                 className="text-gray-400 hover:text-gray-600"
@@ -488,7 +455,6 @@ export const RoleManager: React.FC = () => {
                 ×
               </button>
             </div>
-
             <form onSubmit={handleCreateRole} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -502,7 +468,6 @@ export const RoleManager: React.FC = () => {
                   required
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Description
@@ -514,7 +479,6 @@ export const RoleManager: React.FC = () => {
                   rows={2}
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Scope
@@ -529,7 +493,6 @@ export const RoleManager: React.FC = () => {
                   <option value="team">Team</option>
                 </select>
               </div>
-
               {/* Permission Templates */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -559,7 +522,6 @@ export const RoleManager: React.FC = () => {
                   </button>
                 </div>
               </div>
-
               {/* Permissions */}
               <div>
                 <div className="flex items-center justify-between mb-2">
@@ -574,9 +536,8 @@ export const RoleManager: React.FC = () => {
                     + Add Permission
                   </button>
                 </div>
-
                 <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {formData.permissions.map((permission, index) => (
+                  {formData.permissions.map((permission, index) => ()
                     <div key={index} className="grid grid-cols-12 gap-2 items-center">
                       <input
                         type="text"
@@ -613,7 +574,6 @@ export const RoleManager: React.FC = () => {
                   ))}
                 </div>
               </div>
-
               <div className="flex space-x-3">
                 <button
                   type="submit"
@@ -627,11 +587,11 @@ export const RoleManager: React.FC = () => {
                   onClick={() => {
                     setCreating(false);
                     setEditing(false);
-                    setFormData({
+                    setFormData({)
                       name: '',
                       description: '',
                       scope: 'global',
-                      permissions: []
+                      permissions: [],
                     });
                   }}
                   className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"

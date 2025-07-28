@@ -600,7 +600,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
   public async analyzeApiPerformance(): Promise<PerformanceReport> {
     const reportPeriod = {
       start: new Date(Date.now() - 24 * 60 * 60 * 1000), // Last 24 hours
-      end: new Date()
+      end: new Date(),
     };
     const summary = await this.generatePerformanceSummary(reportPeriod);
     const endpointAnalysis = await this.analyzeAllEndpoints(reportPeriod);
@@ -736,7 +736,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
         memoryPercent: Math.random() * 100,
         networkUtilization: Math.random() * 100,
         diskUtilization: Math.random() * 100,
-        connectionCount: Math.floor(Math.random() * 1000)
+        connectionCount: Math.floor(Math.random() * 1000),
       },
       cacheMetrics: {,
         hitRate: endpoint.metrics.cacheHitRate,
@@ -1037,7 +1037,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
         ]
       });
     }
-    const poorPerformingEndpoints = analyses.filter(a => ;)
+    const poorPerformingEndpoints = analyses.filter(a => ;);
       a.performanceGrade === PerformanceGrade.POOR || 
       a.performanceGrade === PerformanceGrade.CRITICAL
     );
@@ -1261,7 +1261,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
       expectedThroughputImprovement: baseImprovement * 0.8,
       expectedErrorRateReduction: baseImprovement * 0.6,
       expectedCostReduction: baseImprovement * 0.1,
-      confidence: 0.7 + (actions.length * 0.05) // Higher confidence with more actions
+      confidence: 0.7 + (actions.length * 0.05) // Higher confidence with more actions,
     };
   }
   private applyCachingRule(endpointId: string, rule: CachingRule): void {
@@ -1290,7 +1290,7 @@ export class ApiPerformanceOptimizer extends EventEmitter {
     const appliedOptimizations = Array.from(this.optimizations.values());
       .filter(o => o.status === OptimizationStatus.VALIDATED && o.afterMetrics);
     if (appliedOptimizations.length === 0) return 0;
-    const improvements = appliedOptimizations.map(opt => ;)
+    const improvements = appliedOptimizations.map(opt => ;);
       this.calculateImprovement(opt)
     );
     return improvements.reduce((sum, imp) => sum + imp, 0) / improvements.length;
@@ -1397,7 +1397,7 @@ class RateLimiter {
       allowed,
       remainingRequests: Math.max(0, this.limits.requestsPerMinute - currentCount - 1),
       resetTime: new Date(this.windowStart + windowDuration),
-      retryAfter: allowed ? undefined : Math.ceil((this.windowStart + windowDuration - now) / 1000)
+      retryAfter: allowed ? undefined : Math.ceil((this.windowStart + windowDuration - now) / 1000),
     };
   }
 }

@@ -96,7 +96,7 @@ export const useExternalDataImport = ({)
     }
   }, [autoRefresh, refreshInterval, state.lastQuery]);
   // Query external data
-  const queryData = useCallback(async (;)
+  const queryData = useCallback(async (;);
     query: HistoricalQuery, 
     sourceIds?: string[]
   ): Promise<QueryResult[]> => {
@@ -122,7 +122,7 @@ export const useExternalDataImport = ({)
         lastQuery: query,
         lastResults: results,
         cacheHitRate: Math.round(cacheHitRate * 100) / 100,
-        lastUpdateTime: new Date().toISOString()
+        lastUpdateTime: new Date().toISOString(),
       }));
       if (onSuccess) {
         onSuccess(results);
@@ -180,7 +180,7 @@ export const useExternalDataImport = ({)
       sources.set(sourceId, updatedSource);
       setState(prev => ({)
         ...prev,
-        availableDataSources: prev.availableDataSources.map(s => )
+        availableDataSources: prev.availableDataSources.map(s => ),
           s.id === sourceId ? updatedSource : s
         ),
         enabledSourcesCount: prev.availableDataSources,
@@ -208,13 +208,13 @@ export const useExternalDataImport = ({)
     setState(prev => {)
       const source = prev.availableDataSources.find(s => s.id === sourceId);
       if (!source) return prev;
-      const updatedSources = prev.availableDataSources.map(s =>;)
+      const updatedSources = prev.availableDataSources.map(s =>;);
         s.id === sourceId ? { ...s, enabled: !s.enabled } : s
       );
       return {
         ...prev,
         availableDataSources: updatedSources,
-        enabledSourcesCount: updatedSources.filter(s => s.enabled).length
+        enabledSourcesCount: updatedSources.filter(s => s.enabled).length,
       };
     });
   }, []);
@@ -301,7 +301,6 @@ export const useExternalDataImport = ({)
             const escaped = String(value).replace(/"/g, '""');
             return escaped.includes(',') ? `"${escaped}"` : escaped;}
           }).join(',')
-        )
       ];
       return csvRows.join('\n');
     }
@@ -372,7 +371,7 @@ export const useQueryBuilder = () => {
       limit: query.limit || 50,
       offset: query.offset || 0,
       sortBy: query.sortBy,
-      sortOrder: query.sortOrder || 'desc'
+      sortOrder: query.sortOrder || 'desc',
     };
   }, [query, isValid]);
   return {

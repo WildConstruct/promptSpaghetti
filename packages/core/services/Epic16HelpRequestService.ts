@@ -429,7 +429,7 @@ export class Epic16HelpRequestService extends EventEmitter {
         visibility: 'public',
         helpful: null,
         attachments: [],
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -481,7 +481,7 @@ export class Epic16HelpRequestService extends EventEmitter {
         visibility: 'public',
         helpful: null,
         attachments: [],
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       this.emit('help_request_auto_resolved', { request, article: bestArticle });
     }
@@ -562,7 +562,7 @@ export class Epic16HelpRequestService extends EventEmitter {
     const response: HelpResponse = {
       ...responseData,
       id: this.generateResponseId(),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
     request.responses.push(response);
     request.updatedAt = new Date();
@@ -670,7 +670,7 @@ export class Epic16HelpRequestService extends EventEmitter {
     return {
       requests,
       total,
-      hasMore: offset + limit < total
+      hasMore: offset + limit < total,
     };
   }
   /**
@@ -687,7 +687,7 @@ export class Epic16HelpRequestService extends EventEmitter {
     customerSatisfaction: number;
     deflectionRate: number;
   }> {
-    const requests = Array.from(this.requests.values()).filter(r =>;)
+    const requests = Array.from(this.requests.values()).filter(r =>;);
       r.createdAt >= timeRange.start && r.createdAt <= timeRange.end
     );
     const totalRequests = requests.length;
@@ -705,10 +705,10 @@ export class Epic16HelpRequestService extends EventEmitter {
     const resolutionTimes = requests;
       .filter(r => r.sla.resolutionTime.actual)
       .map(r => r.sla.resolutionTime.actual!);
-    const slaBreached = requests.filter(r => ;)
+    const slaBreached = requests.filter(r => ;);
       r.sla.responseTime.breached || r.sla.resolutionTime.breached
     ).length;
-    const autoResolved = requests.filter(r => ;)
+    const autoResolved = requests.filter(r => ;);
       r.analytics.resolutionSource === 'knowledge_base' || r.autoResolvedBy
     ).length;
     const satisfaction = requests;
@@ -718,18 +718,18 @@ export class Epic16HelpRequestService extends EventEmitter {
       totalRequests,
       requestsByStatus,
       requestsByCategory,
-      averageResponseTime: responseTimes.length > 0 
+      averageResponseTime: responseTimes.length > 0 ,
         ? responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length 
         : 0,
-      averageResolutionTime: resolutionTimes.length > 0 
+      averageResolutionTime: resolutionTimes.length > 0 ,
         ? resolutionTimes.reduce((sum, time) => sum + time, 0) / resolutionTimes.length 
         : 0,
       slaBreachRate: totalRequests > 0 ? (slaBreached / totalRequests) * 100 : 0,
       autoResolutionRate: totalRequests > 0 ? (autoResolved / totalRequests) * 100 : 0,
-      customerSatisfaction: satisfaction.length > 0 
+      customerSatisfaction: satisfaction.length > 0 ,
         ? satisfaction.reduce((sum, rating) => sum + rating, 0) / satisfaction.length 
         : 0,
-      deflectionRate: totalRequests > 0 ? (autoResolved / totalRequests) * 100 : 0
+      deflectionRate: totalRequests > 0 ? (autoResolved / totalRequests) * 100 : 0,
     };
   }
   // Private helper methods
@@ -754,7 +754,7 @@ export class Epic16HelpRequestService extends EventEmitter {
         deadline: new Date(now.getTime() + resolutionTarget * 60000),
         breached: false,
       },
-      escalationThreshold: Math.floor(resolutionTarget * 0.7)
+      escalationThreshold: Math.floor(resolutionTarget * 0.7),
     };
   }
   private initializeKnowledgeBase(): void {

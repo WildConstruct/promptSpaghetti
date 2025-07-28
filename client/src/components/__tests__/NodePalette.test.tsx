@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import NodePalette from '../NodePalette';
 
 // 1. Test that all six node types render with correct tooltips
-const NODE_TYPES = [
+const NODE_TYPES = [;
   'WeightedChoice',
   'Concat',
   'Output',
@@ -12,17 +12,15 @@ const NODE_TYPES = [
   'SetVariable',
   'GetVariable'
 ];
-
 describe('NodePalette', () => {
   it('renders all node types with tooltips', () => {
     render(<NodePalette />);
-    NODE_TYPES.forEach(type => {
+    NODE_TYPES.forEach(type => {)
       const item = screen.getByTitle(type);
       expect(item).toBeInTheDocument();
       expect(item).toHaveTextContent(type);
     });
   });
-
   // 2. Test accessibility features (ARIA labels, keyboard navigation)
   it('palette items are accessible as buttons with correct aria-labels', () => {
     render(<NodePalette />);
@@ -30,17 +28,16 @@ describe('NodePalette', () => {
     expect(items.length).toBe(NODE_TYPES.length);
     items.forEach((item, i) => {
       expect(item.tabIndex).toBe(0);
-      expect(item).toHaveAttribute('aria-label', `Add ${NODE_TYPES[i]} node`);
+      expect(item).toHaveAttribute('aria-label', `Add ${NODE_TYPES[i]} node`);}
     });
   });
-
   // 3. Test drag events are triggered correctly for each node type
   it('triggers drag events on drag start', () => {
     render(<NodePalette />);
     const item = screen.getByTitle(NODE_TYPES[0]);
     const dataTransfer = {
       setData: jest.fn(),
-      effectAllowed: ''
+      effectAllowed: '',
     };
     fireEvent.dragStart(item, { dataTransfer });
     expect(dataTransfer.setData).toHaveBeenCalledWith('application/reactflow', NODE_TYPES[0]);

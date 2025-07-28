@@ -113,7 +113,7 @@ interface AudienceSelectorProps {
 
 export const [sortBy, setSortBy] = useState<'name' | 'reach' | 'updated'>('name');
   const filteredAudiences = useMemo(() => {
-    const filtered = audiences.filter(audience =>;)
+    const filtered = audiences.filter(audience =>;);
       audience.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     return filtered.sort((a, b) => {
@@ -127,7 +127,7 @@ export const [sortBy, setSortBy] = useState<'name' | 'reach' | 'updated'>('name'
       }
     });
   }, [audiences, searchTerm, sortBy]);
-  return ()
+  return ();
     <div className={`audience-selector ${compact ? 'compact' : ''}`}>}
       <div className="selector-header">
         <div className="header-title">
@@ -343,7 +343,7 @@ export const [previewLoading, setPreviewLoading] = useState(false);
     });
     return categories;
   }, [availableFields]);
-  return ()
+  return ();
     <div className="advanced-condition-builder">
       <div className="builder-header">
         <div className="header-title">
@@ -469,7 +469,7 @@ export const [previewLoading, setPreviewLoading] = useState(false);
                     <select
                       value={conditions[index + 1]?.logicalOperator || 'AND'}
                       onChange={(e) => updateCondition(conditions[index + 1].id, { )
-                        logicalOperator: e.target.value as 'AND' | 'OR' | 'NOT' 
+                        logicalOperator: e.target.value as 'AND' | 'OR' | 'NOT' ,
                       })}
                       className="logic-select"
                     >
@@ -613,7 +613,7 @@ export
     { code: 'AU', name: 'Australia', userCount: 45000 },
     { code: 'DE', name: 'Germany', userCount: 78000 }
   ];
-  return ()
+  return ();
     <div className="geographic-targeting">
       <div className="geo-header">
         <div className="header-title">
@@ -714,7 +714,7 @@ interface SegmentManagementProps {
 }
 
 export 
-  return ()
+  return ();
     <div className="segment-management">
       <div className="segments-header">
         <div className="header-title">

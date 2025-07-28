@@ -964,7 +964,7 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
           action_items: [],
           plan_updates: [],
           retesting_required: true,
-          next_test_date: Date.now() + (30 * 24 * 60 * 60 * 1000) // 30 days
+          next_test_date: Date.now() + (30 * 24 * 60 * 60 * 1000) // 30 days,
         },
         test_report: `/reports/dr_test_${testId}.pdf`,}
         conducted_by: testLead,
@@ -992,7 +992,6 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
     backup_health: 'healthy' | 'degraded' | 'critical';
     last_successful_backup: number;
     next_scheduled_test: number;
-  } {
     const runningBackups = Array.from(this.activeExecutions.values()).filter(e => e.status === 'running').length;
     const recentTests = Array.from(this.testResults.values());
       .sort((a, b) => b.test_date - a.test_date)
@@ -1334,7 +1333,7 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
         duration,
         participants: [testLead],
         test_lead: testLead,
-        environment: testType === 'full_test' ? 'production' : 'test'
+        environment: testType === 'full_test' ? 'production' : 'test',
       },
       results: {,
         overall_success: success,
@@ -1350,10 +1349,10 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
         actual_rpo: success ? plan.objectives.recovery_point_objective * 0.5 : plan.objectives.recovery_point_objective * 1.5,
         data_recovery_percentage: success ? 100 : 85,
         system_recovery_percentage: success ? 100 : 75,
-        communication_effectiveness: Math.floor(Math.random() * 3) + 8 // 8-10 scale
+        communication_effectiveness: Math.floor(Math.random() * 3) + 8 // 8-10 scale,
       },
       follow_up: {,
-        action_items: issues.map(issue => ({)
+        action_items: issues.map(issue => ({),
           id: this.generateActionItemId(),
           title: `Resolve: ${issue.title}`,}
           description: issue.description,
@@ -1368,7 +1367,7 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
         })),
         plan_updates: success ? [] : ['Update procedure documentation', 'Review automation scripts'],
         retesting_required: !success,
-        next_test_date: success ? undefined : Date.now() + (30 * 24 * 60 * 60 * 1000)
+        next_test_date: success ? undefined : Date.now() + (30 * 24 * 60 * 60 * 1000),
       },
       test_report: `/reports/dr_test_${testId}.pdf`,}
       conducted_by: testLead,
@@ -1387,7 +1386,7 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   }
   private async sendDisasterNotifications()
     event: DisasterRecoveryEvent,
-    phase: 'declared' | 'recovered' | 'failed'
+    phase: 'declared' | 'recovered' | 'failed',
   ): Promise<void> {
     const plan = this.recoveryPlans.get(event.plan_id);
     if (!plan) return;
@@ -1400,7 +1399,7 @@ export class SecurityDisasterRecoveryManager extends EventEmitter {
   }
   private createDisasterNotificationMessage()
     event: DisasterRecoveryEvent,
-    phase: 'declared' | 'recovered' | 'failed'
+    phase: 'declared' | 'recovered' | 'failed',
   ): string {
     return `
 🚨 DISASTER RECOVERY ${phase.toUpperCase()}
@@ -1482,7 +1481,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
       console.warn(`⚠️ ${failedJobs.length} backup jobs have failed recently`);}
     }
     // Check test schedule compliance
-    const overdueTests = Array.from(this.recoveryPlans.values()).filter(plan => ;)
+    const overdueTests = Array.from(this.recoveryPlans.values()).filter(plan => ;);
       plan.testing.next_test_date < Date.now()
     );
     if (overdueTests.length > 0) {
@@ -1609,7 +1608,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
     const today = new Date().toISOString().split('T')[0];
     this.metrics.backup_performance.backup_size_trend.push({)
       date: today,
-      size_gb: execution.metrics.data_size_bytes / (1024 * 1024 * 1024)
+      size_gb: execution.metrics.data_size_bytes / (1024 * 1024 * 1024),
     });
     // Keep only last 30 days
     if (this.metrics.backup_performance.backup_size_trend.length > 30) {
@@ -1620,7 +1619,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
   private updateMetrics(): void {
     const now = Date.now();
     // Update availability metrics
-    const recentExecutions = this.executionHistory.filter(e => ;)
+    const recentExecutions = this.executionHistory.filter(e => ;);
       now - e.start_time < 24 * 60 * 60 * 1000
     );
     if (recentExecutions.length > 0) {
@@ -1632,7 +1631,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
     this.metrics.recovery_readiness.plans_current = currentPlans;
     this.metrics.recovery_readiness.plans_total = this.recoveryPlans.size;
     // Update test results
-    const recentTests = Array.from(this.testResults.values()).filter(t => ;)
+    const recentTests = Array.from(this.testResults.values()).filter(t => ;);
       now - t.test_date < 90 * 24 * 60 * 60 * 1000 // Last 90 days
     );
     this.metrics.recovery_readiness.last_test_results = recentTests.map(t => ({)
@@ -1653,7 +1652,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
           disaster_type: 'hardware_failure' as const,
           severity_level: 'critical' as const,
           scope: 'single_system' as const,
-          impact_category: 'availability' as const
+          impact_category: 'availability' as const,
         },
         objectives: {,
           recovery_time_objective: 4 * 60 * 60 * 1000, // 4 hours
@@ -1686,7 +1685,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
                   automated: true,
                   script_path: '/scripts/activate_standby.sh',
                   approval_required: false,
-                  timeout: 5 * 60 * 1000
+                  timeout: 5 * 60 * 1000,
                 },
                 dependencies: [],
                 parallel_execution: false,
@@ -1811,7 +1810,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
           encryption: {,
             enabled: true,
             algorithm: 'AES-256',
-            key_management: 'cloud_kms' as const
+            key_management: 'cloud_kms' as const,
           },
           compression: {,
             enabled: true,
@@ -1830,7 +1829,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
           retry_policy: {,
             max_retries: 3,
             retry_delay: 30 * 60 * 1000,
-            backoff_strategy: 'exponential' as const
+            backoff_strategy: 'exponential' as const,
           }
         },
         performance: {,
@@ -1844,7 +1843,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
           verify_after_backup: true,
           checksum_validation: true,
           test_restore: true,
-          test_restore_frequency: 'weekly' as const
+          test_restore_frequency: 'weekly' as const,
         },
         retention: {,
           keep_daily: 30,
@@ -1869,7 +1868,7 @@ Status Dashboard: /disaster-recovery/events/${event.id}
         planned_downtime: 0,
         unplanned_downtime: 0,
         mtbf: 8760, // hours
-        mttr: 15 // minutes
+        mttr: 15 // minutes,
       },
       backup_performance: {,
         backup_success_rate: 100,

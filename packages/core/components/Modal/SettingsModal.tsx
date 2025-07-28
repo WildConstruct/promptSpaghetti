@@ -203,42 +203,42 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
   const renderSettingsSection = (sectionId: string) => {
     switch (sectionId) {
       case 'seed':
-        return ()
+        return ();
           <SeedControls
             settings={settings.seed}
             onChange={(seedSettings) => handleSettingsUpdate({ seed: seedSettings })}
           />
         );
       case 'temperature':
-        return ()
+        return ();
           <TemperatureControls
             settings={settings.temperature}
             onChange={(tempSettings) => handleSettingsUpdate({ temperature: tempSettings })}
           />
         );
       case 'runCount':
-        return ()
+        return ();
           <RunCountControls
             settings={settings.runCount}
             onChange={(runSettings) => handleSettingsUpdate({ runCount: runSettings })}
           />
         );
       case 'batch':
-        return ()
+        return ();
           <BatchControls
             settings={settings.batch}
             onChange={(batchSettings) => handleSettingsUpdate({ batch: batchSettings })}
           />
         );
       case 'performance':
-        return ()
+        return ();
           <PerformanceControls
             settings={settings.performance}
             onChange={(perfSettings) => handleSettingsUpdate({ performance: perfSettings })}
           />
         );
       case 'ui':
-        return ()
+        return ();
           <UIControls
             settings={settings.ui}
             onChange={(uiSettings) => handleSettingsUpdate({ ui: uiSettings })}
@@ -248,7 +248,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
         return null;
     }
   };
-  return ()
+  return ();
     <Modal
       isOpen={isOpen}
       onClose={onClose}
@@ -287,10 +287,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
                 gap: '12px',
                 padding: '12px 16px',
                 marginBottom: '4px',
-                backgroundColor: activeGroup === group.id 
+                backgroundColor: activeGroup === group.id ,
                   ? uiColors.accent.primary + '10' 
                   : 'transparent',
-                border: activeGroup === group.id 
+                border: activeGroup === group.id ,
                   ? `1px solid ${uiColors.accent.primary}` }
                   : '1px solid transparent',
                 borderRadius: '8px',
@@ -321,7 +321,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
                 <div style={{
                   fontSize: '14px',
                   fontWeight: 500,
-                  color: activeGroup === group.id 
+                  color: activeGroup === group.id ,
                     ? uiColors.accent.primary 
                     : uiColors.text.primary,
                   marginBottom: '2px',
@@ -408,12 +408,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
               padding: '6px 10px',
               borderRadius: '4px',
               fontSize: '12px',
-              backgroundColor: saveStatus === 'saved' 
+              backgroundColor: saveStatus === 'saved' ,
                 ? '#10b981' + '20' 
                 : saveStatus === 'error' 
                 ? '#ef4444' + '20'
                 : uiColors.ui.hover,
-              color: saveStatus === 'saved'
+              color: saveStatus === 'saved',
                 ? '#10b981'
                 : saveStatus === 'error'
                 ? '#ef4444'

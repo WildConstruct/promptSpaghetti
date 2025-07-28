@@ -113,7 +113,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
       onVerificationComplete?.(type);
     }
   };
-  const renderTrustScoreOverview = () => (;)
+  const renderTrustScoreOverview = () => (;);
     <Card className="trust-score-overview">
       <CardHeader>
         <div className="trust-header">
@@ -183,7 +183,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
       </CardContent>
     </Card>
   );
-  const renderVerificationSteps = () => (;)
+  const renderVerificationSteps = () => (;);
     <Card className="verification-steps">
       <CardHeader>
         <CardTitle>Verification Steps</CardTitle>
@@ -228,7 +228,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
   const renderVerificationForm = (type: string) => {
     switch (type) {
     case 'email_verification':
-      return ()
+      return ();
         <div className="verification-form">
           <div className="form-group">
             <label>Email Address</label>
@@ -251,7 +251,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
         </div>
       );
     case 'phone_verification':
-      return ()
+      return ();
         <div className="verification-form">
           <div className="form-group">
             <label>Phone Number</label>
@@ -274,7 +274,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
         </div>
       );
     case 'professional_credentials':
-      return ()
+      return ();
         <div className="verification-form">
           <div className="form-group">
             <label>Professional Role</label>
@@ -340,7 +340,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
         </div>
       );
     case 'social_media_verification':
-      return ()
+      return ();
         <div className="verification-form">
           <div className="form-group">
             <label>LinkedIn Profile</label>
@@ -399,7 +399,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
         </div>
       );
     default:
-      return ()
+      return ();
         <div className="verification-form">
           <p>Verification form for {type} is coming soon.</p>
           <Button variant="outline" onClick={() => setActiveStep(null)}>
@@ -409,7 +409,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
       );
     }
   };
-  const renderValidationHistory = () => (;)
+  const renderValidationHistory = () => (;);
     <Card className="validation-history">
       <CardHeader>
         <CardTitle>Verification History</CardTitle>
@@ -454,14 +454,14 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
     </Card>
   );
   if (isLoading) {
-    return ()
+    return ();
       <div className="verification-center loading">
         <div className="loading-spinner"></div>
         <p>Loading verification data...</p>
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`verification-center ${className}`}>}
       <div className="verification-header">
         <h2>Identity Verification</h2>

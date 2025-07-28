@@ -171,7 +171,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ )
     return extensions[format] || 'json';
   };
   if (!open) return null;
-  return ()
+  return ();
     <div role="dialog" aria-modal="true" style={{ 
       position: 'fixed', 
       top: 0, 
@@ -355,12 +355,12 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ )
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
                   {selectedForComparison.map(index => {)
                     const result = results[index];
-                    return ()
+                    return ();
                       <div key={index} style={{
                         padding: 8,
                         background: '#fff',
                         borderRadius: 4,
-                        border: '1px solid #bae6fd'
+                        border: '1px solid #bae6fd',
                       }}>
                         <div style={{
                           fontSize: 11,
@@ -402,7 +402,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ )
                 const locked = isResultLocked(i);
                 const regenerating = isResultRegenerating(i);
                 const selected = isResultSelected(i);
-                return ()
+                return ();
                   <li key={i} onMouseEnter={() => onResultHover?.(i)} style={{ 
                     marginBottom: 16, 
                     padding: 12, 
@@ -411,7 +411,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ )
                     position:'relative', 
                     cursor:'pointer',
                     background: regenerating ? '#fef3c7' : locked ? '#fffbeb' : selected ? '#f0fdfa' : hasPath ? '#f8fafc' : '#fff',
-                    opacity: regenerating ? 0.7 : 1
+                    opacity: regenerating ? 0.7 : 1,
                   }}>
                     {/* Seed badge */}
                     <span style={{
@@ -452,7 +452,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ )
                         padding: '1px 4px',
                         borderRadius: 8,
                         fontWeight: 600,
-                        animation: 'pulse 1.5s infinite'
+                        animation: 'pulse 1.5s infinite',
                       }}>
                         ⟳ REGENERATING
                       </span>
@@ -688,7 +688,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ )
                           const probabilityPercent = (probability * 100).toFixed(1);
                           const isHighProbability = probability > 0.5;
                           const isMediumProbability = probability > 0.2;
-                          return ()
+                          return ();
                             <div key={idx} style={{
                               fontSize: 10,
                               color: '#374151',
@@ -727,7 +727,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ )
                                       width: `${probability * 100}%`,}
                                       height: '100%',
                                       background: isHighProbability ? '#10b981' : isMediumProbability ? '#f59e0b' : '#6b7280',
-                                      transition: 'width 0.3s ease'
+                                      transition: 'width 0.3s ease',
                                     }} />
                                   </div>
                                   <span style={{ 
@@ -764,7 +764,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ )
           alignItems: 'center',
           marginTop: 20,
           paddingTop: 16,
-          borderTop: '1px solid #e5e7eb'
+          borderTop: '1px solid #e5e7eb',
         }}>
           <div style={{ fontSize: 12, color: '#6b7280' }}>
             {lockedResults.length > 0 && ()

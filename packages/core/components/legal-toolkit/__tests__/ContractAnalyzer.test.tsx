@@ -39,7 +39,7 @@ describe('ContractAnalyzer Component', () => {
   });
   describe('Initial Rendering', () => {
     it('renders contract analyzer interface', () => {
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -51,7 +51,7 @@ describe('ContractAnalyzer Component', () => {
       expect(screen.getByText('Test Contract')).toBeInTheDocument();
     });
     it('displays document information correctly', () => {
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -64,7 +64,7 @@ describe('ContractAnalyzer Component', () => {
       expect(screen.getByText(/Company A Inc./)).toBeInTheDocument();
     });
     it('shows analysis type selection', () => {
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -78,7 +78,7 @@ describe('ContractAnalyzer Component', () => {
   describe('Analysis Process', () => {
     it('starts analysis when start button is clicked', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -92,7 +92,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('shows progress during analysis', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -109,7 +109,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('displays identified clauses during analysis', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -132,7 +132,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('calls onAnalysisComplete when analysis finishes', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -157,7 +157,7 @@ describe('ContractAnalyzer Component', () => {
   describe('Analysis Results Display', () => {
     it('displays analysis results after completion', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -174,7 +174,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('shows clause details with risk levels', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -192,7 +192,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('displays risk assessment summary', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -209,7 +209,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('shows recommendations', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -228,7 +228,7 @@ describe('ContractAnalyzer Component', () => {
   describe('Clause Interaction', () => {
     it('allows highlighting clauses in document', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -245,7 +245,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('shows clause details when clicked', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -263,7 +263,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('allows filtering clauses by category', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -281,7 +281,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('allows filtering clauses by risk level', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -309,7 +309,7 @@ describe('ContractAnalyzer Component', () => {
         />
       );
       expect(screen.getByDisplayValue('basic')).toBeInTheDocument();
-      rerender()
+      rerender();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -321,7 +321,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('changes analysis depth based on type', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -339,7 +339,7 @@ describe('ContractAnalyzer Component', () => {
   describe('Export Functionality', () => {
     it('allows exporting analysis results', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -358,7 +358,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('generates analysis report for export', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -381,7 +381,7 @@ describe('ContractAnalyzer Component', () => {
     it('handles analysis errors gracefully', async () => {
       const user = userEvent.setup();
       const errorDocument = { ...mockDocument, content: '' };
-      render()
+      render();
         <ContractAnalyzer
           document={errorDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -397,7 +397,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('handles invalid document gracefully', () => {
       const invalidDocument = { ...mockDocument, type: 'invalid' as any };
-      render()
+      render();
         <ContractAnalyzer
           document={invalidDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -409,7 +409,7 @@ describe('ContractAnalyzer Component', () => {
     it('shows retry option on analysis failure', async () => {
       const user = userEvent.setup();
       const errorDocument = { ...mockDocument, content: '' };
-      render()
+      render();
         <ContractAnalyzer
           document={errorDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -428,7 +428,7 @@ describe('ContractAnalyzer Component', () => {
   });
   describe('Accessibility', () => {
     it('provides proper ARIA labels', () => {
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -440,7 +440,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('supports keyboard navigation', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}
@@ -454,7 +454,7 @@ describe('ContractAnalyzer Component', () => {
     });
     it('announces analysis progress to screen readers', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ContractAnalyzer
           document={mockDocument}
           onClauseIdentified={mockOnClauseIdentified}

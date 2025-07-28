@@ -154,7 +154,7 @@ export class AuditManagementAPI {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to create audit event'
+        error: error instanceof Error ? error.message : 'Failed to create audit event',
       };
     }
   }
@@ -199,7 +199,7 @@ export class AuditManagementAPI {
           total_count: result.totalCount,
           total_pages: result.totalPages,
           has_next: result.page < result.totalPages,
-          has_prev: result.page > 1
+          has_prev: result.page > 1,
         },
         analytics: result.analytics,
         filters_applied: this.getAppliedFilters(validatedRequest),
@@ -212,7 +212,7 @@ export class AuditManagementAPI {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to query audit events'
+        error: error instanceof Error ? error.message : 'Failed to query audit events',
       };
     }
   }
@@ -230,17 +230,17 @@ export class AuditManagementAPI {
       if (!event) {
         return {
           success: false,
-          error: 'Audit event not found'
+          error: 'Audit event not found',
         };
       }
       return {
         success: true,
-        event: event as any // Type conversion would be handled properly
+        event: event as any // Type conversion would be handled properly,
       };
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to retrieve audit event'
+        error: error instanceof Error ? error.message : 'Failed to retrieve audit event',
       };
     }
   }
@@ -265,7 +265,7 @@ export class AuditManagementAPI {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to update audit event'
+        error: error instanceof Error ? error.message : 'Failed to update audit event',
       };
     }
   }
@@ -281,11 +281,11 @@ export class AuditManagementAPI {
   }> {
     try {
       const validatedRequest = ComplianceReportRequest.parse(request);
-      const report = this.auditSystem.generateComplianceReport(;)
+      const report = this.auditSystem.generateComplianceReport(;);
         validatedRequest.framework,
         {
           start: new Date(validatedRequest.start_date),
-          end: new Date(validatedRequest.end_date)
+          end: new Date(validatedRequest.end_date),
         }
       );
       // Handle different export formats
@@ -301,7 +301,7 @@ export class AuditManagementAPI {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to generate compliance report'
+        error: error instanceof Error ? error.message : 'Failed to generate compliance report',
       };
     }
   }
@@ -321,7 +321,7 @@ export class AuditManagementAPI {
         timeframe: validatedRequest.timeframe,
         metrics: validatedRequest.metrics,
         group_by: validatedRequest.group_by,
-        filters: validatedRequest.filters ? {
+        filters: validatedRequest.filters ? {,
           start_date: validatedRequest.start_date ? new Date(validatedRequest.start_date) : undefined,
           end_date: validatedRequest.end_date ? new Date(validatedRequest.end_date) : undefined,
           ...validatedRequest.filters
@@ -342,7 +342,7 @@ export class AuditManagementAPI {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to generate analytics'
+        error: error instanceof Error ? error.message : 'Failed to generate analytics',
       };
     }
   }
@@ -364,7 +364,7 @@ export class AuditManagementAPI {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to detect anomalies'
+        error: error instanceof Error ? error.message : 'Failed to detect anomalies',
       };
     }
   }
@@ -401,7 +401,7 @@ export class AuditManagementAPI {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to retrieve system health'
+        error: error instanceof Error ? error.message : 'Failed to retrieve system health',
       };
     }
   }
@@ -433,7 +433,7 @@ export class AuditManagementAPI {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to export audit data'
+        error: error instanceof Error ? error.message : 'Failed to export audit data',
       };
     }
   }
@@ -484,7 +484,7 @@ export class AuditManagementAPI {
       framework: report.framework,
       report_period: report.report_period,
       summary: report.summary,
-      compliance_score: report.compliance_score || 85 // Example score
+      compliance_score: report.compliance_score || 85 // Example score,
     };
   }
   private generateTrendAnalysis(analytics: any): any {

@@ -16,7 +16,7 @@ export const RestorePrompt: React.FC<RestorePromptProps> = ({)
   if (!show || !draft) {
     return null;
   }
-  return ()
+  return ();
     <div 
       style={{
         position: 'absolute',
@@ -37,7 +37,7 @@ export const RestorePrompt: React.FC<RestorePromptProps> = ({)
         background: '#23262b', 
         padding: 32, 
         borderRadius: 12, 
-        boxShadow: '0 2px 8px #0008' 
+        boxShadow: '0 2px 8px #0008' ,
       }}>
         <h3 style={{ color: '#fff', marginBottom: 12 }}>
           Restore unsaved graph draft?

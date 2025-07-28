@@ -20,7 +20,7 @@ jest.mock('lucide-react', () => ({)
   ChevronDown: () => <div data-testid="chevron-down-icon" />,
   UserPlus: () => <div data-testid="user-plus-icon" />,
   Settings: () => <div data-testid="settings-icon" />,
-  Activity: () => <div data-testid="activity-icon" />
+  Activity: () => <div data-testid="activity-icon" />,
 }));
 describe('TeamManager', () => {
   const mockTeams = [;
@@ -140,7 +140,7 @@ describe('TeamManager', () => {
   it('handles team creation form submission', async () => {
     const user = userEvent.setup();
     const mockCreate = jest.fn().mockResolvedValue({});
-    render()
+    render();
       <TeamManager 
         teams={mockTeams} 
         {...defaultProps}
@@ -173,7 +173,7 @@ describe('TeamManager', () => {
   it('validates required fields in create form', async () => {
     const user = userEvent.setup();
     const mockCreate = jest.fn();
-    render()
+    render();
       <TeamManager 
         teams={mockTeams} 
         {...defaultProps}
@@ -202,7 +202,7 @@ describe('TeamManager', () => {
   it('handles team update form submission', async () => {
     const user = userEvent.setup();
     const mockUpdate = jest.fn().mockResolvedValue({});
-    render()
+    render();
       <TeamManager 
         teams={mockTeams} 
         {...defaultProps}
@@ -242,7 +242,7 @@ describe('TeamManager', () => {
   it('handles team deletion', async () => {
     const user = userEvent.setup();
     const mockDelete = jest.fn().mockResolvedValue({});
-    render()
+    render();
       <TeamManager 
         teams={mockTeams} 
         {...defaultProps}
@@ -262,7 +262,7 @@ describe('TeamManager', () => {
   it('expands team to show members when clicked', async () => {
     const user = userEvent.setup();
     const mockLoadMembers = jest.fn().mockResolvedValue(mockMembers);
-    render()
+    render();
       <TeamManager 
         teams={mockTeams} 
         {...defaultProps}
@@ -282,7 +282,7 @@ describe('TeamManager', () => {
   it('displays team members when team is expanded', async () => {
     const user = userEvent.setup();
     const mockLoadMembers = jest.fn().mockResolvedValue(mockMembers);
-    render()
+    render();
       <TeamManager 
         teams={mockTeams} 
         members={{ 'team-1': mockMembers }}
@@ -298,7 +298,7 @@ describe('TeamManager', () => {
   });
   it('shows add member modal when add member button is clicked', async () => {
     const user = userEvent.setup();
-    render()
+    render();
       <TeamManager 
         teams={mockTeams} 
         members={{ 'team-1': mockMembers }}
@@ -315,7 +315,7 @@ describe('TeamManager', () => {
   it('handles add member form submission', async () => {
     const user = userEvent.setup();
     const mockAddMember = jest.fn().mockResolvedValue({});
-    render()
+    render();
       <TeamManager 
         teams={mockTeams} 
         members={{ 'team-1': mockMembers }}
@@ -343,7 +343,7 @@ describe('TeamManager', () => {
   });
   it('shows role update dropdown when member role is clicked', async () => {
     const user = userEvent.setup();
-    render()
+    render();
       <TeamManager 
         teams={mockTeams} 
         members={{ 'team-1': mockMembers }}
@@ -360,7 +360,7 @@ describe('TeamManager', () => {
   it('handles member role update', async () => {
     const user = userEvent.setup();
     const mockUpdateRole = jest.fn().mockResolvedValue({});
-    render()
+    render();
       <TeamManager 
         teams={mockTeams} 
         members={{ 'team-1': mockMembers }}
@@ -380,7 +380,7 @@ describe('TeamManager', () => {
   it('handles member removal', async () => {
     const user = userEvent.setup();
     const mockRemoveMember = jest.fn().mockResolvedValue({});
-    render()
+    render();
       <TeamManager 
         teams={mockTeams} 
         members={{ 'team-1': mockMembers }}
@@ -405,10 +405,10 @@ describe('TeamManager', () => {
   });
   it('shows loading state during operations', async () => {
     const user = userEvent.setup();
-    const mockCreate = jest.fn().mockImplementation(;)
+    const mockCreate = jest.fn().mockImplementation(;);
       () => new Promise(resolve => setTimeout(resolve, 1000))
     );
-    render()
+    render();
       <TeamManager 
         teams={mockTeams} 
         {...defaultProps}

@@ -63,7 +63,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
         difficulty: filters.difficulty.length > 0 ? filters.difficulty : undefined,
         audience: filters.audience.length > 0 ? filters.audience : undefined,
         duration: Object.keys(filters.duration).length > 0 ? filters.duration : undefined,
-        certification: filters.certification ?? undefined
+        certification: filters.certification ?? undefined,
       });
       setAvailablePaths(searchResults);
       // Load user's paths
@@ -126,7 +126,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
     const isEnrolled = !!enrollment;
     const progress = enrollment?.progress.overallProgress || 0;
     const status = enrollment?.status;
-    return ()
+    return ();
       <div
         key={path.id}
         className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer"
@@ -237,7 +237,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
     );
   };
   if (loading) {
-    return ()
+    return ();
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -246,7 +246,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="learning-path-dashboard h-full flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">

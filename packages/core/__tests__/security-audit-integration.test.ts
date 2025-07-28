@@ -114,7 +114,7 @@ describe('Security Audit Logger Integration', () => {
       } as any;
       ctx.variables.x = 10;
       ctx.variables.y = 5;
-      const conditional = new ConditionalNode(;)
+      const conditional = new ConditionalNode(;);
         'test-node',
         [
           { condition: 'x > y', output: 'x is greater' },
@@ -135,7 +135,7 @@ describe('Security Audit Logger Integration', () => {
         seed: 'test-seed',
         executionMeta: { nodeExecutionOrder: [], performanceMetrics: new Map() }
       } as any;
-      const conditional = new ConditionalNode(;)
+      const conditional = new ConditionalNode(;);
         'test-node',
         [
           { condition: 'eval("malicious code")', output: 'bad' }
@@ -156,7 +156,7 @@ describe('Security Audit Logger Integration', () => {
       } as any;
       ctx.variables.value = 15;
       // 1. Create conditional node with Math operations
-      const conditional = new ConditionalNode(;)
+      const conditional = new ConditionalNode(;);
         'math-node',
         [
           { condition: 'Math.min(value, 10) === 10', output: 'capped at 10' },
@@ -168,7 +168,7 @@ describe('Security Audit Logger Integration', () => {
       const result = conditional.run(ctx);
       expect(result).toBe('capped at 10');
       // 3. Try some dangerous operations
-      const dangerousConditional = new ConditionalNode(;)
+      const dangerousConditional = new ConditionalNode(;);
         'danger-node',
         [
           { condition: 'value.constructor.name === "Number"', output: 'dangerous' }
@@ -193,7 +193,7 @@ describe('Security Audit Logger Integration', () => {
       ctx.variables.a = 5;
       ctx.variables.b = 10;
       // Safe operations
-      const safeConditional = new ConditionalNode(;)
+      const safeConditional = new ConditionalNode(;);
         'safe-node',
         [
           { condition: 'a < b', output: 'a is less' },
@@ -203,7 +203,7 @@ describe('Security Audit Logger Integration', () => {
       );
       safeConditional.run(ctx);
       // Dangerous operations
-      const dangerousConditional = new ConditionalNode(;)
+      const dangerousConditional = new ConditionalNode(;);
         'danger-node',
         [
           { condition: 'a.__proto__', output: 'proto' },

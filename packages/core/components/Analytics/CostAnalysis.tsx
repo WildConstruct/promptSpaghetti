@@ -53,7 +53,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
     if (percentage >= 75) return 'Warning';
     return 'On Track';
   };
-  return ()
+  return ();
     <Card className="budget-card">
       <CardHeader>
         <div className="flex justify-between items-start">
@@ -160,7 +160,7 @@ interface CostForecastChartProps {
  */
 const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loading }) => {
   if (loading) {
-    return ()
+    return ();
       <Card>
         <CardHeader>
           <CardTitle>Cost Forecast</CardTitle>
@@ -174,7 +174,7 @@ const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loa
     );
   }
   if (!forecastData) {
-    return ()
+    return ();
       <Card>
         <CardHeader>
           <CardTitle>Cost Forecast</CardTitle>
@@ -191,9 +191,9 @@ const CostForecastChart: React.FC<CostForecastChartProps> = ({ forecastData, loa
     day: i + 1,
     projected: forecastData.forecastedDailyCost * (i + 1),
     lower: forecastData.confidenceInterval.lower * (i + 1) / 30,
-    upper: forecastData.confidenceInterval.upper * (i + 1) / 30
+    upper: forecastData.confidenceInterval.upper * (i + 1) / 30,
   }));
-  return ()
+  return ();
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -336,14 +336,14 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
         forecast: forecastResponse.success ? forecastResponse.data : null,
         budgets: budgetsResponse.success ? budgetsResponse.data : [],
         budgetUsage: budgetUsageMap,
-        recommendations: recommendationsResponse.success ? recommendationsResponse.data : []
+        recommendations: recommendationsResponse.success ? recommendationsResponse.data : [],
       }));
     } catch (error) {
       console.error('Failed to load cost data:', error);
       setState(prev => ({)
         ...prev,
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load cost data'
+        error: error instanceof Error ? error.message : 'Failed to load cost data',
       }));
     }
   }, [analyticsClient, timeRange, userId, organizationId]);
@@ -380,7 +380,7 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
     loadCostData();
   }, [loadCostData]);
   if (state.loading) {
-    return ()
+    return ();
       <div className="cost-analysis">
         <div className="loading-container">
           <div className="loading-spinner"></div>
@@ -390,7 +390,7 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
     );
   }
   if (state.error) {
-    return ()
+    return ();
       <div className="cost-analysis">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
@@ -415,7 +415,7 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({)
     value: cost,
   }));
   const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
-  return ()
+  return ();
     <div className="cost-analysis">
       <Tabs defaultValue="overview" className="w-full">
         <TabsList className="grid grid-cols-4 w-full">

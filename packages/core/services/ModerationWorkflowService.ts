@@ -726,7 +726,7 @@ export class ModerationWorkflowService {
     const workflow = this.workflows.get(workflowId);
     if (!workflow) return false;
     // Check for running executions
-    const runningExecutions = Array.from(this.executions.values()).filter(;)
+    const runningExecutions = Array.from(this.executions.values()).filter(;);
       e => e.workflowId === workflowId && e.status === 'running'
     );
     if (runningExecutions.length > 0) {
@@ -946,24 +946,24 @@ export class ModerationWorkflowService {
       failedExecutions: failedExecutions.length,
       performance: {,
         averageExecutionTime,
-        averageStepsPerWorkflow: workflows.length > 0 
+        averageStepsPerWorkflow: workflows.length > 0 ,
           ? workflows.reduce((sum, w) => sum + w.steps.length, 0) / workflows.length 
           : 0,
         automationRate,
         successRate,
-        throughput: 0 // TODO: Calculate based on time window
+        throughput: 0 // TODO: Calculate based on time window,
       },
       utilization: {,
         processingCapacity: 100, // TODO: Calculate based on resource limits
         queueDepth: this.executionQueue.length,
         resourceUtilization: 75, // TODO: Calculate based on actual resource usage
-        bottlenecks: [] // TODO: Identify bottlenecks
+        bottlenecks: [] // TODO: Identify bottlenecks,
       },
       quality: {,
         slaCompliance: 0.95, // TODO: Calculate based on SLA metrics
         errorRate: executions.length > 0 ? failedExecutions.length / executions.length : 0,
         escalationRate: 0.1, // TODO: Calculate based on escalation data
-        retryRate: 0.05 // TODO: Calculate based on retry data
+        retryRate: 0.05 // TODO: Calculate based on retry data,
       }
     };
   }

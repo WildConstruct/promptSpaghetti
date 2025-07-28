@@ -369,7 +369,7 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
       this.emit('generationStarted', { context });
       const suggestions: ImprovementSuggestion[] = [];
       // Run different types of analysis
-      const analysisResults = await Promise.all([;)
+      const analysisResults = await Promise.all([;);
         this.analyzePerformance(context),
         this.analyzeUserExperience(context),
         this.analyzeContent(context),
@@ -465,7 +465,7 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
     // Get relevant suggestions
     const allSuggestions = this.getSuggestions();
     // Apply personalization algorithm
-    const personalizedSuggestions = this.personalizeSuggestions(;)
+    const personalizedSuggestions = this.personalizeSuggestions(;);
       allSuggestions,
       userBehavior,
       userContext
@@ -536,7 +536,7 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
     const context: AnalysisContext = {
       timeRange: {,
         start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last 7 days
-        end: new Date()
+        end: new Date(),
       },
       scope: {,
         domain: this.mapProblemTypeToDomain(problem.type),
@@ -555,12 +555,12 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
       },
       metrics: await this.getCurrentMetrics(),
       userBehavior: await this.getCurrentUserBehavior(),
-      systemState: await this.getCurrentSystemState()
+      systemState: await this.getCurrentSystemState(),
     };
     // Generate targeted suggestions
     const suggestionIds = await this.generateSuggestions(context);
     // Filter for problem relevance
-    const relevantSuggestionIds = await this.filterForProblemRelevance(;)
+    const relevantSuggestionIds = await this.filterForProblemRelevance(;);
       suggestionIds,
       problem
     );
@@ -568,7 +568,7 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
   }
   // Batch operations
   async approveSuggestions(suggestionIds: string[]): Promise<void> {
-    const results = await Promise.allSettled(;)
+    const results = await Promise.allSettled(;);
       suggestionIds.map(id => this.updateSuggestionStatus(id, 'approved'))
     );
     const approved = results.filter(r => r.status === 'fulfilled').length;
@@ -580,7 +580,7 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
     });
   }
   async rejectSuggestions(suggestionIds: string[], reason?: string): Promise<void> {
-    const results = await Promise.allSettled(;)
+    const results = await Promise.allSettled(;);
       suggestionIds.map(id => this.updateSuggestionStatus(id, 'rejected', { )
         reviewedBy: 'batch_operation' ,
       }))
@@ -605,7 +605,6 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
     implementationRate: number;
     approvalRate: number;
     topCategories: Array<{ category: SuggestionCategory; count: number }>;
-  } {
     const suggestions = Array.from(this.suggestions.values());
     const byType = suggestions.reduce((acc, s) => {
       acc[s.type] = (acc[s.type] || 0) + 1;
@@ -846,7 +845,7 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
     const effortScore = this.getEffortScore(suggestion.implementation.complexity);
     const confidenceScore = suggestion.confidence / 100;
     const urgencyScore = this.getUrgencyScore(suggestion.priority);
-    return ()
+    return ();
       impactScore * weights.impact +
       effortScore * weights.effort +
       confidenceScore * weights.confidence +
@@ -910,7 +909,7 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
     return {
       timeRange: {,
         start: new Date(Date.now() - 24 * 60 * 60 * 1000), // Last 24 hours
-        end: new Date()
+        end: new Date(),
       },
       scope: {,
         domain: 'user_experience',
@@ -929,7 +928,7 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
       },
       metrics: await this.getCurrentMetrics(),
       userBehavior: await this.getCurrentUserBehavior(),
-      systemState: await this.getCurrentSystemState()
+      systemState: await this.getCurrentSystemState(),
     };
   }
   private async buildUserContext(userId: string, context?: Partial<AnalysisContext>): Promise<AnalysisContext> {
@@ -1065,7 +1064,7 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
       risksAndChallenges: ['User adoption', 'Technical complexity'],
       acceptanceCriteria: ['Feature works as expected', 'Performance meets requirements'],
       testingStrategy: 'Unit and integration testing',
-      rolloutPlan: 'Gradual rollout to user segments'
+      rolloutPlan: 'Gradual rollout to user segments',
     };
   }
   private generateEvidence(opportunity: any, analysis: any): Evidence[] {

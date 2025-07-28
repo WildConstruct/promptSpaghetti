@@ -107,7 +107,7 @@ export const bParts = b.split('.').map(Number);
     return totalWeight > 0 ? totalScore / totalWeight : 0;
   },
   // Grade calculation
-  calculateGrade: (score: number): 'A+' | 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D' | 'F' => {
+  calculateGrade: (score: number): 'A+' | 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D' | 'F' => {,
     if (score >= 95) return 'A+';
     if (score >= 90) return 'A';
     if (score >= 85) return 'B+';

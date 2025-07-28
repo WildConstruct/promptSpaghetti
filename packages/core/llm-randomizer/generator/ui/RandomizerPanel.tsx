@@ -43,7 +43,7 @@ export const RandomizerPanel: React.FC<RandomizerPanelProps> = ({)
     setValidation(result);
   }, [parameters, parameterManager]);
   // Handle parameter changes
-  const updateParameter = useCallback(<K extends keyof RandomizerParameters>(;)
+  const updateParameter = useCallback(<K extends keyof RandomizerParameters>(;);
     key: K,
     value: RandomizerParameters[K],
   ) => {
@@ -66,7 +66,7 @@ export const RandomizerPanel: React.FC<RandomizerPanelProps> = ({)
       const completeParameters = parameterManager.createCompleteParameters(parameters);
       setGenerationProgress('Generating with LLM...');
       const result = await workflow.generateGraph(completeParameters, {)
-        onProgress: (message: string) => setGenerationProgress(message)
+        onProgress: (message: string) => setGenerationProgress(message),
       });
       if (result.success && result.graph) {
         // Add to history
@@ -100,7 +100,7 @@ export const RandomizerPanel: React.FC<RandomizerPanelProps> = ({)
   const suggestions = useMemo(() => {
     return parameterManager.getSuggestions(parameters);
   }, [parameters, parameterManager]);
-  return ()
+  return ();
     <div className={`randomizer-panel ${className}`}>}
       {/* Header */}
       <div className="randomizer-header">

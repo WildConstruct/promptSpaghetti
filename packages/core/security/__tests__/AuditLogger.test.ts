@@ -45,7 +45,7 @@ describe('AuditLogger', () => {
         requestId: 'req-123',
         userRole: 'analyst',
         ipAddress: '192.168.1.1',
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       await logger.logDataAccess()
         context,
@@ -147,7 +147,7 @@ describe('AuditLogger', () => {
       }
       const logs = await logger.query({});
       for (const log of logs) {
-        const expected = classifications.find(;)
+        const expected = classifications.find(;);
           c => log.resourceId === `test_${c.level}`}
         );
         expect(log.sensitiveAccess).toBe(expected?.sensitive);
@@ -161,7 +161,7 @@ describe('AuditLogger', () => {
         storageBackend: backend,
         asyncLogging: true,
         bufferSize: 5,
-        flushInterval: 10000 // Long interval
+        flushInterval: 10000 // Long interval,
       });
       // Add 3 logs (less than buffer size)
       for (let i = 0; i < 3; i++) {
@@ -210,7 +210,7 @@ describe('AuditLogger', () => {
         storageBackend: backend,
         asyncLogging: true,
         bufferSize: 100,
-        flushInterval: 1000 // 1 second
+        flushInterval: 1000 // 1 second,
       });
       await asyncLogger.log({)
         userId: 'user123',
@@ -290,28 +290,28 @@ describe('AuditLogger', () => {
           operation: AuditOperation.READ,
           dataClassification: DataClassificationLevel.PUBLIC,
           success: true,
-          timestamp: new Date('2025-01-21T10:00:00Z')
+          timestamp: new Date('2025-01-21T10:00:00Z'),
         },
         {
           userId: 'user1',
           operation: AuditOperation.WRITE,
           dataClassification: DataClassificationLevel.CONFIDENTIAL,
           success: false,
-          timestamp: new Date('2025-01-21T11:00:00Z')
+          timestamp: new Date('2025-01-21T11:00:00Z'),
         },
         {
           userId: 'user2',
           operation: AuditOperation.READ,
           dataClassification: DataClassificationLevel.CONFIDENTIAL,
           success: true,
-          timestamp: new Date('2025-01-21T12:00:00Z')
+          timestamp: new Date('2025-01-21T12:00:00Z'),
         },
         {
           userId: 'user2',
           operation: AuditOperation.DELETE,
           dataClassification: DataClassificationLevel.RESTRICTED,
           success: true,
-          timestamp: new Date('2025-01-21T13:00:00Z')
+          timestamp: new Date('2025-01-21T13:00:00Z'),
         }
       ];
       for (const data of testData) {
@@ -357,7 +357,7 @@ describe('AuditLogger', () => {
     it('should filter by date range', async () => {
       const logs = await logger.query({)
         startDate: new Date('2025-01-21T11:00:00Z'),
-        endDate: new Date('2025-01-21T12:00:00Z')
+        endDate: new Date('2025-01-21T12:00:00Z'),
       });
       expect(logs).toHaveLength(2);
     });

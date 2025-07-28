@@ -68,7 +68,7 @@ describe('EventSystem', () => {
     it('should unsubscribe correctly', async () => {
       const mockHandler = jest.fn<unknown[], unknown>();
       const testEvent = createTestEvent({ type: 'test_unsubscribe' });
-      const subscriptionId = eventBus.subscribe(;)
+      const subscriptionId = eventBus.subscribe(;);
         { types: ['test_unsubscribe'] },
         mockHandler
       );
@@ -148,7 +148,7 @@ describe('EventSystem', () => {
       await eventBus.publish(createTestEvent({ timestamp: now }));
       // Event outside window
       await eventBus.publish(createTestEvent({)
-        timestamp: new Date(now.getTime() + 2 * 60 * 60 * 1000)
+        timestamp: new Date(now.getTime() + 2 * 60 * 60 * 1000),
       }));
       expect(handler).toHaveBeenCalledTimes(1);
     });
@@ -200,7 +200,7 @@ describe('EventSystem', () => {
   });
   describe('Event Factory Functions', () => {
     it('should create workflow events correctly', () => {
-      const workflowEvent = EventFactory.createWorkflowEvent(;)
+      const workflowEvent = EventFactory.createWorkflowEvent(;);
         'task_created',
         { taskId: 'task-123' },
         'test-factory',
@@ -213,7 +213,7 @@ describe('EventSystem', () => {
       expect(workflowEvent.metadata?.priority).toBe(EventPriority.HIGH);
     });
     it('should create analytics events correctly', () => {
-      const analyticsEvent = EventFactory.createAnalyticsEvent(;)
+      const analyticsEvent = EventFactory.createAnalyticsEvent(;);
         'user_action',
         { action: 'click', feature: 'button' },
         'test-factory',
@@ -224,14 +224,14 @@ describe('EventSystem', () => {
       expect(analyticsEvent.metadata?.priority).toBe(EventPriority.MEDIUM);
     });
     it('should create security events with correct priority', () => {
-      const criticalSecurityEvent = EventFactory.createSecurityEvent(;)
+      const criticalSecurityEvent = EventFactory.createSecurityEvent(;);
         'auth_failure',
         { severity: 'critical' },
         'test-factory',
         'user-000'
       );
       expect(criticalSecurityEvent.metadata?.priority).toBe(EventPriority.CRITICAL);
-      const lowSecurityEvent = EventFactory.createSecurityEvent(;)
+      const lowSecurityEvent = EventFactory.createSecurityEvent(;);
         'audit_log',
         { severity: 'low' },
         'test-factory'
@@ -389,14 +389,14 @@ describe('Event System Integration', () => {
       analyticsHandler
     );
     // Publish workflow event that triggers analytics
-    const taskCreatedEvent = EventFactory.createWorkflowEvent(;)
+    const taskCreatedEvent = EventFactory.createWorkflowEvent(;);
       'task_created',
       { taskId: 'task-integration' },
       'integration-test'
     );
     await globalEventBus.publish(taskCreatedEvent);
     // Simulate analytics event triggered by workflow
-    const analyticsEvent = EventFactory.createAnalyticsEvent(;)
+    const analyticsEvent = EventFactory.createAnalyticsEvent(;);
       'user_action',
       { action: 'task_created', feature: 'task_management' },
       'integration-test'
@@ -416,7 +416,7 @@ describe('Event System Integration', () => {
       { types: ['user_interaction'] },
       async (event) => {
         executionOrder.push('ui_handler');
-        const workflowEvent = EventFactory.createWorkflowEvent(;)
+        const workflowEvent = EventFactory.createWorkflowEvent(;);
           'task_started',
           { originalEvent: event.id },
           'ui-integration'
@@ -429,7 +429,7 @@ describe('Event System Integration', () => {
       { types: ['task_started'] },
       async (event) => {
         executionOrder.push('workflow_handler');
-        const analyticsEvent = EventFactory.createAnalyticsEvent(;)
+        const analyticsEvent = EventFactory.createAnalyticsEvent(;);
           'performance_metric',
           { action: 'task_started', value: 1 },
           'workflow-integration'
@@ -445,7 +445,7 @@ describe('Event System Integration', () => {
       }
     );
     // Start the chain
-    const uiEvent = EventFactory.createUIEvent(;)
+    const uiEvent = EventFactory.createUIEvent(;);
       'user_interaction',
       { component: 'task-form', action: 'submit' },
       'integration-test'

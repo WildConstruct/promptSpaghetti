@@ -20,7 +20,7 @@ export interface EditorActions {
     selectNode: (nodeId: string | null) => void;
     focusNode: (nodeId: string) => void;
     saveGraph: () => Promise<void>;
-    loadGraph: (data: {)
+    loadGraph: (data: {),
         nodes: Node[];
         edges: Edge[];
     }) => void;

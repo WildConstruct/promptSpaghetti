@@ -111,7 +111,7 @@ export const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProp
   const executeTransition = async (transition: WorkflowTransition, transitionComment: string) => {
     if (!transition) return;
     try {
-      const result = await transitionResourceState(;)
+      const result = await transitionResourceState(;);
         resourceId,
         transition.to_state_id,
         currentUserId,
@@ -167,7 +167,7 @@ export const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProp
     } else {
       buttonClass += 'bg-blue-100 text-blue-800 hover:bg-blue-200';
     }
-    return ()
+    return ();
       <button
         key={transition.id}
         onClick={() => handleTransitionClick(transition)}
@@ -193,7 +193,7 @@ export const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProp
     );
   };
   if (loading) {
-    return ()
+    return ();
       <div className="flex items-center space-x-2 text-sm text-gray-500">
         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
         <span>Loading transitions...</span>
@@ -201,7 +201,7 @@ export const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProp
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className="flex items-center space-x-2 text-sm text-red-600">
         <ExclamationTriangleIcon className="h-4 w-4" />
         <span>Error loading transitions</span>
@@ -209,13 +209,13 @@ export const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProp
     );
   }
   if (!currentState) {
-    return ()
+    return ();
       <div className="text-sm text-gray-500">
         Current state not found
       </div>
     );
   }
-  return ()
+  return ();
     <div className="space-y-3">
       {/* Current State Display */}
       <div className="flex items-center space-x-2 text-sm">

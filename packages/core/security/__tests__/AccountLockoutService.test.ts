@@ -188,7 +188,7 @@ describe('AccountLockoutService', () => {
       const firstResult = await service.emergencyUnlock(lockoutId, adminId, emergencyCode, 'Test');
       expect(firstResult.success).toBe(true);
       // Create another lockout for second test
-      const secondLockoutId = await service.createLockout(;)
+      const secondLockoutId = await service.createLockout(;);
         'user456',
         'test2@example.com',
         LockoutReason.SUSPICIOUS_ACTIVITY
@@ -218,7 +218,7 @@ describe('AccountLockoutService', () => {
       adminActionId = lockout!.adminActions[0].id;
     });
     test('should approve unlock request', async () => {
-      const result = await service.approveUnlock(;)
+      const result = await service.approveUnlock(;);
         lockoutId,
         adminActionId,
         'approver-admin',
@@ -232,7 +232,7 @@ describe('AccountLockoutService', () => {
       expect(lockout!.adminActions[0].approvedBy).toBe('approver-admin');
     });
     test('should deny unlock request', async () => {
-      const result = await service.approveUnlock(;)
+      const result = await service.approveUnlock(;);
         lockoutId,
         adminActionId,
         'approver-admin',
@@ -249,7 +249,7 @@ describe('AccountLockoutService', () => {
   describe('User and Admin Queries', () => {
     test('should retrieve user lockouts', async () => {
       const userId = 'user123';
-      const lockoutId1 = await service.createLockout(;)
+      const lockoutId1 = await service.createLockout(;);
         userId,
         'test@example.com',
         LockoutReason.EXCESSIVE_FAILED_ATTEMPTS
@@ -267,12 +267,12 @@ describe('AccountLockoutService', () => {
       expect(service.isUserLockedOut(userId)).toBe(true);
     });
     test('should retrieve pending lockouts', async () => {
-      const lockoutId1 = await service.createLockout(;)
+      const lockoutId1 = await service.createLockout(;);
         'user1',
         'test1@example.com',
         LockoutReason.EXCESSIVE_FAILED_ATTEMPTS
       );
-      const lockoutId2 = await service.createLockout(;)
+      const lockoutId2 = await service.createLockout(;);
         'user2',
         'test2@example.com',
         LockoutReason.SECURITY_POLICY_VIOLATION
@@ -310,7 +310,7 @@ describe('AccountLockoutService', () => {
       await service.createLockout('user1', 'test1@example.com', LockoutReason.EXCESSIVE_FAILED_ATTEMPTS);
       const stats = service.getLockoutStatistics({)
         start: new Date(mockDate.getTime() - 24 * 60 * 60 * 1000),
-        end: new Date(mockDate.getTime() + 24 * 60 * 60 * 1000)
+        end: new Date(mockDate.getTime() + 24 * 60 * 60 * 1000),
       });
       expect(stats.totalLockouts).toBe(1);
     });
@@ -392,7 +392,7 @@ describe('AccountLockoutService', () => {
       )).rejects.toThrow('Lockout not found: non-existent');
     });
     test('should throw error for non-existent admin action', async () => {
-      const lockoutId = await service.createLockout(;)
+      const lockoutId = await service.createLockout(;);
         'user',
         'test@example.com',
         LockoutReason.EXCESSIVE_FAILED_ATTEMPTS

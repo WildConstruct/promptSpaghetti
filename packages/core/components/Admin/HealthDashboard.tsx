@@ -192,7 +192,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
   };
   // Loading state
   if (loading) {
-    return ()
+    return ();
       <div className="p-6 space-y-6">
         <div className="flex items-center space-x-3">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -208,7 +208,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
   }
   // Error state
   if (error) {
-    return ()
+    return ();
       <div className="p-6">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
           <div className="flex items-center space-x-3">
@@ -229,7 +229,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
     );
   }
   if (!healthStatus) return null;
-  return ()
+  return ();
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -686,7 +686,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
                     </div>
                     <div className="text-gray-600">Current Health Score</div>
                     <div className="text-sm text-gray-500 mt-1">
-                      Trend: {healthStatus.trends.healthScore.length > 1 ? 
+                      Trend: {healthStatus.trends.healthScore.length > 1 ? ,
                         (healthStatus.trends.healthScore[healthStatus.trends.healthScore.length - 1].value > )
                          healthStatus.trends.healthScore[healthStatus.trends.healthScore.length - 2].value ? 'Improving' : 'Stable') : 'Stable'}
                     </div>

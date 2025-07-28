@@ -38,7 +38,7 @@ export class ConstraintOverrideManager {
   /**
    * Create a new constraint override
    */
-  createOverride()
+  createOverride();
     constraintId: string, 
     reason: OverrideReason,
     options: {,
@@ -70,7 +70,7 @@ export class ConstraintOverrideManager {
   /**
    * Check if a constraint is currently overridden
    */
-  isConstraintOverridden()
+  isConstraintOverridden();
     constraintId: string,
     context: {,
       era?: Era;
@@ -176,7 +176,7 @@ export class ConstraintOverrideManager {
   /**
    * Get suggested overrides for creative flexibility
    */
-  getSuggestedOverrides()
+  getSuggestedOverrides();
     constraints: HistoricalConstraint[],
     context: {,
       era?: Era;
@@ -194,21 +194,21 @@ export class ConstraintOverrideManager {
             category: 'creative',
             description: 'Fantasy setting allows anachronistic materials',
             justification: 'Creative work requires materials not historically available',
-            alternative_considered: 'Period-appropriate materials were considered but limited creative expression'
+            alternative_considered: 'Period-appropriate materials were considered but limited creative expression',
           };
         } else if (context.narrativeNeeds?.includes('visual_impact') && constraint.rule === 'social_class_appropriateness') {
           suggestedReason = {
             category: 'narrative',
             description: 'Narrative requires visual distinction between characters',
             justification: 'Story clarity takes precedence over strict social conventions',
-            alternative_considered: 'Historically accurate clothing would not serve narrative needs'
+            alternative_considered: 'Historically accurate clothing would not serve narrative needs',
           };
         } else if (constraint.rule === 'cultural_appropriateness' && context.creativeGoals?.includes('educational')) {
           suggestedReason = {
             category: 'educational',
             description: 'Educational context allows sensitive cultural elements',
             justification: 'Academic or educational use with proper context and respect',
-            alternative_considered: 'Complete avoidance would limit educational value'
+            alternative_considered: 'Complete avoidance would limit educational value',
           };
         } else {
           continue; // No suggestion for this constraint
@@ -225,11 +225,10 @@ export class ConstraintOverrideManager {
     active: ConstraintOverride[], 
     history: ConstraintOverride[], 
     export_date: string ,
-    } {
     return {
       active: this.getActiveOverrides(),
       history: this.overrideHistory,
-      export_date: new Date().toISOString()
+      export_date: new Date().toISOString(),
     };
   }
   /**
@@ -270,7 +269,7 @@ export class ConstraintOverrideManager {
     const { conditions } = override;
     // Check era conditions
     if (conditions.era && context.era) {
-      const eraMatch = conditions.era.some(era => ;)
+      const eraMatch = conditions.era.some(era => ;);
         era.name === context.era!.name ||
         this.erasOverlap(era, context.era!)
       );
@@ -280,7 +279,7 @@ export class ConstraintOverrideManager {
     }
     // Check node type conditions
     if (conditions.node_types && context.nodeTypes) {
-      const typeMatch = conditions.node_types.some(type =>;)
+      const typeMatch = conditions.node_types.some(type =>;);
         context.nodeTypes!.includes(type)
       );
       if (!typeMatch) {
@@ -289,7 +288,7 @@ export class ConstraintOverrideManager {
     }
     // Check social class conditions
     if (conditions.social_classes && context.socialClasses) {
-      const classMatch = conditions.social_classes.some(cls =>;)
+      const classMatch = conditions.social_classes.some(cls =>;);
         context.socialClasses!.includes(cls)
       );
       if (!classMatch) {

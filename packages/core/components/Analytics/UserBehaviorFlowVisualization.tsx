@@ -75,7 +75,7 @@ const generateMockBehaviorFlowData = (): BehaviorFlowData => ({)
     context: {,
       device: 'desktop',
       referrer: i === 0 ? 'google.com' : undefined,
-      exitType: i === 9 ? 'conversion' : 'continue'
+      exitType: i === 9 ? 'conversion' : 'continue',
     }
   })),
   metadata: {,
@@ -128,7 +128,7 @@ export const UserBehaviorFlowVisualization: React.FC<UserBehaviorFlowVisualizati
         count,
         percentage: (count / mockFlowData.length) * 100,
         avgDuration: Math.random() * 300000 + 180000,
-        conversionRate: Math.random() * 0.4 + 0.1
+        conversionRate: Math.random() * 0.4 + 0.1,
       }));
     // Calculate dropoff points
     const pageCounts = new Map<string, { entries: number; exits: number }>();
@@ -148,7 +148,7 @@ export const UserBehaviorFlowVisualization: React.FC<UserBehaviorFlowVisualizati
         entries: counts.entries,
         exits: counts.exits,
         dropoffRate: counts.exits / counts.entries,
-        impactScore: counts.entries * (counts.exits / counts.entries)
+        impactScore: counts.entries * (counts.exits / counts.entries),
       }))
       .sort((a, b) => b.impactScore - a.impactScore)
       .slice(0, 8);
@@ -192,11 +192,11 @@ export const UserBehaviorFlowVisualization: React.FC<UserBehaviorFlowVisualizati
     totalFlows: mockFlowData.length,
     avgFlowLength: mockFlowData.reduce((sum, flow) => sum + flow.flowPath.length, 0) / mockFlowData.length || 0,
     avgDuration: mockFlowData.reduce((sum, flow) => sum + flow.metadata.totalDuration, 0) / mockFlowData.length || 0,
-    conversionRate: mockFlowData.filter(flow => )
+    conversionRate: mockFlowData.filter(flow => ),
       flow.outcomes.some(outcome => outcome.type === 'conversion')
     ).length / mockFlowData.length * 100
   }), [mockFlowData]);
-  return ()
+  return ();
     <div className="behavior-flow-visualization">
       <div className="flow-header">
         <div className="header-section">

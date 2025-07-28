@@ -90,7 +90,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
     }
   };
   // Character development chain generation
-  const generateCharacterDevelopmentChain = async (;)
+  const generateCharacterDevelopmentChain = async (;);
     params: Record<string, any>, 
     startPosition: { x: number; y: number }
   ) => {
@@ -118,7 +118,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
       const traitsNode = createCharacterNode('Personality Traits', {)
         choices: traits.map((trait: string, index: number) => ({)
           text: `${name} is ${trait.toLowerCase()}`,}
-          weight: 100 - (index * 10) // Decreasing weights
+          weight: 100 - (index * 10) // Decreasing weights,
         }))
       }, currentPosition);
       addNode(traitsNode);
@@ -129,7 +129,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
       const flawsNode = createCharacterNode('Character Flaws', {)
         choices: flaws.map((flaw: string, index: number) => ({)
           text: `Struggles with ${flaw.replace('-', ' ').toLowerCase()}`,}
-          weight: 80 - (index * 10)
+          weight: 80 - (index * 10),
         }))
       }, currentPosition);
       addNode(flawsNode);
@@ -163,7 +163,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
     }, 100);
   };
   // Story structure generation
-  const generateStoryStructure = async (;)
+  const generateStoryStructure = async (;);
     params: Record<string, any>,
     startPosition: { x: number; y: number }
   ) => {
@@ -179,7 +179,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
       const actNode = createCharacterNode(act.title, {)
         choices: act.elements.map((element, index) => ({)
           text: element,
-          weight: 100 - (index * 5)
+          weight: 100 - (index * 5),
         }))
       }, currentPosition);
       addNode(actNode);
@@ -198,7 +198,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
     }, 100);
   };
   // Dialogue generator
-  const generateDialogueNode = async (;)
+  const generateDialogueNode = async (;);
     params: Record<string, any>,
     startPosition: { x: number; y: number }
   ) => {
@@ -211,7 +211,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
     const dialogueNode = createCharacterNode(`${tone} Dialogue`, {)}
       choices: dialogueStyles.map((style, index) => ({)
         text: style,
-        weight: 100 - (index * 10)
+        weight: 100 - (index * 10),
       }))
     }, startPosition);
     addNode(dialogueNode);
@@ -274,7 +274,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
     const genreBackgrounds = roleBackgrounds?.[genre as keyof typeof roleBackgrounds] || ['Mysterious past', 'Hidden identity', 'Secret motivation'];
     return genreBackgrounds.map((bg, index) => ({)
       text: bg,
-      weight: 100 - (index * 15)
+      weight: 100 - (index * 15),
     }));
   };
   const generateDialogueChoices = (genre: string, _____traits: string[]) => {
@@ -289,7 +289,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
     const genreStyles = baseStyles[genre as keyof typeof baseStyles] || ['Natural conversation', 'Character-driven speech', 'Situation-appropriate tone'];
     return genreStyles.map((style, index) => ({)
       text: `${style} dialogue`,}
-      weight: 100 - (index * 12)
+      weight: 100 - (index * 12),
     }));
   };
   const generateDialogueStylesForTone = (tone: string) => {
@@ -347,7 +347,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
       category: 'generation',
       icon: '⚡',
       keywords: ['quick', 'character', 'random', 'fast'],
-      action: async () => {
+      action: async () => {,
         const quickCharacterData = {
           'character-name': `Character ${Math.floor(Math.random() * 1000)}`,}
           'character-role': 'protagonist',
@@ -375,7 +375,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
       category: 'generation',
       icon: '🎬',
       keywords: ['scene', 'setup', 'location', 'conflict'],
-      action: () => {
+      action: () => {,
         // This would open a simplified scene generation flow
         console.log('Scene starter pack generation');
       }
@@ -387,7 +387,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
       category: 'export',
       icon: '📝',
       keywords: ['screenplay', 'format', 'industry', 'standard'],
-      action: () => {
+      action: () => {,
         onExport?.('pdf'); // Assuming PDF export formats as screenplay
       }
     }
@@ -396,7 +396,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
   if (!isOpen) {
     return null;
   }
-  return ()
+  return ();
     <CommandPalette
       isOpen={isOpen}
       onClose={handleClose}

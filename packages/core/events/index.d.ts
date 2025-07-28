@@ -85,7 +85,7 @@ declare const _default: {
          */
         performance: () => void;
     };
-    performEventSystemHealthCheck: () => {
+    performEventSystemHealthCheck: () => {,
         status: "healthy" | "degraded" | "unhealthy";
         stats: {,
             subscriptions: number;
@@ -95,7 +95,7 @@ declare const _default: {
         };
         issues: string[];
     };
-    collectEventSystemMetrics: () => {
+    collectEventSystemMetrics: () => {,
         metrics: {,
             avgEventsPerMinute: number;
             topEventTypes: [string, number][];

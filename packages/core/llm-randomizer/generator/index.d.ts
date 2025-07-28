@@ -25,7 +25,7 @@ export declare class RandomizerSystem {
     /**
      * Quick generation with minimal setup
      */
-    quickGenerate()
+    quickGenerate();
       purpose: string,
       complexity?: ComplexityLevelType,
       provider?: LLMProviderType

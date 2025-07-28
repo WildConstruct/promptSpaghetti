@@ -74,7 +74,7 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
   const renderSpinner = () => {
     switch (type) {
     case 'spinner':
-      return ()
+      return ();
         <div
           style={{
             width: spinnerSize,
@@ -89,7 +89,7 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
         />
       );
     case 'dots':
-      return ()
+      return ();
         <div 
           className="spinner-dots"
           style={{ gap: spinnerSize / 4 }}
@@ -109,7 +109,7 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
         </div>
       );
     case 'pulse':
-      return ()
+      return ();
         <div
           style={{
             width: spinnerSize,
@@ -123,7 +123,7 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
         />
       );
     case 'bars':
-      return ()
+      return ();
         <div
           style={{
             display: 'flex',
@@ -149,7 +149,7 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
         </div>
       );
     case 'ring':
-      return ()
+      return ();
         <div
           style={{
             width: spinnerSize,
@@ -157,7 +157,7 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
             border: `3px solid ${colors.light}`,}
             borderRadius: '50%',
             position: 'relative',
-            animation: 'spin 2s linear infinite'
+            animation: 'spin 2s linear infinite',
           }}
         >
           <div
@@ -170,7 +170,7 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
               border: '3px solid transparent',
               borderTop: `3px solid ${colors.main}`,}
               borderRadius: '50%',
-              animation: 'spin 1s linear infinite reverse'
+              animation: 'spin 1s linear infinite reverse',
             }}
           />
         </div>
@@ -179,7 +179,7 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
       return null;
     }
   };
-  return ()
+  return ();
     <div style={containerStyle}>
       {renderSpinner()}
       {message && ()
@@ -224,7 +224,7 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({)
               right: 0,
               bottom: 0,
               background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
-              animation: 'shimmer 2s infinite'
+              animation: 'shimmer 2s infinite',
             }}
           />
         </div>
@@ -287,7 +287,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({)
       return base;
     }
   };
-  return ()
+  return ();
     <div style={getBackdropStyle()}>
       <div
         style={{
@@ -360,7 +360,7 @@ export const InlineLoader: React.FC<InlineLoaderProps> = ({)
   if (!loading) {
     return <>{children}</>;
   }
-  return ()
+  return ();
     <div
       style={{
         position: 'relative',

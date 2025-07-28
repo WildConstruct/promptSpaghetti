@@ -1,7 +1,6 @@
 import React from 'react';
 import './NodePalette.css';
-
-const NODE_TYPES = [
+const NODE_TYPES = [;
   'WeightedChoice',
   'Concat',
   'Output',
@@ -9,17 +8,16 @@ const NODE_TYPES = [
   'SetVariable',
   'GetVariable'
 ];
-
 function onDragStart(event: React.DragEvent, nodeType: string): void {
   event.dataTransfer.setData('application/reactflow', nodeType);
   event.dataTransfer.effectAllowed = 'move';
 }
 
 export default function NodePalette(): React.ReactElement {
-  return (
+  return ()
     <aside className="node-palette">
       <h4>Node Library</h4>
-      {NODE_TYPES.map((type) => (
+      {NODE_TYPES.map((type) => ()
         <button
           key={type}
           className="palette-item"

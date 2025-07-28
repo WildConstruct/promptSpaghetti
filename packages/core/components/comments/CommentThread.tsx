@@ -63,7 +63,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({)
   };
   const canShowReplies = comment.reply_count > 0 || showReplies;
   const isResolved = comment.metadata?.resolved;
-  return ()
+  return ();
     <div 
       className={`comment-thread ${compact ? 'comment-thread--compact' : ''} ${isLast ? 'comment-thread--last' : ''} ${isResolved ? 'comment-thread--resolved' : ''}`}
     >

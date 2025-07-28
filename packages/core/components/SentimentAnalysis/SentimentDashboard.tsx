@@ -35,7 +35,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
   const [error, setError] = useState<string | null>(null);
   const [selectedTimeRange, _____setSelectedTimeRange] = useState(timeRange || {)
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
-    end: new Date()
+    end: new Date(),
   });
   const sentimentService = new SentimentAnalysisService({)
     baseUrl: 'https://prompt-spaghetti.vercel.app',
@@ -52,7 +52,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
     setIsLoading(true);
     setError(null);
     try {
-      const analyticsData = await sentimentService.getSentimentAnalytics(;)
+      const analyticsData = await sentimentService.getSentimentAnalytics(;);
         resourceId,
         resourceType,
         selectedTimeRange
@@ -102,12 +102,12 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
     const _____total = sentimentDistribution.positive.count + ;
                  sentimentDistribution.neutral.count + 
                  sentimentDistribution.negative.count;
-    return ()
+    return ();
       <div style={{
         backgroundColor: 'white',
         borderRadius: '12px',
         padding: '20px',
-        border: '1px solid #e5e7eb'
+        border: '1px solid #e5e7eb',
       }}>
         <h3 style={{
           margin: '0 0 16px 0',
@@ -254,12 +254,12 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
   const renderEmotionAnalysis = () => {
     if (!analytics) return null;
     const { emotionAnalytics } = analytics;
-    return ()
+    return ();
       <div style={{
         backgroundColor: 'white',
         borderRadius: '12px',
         padding: '20px',
-        border: '1px solid #e5e7eb'
+        border: '1px solid #e5e7eb',
       }}>
         <h3 style={{
           margin: '0 0 16px 0',
@@ -350,12 +350,12 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
   const renderToxicityAnalysis = () => {
     if (!analytics) return null;
     const { toxicityAnalytics } = analytics;
-    return ()
+    return ();
       <div style={{
         backgroundColor: 'white',
         borderRadius: '12px',
         padding: '20px',
-        border: '1px solid #e5e7eb'
+        border: '1px solid #e5e7eb',
       }}>
         <h3 style={{
           margin: '0 0 16px 0',
@@ -367,7 +367,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
         </h3>
         {/* Overall Toxicity Level */}
         <div style={{
-          backgroundColor: toxicityAnalytics.overallLevel === 'none' ? '#f0fdf4' : 
+          backgroundColor: toxicityAnalytics.overallLevel === 'none' ? '#f0fdf4' : ,
             toxicityAnalytics.overallLevel === 'low' ? '#fefce8' :
               toxicityAnalytics.overallLevel === 'medium' ? '#fef3c7' :
                 toxicityAnalytics.overallLevel === 'high' ? '#fef2f2' : '#fecaca',
@@ -476,12 +476,12 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
   const renderInsights = () => {
     if (!analytics) return null;
     const { insights } = analytics;
-    return ()
+    return ();
       <div style={{
         backgroundColor: 'white',
         borderRadius: '12px',
         padding: '20px',
-        border: '1px solid #e5e7eb'
+        border: '1px solid #e5e7eb',
       }}>
         <h3 style={{
           margin: '0 0 16px 0',
@@ -677,7 +677,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
                   key={index}
                   style={{
                     padding: '8px',
-                    backgroundColor: rec.priority === 'critical' ? '#fef2f2' :
+                    backgroundColor: rec.priority === 'critical' ? '#fef2f2' :,
                       rec.priority === 'high' ? '#fef3c7' :
                         rec.priority === 'medium' ? '#eff6ff' : '#f9fafb',
                     border: `1px solid ${rec.priority === 'critical' ? '#fecaca' :}
@@ -695,7 +695,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
                   }}>
                     <span style={{
                       fontWeight: '600',
-                      color: rec.priority === 'critical' ? '#dc2626' :
+                      color: rec.priority === 'critical' ? '#dc2626' :,
                         rec.priority === 'high' ? '#d97706' :
                           rec.priority === 'medium' ? '#2563eb' : '#374151',
                       textTransform: 'capitalize',
@@ -725,7 +725,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
     );
   };
   if (isLoading) {
-    return ()
+    return ();
       <div style={{
         padding: '40px',
         textAlign: 'center',
@@ -738,21 +738,21 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
           borderTop: '3px solid #3b82f6',
           borderRadius: '50%',
           animation: 'spin 1s linear infinite',
-          margin: '0 auto 16px'
+          margin: '0 auto 16px',
         }}></div>
         Loading sentiment analytics...
       </div>
     );
   }
   if (error) {
-    return ()
+    return ();
       <div style={{
         padding: '40px',
         textAlign: 'center',
         color: '#dc2626',
         backgroundColor: '#fef2f2',
         borderRadius: '8px',
-        border: '1px solid #fecaca'
+        border: '1px solid #fecaca',
       }}>
         <div style={{ fontSize: '18px', marginBottom: '8px' }}>⚠️</div>
         <div>Error loading sentiment analytics: {error}</div>
@@ -774,7 +774,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
     );
   }
   if (!analytics) {
-    return ()
+    return ();
       <div style={{
         padding: '40px',
         textAlign: 'center',
@@ -784,7 +784,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div style={{
       padding: '20px',
       backgroundColor: '#f8fafc',

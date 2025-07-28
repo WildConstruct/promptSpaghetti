@@ -256,7 +256,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
           actions: 'discussing a critical business decision',
           locations: 'conference room with city skyline view',
           characters: 'two executives with conflicting perspectives',
-          cinematography: 'close-up shots alternating with wide establishing shots'
+          cinematography: 'close-up shots alternating with wide establishing shots',
         },
         accessibility: {,
           directorFriendly: true,
@@ -277,7 +277,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
           actions: 'chase through crowded market streets',
           locations: 'narrow alleyways and rooftops',
           characters: 'protagonist being pursued by antagonists',
-          cinematography: 'handheld camera with rapid cuts and dynamic angles'
+          cinematography: 'handheld camera with rapid cuts and dynamic angles',
         },
         accessibility: {,
           directorFriendly: true,
@@ -298,7 +298,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
           actions: 'make a crucial discovery about their mission',
           locations: 'high-tech laboratory with panoramic windows',
           characters: 'research team led by brilliant scientist',
-          cinematography: 'smooth dolly movement with lens flares'
+          cinematography: 'smooth dolly movement with lens flares',
         },
         accessibility: {,
           directorFriendly: true,
@@ -388,7 +388,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
         }
       },
       createdAt: new Date(),
-      lastModified: new Date()
+      lastModified: new Date(),
     };
     this.sessions.set(sessionId, session);
     this.emit('session_created', session);
@@ -426,14 +426,14 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
       methodology: 'zada',
       filmGenre: patternData.filmGenre || ['general'],
       complexity: patternData.complexity || 'simple',
-      elements: patternData.elements || {
+      elements: patternData.elements || {,
         timeAndSetting: '',
         actions: '',
         locations: '',
         characters: '',
         cinematography: '',
       },
-      accessibility: patternData.accessibility || {
+      accessibility: patternData.accessibility || {,
         directorFriendly: true,
         technicalLevel: 1,
         humanReadableScore: 8,
@@ -472,7 +472,7 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
       tags: regionData.tags || [],
       defaultNodes: regionData.defaultNodes || [],
       vfxCompatible: regionData.vfxCompatible !== false,
-      marsParameters: regionData.marsParameters || {
+      marsParameters: regionData.marsParameters || {,
         category: 'CUSTOM',
         subcategory: 'user_defined',
       }
@@ -508,8 +508,8 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
         methodology: session.methodology,
         pipelineConfig: session.vfxExportConfig,
       },
-      marsStructure: session.vfxExportConfig.includeMarsStructure ? {
-        regions: session.marsRegions.map(region => ({)
+      marsStructure: session.vfxExportConfig.includeMarsStructure ? {,
+        regions: session.marsRegions.map(region => ({),
           id: region.id,
           type: region.zoneType,
           marsCategory: region.marsParameters.category,
@@ -522,14 +522,14 @@ export class AdvancedPromptingCollaborationService extends EventEmitter {
           }
         }))
       } : null,
-      zadaPatterns: session.vfxExportConfig.includeZadaPatterns ? {
+      zadaPatterns: session.vfxExportConfig.includeZadaPatterns ? {,
         currentPattern: session.currentPattern,
         availablePatterns: Array.from(this.zadaPatterns.values()),
           .filter(p => p.methodology === 'zada' || p.methodology === 'hybrid')
       } : null,
-      annotations: session.vfxExportConfig.includeAnnotations ? {
+      annotations: session.vfxExportConfig.includeAnnotations ? {,
         collaborativeEdits: session.collaborativeEdits,
-        participants: session.participants.map(p => ({)
+        participants: session.participants.map(p => ({),
           id: p.id,
           name: p.name,
           role: p.role,

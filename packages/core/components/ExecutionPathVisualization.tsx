@@ -47,7 +47,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
   const validResults = results.filter(r => r.executionPath);
   const totalExecution = validResults.reduce((sum, r) => sum + r.executionTimeMs, 0);
   const averageTime = validResults.length > 0 ? totalExecution / validResults.length : 0;
-  return ()
+  return ();
     <div className={`execution-path-visualization ${className}`} style={{ }
       background: '#1a202c', 
       borderRadius: 8, 
@@ -99,7 +99,7 @@ export const ExecutionPathVisualization: React.FC<ExecutionPathVisualizationProp
             const isExpanded = expandedResults.has(index);
             const isSelected = selectedPath === path.id;
             const pathColor = EXECUTION_PATH_COLORS[index % EXECUTION_PATH_COLORS.length];
-            return ()
+            return ();
               <div
                 key={index}
                 style={{

@@ -269,22 +269,20 @@ export interface BatchComparisonResult {
 
 // Error types
 export class ComparisonError extends Error {
-  constructor()
+  constructor();
     message: string,
     public code: string,
     public details?: Record<string, unknown>
-  ) {
     super(message);
     this.name = 'ComparisonError';
   }
 }
 
 export class DiffSessionError extends Error {
-  constructor()
+  constructor();
     message: string,
     public code: string,
     public sessionId?: string
-  ) {
     super(message);
     this.name = 'DiffSessionError';
   }

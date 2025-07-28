@@ -44,7 +44,7 @@ describe('UTDG Historical Data Integration Foundation', () => {
         social_class: 'peasant',
       });
       if (nodes.length > 0) {
-        const vfxData = utdgManager.exportForVFX(;)
+        const vfxData = utdgManager.exportForVFX(;);
           nodes, 
           HISTORICAL_ERAS.MEDIEVAL_HIGH, 
           'Medieval village scene'

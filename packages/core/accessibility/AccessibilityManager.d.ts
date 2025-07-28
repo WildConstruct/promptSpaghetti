@@ -209,7 +209,7 @@ export declare class AccessibilityManager extends EventEmitter {
     /**
      * Create or update user accessibility profile
      */
-    createAccessibilityProfile()
+    createAccessibilityProfile();
       userId: string,
       profileData: Partial<UserAccessibilityProfile>,
     ): Promise<UserAccessibilityProfile>;
@@ -230,14 +230,14 @@ export declare class AccessibilityManager extends EventEmitter {
     /**
      * Validate accessibility compliance for authentication flow
      */
-    validateAccessibilityCompliance()
+    validateAccessibilityCompliance();
       authenticationFlow: unknown,
       userProfile?: UserAccessibilityProfile
     ): AccessibilityValidationResult;
     /**
      * Create emergency accessibility bypass
      */
-    createEmergencyBypass()
+    createEmergencyBypass();
       userId: string,
       reason: string,
       authorizedBy: string,

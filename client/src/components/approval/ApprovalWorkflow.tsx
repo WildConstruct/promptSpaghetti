@@ -18,7 +18,6 @@ export interface ApprovalRequest {
   requiredApprovals?: number;
   currentApprovals?: string[];
 }
-
 interface ApprovalWorkflowProps {
   requests: ApprovalRequest[];
   currentUserId: string;
@@ -29,7 +28,7 @@ interface ApprovalWorkflowProps {
   onRequestDetails?: (requestId: string) => void;
 }
 
-export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
+export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({)
   requests,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   currentUserId,
@@ -45,24 +44,19 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
   const [pendingAction, setPendingAction] = useState<'approve' | 'reject' | 'escalate' | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>('pending');
   const [filterType, setFilterType] = useState<string>('all');
-
-  const filteredRequests = requests.filter(request => {
+  const filteredRequests = requests.filter(request => {)
     if (filterStatus !== 'all' && request.status !== filterStatus) return false;
     if (filterType !== 'all' && request.type !== filterType) return false;
     return true;
   });
-
   const handleAction = (action: 'approve' | 'reject' | 'escalate', request: ApprovalRequest) => {
     setSelectedRequest(request);
     setPendingAction(action);
     setShowActionModal(true);
   };
-
   const confirmAction = () => {
     if (!selectedRequest || !pendingAction || !actionReason.trim()) return;
-
     const reason = actionReason.trim();
-    
     switch (pendingAction) {
     case 'approve':
       onApprove?.(selectedRequest.id, reason);
@@ -74,13 +68,11 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
       onEscalate?.(selectedRequest.id, reason);
       break;
     }
-
     setActionReason('');
     setSelectedRequest(null);
     setPendingAction(null);
     setShowActionModal(false);
   };
-
   const getPriorityColor = (priority: ApprovalRequest['priority']) => {
     switch (priority) {
     case 'critical': return '#dc3545';
@@ -89,7 +81,6 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
     case 'low': return '#28a745';
     }
   };
-
   const getStatusColor = (status: ApprovalRequest['status']) => {
     switch (status) {
     case 'pending': return '#ffc107';
@@ -98,16 +89,13 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
     case 'escalated': return '#fd7e14';
     }
   };
-
   const canApprove = (request: ApprovalRequest) => {
     return request.status === 'pending' && userRole !== 'reviewer';
   };
-
   const needsMultipleApprovals = (request: ApprovalRequest) => {
     return request.requiredApprovals && request.requiredApprovals > 1;
   };
-
-  return (
+  return ()
     <div className="approval-workflow">
       <div className="approval-header">
         <h2>Approval Workflow</h2>
@@ -132,7 +120,6 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
           </div>
         </div>
       </div>
-
       <div className="approval-filters">
         <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
           <option value="all">All Status</option>
@@ -141,7 +128,6 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
           <option value="rejected">Rejected</option>
           <option value="escalated">Escalated</option>
         </select>
-
         <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
           <option value="all">All Types</option>
           <option value="content">Content Approval</option>
@@ -151,9 +137,8 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
           <option value="policy_change">Policy Change</option>
         </select>
       </div>
-
       <div className="approval-list">
-        {filteredRequests.map(request => (
+        {filteredRequests.map(request => ()
           <div key={request.id} className="approval-item">
             <div className="item-header">
               <div className="header-main">
@@ -177,33 +162,29 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
               <div className="item-meta">
                 <span>Requested by: {request.requestedBy}</span>
                 <span>Date: {new Date(request.requestedAt).toLocaleDateString()}</span>
-                {needsMultipleApprovals(request) && (
+                {needsMultipleApprovals(request) && ()
                   <span>
                     Approvals: {request.currentApprovals?.length || 0}/{request.requiredApprovals}
                   </span>
                 )}
               </div>
             </div>
-
             <div className="item-content">
               <p>{request.description}</p>
-              
-              {request.status === 'approved' && request.approvedBy && (
+              {request.status === 'approved' && request.approvedBy && ()
                 <div className="approval-info">
                   ✓ Approved by {request.approvedBy} on {new Date(request.approvedAt!).toLocaleDateString()}
                   {request.reason && <span> - {request.reason}</span>}
                 </div>
               )}
-              
-              {request.status === 'rejected' && request.rejectedBy && (
+              {request.status === 'rejected' && request.rejectedBy && ()
                 <div className="rejection-info">
                   ✗ Rejected by {request.rejectedBy} on {new Date(request.rejectedAt!).toLocaleDateString()}
                   {request.reason && <span> - {request.reason}</span>}
                 </div>
               )}
             </div>
-
-            {canApprove(request) && (
+            {canApprove(request) && ()
               <div className="item-actions">
                 <button 
                   className="approve-btn"
@@ -217,7 +198,7 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
                 >
                   Reject
                 </button>
-                {userRole === 'admin' && (
+                {userRole === 'admin' && ()
                   <button 
                     className="escalate-btn"
                     onClick={() => handleAction('escalate', request)}
@@ -236,8 +217,7 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
           </div>
         ))}
       </div>
-
-      {showActionModal && selectedRequest && (
+      {showActionModal && selectedRequest && ()
         <div className="modal-overlay">
           <div className="action-modal">
             <h3>
@@ -245,12 +225,10 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
               {pendingAction === 'reject' && 'Reject Request'}
               {pendingAction === 'escalate' && 'Escalate Request'}
             </h3>
-            
             <div className="modal-content">
               <p><strong>Request:</strong> {selectedRequest.title}</p>
               <p><strong>Type:</strong> {selectedRequest.type.replace('_', ' ')}</p>
               <p><strong>Requested by:</strong> {selectedRequest.requestedBy}</p>
-              
               <div className="reason-input">
                 <label htmlFor="actionReason">
                   {pendingAction === 'approve' && 'Approval reason:'}
@@ -267,7 +245,6 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
                 />
               </div>
             </div>
-
             <div className="modal-actions">
               <button onClick={() => setShowActionModal(false)}>
                 Cancel

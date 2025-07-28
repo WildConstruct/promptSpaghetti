@@ -15,7 +15,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({)
   onChange,
   onGlobalPreviewRequest
 }) => {
-  return ()
+  return ();
     <div style={{ height: '100%' }}>
       <NodeEditorRouter 
         node={node}

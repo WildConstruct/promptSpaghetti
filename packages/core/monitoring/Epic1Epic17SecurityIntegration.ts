@@ -258,7 +258,7 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
   private metricsCollectionInterval?: NodeJS.Timeout;
   private correlationAnalysisInterval?: NodeJS.Timeout;
   private dashboardUpdateInterval?: NodeJS.Timeout;
-  constructor()
+  constructor();
     config: IntegrationConfig,
     monitors: {,
       epic1Monitor: PerformanceMonitor;
@@ -266,7 +266,6 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
       securityMonitor: SecurityAnalyticsMonitor;
       alertingSystem: CrossSystemAlertingSystem;
     }
-  ) {
     super();
     this.config = config;
     this.epic1Monitor = monitors.epic1Monitor;
@@ -311,7 +310,7 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
     const epic17Dashboard = this.epic17Monitor.getAdminPerformanceDashboard();
     const securityDashboard = this.securityMonitor.getSecurityDashboardData();
     // Calculate integrated health score
-    const integratedHealthScore = this.calculateIntegratedHealthScore(;)
+    const integratedHealthScore = this.calculateIntegratedHealthScore(;);
       epic1Stats,
       epic17Dashboard,
       securityDashboard
@@ -332,20 +331,20 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
           failed: Math.floor(epic1Stats.totalExecutions * (epic1Stats.errorRate / 100)),
           averageTime: epic1Stats.averageExecutionTime,
         },
-        topPerformingNodes: epic1Stats.topPerformingTypes.map(type => ({)
+        topPerformingNodes: epic1Stats.topPerformingTypes.map(type => ({),
           nodeType: type,
-          avgTime: 0 // Would get actual average from metrics
+          avgTime: 0 // Would get actual average from metrics,
         })),
-        bottomPerformingNodes: epic1Stats.underperformingTypes.map(type => ({)
+        bottomPerformingNodes: epic1Stats.underperformingTypes.map(type => ({),
           nodeType: type,
-          avgTime: 0 // Would get actual average from metrics
+          avgTime: 0 // Would get actual average from metrics,
         })),
         memoryTrend: this.getMemoryTrend(),
       },
       adminOverview: {,
         activeAdminSessions: epic17Dashboard.adminSystemOverview.activeAdminSessions,
         recentOperations: this.getRecentAdminOperations(),
-        integrationStatus: epic17Dashboard.integrationHealth.map(health => ({)
+        integrationStatus: epic17Dashboard.integrationHealth.map(health => ({),
           integration: health.integration,
           status: health.status,
           responseTime: health.responseTime,
@@ -355,10 +354,10 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
       securityOverview: {,
         threatLevel: securityDashboard.threatLevel,
         activeSecurityAlerts: securityDashboard.criticalAlerts,
-        securitySystemsHealth: securityDashboard.systemPerformance.map(perf => ({)
+        securitySystemsHealth: securityDashboard.systemPerformance.map(perf => ({),
           systemId: perf.systemId,
           healthScore: perf.healthScore,
-          status: perf.healthScore > 80 ? 'healthy' : perf.healthScore > 60 ? 'degraded' : 'critical'
+          status: perf.healthScore > 80 ? 'healthy' : perf.healthScore > 60 ? 'degraded' : 'critical',
         })),
         recentSecurityEvents: this.getRecentSecurityEvents(),
       },
@@ -372,7 +371,7 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
   /**
    * Record integrated security event spanning multiple systems
    */
-  recordIntegratedSecurityEvent()
+  recordIntegratedSecurityEvent();
     event: SecurityEvent,
     context: {,
       performanceImpact?: {
@@ -497,7 +496,7 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
     const securityData = await this.collectSecurityData(timeRange);
     const correlationData = this.correlationEngine.analyzeTimeRange(timeRange);
     // Generate comprehensive analysis
-    const analysis = await this.performIntegratedAnalysis(;)
+    const analysis = await this.performIntegratedAnalysis(;);
       epic1Data,
       epic17Data,
       securityData,
@@ -653,7 +652,7 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
           performanceConditions: {,
             slowExecutionThreshold: 5000,
             errorRateThreshold: 0.1,
-            memoryThreshold: 1024 * 1024 * 1024 // 1GB
+            memoryThreshold: 1024 * 1024 * 1024 // 1GB,
           },
           securityConditions: {,
             threatLevelThreshold: 7,
@@ -663,7 +662,7 @@ export class Epic1Epic17SecurityIntegration extends EventEmitter {
           correlationConditions: {,
             performanceSecurityCorrelation: 0.7,
             healthScoreThreshold: 70,
-            multiSystemEventWindow: 300000 // 5 minutes
+            multiSystemEventWindow: 300000 // 5 minutes,
           }
         },
         actions: {,

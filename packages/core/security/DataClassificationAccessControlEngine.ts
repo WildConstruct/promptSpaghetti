@@ -44,11 +44,10 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
   private permissionCache: Map<string, DataClassificationPermission>;
   private policyCache: Map<string, ABACPolicy>;
   private decisionCache: Map<string, AccessDecision>;
-  constructor()
+  constructor();
     rbacModel: RBACModel,
     abacModel: ABACModel,
     classificationPolicies: ClassificationAccessPolicy[],
-  ) {
     this.rbacModel = rbacModel;
     this.abacModel = abacModel;
     this.classificationPolicies = new Map();
@@ -73,7 +72,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
           metadata: {,
             ...cachedDecision.metadata,
             cacheHit: true,
-            evaluationTime: Date.now() - startTime
+            evaluationTime: Date.now() - startTime,
           }
         };
       }
@@ -156,7 +155,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
         }
       }
       // Check access control matrix
-      const matrixAllowed = this.checkAccessControlMatrix(;)
+      const matrixAllowed = this.checkAccessControlMatrix(;);
         request.object.classification,
         request.action.operation,
         userRoles
@@ -212,7 +211,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
       // Evaluate classification-specific policies
       const classificationPolicy = this.classificationPolicies.get(request.object.classification);
       if (classificationPolicy) {
-        const classificationResult = await this.evaluateClassificationPolicy(;)
+        const classificationResult = await this.evaluateClassificationPolicy(;);
           classificationPolicy, 
           request
         );
@@ -319,7 +318,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
     });
   }
   private async getUserRoles(userId: string): Promise<DataClassificationRole[]> {
-    const userRoleAssignments = this.rbacModel.userRoleAssignments.filter(;)
+    const userRoleAssignments = this.rbacModel.userRoleAssignments.filter(;);
       assignment => assignment.userId === userId && 
                    assignment.status === 'ACTIVE' &&
                    (!assignment.expiresAt || assignment.expiresAt > new Date())
@@ -436,7 +435,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
     return applicablePolicies.sort((a, b) => b.priority - a.priority);
   }
   private async isPolicyApplicable(policy: ABACPolicy, request: AccessRequest): Promise<boolean> {
-    return ()
+    return ();
       await this.evaluateTarget(policy.target.subjects, request.subject) &&
       await this.evaluateTarget(policy.target.objects, request.object) &&
       await this.evaluateTarget(policy.target.actions, request.action) &&
@@ -511,7 +510,7 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
     conditions: AccessCondition[];
   }> {
     // Find applicable access rule
-    const applicableRule = policy.accessRules.find(rule => ;)
+    const applicableRule = policy.accessRules.find(rule => ;);
       rule.operation === request.action.operation || rule.operation === '*'
     );
     if (!applicableRule) {

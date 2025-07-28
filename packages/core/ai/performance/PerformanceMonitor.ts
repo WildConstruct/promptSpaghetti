@@ -137,7 +137,7 @@ export class PerformanceMonitor {
       this.collectionTimer = undefined;
     }
   }
-  registerModel()
+  registerModel();
     modelId: string, 
     modelType: string, 
     provider: string,
@@ -165,7 +165,7 @@ export class PerformanceMonitor {
       }
     }
   }
-  recordRequest()
+  recordRequest();
     modelId: string,
     responseTime: number,
     success: boolean,
@@ -215,7 +215,7 @@ export class PerformanceMonitor {
       this.recordHistoricalMetrics(modelId, { ...metrics });
     }
   }
-  recordResourceUsage()
+  recordResourceUsage();
     modelId: string,
     resourceMetrics: {,
       memoryUsage?: number;
@@ -269,7 +269,7 @@ export class PerformanceMonitor {
         totalRequests,
         averageResponseTime: totalRequests > 0 ? totalResponseTime / totalRequests : 0,
         totalCost,
-        successRate: totalRequests > 0 ? totalSuccessful / totalRequests : 0
+        successRate: totalRequests > 0 ? totalSuccessful / totalRequests : 0,
       },
       trends: this.generateTrends(timeRange),
       topPerformers: this.getTopPerformers(),
@@ -504,15 +504,15 @@ export class PerformanceMonitor {
     const interval = 300000; // 5 minutes;
     const responseTimeTrend = Array.from({ length: points }, (_, i) => ({)
       timestamp: now - (interval * (points - i)),
-      value: Math.random() * 5000 + 1000 // Sample data
+      value: Math.random() * 5000 + 1000 // Sample data,
     }));
     const successRateTrend = Array.from({ length: points }, (_, i) => ({)
       timestamp: now - (interval * (points - i)),
-      value: 0.9 + (Math.random() * 0.1) // 90-100% success rate
+      value: 0.9 + (Math.random() * 0.1) // 90-100% success rate,
     }));
     const costTrend = Array.from({ length: points }, (_, i) => ({)
       timestamp: now - (interval * (points - i)),
-      value: Math.random() * 0.1 + 0.01 // $0.01-$0.11 per request
+      value: Math.random() * 0.1 + 0.01 // $0.01-$0.11 per request,
     }));
     return {
       responseTimeTrend,
@@ -591,7 +591,7 @@ export class PerformanceMonitor {
       'modelId', 'modelType', 'provider', 'totalRequests', 'successfulRequests',
       'averageResponseTime', 'successRate', 'errorRate', 'totalCost', 'healthStatus'
     ];
-    const rows = data.map(model => [;)
+    const rows = data.map(model => [;);
       model.modelId,
       model.modelType,
       model.provider,

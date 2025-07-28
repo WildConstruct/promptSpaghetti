@@ -180,7 +180,7 @@ export declare class DataRetrievalRateLimit extends EventEmitter {
     /**
      * Check if data retrieval request is allowed
      */
-    checkDataRetrievalLimit()
+    checkDataRetrievalLimit();
       subject: SubjectAttributes,
       object: ObjectAttributes,
       operation: DataOperation,

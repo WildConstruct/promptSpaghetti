@@ -79,7 +79,7 @@ export class ConstraintValidator {
    */
   validateForEra(nodes: UTDGNode[], era: Era): ConstraintValidationResult {
     // Filter constraints relevant to the era
-    const eraConstraints = this.constraints.filter(constraint =>;)
+    const eraConstraints = this.constraints.filter(constraint =>;);
       constraint.eras.some(cEra => this.erasOverlap(cEra, era))
     );
     const validator = new ConstraintValidator(eraConstraints);
@@ -156,7 +156,7 @@ export class ConstraintValidator {
     case 'strict':
       return {
         ...baseResult,
-        severity: 'major' as const
+        severity: 'major' as const,
       };
     case 'warning':
       return {
@@ -259,7 +259,7 @@ export class ConstraintValidator {
     const violatingNodes: string[] = [];
     for (const node of nodes) {
       // Check for culturally sensitive items
-      const culturalTags = node.metadata.tags.filter(tag => ;)
+      const culturalTags = node.metadata.tags.filter(tag => ;);
         tag.includes('religious') || 
         tag.includes('sacred') || 
         tag.includes('ceremonial') ||
@@ -294,7 +294,7 @@ export class ConstraintValidator {
     }
     // Check each node against the common period
     for (const node of nodes) {
-      const nodeValidInPeriod = node.metadata.era.some(era => ;)
+      const nodeValidInPeriod = node.metadata.era.some(era => ;);
         era.period.start <= commonPeriod.end && era.period.end >= commonPeriod.start
       );
       if (!nodeValidInPeriod) {
@@ -312,11 +312,10 @@ export class ConstraintValidator {
     if (constraintRegions.length === 0) return violatingNodes;
     for (const node of nodes) {
       const nodeRegions = node.metadata.era.flatMap(era => era.region);
-      const hasValidRegion = nodeRegions.some(region => ;)
+      const hasValidRegion = nodeRegions.some(region => ;);
         constraintRegions.some(cRegion => )
           region.toLowerCase().includes(cRegion.toLowerCase()) ||
           cRegion.toLowerCase().includes(region.toLowerCase())
-        )
       );
       if (!hasValidRegion) {
         violatingNodes.push(node.id);
@@ -367,7 +366,7 @@ export class ConstraintValidator {
     // Eras more than 500 years apart are generally incompatible
     if (timeDifference > 500) return true;
     // Different regions with no cultural connection
-    const hasCommonRegion = era1.region.some(r1 => ;)
+    const hasCommonRegion = era1.region.some(r1 => ;);
       era2.region.some(r2 => r1 === r2)
     );
     if (!hasCommonRegion && timeDifference > 200) return true;
@@ -384,7 +383,7 @@ export class ConstraintValidator {
         eras: [HISTORICAL_ERAS.MEDIEVAL_HIGH, HISTORICAL_ERAS.MEDIEVAL_LATE],
         enforcement: 'strict',
         message: 'Medieval and modern items should not be mixed without historical justification',
-        historical_basis: 'Medieval technology and materials were fundamentally different from modern equivalents'
+        historical_basis: 'Medieval technology and materials were fundamentally different from modern equivalents',
       },
       {
         id: 'silk-availability-medieval',
@@ -393,7 +392,7 @@ export class ConstraintValidator {
         regions: ['Northern Europe'],
         enforcement: 'warning',
         message: 'Silk was extremely rare and expensive in early medieval Northern Europe',
-        historical_basis: 'Silk trade routes were disrupted and silk was primarily available to royalty and high clergy'
+        historical_basis: 'Silk trade routes were disrupted and silk was primarily available to royalty and high clergy',
       },
       {
         id: 'social-class-clothing',
@@ -402,7 +401,7 @@ export class ConstraintValidator {
         social_classes: ['peasant'],
         enforcement: 'warning',
         message: 'Elaborate clothing items inappropriate for peasant social class',
-        historical_basis: 'Sumptuary laws regulated clothing by social class in medieval Europe'
+        historical_basis: 'Sumptuary laws regulated clothing by social class in medieval Europe',
       },
       {
         id: 'cultural-sensitivity-religious',
@@ -410,7 +409,7 @@ export class ConstraintValidator {
         eras: Object.values(HISTORICAL_ERAS),
         enforcement: 'suggestion',
         message: 'Religious items should be used with cultural sensitivity and historical context',
-        historical_basis: 'Religious artifacts had sacred significance and specific usage contexts'
+        historical_basis: 'Religious artifacts had sacred significance and specific usage contexts',
       }
     ];
   }

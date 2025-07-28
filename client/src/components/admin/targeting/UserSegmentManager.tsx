@@ -1,5 +1,4 @@
 // Epic 17.1.4 - User Segment Manager Component
-
 import React, { useState, useEffect } from 'react';
 import { 
   Users, 
@@ -20,7 +19,6 @@ import { Badge } from '../../common/Badge';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
 import { TargetingRuleBuilder } from './TargetingRuleBuilder';
 import './TargetingRuleBuilder.css';
-
 interface TargetingRule {
   id: string;
   attribute: string;
@@ -28,7 +26,6 @@ interface TargetingRule {
   value: Error;
   logicalOperator?: 'AND' | 'OR';
 }
-
 interface UserSegment {
   id: string;
   name: string;
@@ -40,22 +37,19 @@ interface UserSegment {
   updatedAt: string;
   usageCount: number; // How many toggles use this segment
 }
-
 interface UserSegmentManagerProps {
   onSelectSegment?: (segment: UserSegment) => void;
   readonly?: boolean;
 }
 
-export   const [searchTerm, setSearchTerm] = useState('');
+export const [searchTerm, setSearchTerm] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingSegment, setEditingSegment] = useState<UserSegment | null>(null);
   const [segments, setSegments] = useState<UserSegment[]>([]);
   // const [testingSegment, setTestingSegment] = useState<string | null>(null); // TODO: Implement segment testing feature
-
   useEffect(() => {
     fetchSegments();
   }, []);
-
   const fetchSegments = async () => {
     setLoading(true);
     try {
@@ -65,25 +59,25 @@ export   const [searchTerm, setSearchTerm] = useState('');
           id: 'seg_1',
           name: 'Beta Users',
           description: 'Users who opted into beta testing',
-          rules: [
+          rules: [,
             {
               id: 'rule_1',
               attribute: 'user_type',
               operator: 'equals',
-              value: 'beta_tester'
+              value: 'beta_tester',
             }
           ],
           isActive: true,
           estimatedUsers: 1250,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          usageCount: 3
+          usageCount: 3,
         },
         {
           id: 'seg_2',
           name: 'Premium Users',
           description: 'Users with premium subscriptions',
-          rules: [
+          rules: [,
             {
               id: 'rule_2',
               attribute: 'subscription_tier',
@@ -95,28 +89,27 @@ export   const [searchTerm, setSearchTerm] = useState('');
           estimatedUsers: 5680,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          usageCount: 7
+          usageCount: 7,
         },
         {
           id: 'seg_3',
           name: 'New Users',
           description: 'Users registered within the last 30 days',
-          rules: [
+          rules: [,
             {
               id: 'rule_3',
               attribute: 'registration_date',
               operator: 'greater_than',
-              value: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+              value: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
             }
           ],
           isActive: false,
           estimatedUsers: 890,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          usageCount: 1
+          usageCount: 1,
         }
       ];
-      
       setSegments(mockSegments);
     } catch (error) {
       console.error('Failed to fetch segments:', error);
@@ -124,40 +117,35 @@ export   const [searchTerm, setSearchTerm] = useState('');
       setLoading(false);
     }
   };
-
   const testSegment = async (rules: TargetingRule[]): Promise<{ matches: boolean; userCount: number }> => {
     // Mock implementation - replace with actual API call
     console.log('Testing segment with rules:', rules);
     return new Promise((resolve) => {
       setTimeout(() => {
         const randomUserCount = Math.floor(Math.random() * 10000) + 100;
-        resolve({
+        resolve({)
           matches: true,
-          userCount: randomUserCount
+          userCount: randomUserCount,
         });
       }, 1000);
     });
   };
-
-  const filteredSegments = segments.filter(segment =>
+  const filteredSegments = segments.filter(segment =>;)
     segment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     segment.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
   const handleToggleSegment = async (id: string, isActive: boolean) => {
     try {
       // TODO: API call to toggle segment
-      setSegments(prev => prev.map(seg => 
+      setSegments(prev => prev.map(seg => )
         seg.id === id ? { ...seg, isActive } : seg
       ));
     } catch (error) {
       console.error('Failed to toggle segment:', error);
     }
   };
-
   const handleDeleteSegment = async (id: string) => {
     if (!confirm('Are you sure you want to delete this segment?')) return;
-    
     try {
       // TODO: API call to delete segment
       setSegments(prev => prev.filter(seg => seg.id !== id));
@@ -165,22 +153,19 @@ export   const [searchTerm, setSearchTerm] = useState('');
       console.error('Failed to delete segment:', error);
     }
   };
-
   const handleDuplicateSegment = (segment: UserSegment) => {
     const duplicated: UserSegment = {
       ...segment,
-      id: `seg_${Date.now()}`,
-      name: `${segment.name} (Copy)`,
+      id: `seg_${Date.now()}`,}
+      name: `${segment.name} (Copy)`,}
       isActive: false,
       usageCount: 0,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
-    
     setSegments(prev => [...prev, duplicated]);
   };
-
-  return (
+  return ()
     <div className="user-segment-manager">
       {/* Header */}
       <div className="segment-header">
@@ -191,8 +176,7 @@ export   const [searchTerm, setSearchTerm] = useState('');
           </h2>
           <p>Create and manage user targeting segments</p>
         </div>
-        
-        {!readonly && (
+        {!readonly && ()
           <button
             className="btn btn-primary"
             onClick={() => setShowCreateModal(true)}
@@ -202,7 +186,6 @@ export   const [searchTerm, setSearchTerm] = useState('');
           </button>
         )}
       </div>
-
       {/* Search and Stats */}
       <div className="segment-controls">
         <div className="search-box">
@@ -214,7 +197,6 @@ export   const [searchTerm, setSearchTerm] = useState('');
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
         <div className="segment-stats">
           <div className="stat-item">
             <span className="stat-value">{segments.length}</span>
@@ -232,15 +214,14 @@ export   const [searchTerm, setSearchTerm] = useState('');
           </div>
         </div>
       </div>
-
       {/* Segments List */}
       <div className="segments-grid">
-        {loading ? (
+        {loading ? ()
           <div className="loading-state">
             <LoadingSpinner />
             <p>Loading segments...</p>
           </div>
-        ) : filteredSegments.length === 0 ? (
+        ) : filteredSegments.length === 0 ? ()
           <div className="empty-state">
             <Users size={48} />
             <h3>No segments found</h3>
@@ -250,7 +231,7 @@ export   const [searchTerm, setSearchTerm] = useState('');
                 : 'Create your first user segment to get started'
               }
             </p>
-            {!readonly && !searchTerm && (
+            {!readonly && !searchTerm && ()
               <button
                 className="btn btn-primary"
                 onClick={() => setShowCreateModal(true)}
@@ -260,8 +241,8 @@ export   const [searchTerm, setSearchTerm] = useState('');
               </button>
             )}
           </div>
-        ) : (
-          filteredSegments.map(segment => (
+        ) : ()
+          filteredSegments.map(segment => ()
             <div key={segment.id} className="segment-card">
               <div className="segment-header-row">
                 <div className="segment-title">
@@ -270,15 +251,14 @@ export   const [searchTerm, setSearchTerm] = useState('');
                     <Badge color={segment.isActive ? 'green' : 'gray'}>
                       {segment.isActive ? 'Active' : 'Inactive'}
                     </Badge>
-                    {segment.usageCount > 0 && (
+                    {segment.usageCount > 0 && ()
                       <Badge color="blue">
                         {segment.usageCount} toggle{segment.usageCount !== 1 ? 's' : ''}
                       </Badge>
                     )}
                   </div>
                 </div>
-                
-                {!readonly && (
+                {!readonly && ()
                   <div className="segment-actions">
                     <button
                       className="btn-icon"
@@ -287,7 +267,6 @@ export   const [searchTerm, setSearchTerm] = useState('');
                     >
                       {segment.isActive ? <Pause size={14} /> : <Play size={14} />}
                     </button>
-                    
                     <button
                       className="btn-icon"
                       title="Edit Segment"
@@ -295,7 +274,6 @@ export   const [searchTerm, setSearchTerm] = useState('');
                     >
                       <Edit size={14} />
                     </button>
-                    
                     <button
                       className="btn-icon"
                       title="Duplicate Segment"
@@ -303,7 +281,6 @@ export   const [searchTerm, setSearchTerm] = useState('');
                     >
                       <Copy size={14} />
                     </button>
-                    
                     <button
                       className="btn-icon btn-danger"
                       title="Delete Segment"
@@ -315,39 +292,34 @@ export   const [searchTerm, setSearchTerm] = useState('');
                   </div>
                 )}
               </div>
-
-              {segment.description && (
+              {segment.description && ()
                 <p className="segment-description">{segment.description}</p>
               )}
-
               <div className="segment-stats-row">
                 <div className="user-count">
                   <BarChart3 size={16} />
                   <span>{segment.estimatedUsers.toLocaleString()} users</span>
                 </div>
-                
                 <div className="rule-count">
                   <Filter size={16} />
                   <span>{segment.rules.length} rule{segment.rules.length !== 1 ? 's' : ''}</span>
                 </div>
               </div>
-
               <div className="segment-preview">
                 <h5>Rules Preview:</h5>
                 <div className="rules-preview">
-                  {segment.rules.slice(0, 2).map((rule, index) => (
+                  {segment.rules.slice(0, 2).map((rule, index) => ()
                     <code key={rule.id} className="rule-preview">
                       {index > 0 && <span className="rule-operator">{rule.logicalOperator}</span>}
                       {rule.attribute} {rule.operator} {Array.isArray(rule.value) ? `[${rule.value.join(', ')}]` : rule.value}
                     </code>
                   ))}
-                  {segment.rules.length > 2 && (
+                  {segment.rules.length > 2 && ()
                     <span className="more-rules">+{segment.rules.length - 2} more</span>
                   )}
                 </div>
               </div>
-
-              {onSelectSegment && (
+              {onSelectSegment && ()
                 <button
                   className="btn btn-primary btn-sm segment-select-btn"
                   onClick={() => onSelectSegment(segment)}
@@ -359,9 +331,8 @@ export   const [searchTerm, setSearchTerm] = useState('');
           ))
         )}
       </div>
-
       {/* Create/Edit Segment Modal */}
-      {(showCreateModal || editingSegment) && (
+      {(showCreateModal || editingSegment) && ()
         <SegmentModal
           segment={editingSegment}
           onClose={() => {
@@ -391,8 +362,7 @@ interface SegmentModalProps {
   onSave: (segment: UserSegment) => void;
   onTestRules: (rules: TargetingRule[]) => Promise<{ matches: boolean; userCount: number }>;
 }
-
-const SegmentModal: React.FC<SegmentModalProps> = ({
+const SegmentModal: React.FC<SegmentModalProps> = ({)
   segment,
   onClose,
   onSave,
@@ -403,29 +373,23 @@ const SegmentModal: React.FC<SegmentModalProps> = ({
   const [rules, setRules] = useState<TargetingRule[]>(segment?.rules || []);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
-    
     if (!name.trim()) {
       newErrors.name = 'Name is required';
     }
-    
     if (rules.length === 0) {
       newErrors.rules = 'At least one rule is required';
     }
-    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleSave = async () => {
     if (!validate()) return;
-    
     setSaving(true);
     try {
       const segmentData: UserSegment = {
-        id: segment?.id || `seg_${Date.now()}`,
+        id: segment?.id || `seg_${Date.now()}`,}
         name: name.trim(),
         description: description.trim(),
         rules,
@@ -433,9 +397,8 @@ const SegmentModal: React.FC<SegmentModalProps> = ({
         estimatedUsers: segment?.estimatedUsers || 0,
         createdAt: segment?.createdAt || new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        usageCount: segment?.usageCount || 0
+        usageCount: segment?.usageCount || 0,
       };
-      
       onSave(segmentData);
     } catch {
       setErrors({ submit: 'Failed to save segment' });
@@ -443,8 +406,7 @@ const SegmentModal: React.FC<SegmentModalProps> = ({
       setSaving(false);
     }
   };
-
-  return (
+  return ()
     <div className="modal-overlay">
       <div className="modal-content segment-modal">
         <div className="modal-header">
@@ -453,15 +415,13 @@ const SegmentModal: React.FC<SegmentModalProps> = ({
             <X size={20} />
           </button>
         </div>
-
         <div className="modal-body">
-          {errors.submit && (
+          {errors.submit && ()
             <div className="error-message">
               <AlertCircle size={16} />
               {errors.submit}
             </div>
           )}
-
           <div className="form-group">
             <label>Name *</label>
             <input
@@ -473,7 +433,6 @@ const SegmentModal: React.FC<SegmentModalProps> = ({
             />
             {errors.name && <span className="field-error">{errors.name}</span>}
           </div>
-
           <div className="form-group">
             <label>Description</label>
             <textarea
@@ -483,7 +442,6 @@ const SegmentModal: React.FC<SegmentModalProps> = ({
               rows={2}
             />
           </div>
-
           <div className="form-group">
             <label>Targeting Rules *</label>
             <TargetingRuleBuilder
@@ -494,7 +452,6 @@ const SegmentModal: React.FC<SegmentModalProps> = ({
             {errors.rules && <span className="field-error">{errors.rules}</span>}
           </div>
         </div>
-
         <div className="modal-footer">
           <button
             className="btn btn-secondary"
@@ -503,7 +460,6 @@ const SegmentModal: React.FC<SegmentModalProps> = ({
           >
             Cancel
           </button>
-          
           <button
             className="btn btn-primary"
             onClick={handleSave}

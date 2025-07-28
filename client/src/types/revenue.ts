@@ -4,7 +4,6 @@
  * 
  * TypeScript type definitions for revenue analytics and dashboard components
  */
-
 import { LicenseType, PaymentProvider } from '../../../server/src/marketplace/transaction.types';
 
 // Time Range Options
@@ -21,7 +20,7 @@ export const RevenueTimeRange = {
   LAST_30D: 'last_30d' as const,
   LAST_90D: 'last_90d' as const,
   LAST_YEAR: 'last_year' as const,
-  CUSTOM: 'custom' as const
+  CUSTOM: 'custom' as const,
 } as const;
 
 // Revenue Metrics Summary
@@ -32,19 +31,16 @@ export interface RevenueMetrics {
   netRevenue: number;
   totalCommissions: number;
   totalRefunds: number;
-  
   // Growth Metrics
   revenueGrowth: number; // Percentage change from previous period
   transactionGrowth: number;
   customerGrowth: number;
-  
   // Performance Metrics
   transactionCount: number;
   uniqueCustomers: number;
   averageOrderValue: number;
   conversionRate: number;
   refundRate: number;
-  
   // Forecasting
   projectedRevenue?: number;
   forecastConfidence?: number;
@@ -89,7 +85,7 @@ export interface TopTemplate {
   revenue: number;
   transactions: number;
   conversionRate: number;
-  licenseBreakdown: Array<{
+  licenseBreakdown: Array<{,
     licenseType: LicenseType;
     count: number;
     revenue: number;
@@ -143,25 +139,21 @@ export interface RevenueForecast {
   targetId?: string;
   forecastHorizonDays: number;
   confidenceLevel: number;
-  
   // Forecast Results
   forecastedRevenue: number;
   upperBound: number;
   lowerBound: number;
-  
   // Daily Breakdown
-  dailyForecast: Array<{
+  dailyForecast: Array<{,
     date: Date;
     predictedRevenue: number;
     confidenceIntervalUpper: number;
     confidenceIntervalLower: number;
   }>;
-  
   // Model Performance
   mae: number; // Mean Absolute Error
   mape: number; // Mean Absolute Percentage Error
   rSquared: number;
-  
   generatedAt: Date;
   validUntil: Date;
 }
@@ -171,7 +163,7 @@ export interface RealtimeRevenueData {
   timestamp: Date;
   totalRevenueToday: number;
   transactionsToday: number;
-  recentTransactions: Array<{
+  recentTransactions: Array<{,
     id: string;
     amount: number;
     currency: string;
@@ -180,7 +172,7 @@ export interface RealtimeRevenueData {
     country?: string;
     timestamp: Date;
   }>;
-  hourlyTrend: Array<{
+  hourlyTrend: Array<{,
     hour: number;
     revenue: number;
     transactions: number;
@@ -191,31 +183,24 @@ export interface RealtimeRevenueData {
 export interface RevenueDashboardData {
   // Summary Metrics
   metrics: RevenueMetrics;
-  
   // Time Series Data
   trends: RevenueTrendPoint[];
-  
   // Breakdown Data
   paymentMethods: PaymentMethodData[];
   geography: GeographicRevenueData[];
-  
   // Top Performers
   topTemplates: TopTemplate[];
   topCreators: TopCreator[];
-  
   // Payout Information
   payouts: CreatorPayout[];
-  
   // Real-time Data
   realtime?: RealtimeRevenueData;
-  
   // Forecast Data
   forecast?: RevenueForecast;
-  
   // Metadata
   lastUpdated: Date;
   dataQuality: number; // 0-1 score
-  timeRange: {
+  timeRange: {,
     start: Date;
     end: Date;
   };
@@ -312,7 +297,7 @@ export interface RevenueServiceConfig {
 export interface RevenueCohortData {
   cohortMonth: string; // YYYY-MM format
   customerCount: number;
-  revenueByPeriod: Array<{
+  revenueByPeriod: Array<{,
     period: number; // 0-based months since cohort
     revenue: number;
     customers: number;
@@ -339,37 +324,31 @@ export interface TemplateRevenueAnalytics {
   templateName: string;
   creatorId: string;
   creatorName: string;
-  
   // Revenue Metrics
   totalRevenue: number;
   averageRevenue: number;
   revenueGrowth: number;
-  
   // Sales Metrics
   totalSales: number;
   uniqueCustomers: number;
   repeatPurchaseRate: number;
   conversionRate: number;
-  
   // License Performance
-  licenseBreakdown: Array<{
+  licenseBreakdown: Array<{,
     licenseType: LicenseType;
     count: number;
     revenue: number;
     averagePrice: number;
   }>;
-  
   // Geographic Performance
-  topCountries: Array<{
+  topCountries: Array<{,
     countryCode: string;
     countryName: string;
     revenue: number;
     sales: number;
   }>;
-  
   // Trend Data
   dailyRevenue: RevenueTrendPoint[];
-  
   // Performance Rankings
   revenueRank: number;
   salesRank: number;

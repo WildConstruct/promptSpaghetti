@@ -428,7 +428,6 @@ export class ChallengeTelemetryService extends EventEmitter {
     patterns: string[];
     riskScore: number;
     recommendations: string[];
-  } {
     const patterns: string[] = [];
     let riskScore = event.fraudIndicators.riskScore;
     const recommendations: string[] = [];
@@ -512,7 +511,7 @@ export class ChallengeTelemetryService extends EventEmitter {
     sessionId: string,
   ): { testId: string; variantId: string; parameters: Record<string, any> } | null {
     // Find active A/B test for this challenge type
-    const activeTest = Array.from(this.abTests.values()).find(test => ;)
+    const activeTest = Array.from(this.abTests.values()).find(test => ;);
       test.challengeType === challengeType && 
       test.isActive &&
       new Date() >= test.startDate &&
@@ -559,13 +558,12 @@ export class ChallengeTelemetryService extends EventEmitter {
       isStatisticallySignificant: boolean;
     }>;
     recommendation: string;
-  } {
     const test = this.abTests.get(testId);
     if (!test) {
       throw new Error(`A/B test not found: ${testId}`);}
     }
     const results = test.variants.map(variant => {)
-      const variantEvents = Array.from(this.events.values()).filter(event =>;)
+      const variantEvents = Array.from(this.events.values()).filter(event =>;);
         event.challengeType === test.challengeType &&
         event.challengeData.variant === variant.id &&
         event.timestamp >= test.startDate &&
@@ -615,7 +613,6 @@ export class ChallengeTelemetryService extends EventEmitter {
     fraudAlerts: Array<{ level: string; description: string; timestamp: Date }>;
     performanceMetrics: Array<{ metric: string; value: number; trend: 'up' | 'down' | 'stable' }>;
     geographicDistribution: Array<{ country: string; attempts: number; successRate: number }>;
-    } {
     const now = new Date();
     const last24Hours = new Date(now.getTime() - 24 * 60 * 60 * 1000);
     const recentEvents = Array.from(this.events.values());
@@ -643,7 +640,7 @@ export class ChallengeTelemetryService extends EventEmitter {
       .map(([type, data]) => ({)
         type: type as ChallengeType,
         count: data.count,
-        successRate: data.count > 0 ? (data.successful / data.count) * 100 : 0
+        successRate: data.count > 0 ? (data.successful / data.count) * 100 : 0,
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
@@ -663,7 +660,7 @@ export class ChallengeTelemetryService extends EventEmitter {
       .map(([country, data]) => ({)
         country,
         attempts: data.attempts,
-        successRate: data.attempts > 0 ? (data.successful / data.attempts) * 100 : 0
+        successRate: data.attempts > 0 ? (data.successful / data.attempts) * 100 : 0,
       }))
       .sort((a, b) => b.attempts - a.attempts)
       .slice(0, 10);
@@ -712,7 +709,7 @@ export class ChallengeTelemetryService extends EventEmitter {
       byDifficulty[level] = {
         attempts: levelEvents.length,
         successRate: levelEvents.length > 0 ? (levelSuccessful / levelEvents.length) * 100 : 0,
-        averageTime: levelEvents.length > 0 ?
+        averageTime: levelEvents.length > 0 ?,
           levelEvents.reduce((sum, e) => sum + e.timeToComplete, 0) / levelEvents.length : 0
       };
     });
@@ -756,12 +753,12 @@ export class ChallengeTelemetryService extends EventEmitter {
         botAttempts: byUserType[UserAgentType.BOT_CONFIRMED]?.attempts || 0,
         suspiciousActivities: events.filter(e => e.fraudIndicators.riskScore > 50).length,
         preventedAttacks: events.filter(e => e.fraudIndicators.riskScore > 80).length,
-        falsePositives: 0 // Would need manual verification
+        falsePositives: 0 // Would need manual verification,
       },
       accessibility: {,
         assistedCompletions: events.filter(e => e.accessibility.assistiveTechUsed.length > 0).length,
         accommodationUsage: {},
-        accessibilitySuccessRate: 0 // Would calculate from accessibility events
+        accessibilitySuccessRate: 0 // Would calculate from accessibility events,
       },
       optimization: {,
         recommendedDifficulty,
@@ -877,7 +874,7 @@ export class ChallengeTelemetryService extends EventEmitter {
       this.emit('metricsAggregated', {)
         period: { start: oneHourAgo, end: now },
         totalEvents: recentEvents.length,
-        successRate: (recentEvents.filter(e => e.outcome === ChallengeOutcome.SUCCESS).length / recentEvents.length) * 100
+        successRate: (recentEvents.filter(e => e.outcome === ChallengeOutcome.SUCCESS).length / recentEvents.length) * 100,
       });
     }
   }

@@ -284,7 +284,7 @@ export class ExemptionManager extends EventEmitter {
         userId: requestorId,
         userEmail: requestorEmail,
         role: requestorRole,
-        timestamp: new Date()
+        timestamp: new Date(),
       },
       effectiveFrom: new Date(),
       expiresAt: request.requestedDuration ,
@@ -294,7 +294,7 @@ export class ExemptionManager extends EventEmitter {
       conditions: {,
         usageQuota: {,
           currentUsage: 0,
-          resetTime: new Date()
+          resetTime: new Date(),
         },
         ...request.conditions
       },
@@ -303,7 +303,7 @@ export class ExemptionManager extends EventEmitter {
         riskAssessment: {,
           level: request.riskLevel,
           mitigations: request.mitigations,
-          reviewDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+          reviewDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days,
         },
         tags: [],
       },
@@ -437,7 +437,6 @@ export class ExemptionManager extends EventEmitter {
     granted: boolean;
     exemption?: SecurityExemption;
     reason?: string;
-  } {
     const exemptions = Array.from(this.exemptions.values());
       .filter(ex => )
         ex.type === type &&
@@ -450,7 +449,7 @@ export class ExemptionManager extends EventEmitter {
     }
     // Check expiry
     const now = new Date();
-    const activeExemptions = exemptions.filter(ex => ;)
+    const activeExemptions = exemptions.filter(ex => ;);
       !ex.expiresAt || ex.expiresAt > now
     );
     if (activeExemptions.length === 0) {
@@ -552,7 +551,7 @@ export class ExemptionManager extends EventEmitter {
         userId: requestorId,
         userEmail: requestorEmail,
         role: requestorRole,
-        timestamp: new Date()
+        timestamp: new Date(),
       },
       approvedBy: {,
         userId: 'EMERGENCY_SYSTEM',
@@ -567,7 +566,7 @@ export class ExemptionManager extends EventEmitter {
       conditions: {,
         usageQuota: {,
           currentUsage: 0,
-          resetTime: new Date()
+          resetTime: new Date(),
         }
       },
       metadata: {,
@@ -575,7 +574,7 @@ export class ExemptionManager extends EventEmitter {
         riskAssessment: {,
           level: 'critical',
           mitigations: ['Emergency monitoring enabled', 'Auto-expiry in 24 hours'],
-          reviewDate: new Date(Date.now() + 24 * 60 * 60 * 1000)
+          reviewDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
         },
         tags: ['emergency', 'override']
       },
@@ -610,7 +609,6 @@ export class ExemptionManager extends EventEmitter {
     exemptions: SecurityExemption[];
     total: number;
     hasMore: boolean;
-  } {
     let exemptions = Array.from(this.exemptions.values());
     // Apply filters
     if (query.types?.length) {
@@ -672,7 +670,7 @@ export class ExemptionManager extends EventEmitter {
     return {
       exemptions,
       total,
-      hasMore: (offset + limit) < total
+      hasMore: (offset + limit) < total,
     };
   }
   /**
@@ -694,7 +692,6 @@ export class ExemptionManager extends EventEmitter {
       averageUsagePerExemption: number;
       mostUsedExemptions: Array<{ id: string; usage: number }>;
     };
-    } {
     const exemptions = Array.from(this.exemptions.values());
     const now = new Date();
     const soonThreshold = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -722,7 +719,7 @@ export class ExemptionManager extends EventEmitter {
       byType,
       byScope,
       byPriority,
-      expiringSoon: exemptions.filter(ex => )
+      expiringSoon: exemptions.filter(ex => ),
         ex.expiresAt && ex.expiresAt <= soonThreshold && ex.expiresAt > now
       ).length,
       emergencyCount: exemptions.filter(ex => ex.priority === ExemptionPriority.EMERGENCY).length,
@@ -784,7 +781,7 @@ export class ExemptionManager extends EventEmitter {
       if (quota.maxUsesPerHour) {
         const hourStart = new Date(now);
         hourStart.setMinutes(0, 0, 0);
-        const hourlyUsage = exemption.usage.usageHistory.filter(usage => ;)
+        const hourlyUsage = exemption.usage.usageHistory.filter(usage => ;);
           usage.timestamp >= hourStart
         ).length;
         if (hourlyUsage >= quota.maxUsesPerHour) {

@@ -430,7 +430,7 @@ export class HealthCheckDefinitionBuilder {
       tags: [],
       isActive: true,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
   }
   description(desc: string): this {

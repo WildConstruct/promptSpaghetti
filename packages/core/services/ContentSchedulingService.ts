@@ -341,7 +341,7 @@ export class ContentSchedulingService {
       status: 'deleted',
       scheduling: {,
         ...content.scheduling,
-        deleteAt: new Date()
+        deleteAt: new Date(),
       }
     }, deletedBy);
     if (deletedContent) {
@@ -377,7 +377,7 @@ export class ContentSchedulingService {
       status: 'published',
       scheduling: {,
         ...content.scheduling,
-        publishAt: new Date()
+        publishAt: new Date(),
       }
     }, publishedBy);
     if (updatedContent) {
@@ -393,7 +393,7 @@ export class ContentSchedulingService {
       status: 'unpublished',
       scheduling: {,
         ...content.scheduling,
-        unpublishAt: new Date()
+        unpublishAt: new Date(),
       }
     }, unpublishedBy);
     if (updatedContent) {
@@ -451,7 +451,7 @@ export class ContentSchedulingService {
           batch.progress.errors.push({)
             contentId,
             error: 'Content not found',
-            timestamp: new Date()
+            timestamp: new Date(),
           });
           continue;
         }
@@ -471,7 +471,7 @@ export class ContentSchedulingService {
           batch.progress.errors.push({)
             contentId,
             error: error instanceof Error ? error.message : 'Unknown error',
-            timestamp: new Date()
+            timestamp: new Date(),
           });
         }
         this.batches.set(batchId, batch);
@@ -552,13 +552,13 @@ export class ContentSchedulingService {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
     const scheduledContent = content.filter(c => c.status === 'scheduled');
-    const publishedToday = content.filter(c => ;)
+    const publishedToday = content.filter(c => ;);
       c.status === 'published' && 
       c.scheduling.publishAt &&
       c.scheduling.publishAt >= today &&
       c.scheduling.publishAt < tomorrow
     );
-    const unpublishedToday = content.filter(c => ;)
+    const unpublishedToday = content.filter(c => ;);
       c.status === 'unpublished' && 
       c.scheduling.unpublishAt &&
       c.scheduling.unpublishAt >= today &&

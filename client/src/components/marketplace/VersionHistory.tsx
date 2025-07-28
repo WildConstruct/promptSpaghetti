@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import './VersionHistory.css';
-
 interface EnhancedTemplateVersion {
   id: string;
   template_id: string;
@@ -34,12 +33,11 @@ interface EnhancedTemplateVersion {
   created_at: string;
   updated_at: string;
 }
-
 interface VersionComparison {
   from_version: EnhancedTemplateVersion;
   to_version: EnhancedTemplateVersion;
   differences: unknown[];
-  compatibility_impact: {
+  compatibility_impact: {,
     is_breaking: boolean;
     affected_components: string[];
     required_updates: string[];
@@ -50,19 +48,17 @@ interface VersionComparison {
   migration_complexity: 'simple' | 'moderate' | 'complex';
   estimated_migration_time: number;
 }
-
 const STATUS_COLORS = {
   draft: '#6b7280',
   published: '#10b981',
   deprecated: '#f59e0b',
-  archived: '#ef4444'
+  archived: '#ef4444',
 };
-
 const COMPATIBILITY_COLORS = {
   breaking: '#ef4444',
   major: '#f59e0b',
   minor: '#10b981',
-  patch: '#3b82f6'
+  patch: '#3b82f6',
 };
 
 export const VersionHistory: React.FC = () => {
@@ -72,19 +68,17 @@ export const VersionHistory: React.FC = () => {
   const [comparison, setComparison] = useState<VersionComparison | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState({
+  const [filter, setFilter] = useState({)
     status: '',
     visibility: '',
-    compatibility: ''
+    compatibility: '',
   });
   const [showComparison, setShowComparison] = useState(false);
-
   useEffect(() => {
     if (templateId) {
       fetchVersions();
     }
   }, [templateId, filter, fetchVersions]);
-
   const fetchVersions = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -92,26 +86,21 @@ export const VersionHistory: React.FC = () => {
       if (filter.status) params.append('status', filter.status);
       if (filter.visibility) params.append('visibility', filter.visibility);
       params.append('include_private', 'true');
-
-      const response = await fetch(`/api/marketplace/templates/${templateId}/versions?${params}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+      const response = await fetch(`/api/marketplace/templates/${templateId}/versions?${params}`, {)}
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
         }
       });
-
       if (!response.ok) {
         throw new Error('Failed to fetch versions');
       }
-
       const data = await response.json();
       let filteredVersions = data;
-
       if (filter.compatibility) {
         filteredVersions = data.filter((v: EnhancedTemplateVersion) => 
           v.compatibility_level === filter.compatibility
         );
       }
-
       setVersions(filteredVersions);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch versions');
@@ -119,7 +108,6 @@ export const VersionHistory: React.FC = () => {
       setIsLoading(false);
     }
   }, [templateId, filter]);
-
   const handleVersionSelect = (versionId: string) => {
     if (selectedVersions.includes(versionId)) {
       setSelectedVersions(selectedVersions.filter(id => id !== versionId));
@@ -130,30 +118,26 @@ export const VersionHistory: React.FC = () => {
       setSelectedVersions([selectedVersions[1], versionId]);
     }
   };
-
   const handleCompareVersions = async () => {
     if (selectedVersions.length !== 2) return;
-
     try {
       setIsLoading(true);
-      const response = await fetch('/api/marketplace/versions/compare', {
+      const response = await fetch('/api/marketplace/versions/compare', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           from_version_id: selectedVersions[0],
           to_version_id: selectedVersions[1],
           include_content_diff: true,
-          include_metadata_diff: true
+          include_metadata_diff: true,
         })
       });
-
       if (!response.ok) {
         throw new Error('Failed to compare versions');
       }
-
       const comparisonData = await response.json();
       setComparison(comparisonData);
       setShowComparison(true);
@@ -163,44 +147,38 @@ export const VersionHistory: React.FC = () => {
       setIsLoading(false);
     }
   };
-
   const handleDeployVersion = async (versionId: string) => {
     if (!confirm('Are you sure you want to deploy this version?')) return;
-
     try {
-      const response = await fetch(`/api/marketplace/versions/${versionId}/deploy`, {
+      const response = await fetch(`/api/marketplace/versions/${versionId}/deploy`, {)}
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           deployment_type: 'immediate',
-          rollout_percentage: 100
+          rollout_percentage: 100,
         })
       });
-
       if (!response.ok) {
         throw new Error('Failed to deploy version');
       }
-
       alert('Version deployed successfully!');
       fetchVersions();
     } catch (err) {
-      alert(`Deployment failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      alert(`Deployment failed: ${err instanceof Error ? err.message : 'Unknown error'}`);}
     }
   };
-
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('en-US', {)
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
-
   const getVersionTypeIcon = (compatibilityLevel: string) => {
     switch (compatibilityLevel) {
     case 'breaking': return '💥';
@@ -210,7 +188,6 @@ export const VersionHistory: React.FC = () => {
     default: return '📦';
     }
   };
-
   const getRiskIcon = (riskLevel: string) => {
     switch (riskLevel) {
     case 'high': return '🔴';
@@ -219,17 +196,15 @@ export const VersionHistory: React.FC = () => {
     default: return '⚪';
     }
   };
-
   if (isLoading && !versions.length) {
-    return (
+    return ()
       <div className="version-history loading">
         <div className="loading-spinner">Loading version history...</div>
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="version-history error">
         <div className="error-message">
           <h3>Error loading versions</h3>
@@ -239,13 +214,12 @@ export const VersionHistory: React.FC = () => {
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="version-history">
       <div className="version-header">
         <h2>Version History</h2>
         <div className="version-actions">
-          {selectedVersions.length === 2 && (
+          {selectedVersions.length === 2 && ()
             <button 
               className="btn-primary"
               onClick={handleCompareVersions}
@@ -256,7 +230,6 @@ export const VersionHistory: React.FC = () => {
           )}
         </div>
       </div>
-
       <div className="version-filters">
         <select
           value={filter.status}
@@ -268,7 +241,6 @@ export const VersionHistory: React.FC = () => {
           <option value="deprecated">Deprecated</option>
           <option value="archived">Archived</option>
         </select>
-
         <select
           value={filter.visibility}
           onChange={(e) => setFilter({ ...filter, visibility: e.target.value })}
@@ -278,7 +250,6 @@ export const VersionHistory: React.FC = () => {
           <option value="private">Private</option>
           <option value="beta">Beta</option>
         </select>
-
         <select
           value={filter.compatibility}
           onChange={(e) => setFilter({ ...filter, compatibility: e.target.value })}
@@ -290,16 +261,15 @@ export const VersionHistory: React.FC = () => {
           <option value="patch">Patches</option>
         </select>
       </div>
-
-      {selectedVersions.length > 0 && (
+      {selectedVersions.length > 0 && ()
         <div className="selection-info">
           <p>
             {selectedVersions.length === 1 
               ? '1 version selected. Select another to compare.' 
-              : `${selectedVersions.length} versions selected.`
+              : `${selectedVersions.length} versions selected.`}
             }
           </p>
-          {selectedVersions.length > 0 && (
+          {selectedVersions.length > 0 && ()
             <button 
               className="btn-secondary"
               onClick={() => setSelectedVersions([])}
@@ -309,9 +279,8 @@ export const VersionHistory: React.FC = () => {
           )}
         </div>
       )}
-
       <div className="version-timeline">
-        {versions.map((version, index) => (
+        {versions.map((version, index) => ()
           <div 
             key={version.id} 
             className={`version-item ${selectedVersions.includes(version.id) ? 'selected' : ''}`}
@@ -324,7 +293,6 @@ export const VersionHistory: React.FC = () => {
               />
               {index < versions.length - 1 && <div className="version-line" />}
             </div>
-
             <div className="version-content">
               <div className="version-header-item">
                 <div className="version-info">
@@ -352,7 +320,7 @@ export const VersionHistory: React.FC = () => {
                   </div>
                 </div>
                 <div className="version-actions-item">
-                  {version.status === 'published' && (
+                  {version.status === 'published' && ()
                     <button 
                       className="btn-outline"
                       onClick={(e) => {
@@ -368,68 +336,61 @@ export const VersionHistory: React.FC = () => {
                   </span>
                 </div>
               </div>
-
               <div className="version-details">
                 <div className="release-notes">
                   <h4>Release Notes</h4>
                   <p>{version.release_notes}</p>
                 </div>
-
-                {version.new_features.length > 0 && (
+                {version.new_features.length > 0 && ()
                   <div className="feature-list">
                     <h5>✨ New Features</h5>
                     <ul>
-                      {version.new_features.map((feature, idx) => (
+                      {version.new_features.map((feature, idx) => ()
                         <li key={idx}>{feature}</li>
                       ))}
                     </ul>
                   </div>
                 )}
-
-                {version.bug_fixes.length > 0 && (
+                {version.bug_fixes.length > 0 && ()
                   <div className="feature-list">
                     <h5>🔧 Bug Fixes</h5>
                     <ul>
-                      {version.bug_fixes.map((fix, idx) => (
+                      {version.bug_fixes.map((fix, idx) => ()
                         <li key={idx}>{fix}</li>
                       ))}
                     </ul>
                   </div>
                 )}
-
-                {version.breaking_changes.length > 0 && (
+                {version.breaking_changes.length > 0 && ()
                   <div className="feature-list breaking">
                     <h5>💥 Breaking Changes</h5>
                     <ul>
-                      {version.breaking_changes.map((change, idx) => (
+                      {version.breaking_changes.map((change, idx) => ()
                         <li key={idx}>{change}</li>
                       ))}
                     </ul>
                   </div>
                 )}
-
-                {version.deprecated_features.length > 0 && (
+                {version.deprecated_features.length > 0 && ()
                   <div className="feature-list deprecated">
                     <h5>⚠️ Deprecated Features</h5>
                     <ul>
-                      {version.deprecated_features.map((feature, idx) => (
+                      {version.deprecated_features.map((feature, idx) => ()
                         <li key={idx}>{feature}</li>
                       ))}
                     </ul>
                   </div>
                 )}
-
-                {version.known_issues.length > 0 && (
+                {version.known_issues.length > 0 && ()
                   <div className="feature-list issues">
                     <h5>🐛 Known Issues</h5>
                     <ul>
-                      {version.known_issues.map((issue, idx) => (
+                      {version.known_issues.map((issue, idx) => ()
                         <li key={idx}>{issue}</li>
                       ))}
                     </ul>
                   </div>
                 )}
-
                 <div className="version-specs">
                   <div className="spec-item">
                     <strong>Claude Model:</strong> {version.claude_model}
@@ -437,12 +398,12 @@ export const VersionHistory: React.FC = () => {
                   <div className="spec-item">
                     <strong>Token Estimate:</strong> {version.token_per_run_estimate.toLocaleString()}
                   </div>
-                  {version.min_claude_version && (
+                  {version.min_claude_version && ()
                     <div className="spec-item">
                       <strong>Min Claude Version:</strong> {version.min_claude_version}
                     </div>
                   )}
-                  {version.max_claude_version && (
+                  {version.max_claude_version && ()
                     <div className="spec-item">
                       <strong>Max Claude Version:</strong> {version.max_claude_version}
                     </div>
@@ -453,8 +414,7 @@ export const VersionHistory: React.FC = () => {
           </div>
         ))}
       </div>
-
-      {showComparison && comparison && (
+      {showComparison && comparison && ()
         <div className="comparison-modal">
           <div className="comparison-content">
             <div className="comparison-header">
@@ -466,7 +426,6 @@ export const VersionHistory: React.FC = () => {
                 ×
               </button>
             </div>
-
             <div className="comparison-summary">
               <div className="version-compare-info">
                 <div className="compare-version">
@@ -479,7 +438,6 @@ export const VersionHistory: React.FC = () => {
                   <span className="date">({formatDate(comparison.to_version.created_at)})</span>
                 </div>
               </div>
-
               <div className="compatibility-summary">
                 <div className="risk-indicator">
                   {getRiskIcon(comparison.compatibility_impact.risk_level)}
@@ -489,49 +447,46 @@ export const VersionHistory: React.FC = () => {
                   <span>Migration: {comparison.migration_complexity}</span>
                   <span>Est. Time: {comparison.estimated_migration_time} min</span>
                 </div>
-                {comparison.compatibility_impact.is_breaking && (
+                {comparison.compatibility_impact.is_breaking && ()
                   <div className="breaking-warning">
                     ⚠️ Breaking changes detected
                   </div>
                 )}
               </div>
             </div>
-
             <div className="comparison-details">
               <div className="changes-section">
                 <h4>Changes ({comparison.differences.length})</h4>
                 <div className="changes-list">
-                  {comparison.differences.slice(0, 10).map((diff, index) => (
-                    <div key={index} className={`change-item ${diff.impact}`}>
+                  {comparison.differences.slice(0, 10).map((diff, index) => ()
+                    <div key={index} className={`change-item ${diff.impact}`}>}
                       <span className="change-type">{diff.type}</span>
                       <span className="change-path">{diff.path}</span>
                       <span className="change-description">{diff.description}</span>
                     </div>
                   ))}
-                  {comparison.differences.length > 10 && (
+                  {comparison.differences.length > 10 && ()
                     <div className="more-changes">
                       +{comparison.differences.length - 10} more changes
                     </div>
                   )}
                 </div>
               </div>
-
-              {comparison.compatibility_impact.required_updates.length > 0 && (
+              {comparison.compatibility_impact.required_updates.length > 0 && ()
                 <div className="updates-section">
                   <h4>Required Updates</h4>
                   <ul>
-                    {comparison.compatibility_impact.required_updates.map((update, index) => (
+                    {comparison.compatibility_impact.required_updates.map((update, index) => ()
                       <li key={index}>{update}</li>
                     ))}
                   </ul>
                 </div>
               )}
-
-              {comparison.compatibility_impact.deprecation_warnings.length > 0 && (
+              {comparison.compatibility_impact.deprecation_warnings.length > 0 && ()
                 <div className="deprecation-section">
                   <h4>Deprecation Warnings</h4>
                   <ul>
-                    {comparison.compatibility_impact.deprecation_warnings.map((warning, index) => (
+                    {comparison.compatibility_impact.deprecation_warnings.map((warning, index) => ()
                       <li key={index}>{warning}</li>
                     ))}
                   </ul>

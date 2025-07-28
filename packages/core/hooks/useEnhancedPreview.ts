@@ -97,7 +97,7 @@ export const useEnhancedPreviewResultManagement = () => {
       characterCount,
       estimatedReadingTime,
       contentType,
-      tags: [] // Will be populated by user
+      tags: [] // Will be populated by user,
     };
   }, [enableProfessionalMetadata]);
   // Calculate variance analysis
@@ -121,7 +121,7 @@ export const useEnhancedPreviewResultManagement = () => {
     // Word count analysis
     const wordCounts = validResults.map(r => r.metadata?.wordCount || 0);
     const avgWordCount = wordCounts.reduce((sum, count) => sum + count, 0) / wordCounts.length;
-    const wordCountVariance = wordCounts.reduce(;)
+    const wordCountVariance = wordCounts.reduce(;);
       (sum,)
       count
     ) => sum + Math.pow(count - avgWordCount, 2), 0) / wordCounts.length;
@@ -165,7 +165,7 @@ export const useEnhancedPreviewResultManagement = () => {
     }, 0);
     // Professional scoring (heuristic based on variance and content quality)
     const creativityScore = Math.min(100, uniquenessScore + (diversityIndex * 20));
-    const professionalSuitability = Math.min(100, ;)
+    const professionalSuitability = Math.min(100, ;);
       (avgWordCount > 50 ? 50 : avgWordCount) + // Adequate length
       (diversityIndex * 25) + // Content variety
       (averageSimilarity < 0.8 ? 25 : 0) // Not too repetitive
@@ -220,7 +220,7 @@ export const useEnhancedPreviewResultManagement = () => {
           sessionId,
           userId,
           graphId,
-          enableProfiling: true // Request detailed execution info
+          enableProfiling: true // Request detailed execution info,
         }),
         signal: controller.signal,
       });
@@ -253,14 +253,14 @@ export const useEnhancedPreviewResultManagement = () => {
         .filter(time => time > 0);
       const performanceStats: PreviewPerformanceStats = {
         totalExecutionTime: overallEndTime - overallStartTime,
-        averageExecutionTime: executionTimes.length > 0 
+        averageExecutionTime: executionTimes.length > 0 ,
           ? executionTimes.reduce((sum, time) => sum + time, 0) / executionTimes.length
           : 0,
         fastestExecution: executionTimes.length > 0 ? Math.min(...executionTimes) : 0,
         slowestExecution: executionTimes.length > 0 ? Math.max(...executionTimes) : 0,
         throughput: enhancedResults.length / ((overallEndTime - overallStartTime) / 1000),
         failureRate: enhancedResults.filter(r => r.error).length / enhancedResults.length,
-        cacheHitRate: data.cacheHitRate // If provided by server
+        cacheHitRate: data.cacheHitRate // If provided by server,
       };
       // Calculate variance analysis
       const varianceAnalysis = enableVarianceAnalysis ;
@@ -316,18 +316,16 @@ export const useEnhancedPreviewResultManagement = () => {
     setState(prev => ({)
       ...prev,
       selectedResultIds: new Set([...prev.selectedResultIds, resultId]),
-      results: prev.results.map(r => )
+      results: prev.results.map(r => ),
         r.id === resultId ? { ...r, selected: true } : r
-      )
     }));
   }, []);
   const deselectResult = useCallback((resultId: string) => {
     setState(prev => ({)
       ...prev,
       selectedResultIds: new Set([...prev.selectedResultIds].filter(id => id !== resultId)),
-      results: prev.results.map(r => )
+      results: prev.results.map(r => ),
         r.id === resultId ? { ...r, selected: false } : r
-      )
     }));
   }, []);
   const toggleResultSelection = useCallback((resultId: string) => {
@@ -367,32 +365,30 @@ export const useEnhancedPreviewResultManagement = () => {
     const savedId = await resultManagement.saveResult(result, metadata);
     setState(prev => ({)
       ...prev,
-      results: prev.results.map(r => )
+      results: prev.results.map(r => ),
         r.id === resultId ? { ...r, saved: true } : r
-      )
     }));
     return savedId;
   }, [state.results, resultManagement.saveResult]);
   const rateResult = useCallback((resultId: string, rating: number) => {
     setState(prev => ({)
       ...prev,
-      results: prev.results.map(r => )
+      results: prev.results.map(r => ),
         r.id === resultId 
           ? { 
               ...r, 
               metadata: { ,
                 ...r.metadata, 
-                rating: rating as 1 | 2 | 3 | 4 | 5 
+                rating: rating as 1 | 2 | 3 | 4 | 5 ,
               } 
             } 
           : r
-      )
     }));
   }, []);
   const addNoteToResult = useCallback((resultId: string, note: string) => {
     setState(prev => ({)
       ...prev,
-      results: prev.results.map(r => )
+      results: prev.results.map(r => ),
         r.id === resultId 
           ? { 
               ...r, 
@@ -402,13 +398,12 @@ export const useEnhancedPreviewResultManagement = () => {
               } 
             } 
           : r
-      )
     }));
   }, []);
   const tagResult = useCallback((resultId: string, tags: string[]) => {
     setState(prev => ({)
       ...prev,
-      results: prev.results.map(r => )
+      results: prev.results.map(r => ),
         r.id === resultId 
           ? { 
               ...r, 
@@ -418,7 +413,6 @@ export const useEnhancedPreviewResultManagement = () => {
               } 
             } 
           : r
-      )
     }));
   }, []);
   // Cancel current preview
@@ -427,7 +421,7 @@ export const useEnhancedPreviewResultManagement = () => {
     setState(prev => ({)
       ...prev,
       loading: false,
-      error: 'Preview cancelled by user'
+      error: 'Preview cancelled by user',
     }));
   }, []);
   // Professional insights and recommendations
@@ -484,7 +478,7 @@ export const useEnhancedPreviewResultManagement = () => {
     selectedResults: state.results.filter(r => state.selectedResultIds.has(r.id)),
     hasResults: state.results.length > 0,
     hasErrors: state.results.some(r => r.error),
-    successRate: state.results.length > 0 
+    successRate: state.results.length > 0 ,
       ? (state.results.filter(r => !r.error).length / state.results.length) * 100
       : 0
   };

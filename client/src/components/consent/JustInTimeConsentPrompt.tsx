@@ -6,7 +6,6 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   ConsentType,
@@ -14,7 +13,6 @@ import {
 } from '../../types/consent';
 import { useConsent } from '../../hooks/useConsent';
 import './JustInTimeConsentPrompt.css';
-
 interface JustInTimeConsentPromptProps {
   prompt: ActivePrompt;
   onRespond: (promptId: string, granted: boolean) => Promise<void>;
@@ -22,7 +20,7 @@ interface JustInTimeConsentPromptProps {
   onClose?: () => void;
 }
 
-export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = ({
+export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = ({)
   prompt,
   onRespond,
   onDismiss,
@@ -34,10 +32,8 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
   const [isVisible, setIsVisible] = useState(true);
   const promptRef = useRef<HTMLDivElement>(null);
   const autoHideTimer = useRef<NodeJS.Timeout>();
-
   const { config, consentType, context } = prompt;
   const { title, message, appearance, behavior } = config;
-
   useEffect(() => {
     // Auto-hide timer if configured
     if (behavior.autoHideAfter && behavior.autoHideAfter > 0) {
@@ -45,48 +41,38 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
         handleDismiss();
       }, behavior.autoHideAfter * 1000);
     }
-
     // Position the prompt if it's a tooltip or positioned style
     if (appearance.style === 'tooltip' && prompt.position) {
       positionPrompt();
     }
-
     return () => {
       if (autoHideTimer.current) {
         clearTimeout(autoHideTimer.current);
       }
     };
   }, [appearance.style, behavior.autoHideAfter, handleDismiss, positionPrompt, prompt.position]);
-
   const positionPrompt = useCallback(() => {
     if (!promptRef.current || !prompt.position) return;
-    
     const promptElement = promptRef.current;
     const { x, y } = prompt.position;
-    
     promptElement.style.position = 'fixed';
-    promptElement.style.left = `${x}px`;
-    promptElement.style.top = `${y}px`;
+    promptElement.style.left = `${x}px`;}
+    promptElement.style.top = `${y}px`;}
     promptElement.style.zIndex = '10001';
-    
     // Adjust position if prompt goes off-screen
     const rect = promptElement.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    
     if (rect.right > viewportWidth) {
-      promptElement.style.left = `${x - rect.width}px`;
+      promptElement.style.left = `${x - rect.width}px`;}
     }
-    
     if (rect.bottom > viewportHeight) {
-      promptElement.style.top = `${y - rect.height}px`;
+      promptElement.style.top = `${y - rect.height}px`;}
     }
   }, [prompt.position]);
-
   const handleGrant = async () => {
     setIsLoading(true);
     setError(null);
-    
     try {
       await grantConsent(consentType, 'just_in_time');
       await onRespond(prompt.id, true);
@@ -98,11 +84,9 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
       setIsLoading(false);
     }
   };
-
   const handleDeny = async () => {
     setIsLoading(true);
     setError(null);
-    
     try {
       // Only withdraw if user previously had consent
       if (hasConsent(consentType)) {
@@ -117,41 +101,34 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
       setIsLoading(false);
     }
   };
-
   const handleDismiss = useCallback(() => {
     if (behavior.allowDismiss) {
       onDismiss(prompt.id);
       handleClose();
     }
   }, [behavior.allowDismiss, onDismiss, prompt.id, handleClose]);
-
   const handleClose = useCallback(() => {
     setIsVisible(false);
     onClose?.();
   }, [onClose]);
-
   if (!isVisible) {
     return null;
   }
-
   const getIconElement = () => {
     if (!appearance.showIcon) return null;
-    
     const iconType = appearance.iconType || 'info';
     const iconMap = {
       info: '🛈',
       warning: '⚠',
       question: '❓',
-      shield: '🛡'
+      shield: '🛡',
     };
-    
-    return (
-      <div className={`jit-prompt__icon jit-prompt__icon--${iconType}`}>
+    return ()
+      <div className={`jit-prompt__icon jit-prompt__icon--${iconType}`}>}
         {iconMap[iconType]}
       </div>
     );
   };
-
   const getConsentTypeDescription = () => {
     const descriptions = {
       [ConsentType.ANALYTICS]: 'website analytics and performance tracking',
@@ -163,31 +140,25 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
       [ConsentType.PERFORMANCE]: 'performance monitoring and optimization',
       [ConsentType.NECESSARY]: 'essential website functionality'
     };
-    
     return descriptions[consentType] || 'this feature';
   };
-
   const getPromptClasses = () => {
     const baseClass = 'jit-prompt';
-    const classes = [
+    const classes = [;
       baseClass,
-      `${baseClass}--${appearance.style}`,
-      `${baseClass}--${appearance.theme}`,
-      `${baseClass}--${appearance.size}`
+      `${baseClass}--${appearance.style}`,}
+      `${baseClass}--${appearance.theme}`,}
+      `${baseClass}--${appearance.size}`}
     ];
-    
     if (appearance.position) {
-      classes.push(`${baseClass}--${appearance.position}`);
+      classes.push(`${baseClass}--${appearance.position}`);}
     }
-    
     if (behavior.blockInteraction) {
-      classes.push(`${baseClass}--blocking`);
+      classes.push(`${baseClass}--blocking`);}
     }
-    
     return classes.join(' ');
   };
-
-  const renderPromptContent = () => (
+  const renderPromptContent = () => (;)
     <div className="jit-prompt__content">
       <div className="jit-prompt__header">
         {getIconElement()}
@@ -200,7 +171,7 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
             Feature: {context.feature} • Action: {context.action}
           </p>
         </div>
-        {behavior.allowDismiss && (
+        {behavior.allowDismiss && ()
           <button
             className="jit-prompt__close"
             onClick={handleDismiss}
@@ -211,13 +182,11 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
           </button>
         )}
       </div>
-      
-      {error && (
+      {error && ()
         <div className="jit-prompt__error" role="alert">
           {error}
         </div>
       )}
-      
       <div className="jit-prompt__actions">
         <button
           className="jit-prompt__button jit-prompt__button--grant"
@@ -234,7 +203,6 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
           {isLoading ? 'Saving...' : 'Don\'t Allow'}
         </button>
       </div>
-      
       <div className="jit-prompt__footer">
         <a 
           href="/privacy" 
@@ -256,10 +224,9 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
       </div>
     </div>
   );
-
   // Modal overlay for blocking interactions
   if (appearance.style === 'modal' || behavior.blockInteraction) {
-    return (
+    return ()
       <div className="jit-prompt-overlay">
         <div
           ref={promptRef}
@@ -275,9 +242,8 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
       </div>
     );
   }
-
   // Non-modal prompt (banner, sidebar, tooltip, inline)
-  return (
+  return ()
     <div
       ref={promptRef}
       className={getPromptClasses()}

@@ -98,7 +98,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
     isSaving: false,
     hasUnsavedChanges: false,
     activeTab: 'general',
-    expandedSections: new Set(['general-settings'])
+    expandedSections: new Set(['general-settings']),
   });
   // Theme configuration
   const themeStyles = useMemo(() => {
@@ -228,7 +228,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
   // Render validation status
   const renderValidationStatus = () => {
     if (state.isLoading) {
-      return ()
+      return ();
         <div style={{
           padding: '12px',
           background: themeStyles.surface,
@@ -244,7 +244,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             border: `2px solid ${themeStyles.primary}`,}
             borderTopColor: 'transparent',
             borderRadius: '50%',
-            animation: 'spin 1s linear infinite'
+            animation: 'spin 1s linear infinite',
           }} />
           <span style={{ color: themeStyles.textSecondary, fontSize: '14px' }}>
             Validating configuration...
@@ -255,7 +255,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
     if (!state.validation) return null;
     const { isValid, errors, warnings, securityScore } = state.validation;
     const statusColor = isValid ? themeStyles.success : themeStyles.error;
-    return ()
+    return ();
       <div style={{
         padding: '16px',
         background: themeStyles.surface,
@@ -267,7 +267,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: errors.length > 0 || warnings.length > 0 ? '12px' : '0'
+          marginBottom: errors.length > 0 || warnings.length > 0 ? '12px' : '0',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{
@@ -286,7 +286,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
           </div>
           <div style={{
             padding: '4px 12px',
-            background: securityScore >= 80 ? themeStyles.success : 
+            background: securityScore >= 80 ? themeStyles.success : ,
               securityScore >= 60 ? themeStyles.warning : themeStyles.error,
             color: themeStyles.background,
             borderRadius: '12px',
@@ -352,7 +352,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
       { id: 'notifications', label: 'Notifications', icon: '📧' },
       { id: 'compliance', label: 'Compliance', icon: '📋' }
     ] as const;
-    return ()
+    return ();
       <div style={{
         display: 'flex',
         borderBottom: `1px solid ${themeStyles.border}`,}
@@ -375,7 +375,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
             }}
           >
             <span>{tab.icon}</span>
@@ -386,7 +386,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
     );
   };
   // Render general settings tab
-  const renderGeneralSettings = () => (;)
+  const renderGeneralSettings = () => (;);
     <div>
       <div style={{
         background: themeStyles.surface,
@@ -399,7 +399,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
           color: themeStyles.text,
           fontSize: '16px',
           fontWeight: 500,
-          margin: '0 0 16px 0'
+          margin: '0 0 16px 0',
         }}>
           Core Alert Settings
         </h3>
@@ -533,14 +533,14 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             fontSize: '12px',
             marginTop: '4px',
           }}>
-            Recommended: 30-90 days for compliance
+            Recommended: 30-90 days for compliance,
           </div>
         </div>
       </div>
     </div>
   );
   // Render alert thresholds tab
-  const renderAlertThresholds = () => (;)
+  const renderAlertThresholds = () => (;);
     <div>
       <div style={{
         background: themeStyles.surface,
@@ -553,7 +553,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
           color: themeStyles.text,
           fontSize: '16px',
           fontWeight: 500,
-          margin: '0 0 16px 0'
+          margin: '0 0 16px 0',
         }}>
           Escalation Thresholds
         </h3>
@@ -675,7 +675,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
     </div>
   );
   // Render action buttons
-  const renderActionButtons = () => (;)
+  const renderActionButtons = () => (;);
     <div style={{
       display: 'flex',
       justifyContent: 'space-between',
@@ -733,7 +733,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
             color: themeStyles.textSecondary,
             cursor: state.hasUnsavedChanges && !readOnly ? 'pointer' : 'not-allowed',
             fontSize: '14px',
-            opacity: state.hasUnsavedChanges && !readOnly ? 1 : 0.5
+            opacity: state.hasUnsavedChanges && !readOnly ? 1 : 0.5,
           }}
         >
           Reset Changes
@@ -743,13 +743,13 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
           disabled={!state.validation?.isValid || state.isSaving || readOnly || !state.hasUnsavedChanges}
           style={{
             padding: '10px 20px',
-            background: state.validation?.isValid && !readOnly && state.hasUnsavedChanges 
+            background: state.validation?.isValid && !readOnly && state.hasUnsavedChanges ,
               ? themeStyles.primary 
               : themeStyles.textMuted,
             border: 'none',
             borderRadius: '6px',
             color: themeStyles.background,
-            cursor: state.validation?.isValid && !readOnly && state.hasUnsavedChanges 
+            cursor: state.validation?.isValid && !readOnly && state.hasUnsavedChanges ,
               ? 'pointer' 
               : 'not-allowed',
             fontSize: '14px',
@@ -767,7 +767,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
                 border: '2px solid transparent',
                 borderTopColor: 'currentColor',
                 borderRadius: '50%',
-                animation: 'spin 1s linear infinite'
+                animation: 'spin 1s linear infinite',
               }} />
               Saving...
             </>
@@ -780,7 +780,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
       </div>
     </div>
   );
-  return ()
+  return ();
     <div style={{
       background: themeStyles.background,
       color: themeStyles.text,

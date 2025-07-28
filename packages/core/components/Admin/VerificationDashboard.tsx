@@ -118,7 +118,6 @@ const VerificationDashboard: React.FC<VerificationDashboardProps> = ({)
         item.requestId === requestId 
           ? { ...item, status: newStatus }
           : item
-      )
     );
   };
   const getStatusColor = (status: ValidationStatus) => {
@@ -148,7 +147,7 @@ const VerificationDashboard: React.FC<VerificationDashboardProps> = ({)
     const matchesType = typeFilter === 'all' || item.type === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
   });
-  const renderOverview = () => (;)
+  const renderOverview = () => (;);
     <div className="overview-section">
       <div className="metrics-grid">
         <Card className="metric-card">
@@ -249,7 +248,7 @@ const VerificationDashboard: React.FC<VerificationDashboardProps> = ({)
       </div>
     </div>
   );
-  const renderQueue = () => (;)
+  const renderQueue = () => (;);
     <div className="queue-section">
       <div className="queue-controls">
         <div className="search-bar">
@@ -377,7 +376,7 @@ const VerificationDashboard: React.FC<VerificationDashboardProps> = ({)
       )}
     </div>
   );
-  return ()
+  return ();
     <div className={`verification-dashboard ${className}`}>}
       <div className="dashboard-header">
         <div className="header-info">

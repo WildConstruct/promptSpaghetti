@@ -215,7 +215,7 @@ export function createPaginatedResult<T>()
       hasNextPage: page < totalPages,
       hasPreviousPage: page > 1,
       nextPage: page < totalPages ? page + 1 : undefined,
-      previousPage: page > 1 ? page - 1 : undefined
+      previousPage: page > 1 ? page - 1 : undefined,
     }
   };
 }

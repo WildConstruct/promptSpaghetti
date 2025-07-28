@@ -545,7 +545,7 @@ export const CONTRIBUTION_TYPE_DESCRIPTIONS = {
   pattern_library: 'Reusable design and prompt patterns',
   community_post: 'Community discussions and questions',
   documentation: 'Technical documentation',
-  review: 'Reviews and feedback on templates'
+  review: 'Reviews and feedback on templates',
 } as const;
 
 export const CONTRIBUTION_STATUS_DESCRIPTIONS = {
@@ -556,7 +556,7 @@ export const CONTRIBUTION_STATUS_DESCRIPTIONS = {
   approved: 'Approved but not yet published',
   published: 'Live and publicly available',
   rejected: 'Rejected and will not be published',
-  archived: 'Removed from public view'
+  archived: 'Removed from public view',
 } as const;
 
 export const CONTRIBUTOR_LEVEL_DESCRIPTIONS = {
@@ -565,7 +565,7 @@ export const CONTRIBUTOR_LEVEL_DESCRIPTIONS = {
   regular: 'Regular contributor with good quality',
   trusted: 'Trusted contributor with high quality work',
   expert: 'Expert contributor with exceptional content',
-  moderator: 'Community moderator and content reviewer'
+  moderator: 'Community moderator and content reviewer',
 } as const;
 
 export const CONTRIBUTION_DEFAULTS = {

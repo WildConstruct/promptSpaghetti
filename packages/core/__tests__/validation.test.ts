@@ -88,7 +88,7 @@ describe('Core Validation - validateConnection', () => {
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({)
         edgeId: 'e1',
-        message: 'Edge is a self-loop'
+        message: 'Edge is a self-loop',
       });
     });
     it('should detect multiple self-loops', () => {
@@ -106,11 +106,11 @@ describe('Core Validation - validateConnection', () => {
       expect(result).toHaveLength(2);
       expect(result).toContainEqual({)
         edgeId: 'e1',
-        message: 'Edge is a self-loop'
+        message: 'Edge is a self-loop',
       });
       expect(result).toContainEqual({)
         edgeId: 'e2',
-        message: 'Edge is a self-loop'
+        message: 'Edge is a self-loop',
       });
     });
     it('should detect self-loops in complex graphs', () => {
@@ -144,7 +144,7 @@ describe('Core Validation - validateConnection', () => {
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({)
         edgeId: 'e2',
-        message: 'Duplicate edge'
+        message: 'Duplicate edge',
       });
     });
     it('should detect multiple duplicate edges', () => {
@@ -164,11 +164,11 @@ describe('Core Validation - validateConnection', () => {
       expect(result).toHaveLength(2);
       expect(result).toContainEqual({)
         edgeId: 'e2',
-        message: 'Duplicate edge'
+        message: 'Duplicate edge',
       });
       expect(result).toContainEqual({)
         edgeId: 'e4',
-        message: 'Duplicate edge'
+        message: 'Duplicate edge',
       });
     });
     it('should allow reverse edges (bidirectional)', () => {
@@ -265,7 +265,7 @@ describe('Core Validation - validateConnection', () => {
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({)
         edgeId: 'edge.4',
-        message: 'Duplicate edge'
+        message: 'Duplicate edge',
       });
     });
     it('should handle very long node IDs', () => {

@@ -20,7 +20,7 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [dateRange, setDateRange] = useState({)
     from: filters.from_date ? filters.from_date.toISOString().split('T')[0] : '',
-    to: filters.to_date ? filters.to_date.toISOString().split('T')[0] : ''
+    to: filters.to_date ? filters.to_date.toISOString().split('T')[0] : '',
   });
   const handleEventTypeChange = (eventType: string, checked: boolean) => {
     const currentTypes = filters.event_types || [];
@@ -34,7 +34,7 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
     setDateRange(newDateRange);
     onFilterChange({)
       from_date: newDateRange.from ? new Date(newDateRange.from) : undefined,
-      to_date: newDateRange.to ? new Date(newDateRange.to) : undefined
+      to_date: newDateRange.to ? new Date(newDateRange.to) : undefined,
     });
   };
   const clearFilters = () => {
@@ -46,7 +46,7 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
       to_date: undefined,
     });
   };
-  const hasActiveFilters = !!(;)
+  const hasActiveFilters = !!(;);
     filters.actor_id ||
     (filters.event_types && filters.event_types.length > 0) ||
     filters.from_date ||
@@ -60,7 +60,7 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
     user: eventTypes.filter(t => t.startsWith('user.')),
     other: eventTypes.filter(t => !['workspace.', 'project.', 'resource.', 'comment.', 'user.'].some(prefix => t.startsWith(prefix)))
   };
-  return ()
+  return ();
     <div className={`activity-filters ${className}`}>}
       <div className="activity-filters__header">
         <h4>Filter Activity</h4>
@@ -101,7 +101,7 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
             <button
               className={`quick-filter ${filters.event_types?.some(t => t.includes('created')) ? 'quick-filter--active' : ''}`}
               onClick={() => onFilterChange({ )
-                event_types: eventTypes.filter(t => t.includes('created'))
+                event_types: eventTypes.filter(t => t.includes('created')),
               })}
             >
               Created Items
@@ -109,7 +109,7 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
             <button
               className={`quick-filter ${filters.event_types?.some(t => t.startsWith('user.')) ? 'quick-filter--active' : ''}`}
               onClick={() => onFilterChange({ )
-                event_types: eventTypes.filter(t => t.startsWith('user.'))
+                event_types: eventTypes.filter(t => t.startsWith('user.')),
               })}
             >
               User Activity
@@ -155,7 +155,7 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
             <div className="event-type-filters">
               {Object.entries(eventTypeGroups).map(([group, types]) => {
                 if (types.length === 0) return null;
-                return ()
+                return ();
                   <div key={group} className="event-type-group">
                     <h5 className="event-type-group__title">
                       {group.charAt(0).toUpperCase() + group.slice(1)} Events

@@ -282,11 +282,10 @@ export interface ContentVersionDiff {
 export class ContentVersionManager {
   private versions = new Map<string, ContentVersion>();
   private apiClient: unknown;
-  constructor()
+  constructor();
     apiClient: unknown,
     private contentId: string,
     private userId: string
-  ) {
     this.apiClient = apiClient;
   }
   // Core Version Management
@@ -349,7 +348,7 @@ export class ContentVersionManager {
       const response = await this.apiClient.put(`/api/content-versions/${versionId}/submit-review`, {)}
         reviewer_id: options.reviewer_id,
         review_notes: options.review_notes,
-        priority: options.priority || 'normal'
+        priority: options.priority || 'normal',
       });
       const version = response.data;
       this.versions.set(versionId, version);
@@ -370,7 +369,7 @@ export class ContentVersionManager {
         release_notes: options.release_notes,
         visibility: options.visibility || 'public',
         publish_date: options.publish_date,
-        notify_subscribers: options.notify_subscribers || true
+        notify_subscribers: options.notify_subscribers || true,
       });
       const version = response.data;
       this.versions.set(versionId, version);
@@ -433,14 +432,14 @@ export class ContentVersionManager {
     try {
       await this.apiClient.post(`/api/content-versions/${versionId}/contributors`, {)}
         ...contributor,
-        contribution_date: new Date().toISOString()
+        contribution_date: new Date().toISOString(),
       });
       // Update local data
       const version = this.versions.get(versionId);
       if (version) {
         version.contributors.push({)
           ...contributor,
-          contribution_date: new Date().toISOString()
+          contribution_date: new Date().toISOString(),
         });
       }
     } catch (error) {
@@ -515,7 +514,7 @@ export class ContentVersionManager {
         options
       };
       const response = await this.apiClient.post('/api/content-versions/export', exportData, {)
-        responseType: options.format === 'content_bundle' ? 'blob' : 'json'
+        responseType: options.format === 'content_bundle' ? 'blob' : 'json',
       });
       if (options.format === 'content_bundle') {
         return {
@@ -541,7 +540,7 @@ export class ContentVersionManager {
     change_magnitude: 'trivial' | 'minor' | 'moderate' | 'major' | 'complete_rewrite';
   }> {
     try {
-      const response = await this.apiClient.get(;)
+      const response = await this.apiClient.get(;);
         `/api/content-versions/${fromVersionId}/compare/${toVersionId}`}
       );
       return response.data;
@@ -624,13 +623,13 @@ export class ContentVersionManager {
         completeness: wordCount > 500 ? 80 : 60,
         usefulness: 75,
         originality: 85,
-        engagement: hasImages ? 80 : 70
+        engagement: hasImages ? 80 : 70,
       },
       automated_checks: {,
         grammar_score: 75,
         readability_score: 70,
         seo_score: content.seo.metaDescription.length > 0 ? 80 : 60,
-        formatting_score: hasToc ? 85 : 75
+        formatting_score: hasToc ? 85 : 75,
       }
     };
   }

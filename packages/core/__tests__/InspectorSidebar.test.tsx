@@ -39,7 +39,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
     data: { ,
       label: 'Test Label', 
       value: 5,
-      description: 'Test description'
+      description: 'Test description',
     },
     position: { x: 0, y: 0 }
   };
@@ -52,14 +52,14 @@ describe('InspectorSidebar - Enhanced Testing', () => {
   });
   describe('Basic Functionality', () => {
     it('renders form fields for schema', () => {
-      render()
+      render();
         <InspectorSidebar node={node} schema={schema} onChange={() => {}} />
       );
       expect(screen.getByLabelText('label')).toBeInTheDocument();
       expect(screen.getByLabelText('value')).toBeInTheDocument();
     });
     it('shows placeholder when no node selected', () => {
-      render()
+      render();
         <InspectorSidebar node={null} schema={null} onChange={() => {}} />
       );
       expect(screen.getByText(/select a node/i)).toBeInTheDocument();
@@ -67,7 +67,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
     it('calls onChange with updated string value', async () => {
       const handleChange = jest.fn<unknown[], unknown>();
       const user = userEvent.setup();
-      render()
+      render();
         <InspectorSidebar node={node} schema={schema} onChange={handleChange} />
       );
       const input = screen.getByLabelText('label');
@@ -78,7 +78,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
     it('calls onChange with updated number value', async () => {
       const handleChange = jest.fn<unknown[], unknown>();
       const user = userEvent.setup();
-      render()
+      render();
         <InspectorSidebar node={node} schema={schema} onChange={handleChange} />
       );
       const input = screen.getByLabelText('value');
@@ -90,21 +90,21 @@ describe('InspectorSidebar - Enhanced Testing', () => {
   describe('Error Handling', () => {
     it('handles null node gracefully', () => {
       expect(() => {
-        render()
+        render();
           <InspectorSidebar node={null} schema={schema} onChange={() => {}} />
         );
       }).not.toThrow();
     });
     it('handles undefined node gracefully', () => {
       expect(() => {
-        render()
+        render();
           <InspectorSidebar node={undefined as any} schema={schema} onChange={() => {}} />
         );
       }).not.toThrow();
     });
     it('handles null schema gracefully', () => {
       expect(() => {
-        render()
+        render();
           <InspectorSidebar node={node} schema={null} onChange={() => {}} />
         );
       }).not.toThrow();
@@ -115,7 +115,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
         data: null,
       } as any;
       expect(() => {
-        render()
+        render();
           <InspectorSidebar node={malformedNode} schema={schema} onChange={() => {}} />
         );
       }).not.toThrow();
@@ -123,7 +123,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
     it('handles invalid schema gracefully', () => {
       const invalidSchema = 'not a schema' as any;
       expect(() => {
-        render()
+        render();
           <InspectorSidebar node={node} schema={invalidSchema} onChange={() => {}} />
         );
       }).not.toThrow();
@@ -134,7 +134,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       });
       const user = userEvent.setup();
       const onError = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <TestErrorBoundary onError={onError}>
           <InspectorSidebar node={node} schema={schema} onChange={handleChange} />
         </TestErrorBoundary>
@@ -147,10 +147,10 @@ describe('InspectorSidebar - Enhanced Testing', () => {
     it('handles schema validation errors', async () => {
       const strictSchema = z.object({)
         label: z.string().min(10, 'Must be at least 10 characters'),
-        value: z.number().positive('Must be positive')
+        value: z.number().positive('Must be positive'),
       });
       const user = userEvent.setup();
-      render()
+      render();
         <InspectorSidebar node={node} schema={strictSchema} onChange={() => {}} />
       );
       // Try to enter invalid data
@@ -169,7 +169,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
     it('debounces rapid input changes', async () => {
       const handleChange = jest.fn<unknown[], unknown>();
       const user = userEvent.setup();
-      render()
+      render();
         <InspectorSidebar 
           node={node} 
           schema={schema} 
@@ -192,7 +192,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
     it('handles many concurrent input changes efficiently', async () => {
       const handleChange = jest.fn<unknown[], unknown>();
       const user = userEvent.setup();
-      render()
+      render();
         <InspectorSidebar node={node} schema={schema} onChange={handleChange} />
       );
       const labelInput = screen.getByLabelText('label');
@@ -231,7 +231,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
         }
       };
       const startTime = performance.now();
-      render()
+      render();
         <InspectorSidebar 
           node={complexNode} 
           schema={complexSchema} 
@@ -245,7 +245,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
   });
   describe('Accessibility & Code Quality', () => {
     it('provides proper form labels and ARIA attributes', () => {
-      render()
+      render();
         <InspectorSidebar node={node} schema={schema} onChange={() => {}} />
       );
       const labelInput = screen.getByLabelText('label');
@@ -257,7 +257,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
     });
     it('supports keyboard navigation', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <InspectorSidebar node={node} schema={schema} onChange={() => {}} />
       );
       // Should be able to tab between fields
@@ -293,7 +293,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
     it('handles string inputs correctly', async () => {
       const handleChange = jest.fn<unknown[], unknown>();
       const user = userEvent.setup();
-      render()
+      render();
         <InspectorSidebar node={node} schema={schema} onChange={handleChange} />
       );
       const input = screen.getByLabelText('label');
@@ -304,7 +304,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
     it('handles number inputs correctly', async () => {
       const handleChange = jest.fn<unknown[], unknown>();
       const user = userEvent.setup();
-      render()
+      render();
         <InspectorSidebar node={node} schema={schema} onChange={handleChange} />
       );
       const input = screen.getByLabelText('value');
@@ -322,7 +322,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       };
       const handleChange = jest.fn<unknown[], unknown>();
       const user = userEvent.setup();
-      render()
+      render();
         <InspectorSidebar 
           node={booleanNode} 
           schema={booleanSchema} 
@@ -339,7 +339,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
         data: { label: 'Test', value: 5 } // No description
       };
       expect(() => {
-        render()
+        render();
           <InspectorSidebar 
             node={nodeWithoutOptional} 
             schema={schema} 
@@ -353,7 +353,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
     it('handles invalid number inputs gracefully', async () => {
       const handleChange = jest.fn<unknown[], unknown>();
       const user = userEvent.setup();
-      render()
+      render();
         <InspectorSidebar node={node} schema={schema} onChange={handleChange} />
       );
       const input = screen.getByLabelText('value');
@@ -370,7 +370,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
         ...node,
         data: { ...node.data, label: longValue }
       };
-      render()
+      render();
         <InspectorSidebar 
           node={nodeWithLongValue} 
           schema={schema} 
@@ -386,7 +386,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
         ...node,
         data: { ...node.data, label: specialValue }
       };
-      render()
+      render();
         <InspectorSidebar 
           node={nodeWithSpecialChars} 
           schema={schema} 
@@ -400,7 +400,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       const circularNode = { ...node };
       (circularNode.data as any).self = circularNode;
       expect(() => {
-        render()
+        render();
           <InspectorSidebar 
             node={circularNode} 
             schema={schema} 

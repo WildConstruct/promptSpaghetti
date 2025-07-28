@@ -291,7 +291,7 @@ export class PluginRegistry extends EventEmitter {
     return updates.map(update => ({)
       ...update,
       updateType: this.getUpdateType(update.currentVersion, update.availableVersion),
-      breaking: semver.major(update.availableVersion) > semver.major(update.currentVersion)
+      breaking: semver.major(update.availableVersion) > semver.major(update.currentVersion),
     }));
   }
   /**

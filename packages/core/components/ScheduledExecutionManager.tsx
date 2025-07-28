@@ -92,7 +92,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           action_type: 'state_transition',
           action_config: {,
             to_state_id: 'review-state',
-            comment: 'Automated daily review trigger'
+            comment: 'Automated daily review trigger',
           },
           enabled: true,
           next_run_at: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow 9 AM
@@ -103,7 +103,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           max_retries: 3,
           created_by: 'user1',
           created_at: new Date('2024-01-01'),
-          updated_at: new Date('2024-01-20')
+          updated_at: new Date('2024-01-20'),
         },
         {
           id: '2',
@@ -127,7 +127,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           max_retries: 3,
           created_by: 'user2',
           created_at: new Date('2024-01-01'),
-          updated_at: new Date('2024-01-15')
+          updated_at: new Date('2024-01-15'),
         },
         {
           id: '3',
@@ -151,7 +151,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           max_retries: 3,
           created_by: 'user3',
           created_at: new Date('2024-01-20'),
-          updated_at: new Date('2024-01-20')
+          updated_at: new Date('2024-01-20'),
         }
       ];
       setSchedules(mockSchedules);
@@ -191,7 +191,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           error_message: 'Failed to generate report: Database connection timeout',
           execution_time_ms: 30000,
           retry_attempt: 1,
-          next_retry_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 5 * 60 * 1000)
+          next_retry_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 5 * 60 * 1000),
         },
         {
           id: '3',
@@ -227,7 +227,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
         max_retries: scheduleData.max_retries || 3,
         created_by: 'current_user',
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
       };
       setSchedules(prev => [...prev, newSchedule]);
       setShowCreateSchedule(false);
@@ -345,7 +345,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       return newSet;
     });
   };
-  const renderSchedulesTab = () => (;)
+  const renderSchedulesTab = () => (;);
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Scheduled Executions</h3>
@@ -430,7 +430,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       )}
     </div>
   );
-  const renderExecutionLogsTab = () => (;)
+  const renderExecutionLogsTab = () => (;);
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">Execution Logs</h3>
       <div className="space-y-3">
@@ -518,7 +518,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       .filter(log => log.execution_time_ms)
       .reduce((sum, log) => sum + (log.execution_time_ms || 0), 0) / 
       executionLogs.filter(log => log.execution_time_ms).length || 0;
-    return ()
+    return ();
       <div className="space-y-6">
         <h3 className="text-lg font-semibold">Execution Statistics</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -599,7 +599,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
     { id: 'logs', label: 'Execution Logs', icon: EyeIcon },
     { id: 'statistics', label: 'Statistics', icon: CogIcon }
   ];
-  return ()
+  return ();
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
@@ -701,7 +701,7 @@ const CreateScheduleModal: React.FC<{
     e.preventDefault();
     onSubmit(formData);
   };
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
         <h3 className="text-lg font-semibold mb-4">Create Schedule</h3>
@@ -828,7 +828,7 @@ const DeleteScheduleModal: React.FC<{
   onClose: () => void;
   onConfirm: () => void;
 }> = ({ onClose, onConfirm }) => {
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">Delete Schedule</h3>

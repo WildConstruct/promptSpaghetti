@@ -208,7 +208,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
     default: return 'text-gray-600';
     }
   };
-  const renderTimelineView = () => (;)
+  const renderTimelineView = () => (;);
     <div className="space-y-4">
       {versions.map((version, index) => ()
         <div
@@ -319,7 +319,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
       ))}
     </div>
   );
-  const renderTableView = () => (;)
+  const renderTableView = () => (;);
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
@@ -441,7 +441,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
   );
   const renderComparisonModal = () => {
     if (!showComparison || !comparisonResult) return null;
-    return ()
+    return ();
       <div className="fixed inset-0 z-50 overflow-y-auto">
         <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center">
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
@@ -553,7 +553,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
       </div>
     );
   };
-  return ()
+  return ();
     <div className={`template-version-history ${className}`}>}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900">Version History</h2>

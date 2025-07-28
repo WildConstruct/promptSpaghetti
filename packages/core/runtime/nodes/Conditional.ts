@@ -47,12 +47,11 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
   private branches: ConditionalBranch[];
   private defaultOutput: string;
   private conditionalConfig: ConditionalConfig;
-  constructor()
+  constructor();
     id: string, 
     branches: ConditionalBranch[] = [],
     defaultOutput: string = '',
     config: ConditionalConfig = {}
-  ) {
     // Configure as deterministic, non-cacheable (depends on variables), stateless
     const nodeConfig: AdvancedNodeConfig = {
       deterministic: true,
@@ -80,7 +79,7 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
         dataType: 'array',
         required: false,
         defaultValue: [],
-        description: 'Array of condition expressions to evaluate'
+        description: 'Array of condition expressions to evaluate',
       })
       .addInput({)
         id: 'outputs',
@@ -88,7 +87,7 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
         dataType: 'stringArray',
         required: false,
         defaultValue: [],
-        description: 'Array of outputs corresponding to conditions'
+        description: 'Array of outputs corresponding to conditions',
       })
       .addInput({)
         id: 'default',
@@ -96,7 +95,7 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
         dataType: 'string',
         required: false,
         defaultValue: '',
-        description: 'Default output when no conditions match'
+        description: 'Default output when no conditions match',
       })
       .addTextOutput('result', 'Conditional Result')
       .build();
@@ -195,7 +194,7 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
       },
       metadata: {,
         version: '1.0.0',
-        created: new Date().toISOString()
+        created: new Date().toISOString(),
       }
     };
   }
@@ -259,7 +258,7 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
    */
   private createEvaluationContext(ctx: AdvancedExecutionContext): Record<string, any> {
     // Use SafeExpressionEvaluator's createSafeContext which includes safe Math
-    const evalContext = SafeExpressionEvaluator.createSafeContext(;)
+    const evalContext = SafeExpressionEvaluator.createSafeContext(;);
       this.conditionalConfig.allowVariableAccess ? ctx.variables : {}
     );
     // Add additional convenience functions if variable access is allowed

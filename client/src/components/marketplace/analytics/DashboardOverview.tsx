@@ -6,21 +6,19 @@ import { TopPerformingTemplate } from './TopPerformingTemplate';
 import { TrendChart } from './TrendChart';
 import { formatNumber, formatCurrency, formatPercentage } from '../../../utils/formatters';
 import './DashboardOverview.css';
-
 interface DashboardOverviewProps {
   dashboard: CreatorDashboard;
   insights: AnalyticsInsight[];
   onRefresh: () => void;
 }
 
-export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
+export const DashboardOverview: React.FC<DashboardOverviewProps> = ({)
   dashboard,
   insights,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onRefresh
 }) => {
   const { overview, performance_summary } = dashboard;
-
   // Calculate trend indicators
   const getTrendIcon = (value: number) => {
     if (value > 5) return { icon: '📈', color: '#10b981', label: 'Strong Growth' };
@@ -28,13 +26,11 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     if (value > -5) return { icon: '📉', color: '#f59e0b', label: 'Stable' };
     return { icon: '⚠️', color: '#ef4444', label: 'Declining' };
   };
-
   const viewsTrend = getTrendIcon(performance_summary.views_trend);
   const downloadsTrend = getTrendIcon(performance_summary.downloads_trend);
   const revenueTrend = getTrendIcon(performance_summary.revenue_trend);
   const ratingTrend = getTrendIcon(performance_summary.rating_trend);
-
-  return (
+  return ()
     <div className="dashboard-overview">
       {/* Key Metrics Grid */}
       <div className="metrics-grid">
@@ -47,7 +43,6 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           color="#3b82f6"
           subtitle="30-day period"
         />
-        
         <MetricCard
           title="Downloads"
           value={formatNumber(overview.total_downloads)}
@@ -57,7 +52,6 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           color="#10b981"
           subtitle="30-day period"
         />
-        
         <MetricCard
           title="Revenue"
           value={formatCurrency(overview.total_revenue)}
@@ -67,7 +61,6 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           color="#f59e0b"
           subtitle="30-day period"
         />
-        
         <MetricCard
           title="Avg Rating"
           value={overview.average_rating.toFixed(1)}
@@ -78,7 +71,6 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           subtitle="All templates"
         />
       </div>
-
       {/* Secondary Metrics */}
       <div className="secondary-metrics">
         <div className="metric-item">
@@ -87,14 +79,12 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             {overview.active_templates} / {overview.total_templates}
           </span>
         </div>
-        
         <div className="metric-item">
           <span className="metric-label">Market Ranking</span>
           <span className="metric-value">
             #{formatNumber(performance_summary.ranking_position)}
           </span>
         </div>
-        
         <div className="metric-item">
           <span className="metric-label">Market Share</span>
           <span className="metric-value">
@@ -102,20 +92,17 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           </span>
         </div>
       </div>
-
       {/* Content Grid */}
       <div className="content-grid">
         {/* Top Performing Template */}
         <div className="content-section">
           <TopPerformingTemplate template={overview.top_performing_template} />
         </div>
-
         {/* Quick Insights */}
         <div className="content-section">
           <QuickInsights insights={insights.slice(0, 3)} />
         </div>
       </div>
-
       {/* Charts Section */}
       <div className="charts-section">
         <div className="chart-container">
@@ -143,7 +130,6 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           />
         </div>
       </div>
-
       {/* Performance Summary Cards */}
       <div className="performance-cards">
         <div className="performance-card">
@@ -158,7 +144,6 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             Views to downloads
           </div>
         </div>
-
         <div className="performance-card">
           <div className="performance-card-header">
             <span className="performance-icon">🏆</span>
@@ -171,7 +156,6 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             Based on ratings
           </div>
         </div>
-
         <div className="performance-card">
           <div className="performance-card-header">
             <span className="performance-icon">📊</span>
@@ -184,7 +168,6 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             Avg downloads per template
           </div>
         </div>
-
         <div className="performance-card">
           <div className="performance-card-header">
             <span className="performance-icon">💡</span>
@@ -198,12 +181,11 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           </div>
         </div>
       </div>
-
       {/* Action Items */}
       <div className="action-items">
         <h3>Recommended Actions</h3>
         <div className="action-list">
-          {performance_summary.views_trend < 0 && (
+          {performance_summary.views_trend < 0 && ()
             <div className="action-item">
               <span className="action-icon">📈</span>
               <div className="action-content">
@@ -212,8 +194,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               </div>
             </div>
           )}
-          
-          {overview.average_rating < 4.0 && (
+          {overview.average_rating < 4.0 && ()
             <div className="action-item">
               <span className="action-icon">⭐</span>
               <div className="action-content">
@@ -222,8 +203,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               </div>
             </div>
           )}
-          
-          {((overview.total_downloads / overview.total_views) * 100) < 10 && (
+          {((overview.total_downloads / overview.total_views) * 100) < 10 && ()
             <div className="action-item">
               <span className="action-icon">🎯</span>
               <div className="action-content">
@@ -232,8 +212,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               </div>
             </div>
           )}
-          
-          {overview.active_templates < 5 && (
+          {overview.active_templates < 5 && ()
             <div className="action-item">
               <span className="action-icon">📝</span>
               <div className="action-content">

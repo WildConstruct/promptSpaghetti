@@ -56,7 +56,7 @@ declare const _default: {
     HelpfulInput: React.FC<HelpfulInputProps>;
     HelpfulButton: React.FC<HelpfulButtonProps>;
     HelpfulSection: React.FC<HelpfulSectionProps>;
-    useContextualHelp: (helpContent: HelpContent) => {
+    useContextualHelp: (helpContent: HelpContent) => {,
         wrapWithHelp: (element: React.ReactElement) => import("react/jsx-runtime").JSX.Element;
         showHelp: boolean;
     };

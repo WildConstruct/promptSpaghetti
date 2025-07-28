@@ -656,7 +656,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         lastSeen: intel.timestamp,
         affectedSystems: intel.correlatedEvents.map(e => e.metadata?.system as string).filter(Boolean),
         description: `Security intelligence: ${intel.type}`,}
-        status: intel.autoResolved ? 'resolved' : 'active'
+        status: intel.autoResolved ? 'resolved' : 'active',
       }));
     // Threats by category
     const threatsByCategory: Record<string, number> = {};
@@ -673,7 +673,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
           critical: activeThreats.filter(i => i.severity === 'critical').length,
           high: activeThreats.filter(i => i.severity === 'high').length,
           medium: activeThreats.filter(i => i.severity === 'medium').length,
-          low: activeThreats.filter(i => i.severity === 'low').length
+          low: activeThreats.filter(i => i.severity === 'low').length,
         },
         primaryThreatTypes: Object.keys(threatsByCategory).slice(0, 3)
       }
@@ -685,7 +685,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       geographicalThreats,
       attackVectors: [], // Would be populated with actual attack vector analysis
       threatTrends: this.threatIntelligence.threatTrends, // Preserve existing trends
-      indicators: [] // Would be populated with IOCs
+      indicators: [] // Would be populated with IOCs,
     };
   }
   private async updateDashboardMetrics(intelligence: SecurityIntelligence[]): Promise<void> {
@@ -762,7 +762,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       keyHighlights,
       majorConcerns,
       actionItems,
-      budgetImpact: 'Moderate investment required for security improvements'
+      budgetImpact: 'Moderate investment required for security improvements',
     };
   }
   private async generateKeyMetrics(): Promise<KeyMetric[]> {
@@ -869,7 +869,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         implementationCost: 50000,
         riskReduction: 30,
         dependencies: ['security_team_approval', 'budget_allocation'],
-        timeline: '4 weeks'
+        timeline: '4 weeks',
       });
     }
     const activeThreats = intelligence.filter(i => !i.autoResolved);
@@ -885,13 +885,13 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         implementationCost: 25000,
         riskReduction: 50,
         dependencies: ['incident_response_team'],
-        timeline: '2 weeks'
+        timeline: '2 weeks',
       });
     }
     return recommendations;
   }
   private async updateRiskFactorsFromAnomalies(anomalies: SecurityAnomaly[]): Promise<void> {
-    const highSeverityAnomalies = anomalies.filter(a => ;)
+    const highSeverityAnomalies = anomalies.filter(a => ;);
       a.severity === 'high' || a.severity === 'critical'
     );
     if (highSeverityAnomalies.length > 0) {
@@ -919,7 +919,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     const trends: PostureTrend[] = [];
     const highConfidenceForecasts = forecasts.filter(f => f.confidence > 0.7);
     if (highConfidenceForecasts.length > 0) {
-      const avgIntensity = highConfidenceForecasts.reduce(;)
+      const avgIntensity = highConfidenceForecasts.reduce(;);
         (sum,)
         f
       ) => sum + f.predictedIntensity, 0) / highConfidenceForecasts.length;
@@ -928,7 +928,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         direction: avgIntensity > 60 ? 'declining' : avgIntensity > 30 ? 'stable' : 'improving',
         changePercent: avgIntensity,
         timeframe: 'next_4_hours',
-        significance: avgIntensity > 70 ? 'high' : avgIntensity > 40 ? 'medium' : 'low'
+        significance: avgIntensity > 70 ? 'high' : avgIntensity > 40 ? 'medium' : 'low',
       });
     }
     this.securityPosture.trends = trends;
@@ -973,7 +973,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     this.dashboardMetrics.systemHealth = {
       availability: 95 + Math.random() * 5, // Simulate availability
       performance: 90 + Math.random() * 10, // Simulate performance
-      errors: Math.floor(Math.random() * 5) // Simulate error count
+      errors: Math.floor(Math.random() * 5) // Simulate error count,
     };
     this.emit('scheduledUpdate', this.dashboardMetrics);
   }
@@ -990,7 +990,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     for (const schedule of this.config.reportingSchedules) {
       if (schedule.enabled && schedule.nextExecution <= now) {
         try {
-          const report = await this.generateExecutiveReport(;)
+          const report = await this.generateExecutiveReport(;);
             schedule.reportType,
             this.calculateReportPeriod(schedule.frequency)
           );

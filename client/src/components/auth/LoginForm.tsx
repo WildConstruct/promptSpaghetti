@@ -3,7 +3,6 @@
  * 
  * Integrates with the authentication routing system
  */
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
@@ -11,38 +10,33 @@ import { useAuthStore } from '../../stores/authStore';
 import { OAuthProviderButtons } from './OAuthProviderButtons';
 
 // Login form validation schema
-const loginSchema = z.object({
-  email: z.string()
+const loginSchema = z.object({)
+  email: z.string(),
     .email('Please enter a valid email address')
     .min(1, 'Email is required'),
-  password: z.string()
+  password: z.string(),
     .min(1, 'Password is required'),
-  rememberMe: z.boolean()
+  rememberMe: z.boolean(),
 });
-
 type LoginFormData = z.infer<typeof loginSchema>;
-
 interface LoginFormProps {
   onSuccess?: () => void;
   onError?: (error: string) => void;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({
+export const LoginForm: React.FC<LoginFormProps> = ({)
   onSuccess,
   onError
 }) => {
   const navigate = useNavigate();
   const { login, isLoading, error: authError, returnUrl } = useAuthStore();
-  
-  const [formData, setFormData] = useState<LoginFormData>({
+  const [formData, setFormData] = useState<LoginFormData>({)
     email: '',
     password: '',
-    rememberMe: false
+    rememberMe: false,
   });
-  
   const [errors, setErrors] = useState<Partial<Record<keyof LoginFormData, string>>>({});
   const [showPassword, setShowPassword] = useState(false);
-
   const validateField = (field: keyof LoginFormData, value: Error): string | undefined => {
     try {
       const fieldSchema = loginSchema.shape[field];
@@ -55,26 +49,21 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       return 'Invalid value';
     }
   };
-
   const handleInputChange = (field: keyof LoginFormData, value: Error) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    
     // Clear field error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
   };
-
   const handleInputBlur = (field: keyof LoginFormData) => {
     const error = validateField(field, formData[field]);
     if (error) {
       setErrors(prev => ({ ...prev, [field]: error }));
     }
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     // Validate all fields
     const newErrors: Partial<Record<keyof LoginFormData, string>> = {};
     Object.keys(formData).forEach((key) => {
@@ -84,15 +73,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         newErrors[field] = error;
       }
     });
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-
     try {
       const success = await login(formData.email, formData.password, formData.rememberMe);
-      
       if (success) {
         // Redirect to return URL or default to home
         const redirectTo = returnUrl || '/';
@@ -106,8 +92,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       onError?.(errorMessage);
     }
   };
-
-  return (
+  return ()
     <div style={{ width: '100%' }}>
       {/* OAuth Provider Buttons */}
       <OAuthProviderButtons 
@@ -115,7 +100,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         onError={onError}
         onSuccess={onSuccess}
       />
-
       <form 
         onSubmit={handleSubmit} 
         style={{ width: '100%' }}
@@ -134,7 +118,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               marginBottom: '8px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#333'
+              color: '#333',
             }}
           >
             Email Address *
@@ -149,10 +133,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             style={{
               width: '100%',
               padding: '12px',
-              border: `1px solid ${errors.email ? '#dc3545' : '#ddd'}`,
+              border: `1px solid ${errors.email ? '#dc3545' : '#ddd'}`,}
               borderRadius: '6px',
               fontSize: '16px',
-              boxSizing: 'border-box'
+              boxSizing: 'border-box',
             }}
             placeholder="Enter your email"
             disabled={isLoading}
@@ -162,21 +146,20 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             aria-describedby={errors.email ? 'email-error' : undefined}
             autoComplete="email"
           />
-          {errors.email && (
+          {errors.email && ()
             <div 
               id="email-error"
               role="alert"
               style={{
                 color: '#dc3545',
                 fontSize: '14px',
-                marginTop: '4px'
+                marginTop: '4px',
               }}
             >
               {errors.email}
             </div>
           )}
         </div>
-
         {/* Password Field */}
         <div style={{ marginBottom: '20px' }}>
           <label 
@@ -186,7 +169,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               marginBottom: '8px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#333'
+              color: '#333',
             }}
           >
             Password *
@@ -203,10 +186,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 width: '100%',
                 padding: '12px',
                 paddingRight: '45px',
-                border: `1px solid ${errors.password ? '#dc3545' : '#ddd'}`,
+                border: `1px solid ${errors.password ? '#dc3545' : '#ddd'}`,}
                 borderRadius: '6px',
                 fontSize: '16px',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
               }}
               placeholder="Enter your password"
               disabled={isLoading}
@@ -229,7 +212,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 border: 'none',
                 color: '#666',
                 cursor: 'pointer',
-                fontSize: '14px'
+                fontSize: '14px',
               }}
               disabled={isLoading}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
@@ -239,21 +222,20 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
-          {errors.password && (
+          {errors.password && ()
             <div 
               id="password-error"
               role="alert"
               style={{
                 color: '#dc3545',
                 fontSize: '14px',
-                marginTop: '4px'
+                marginTop: '4px',
               }}
             >
               {errors.password}
             </div>
           )}
         </div>
-
         {/* Remember Me Checkbox */}
         <div style={{ marginBottom: '20px' }}>
           <label 
@@ -262,7 +244,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               display: 'flex',
               alignItems: 'center',
               fontSize: '14px',
-              cursor: 'pointer'
+              cursor: 'pointer',
           }}>
             <input
               id="remember-me"
@@ -283,7 +265,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             </span>
           </label>
         </div>
-
         {/* Submit Button */}
         <button
           type="submit"
@@ -298,15 +279,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             fontSize: '16px',
             fontWeight: '500',
             cursor: isLoading ? 'not-allowed' : 'pointer',
-            transition: 'background-color 0.2s'
+            transition: 'background-color 0.2s',
           }}
           aria-describedby={authError ? 'form-error' : undefined}
         >
           {isLoading ? 'Signing in...' : 'Sign In'}
         </button>
-        
         {/* Loading status for screen readers */}
-        {isLoading && (
+        {isLoading && ()
           <div 
             aria-live="polite" 
             aria-atomic="true" 
@@ -315,9 +295,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             Signing in, please wait...
           </div>
         )}
-        
         {/* Form-level error */}
-        {authError && (
+        {authError && ()
           <div 
             id="form-error"
             role="alert"
@@ -325,16 +304,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               color: '#dc3545',
               fontSize: '14px',
               marginTop: '12px',
-              textAlign: 'center'
+              textAlign: 'center',
             }}
           >
             {authError}
           </div>
         )}
-        
         </fieldset>
       </form>
-      
       {/* Add screen reader only styles */}
       <style>{`
         .sr-only {

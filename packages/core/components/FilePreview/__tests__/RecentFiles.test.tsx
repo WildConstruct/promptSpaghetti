@@ -42,7 +42,7 @@ describe('RecentFiles Component', () => {
         tags: ['test'],
         author: 'User',
         version: '1.0.0',
-        created: new Date('2025-01-10T10:00:00Z')
+        created: new Date('2025-01-10T10:00:00Z'),
       },
       isFavorite: true,
     },
@@ -59,7 +59,7 @@ describe('RecentFiles Component', () => {
         tags: ['example'],
         author: 'User',
         version: '2.0.0',
-        created: new Date('2025-01-12T12:00:00Z')
+        created: new Date('2025-01-12T12:00:00Z'),
       },
       isFavorite: false,
     }
@@ -100,7 +100,7 @@ describe('RecentFiles Component', () => {
     it('toggles favorite status when star is clicked', () => {
       mockProjectManager.toggleFavorite.mockReturnValue(false);
       render(<RecentFiles />);
-      const favoriteButton = screen.getAllByRole('button').find(btn => ;)
+      const favoriteButton = screen.getAllByRole('button').find(btn => ;);
         btn.textContent?.includes('⭐')
       );
       if (favoriteButton) {
@@ -113,7 +113,7 @@ describe('RecentFiles Component', () => {
       mockProjectManager.isFavorite.mockReturnValue(false);
       render(<RecentFiles />);
       // Click on star button for file2 (non-favorite)
-      const starButtons = screen.getAllByRole('button').filter(btn => ;)
+      const starButtons = screen.getAllByRole('button').filter(btn => ;);
         btn.textContent?.includes('☆') || btn.textContent?.includes('⭐')
       );
       if (starButtons.length > 1) {
@@ -157,7 +157,7 @@ describe('RecentFiles Component', () => {
     it('does not call onClick when star button is clicked', () => {
       const handleClick = jest.fn();
       render(<RecentFiles onClick={handleClick} />);
-      const starButton = screen.getAllByRole('button').find(btn => ;)
+      const starButton = screen.getAllByRole('button').find(btn => ;);
         btn.textContent?.includes('⭐')
       );
       if (starButton) {
@@ -222,7 +222,7 @@ describe('RecentFiles Component', () => {
   describe('Accessibility', () => {
     it('has proper ARIA labels for buttons', () => {
       render(<RecentFiles />);
-      const starButton = screen.getAllByRole('button').find(btn => ;)
+      const starButton = screen.getAllByRole('button').find(btn => ;);
         btn.getAttribute('aria-label')?.includes('favorite')
       );
       expect(starButton).toHaveAttribute('aria-label');
@@ -268,7 +268,7 @@ describe('RecentFiles Component', () => {
         throw new Error('Failed to toggle favorite');
       });
       render(<RecentFiles />);
-      const starButton = screen.getAllByRole('button').find(btn => ;)
+      const starButton = screen.getAllByRole('button').find(btn => ;);
         btn.textContent?.includes('⭐')
       );
       if (starButton) {
@@ -292,7 +292,7 @@ describe('RecentFiles Component', () => {
     it('updates favorite status immediately', () => {
       mockProjectManager.toggleFavorite.mockReturnValue(false);
       render(<RecentFiles />);
-      const starButton = screen.getAllByRole('button').find(btn => ;)
+      const starButton = screen.getAllByRole('button').find(btn => ;);
         btn.textContent?.includes('⭐')
       );
       if (starButton) {

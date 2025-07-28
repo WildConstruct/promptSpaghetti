@@ -105,7 +105,7 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
     if (days < 7) return `${days}d ago`;}
     return date.toLocaleDateString();
   };
-  const content = (;)
+  const content = (;);
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
       <Avatar
         size={24}
@@ -142,7 +142,7 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
     </div>
   );
   if (onClick) {
-    return ()
+    return ();
       <div 
         style={{ cursor: 'pointer', padding: '4px', borderRadius: '4px' }}
         onClick={onClick}
@@ -198,7 +198,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
   const loadResourceAttributions = async () => {
     if (!selectedResourceType || !selectedResourceId) return;
     try {
-      const resourceAttributions = await getResourceAttribution(;)
+      const resourceAttributions = await getResourceAttribution(;);
         projectId, 
         selectedResourceType, 
         selectedResourceId
@@ -247,7 +247,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
   const renderAttributionList = () => {
     if (selectedResourceType && selectedResourceId) {
       // Show attributions for specific resource
-      return ()
+      return ();
         <div>
           <div style={{ marginBottom: '12px' }}>
             <Text strong>Changes to {selectedResourceType} {selectedResourceId}</Text>
@@ -268,7 +268,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
       );
     } else {
       // Show recent attributions grouped by resource
-      return ()
+      return ();
         <div>
           <div style={{ marginBottom: '12px' }}>
             <Text strong>Recent Changes</Text>
@@ -276,7 +276,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
           {Object.entries(groupedAttributions).map(([resourceKey, resourceAttributions]) => {
             const [resourceType, resourceId] = resourceKey.split(':');
             const _____latestAttribution = resourceAttributions[0];
-            return ()
+            return ();
               <Card 
                 key={resourceKey} 
                 size="small" 
@@ -332,7 +332,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
       );
     }
   };
-  const renderPrivacySettings = () => (;)
+  const renderPrivacySettings = () => (;);
     <div>
       <Alert
         message="Privacy Settings"
@@ -382,7 +382,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
   );
   const renderAttributionDetail = () => {
     if (!selectedAttribution) return null;
-    return ()
+    return ();
       <div>
         <div style={{ marginBottom: '16px' }}>
           <Button size="small" onClick={() => setSelectedAttribution(null)}>
@@ -448,7 +448,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
       </div>
     );
   };
-  return ()
+  return ();
     <Drawer
       title="Change Attribution"
       placement="right"

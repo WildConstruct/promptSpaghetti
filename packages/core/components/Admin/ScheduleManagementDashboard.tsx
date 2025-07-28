@@ -204,13 +204,13 @@ export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardPr
         id: 'upcoming-1',
         name: 'Blog Post Publication',
         type: 'Content',
-        nextExecution: new Date(Date.now() + 6 * 60 * 60 * 1000)
+        nextExecution: new Date(Date.now() + 6 * 60 * 60 * 1000),
       },
       {
         id: 'upcoming-2',
         name: 'Weekly Maintenance',
         type: 'Feature Toggle',
-        nextExecution: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
+        nextExecution: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
       }
     ]
   };
@@ -260,7 +260,7 @@ export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardPr
     console.log(`Deleting schedule: ${scheduleId}`);}
   };
   if (loading) {
-    return ()
+    return ();
       <div className={`p-6 ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <RefreshCw className="h-8 w-8 animate-spin text-blue-600" />
@@ -269,7 +269,7 @@ export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardPr
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`p-6 space-y-6 ${className}`}>}
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -445,7 +445,7 @@ export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardPr
                 {filteredSchedules.map((schedule) => {
                   const StatusIcon = STATUS_CONFIG[schedule.status].icon;
                   const TypeIcon = TYPE_CONFIG[schedule.type].icon;
-                  return ()
+                  return ();
                     <div key={schedule.id} className="p-6 hover:bg-gray-50">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">

@@ -505,7 +505,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
     const reviewItems = items.filter(item => item.status === 'review').length;
     const blockedItems = items.filter(item => item.status === 'blocked').length;
     const criticalItems = items.filter(item => item.priority === 'critical').length;
-    const overdue = items.filter(item => ;)
+    const overdue = items.filter(item => ;);
       item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved'
     ).length;
     const totalEstimated = items.reduce((sum, item) => sum + (item.estimatedHours || 0), 0);
@@ -560,14 +560,14 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
       metadata: {,
         ...prev.metadata,
         totalItems: prev.items.length + 1,
-        lastActivity: new Date().toISOString()
+        lastActivity: new Date().toISOString(),
       }
     }));
   }, []);
   const handleItemUpdate = useCallback((itemId: string, updates: Partial<VFXChecklistItem>) => {
     setChecklist(prev => ({)
       ...prev,
-      items: prev.items.map(item => )
+      items: prev.items.map(item => ),
         item.id === itemId 
           ? { ...item, ...updates, updatedAt: new Date().toISOString() }
           : item
@@ -575,10 +575,10 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
       updatedAt: new Date().toISOString(),
       metadata: {,
         ...prev.metadata,
-        completedItems: prev.items.filter(item => )
+        completedItems: prev.items.filter(item => ),
           item.id === itemId ? updates.status === 'approved' : item.status === 'approved'
         ).length,
-        lastActivity: new Date().toISOString()
+        lastActivity: new Date().toISOString(),
       }
     }));
   }, []);
@@ -590,7 +590,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
       metadata: {,
         ...prev.metadata,
         totalItems: prev.items.length - 1,
-        lastActivity: new Date().toISOString()
+        lastActivity: new Date().toISOString(),
       }
     }));
   }, []);
@@ -598,16 +598,16 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
     const newComment: VFXChecklistComment = {
       ...comment,
       id: `comment-${Date.now()}`,}
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
     setChecklist(prev => ({)
       ...prev,
-      items: prev.items.map(item =>)
+      items: prev.items.map(item =>),
         item.id === itemId
           ? { ...item, comments: [...item.comments, newComment] }
           : item
       ),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     }));
   }, []);
   const handleTemplateSelect = useCallback((template: VFXChecklistTemplate) => {
@@ -647,7 +647,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
     setChecklist(newChecklist);
     setActiveTab('checklist');
   }, [currentUser]);
-  return ()
+  return ();
     <div className={`vfx-checklist-demo ${className}`}>}
       <Card>
         <CardHeader>
@@ -880,7 +880,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
                           const color = priority === 'critical' ? 'bg-red-500' :;
                             priority === 'high' ? 'bg-orange-500' :
                               priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500';
-                          return ()
+                          return ();
                             <div key={priority} className="flex items-center justify-between">
                               <span className="text-sm capitalize">{priority}</span>
                               <div className="flex items-center gap-2">
@@ -911,7 +911,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
                         {DEMO_TEAM.slice(0, 4).map(member => {)
                           const userItems = checklist.items.filter(item => item.assignee?.id === member.id);
                           const completed = userItems.filter(item => item.status === 'approved').length;
-                          return ()
+                          return ();
                             <div key={member.id} className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <div 
@@ -936,10 +936,10 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
                     const userItems = checklist.items.filter(item => item.assignee?.id === member.id);
                     const completed = userItems.filter(item => item.status === 'approved').length;
                     const inProgress = userItems.filter(item => item.status === 'in_progress').length;
-                    const overdue = userItems.filter(item => ;)
+                    const overdue = userItems.filter(item => ;);
                       item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved'
                     ).length;
-                    return ()
+                    return ();
                       <Card key={member.id} className={member.id === currentUser.id ? 'border-blue-300 bg-blue-50' : ''}>
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between mb-3">

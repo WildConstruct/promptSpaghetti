@@ -136,7 +136,7 @@ const createMockStatistics = (overrides: Partial<WorkflowStatistics> = {}): Work
 const mockApiResponse = (data: any) => {
   mockFetch.mockResolvedValueOnce({)
     ok: true,
-    json: async () => data
+    json: async () => data,
   } as Response);
 };
 
@@ -375,7 +375,7 @@ describe('Workflow Store', () => {
         mockApiResponse(transitionResult);
         const { result } = renderHook(() => useWorkflowStore());
         await act(async () => {
-          const result_data = await result.current.transitionResourceState(;)
+          const result_data = await result.current.transitionResourceState(;);
             'resource-1',
             'state-2',
             'user-1',
@@ -405,7 +405,7 @@ describe('Workflow Store', () => {
         mockApiResponse(transitionResult);
         const { result } = renderHook(() => useWorkflowStore());
         await act(async () => {
-          const result_data = await result.current.transitionResourceState(;)
+          const result_data = await result.current.transitionResourceState(;);
             'resource-1',
             'state-2',
             'user-1'
@@ -487,7 +487,7 @@ describe('Workflow Store', () => {
         mockApiResponse(newLock);
         const { result } = renderHook(() => useWorkflowStore());
         await act(async () => {
-          const lock = await result.current.acquireLock(;)
+          const lock = await result.current.acquireLock(;);
             'resource-1',
             'user-1',
             'edit',
@@ -689,7 +689,7 @@ describe('Workflow Store', () => {
         const maintenanceResult = {
           expired_locks_released: 5,
           expired_approvals_cancelled: 2,
-          maintenance_timestamp: new Date().toISOString()
+          maintenance_timestamp: new Date().toISOString(),
         };
         mockApiResponse(maintenanceResult);
         const { result } = renderHook(() => useWorkflowStore());

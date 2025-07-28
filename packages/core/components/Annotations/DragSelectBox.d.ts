@@ -7,7 +7,7 @@
  */
 import React from 'react';
 interface DragSelectBoxProps {
-    onSelectionComplete: (bounds: {)
+    onSelectionComplete: (bounds: {),
         x: number;
         y: number;
         width: number;

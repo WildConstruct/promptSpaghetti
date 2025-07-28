@@ -7,38 +7,30 @@
  * Integrates with the auth store to show authenticated user details and provides
  * quick access to user-specific features based on roles and permissions.
  */
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { User, ChevronDown, Settings, Shield, Users } from 'lucide-react';
-
 interface UserNavigationProps {
   className?: string;
 }
 
-export   const navigate = useNavigate();
+export const navigate = useNavigate();
   const { isAuthenticated, user } = useAuthStore();
-
   if (!isAuthenticated || !user) {
     return null;
   }
-
   // Check if user has admin role
   const isAdmin = user.roles?.includes('admin') || user.roles?.includes('administrator');
-  
   // Get user display name
-  const displayName = user.firstName && user.lastName 
-    ? `${user.firstName} ${user.lastName}`
+  const displayName = user.firstName && user.lastName ;
+    ? `${user.firstName} ${user.lastName}`}
     : user.firstName ?? user.lastName ?? user.email.split('@')[0];
-
-  const userInitials = user.firstName && user.lastName
-    ? `${user.firstName[0]}${user.lastName[0]}`
+  const userInitials = user.firstName && user.lastName;
+    ? `${user.firstName[0]}${user.lastName[0]}`}
     : displayName.slice(0, 2);
-
   const handleOptionClick = (action: string) => {
     setDropdownOpen(false);
-    
     switch (action) {
     case 'profile':
       // Navigate to profile page
@@ -60,9 +52,8 @@ export   const navigate = useNavigate();
       break;
     }
   };
-
-  return (
-    <div className={`user-navigation ${className}`} style={{ position: 'relative' }}>
+  return ()
+    <div className={`user-navigation ${className}`} style={{ position: 'relative' }}>}
       {/* User Info Button */}
       <button
         onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -101,19 +92,17 @@ export   const navigate = useNavigate();
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '12px',
-            fontWeight: '600'
+            fontWeight: '600',
           }}
         >
           {userInitials.toUpperCase()}
         </div>
-        
         {/* User Name */}
         <span style={{ fontWeight: '500' }}>
           {displayName}
         </span>
-        
         {/* Role Badge */}
-        {isAdmin && (
+        {isAdmin && ()
           <span
             style={{
               padding: '2px 6px',
@@ -121,36 +110,33 @@ export   const navigate = useNavigate();
               color: '#92400e',
               borderRadius: '4px',
               fontSize: '11px',
-              fontWeight: '600'
+              fontWeight: '600',
             }}
           >
             Admin
           </span>
         )}
-        
         {/* Dropdown Icon */}
         <ChevronDown 
           size={14} 
           style={{ 
             transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-            transition: 'transform 0.2s ease'
+            transition: 'transform 0.2s ease',
           }} 
         />
       </button>
-
       {/* Dropdown Menu */}
-      {dropdownOpen && (
+      {dropdownOpen && ()
         <>
           {/* Backdrop */}
           <div
             style={{
               position: 'fixed',
               inset: 0,
-              zIndex: 10
+              zIndex: 10,
             }}
             onClick={() => setDropdownOpen(false)}
           />
-          
           {/* Menu */}
           <div
             style={{
@@ -164,7 +150,7 @@ export   const navigate = useNavigate();
               borderRadius: '8px',
               boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
               zIndex: 20,
-              overflow: 'hidden'
+              overflow: 'hidden',
             }}
           >
             {/* User Info Header */}
@@ -175,9 +161,9 @@ export   const navigate = useNavigate();
               <div style={{ fontSize: '12px', color: '#6b7280' }}>
                 {user.email}
               </div>
-              {user.roles && user.roles.length > 0 && (
+              {user.roles && user.roles.length > 0 && ()
                 <div style={{ marginTop: '4px', display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                  {user.roles.map((role) => (
+                  {user.roles.map((role) => ()
                     <span
                       key={role}
                       style={{
@@ -186,7 +172,7 @@ export   const navigate = useNavigate();
                         color: '#374151',
                         borderRadius: '4px',
                         fontSize: '10px',
-                        fontWeight: '500'
+                        fontWeight: '500',
                       }}
                     >
                       {role}
@@ -195,7 +181,6 @@ export   const navigate = useNavigate();
                 </div>
               )}
             </div>
-            
             {/* Menu Options */}
             <div style={{ padding: '8px 0' }}>
               <button
@@ -212,7 +197,7 @@ export   const navigate = useNavigate();
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  transition: 'background-color 0.2s ease'
+                  transition: 'background-color 0.2s ease',
                 }}
                 onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                   e.currentTarget.style.backgroundColor = '#f9fafb';
@@ -224,7 +209,6 @@ export   const navigate = useNavigate();
                 <User size={16} />
                 My Profile
               </button>
-              
               <button
                 onClick={() => handleOptionClick('settings')}
                 style={{
@@ -239,7 +223,7 @@ export   const navigate = useNavigate();
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  transition: 'background-color 0.2s ease'
+                  transition: 'background-color 0.2s ease',
                 }}
                 onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                   e.currentTarget.style.backgroundColor = '#f9fafb';
@@ -251,14 +235,13 @@ export   const navigate = useNavigate();
                 <Settings size={16} />
                 Settings
               </button>
-
               {/* Admin Menu Section */}
-              {isAdmin && (
+              {isAdmin && ()
                 <>
                   <div
                     style={{
                       margin: '8px 0',
-                      borderTop: '1px solid #f3f4f6'
+                      borderTop: '1px solid #f3f4f6',
                     }}
                   />
                   <button
@@ -275,7 +258,7 @@ export   const navigate = useNavigate();
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
-                      transition: 'background-color 0.2s ease'
+                      transition: 'background-color 0.2s ease',
                     }}
                     onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                       e.currentTarget.style.backgroundColor = '#fef3c7';
@@ -287,7 +270,6 @@ export   const navigate = useNavigate();
                     <Users size={16} />
                     User Management
                   </button>
-                  
                   <button
                     onClick={() => handleOptionClick('admin')}
                     style={{
@@ -302,7 +284,7 @@ export   const navigate = useNavigate();
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
-                      transition: 'background-color 0.2s ease'
+                      transition: 'background-color 0.2s ease',
                     }}
                     onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                       e.currentTarget.style.backgroundColor = '#fef3c7';

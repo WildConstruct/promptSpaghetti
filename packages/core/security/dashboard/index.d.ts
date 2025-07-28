@@ -40,7 +40,7 @@ export declare class SecurityDashboardFactory {
     /**
      * Create a dashboard from template
      */
-    createDashboard()
+    createDashboard();
       templateId: string,
       userId: string,
       overrides?: Partial<DashboardConfig>
@@ -48,7 +48,7 @@ export declare class SecurityDashboardFactory {
     /**
      * Create a dashboard from preset
      */
-    createDashboardFromPreset()
+    createDashboardFromPreset();
       presetId: string,
       userId: string,
       overrides?: Partial<DashboardConfig>

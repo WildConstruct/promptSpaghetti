@@ -242,7 +242,7 @@ export class NodeValidationFramework {
           severity: 'critical',
           description: 'Conditional expression contains dangerous evaluation functions',
           location: 'data.condition',
-          recommendation: 'Use safe expression evaluator instead of eval()'
+          recommendation: 'Use safe expression evaluator instead of eval()',
         });
       }
     }
@@ -260,7 +260,7 @@ export class NodeValidationFramework {
           severity: 'high',
           description: 'Python code contains potentially dangerous functions',
           location: 'data.code',
-          recommendation: 'Use restricted execution environment or whitelist safe functions'
+          recommendation: 'Use restricted execution environment or whitelist safe functions',
         });
       }
     }
@@ -281,7 +281,7 @@ export class NodeValidationFramework {
         severity: 'high',
         description: `Estimated memory usage (${Math.round(estimatedMemory / 1024)}KB) exceeds limit`,}
         impact: 'May cause out of memory errors',
-        suggestion: 'Reduce data size or implement streaming'
+        suggestion: 'Reduce data size or implement streaming',
       });
     }
     // Estimate execution time
@@ -293,7 +293,7 @@ export class NodeValidationFramework {
         severity: 'high',
         description: `Estimated execution time (${estimatedTime}ms) exceeds limit`,}
         impact: 'May cause UI blocking or timeouts',
-        suggestion: 'Optimize algorithm or use worker thread'
+        suggestion: 'Optimize algorithm or use worker thread',
       });
     }
     result.performance.issues = issues;
@@ -315,7 +315,7 @@ export class NodeValidationFramework {
           severity: 'high',
           description: 'Cyclical Sequential node with no items will loop infinitely',
           impact: 'Will freeze application',
-          suggestion: 'Add termination condition or default items'
+          suggestion: 'Add termination condition or default items',
         });
       }
     }
@@ -323,7 +323,7 @@ export class NodeValidationFramework {
       // Check for states with no exit conditions
       const matrix = nodeData.data.transitionMatrix;
       for (const [state, transitions] of Object.entries(matrix)) {
-        const totalWeight = Object.values(;)
+        const totalWeight = Object.values(;);
           transitions as Record<string,
           number>
         ).reduce((sum, weight) => sum + weight, 0);
@@ -333,7 +333,7 @@ export class NodeValidationFramework {
             severity: 'medium',
             description: `Markov state '${state}' has no valid transitions`,}
             impact: 'May get stuck in infinite loop',
-            suggestion: 'Add transition weights or termination condition'
+            suggestion: 'Add transition weights or termination condition',
           });
         }
       }

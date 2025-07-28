@@ -234,7 +234,6 @@ export class AuditCalendarSystem {
     totalCount: number;
     upcomingDeadlines: AuditSchedule[];
     overdueSchedules: AuditSchedule[];
-  } {
     const validatedQuery = SchedulingQuerySchema.parse(query);
     // Apply filters
     const filteredSchedules = this.applyScheduleFilters(Array.from(this.schedules.values()), validatedQuery);
@@ -263,7 +262,7 @@ export class AuditCalendarSystem {
     const updatedSchedule: AuditSchedule = {
       ...existingSchedule,
       ...updates,
-      updated_at: new Date()
+      updated_at: new Date(),
     };
     // Validate the updated schedule
     const validatedSchedule = AuditScheduleSchema.parse(updatedSchedule);
@@ -305,7 +304,7 @@ export class AuditCalendarSystem {
           {
             timestamp: new Date(),
             author: 'system',
-            content: completionData.completion_notes || 'Schedule completed'
+            content: completionData.completion_notes || 'Schedule completed',
           }
         ]
       }
@@ -347,7 +346,6 @@ export class AuditCalendarSystem {
       overdue_count: number;
       upcoming_deadlines: number;
     };
-  } {
     const validatedConfig = CalendarViewConfigSchema.parse(config);
     // Filter schedules for the date range
     const schedules = Array.from(this.schedules.values()).filter(schedule => {)
@@ -416,7 +414,7 @@ export class AuditCalendarSystem {
     const duration = baseSchedule.scheduled_end.getTime() - baseSchedule.scheduled_start.getTime();
     while (currentDate <= endDate) {
       // Calculate next occurrence based on pattern
-      const nextDate = this.calculateNextOccurrence(;)
+      const nextDate = this.calculateNextOccurrence(;);
         currentDate,
         baseSchedule.recurrence_pattern,
         baseSchedule.recurrence_config
@@ -434,7 +432,7 @@ export class AuditCalendarSystem {
         metadata: {,
           ...baseSchedule.metadata,
           recurring_parent_id: scheduleId,
-          occurrence_number: instances.length + 1
+          occurrence_number: instances.length + 1,
         }
       };
       instances.push(instance);
@@ -455,7 +453,6 @@ export class AuditCalendarSystem {
     }>;
     notifications_sent: number;
     schedules_updated: number;
-    } {
     const alerts: any[] = [];
     let notificationsSent = 0;
     let schedulesUpdated = 0;
@@ -467,7 +464,7 @@ export class AuditCalendarSystem {
         schedule_id: schedule.id,
         message: `Schedule "${schedule.title}" is overdue`,}
         severity: schedule.priority === SchedulePriority.CRITICAL ? 'critical' : 'high',
-        action_required: 'Immediate attention required'
+        action_required: 'Immediate attention required',
       });
       // Update status
       if (schedule.status !== ScheduleStatus.OVERDUE) {
@@ -483,7 +480,7 @@ export class AuditCalendarSystem {
         schedule_id: schedule.id,
         message: `Schedule "${schedule.title}" due in ${this.getDaysUntil(schedule.scheduled_start)} days`,}
         severity: schedule.priority === SchedulePriority.REGULATORY ? 'critical' : 'medium',
-        action_required: 'Prepare for upcoming audit activity'
+        action_required: 'Prepare for upcoming audit activity',
       });
     });
     // Process notifications
@@ -518,8 +515,7 @@ export class AuditCalendarSystem {
       by_assignee: Record<string, number>;
       by_activity_type: Record<AuditActivityType, number>;
     };
-  } {
-    const schedules = Array.from(this.schedules.values()).filter(schedule =>;)
+    const schedules = Array.from(this.schedules.values()).filter(schedule =>;);
       schedule.scheduled_start >= dateRange.start && schedule.scheduled_start <= dateRange.end
     );
     // Summary statistics
@@ -555,7 +551,7 @@ export class AuditCalendarSystem {
         completed_schedules: completedSchedules,
         overdue_schedules: overdueSchedules,
         completion_rate: Math.round(completionRate * 100) / 100,
-        average_duration: Math.round(avgDuration * 100) / 100
+        average_duration: Math.round(avgDuration * 100) / 100,
       },
       activity_breakdown: activityBreakdown,
       priority_distribution: priorityDistribution,
@@ -663,7 +659,7 @@ export class AuditCalendarSystem {
       priorityCounts[priority] = schedules.filter(s => s.priority === priority).length;
     });
     const now = new Date();
-    const upcomingDeadlines = schedules.filter(s => ;)
+    const upcomingDeadlines = schedules.filter(s => ;);
       s.scheduled_start > now && 
       s.scheduled_start <= new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
     ).length;
@@ -736,7 +732,7 @@ export class AuditCalendarSystem {
   }
   private generateNextOccurrence(schedule: AuditSchedule): void {
     if (schedule.recurrence_pattern === RecurrencePattern.NONE) return;
-    const nextStart = this.calculateNextOccurrence(;)
+    const nextStart = this.calculateNextOccurrence(;);
       schedule.scheduled_start,
       schedule.recurrence_pattern,
       schedule.recurrence_config

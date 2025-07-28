@@ -114,7 +114,7 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeDat
     examples: ['Join All: combines everything', 'Non-Empty: skips empty inputs'],
     priority: 'medium',
   });
-  return ()
+  return ();
     <div className="concat-editor">
       {/* BASIC LEVEL: Essential concatenation settings */}
       <ProgressiveDisclosureSection

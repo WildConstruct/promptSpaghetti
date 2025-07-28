@@ -186,7 +186,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
         pagePattern: /\/marketplace/,
         userBehavior: { ,
           searchRefinements: 3,
-          timeWithoutProgress: 30000 // 30 seconds without success
+          timeWithoutProgress: 30000 // 30 seconds without success,
         }
       },
       helpContent: {,
@@ -393,7 +393,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
     setUserBehavior(prev => ({)
       ...prev,
       ...updates,
-      timeOnPage: Date.now() - pageStartTime.current
+      timeOnPage: Date.now() - pageStartTime.current,
     }));
   }, []);
   // Struggle detection algorithm
@@ -483,7 +483,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
     behaviorTrackingInterval.current = setInterval(() => {
       const currentBehavior = {
         ...userBehavior,
-        timeOnPage: Date.now() - pageStartTime.current
+        timeOnPage: Date.now() - pageStartTime.current,
       };
       // Detect struggles
       detectUserStruggle(currentBehavior);
@@ -543,7 +543,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
     };
   }, []);
   if (!enabled) return null;
-  return ()
+  return ();
     <div className="marketplace-contextual-help">
       {/* Main Help Overlay Integration */}
       <MarketplaceHelpOverlay

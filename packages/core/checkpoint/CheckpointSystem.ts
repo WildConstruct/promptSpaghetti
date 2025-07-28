@@ -140,7 +140,7 @@ export class CheckpointSystem extends EventEmitter {
         maxCheckpoints: 50,
         maxAge: 30, // 30 days
         compressionThreshold: 1024 * 1024, // 1MB
-        archiveAfter: 7 // 7 days
+        archiveAfter: 7 // 7 days,
       },
       recovery: {,
         autoRecovery: true,
@@ -509,7 +509,7 @@ export class CheckpointSystem extends EventEmitter {
       compressedSize,
       compressionRatio: compressedSize / originalSize,
       algorithm: 'gzip',
-      processingTime: performance.now() - startTime
+      processingTime: performance.now() - startTime,
     };
   }
   private async decompressCheckpoint(checkpoint: CheckpointData): Promise<any> {

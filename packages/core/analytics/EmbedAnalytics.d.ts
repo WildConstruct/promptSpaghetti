@@ -440,7 +440,7 @@ export declare class EmbedAnalytics extends EventEmitter {
     endSession(): void;
     getExperimentVariant(experimentId: string): string | null;
     trackExperimentGoal(experimentId: string, goalId: string, value?: number): void;
-    generateReport()
+    generateReport();
       type: ReportType,
       timeRange: TimeRange,
       filters?: ReportFilter[],

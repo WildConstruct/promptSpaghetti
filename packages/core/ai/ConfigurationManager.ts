@@ -128,7 +128,7 @@ export class ConfigurationValidator {
       id: 'required-fields',
       name: 'Required Fields',
       description: 'Validates that required fields are present',
-      validate: (config) => {
+      validate: (config) => {,
         const errors: string[] = [];
         if (!config.id) errors.push('Model ID is required');
         if (!config.type) errors.push('Model type is required');
@@ -146,7 +146,7 @@ export class ConfigurationValidator {
       id: 'api-key-validation',
       name: 'API Key Validation',
       description: 'Validates API key requirements',
-      validate: (config) => {
+      validate: (config) => {,
         const errors: string[] = [];
         const warnings: string[] = [];
         if (config.provider === AIModelProvider.OPENAI || config.provider === AIModelProvider.ANTHROPIC) {
@@ -169,7 +169,7 @@ export class ConfigurationValidator {
       id: 'model-name-validation',
       name: 'Model Name Validation',
       description: 'Validates model names for specific providers',
-      validate: (config) => {
+      validate: (config) => {,
         const warnings: string[] = [];
         const suggestions: string[] = [];
         if (config.provider === AIModelProvider.OPENAI && config.modelName) {
@@ -192,7 +192,7 @@ export class ConfigurationValidator {
       id: 'resource-limits',
       name: 'Resource Limits',
       description: 'Validates resource limit settings',
-      validate: (config) => {
+      validate: (config) => {,
         const warnings: string[] = [];
         const suggestions: string[] = [];
         if (config.capabilities?.maxInputSize && config.capabilities.maxInputSize > 1000000) {

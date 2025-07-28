@@ -72,7 +72,7 @@ export class ExtensionLifecycleManager {
       errors: [],
       healthStatus: {,
         status: 'healthy',
-        lastChecked: new Date()
+        lastChecked: new Date(),
       }
     };
     this.extensions.set(extension.id, entry);
@@ -274,7 +274,7 @@ export class ExtensionLifecycleManager {
       return {
         status: 'error',
         message: 'Extension not found',
-        lastChecked: new Date()
+        lastChecked: new Date(),
       };
     }
     return entry.healthStatus;
@@ -289,14 +289,14 @@ export class ExtensionLifecycleManager {
       const healthStatus = entry.extension.getHealthStatus();
       entry.healthStatus = {
         ...healthStatus,
-        lastChecked: new Date()
+        lastChecked: new Date(),
       };
       return entry.healthStatus;
     } catch (error) {
       entry.healthStatus = {
         status: 'error',
         message: error.message,
-        lastChecked: new Date()
+        lastChecked: new Date(),
       };
       return entry.healthStatus;
     }
@@ -376,7 +376,7 @@ export class ExtensionLifecycleManager {
   private addError(entry: ExtensionLifecycleEntry, error: Error): void {
     entry.errors.push({)
       error,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   private async validateExtension(extension: BaseExtension): Promise<ExtensionValidationResult> {
@@ -485,14 +485,14 @@ export class ExtensionLifecycleManager {
       get: async (key: string) => storage.get(`${extensionId}:${key}`),}
       set: async (key: string, value: any) => storage.set(`${extensionId}:${key}`, value),}
       delete: async (key: string) => storage.delete(`${extensionId}:${key}`),}
-      clear: async () => {
+      clear: async () => {,
         for (const key of storage.keys()) {
           if (key.startsWith(`${extensionId}:`)) {}
             storage.delete(key);
           }
         }
       },
-      keys: async () => {
+      keys: async () => {,
         return Array.from(storage.keys())
           .filter(key => key.startsWith(`${extensionId}:`))}
           .map(key => key.substring(extensionId.length + 1));
@@ -508,7 +508,7 @@ export class ExtensionLifecycleManager {
     return {
       version: '1.0.0',
       environment: 'development',
-      getSystemInfo: () => ({)
+      getSystemInfo: () => ({),
         version: '1.0.0',
         platform: process.platform,
         architecture: process.arch,
@@ -516,20 +516,20 @@ export class ExtensionLifecycleManager {
         memoryUsage: process.memoryUsage(),
         uptime: process.uptime(),
       }),
-      getPerformanceMetrics: () => ({)
+      getPerformanceMetrics: () => ({),
         executionTime: 0,
         memoryUsage: 0,
         cpuUsage: 0,
         activeNodes: 0,
         totalExecutions: 0,
       }),
-      registerNode: (nodeDefinition: any) => {
+      registerNode: (nodeDefinition: any) => {,
         // This would register with the node registry
       },
-      unregisterNode: (nodeId: string) => {
+      unregisterNode: (nodeId: string) => {,
         // This would unregister from the node registry
       },
-      getRegisteredNodes: () => {
+      getRegisteredNodes: () => {,
         // This would return registered nodes
         return [];
       }
@@ -540,13 +540,13 @@ export class ExtensionLifecycleManager {
       registerComponent: (componentId: string, component: any) => {
         // This would register with the UI system
       },
-      unregisterComponent: (componentId: string) => {
+      unregisterComponent: (componentId: string) => {,
         // This would unregister from the UI system
       },
       registerInspectorEditor: (nodeType: string, editor: any) => {
         // This would register with the inspector system
       },
-      unregisterInspectorEditor: (nodeType: string) => {
+      unregisterInspectorEditor: (nodeType: string) => {,
         // This would unregister from the inspector system
       },
       registerMenuItem: (menuId: string, item: any) => {
@@ -555,30 +555,30 @@ export class ExtensionLifecycleManager {
       unregisterMenuItem: (menuId: string, itemId: string) => {
         // This would unregister from the menu system
       },
-      showNotification: (notification: any) => {
+      showNotification: (notification: any) => {,
         // This would show a notification
       },
-      showModal: (modal: any) => {
+      showModal: (modal: any) => {,
         // This would show a modal
       }
     };
   }
   private createAPIContext(extensionId: string): any {
     return {
-      createHttpClient: () => {
+      createHttpClient: () => {,
         // This would return an HTTP client
         return {};
       },
       registerEndpoint: (path: string, handler: any) => {
         // This would register an API endpoint
       },
-      unregisterEndpoint: (path: string) => {
+      unregisterEndpoint: (path: string) => {,
         // This would unregister an API endpoint
       },
-      registerMiddleware: (middleware: any) => {
+      registerMiddleware: (middleware: any) => {,
         // This would register middleware
       },
-      unregisterMiddleware: (middlewareId: string) => {
+      unregisterMiddleware: (middlewareId: string) => {,
         // This would unregister middleware
       }
     };

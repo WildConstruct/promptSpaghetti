@@ -225,7 +225,7 @@ const SOCIAL_PLATFORMS: SocialPlatform[] = [
       clicks: 0,
       shares: 0,
       reach: 0,
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     }
   },
   {
@@ -272,7 +272,7 @@ const SOCIAL_PLATFORMS: SocialPlatform[] = [
       clicks: 0,
       shares: 0,
       reach: 0,
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     }
   },
   {
@@ -319,7 +319,7 @@ const SOCIAL_PLATFORMS: SocialPlatform[] = [
       clicks: 0,
       shares: 0,
       reach: 0,
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     }
   },
   {
@@ -366,7 +366,7 @@ const SOCIAL_PLATFORMS: SocialPlatform[] = [
       clicks: 0,
       shares: 0,
       reach: 0,
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     }
   },
   {
@@ -413,7 +413,7 @@ const SOCIAL_PLATFORMS: SocialPlatform[] = [
       clicks: 0,
       shares: 0,
       reach: 0,
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     }
   }
 ];
@@ -449,7 +449,7 @@ export const ShareContentGenerator = {
       linkedin: [...baseTags, 'ArtificialIntelligence', 'Productivity', 'Innovation'].slice(0, 5),
       facebook: [], // Facebook doesn't use hashtags effectively
       reddit: [], // Reddit uses subreddits instead
-      discord: [] // Discord doesn't use hashtags
+      discord: [] // Discord doesn't use hashtags,
     };
     return platformSpecific[platform as keyof typeof platformSpecific] || [];
   }
@@ -549,7 +549,7 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
       shareType: 'direct',
       content: {,
         ...content,
-        url: content.url + (trackingEnabled ? '?' + new URLSearchParams(trackingParams).toString() : '')
+        url: content.url + (trackingEnabled ? '?' + new URLSearchParams(trackingParams).toString() : ''),
       },
       timestamp: new Date(),
       userId: 'current_user', // Would come from auth context
@@ -571,7 +571,7 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
           conversionRate: Math.random() * 5,
           engagementRate: Math.random() * 15,
           viralCoefficient: Math.random() * 2,
-          timeToConversion: Math.random() * 3600
+          timeToConversion: Math.random() * 3600,
         }
       },
       metadata: {,
@@ -598,7 +598,7 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
           clicks: analytics.clicks + shareRecord.analytics.clicks,
           engagements: analytics.engagements + shareRecord.analytics.engagements,
           conversions: analytics.conversions + shareRecord.analytics.conversions,
-          revenue: analytics.revenue + shareRecord.analytics.revenue
+          revenue: analytics.revenue + shareRecord.analytics.revenue,
         };
         setAnalytics(updatedAnalytics);
         onAnalyticsUpdate?.(updatedAnalytics);
@@ -610,7 +610,7 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
     }
   }, [performShare, onShareComplete, analytics, onAnalyticsUpdate, customizations.analyticsIntegration]);
   const handleBulkShare = useCallback(async () => {
-    const sharePromises = selectedPlatforms.map(platformId => ;)
+    const sharePromises = selectedPlatforms.map(platformId => ;);
       handleSingleShare(platformId).catch(err => ({ platformId, error: err }))
     );
     await Promise.all(sharePromises);
@@ -637,7 +637,7 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
     totalEngagements: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.engagements, 0),
     averageCTR: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.performance.clickThroughRate, 0) / Math.max(Object.keys(shareResults).length, 1)
   }), [shareResults]);
-  return ()
+  return ();
     <div className={`bg-white border border-gray-200 rounded-lg overflow-hidden ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
@@ -719,7 +719,7 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
             const isSelected = selectedPlatforms.includes(platform.id);
             const isSharing = isSharing[platform.id];
             const shareResult = shareResults[platform.id];
-            return ()
+            return ();
               <div
                 key={platform.id}
                 className={`border rounded-lg p-4 cursor-pointer transition-all ${
@@ -815,7 +815,7 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
             const platform = platforms.find(p => p.id === platformId);
             const content = shareContent[platformId];
             if (!platform || !content) return null;
-            return ()
+            return ();
               <div key={platformId} className="mb-6 p-4 bg-white border border-gray-200 rounded-lg">
                 <div className="flex items-center gap-2 mb-3">
                   <platform.icon className="h-4 w-4" style={{ color: platform.color }} />

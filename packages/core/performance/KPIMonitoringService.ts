@@ -91,17 +91,17 @@ export class KPIMonitoringService extends EventEmitter {
       alertThresholds: {,
         critical: 3,                  // Alert after 3 critical violations
         consecutive: 2,               // Alert after 2 consecutive violations
-        degradationThreshold: 20     // Alert on 20% degradation
+        degradationThreshold: 20     // Alert on 20% degradation,
       },
       kpiFilters: {,
         categories: [],               // Monitor all categories
         priorities: ['critical', 'high'], // Monitor critical and high priority
-        enabled: []                   // Monitor all KPIs
+        enabled: []                   // Monitor all KPIs,
       },
       baseline: {,
         autoCapture: true,
         captureInterval: 3600000,     // 1 hour
-        retentionPeriod: 2592000000   // 30 days
+        retentionPeriod: 2592000000   // 30 days,
       },
       reporting: {,
         enabled: false,
@@ -196,7 +196,7 @@ export class KPIMonitoringService extends EventEmitter {
       this.emit('monitoring-cycle-complete', {)
         timestamp: Date.now(),
         kpisMonitored: kpisToMonitor.length,
-        alertsGenerated: this.alerts.filter(a => !a.acknowledged).length
+        alertsGenerated: this.alerts.filter(a => !a.acknowledged).length,
       });
     } catch (error) {
       console.error('❌ Error in monitoring cycle:', error);
@@ -254,10 +254,10 @@ export class KPIMonitoringService extends EventEmitter {
   private async createKPIAlert()
     snapshot: KPISnapshot, 
     kpi: KPIDefinition, 
-    type: 'status_violation' | 'trend_degradation' | 'consecutive_violations'
+    type: 'status_violation' | 'trend_degradation' | 'consecutive_violations',
   ): Promise<void> {
     // Check if similar alert already exists and is unacknowledged
-    const existingAlert = this.alerts.find(alert => ;)
+    const existingAlert = this.alerts.find(alert => ;);
       alert.kpiId === snapshot.kpiId && 
       !alert.acknowledged &&
       Date.now() - alert.timestamp < 3600000 // Within last hour
@@ -442,7 +442,6 @@ export class KPIMonitoringService extends EventEmitter {
     alerts: KPIAlert[];
     trends: KPITrendAnalysis[];
     recommendations: string[];
-    } {
     const monitoredKPIs = this.getFilteredKPIs();
     const activeAlerts = this.alerts.filter(a => !a.acknowledged);
     // Calculate average score
@@ -460,7 +459,7 @@ export class KPIMonitoringService extends EventEmitter {
         status: latest?.status || 'unknown',
         value: latest?.value || 0,
         target: kpi.target,
-        trend: latest?.trend || 'stable'
+        trend: latest?.trend || 'stable',
       };
     });
     // Generate trend analyses
@@ -543,7 +542,7 @@ export class KPIMonitoringService extends EventEmitter {
         kpiId: kpi.id,
         status: latest?.status || 'unknown',
         value: latest?.value || 0,
-        trend: latest?.trend || 'stable'
+        trend: latest?.trend || 'stable',
       };
     });
   }
@@ -609,7 +608,6 @@ export class KPIMonitoringService extends EventEmitter {
     alerts: KPIAlert[];
     kpiHistory: Record<string, KPISnapshot[]>;
     baselines: BaselineSnapshot[];
-    } {
     return {
       config: this.config,
       alerts: this.alerts,
@@ -626,7 +624,6 @@ export class KPIMonitoringService extends EventEmitter {
     kpisMonitored: number;
     activeAlerts: number;
     lastCycle?: number;
-    } {
     return {
       isRunning: this.isMonitoring,
       uptime: this.isMonitoring ? Date.now() - (this.monitoringInterval as any)?._idleStart || 0 : 0,

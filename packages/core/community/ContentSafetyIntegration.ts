@@ -497,14 +497,13 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
   private tutorialService: MarketplaceTutorialSystemService;
   private analyticsService: LearningAnalyticsServiceImpl;
   private apiClient: any;
-  constructor()
+  constructor();
     filteringService: MarketplaceContentFilteringService,
     moderationService: EnhancedModerationService,
     contributionService: ContributionManagementService,
     tutorialService: MarketplaceTutorialSystemService,
     analyticsService: LearningAnalyticsServiceImpl,
     apiClient: any,
-  ) {
     this.filteringService = filteringService;
     this.moderationService = moderationService;
     this.contributionService = contributionService;
@@ -547,7 +546,7 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
       // Stage 5: Final Decision Making
       const finalDecision = await this.makeFinalSafetyDecision(request, stageResults);
       // Stage 6: Generate Comprehensive Result
-      const safetyResult = await this.generateComprehensiveResult(;)
+      const safetyResult = await this.generateComprehensiveResult(;);
         request,
         stageResults,
         finalDecision,
@@ -650,7 +649,7 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
         processing_time_ms: Date.now() - stageStartTime,
         findings,
         recommendations: findings.map(f => f.resolution_suggestions).flat(),
-        next_stage_suggestions: decision === 'approve' ? ['pre_filtering'] : []
+        next_stage_suggestions: decision === 'approve' ? ['pre_filtering'] : [],
       };
     } catch (error) {
       console.error('Intake stage failed:', error);
@@ -701,7 +700,7 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
         processing_time_ms: Date.now() - stageStartTime,
         findings,
         recommendations: filteringResult.improvement_suggestions.map(s => s.title),
-        next_stage_suggestions: decision === 'approve' ? ['moderation'] : ['escalation']
+        next_stage_suggestions: decision === 'approve' ? ['moderation'] : ['escalation'],
       };
     } catch (error) {
       console.error('Filtering stage failed:', error);
@@ -733,11 +732,11 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
         },
         author: {,
           userId: request.submission_context.submitter_id,
-          trustScore: 75 // Would be fetched from user service
+          trustScore: 75 // Would be fetched from user service,
         },
         context: {,
           source: request.submission_context.submission_source,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         },
         moderation_context: this.inferModerationContext(request),
         workflow_type: this.determineWorkflowType(request),
@@ -762,7 +761,7 @@ export class ContentSafetyServiceImpl implements ContentSafetyService {
         processing_time_ms: Date.now() - stageStartTime,
         findings,
         recommendations: moderationResult.recommendedActions.map(a => a.reason),
-        next_stage_suggestions: decision === 'approve' ? ['quality_gates'] : ['escalation']
+        next_stage_suggestions: decision === 'approve' ? ['quality_gates'] : ['escalation'],
       };
     } catch (error) {
       console.error('Moderation stage failed:', error);

@@ -1,9 +1,7 @@
 // Epic 11.2 User Profile Manager Component
 // Comprehensive user profile management with inline editing
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-
 interface UserProfile {
   id?: string;
   displayName?: string;
@@ -16,20 +14,18 @@ interface UserProfile {
   createdAt?: string;
   updatedAt?: string;
 }
-
 interface ProfileCompleteness {
   percentage: number;
   completedFields: string[];
   missingFields: string[];
 }
-
 interface UserProfileManagerProps {
   onProfileUpdate?: (profile: UserProfile) => void;
   showCompleteness?: boolean;
   allowImageUpload?: boolean;
 }
 
-export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
+export const UserProfileManager: React.FC<UserProfileManagerProps> = ({)
   onProfileUpdate,
   showCompleteness = true,
   allowImageUpload = true
@@ -43,15 +39,13 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
   const [editMode, setEditMode] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [tempValues, setTempValues] = useState<Partial<UserProfile>>({});
-
   // Available timezones and locales
-  const timezones = [
+  const timezones = [;
     'UTC', 'America/New_York', 'America/Los_Angeles', 'America/Chicago',
     'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Asia/Tokyo',
     'Asia/Shanghai', 'Asia/Mumbai', 'Australia/Sydney'
   ];
-
-  const locales = [
+  const locales = [;
     { code: 'en-US', name: 'English (US)' },
     { code: 'en-GB', name: 'English (UK)' },
     { code: 'es-ES', name: 'Español' },
@@ -60,20 +54,17 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
     { code: 'ja-JP', name: '日本語' },
     { code: 'zh-CN', name: '中文' }
   ];
-
   const fetchProfile = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/auth/profile', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      const response = await fetch('/api/auth/profile', {)
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
         }
       });
-
       if (!response.ok) {
         throw new Error('Failed to fetch profile');
       }
-
       const data = await response.json();
       setProfile(data.profile);
       if (showCompleteness) {
@@ -86,39 +77,32 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
       setLoading(false);
     }
   }, [showCompleteness]);
-
   useEffect(() => {
     if (user) {
       fetchProfile();
     }
   }, [user, fetchProfile]);
-
   const updateProfile = async (updates: Partial<UserProfile>) => {
     try {
       setSaving(true);
       setError(null);
-
-      const response = await fetch('/api/auth/profile', {
+      const response = await fetch('/api/auth/profile', {)
         method: 'PUT',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
         },
-        body: JSON.stringify(updates)
+        body: JSON.stringify(updates),
       });
-
       if (!response.ok) {
         throw new Error('Failed to update profile');
       }
-
       const data = await response.json();
       setProfile(data.profile);
-      
       // Refresh completeness if showing
       if (showCompleteness) {
         await fetchProfile();
       }
-      
       onProfileUpdate?.(data.profile);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -127,31 +111,25 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
       setSaving(false);
     }
   };
-
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-
     try {
       setUploadingImage(true);
       setError(null);
-
       const formData = new FormData();
       formData.append('file', file);
-
-      const response = await fetch('/api/auth/profile/avatar', {
+      const response = await fetch('/api/auth/profile/avatar', {)
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
         },
-        body: formData
+        body: formData,
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to upload image');
       }
-
       const data = await response.json();
       setProfile(prev => prev ? { ...prev, avatarUrl: data.avatarUrl } : null);
       onProfileUpdate?.(profile ? { ...profile, avatarUrl: data.avatarUrl } : {});
@@ -162,22 +140,18 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
       setUploadingImage(false);
     }
   };
-
   const handleDeleteImage = async () => {
     try {
       setError(null);
-
-      const response = await fetch('/api/auth/profile/avatar', {
+      const response = await fetch('/api/auth/profile/avatar', {)
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
         }
       });
-
       if (!response.ok) {
         throw new Error('Failed to delete image');
       }
-
       setProfile(prev => prev ? { ...prev, avatarUrl: null } : null);
       onProfileUpdate?.(profile ? { ...profile, avatarUrl: null } : {});
     } catch (error) {
@@ -185,17 +159,14 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
       setError('Failed to delete image');
     }
   };
-
   const startEdit = (field: string, currentValue: Error) => {
     setEditMode(field);
     setTempValues({ [field]: currentValue });
   };
-
   const cancelEdit = () => {
     setEditMode(null);
     setTempValues({});
   };
-
   const saveEdit = async (field: string) => {
     if (tempValues[field] !== undefined) {
       await updateProfile({ [field]: tempValues[field] });
@@ -203,26 +174,22 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
     setEditMode(null);
     setTempValues({});
   };
-
   const handleTempValueChange = (field: string, value: Error) => {
     setTempValues(prev => ({ ...prev, [field]: value }));
   };
-
   const getCompletenessColor = (percentage: number) => {
     if (percentage >= 80) return 'text-green-600';
     if (percentage >= 60) return 'text-yellow-600';
     return 'text-red-600';
   };
-
   if (loading) {
-    return (
+    return ()
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Profile Header */}
       <div className="bg-white rounded-lg shadow-md p-6">
@@ -230,13 +197,13 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
           {/* Avatar */}
           <div className="relative">
             <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-              {profile?.avatarUrl ? (
+              {profile?.avatarUrl ? ()
                 <img
                   src={profile.avatarUrl}
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
-              ) : (
+              ) : ()
                 <div className="text-2xl text-gray-400">
                   {profile?.displayName?.[0]?.toUpperCase() || 
                    profile?.firstName?.[0]?.toUpperCase() || 
@@ -244,14 +211,13 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
                 </div>
               )}
             </div>
-
-            {allowImageUpload && (
+            {allowImageUpload && ()
               <div className="absolute bottom-0 right-0">
                 <label className="cursor-pointer">
                   <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700">
-                    {uploadingImage ? (
+                    {uploadingImage ? ()
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                    ) : (
+                    ) : ()
                       <span className="text-xs">📷</span>
                     )}
                   </div>
@@ -266,14 +232,13 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
               </div>
             )}
           </div>
-
           {/* Profile Info */}
           <div className="flex-1">
             <div className="flex items-center space-x-2">
               <h1 className="text-2xl font-bold text-gray-900">
                 {profile?.displayName || profile?.firstName || 'Anonymous User'}
               </h1>
-              {profile?.avatarUrl && (
+              {profile?.avatarUrl && ()
                 <button
                   onClick={handleDeleteImage}
                   className="text-red-600 hover:text-red-800 text-sm"
@@ -283,18 +248,17 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
               )}
             </div>
             <p className="text-gray-600">{user?.email}</p>
-            {profile?.bio && (
+            {profile?.bio && ()
               <p className="text-gray-700 mt-2">{profile.bio}</p>
             )}
           </div>
         </div>
-
         {/* Profile Completeness */}
-        {showCompleteness && completeness && (
+        {showCompleteness && completeness && ()
           <div className="mt-6 p-4 bg-gray-50 rounded-lg">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">Profile Completeness</span>
-              <span className={`text-sm font-bold ${getCompletenessColor(completeness.percentage)}`}>
+              <span className={`text-sm font-bold ${getCompletenessColor(completeness.percentage)}`}>}
                 {completeness.percentage}%
               </span>
             </div>
@@ -304,7 +268,7 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
                 style={{ width: `${completeness.percentage}%` }}
               />
             </div>
-            {completeness.missingFields.length > 0 && (
+            {completeness.missingFields.length > 0 && ()
               <p className="text-sm text-gray-600 mt-2">
                 Missing: {completeness.missingFields.join(', ')}
               </p>
@@ -312,9 +276,8 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
           </div>
         )}
       </div>
-
       {/* Error Message */}
-      {error && (
+      {error && ()
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex items-center text-red-700">
             <span className="mr-2">❌</span>
@@ -322,18 +285,16 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
           </div>
         </div>
       )}
-
       {/* Profile Fields */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Profile Information</h2>
-        
         <div className="space-y-6">
           {/* Display Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Display Name
             </label>
-            {editMode === 'displayName' ? (
+            {editMode === 'displayName' ? ()
               <div className="flex space-x-2">
                 <input
                   type="text"
@@ -356,7 +317,7 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
                   Cancel
                 </button>
               </div>
-            ) : (
+            ) : ()
               <div className="flex items-center justify-between">
                 <span className="text-gray-900">
                   {profile?.displayName || <span className="text-gray-400">Not set</span>}
@@ -370,13 +331,12 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
               </div>
             )}
           </div>
-
           {/* First Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               First Name
             </label>
-            {editMode === 'firstName' ? (
+            {editMode === 'firstName' ? ()
               <div className="flex space-x-2">
                 <input
                   type="text"
@@ -399,7 +359,7 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
                   Cancel
                 </button>
               </div>
-            ) : (
+            ) : ()
               <div className="flex items-center justify-between">
                 <span className="text-gray-900">
                   {profile?.firstName || <span className="text-gray-400">Not set</span>}
@@ -413,13 +373,12 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
               </div>
             )}
           </div>
-
           {/* Last Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Last Name
             </label>
-            {editMode === 'lastName' ? (
+            {editMode === 'lastName' ? ()
               <div className="flex space-x-2">
                 <input
                   type="text"
@@ -442,7 +401,7 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
                   Cancel
                 </button>
               </div>
-            ) : (
+            ) : ()
               <div className="flex items-center justify-between">
                 <span className="text-gray-900">
                   {profile?.lastName || <span className="text-gray-400">Not set</span>}
@@ -456,13 +415,12 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
               </div>
             )}
           </div>
-
           {/* Bio */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Bio
             </label>
-            {editMode === 'bio' ? (
+            {editMode === 'bio' ? ()
               <div className="space-y-2">
                 <textarea
                   value={tempValues.bio || ''}
@@ -491,12 +449,12 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
                   </button>
                 </div>
               </div>
-            ) : (
+            ) : ()
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  {profile?.bio ? (
+                  {profile?.bio ? ()
                     <p className="text-gray-900 whitespace-pre-wrap">{profile.bio}</p>
-                  ) : (
+                  ) : ()
                     <span className="text-gray-400">Not set</span>
                   )}
                 </div>
@@ -509,20 +467,19 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
               </div>
             )}
           </div>
-
           {/* Timezone */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Timezone
             </label>
-            {editMode === 'timezone' ? (
+            {editMode === 'timezone' ? ()
               <div className="flex space-x-2">
                 <select
                   value={tempValues.timezone || ''}
                   onChange={(e) => handleTempValueChange('timezone', e.target.value)}
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  {timezones.map(tz => (
+                  {timezones.map(tz => ()
                     <option key={tz} value={tz}>{tz}</option>
                   ))}
                 </select>
@@ -540,7 +497,7 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
                   Cancel
                 </button>
               </div>
-            ) : (
+            ) : ()
               <div className="flex items-center justify-between">
                 <span className="text-gray-900">
                   {profile?.timezone || 'UTC'}
@@ -554,20 +511,19 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
               </div>
             )}
           </div>
-
           {/* Locale */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Language
             </label>
-            {editMode === 'locale' ? (
+            {editMode === 'locale' ? ()
               <div className="flex space-x-2">
                 <select
                   value={tempValues.locale || ''}
                   onChange={(e) => handleTempValueChange('locale', e.target.value)}
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  {locales.map(locale => (
+                  {locales.map(locale => ()
                     <option key={locale.code} value={locale.code}>{locale.name}</option>
                   ))}
                 </select>
@@ -585,7 +541,7 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
                   Cancel
                 </button>
               </div>
-            ) : (
+            ) : ()
               <div className="flex items-center justify-between">
                 <span className="text-gray-900">
                   {locales.find(l => l.code === profile?.locale)?.name || 'English (US)'}
@@ -601,11 +557,9 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
           </div>
         </div>
       </div>
-
       {/* Account Info */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Account Information</h2>
-        
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -613,15 +567,14 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
             </label>
             <div className="flex items-center space-x-2">
               <span className="text-gray-900">{user?.email}</span>
-              {user?.emailVerified && (
+              {user?.emailVerified && ()
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                   Verified
                 </span>
               )}
             </div>
           </div>
-
-          {profile?.createdAt && (
+          {profile?.createdAt && ()
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Member Since

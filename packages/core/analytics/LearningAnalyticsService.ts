@@ -55,11 +55,10 @@ export class LearningAnalyticsServiceImpl implements LearningAnalyticsService {
   private apiClient: unknown;
   private skillAssessmentEngine: SkillAssessmentEngine;
   private tutorialService: MarketplaceTutorialSystemService;
-  constructor()
+  constructor();
     apiClient: unknown,
     skillAssessmentEngine: SkillAssessmentEngine,
     tutorialService: MarketplaceTutorialSystemService,
-  ) {
     this.apiClient = apiClient;
     this.skillAssessmentEngine = skillAssessmentEngine;
     this.tutorialService = tutorialService;

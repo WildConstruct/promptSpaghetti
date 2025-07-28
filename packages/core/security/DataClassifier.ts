@@ -130,7 +130,7 @@ export class DataClassifier extends BrowserEventEmitter {
       classifiedBy: 'automated',
       version: '1.0',
       reviewDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days
-      lastModified: new Date()
+      lastModified: new Date(),
     };
     this.classifications.set(data.id, { ...result, ...metadata });
     // Emit classification event
@@ -158,7 +158,7 @@ export class DataClassifier extends BrowserEventEmitter {
     this.emit('batchClassificationComplete', {)
       total: dataElements.length,
       successful: results.size,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return results;
   }
@@ -195,7 +195,7 @@ export class DataClassifier extends BrowserEventEmitter {
       newLevel,
       reason,
       approvedBy,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -207,7 +207,7 @@ export class DataClassifier extends BrowserEventEmitter {
       ruleId: rule.id,
       name: rule.name,
       level: rule.level,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -218,7 +218,7 @@ export class DataClassifier extends BrowserEventEmitter {
     if (removed) {
       this.emit('ruleRemoved', {)
         ruleId,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -231,7 +231,6 @@ export class DataClassifier extends BrowserEventEmitter {
     algorithm: string;
     keyRotation: string;
     keyStorage: string;
-  } {
     switch (level) {
     case ClassificationLevel.RESTRICTED:
       return {
@@ -247,7 +246,7 @@ export class DataClassifier extends BrowserEventEmitter {
         inTransit: true,
         algorithm: 'AES-256-CBC',
         keyRotation: '1 year',
-        keyStorage: 'Cloud KMS'
+        keyStorage: 'Cloud KMS',
       };
     case ClassificationLevel.INTERNAL:
       return {
@@ -255,7 +254,7 @@ export class DataClassifier extends BrowserEventEmitter {
         inTransit: true,
         algorithm: 'TLS 1.3',
         keyRotation: 'N/A',
-        keyStorage: 'Certificate store'
+        keyStorage: 'Certificate store',
       };
     default:
       return {
@@ -274,7 +273,6 @@ export class DataClassifier extends BrowserEventEmitter {
     period: string;
     disposal: string;
     archival: boolean;
-  } {
     if (category === DataCategory.PII) {
       return {
         period: 'As required by GDPR (minimal necessary)',
@@ -437,7 +435,6 @@ export class DataClassifier extends BrowserEventEmitter {
   private evaluateRule(rule: ClassificationRule, data: DataElement): {
     matches: boolean;
     reasons: string[];
-  } {
     const reasons: string[] = [];
     let matches = false;
     // Check patterns
@@ -503,14 +500,14 @@ export class DataClassifier extends BrowserEventEmitter {
     const encryptionRequired = highestPriorityRule.level === ClassificationLevel.RESTRICTED ||;
                              highestPriorityRule.level === ClassificationLevel.CONFIDENTIAL;
     // Get retention period
-    const retention = this.getRetentionRequirements(;)
+    const retention = this.getRetentionRequirements(;);
       highestPriorityRule.level, 
       highestPriorityRule.category
     );
     // Determine access controls
     const accessControls = this.getAccessControls(highestPriorityRule.level);
     // Calculate confidence based on number and priority of matched rules
-    const confidence = Math.min(100, ;)
+    const confidence = Math.min(100, ;);
       (matchedRules.reduce((sum, rule) => sum + rule.priority, 0) / matchedRules.length) * 10
     );
     return {
@@ -535,7 +532,7 @@ export class DataClassifier extends BrowserEventEmitter {
       encryptionRequired: false,
       retentionPeriod: '1 year',
       accessControls: ['authenticated-users'],
-      reasoning: ['Default classification applied - no specific rules matched']
+      reasoning: ['Default classification applied - no specific rules matched'],
     };
   }
   private getAccessControls(level: ClassificationLevel): string[] {
@@ -604,7 +601,7 @@ export class ClassificationPolicyManager {
       compliant: violations.length === 0,
       violations,
       policy: policy.id,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
 }

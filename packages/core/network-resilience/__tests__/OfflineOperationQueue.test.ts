@@ -325,7 +325,7 @@ describe('OfflineOperationQueue', () => {
           userId: 'user1',
           requiresOrder: false,
           maxRetries: 3,
-          expiresAt: Date.now() + 10000
+          expiresAt: Date.now() + 10000,
         }],
         failedOperations: [],
         timestamp: Date.now(),

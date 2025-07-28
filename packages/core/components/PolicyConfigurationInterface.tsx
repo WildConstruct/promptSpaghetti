@@ -156,7 +156,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
         audience: initialPolicy.audience,
         templateId: initialPolicy.templateId || '',
         variables: initialPolicy.variables || {},
-        customizations: initialPolicy.customizations || []
+        customizations: initialPolicy.customizations || [],
       });
     }
   }, [initialPolicy, mode]);
@@ -257,7 +257,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
         channels: deploymentConfig.channels,
         rolloutStrategy: {,
           type: deploymentConfig.rolloutType,
-          phases: deploymentConfig.phases.map(phase => ({)
+          phases: deploymentConfig.phases.map(phase => ({),
             ...phase,
             startDate: new Date(),
             successCriteria: [],
@@ -268,7 +268,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
         },
         notificationSettings: {,
           enabled: deploymentConfig.notifications.enabled,
-          channels: deploymentConfig.notifications.channels.map(channel => ({)
+          channels: deploymentConfig.notifications.channels.map(channel => ({),
             type: channel,
             configuration: {},
             enabled: true,
@@ -324,7 +324,6 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
       ...prev,
       customizations: prev.customizations.map((cust, i) => 
         i === index ? { ...cust, [field]: value } : cust
-      )
     }));
   }, []);
   const removeCustomization = useCallback((index: number) => {
@@ -333,7 +332,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
       customizations: prev.customizations.filter((_, i) => i !== index)
     }));
   }, []);
-  return ()
+  return ();
     <div className="policy-configuration-interface">
       <div className="policy-config-header">
         <h2 className="policy-config-title">
@@ -670,7 +669,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         if (e.target.checked) {
                           updateFormField('complianceFrameworks', [...formData.complianceFrameworks, framework]);
                         } else {
-                          updateFormField()
+                          updateFormField();
                             'complianceFrameworks',
                             formData.complianceFrameworks.filter(f => f !== framework)
                             ));
@@ -731,7 +730,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                 value={deploymentConfig.environment}
                 onChange={(e) => setDeploymentConfig(prev => ({)
                   ...prev,
-                  environment: e.target.value as 'STAGING' | 'PRODUCTION'
+                  environment: e.target.value as 'STAGING' | 'PRODUCTION',
                 }))}
                 disabled={mode === 'view'}
               >
@@ -746,7 +745,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                 value={deploymentConfig.rolloutType}
                 onChange={(e) => setDeploymentConfig(prev => ({)
                   ...prev,
-                  rolloutType: e.target.value as any
+                  rolloutType: e.target.value as any,
                 }))}
                 disabled={mode === 'view'}
               >
@@ -773,7 +772,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         } else {
                           setDeploymentConfig(prev => ({)
                             ...prev,
-                            channels: prev.channels.filter(c => c !== channel)
+                            channels: prev.channels.filter(c => c !== channel),
                           }));
                         }
                       }}
@@ -824,7 +823,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                                   ...prev,
                                   notifications: {,
                                     ...prev.notifications,
-                                    channels: prev.notifications.channels.filter(c => c !== channel)
+                                    channels: prev.notifications.channels.filter(c => c !== channel),
                                   }
                                 }));
                               }
@@ -861,7 +860,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                           ...prev,
                           notifications: {,
                             ...prev.notifications,
-                            scheduled: new Date(e.target.value)
+                            scheduled: new Date(e.target.value),
                           }
                         }))}
                         disabled={mode === 'view'}

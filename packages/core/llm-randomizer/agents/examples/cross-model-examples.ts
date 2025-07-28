@@ -138,7 +138,7 @@ export const testCases = {
       'Friendly and welcoming tone'
     ],
     style: 'creative' as const,
-    domain: 'social interaction'
+    domain: 'social interaction',
   },
   /**
    * Moderate complexity test case
@@ -155,7 +155,7 @@ export const testCases = {
     ],
     focusAreas: ['personalization', 'content quality', 'user experience'],
     style: 'balanced' as const,
-    domain: 'educational content'
+    domain: 'educational content',
   },
   /**
    * Complex test case with advanced features
@@ -218,7 +218,7 @@ export const testCases = {
     ],
     focusAreas: ['data quality', 'analysis accuracy', 'performance optimization'],
     style: 'logical' as const,
-    domain: 'data science'
+    domain: 'data science',
   }
 };
 /**

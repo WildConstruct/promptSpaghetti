@@ -20,7 +20,7 @@ export const useTargetingConditions = (initialConditions: TargetingCondition[] =
     const newCondition: TargetingCondition = {
       ...condition,
       id: `condition_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,}
-      logicalOperator: conditions.length > 0 ? 'AND' : undefined
+      logicalOperator: conditions.length > 0 ? 'AND' : undefined,
     };
     setConditions(prev => [...prev, newCondition]);
     setIsDirty(true);

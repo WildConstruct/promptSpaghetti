@@ -6,7 +6,7 @@ import { z } from 'zod';
 // Base UI Node - only user-relevant fields
 export const UIBaseNode = z.object({)
   name: z.string().optional(),           // User-friendly label (optional)
-  description: z.string().optional()    // User description (optional)
+  description: z.string().optional()    // User description (optional),
 });
 
 // UI schemas for each node type - simplified for designers
@@ -18,12 +18,12 @@ export const UIWeightedChoiceNode = UIBaseNode.extend({)
 
 export const UIConcatNode = UIBaseNode.extend({)
   type: z.literal('Concat'),
-  separator: z.string().default(' ')    // Simple separator option
+  separator: z.string().default(' ')    // Simple separator option,
 });
 
 export const UIOutputNode = UIBaseNode.extend({)
   type: z.literal('Output'),
-  template: z.string().optional()       // Optional template for output formatting
+  template: z.string().optional()       // Optional template for output formatting,
 });
 
 // Template-based nodes use {variable} syntax
@@ -54,9 +54,9 @@ export const UIConditionalNode = UIBaseNode.extend({)
   conditions: z.array(z.object({),
     when: z.string(),                    // Simple condition text
     then: z.string(),                    // Output when true
-    label: z.string().optional()        // User label for this condition
+    label: z.string().optional()        // User label for this condition,
   })).default([]),
-  otherwise: z.string().optional()      // Default case
+  otherwise: z.string().optional()      // Default case,
 });
 
 export const UISequentialNode = UIBaseNode.extend({)

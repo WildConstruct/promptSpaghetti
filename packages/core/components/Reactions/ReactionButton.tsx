@@ -62,7 +62,7 @@ const DEFAULT_REACTIONS: ReactionType[] = [
     label: 'Love',
     category: 'positive',
     weight: 1.0,
-    description: 'Love this content'
+    description: 'Love this content',
   },
   {
     id: 'like',
@@ -70,7 +70,7 @@ const DEFAULT_REACTIONS: ReactionType[] = [
     label: 'Like',
     category: 'positive',
     weight: 0.8,
-    description: 'Like this content'
+    description: 'Like this content',
   },
   {
     id: 'helpful',
@@ -78,7 +78,7 @@ const DEFAULT_REACTIONS: ReactionType[] = [
     label: 'Helpful',
     category: 'positive',
     weight: 0.9,
-    description: 'This is helpful'
+    description: 'This is helpful',
   },
   {
     id: 'amazing',
@@ -86,7 +86,7 @@ const DEFAULT_REACTIONS: ReactionType[] = [
     label: 'Amazing',
     category: 'positive',
     weight: 1.0,
-    description: 'This is amazing'
+    description: 'This is amazing',
   },
   {
     id: 'funny',
@@ -94,7 +94,7 @@ const DEFAULT_REACTIONS: ReactionType[] = [
     label: 'Funny',
     category: 'positive',
     weight: 0.7,
-    description: 'This is funny'
+    description: 'This is funny',
   },
   {
     id: 'thinking',
@@ -102,7 +102,7 @@ const DEFAULT_REACTIONS: ReactionType[] = [
     label: 'Thinking',
     category: 'neutral',
     weight: 0.0,
-    description: 'Makes me think'
+    description: 'Makes me think',
   },
   {
     id: 'confused',
@@ -110,7 +110,7 @@ const DEFAULT_REACTIONS: ReactionType[] = [
     label: 'Confused',
     category: 'neutral',
     weight: -0.2,
-    description: 'This is confusing'
+    description: 'This is confusing',
   },
   {
     id: 'dislike',
@@ -118,7 +118,7 @@ const DEFAULT_REACTIONS: ReactionType[] = [
     label: 'Dislike',
     category: 'negative',
     weight: -0.8,
-    description: 'Dislike this content'
+    description: 'Dislike this content',
   },
   {
     id: 'angry',
@@ -126,7 +126,7 @@ const DEFAULT_REACTIONS: ReactionType[] = [
     label: 'Angry',
     category: 'negative',
     weight: -1.0,
-    description: 'This makes me angry'
+    description: 'This makes me angry',
   },
   {
     id: 'rocket',
@@ -134,7 +134,7 @@ const DEFAULT_REACTIONS: ReactionType[] = [
     label: 'Awesome',
     category: 'positive',
     weight: 0.9,
-    description: 'This is awesome'
+    description: 'This is awesome',
   }
 ];
 
@@ -253,7 +253,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
   // Render reaction picker
   const renderReactionPicker = () => {
     if (!showPicker) return null;
-    return ()
+    return ();
       <div style={{
         position: 'absolute',
         bottom: '100%',
@@ -287,7 +287,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
               alignItems: 'center',
               justifyContent: 'center',
               transition: 'all 0.2s ease',
-              opacity: loading ? 0.6 : 1
+              opacity: loading ? 0.6 : 1,
             }}
             onMouseOver={(e) => {
               if (!loading) {
@@ -302,7 +302,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
           >
             <span style={{
               transform: animatingReaction === reaction.id ? 'scale(1.3)' : 'scale(1)',
-              transition: 'transform 0.3s ease'
+              transition: 'transform 0.3s ease',
             }}>
               {reaction.emoji}
             </span>
@@ -312,7 +312,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
     );
   };
   // Render compact variant (most common)
-  const renderCompactVariant = () => (;)
+  const renderCompactVariant = () => (;);
     <div style={{
       position: 'relative',
       display: 'flex',
@@ -330,7 +330,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
           {topReactions.map(reaction => {)
             const reactionDef = DEFAULT_REACTIONS.find(r => r.id === reaction.type);
             const isUserReaction = summary.userReaction === reaction.type;
-            return ()
+            return ();
               <button
                 key={reaction.type}
                 onClick={() => handleReactionClick(reaction.type)}
@@ -347,7 +347,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
                   fontSize: currentSize.fontSize,
                   cursor: disabled || !userId || loading ? 'not-allowed' : 'pointer',
                   transition: 'all 0.2s ease',
-                  opacity: disabled ? 0.6 : 1
+                  opacity: disabled ? 0.6 : 1,
                 }}
                 onMouseOver={(e) => {
                   if (!disabled && userId && !loading) {
@@ -361,7 +361,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
                 <span style={{
                   fontSize: currentSize.emojiSize,
                   transform: animatingReaction === reaction.type ? 'scale(1.2)' : 'scale(1)',
-                  transition: 'transform 0.3s ease'
+                  transition: 'transform 0.3s ease',
                 }}>
                   {reactionDef?.emoji}
                 </span>
@@ -369,7 +369,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
                   <span style={{
                     fontSize: `calc(${currentSize.fontSize} * 0.9)`,}
                     fontWeight: '500',
-                    color: isUserReaction ? '#3b82f6' : '#6b7280'
+                    color: isUserReaction ? '#3b82f6' : '#6b7280',
                   }}>
                     {reaction.count}
                   </span>
@@ -377,7 +377,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
                 {showLabels && ()
                   <span style={{
                     fontSize: `calc(${currentSize.fontSize} * 0.85)`,}
-                    color: isUserReaction ? '#3b82f6' : '#6b7280'
+                    color: isUserReaction ? '#3b82f6' : '#6b7280',
                   }}>
                     {reactionDef?.label}
                   </span>
@@ -436,7 +436,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
     </div>
   );
   // Render minimal variant (just emoji count)
-  const renderMinimalVariant = () => (;)
+  const renderMinimalVariant = () => (;);
     <div style={{
       display: 'flex',
       alignItems: 'center',
@@ -445,7 +445,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
     }}>
       {topReactions.slice(0, 3).map(reaction => {)
         const reactionDef = DEFAULT_REACTIONS.find(r => r.id === reaction.type);
-        return ()
+        return ();
           <span
             key={reaction.type}
             title={`${reactionDef?.description} (${reaction.count})`}
@@ -477,7 +477,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
     </div>
   );
   // Render picker variant (always show all options)
-  const renderPickerVariant = () => (;)
+  const renderPickerVariant = () => (;);
     <div style={{
       display: 'flex',
       flexWrap: 'wrap',
@@ -490,7 +490,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
       {DEFAULT_REACTIONS.map(reaction => {)
         const count = summary.reactionCounts[reaction.id] || 0;
         const isUserReaction = summary.userReaction === reaction.id;
-        return ()
+        return ();
           <button
             key={reaction.id}
             onClick={() => handleReactionClick(reaction.id)}
@@ -506,7 +506,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
               borderRadius: '6px',
               fontSize: currentSize.fontSize,
               cursor: disabled || !userId || loading ? 'not-allowed' : 'pointer',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
             }}
           >
             <span style={{ fontSize: currentSize.emojiSize }}>
@@ -515,7 +515,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
             {showLabels && ()
               <span style={{ 
                 fontSize: `calc(${currentSize.fontSize} * 0.9)`,}
-                color: isUserReaction ? '#3b82f6' : '#374151'
+                color: isUserReaction ? '#3b82f6' : '#374151',
               }}>
                 {reaction.label}
               </span>
@@ -539,7 +539,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
   );
   // Error display
   if (error) {
-    return ()
+    return ();
       <div style={{
         padding: '8px 12px',
         backgroundColor: '#fef2f2',
@@ -566,7 +566,7 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({)
       return renderCompactVariant();
     }
   };
-  return ()
+  return ();
     <div className={`reaction-button ${className}`} style={{ position: 'relative' }}>}
       {renderContent()}
     </div>
@@ -594,7 +594,7 @@ function generateMockSummary(contentId: string, userId?: string): ReactionSummar
         type,
         emoji: reactionDef?.emoji || '❓',
         count,
-        percentage: totalReactions > 0 ? (count / totalReactions) * 100 : 0
+        percentage: totalReactions > 0 ? (count / totalReactions) * 100 : 0,
       };
     })
     .sort((a, b) => b.count - a.count);
@@ -657,7 +657,7 @@ function updateSummaryAfterReaction()
         type,
         emoji: reactionDef?.emoji || '❓',
         count,
-        percentage: totalReactions > 0 ? (count / totalReactions) * 100 : 0
+        percentage: totalReactions > 0 ? (count / totalReactions) * 100 : 0,
       };
     })
     .sort((a, b) => b.count - a.count);

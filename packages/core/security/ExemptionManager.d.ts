@@ -223,7 +223,7 @@ export declare class ExemptionManager extends EventEmitter {
     /**
      * Request a new security exemption
      */
-    requestExemption()
+    requestExemption();
       request: ExemptionRequest,
       requestorId: string,
       requestorEmail: string,
@@ -232,7 +232,7 @@ export declare class ExemptionManager extends EventEmitter {
     /**
      * Approve a pending exemption request
      */
-    approveExemption()
+    approveExemption();
       exemptionId: string,
       approverId: string,
       approverEmail: string,
@@ -242,7 +242,7 @@ export declare class ExemptionManager extends EventEmitter {
     /**
      * Deny a pending exemption request
      */
-    denyExemption()
+    denyExemption();
       exemptionId: string,
       approverId: string,
       approverEmail: string,
@@ -260,7 +260,7 @@ export declare class ExemptionManager extends EventEmitter {
     /**
      * Revoke an active exemption
      */
-    revokeExemption()
+    revokeExemption();
       exemptionId: string,
       revokerId: string,
       revokerEmail: string,
@@ -270,7 +270,7 @@ export declare class ExemptionManager extends EventEmitter {
     /**
      * Create emergency exemption with bypass approval
      */
-    createEmergencyExemption()
+    createEmergencyExemption();
       request: ExemptionRequest,
       requestorId: string,
       requestorEmail: string,

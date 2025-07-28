@@ -119,7 +119,7 @@ export const OperationUI: React.FC<OperationUIProps> = ({)
     !readonly && !isExecuting && isValid && !execution,
   [readonly, isExecuting, isValid, execution]
   );
-  return ()
+  return ();
     <div className="operation-ui">
       <OperationHeader 
         operationType={operationType}
@@ -178,7 +178,7 @@ const OperationHeader: React.FC<OperationHeaderProps> = ({)
     default: return 'gray';
     }
   };
-  return ()
+  return ();
     <div className="operation-header">
       <div className="operation-title">
         <div className="operation-icon" style={{ color: operationType.uiConfig.color }}>
@@ -250,7 +250,7 @@ const OperationParametersForm: React.FC<OperationParametersFormProps> = ({)
     }
     setCollapsedSections(newCollapsed);
   };
-  return ()
+  return ();
     <div className="operation-parameters-form">
       {Object.entries(parametersByGroup).map(([group, groupParams]) => ()
         <div key={group} className="parameter-group">
@@ -301,11 +301,11 @@ const ParameterInput: React.FC<ParameterInputProps> = ({)
   const renderInput = () => {
     const commonProps = {
       value: value || parameter.defaultValue || '',
-      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => 
+      onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => ,
         onChange(e.target.value),
       disabled: readonly,
       placeholder: parameter.placeholder,
-      className: error ? 'error' : ''
+      className: error ? 'error' : '',
     };
     switch (parameter.inputType) {
     case InputType.TEXT:
@@ -313,7 +313,7 @@ const ParameterInput: React.FC<ParameterInputProps> = ({)
     case InputType.TEXTAREA:
       return <textarea {...commonProps} rows={4} />;
     case InputType.NUMBER:
-      return ()
+      return ();
         <input 
           type="number" 
           {...commonProps}
@@ -321,7 +321,7 @@ const ParameterInput: React.FC<ParameterInputProps> = ({)
         />
       );
     case InputType.CHECKBOX:
-      return ()
+      return ();
         <input
           type="checkbox"
           checked={Boolean(value)}
@@ -331,7 +331,7 @@ const ParameterInput: React.FC<ParameterInputProps> = ({)
         />
       );
     case InputType.SELECT:
-      return ()
+      return ();
         <select {...commonProps}>
           <option value="">Select...</option>
           {parameter.options?.map(option => ()
@@ -346,7 +346,7 @@ const ParameterInput: React.FC<ParameterInputProps> = ({)
         </select>
       );
     case InputType.MULTISELECT:
-      return ()
+      return ();
         <div className="multiselect">
           {parameter.options?.map(option => ()
             <label key={option.value} className="multiselect-option">
@@ -369,7 +369,7 @@ const ParameterInput: React.FC<ParameterInputProps> = ({)
         </div>
       );
     case InputType.DATE_PICKER:
-      return ()
+      return ();
         <input
           type="date"
           value={value ? new Date(value).toISOString().split('T')[0] : ''}
@@ -379,7 +379,7 @@ const ParameterInput: React.FC<ParameterInputProps> = ({)
         />
       );
     case InputType.DATETIME_PICKER:
-      return ()
+      return ();
         <input
           type="datetime-local"
           value={value ? new Date(value).toISOString().slice(0, -1) : ''}
@@ -389,7 +389,7 @@ const ParameterInput: React.FC<ParameterInputProps> = ({)
         />
       );
     case InputType.FILE_UPLOAD:
-      return ()
+      return ();
         <input
           type="file"
           onChange={(e) => {
@@ -406,7 +406,7 @@ const ParameterInput: React.FC<ParameterInputProps> = ({)
       return <input type="text" {...commonProps} />;
     }
   };
-  return ()
+  return ();
     <div className="parameter-input">
       <label className="parameter-label">
         {parameter.displayName}
@@ -454,7 +454,7 @@ const OperationActions: React.FC<OperationActionsProps> = ({)
     setShowConfirmation(false);
     onExecute();
   };
-  return ()
+  return ();
     <div className="operation-actions">
       <div className="primary-actions">
         {!execution && ()
@@ -532,7 +532,7 @@ const OperationProgress: React.FC<OperationProgressProps> = ({)
     default: return 'gray';
     }
   };
-  return ()
+  return ();
     <div className="operation-progress">
       <div className="progress-header">
         <h4>Operation Progress</h4>

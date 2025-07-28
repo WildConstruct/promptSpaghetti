@@ -121,7 +121,7 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({)
       }
     }
   };
-  const renderChangesList = () => (;)
+  const renderChangesList = () => (;);
     <div className="h-full flex flex-col">
       {/* Changes Header */}
       <div className="p-4 border-b border-gray-200">
@@ -233,7 +233,7 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({)
       { label: 'Edges Removed', value: diff.summary.removed_edges.toString(), color: 'text-red-600' },
       { label: 'Properties Changed', value: diff.summary.property_changes.toString(), color: 'text-blue-600' }
     ];
-    return ()
+    return ();
       <div className="grid grid-cols-2 gap-3 p-4 bg-gray-50 border-b border-gray-200">
         {stats.map(stat => ()
           <div key={stat.label} className="text-center">
@@ -245,7 +245,7 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({)
     );
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div className={`visual-diff-viewer ${className} fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4`}>}
       <div className="bg-white rounded-lg shadow-xl max-w-7xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
@@ -395,7 +395,7 @@ const ChangeItem: React.FC<ChangeItemProps> = ({)
     }
     return baseDesc;
   };
-  return ()
+  return ();
     <div
       className={`p-3 cursor-pointer transition-colors ${
         isSelected ? 'bg-blue-50 border-l-4 border-l-blue-500' : 'hover:bg-gray-50'

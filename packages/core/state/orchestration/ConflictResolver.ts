@@ -164,7 +164,7 @@ export class ConflictResolver {
     // Check if changes affect overlapping paths
     const localPaths = this.extractAffectedPaths(localChange);
     const remotePaths = this.extractAffectedPaths(remoteChange);
-    const overlappingPaths = localPaths.filter(path => ;)
+    const overlappingPaths = localPaths.filter(path => ;);
       remotePaths.some(remotePath => this.pathsOverlap(path, remotePath))
     );
     if (overlappingPaths.length === 0) {
@@ -259,7 +259,7 @@ export class ConflictResolver {
   }
   private mergeChanges<T>(conflict: StateConflict<T>): ConflictResolution<T> {
     // Intelligent merge based on change types and data
-    const mergedPayload = this.mergePaylods(;)
+    const mergedPayload = this.mergePaylods(;);
       conflict.localChange.payload,
       conflict.remoteChange.payload
     );
@@ -297,7 +297,7 @@ export class ConflictResolver {
       JSON.stringify(change.payload).includes('access');
     if (isSecurityRelated(conflict.localChange) || isSecurityRelated(conflict.remoteChange)) {
       // Choose the more restrictive change
-      const moreRestrictive = this.selectMoreRestrictiveChange(;)
+      const moreRestrictive = this.selectMoreRestrictiveChange(;);
         conflict.localChange,
         conflict.remoteChange
       );
@@ -334,7 +334,7 @@ export class ConflictResolver {
     };
   }
   // Specialized conflict resolution methods
-  resolveGraphConflicts()
+  resolveGraphConflicts();
     localChanges: GraphMutation[],
     remoteChanges: GraphMutation[],
   ): GraphMutation[] {
@@ -351,7 +351,7 @@ export class ConflictResolver {
     }
     return resolvedMutations;
   }
-  resolveSecurityConflicts()
+  resolveSecurityConflicts();
     localPermissions: Permission[],
     remotePermissions: Permission[],
   ): Permission[] {
@@ -376,7 +376,7 @@ export class ConflictResolver {
     });
     return Array.from(mergedPermissions.values());
   }
-  resolveDashboardConflicts()
+  resolveDashboardConflicts();
     localLayout: DashboardLayout,
     remoteLayout: DashboardLayout,
   ): DashboardLayout {

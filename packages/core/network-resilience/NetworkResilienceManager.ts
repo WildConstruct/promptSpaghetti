@@ -87,7 +87,7 @@ export class NetworkResilienceManager extends EventEmitter {
       persistence: {,
         enabled: true,
         storageKey: 'network-resilience-state',
-        maxStorageSize: 50 * 1024 * 1024 // 50MB
+        maxStorageSize: 50 * 1024 * 1024 // 50MB,
       },
       performance: {,
         enableMetrics: true,
@@ -178,7 +178,7 @@ export class NetworkResilienceManager extends EventEmitter {
     const operationId = this.offlineQueue.enqueue({)
       ...operation,
       documentId: this.documentId || 'unknown',
-      userId: this.userId || 'unknown'
+      userId: this.userId || 'unknown',
     });
     this.metrics.queuedOperations++;
     this.updateMetrics();
@@ -222,7 +222,7 @@ export class NetworkResilienceManager extends EventEmitter {
       // Get current document state (would integrate with actual document system)
       const localState = await this.getCurrentDocumentState();
       // Perform recovery sync
-      const delta = await this.syncRecovery.startRecovery(;)
+      const delta = await this.syncRecovery.startRecovery(;);
         this.documentId,
         localState,
         () => this.getServerDocumentState()
@@ -233,7 +233,7 @@ export class NetworkResilienceManager extends EventEmitter {
       this.emit('sync_completed', {)
         operationsSynced: delta.operations.length,
         conflicts: delta.conflicts.length,
-        duration: Date.now() - (this.lastSyncTime - 1000) // Approximate
+        duration: Date.now() - (this.lastSyncTime - 1000) // Approximate,
       });
       return delta;
     } finally {
@@ -447,7 +447,7 @@ export class NetworkResilienceManager extends EventEmitter {
         break;
       case 'pong':
         this.connectionState.updateMetrics({)
-          latency: Date.now() - message.payload.timestamp
+          latency: Date.now() - message.payload.timestamp,
         });
         break;
       default:

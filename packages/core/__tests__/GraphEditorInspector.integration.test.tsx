@@ -12,7 +12,7 @@ describe('GraphEditor integration: InspectorSidebar', () => {
   ];
   const edges: Edge[] = [];
   it('shows InspectorSidebar when node is selected and updates node data', async () => {
-    render()
+    render();
       <GraphEditor
         initialNodes={nodes}
         initialEdges={edges}
@@ -35,7 +35,7 @@ describe('GraphEditor integration: InspectorSidebar', () => {
   });
   it('debounces and re-validates on node param change', async () => {
     const validateConnection = jest.fn(() => []);
-    render()
+    render();
       <GraphEditor
         initialNodes={nodes}
         initialEdges={edges}

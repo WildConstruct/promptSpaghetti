@@ -230,7 +230,7 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({)
         aggregation: { interval: 'day' }
       };
       const results = await analyticsInfrastructure.queryMetrics(query);
-      const processedData = await processFunnelChartData(;)
+      const processedData = await processFunnelChartData(;);
         funnelDefinition,
         results,
         segments,
@@ -263,7 +263,7 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({)
       height: containerHeight,
       margin: { top: 40, right: 80, bottom: 60, left: 80 },
       chartWidth: containerWidth - 160,
-      chartHeight: containerHeight - 100
+      chartHeight: containerHeight - 100,
     };
   }, [chartData, containerRef.current?.clientWidth]);
   // Handle step interactions
@@ -300,7 +300,7 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({)
     if (step) {
       setInteractionState(prev => ({)
         ...prev,
-        selectedStep: stepId === prev.selectedStep ? null : stepId
+        selectedStep: stepId === prev.selectedStep ? null : stepId,
       }));
       onStepClick?.(funnelDefinition.steps.find(s => s.id === stepId)!, step);
     }
@@ -327,14 +327,14 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({)
     return <FunnelChartLoadingState />;
   }
   if (error || !chartData) {
-    return ()
+    return ();
       <FunnelChartErrorState 
         error={error || 'No data available'} 
         onRetry={loadChartData} 
       />
     );
   }
-  return ()
+  return ();
     <div className="funnel-chart" ref={containerRef}>
       <FunnelChartHeader
         funnelDefinition={funnelDefinition}
@@ -420,7 +420,7 @@ const FunnelChartHeader: React.FC<FunnelChartHeaderProps> = ({)
   chartMode,
   onExport
 }) => {
-  return ()
+  return ();
     <div className="funnel-chart-header">
       <div className="funnel-info">
         <h3>{funnelDefinition.name}</h3>
@@ -477,7 +477,7 @@ const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({)
   const stepHeight = chartHeight / steps.length;
   const stepSpacing = stepHeight * 0.2;
   const stepBarHeight = stepHeight - stepSpacing;
-  return ()
+  return ();
     <g transform={`translate(${margin.left}, ${margin.top})`}>}
       {steps.map((step, index) => {
         const width = (step.totalEntries / maxEntries) * chartWidth;
@@ -485,7 +485,7 @@ const StandardFunnelChart: React.FC<StandardFunnelChartProps> = ({)
         const y = index * stepHeight;
         const isHovered = interactionState.hoveredStep === step.stepId;
         const isSelected = interactionState.selectedStep === step.stepId;
-        return ()
+        return ();
           <g key={step.stepId}>
             {/* Step bar */}
             <rect
@@ -571,7 +571,7 @@ const HorizontalFunnelChart: React.FC<StandardFunnelChartProps> = ({)
   const stepWidth = chartWidth / steps.length;
   const stepSpacing = stepWidth * 0.1;
   const stepBarWidth = stepWidth - stepSpacing;
-  return ()
+  return ();
     <g transform={`translate(${margin.left}, ${margin.top})`}>}
       {steps.map((step, index) => {
         const height = (step.totalEntries / maxEntries) * chartHeight;
@@ -579,7 +579,7 @@ const HorizontalFunnelChart: React.FC<StandardFunnelChartProps> = ({)
         const y = chartHeight - height;
         const isHovered = interactionState.hoveredStep === step.stepId;
         const isSelected = interactionState.selectedStep === step.stepId;
-        return ()
+        return ();
           <g key={step.stepId}>
             <rect
               x={x}
@@ -648,7 +648,7 @@ const DropoffAnalysisPanel: React.FC<DropoffAnalysisPanelProps> = ({ dropoffAnal
   const criticalDropoffs = dropoffAnalysis;
     .filter(d => d.severity === 'critical' || d.severity === 'high')
     .sort((a, b) => b.dropOffRate - a.dropOffRate);
-  return ()
+  return ();
     <div className="dropoff-analysis-panel">
       <h4>Drop-off Analysis</h4>
       <div className="critical-dropoffs">
@@ -690,7 +690,7 @@ interface SegmentComparisonPanelProps {
   segmentComparisons: SegmentFunnelComparison[];
 }
 const SegmentComparisonPanel: React.FC<SegmentComparisonPanelProps> = ({ segmentComparisons }) => {
-  return ()
+  return ();
     <div className="segment-comparison-panel">
       <h4>Segment Performance</h4>
       <div className="segment-grid">
@@ -722,7 +722,7 @@ interface StepTooltipProps {
   onClose: () => void;
 }
 const StepTooltip: React.FC<StepTooltipProps> = ({ content, position, onClose }) => {
-  return ()
+  return ();
     <div 
       className="step-tooltip"
       style={{ 
@@ -842,7 +842,7 @@ async function processFunnelChartData()
     order: step.order,
     totalEntries: 1000 - (index * 150),
     totalConversions: 1000 - ((index + 1) * 150),
-    conversionRate: index < funnelDefinition.steps.length - 1 ? 
+    conversionRate: index < funnelDefinition.steps.length - 1 ? ,
       ((1000 - ((index + 1) * 150)) / (1000 - (index * 150))) * 100 : 100,
     dropOffCount: 150,
     dropOffRate: 15.0,
@@ -853,7 +853,7 @@ async function processFunnelChartData()
       previousPeriod: {,
         conversionRate: 75 + (Math.random() * 20),
         change: (Math.random() - 0.5) * 20,
-        direction: Math.random() > 0.5 ? 'improvement' : 'decline'
+        direction: Math.random() > 0.5 ? 'improvement' : 'decline',
       },
       benchmark: {,
         conversionRate: 70 + (Math.random() * 15),
@@ -864,7 +864,7 @@ async function processFunnelChartData()
         segmentId: segment.id,
         segmentName: segment.name,
         conversionRate: 60 + (Math.random() * 40),
-        performance: Math.random() > 0.5 ? 'above_average' : 'below_average' as any
+        performance: Math.random() > 0.5 ? 'above_average' : 'below_average' as any,
       }))
     }
   }));
@@ -878,7 +878,7 @@ async function processFunnelChartData()
     revenuePerConversion: 25,
     totalDropoffs: 850,
     biggestDropoffStep: steps[1]?.stepId || '',
-    mostEfficientStep: steps[0]?.stepId || ''
+    mostEfficientStep: steps[0]?.stepId || '',
   };
   const dropoffAnalysis: DropoffAnalysis[] = steps
     .filter(step => step.dropOffRate > 10)
@@ -909,16 +909,16 @@ async function processFunnelChartData()
         'Optimize page loading performance',
         'Add progress indicators to improve user experience'
       ],
-      severity: step.dropOffRate > 30 ? 'critical' : step.dropOffRate > 20 ? 'high' : 'medium'
+      severity: step.dropOffRate > 30 ? 'critical' : step.dropOffRate > 20 ? 'high' : 'medium',
     }));
   const segmentComparisons: SegmentFunnelComparison[] = segments.map(segment => ({)
     segmentId: segment.id,
     segmentName: segment.name,
     overallConversionRate: segment.performance.averageConversionRate,
-    stepPerformance: steps.map(step => ({)
+    stepPerformance: steps.map(step => ({),
       stepId: step.stepId,
       conversionRate: step.conversionRate * (0.8 + Math.random() * 0.4),
-      relativePerformance: (Math.random() - 0.5) * 40
+      relativePerformance: (Math.random() - 0.5) * 40,
     })),
     insights: [,
       `${segment.name} shows ${Math.random() > 0.5 ? 'above' : 'below'} average performance`,}

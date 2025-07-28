@@ -111,7 +111,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
     return {
       type: analysis.changeType,
       significance: Math.round(analysis.significance * 100),
-      affectedCount: analysis.affectedNodes.length + analysis.affectedEdges.length
+      affectedCount: analysis.affectedNodes.length + analysis.affectedEdges.length,
     };
   }, [getChangeAnalysis]);
   // Handle manual refresh
@@ -123,7 +123,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
     resetState();
   }, [resetState]);
   if (!visible) return null;
-  return ()
+  return ();
     <div
       className={`real-time-preview-panel ${className}`}
       style={{
@@ -219,7 +219,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
               border: 'none',
               borderRadius: '6px',
               fontSize: '12px',
-              cursor: isSyncing ? 'not-allowed' : 'pointer'
+              cursor: isSyncing ? 'not-allowed' : 'pointer',
             }}
           >
             {isSyncing ? 'Syncing...' : '🔄 Refresh'}
@@ -302,7 +302,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
         style={{
           maxHeight: '400px',
           overflowY: 'auto',
-          padding: '12px 0'
+          padding: '12px 0',
         }}
       >
         {error && ()
@@ -357,7 +357,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
               border: `1px solid ${selectedResult === index ? '#0ea5e9' : '#e2e8f0'}`,}
               borderRadius: '8px',
               cursor: 'pointer',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
             }}
             onClick={() => handleResultClick(index)}
           >

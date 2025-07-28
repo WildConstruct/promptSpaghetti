@@ -14,10 +14,10 @@ import {
   StickyNoteFilter
 } from '../types/StickyNotes.js';
 interface StickyNotesStore extends StickyNoteState, StickyNoteActions {}
-const createDefaultNote = (;)
+const createDefaultNote = (;);
   id: string, 
   position: { x: number; y: number }, 
-  content: string = ''
+  content: string = '',
 ): StickyNote => ({)
   id,
   position,
@@ -36,7 +36,7 @@ const createDefaultNote = (;)
     updatedAt: new Date().toISOString(),
     author: {,
       id: 'current-user',
-      name: 'Current User'
+      name: 'Current User',
     },
     version: 1,
   },
@@ -74,7 +74,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
       const id = `note_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
       const note = createDefaultNote(id, position, content);
       // Find the highest z-index and increment
-      const maxZ = Math.max(;)
+      const maxZ = Math.max(;);
         ...Object.values(get().notes).map(n => n.appearance.zIndex),
         999
       );
@@ -94,7 +94,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
           metadata: {,
             ...note.metadata,
             updatedAt: new Date().toISOString(),
-            version: note.metadata.version + 1
+            version: note.metadata.version + 1,
           }
         };
         return {
@@ -102,7 +102,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
         };
       });
     },
-    deleteNote: (id) => {
+    deleteNote: (id) => {,
       set(state => {)
         const { [id]: deleted, ...remainingNotes } = state.notes;
         // Remove from selection
@@ -112,18 +112,18 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
         Object.keys(groups).forEach(groupId => {)
           groups[groupId] = {
             ...groups[groupId],
-            notes: groups[groupId].notes.filter(noteId => noteId !== id)
+            notes: groups[groupId].notes.filter(noteId => noteId !== id),
           };
         });
         return {
           notes: remainingNotes,
           groups,
           selection,
-          activeNote: state.activeNote === id ? undefined : state.activeNote
+          activeNote: state.activeNote === id ? undefined : state.activeNote,
         };
       });
     },
-    duplicateNote: (id) => {
+    duplicateNote: (id) => {,
       const note = get().notes[id];
       if (!note) return '';
       const newId = `note_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
@@ -132,7 +132,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
         id: newId,
         position: {,
           x: note.position.x + 20,
-          y: note.position.y + 20
+          y: note.position.y + 20,
         },
         metadata: {,
           ...note.metadata,
@@ -142,7 +142,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
         },
         appearance: {,
           ...note.appearance,
-          zIndex: Math.max(...Object.values(get().notes).map(n => n.appearance.zIndex)) + 1
+          zIndex: Math.max(...Object.values(get().notes).map(n => n.appearance.zIndex)) + 1,
         }
       };
       set(state => ({)
@@ -157,7 +157,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
       if (snapToGrid) {
         finalPosition = {
           x: Math.round(position.x / gridSize) * gridSize,
-          y: Math.round(position.y / gridSize) * gridSize
+          y: Math.round(position.y / gridSize) * gridSize,
         };
       }
       set(state => ({)
@@ -168,7 +168,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
             position: finalPosition,
             metadata: {,
               ...state.notes[id].metadata,
-              updatedAt: new Date().toISOString()
+              updatedAt: new Date().toISOString(),
             }
           }
         }
@@ -183,13 +183,13 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
             size,
             metadata: {,
               ...state.notes[id].metadata,
-              updatedAt: new Date().toISOString()
+              updatedAt: new Date().toISOString(),
             }
           }
         }
       }));
     },
-    bringToFront: (id) => {
+    bringToFront: (id) => {,
       const maxZ = Math.max(...Object.values(get().notes).map(n => n.appearance.zIndex));
       set(state => ({)
         notes: {,
@@ -198,13 +198,13 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
             ...state.notes[id],
             appearance: {,
               ...state.notes[id].appearance,
-              zIndex: maxZ + 1
+              zIndex: maxZ + 1,
             }
           }
         }
       }));
     },
-    sendToBack: (id) => {
+    sendToBack: (id) => {,
       const minZ = Math.min(...Object.values(get().notes).map(n => n.appearance.zIndex));
       set(state => ({)
         notes: {,
@@ -213,7 +213,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
             ...state.notes[id],
             appearance: {,
               ...state.notes[id].appearance,
-              zIndex: minZ - 1
+              zIndex: minZ - 1,
             }
           }
         }
@@ -232,18 +232,18 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
         }
       });
     },
-    deselectNote: (id) => {
+    deselectNote: (id) => {,
       set(state => ({)
-        selection: state.selection.filter(selectedId => selectedId !== id)
+        selection: state.selection.filter(selectedId => selectedId !== id),
       }));
     },
-    clearSelection: () => {
+    clearSelection: () => {,
       set({ selection: [] });
     },
-    startEditing: (id) => {
+    startEditing: (id) => {,
       set({ activeNote: id });
     },
-    stopEditing: () => {
+    stopEditing: () => {,
       set({ activeNote: undefined });
     },
     // Content editing
@@ -294,43 +294,42 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
           ...state.groups,
           [groupId]: {
             ...state.groups[groupId],
-            notes: state.groups[groupId].notes.filter(id => id !== noteId)
+            notes: state.groups[groupId].notes.filter(id => id !== noteId),
           }
         }
       }));
     },
-    deleteGroup: (groupId) => {
+    deleteGroup: (groupId) => {,
       set(state => {)
         const { [groupId]: deleted, ...remainingGroups } = state.groups;
         return { groups: remainingGroups };
       });
     },
     // Filtering and search
-    setFilter: (filter) => {
+    setFilter: (filter) => {,
       set(state => ({)
         filter: { ...state.filter, ...filter }
       }));
     },
-    clearFilter: () => {
+    clearFilter: () => {,
       set({ filter: {} });
     },
-    searchNotes: (query) => {
+    searchNotes: (query) => {,
       const notes = Object.values(get().notes);
       const matchingIds: string[] = [];
       const lowerQuery = query.toLowerCase();
       notes.forEach(note => {)
-        if ()
+        if ();
           note.content.text.toLowerCase().includes(lowerQuery) ||
           note.appearance.category?.toLowerCase().includes(lowerQuery) ||
           note.metadata.author.name.toLowerCase().includes(lowerQuery)
-        ) {
           matchingIds.push(note.id);
         }
       });
       return matchingIds;
     },
     // Import/Export
-    exportNotes: (format) => {
+    exportNotes: (format) => {,
       const state = get();
       switch (format) {
       case 'json':
@@ -342,13 +341,13 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
         }, null, 2);
       case 'markdown':
         const notes = Object.values(state.notes);
-        const markdown = notes.map(note => ;)
+        const markdown = notes.map(note => ;);
           `## ${note.appearance.category || 'Note'}\n\n${note.content.text}\n\n*Created: ${new Date(note.metadata.createdAt).toLocaleDateString()}*\n\n---\n`}
         ).join('\n');
         return `# Sticky Notes Export\n\n${markdown}`;}
       case 'html':
         const htmlNotes = Object.values(state.notes);
-        const html = htmlNotes.map(note =>;)
+        const html = htmlNotes.map(note =>;);
           `<div class="sticky-note" style="background: ${COLOR_THEMES[note.appearance.color]?.background}">}
               <h3>${note.appearance.category || 'Note'}</h3>}
               <p>${note.content.text.replace(/\n/g, '<br>')}</p>}
@@ -376,7 +375,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
       }
     },
     // Collaboration
-    lockNote: (id) => {
+    lockNote: (id) => {,
       get().updateNote(id, {)
         collaboration: {,
           ...get().notes[id].collaboration,
@@ -385,7 +384,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
         }
       });
     },
-    unlockNote: (id) => {
+    unlockNote: (id) => {,
       get().updateNote(id, {)
         collaboration: {,
           ...get().notes[id].collaboration,
@@ -402,7 +401,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
         text: comment,
         author: {,
           id: 'current-user',
-          name: 'Current User'
+          name: 'Current User',
         },
         timestamp: new Date().toISOString(),
         resolved: false,
@@ -417,7 +416,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
     resolveComment: (noteId, commentId) => {
       const note = get().notes[noteId];
       if (!note) return;
-      const updatedComments = note.collaboration.comments.map(comment =>;)
+      const updatedComments = note.collaboration.comments.map(comment =>;);
         comment.id === commentId ? { ...comment, resolved: true } : comment
       );
       get().updateNote(noteId, {)
@@ -428,7 +427,7 @@ export const useStickyNotesStore = create<StickyNotesStore>()()
       });
     },
     // Settings
-    updateSettings: (settings) => {
+    updateSettings: (settings) => {,
       set(state => ({)
         settings: { ...state.settings, ...settings }
       }));

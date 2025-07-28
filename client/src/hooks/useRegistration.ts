@@ -1,6 +1,5 @@
 // Epic 11 Registration Hook
 // React hook for user registration with validation and analytics
-
 import { useState, useCallback } from 'react';
 import { useAuth } from './useAuth';
 
@@ -14,7 +13,7 @@ export interface RegistrationData {
 }
 
 export interface RegistrationResponse {
-  user: {
+  user: {,
     id: string;
     email: string;
     emailVerified: boolean;
@@ -28,17 +27,17 @@ export interface RegistrationResponse {
 
 export interface ValidationResult {
   isValid: boolean;
-  errors: Array<{
+  errors: Array<{,
     field: string;
     message: string;
     code: string;
   }>;
-  warnings: Array<{
+  warnings: Array<{,
     field: string;
     message: string;
     code: string;
   }>;
-  suggestions: Array<{
+  suggestions: Array<{,
     field: string;
     suggestion: string;
   }>;
@@ -49,73 +48,60 @@ export const useRegistration = () => {
   const [error, setError] = useState<string | null>(null);
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
   const { login } = useAuth();
-
   const register = useCallback(async (data: RegistrationData): Promise<RegistrationResponse> => {
     setIsLoading(true);
     setError(null);
-
     try {
-      const response = await fetch('/auth/register', {
+      const response = await fetch('/auth/register', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(data),
-        credentials: 'include'
+        credentials: 'include',
       });
-
       if (!response.ok) {
         const errorData = await response.json();
-        
         // Handle validation errors
         if (response.status === 400 && errorData.validation) {
           setValidationResult(errorData.validation);
           throw new Error('Please fix the validation errors');
         }
-        
         throw new Error(errorData.error || 'Registration failed');
       }
-
       const result: RegistrationResponse = await response.json();
-      
       // Track successful registration
       if (window.gtag) {
-        window.gtag('event', 'sign_up', {
+        window.gtag('event', 'sign_up', {)
           method: 'email',
-          user_id: result.user.id
+          user_id: result.user.id,
         });
       }
-
       return result;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Registration failed';
       setError(errorMessage);
-      
       // Track registration failure
       if (window.gtag) {
-        window.gtag('event', 'registration_failed', {
-          error: errorMessage
+        window.gtag('event', 'registration_failed', {)
+          error: errorMessage,
         });
       }
-      
       throw err;
     } finally {
       setIsLoading(false);
     }
   }, []);
-
   const validateField = useCallback(async (field: string, value: any): Promise<void> => {
     if (!value) return;
-
     try {
-      const response = await fetch('/auth/validate-field', {
+      const response = await fetch('/auth/validate-field', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ field, value })
       });
-
       if (response.ok) {
         const result = await response.json();
         if (result.validation) {
@@ -126,21 +112,18 @@ export const useRegistration = () => {
       console.error('Field validation error:', err);
     }
   }, []);
-
   const resendEmailVerification = useCallback(async (email: string): Promise<void> => {
     setIsLoading(true);
     setError(null);
-
     try {
-      const response = await fetch('/auth/resend-verification', {
+      const response = await fetch('/auth/resend-verification', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email }),
-        credentials: 'include'
+        credentials: 'include',
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to resend verification email');
@@ -153,26 +136,22 @@ export const useRegistration = () => {
       setIsLoading(false);
     }
   }, []);
-
   const verifyEmail = useCallback(async (token: string): Promise<void> => {
     setIsLoading(true);
     setError(null);
-
     try {
-      const response = await fetch('/auth/verify-email', {
+      const response = await fetch('/auth/verify-email', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ token }),
-        credentials: 'include'
+        credentials: 'include',
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Email verification failed');
       }
-
       // Track email verification
       if (window.gtag) {
         window.gtag('event', 'email_verified');
@@ -185,15 +164,12 @@ export const useRegistration = () => {
       setIsLoading(false);
     }
   }, []);
-
   const clearError = useCallback(() => {
     setError(null);
   }, []);
-
   const clearValidation = useCallback(() => {
     setValidationResult(null);
   }, []);
-
   return {
     register,
     validateField,
@@ -217,59 +193,47 @@ export const usePasswordStrength = (password: string) => {
     if (!password) {
       return { score: 0, feedback: [], strength: 'weak' };
     }
-
     let score = 0;
     const feedback: string[] = [];
-
     // Length check
     if (password.length >= 12) {
       score += 25;
     } else {
       feedback.push('Use at least 12 characters');
     }
-
     // Character variety
     if (/[a-z]/.test(password)) score += 15;
     else feedback.push('Add lowercase letters');
-
     if (/[A-Z]/.test(password)) score += 15;
     else feedback.push('Add uppercase letters');
-
     if (/\d/.test(password)) score += 15;
     else feedback.push('Add numbers');
-
     if (/[^A-Za-z0-9]/.test(password)) score += 15;
     else feedback.push('Add special characters');
-
     // Bonus points
     if (password.length >= 16) score += 10;
     if (/[A-Z].*[A-Z]/.test(password)) score += 5;
     if (/\d.*\d/.test(password)) score += 5;
     if (/[^A-Za-z0-9].*[^A-Za-z0-9]/.test(password)) score += 5;
-
     // Penalties
     if (/(.)\1{2,}/.test(password)) {
       score -= 10;
       feedback.push('Avoid repeating characters');
     }
-
     if (/123|abc|qwe|password/i.test(password)) {
       score -= 15;
       feedback.push('Avoid common patterns');
     }
-
     let strength: 'weak' | 'fair' | 'good' | 'strong';
     if (score < 30) strength = 'weak';
     else if (score < 60) strength = 'fair';
     else if (score < 80) strength = 'good';
     else strength = 'strong';
-
     return {
       score: Math.min(100, Math.max(0, score)),
       feedback,
       strength
     };
   }, []);
-
   return calculateStrength(password);
 };

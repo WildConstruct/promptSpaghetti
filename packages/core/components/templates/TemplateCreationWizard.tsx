@@ -170,7 +170,7 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({)
     }));
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
         {/* Header */}
@@ -315,7 +315,7 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
   const removeTag = (tag: string) => {
     onChange({ tags: data.tags?.filter(t => t !== tag) || [] });
   };
-  return ()
+  return ();
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -448,7 +448,7 @@ interface VariablesStepProps {
   onRemove: (index: number) => void;
 }
 const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdate, onRemove }) => {
-  return ()
+  return ();
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
@@ -574,7 +574,7 @@ interface CustomizationStepProps {
 }
 const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData, onAdd, onUpdate, onRemove }) => {
   const _____availableNodes = graphData?.nodes?.map((node: Error) => node.id) || [];
-  return ()
+  return ();
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
@@ -675,7 +675,7 @@ interface PreviewStepProps {
   template: ProjectTemplate;
 }
 const PreviewStep: React.FC<PreviewStepProps> = ({ template }) => {
-  return ()
+  return ();
     <div className="space-y-6">
       <h3 className="text-lg font-medium text-gray-900">Template Preview</h3>
       <div className="bg-gray-50 rounded-lg p-6">
@@ -735,7 +735,7 @@ interface PublishStepProps {
   onChange: (updates: Partial<ProjectTemplate>) => void;
 }
 const PublishStep: React.FC<PublishStepProps> = ({ data, errors, onChange }) => {
-  return ()
+  return ();
     <div className="space-y-6">
       <h3 className="text-lg font-medium text-gray-900">Publish Template</h3>
       <div className="space-y-4">

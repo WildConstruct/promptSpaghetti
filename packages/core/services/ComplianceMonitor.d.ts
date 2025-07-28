@@ -229,7 +229,7 @@ export declare class EnhancedComplianceMonitor extends ComplianceMonitor {
     /**
      * Record compliance measurement and update baselines
      */
-    recordComplianceMeasurement()
+    recordComplianceMeasurement();
       framework: 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL',
       metricName: string,
       actualValue: number,

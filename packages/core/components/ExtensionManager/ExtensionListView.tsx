@@ -49,7 +49,7 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({)
     return 'Disabled';
   };
   if (extensions.length === 0) {
-    return ()
+    return ();
       <div className="extension-list-empty">
         <div className="empty-icon">📦</div>
         <h3>No Extensions Found</h3>
@@ -57,7 +57,7 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="extension-list-view">
       <div className="extension-list-header">
         <span className="header-icon">Type</span>
@@ -70,7 +70,7 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({)
         {extensions.map((extension) => {
           const status = getExtensionStatus(extension.id);
           const isSelected = selectedExtension?.id === extension.id;
-          return ()
+          return ();
             <div
               key={extension.id}
               className={`extension-list-item ${isSelected ? 'selected' : ''}`}

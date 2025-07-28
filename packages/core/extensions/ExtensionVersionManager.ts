@@ -36,7 +36,7 @@ export class SemanticVersion {
       minor: parseInt(match[2], 10),
       patch: parseInt(match[3], 10),
       prerelease: match[4] ? match[4].split('.') : [],
-      build: match[5] ? match[5].split('.') : []
+      build: match[5] ? match[5].split('.') : [],
     };
   }
   /**
@@ -161,7 +161,7 @@ export class VersionRange {
       return {
         operator: '~',
         version,
-        satisfies: (v: SemanticVersion) => {
+        satisfies: (v: SemanticVersion) => {,
           return v.major === version.major && 
                  v.minor === version.minor && 
                  v.compareTo(version) >= 0 && 
@@ -176,7 +176,7 @@ export class VersionRange {
       return {
         operator: '^',
         version,
-        satisfies: (v: SemanticVersion) => {
+        satisfies: (v: SemanticVersion) => {,
           return v.major === version.major && v.compareTo(version) >= 0;
         }
       };
@@ -189,7 +189,7 @@ export class VersionRange {
         return {
           operator: op as ComparisonOperator,
           version,
-          satisfies: (v: SemanticVersion) => {
+          satisfies: (v: SemanticVersion) => {,
             const cmp = v.compareTo(version);
             switch (op) {
             case '>=': return cmp >= 0;
@@ -208,7 +208,7 @@ export class VersionRange {
     return {
       operator: '=',
       version,
-      satisfies: (v: SemanticVersion) => v.compareTo(version) === 0
+      satisfies: (v: SemanticVersion) => v.compareTo(version) === 0,
     };
   }
   /**
@@ -286,7 +286,7 @@ export class ExtensionVersionManager {
         severity: 'error',
         message: systemCheck.message || 'System version incompatible',
         currentVersion: systemVersion,
-        requiredVersion: extension.dependencies?.system || '1.0.0'
+        requiredVersion: extension.dependencies?.system || '1.0.0',
       });
     }
     // Check extension dependencies
@@ -350,7 +350,6 @@ export class ExtensionVersionManager {
   private checkSystemCompatibility(extension: ExtensionManifest, systemVersion: string): {
     compatible: boolean;
     message?: string;
-  } {
     const systemVer = this.parseVersion(systemVersion);
     // Check minimum system version
     if (extension.compatibility?.min_system_version) {
@@ -381,7 +380,7 @@ export class ExtensionVersionManager {
     extension: ExtensionManifest,
     availableExtensions: Map<string, ExtensionManifest>,
     visited: Set<string> = new Set(),
-    path: string[] = []
+    path: string[] = [],
   ): string[] {
     if (visited.has(extension.id)) {
       const circularStart = path.indexOf(extension.id);
@@ -393,7 +392,7 @@ export class ExtensionVersionManager {
       for (const depId of Object.keys(extension.dependencies.extensions)) {
         const depExtension = availableExtensions.get(depId);
         if (depExtension) {
-          const circular = this.findCircularDependencies(;)
+          const circular = this.findCircularDependencies(;);
             depExtension,
             availableExtensions,
             new Set(visited),

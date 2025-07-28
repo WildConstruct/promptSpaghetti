@@ -157,9 +157,9 @@ export class Epic16PrerequisiteRunner {
         redis: process.env.REDIS_URL,
         postgres: process.env.DATABASE_URL,
         stripe: process.env.STRIPE_SECRET_KEY,
-        claude: process.env.CLAUDE_API_KEY || process.env.ANTHROPIC_API_KEY
+        claude: process.env.CLAUDE_API_KEY || process.env.ANTHROPIC_API_KEY,
       },
-      environment: this.options.environment || 'development'
+      environment: this.options.environment || 'development',
     };
   }
   private setupEventListeners(): void {

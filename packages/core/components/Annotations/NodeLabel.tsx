@@ -225,7 +225,7 @@ export const NodeLabel: React.FC<NodeLabelProps> = ({)
   const effectiveLabel = getEffectiveLabel();
   const positionStyles = getPositionStyles();
   const labelStyles = getLabelStyles();
-  return ()
+  return ();
     <div
       ref={labelRef}
       data-testid={`node-label-${nodeId}`}
@@ -301,7 +301,7 @@ export const NodeLabel: React.FC<NodeLabelProps> = ({)
             alignItems: 'center',
             justifyContent: 'center',
             opacity: 0.8,
-            transition: 'opacity 0.2s ease'
+            transition: 'opacity 0.2s ease',
           }}
           onClick={(e) => {
             e.stopPropagation();

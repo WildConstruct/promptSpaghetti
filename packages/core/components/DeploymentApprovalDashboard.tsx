@@ -161,7 +161,7 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
     case 'pending':
     case 'in_review': 
       return <ClockIcon className="h-5 w-5 text-yellow-500" />;
-    default: 
+    default: ,
       return <ExclamationTriangleIcon className="h-5 w-5 text-gray-500" />;
     }
   };
@@ -182,7 +182,7 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
     return true;
   });
   if (loading && deploymentRequests.length === 0) {
-    return ()
+    return ();
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2 text-gray-600">
           <ArrowTopRightOnSquareIcon className="h-5 w-5 animate-spin" />
@@ -192,7 +192,7 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <div className="flex items-center">
           <XCircleIcon className="h-5 w-5 text-red-500 mr-2" />
@@ -201,7 +201,7 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
       </div>
     );
   }
-  return ()
+  return ();
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -242,7 +242,7 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
               if (tab.id === 'rejected') return req.status === 'rejected';
               return true;
             }).length;
-            return ()
+            return ();
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
@@ -393,7 +393,7 @@ const DeploymentRequestCard: React.FC<{
     case 'pending':
     case 'in_review': 
       return <ClockIcon className="h-5 w-5 text-yellow-500" />;
-    default: 
+    default: ,
       return <ExclamationTriangleIcon className="h-5 w-5 text-gray-500" />;
     }
   };
@@ -409,9 +409,9 @@ const DeploymentRequestCard: React.FC<{
     low: 'bg-blue-100 text-blue-800',
     medium: 'bg-yellow-100 text-yellow-800',
     high: 'bg-orange-100 text-orange-800',
-    critical: 'bg-red-100 text-red-800'
+    critical: 'bg-red-100 text-red-800',
   };
-  return ()
+  return ();
     <div className="bg-white border border-gray-200 rounded-lg p-6 hover:border-gray-300 transition-colors cursor-pointer">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-3">
@@ -519,7 +519,7 @@ const DeploymentRequestDetail: React.FC<{
   currentUserId: string;
   onUpdate: () => void;
 }> = ({ request, onClose, currentUserId, onUpdate }) => {
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">

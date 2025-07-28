@@ -128,7 +128,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
   const renderTabContent = () => {
     switch (activeTab) {
     case 'templates':
-      return ()
+      return ();
         <ExportTemplateList
           templates={templates}
           onTemplateSelect={handleTemplateSelect}
@@ -138,7 +138,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
         />
       );
     case 'jobs':
-      return ()
+      return ();
         <ExportJobList
           jobs={jobs}
           onCancel={cancelExportJob}
@@ -149,7 +149,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
         />
       );
     case 'statistics':
-      return ()
+      return ();
         <ExportStatsDashboard
           statistics={statistics}
           loading={loading}
@@ -157,7 +157,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
         />
       );
     case 'shares':
-      return ()
+      return ();
         <ShareManager
           projectId={projectId}
         />
@@ -174,7 +174,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
     oneDayAgo.setDate(oneDayAgo.getDate() - 1);
     return jobs.filter(job => new Date(job.started_at) > oneDayAgo).length;
   };
-  return ()
+  return ();
     <div className={`export-manager ${className}`}>}
       {/* Header */}
       <div className="export-manager-header">

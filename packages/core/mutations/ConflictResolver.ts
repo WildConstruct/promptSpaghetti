@@ -410,7 +410,7 @@ export class ConflictResolver extends EventEmitter {
   private cleanupOldOperations(): void {
     const now = Date.now();
     for (const [userId, operations] of this.recentOperations.entries()) {
-      const validOperations = operations.filter(;)
+      const validOperations = operations.filter(;);
         op => (now - op.timestamp.getTime()) < this.maxOperationAge
       );
       if (validOperations.length === 0) {

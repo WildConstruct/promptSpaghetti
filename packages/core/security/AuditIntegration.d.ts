@@ -34,7 +34,7 @@ export declare class AuditIntegration {
     /**
      * Log a data access operation with automatic classification enrichment
      */
-    logDataAccess()
+    logDataAccess();
       context: OperationContext,
       resourceType: string,
       resourceId: string,

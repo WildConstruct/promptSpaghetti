@@ -48,11 +48,10 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
   private ioHandler: AdvancedIOHandler;
   private choices: WeightedChoice[];
   private distributionConfig: WeightDistributionConfig;
-  constructor()
+  constructor();
     id: string, 
     choices: WeightedChoice[] = [],
     distributionConfig: WeightDistributionConfig = { type: 'linear', normalize: true }
-  ) {
     // Configure as deterministic, cacheable, stateless
     const config: AdvancedNodeConfig = {
       deterministic: true,
@@ -74,7 +73,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
         dataType: 'stringArray',
         required: false,
         defaultValue: [],
-        description: 'Array of string values to choose from'
+        description: 'Array of string values to choose from',
       })
       .addInput({)
         id: 'weights',
@@ -84,7 +83,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
         defaultValue: [],
         constraints: {,
           min: 0,
-          customValidator: (weights: number[]) => {
+          customValidator: (weights: number[]) => {,
             if (weights.some(w => w < 0)) {
               return ValidationHelpers.createInvalidResult(['Weights cannot be negative']);
             }
@@ -94,7 +93,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
             return ValidationHelpers.createValidResult();
           }
         },
-        description: 'Array of numeric weights (must be non-negative)'
+        description: 'Array of numeric weights (must be non-negative)',
       })
       .addTextOutput('result', 'Selected Choice')
       .build();
@@ -179,7 +178,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
       },
       metadata: {,
         version: '1.0.0',
-        created: new Date().toISOString()
+        created: new Date().toISOString(),
       }
     };
   }
@@ -226,7 +225,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
       if (totalWeight > 0) {
         distributedChoices = distributedChoices.map(choice => ({)
           ...choice,
-          weight: choice.weight / totalWeight
+          weight: choice.weight / totalWeight,
         }));
       }
     }
@@ -257,7 +256,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
       const gaussian = Math.exp(-0.5 * Math.pow((x - mean) / std, 2));
       return {
         ...choice,
-        weight: choice.weight * gaussian
+        weight: choice.weight * gaussian,
       };
     });
   }

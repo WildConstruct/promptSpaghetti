@@ -65,7 +65,7 @@ export declare class ParameterManager {
     /**
      * Create new preset from parameters
      */
-    createPreset()
+    createPreset();
       name: string,
       description: string,
       category: string,
@@ -87,7 +87,7 @@ export declare class ParameterManager {
     /**
      * Add to history
      */
-    addToHistory()
+    addToHistory();
       parameters: RandomizerParameters,
       success: boolean,
       generationTime?: number,

@@ -328,7 +328,7 @@ export class ClassificationAuditLoggingService {
           requirement: this.getComplianceRequirement(framework, action),
           status: 'COMPLIANT',
           assessmentDate: new Date(),
-          nextReviewDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000) // 90 days
+          nextReviewDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000) // 90 days,
         });
       });
     }
@@ -419,7 +419,7 @@ export class ClassificationAuditLoggingService {
       violations.push('Access outside business hours');
     }
     // Check for rapid succession of actions
-    const recentEntries = Array.from(this.auditLogs.values()).filter(e => ;)
+    const recentEntries = Array.from(this.auditLogs.values()).filter(e => ;);
       e.userId === entry.userId &&
       e.timestamp.getTime() > Date.now() - 300000 && // Last 5 minutes
       e.id !== entry.id
@@ -520,7 +520,7 @@ export class ClassificationAuditLoggingService {
       entries,
       format,
       retentionPeriod: 90, // 90 days default
-      expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
+      expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
     };
     this.reports.set(reportId, report);
     return reportId;
@@ -533,7 +533,7 @@ export class ClassificationAuditLoggingService {
     const timestamps = entries.map(e => e.timestamp);
     const timeRange = {
       start: timestamps.length > 0 ? new Date(Math.min(...timestamps.map(t => t.getTime()))) : new Date(),
-      end: timestamps.length > 0 ? new Date(Math.max(...timestamps.map(t => t.getTime()))) : new Date()
+      end: timestamps.length > 0 ? new Date(Math.max(...timestamps.map(t => t.getTime()))) : new Date(),
     };
     // Action breakdown
     const actionBreakdown = {} as Record<AuditAction, number>;
@@ -595,7 +595,7 @@ export class ClassificationAuditLoggingService {
         'timestamp', 'userId', 'action', 'classification', 'dataId',
         'resourceType', 'success', 'riskScore', 'violationsDetected'
       ];
-      const rows = report.entries.map(entry => [;)
+      const rows = report.entries.map(entry => [;);
         entry.timestamp.toISOString(),
         entry.userId,
         entry.action,
@@ -716,7 +716,6 @@ export class ClassificationAuditLoggingService {
     entriesByAction: Record<string, number>;
     averageRiskScore: number;
     recentViolations: number;
-    } {
     const entries = Array.from(this.auditLogs.values());
     const entriesByClassification = {} as Record<DataClassificationLevel, number>;
     const entriesByAction = {} as Record<string, number>;

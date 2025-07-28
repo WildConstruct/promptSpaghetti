@@ -102,11 +102,10 @@ export class WebSocketStreamingServer extends EventEmitter {
   private stats: ConnectionStats;
   private heartbeatTimer: NodeJS.Timeout | null = null;
   private metricsTimer: NodeJS.Timeout | null = null;
-  constructor()
+  constructor();
     eventBus: UnifiedEventBus,
     authService: AnalyticsAuthorizationService,
     config: Partial<WSServerConfig> = {}
-  ) {
     super();
     this.eventBus = eventBus;
     this.authService = authService;
@@ -337,9 +336,9 @@ export class WebSocketStreamingServer extends EventEmitter {
           ...subscriptionConfig.filter,
           types: subscriptionConfig.filter?.types as AnalyticsEventType[] | undefined,
           categories: subscriptionConfig.filter?.categories as EventCategory[] | undefined,
-          severities: subscriptionConfig.filter?.severities as EventSeverity[] | undefined
+          severities: subscriptionConfig.filter?.severities as EventSeverity[] | undefined,
         };
-        const queryAuth = await this.authService.authorizeAnalyticsQuery(;)
+        const queryAuth = await this.authService.authorizeAnalyticsQuery(;);
           eventFilter,
           client.authContext
         );
@@ -458,7 +457,7 @@ export class WebSocketStreamingServer extends EventEmitter {
     this.eventBus.subscribe({)
       name: 'websocket-broadcaster',
       filter: {}, // Subscribe to all events
-      handler: (event: UnifiedAnalyticsEvent) => {
+      handler: (event: UnifiedAnalyticsEvent) => {,
         this.broadcastEvent(event);
       },
       priority: 500,
@@ -479,7 +478,7 @@ export class WebSocketStreamingServer extends EventEmitter {
           ...config.filter,
           types: config.filter.types as AnalyticsEventType[] | undefined,
           categories: config.filter.categories as EventCategory[] | undefined,
-          severities: config.filter.severities as EventSeverity[] | undefined
+          severities: config.filter.severities as EventSeverity[] | undefined,
         } : undefined;
         if (this.eventMatchesFilter(event, eventFilter)) {
           broadcastPromises.push()
@@ -535,7 +534,7 @@ export class WebSocketStreamingServer extends EventEmitter {
       type: WSMessageType.EVENT,
       payload: {,
         subscriptionId,
-        events: config.includeMetadata ? events : events.map(e => ({)
+        events: config.includeMetadata ? events : events.map(e => ({),
           id: e.id,
           type: e.type,
           timestamp: e.timestamp,

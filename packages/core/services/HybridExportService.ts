@@ -167,13 +167,13 @@ export class HybridPromptExportService {
     }
   ): Promise<HybridExportFormat> {
     // Start with base VFX export
-    const baseExport = await this.vfxExporter.exportGraph(;)
+    const baseExport = await this.vfxExporter.exportGraph(;);
       graph,
       executionResults,
       { quality: options.quality }
     );
     // Build hybrid extensions
-    const hybridExtensions = await this.buildHybridExtensions(;)
+    const hybridExtensions = await this.buildHybridExtensions(;);
       graph,
       executionResults,
       options
@@ -189,36 +189,32 @@ export class HybridPromptExportService {
     graph: { nodes: Node[]; edges: Edge[] },
     executionResults: any,
     options: any,
-  ) {
     const extensions: HybridExportFormat['hybridPrompting'] = {
       mars: {,
         framework: 'MARS-v1.0',
-        tags: await this.marsExtractor.extractMARSTags()
+        tags: await this.marsExtractor.extractMARSTags(),
           executionResults.finalPrompt,
           executionResults.variables
         ),
-        structured: await this.marsExtractor.createStructuredPrompt()
+        structured: await this.marsExtractor.createStructuredPrompt(),
           executionResults.finalPrompt
-        )
       },
       zada: {,
         approach: 'screenplay-style',
-        variants: await this.zadaGenerator.generateNaturalLanguageVariants()
+        variants: await this.zadaGenerator.generateNaturalLanguageVariants(),
           executionResults.finalPrompt,
           executionResults.variables,
           options.targetAudience
         ),
-        director_friendly: await this.zadaGenerator.createDirectorAccessiblePrompt()
+        director_friendly: await this.zadaGenerator.createDirectorAccessiblePrompt(),
           executionResults.finalPrompt,
           executionResults.variables
-        )
       },
       hollywood: {,
         protocol: 'reproducibility-v1',
         seeds: this.seedManager.generateHollywoodSeeds(graph),
         iteration_tracking: this.seedManager.createIterationHistory(),
           executionResults
-        )
       }
     };
     return extensions;
@@ -301,7 +297,6 @@ class MARSFrameworkExtractor {
         key.toLowerCase().includes('shot') ||
         key.toLowerCase().includes('angle') ||
         key.toLowerCase().includes('lens')
-      )
     );
   }
   private inferShotType(prompt: string, variables: Record<string, string>): 'ECU' | 'CU' | 'MS' | 'WS' | 'EWS' | 'OTS' | 'POV' {
@@ -413,7 +408,7 @@ class MARSFrameworkExtractor {
   private extractInteractions(prompt: string, variables: Record<string, string>): string {
     // Extract action words and interactions
     const actionWords = ['walking', 'running', 'sitting', 'standing', 'looking', 'holding', 'talking'];
-    const foundActions = actionWords.filter(action => ;)
+    const foundActions = actionWords.filter(action => ;);
       prompt.toLowerCase().includes(action)
     );
     return foundActions.join(', ') || 'neutral pose';
@@ -421,7 +416,7 @@ class MARSFrameworkExtractor {
   private extractEmotionalState(prompt: string, variables: Record<string, string>): string {
     // Extract emotional descriptors
     const emotions = ['happy', 'sad', 'angry', 'surprised', 'contemplative', 'serious', 'joyful'];
-    const foundEmotions = emotions.filter(emotion => ;)
+    const foundEmotions = emotions.filter(emotion => ;);
       prompt.toLowerCase().includes(emotion)
     );
     return foundEmotions[0] || 'neutral';
@@ -429,7 +424,7 @@ class MARSFrameworkExtractor {
   private extractPhysicalBlocking(prompt: string, variables: Record<string, string>): string {
     // Extract positioning and blocking information
     const positionWords = ['standing', 'sitting', 'leaning', 'center', 'left', 'right', 'foreground', 'background'];
-    const foundPositions = positionWords.filter(position => ;)
+    const foundPositions = positionWords.filter(position => ;);
       prompt.toLowerCase().includes(position)
     );
     return foundPositions.join(', ') || 'center frame';
@@ -488,7 +483,7 @@ class MARSFrameworkExtractor {
   }
   private extractSpecialEffects(prompt: string, variables: Record<string, string>): string[] | undefined {
     const fxKeywords = ['explosion', 'fire', 'water', 'magic', 'sparks', 'lightning', 'energy'];
-    const foundFX = fxKeywords.filter(fx => ;)
+    const foundFX = fxKeywords.filter(fx => ;);
       prompt.toLowerCase().includes(fx) || 
       Object.values(variables).some(v => v.toLowerCase().includes(fx))
     );
@@ -496,7 +491,7 @@ class MARSFrameworkExtractor {
   }
   private extractPostProcessingEffects(prompt: string, variables: Record<string, string>): string[] | undefined {
     const postFX = ['grain', 'vignette', 'bloom', 'chromatic aberration', 'lens flare'];
-    const foundPostFX = postFX.filter(fx => ;)
+    const foundPostFX = postFX.filter(fx => ;);
       prompt.toLowerCase().includes(fx) || 
       Object.values(variables).some(v => v.toLowerCase().includes(fx))
     );
@@ -586,7 +581,7 @@ class ZadaNaturalLanguageGenerator {
   async generateNaturalLanguageVariants()
     prompt: string, 
     variables: Record<string, string>,
-    targetAudience: 'director' | 'vfx_professional' | 'mixed_crew'
+    targetAudience: 'director' | 'vfx_professional' | 'mixed_crew',
   ): Promise<ZadaNaturalLanguageVariant[]> {
     const variants: ZadaNaturalLanguageVariant[] = [];
     // Screenplay-style variant
@@ -688,7 +683,7 @@ ${this.generateTechnicalConsiderations(prompt, variables)}`;}
   private extractMainAction(prompt: string): string {
     // Extract primary action/verb
     const actionWords = ['walking', 'running', 'sitting', 'standing', 'looking', 'holding', 'talking', 'smiling', 'thinking'];
-    const foundAction = actionWords.find(action => ;)
+    const foundAction = actionWords.find(action => ;);
       prompt.toLowerCase().includes(action)
     );
     return foundAction || 'posing naturally';
@@ -799,7 +794,7 @@ ${this.generateTechnicalConsiderations(prompt, variables)}`;}
   }
   private extractMoodDirection(prompt: string, variables: Record<string, string>): string {
     const moodWords = ['dramatic', 'peaceful', 'intense', 'calm', 'energetic', 'mysterious', 'warm', 'cold'];
-    const foundMood = moodWords.find(mood => ;)
+    const foundMood = moodWords.find(mood => ;);
       prompt.toLowerCase().includes(mood) ||
       Object.values(variables).some(v => v.toLowerCase().includes(mood))
     );
@@ -905,7 +900,7 @@ ${this.generateTechnicalConsiderations(prompt, variables)}`;}
   }
   private extractSpecialEffectsNaturally(prompt: string, variables: Record<string, string>): string[] | null {
     const fxKeywords = ['explosion', 'fire', 'water effects', 'magical elements', 'sparks', 'energy effects'];
-    const foundFX = fxKeywords.filter(fx => ;)
+    const foundFX = fxKeywords.filter(fx => ;);
       prompt.toLowerCase().includes(fx.split(' ')[0])
     );
     return foundFX.length > 0 ? foundFX : null;
@@ -960,7 +955,7 @@ class HollywoodSeedManager {
       timestamp: new Date().toISOString(),
       seed_used: executionResults.seed || Date.now(),
       changes_from_previous: ['Initial generation'],
-      approval_status: 'draft' as const
+      approval_status: 'draft' as const,
     }];
   }
   private hashSeed(input: string): number {

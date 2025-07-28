@@ -112,7 +112,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
   const [error, setError] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(true);
   // Data service instance
-  const dataService = useMemo(;)
+  const dataService = useMemo(;);
     () => new SecurityDashboardDataService(workspaceId),
     [workspaceId]
   );
@@ -245,7 +245,6 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
       setSecurityAlerts(prev => )
         prev.map(alert => )
           alert.id === data.payload.id ? { ...alert, ...data.payload } : alert
-        )
       );
       break;
     case 'compliance_update':
@@ -254,7 +253,6 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
           status.framework === data.payload.framework 
             ? { ...status, ...data.payload } 
             : status
-        )
       );
       break;
     default:
@@ -279,7 +277,6 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
           alert.id === alertId 
             ? { ...alert, status: action as SecurityAlert['status'] }
             : alert
-        )
       );
     } catch (error) {
       console.error('Failed to update alert:', error);
@@ -315,13 +312,13 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
     };
     switch (currentDashboardType) {
     case DashboardType.OPERATIONAL:
-      return ()
+      return ();
         <OperationalSecurityDashboard
           alerts={securityAlerts}
           metrics={{
             alerts: {,
               total: securityAlerts.length,
-              newLast24h: securityAlerts.filter(a => )
+              newLast24h: securityAlerts.filter(a => ),
                 Date.now() - a.timestamp.getTime() < 24 * 60 * 60 * 1000
               ).length,
               byCategory: securityAlerts.reduce((acc, alert) => {
@@ -339,7 +336,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
               active: securityAlerts.filter(a => a.status === 'investigating').length,
               resolved24h: 12,
               avgResolutionTime: 180,
-              escalated: securityAlerts.filter(a => a.status === 'escalated').length
+              escalated: securityAlerts.filter(a => a.status === 'escalated').length,
             },
             system: {,
               overallHealth: 98,
@@ -392,7 +389,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
         />
       );
     case DashboardType.EXECUTIVE:
-      return ()
+      return ();
         <ExecutiveSecurityDashboard
           securityMetrics={securityMetrics}
           alerts={securityAlerts}
@@ -401,7 +398,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
         />
       );
     case DashboardType.COMPLIANCE:
-      return ()
+      return ();
         <ComplianceSecurityDashboard
           complianceStatus={complianceStatus}
           alerts={securityAlerts.filter(a => a.category === 'policy_violation')}
@@ -409,7 +406,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
         />
       );
     case DashboardType.ANALYTICS:
-      return ()
+      return ();
         <SecurityDashboardWorkflow
           workspaceId={workspaceId}
           userId={userId}
@@ -418,7 +415,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
         />
       );
     default:
-      return ()
+      return ();
         <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
@@ -433,7 +430,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
   };
   // Render loading state
   if (loading) {
-    return ()
+    return ();
       <div style={{
         display: 'flex',
         flexDirection: 'column',
@@ -470,7 +467,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
   }
   // Render error state
   if (error) {
-    return ()
+    return ();
       <div style={{
         display: 'flex',
         flexDirection: 'column',
@@ -500,7 +497,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
             fontSize: '16px',
             fontWeight: 600,
             cursor: 'pointer',
-            transition: 'all 0.2s ease'
+            transition: 'all 0.2s ease',
           }}
         >
           🔄 Retry Dashboard
@@ -509,7 +506,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
     );
   }
   // Main dashboard render
-  return ()
+  return ();
     <div style={{
       background: themeStyles.background,
       color: themeStyles.text,
@@ -561,7 +558,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
                   fontSize: '14px',
                   fontWeight: 500,
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.2s ease',
                 }}
               >
                 <span>{item.icon}</span>
@@ -587,7 +584,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
                 width: '6px',
                 height: '6px',
                 borderRadius: '50%',
-                background: isConnected ? themeStyles.success : themeStyles.error
+                background: isConnected ? themeStyles.success : themeStyles.error,
               }} />
               {isConnected ? 'LIVE' : 'OFFLINE'}
             </div>
@@ -599,7 +596,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({)
                   securityMetrics.riskLevel === 'high' ? `${themeStyles.error}20` :}
                     securityMetrics.riskLevel === 'medium' ? `${themeStyles.warning}20` :}
                       `${themeStyles.success}20`,}
-                color: securityMetrics.riskLevel === 'critical' ? themeStyles.critical :
+                color: securityMetrics.riskLevel === 'critical' ? themeStyles.critical :,
                   securityMetrics.riskLevel === 'high' ? themeStyles.error :
                     securityMetrics.riskLevel === 'medium' ? themeStyles.warning :
                       themeStyles.success,

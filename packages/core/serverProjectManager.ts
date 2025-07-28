@@ -60,7 +60,7 @@ export class ServerProjectManager {
           fileFormatVersion: '1.0.0',
         },
         graph,
-        settings: settings || {
+        settings: settings || {,
           autoSave: true,
           autoSaveInterval: 5000,
           theme: 'light',
@@ -170,7 +170,7 @@ export class ServerProjectManager {
         if (response.status === 404) {
           return {
             success: false,
-            error: 'Project not found or access denied'
+            error: 'Project not found or access denied',
           };
         }
         const errorData = await response.json();
@@ -227,7 +227,7 @@ export class ServerProjectManager {
    */
   static async getRecentProjects()
     userId?: number,
-    limit: number = 10
+    limit: number = 10,
   ): Promise<{ projects: ServerProject[] } | { error: string }> {
     try {
       const url = new URL(`${this.API_BASE}/projects/recent`, window.location.origin);}
@@ -268,7 +268,7 @@ export class ServerProjectManager {
         if (response.status === 404) {
           return {
             success: false,
-            error: 'Project not found or access denied'
+            error: 'Project not found or access denied',
           };
         }
         const errorData = await response.json();
@@ -293,7 +293,7 @@ export class ServerProjectManager {
     searchQuery: string,
     userId?: number,
     limit: number = 20,
-    offset: number = 0
+    offset: number = 0,
   ): Promise<ProjectListResponse | { error: string }> {
     return this.getUserProjects({)
       userId,
@@ -311,7 +311,7 @@ export class ServerProjectManager {
     tags: string[],
     userId?: number,
     limit: number = 20,
-    offset: number = 0
+    offset: number = 0,
   ): Promise<ProjectListResponse | { error: string }> {
     return this.getUserProjects({)
       userId,

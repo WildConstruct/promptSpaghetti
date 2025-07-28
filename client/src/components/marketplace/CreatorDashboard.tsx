@@ -17,7 +17,6 @@ import {
 } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config/environment';
-
 interface CreatorStats {
   total_templates: number;
   active_templates: number;
@@ -28,7 +27,6 @@ interface CreatorStats {
   total_views: number;
   conversion_rate: number;
 }
-
 interface Template {
   id: string;
   title: string;
@@ -42,12 +40,11 @@ interface Template {
   created_at: string;
   updated_at: string;
 }
-
 interface MonetizationSettings {
   payout_threshold_cents: number;
   payout_schedule: 'weekly' | 'monthly';
   payment_method: 'stripe' | 'paypal' | 'bank_transfer';
-  tax_settings: {
+  tax_settings: {,
     tax_id?: string;
     business_name?: string;
     address: string;
@@ -56,7 +53,6 @@ interface MonetizationSettings {
     tax_exempt: boolean;
   };
 }
-
 interface CreatorProfile {
   id: string;
   display_name: string;
@@ -69,59 +65,51 @@ interface CreatorProfile {
   public_profile: boolean;
 }
 
-
-export   const [templates, setTemplates] = useState<Template[]>([]);
+export const [templates, setTemplates] = useState<Template[]>([]);
   const [profile, setProfile] = useState<CreatorProfile | null>(null);
   const [monetization, setMonetization] = useState<MonetizationSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'templates' | 'analytics' | 'monetization' | 'profile'>('overview');
-  const [dateRange, setDateRange] = useState({
+  const [dateRange, setDateRange] = useState({)
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    end: new Date().toISOString().split('T')[0]
+    end: new Date().toISOString().split('T')[0],
   });
-
   const navigate = useNavigate();
-
   const getAuthHeaders = useCallback(() => {
     const token = localStorage.getItem('auth_token');
     return {
       'Content-Type': 'application/json',
-      ...(token && { 'Authorization': `Bearer ${token}` })
+      ...(token && { 'Authorization': `Bearer ${token}` })}
     };
   }, []);
-
   const fetchCreatorData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
-      const [statsRes, templatesRes, profileRes, monetizationRes] = await Promise.all([
-        fetch(`${API_URL}/api/marketplace/creator/stats?start_date=${dateRange.start}&end_date=${dateRange.end}`, {
-          headers: getAuthHeaders()
+      const [statsRes, templatesRes, profileRes, monetizationRes] = await Promise.all([)
+        fetch(`${API_URL}/api/marketplace/creator/stats?start_date=${dateRange.start}&end_date=${dateRange.end}`, {)}
+          headers: getAuthHeaders(),
         }),
-        fetch(`${API_URL}/api/marketplace/creator/templates`, {
-          headers: getAuthHeaders()
+        fetch(`${API_URL}/api/marketplace/creator/templates`, {)}
+          headers: getAuthHeaders(),
         }),
-        fetch(`${API_URL}/api/marketplace/creator/profile`, {
-          headers: getAuthHeaders()
+        fetch(`${API_URL}/api/marketplace/creator/profile`, {)}
+          headers: getAuthHeaders(),
         }),
-        fetch(`${API_URL}/api/marketplace/creator/monetization`, {
-          headers: getAuthHeaders()
+        fetch(`${API_URL}/api/marketplace/creator/monetization`, {)}
+          headers: getAuthHeaders(),
         })
       ]);
-
       if (!statsRes.ok || !templatesRes.ok || !profileRes.ok || !monetizationRes.ok) {
         throw new Error('Failed to fetch creator data');
       }
-
-      const [statsData, templatesData, profileData, monetizationData] = await Promise.all([
+      const [statsData, templatesData, profileData, monetizationData] = await Promise.all([)
         statsRes.json(),
         templatesRes.json(),
         profileRes.json(),
         monetizationRes.json()
       ]);
-
       setStats(statsData);
       setTemplates(templatesData.templates || []);
       setProfile(profileData);
@@ -132,18 +120,15 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
       setLoading(false);
     }
   }, [dateRange, getAuthHeaders]);
-
   useEffect(() => {
     fetchCreatorData();
   }, [dateRange, fetchCreatorData]);
-
-  const formatCurrency = (cents: number) => `$${(cents / 100).toFixed(2)}`;
+  const formatCurrency = (cents: number) => `$${(cents / 100).toFixed(2)}`;}
   const formatNumber = (num: number) => {
-    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
-    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
+    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;}
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;}
     return num.toString();
   };
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'listed': return '#22c55e';
@@ -153,7 +138,6 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
       default: return '#6b7280';
     }
   };
-
   const getVerificationBadge = (status: string) => {
     switch (status) {
       case 'verified': return '✅ Verified Creator';
@@ -162,19 +146,17 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
       default: return '📋 Unverified';
     }
   };
-
   const getTierBadge = (tier: string) => {
     const tierMap = {
       bronze: '🥉 Bronze Creator',
       silver: '🥈 Silver Creator', 
       gold: '🥇 Gold Creator',
-      platinum: '💎 Platinum Creator'
+      platinum: '💎 Platinum Creator',
     };
     return tierMap[tier as keyof typeof tierMap] || '📝 New Creator';
   };
-
   if (loading) {
-    return (
+    return ()
       <div className="creator-dashboard loading">
         <div className="loading-spinner">
           <div className="spinner"></div>
@@ -183,9 +165,8 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="creator-dashboard error">
         <div className="error-message">
           <h3>Failed to load dashboard</h3>
@@ -197,8 +178,7 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="creator-dashboard">
       {/* Header */}
       <div className="dashboard-header">
@@ -231,10 +211,9 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           </div>
         </div>
       </div>
-
       {/* Navigation Tabs */}
       <div className="dashboard-tabs">
-        {['overview', 'templates', 'analytics', 'monetization', 'profile'].map(tab => (
+        {['overview', 'templates', 'analytics', 'monetization', 'profile'].map(tab => ()
           <button
             key={tab}
             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -244,10 +223,9 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           </button>
         ))}
       </div>
-
       {/* Content */}
       <div className="dashboard-content">
-        {activeTab === 'overview' && (
+        {activeTab === 'overview' && ()
           <div className="overview-tab">
             {/* Key Metrics */}
             <div className="metrics-grid">
@@ -272,7 +250,6 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
                 <div className="metric-label">From {formatNumber(stats?.total_views || 0)} views</div>
               </div>
             </div>
-
             {/* Recent Templates Performance */}
             <div className="recent-performance">
               <h3>Top Performing Templates</h3>
@@ -285,7 +262,7 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
                   <div>Rating</div>
                   <div>Views</div>
                 </div>
-                {templates.slice(0, 5).map(template => (
+                {templates.slice(0, 5).map(template => ()
                   <div key={template.id} className="table-row">
                     <div className="template-info">
                       <span className="template-title">{template.title}</span>
@@ -309,8 +286,7 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
             </div>
           </div>
         )}
-
-        {activeTab === 'templates' && (
+        {activeTab === 'templates' && ()
           <div className="templates-tab">
             <div className="templates-header">
               <h3>Your Templates ({templates.length})</h3>
@@ -327,9 +303,8 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
                 </button>
               </div>
             </div>
-            
             <div className="templates-grid">
-              {templates.map(template => (
+              {templates.map(template => ()
                 <div key={template.id} className="template-card">
                   <div className="card-header">
                     <h4>{template.title}</h4>
@@ -359,13 +334,13 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
                     </div>
                   </div>
                   <div className="card-actions">
-                    <button onClick={() => navigate(`/marketplace/templates/${template.id}/edit`)}>
+                    <button onClick={() => navigate(`/marketplace/templates/${template.id}/edit`)}>}
                       Edit
                     </button>
-                    <button onClick={() => navigate(`/marketplace/templates/${template.id}/analytics`)}>
+                    <button onClick={() => navigate(`/marketplace/templates/${template.id}/analytics`)}>}
                       Analytics
                     </button>
-                    <button onClick={() => navigate(`/marketplace/templates/${template.id}`)}>
+                    <button onClick={() => navigate(`/marketplace/templates/${template.id}`)}>}
                       View
                     </button>
                   </div>
@@ -374,8 +349,7 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
             </div>
           </div>
         )}
-
-        {activeTab === 'analytics' && (
+        {activeTab === 'analytics' && ()
           <div className="analytics-tab">
             <div className="analytics-charts">
               {/* Revenue Trend */}
@@ -392,7 +366,6 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-
               {/* Template Performance */}
               <div className="chart-container">
                 <h3>Template Performance</h3>
@@ -409,12 +382,10 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
             </div>
           </div>
         )}
-
-        {activeTab === 'monetization' && (
+        {activeTab === 'monetization' && ()
           <div className="monetization-tab">
             <div className="monetization-settings">
               <h3>Monetization Settings</h3>
-              
               <div className="settings-section">
                 <h4>Payout Configuration</h4>
                 <div className="setting-row">
@@ -443,7 +414,6 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
                   </select>
                 </div>
               </div>
-
               <div className="settings-section">
                 <h4>Tax Information</h4>
                 <div className="setting-row">
@@ -471,17 +441,14 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
                   />
                 </div>
               </div>
-
               <button className="save-settings-btn">Save Settings</button>
             </div>
           </div>
         )}
-
-        {activeTab === 'profile' && (
+        {activeTab === 'profile' && ()
           <div className="profile-tab">
             <div className="profile-settings">
               <h3>Creator Profile</h3>
-              
               <div className="profile-section">
                 <h4>Public Information</h4>
                 <div className="setting-row">
@@ -518,7 +485,6 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
                   </label>
                 </div>
               </div>
-
               <div className="profile-section">
                 <h4>Social Links</h4>
                 <div className="social-links">
@@ -548,20 +514,17 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
                   </div>
                 </div>
               </div>
-
               <button className="save-profile-btn">Save Profile</button>
             </div>
           </div>
         )}
       </div>
-
       <style>{`
         .creator-dashboard {
           max-width: 1400px;
           margin: 0 auto;
           padding: 20px;
         }
-
         .dashboard-header {
           display: flex;
           justify-content: space-between;
@@ -570,17 +533,14 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           padding-bottom: 20px;
           border-bottom: 2px solid #e1e5e9;
         }
-
         .creator-info h1 {
           margin: 0 0 10px 0;
           color: #1f2937;
         }
-
         .creator-badges {
           display: flex;
           gap: 10px;
         }
-
         .verification-badge, .tier-badge {
           background: #f3f4f6;
           padding: 4px 8px;
@@ -588,13 +548,11 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           font-size: 12px;
           font-weight: 500;
         }
-
         .header-actions {
           display: flex;
           align-items: center;
           gap: 15px;
         }
-
         .create-template-btn {
           background: #3b82f6;
           color: white;
@@ -604,31 +562,26 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           font-weight: 500;
           cursor: pointer;
         }
-
         .create-template-btn:hover {
           background: #2563eb;
         }
-
         .date-range-selector {
           display: flex;
           align-items: center;
           gap: 8px;
         }
-
         .date-range-selector input {
           padding: 8px 12px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 14px;
         }
-
         .dashboard-tabs {
           display: flex;
           gap: 2px;
           margin-bottom: 30px;
           border-bottom: 2px solid #e1e5e9;
         }
-
         .tab {
           background: none;
           border: none;
@@ -638,23 +591,19 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           font-weight: 500;
           border-bottom: 2px solid transparent;
         }
-
         .tab.active {
           color: #3b82f6;
           border-bottom-color: #3b82f6;
         }
-
         .tab:hover {
           color: #1f2937;
         }
-
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 20px;
           margin-bottom: 30px;
         }
-
         .metric-card {
           background: white;
           padding: 24px;
@@ -662,75 +611,62 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
           text-align: center;
         }
-
         .metric-card h3 {
           margin: 0 0 10px 0;
           color: #6b7280;
           font-size: 14px;
           font-weight: 500;
         }
-
         .metric-value {
           font-size: 32px;
           font-weight: bold;
           color: #1f2937;
           margin-bottom: 5px;
         }
-
         .metric-label {
           font-size: 12px;
           color: #6b7280;
         }
-
         .recent-performance {
           background: white;
           padding: 20px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-
         .recent-performance h3 {
           margin: 0 0 20px 0;
           color: #1f2937;
         }
-
         .templates-table {
           display: flex;
           flex-direction: column;
           gap: 1px;
         }
-
         .table-header, .table-row {
           display: grid;
           grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
           gap: 20px;
           padding: 12px 0;
         }
-
         .table-header {
           font-weight: 600;
           color: #6b7280;
           border-bottom: 1px solid #e1e5e9;
         }
-
         .table-row {
           border-bottom: 1px solid #f3f4f6;
         }
-
         .template-info {
           display: flex;
           flex-direction: column;
         }
-
         .template-title {
           font-weight: 500;
         }
-
         .template-price {
           font-size: 12px;
           color: #6b7280;
         }
-
         .status-badge {
           display: inline-block;
           padding: 2px 8px;
@@ -740,73 +676,61 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           text-transform: uppercase;
           color: white;
         }
-
         .templates-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 20px;
         }
-
         .templates-filters {
           display: flex;
           gap: 10px;
           align-items: center;
         }
-
         .templates-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
           gap: 20px;
         }
-
         .template-card {
           background: white;
           padding: 20px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-
         .card-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 15px;
         }
-
         .card-header h4 {
           margin: 0;
           color: #1f2937;
         }
-
         .card-metrics {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 15px;
           margin-bottom: 15px;
         }
-
         .card-metrics .metric {
           text-align: center;
         }
-
         .card-metrics .value {
           display: block;
           font-size: 18px;
           font-weight: bold;
           color: #1f2937;
         }
-
         .card-metrics .label {
           font-size: 12px;
           color: #6b7280;
         }
-
         .card-actions {
           display: flex;
           gap: 8px;
         }
-
         .card-actions button {
           flex: 1;
           padding: 8px 12px;
@@ -816,29 +740,24 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           cursor: pointer;
           font-size: 12px;
         }
-
         .card-actions button:hover {
           background: #f9fafb;
         }
-
         .analytics-charts {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
           gap: 30px;
         }
-
         .chart-container {
           background: white;
           padding: 20px;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-
         .chart-container h3 {
           margin: 0 0 20px 0;
           color: #1f2937;
         }
-
         .monetization-settings, .profile-settings {
           background: white;
           padding: 30px;
@@ -846,30 +765,25 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
           max-width: 600px;
         }
-
         .settings-section, .profile-section {
           margin-bottom: 30px;
         }
-
         .settings-section h4, .profile-section h4 {
           margin: 0 0 15px 0;
           color: #1f2937;
           font-size: 16px;
         }
-
         .setting-row {
           display: flex;
           align-items: center;
           gap: 15px;
           margin-bottom: 15px;
         }
-
         .setting-row label {
           min-width: 120px;
           font-weight: 500;
           color: #374151;
         }
-
         .setting-row input, .setting-row select, .setting-row textarea {
           flex: 1;
           padding: 8px 12px;
@@ -877,7 +791,6 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           border-radius: 6px;
           font-size: 14px;
         }
-
         .save-settings-btn, .save-profile-btn {
           background: #3b82f6;
           color: white;
@@ -887,22 +800,18 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           font-weight: 500;
           cursor: pointer;
         }
-
         .save-settings-btn:hover, .save-profile-btn:hover {
           background: #2563eb;
         }
-
         .loading, .error {
           display: flex;
           justify-content: center;
           align-items: center;
           min-height: 400px;
         }
-
         .loading-spinner {
           text-align: center;
         }
-
         .spinner {
           width: 40px;
           height: 40px;
@@ -912,12 +821,10 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           animation: spin 1s linear infinite;
           margin: 0 auto 20px;
         }
-
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-
         .error-message {
           text-align: center;
           padding: 40px;
@@ -925,7 +832,6 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-
         .retry-button {
           background: #3b82f6;
           color: white;
@@ -935,7 +841,6 @@ export   const [templates, setTemplates] = useState<Template[]>([]);
           cursor: pointer;
           margin-top: 15px;
         }
-
         .retry-button:hover {
           background: #2563eb;
         }

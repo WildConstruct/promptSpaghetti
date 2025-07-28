@@ -41,7 +41,7 @@ describe('ClassificationAuditLogger', () => {
     timestamp: new Date(),
     ...overrides
   });
-  const createTestClassificationResult = (;)
+  const createTestClassificationResult = (;);
     overrides?: Partial<ClassificationResult>
   ): ClassificationResult => ({)
     level: ClassificationLevel.CONFIDENTIAL,
@@ -95,7 +95,7 @@ describe('ClassificationAuditLogger', () => {
       const dataElement = createTestDataElement();
       const result = createTestClassificationResult();
       const actor = createTestActor();
-      const logId = await auditLogger.logClassification(;)
+      const logId = await auditLogger.logClassification(;);
         dataElement,
         result,
         actor,
@@ -128,7 +128,7 @@ describe('ClassificationAuditLogger', () => {
     });
     test('should log classification updates', async () => {
       const actor = createTestActor();
-      const logId = await auditLogger.logClassificationUpdate(;)
+      const logId = await auditLogger.logClassificationUpdate(;);
         'data-123',
         ClassificationLevel.INTERNAL,
         ClassificationLevel.CONFIDENTIAL,
@@ -142,7 +142,7 @@ describe('ClassificationAuditLogger', () => {
         action: {,
           operation: 'update_classification',
           result: 'success',
-          reason: 'Reclassified after review'
+          reason: 'Reclassified after review',
         },
         context: {,
           metadata: {,
@@ -156,7 +156,7 @@ describe('ClassificationAuditLogger', () => {
   describe('Policy Violation Logging', () => {
     test('should log policy violations', async () => {
       const actor = createTestActor();
-      const logId = await auditLogger.logPolicyViolation(;)
+      const logId = await auditLogger.logPolicyViolation(;);
         {
           dataId: 'data-123',
           policyId: 'policy-456',
@@ -173,7 +173,7 @@ describe('ClassificationAuditLogger', () => {
         action: {,
           operation: 'policy_check',
           result: 'failure',
-          reason: 'Unencrypted PII data'
+          reason: 'Unencrypted PII data',
         },
         compliance: {,
           frameworks: [ComplianceFramework.GDPR],
@@ -222,7 +222,7 @@ describe('ClassificationAuditLogger', () => {
         action: {,
           operation: 'access_request',
           result: 'success',
-          reason: 'User has required permissions'
+          reason: 'User has required permissions',
         },
         target: {,
           classification
@@ -244,7 +244,7 @@ describe('ClassificationAuditLogger', () => {
         action: {,
           operation: 'access_request',
           result: 'failure',
-          reason: 'Insufficient permissions'
+          reason: 'Insufficient permissions',
         }
       });
     });
@@ -298,7 +298,7 @@ describe('ClassificationAuditLogger', () => {
         30
       );
       const recentLogs = await auditLogger.queryLogs({)
-        startDate: new Date(Date.now() - 1800000) // Last 30 minutes
+        startDate: new Date(Date.now() - 1800000) // Last 30 minutes,
       });
       expect(recentLogs).toHaveLength(1);
       expect(recentLogs[0].target.dataId).toBe('data-new');
@@ -437,7 +437,7 @@ describe('ClassificationAuditLogger', () => {
       );
     });
     test('should generate compliance report', async () => {
-      const report = await auditLogger.generateComplianceReport(;)
+      const report = await auditLogger.generateComplianceReport(;);
         ComplianceFramework.GDPR,
         new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
         new Date()
@@ -486,7 +486,7 @@ describe('ClassificationAuditLogger', () => {
           actor
         );
       }
-      const report = await auditLogger.generateComplianceReport(;)
+      const report = await auditLogger.generateComplianceReport(;);
         ComplianceFramework.GDPR,
         new Date(Date.now() - 1000),
         new Date()
@@ -569,7 +569,7 @@ describe('ClassificationAuditLogger', () => {
       // Create a smaller audit logger with 1MB rotation for faster testing
       const smallConfig = {
         ...testConfig,
-        logRotationSizeMB: 1 // 1MB instead of 10MB
+        logRotationSizeMB: 1 // 1MB instead of 10MB,
       };
       const smallAuditLogger = new ClassificationAuditLogger(smallConfig);
       const rotationHandler = jest.fn<unknown[], unknown>();

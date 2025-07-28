@@ -248,7 +248,7 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({)
       autoDelete: true,
       customRetentionPeriods: {},
       deleteInactiveData: true,
-      inactivityThreshold: 1095 // 3 years
+      inactivityThreshold: 1095 // 3 years,
     },
     sharing: {,
       internal: {,
@@ -287,7 +287,7 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({)
         requiresNotification: false,
       }
     },
-    lastUpdated: new Date()
+    lastUpdated: new Date(),
   });
   const [consentHistory, setConsentHistory] = useState<ConsentHistoryEntry[]>([)
     {
@@ -318,7 +318,7 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({)
       status: 'COMPLETED',
       submittedAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
       completedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-      description: 'Request for copy of personal data'
+      description: 'Request for copy of personal data',
     }
   ]);
   const [saving, setSaving] = useState(false);
@@ -332,7 +332,7 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({)
       await new Promise(resolve => setTimeout(resolve, 1000));
       const updatedSettings = {
         ...settings,
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       };
       setSettings(updatedSettings);
       setLastSaved(new Date());
@@ -386,12 +386,12 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({)
         [category]: {
           ...prev.categories[category],
           enabled,
-          lastModified: new Date()
+          lastModified: new Date(),
         }
       }
     }));
   };
-  const updateCommunicationPreference = (;)
+  const updateCommunicationPreference = (;);
     channel: keyof CommunicationPreferences,
     updates: Partial<ChannelPreference>,
   ) => {
@@ -428,7 +428,7 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({)
     default: return <Clock className="w-4 h-4 text-gray-600" />;
     }
   };
-  return ()
+  return ();
     <div className="max-w-6xl mx-auto p-6 bg-white">
       {/* Header */}
       <div className="mb-8">

@@ -361,7 +361,7 @@ export const PresetSelector: React.FC<{
     return cats.map(cat => ({)
       id: cat,
       label: cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1),
-      count: cat === 'all' ? presets.length : presets.filter(p => p.category === cat).length
+      count: cat === 'all' ? presets.length : presets.filter(p => p.category === cat).length,
     }));
   }, [presets]);
   const filteredPresets = useMemo(() => {
@@ -369,7 +369,7 @@ export const PresetSelector: React.FC<{
       ? presets 
       : presets.filter(preset => preset.category === activeCategory);
   }, [presets, activeCategory]);
-  return ()
+  return ();
     <div className="bg-white border border-gray-200 rounded-lg p-4">
       <h3 className="font-semibold text-gray-900 mb-4">Choose a Preset</h3>
       {/* Category tabs */}
@@ -465,7 +465,7 @@ export const VisualLayoutBuilder: React.FC<{
       setSelectedWidget(null);
     }
   }, [widgets, onWidgetsChange, selectedWidget]);
-  return ()
+  return ();
     <div className="bg-white border border-gray-200 rounded-lg">
       <div className="border-b border-gray-200 p-4">
         <h3 className="font-semibold text-gray-900">Visual Layout Builder</h3>
@@ -485,7 +485,7 @@ export const VisualLayoutBuilder: React.FC<{
                 >
                   {WIDGET_LIBRARY.map((widget, index) => {
                     const Icon = widget.icon;
-                    return ()
+                    return ();
                       <Draggable key={widget.id} draggableId={widget.id} index={index}>
                         {(provided, snapshot) => ()
                           <div
@@ -533,7 +533,7 @@ export const VisualLayoutBuilder: React.FC<{
                 >
                   {widgets.map((widget, index) => {
                     const Icon = widget.icon;
-                    return ()
+                    return ();
                       <Draggable key={widget.id} draggableId={widget.id} index={index}>
                         {(provided, snapshot) => ()
                           <div
@@ -594,7 +594,7 @@ export const VisualLayoutBuilder: React.FC<{
                 {(() => {
                   const widget = widgets.find(w => w.id === selectedWidget);
                   if (!widget) return null;
-                  return ()
+                  return ();
                     <div className="p-3 border border-gray-200 rounded-lg">
                       <h5 className="font-medium text-gray-900 mb-3">{widget.name}</h5>
                       <div className="space-y-3">
@@ -729,7 +729,7 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
   const handleExport = useCallback((format: 'iframe' | 'javascript' | 'react') => {
     return onExport(customization, format);
   }, [customization, onExport]);
-  return ()
+  return ();
     <div className={`bg-gray-50 min-h-screen ${className}`}>}
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Header */}
@@ -782,7 +782,7 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
               { id: 'export', label: 'Export', icon: CodeBracketIcon }
             ].map((tab) => {
               const Icon = tab.icon;
-              return ()
+              return ();
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
@@ -830,7 +830,7 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                         { value: 'auto', label: 'Auto', icon: AutoIcon }
                       ].map((theme) => {
                         const Icon = theme.icon;
-                        return ()
+                        return ();
                           <button
                             key={theme.value}
                             onClick={() => updateCustomization({)
@@ -1035,7 +1035,7 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                     { format: 'react', title: 'React Component', description: 'React component usage', icon: SparklesIcon }
                   ].map((option) => {
                     const Icon = option.icon;
-                    return ()
+                    return ();
                       <button
                         key={option.format}
                         onClick={() => {

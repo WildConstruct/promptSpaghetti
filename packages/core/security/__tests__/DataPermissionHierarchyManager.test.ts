@@ -44,10 +44,10 @@ describe('DataPermissionHierarchyManager', () => {
           geoLocation: {,
             country: 'US',
             region: 'CA',
-            city: 'San Francisco'
+            city: 'San Francisco',
           }
         },
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       const result = await manager.evaluatePermissionRequest(request);
       expect(result.granted).toBe(true);
@@ -72,10 +72,10 @@ describe('DataPermissionHierarchyManager', () => {
           geoLocation: {,
             country: 'US',
             region: 'NY',
-            city: 'New York'
+            city: 'New York',
           }
         },
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       const result = await manager.evaluatePermissionRequest(request);
       expect(result.granted).toBe(false);
@@ -104,7 +104,7 @@ describe('DataPermissionHierarchyManager', () => {
             city: 'Austin',
           }
         },
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       const result = await manager.evaluatePermissionRequest(request);
       // DELETE operations on CONFIDENTIAL data should require escalation for standard users
@@ -166,7 +166,7 @@ describe('DataPermissionHierarchyManager', () => {
           }
         },
         requestedAt: new Date(),
-        expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000) // 2 hours
+        expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000) // 2 hours,
       };
       const result = await manager.evaluatePermissionRequest(request);
       // Critical urgency should be handled with appropriate escalation
@@ -195,12 +195,12 @@ describe('DataPermissionHierarchyManager', () => {
           geoLocation: {,
             country: 'US',
             region: 'CA',
-            city: 'San Francisco'
+            city: 'San Francisco',
           }
         },
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
-      const grant = await manager.grantPermission(;)
+      const grant = await manager.grantPermission(;);
         request,
         'manager-001',
         [],
@@ -237,10 +237,10 @@ describe('DataPermissionHierarchyManager', () => {
           geoLocation: {,
             country: 'US',
             region: 'CA',
-            city: 'San Francisco'
+            city: 'San Francisco',
           }
         },
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       const eventPromise = new Promise((resolve) => {
         manager.once('permission_granted', (data) => {
@@ -274,12 +274,12 @@ describe('DataPermissionHierarchyManager', () => {
           geoLocation: {,
             country: 'US',
             region: 'CA',
-            city: 'San Francisco'
+            city: 'San Francisco',
           }
         },
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
-      const escalation = await manager.initiateEscalation(;)
+      const escalation = await manager.initiateEscalation(;);
         request,
         'data_access_request'
       );
@@ -309,10 +309,10 @@ describe('DataPermissionHierarchyManager', () => {
           geoLocation: {,
             country: 'US',
             region: 'CA',
-            city: 'San Francisco'
+            city: 'San Francisco',
           }
         },
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       const eventPromise = new Promise((resolve) => {
         manager.once('escalation_initiated', (data) => {
@@ -343,10 +343,10 @@ describe('DataPermissionHierarchyManager', () => {
           geoLocation: {,
             country: 'US',
             region: 'CA',
-            city: 'San Francisco'
+            city: 'San Francisco',
           }
         },
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       await expect()
         manager.initiateEscalation(request, 'invalid-path')
@@ -355,7 +355,7 @@ describe('DataPermissionHierarchyManager', () => {
   });
   describe('Permission Delegation', () => {
     it('should allow delegation between appropriate levels', async () => {
-      const delegation = await manager.delegatePermissions(;)
+      const delegation = await manager.delegatePermissions(;);
         'data-owner-001',
         'analyst-001',
         ['read', 'WRITE'],
@@ -385,7 +385,6 @@ describe('DataPermissionHierarchyManager', () => {
           new Date(Date.now() + 24 * 60 * 60 * 1000),
           [],
           'Invalid delegation attempt'
-        )
       ).rejects.toThrow('Cannot delegate to user with equal or higher privilege level');
     });
     it('should prevent delegation by users without delegation rights', async () => {
@@ -397,7 +396,6 @@ describe('DataPermissionHierarchyManager', () => {
           new Date(Date.now() + 24 * 60 * 60 * 1000),
           [],
           'Invalid delegation by guest'
-        )
       ).rejects.toThrow('User does not have delegation privileges');
     });
     it('should emit delegation requested event', async () => {
@@ -459,10 +457,10 @@ describe('DataPermissionHierarchyManager', () => {
           geoLocation: {,
             country: 'US',
             region: 'CA',
-            city: 'San Francisco'
+            city: 'San Francisco',
           }
         },
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       const highRiskRequest: PermissionRequest = {
         id: 'high-risk-001',
@@ -481,10 +479,10 @@ describe('DataPermissionHierarchyManager', () => {
           geoLocation: {,
             country: 'US',
             region: 'CA',
-            city: 'San Francisco'
+            city: 'San Francisco',
           }
         },
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       // Risk scoring is done internally, we can test indirectly through grant audit trail
       const lowRiskGrant = await manager.grantPermission(lowRiskRequest, 'manager-001');
@@ -522,14 +520,14 @@ describe('DataPermissionHierarchyManager', () => {
           geoLocation: {,
             country: 'US',
             region: 'CA',
-            city: 'San Francisco'
+            city: 'San Francisco',
           }
         },
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       // Grant permission with very short time limit
       const pastTime = new Date(Date.now() - 1000); // 1 second ago;
-      const grant = await manager.grantPermission(;)
+      const grant = await manager.grantPermission(;);
         request,
         'manager-001',
         [],
@@ -560,10 +558,10 @@ describe('DataPermissionHierarchyManager', () => {
           geoLocation: {,
             country: 'US',
             region: 'CA',
-            city: 'San Francisco'
+            city: 'San Francisco',
           }
         },
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       const result = await manager.evaluatePermissionRequest(malformedRequest as PermissionRequest);
       expect(result.granted).toBe(false);
@@ -588,10 +586,10 @@ describe('DataPermissionHierarchyManager', () => {
           geoLocation: {,
             country: 'US',
             region: 'CA',
-            city: 'San Francisco'
+            city: 'San Francisco',
           }
         },
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       const result = await manager.evaluatePermissionRequest(edgeCaseRequest);
       // Should handle gracefully and return a decision

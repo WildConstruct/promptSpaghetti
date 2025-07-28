@@ -66,7 +66,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
   const handleCommandPalette = useCallback(() => {
     setShowCommandPalette(true);
   }, []);
-  const handleGenerationStart = useCallback(;)
+  const handleGenerationStart = useCallback(;);
     async (flow: { nodes: Node[]; edges: Edge[] },)
     params: Record<string,
     unknown>
@@ -182,7 +182,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
     onNodesSelect(selection.nodes);
     onEdgesSelect(selection.edges);
   }, [onNodesSelect, onEdgesSelect]);
-  return ()
+  return ();
     <>
       {/* Command Palette */}
       <CommandPalette
@@ -282,7 +282,7 @@ export const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps> = (
             height: '6px',
             borderRadius: '50%',
             background: 'var(--color-accent-green)',
-            animation: 'pulse 2s infinite'
+            animation: 'pulse 2s infinite',
           }}
         />
         <span>Professional Mode Active</span>

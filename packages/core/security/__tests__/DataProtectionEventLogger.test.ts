@@ -121,7 +121,7 @@ describe('DataProtectionEventLogger', () => {
     it('should validate required event fields', async () => {
       const invalidEvent: Partial<DataProtectionEvent> = {
         eventType: DataProtectionEventType.DATA_SUBJECT_ACCESS,
-        timestamp: new Date()
+        timestamp: new Date(),
         // Missing required fields
       };
       await expect(logger.logDataProtectionEvent(invalidEvent as DataProtectionEvent))
@@ -266,7 +266,7 @@ describe('DataProtectionEventLogger', () => {
       riskScore: 85,
       mitigationActions: ['revoke_access', 'notify_admin'],
       requiresNotification: true,
-      notificationDeadline: new Date('2024-01-02T10:00:00Z')
+      notificationDeadline: new Date('2024-01-02T10:00:00Z'),
     };
     it('should log policy violation with extended metadata', async () => {
       await logger.logPolicyViolationEvent(mockViolationEvent);
@@ -347,7 +347,7 @@ describe('DataProtectionEventLogger', () => {
     it('should generate GDPR compliance report', async () => {
       const startDate = new Date('2024-01-01');
       const endDate = new Date('2024-01-31');
-      const report = await logger.generateComplianceReport(;)
+      const report = await logger.generateComplianceReport(;);
         ComplianceFramework.GDPR,
         startDate,
         endDate
@@ -376,7 +376,7 @@ describe('DataProtectionEventLogger', () => {
     it('should generate CCPA compliance report', async () => {
       const startDate = new Date('2024-01-01');
       const endDate = new Date('2024-01-31');
-      const report = await logger.generateComplianceReport(;)
+      const report = await logger.generateComplianceReport(;);
         ComplianceFramework.CCPA,
         startDate,
         endDate
@@ -396,7 +396,7 @@ describe('DataProtectionEventLogger', () => {
         }
       ];
       mockAuditLogger.getEventsByDateRange.mockResolvedValue(oldEvents);
-      const report = await logger.generateComplianceReport(;)
+      const report = await logger.generateComplianceReport(;);
         ComplianceFramework.GDPR,
         new Date('2020-01-01'),
         new Date('2024-01-31')

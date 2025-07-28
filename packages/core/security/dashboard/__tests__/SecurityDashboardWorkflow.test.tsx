@@ -44,7 +44,7 @@ const mockWorkflowStore = {
       is_locked: false,
       sort_order: 1,
       created_at: new Date(),
-      updated_at: new Date()
+      updated_at: new Date(),
     },
     {
       id: 'state-2',
@@ -57,7 +57,7 @@ const mockWorkflowStore = {
       is_locked: false,
       sort_order: 2,
       created_at: new Date(),
-      updated_at: new Date()
+      updated_at: new Date(),
     },
     {
       id: 'state-3',
@@ -70,7 +70,7 @@ const mockWorkflowStore = {
       is_locked: false,
       sort_order: 3,
       created_at: new Date(),
-      updated_at: new Date()
+      updated_at: new Date(),
     }
   ],
   transitions: [,
@@ -83,7 +83,7 @@ const mockWorkflowStore = {
       requires_approval: false,
       required_permissions: 0n,
       conditions: {},
-      created_at: new Date()
+      created_at: new Date(),
     }
   ],
   approvals: [,
@@ -97,7 +97,7 @@ const mockWorkflowStore = {
       requested_at: new Date(),
       priority: 'high' as const,
       created_at: new Date(),
-      updated_at: new Date()
+      updated_at: new Date(),
     }
   ],
   locks: [],
@@ -121,21 +121,21 @@ const mockWorkflowStore = {
     id: 'lock-1',
     resource_id: 'event-1',
     locked_by: 'user-1',
-    lock_type: 'state_change' as const
+    lock_type: 'state_change' as const,
   } as unknown as unknown),
   releaseLock: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
 };
 
 // Mock the useWorkflowStore hook
 jest.mock('../stores/workflowStore', () => ({)
-  useWorkflowStore: () => mockWorkflowStore
+  useWorkflowStore: () => mockWorkflowStore,
 }));
 
 // Mock WebSocket
 const mockWebSocket = {
   close: jest.fn<unknown[], unknown>(),
   onmessage: null as ((event: MessageEvent) => void) | null,
-  onerror: null as ((event: Event) => void) | null
+  onerror: null as ((event: Event) => void) | null,
 };
 
 // @ts-ignore
@@ -204,7 +204,7 @@ describe('SecurityDashboardWorkflow', () => {
     });
     test('processes incoming security events via WebSocket', async () => {
       const onSecurityEvent = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <SecurityDashboardWorkflow 
           {...defaultProps} 
           onSecurityEvent={onSecurityEvent}
@@ -271,7 +271,7 @@ describe('SecurityDashboardWorkflow', () => {
           }
         ]
       };
-      render()
+      render();
         <SecurityDashboardWorkflow 
           {...defaultProps} 
           config={configWithAutoActions}
@@ -403,7 +403,7 @@ describe('SecurityDashboardWorkflow', () => {
   });
   describe('Role-based Access Control', () => {
     test('shows appropriate widgets for security admin role', async () => {
-      render()
+      render();
         <SecurityDashboardWorkflow 
           {...defaultProps} 
           userRole={SecurityRole.SECURITY_ADMIN}
@@ -416,7 +416,7 @@ describe('SecurityDashboardWorkflow', () => {
       });
     });
     test('restricts widgets for viewer role', async () => {
-      render()
+      render();
         <SecurityDashboardWorkflow 
           {...defaultProps} 
           userRole={SecurityRole.VIEWER}
@@ -442,7 +442,7 @@ describe('SecurityDashboardWorkflow', () => {
           }
         ]
       };
-      render()
+      render();
         <SecurityDashboardWorkflow 
           {...defaultProps} 
           config={configWithCompliance}

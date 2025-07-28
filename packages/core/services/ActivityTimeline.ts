@@ -313,7 +313,7 @@ export class ActivityTimelineService {
    */
   async trackGraphOperation()
     action: string,
-    details: Partial<ActivityDetails> & {
+    details: Partial<ActivityDetails> & {,
       nodeChanges?: NodeChange[];
       connectionChanges?: ConnectionChange[];
       variableChanges?: VariableChange[];
@@ -566,7 +566,7 @@ export class ActivityTimelineService {
         userActivity[userId] = {
           count: 0,
           lastActivity: activity.timestamp,
-          displayName: activity.userDisplayName || userId
+          displayName: activity.userDisplayName || userId,
         };
       }
       userActivity[userId].count++;
@@ -597,12 +597,12 @@ export class ActivityTimelineService {
       : 0;
     // Collaboration stats
     const collaborativeEvents = activities.filter(a => a.type === 'collaboration').length;
-    const teamsActive = new Set(;)
+    const teamsActive = new Set(;);
       activities
         .filter(a => a.workspaceId)
         .map(a => a.workspaceId)
     ).size;
-    const sharingEvents = activities.filter(a => ;)
+    const sharingEvents = activities.filter(a => ;);
       a.action.includes('share') || a.visibility === 'public' || a.visibility === 'team'
     ).length;
     return {
@@ -641,7 +641,7 @@ export class ActivityTimelineService {
     return this.getActivities({)
       ...filter,
       types: ['collaboration'],
-      workspaceIds: workspaceId ? [workspaceId] : filter?.workspaceIds
+      workspaceIds: workspaceId ? [workspaceId] : filter?.workspaceIds,
     });
   }
   /**
@@ -742,7 +742,7 @@ export class ActivityTimelineService {
       screenResolution: [1920, 1080],
       viewport: [1920, 1080],
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      language: typeof navigator !== 'undefined' ? navigator.language : 'en'
+      language: typeof navigator !== 'undefined' ? navigator.language : 'en',
     };
     // Start anonymous session
     this.startSession('anonymous', clientInfo);
@@ -766,7 +766,7 @@ export class ActivityTimelineService {
       const recentErrors = this.getActivities({)
         dateRange: {,
           start: new Date(Date.now() - 5 * 60 * 1000), // Last 5 minutes
-          end: new Date()
+          end: new Date(),
         },
         errorsOnly: true,
         userIds: [event.userId],
@@ -786,7 +786,7 @@ export class ActivityTimelineService {
       userIds: [session.userId],
       dateRange: {,
         start: session.startTime,
-        end: session.endTime || new Date()
+        end: session.endTime || new Date(),
       }
     });
     // Classify session type
@@ -803,7 +803,7 @@ export class ActivityTimelineService {
       session.type = 'exploration';
     }
     // Calculate productivity
-    const highImpactActions = sessionActivities.filter(a => ;)
+    const highImpactActions = sessionActivities.filter(a => ;);
       a.impact === 'high' || a.impact === 'critical'
     ).length;
     const errorRate = sessionActivities.filter(a => !a.success).length / sessionActivities.length;

@@ -130,31 +130,31 @@ export declare class MultimodalAdapter extends BaseAIModel {
     process(input: MultimodalInput[], options?: MultimodalRequestOptions): Promise<MultimodalUnderstandingResult>;
     cleanup(): Promise<void>;
     estimate(input: MultimodalInput[], options?: MultimodalRequestOptions): Promise<CostEstimate>;
-    understandContent()
+    understandContent();
       inputs: MultimodalInput[],
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
-    compareContent()
+    compareContent();
       inputs: MultimodalInput[],
       comparisonAspects?: string[],
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
-    describeMultimodal()
+    describeMultimodal();
       inputs: MultimodalInput[],
       detailLevel?: 'brief' | 'detailed' | 'comprehensive',
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
-    analyzeContent()
+    analyzeContent();
       inputs: MultimodalInput[],
       analysisTypes?: string[],
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
-    summarizeMultimodal()
+    summarizeMultimodal();
       inputs: MultimodalInput[],
       summaryLength?: 'short' | 'medium' | 'long',
       options?: Partial<MultimodalRequestOptions>
     ): Promise<MultimodalUnderstandingResult>;
-    extractInformation()
+    extractInformation();
       inputs: MultimodalInput[],
       extractionTargets?: string[],
       options?: Partial<MultimodalRequestOptions>

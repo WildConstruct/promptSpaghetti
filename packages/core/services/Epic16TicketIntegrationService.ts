@@ -614,7 +614,7 @@ export class Epic16TicketIntegrationService extends EventEmitter {
     return {
       tickets,
       total,
-      hasMore: offset + limit < total
+      hasMore: offset + limit < total,
     };
   }
   /**
@@ -631,7 +631,7 @@ export class Epic16TicketIntegrationService extends EventEmitter {
     escalationRate: number;
     customerSatisfaction: number;
   }> {
-    const tickets = Array.from(this.tickets.values()).filter(t =>;)
+    const tickets = Array.from(this.tickets.values()).filter(t =>;);
       t.createdAt >= timeRange.start && t.createdAt <= timeRange.end
     );
     const totalTickets = tickets.length;
@@ -659,7 +659,7 @@ export class Epic16TicketIntegrationService extends EventEmitter {
       averageResolutionTime: this.calculateAverageResolutionTime(tickets),
       slaBreachRate: totalTickets > 0 ? (slaBreached / totalTickets) * 100 : 0,
       escalationRate: totalTickets > 0 ? (escalated / totalTickets) * 100 : 0,
-      customerSatisfaction: 85 // Mock value - would come from surveys
+      customerSatisfaction: 85 // Mock value - would come from surveys,
     };
   }
   // Private helper methods
@@ -685,19 +685,19 @@ export class Epic16TicketIntegrationService extends EventEmitter {
         target: targets.response,
         deadline: new Date(now.getTime() + targets.response * 60000),
         breached: false,
-        warningThreshold: Math.floor(targets.response * 0.8)
+        warningThreshold: Math.floor(targets.response * 0.8),
       },
       resolutionTime: {,
         target: targets.resolution,
         deadline: new Date(now.getTime() + targets.resolution * 60000),
         breached: false,
-        warningThreshold: Math.floor(targets.resolution * 0.8)
+        warningThreshold: Math.floor(targets.resolution * 0.8),
       },
       escalationTime: {,
         target: targets.resolution * 0.5,
         deadline: new Date(now.getTime() + (targets.resolution * 0.5) * 60000),
         breached: false,
-        warningThreshold: Math.floor((targets.resolution * 0.5) * 0.8)
+        warningThreshold: Math.floor((targets.resolution * 0.5) * 0.8),
       },
       breached: false,
     };
@@ -734,7 +734,7 @@ export class Epic16TicketIntegrationService extends EventEmitter {
     const workflow = this.workflows.get(this.config.defaultWorkflow);
     if (!workflow || !workflow.active) return;
     // Find applicable workflow steps
-    const applicableTriggers = workflow.triggers.filter(trigger => ;)
+    const applicableTriggers = workflow.triggers.filter(trigger => ;);
       trigger.type === event || (event === 'status_changed' && trigger.type === 'status_change')
     );
     for (const trigger of applicableTriggers) {

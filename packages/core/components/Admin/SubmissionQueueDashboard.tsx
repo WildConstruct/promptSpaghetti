@@ -186,7 +186,7 @@ const SubmissionQueueDashboard: React.FC = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`}
         },
-        body: JSON.stringify({ )
+        body: JSON.stringify({ ),
           submission_ids: selectedSubmissions,
           reviewer_id: reviewerId ,
         })
@@ -221,7 +221,7 @@ const SubmissionQueueDashboard: React.FC = () => {
       urgent: 'bg-red-100 text-red-800',
       high: 'bg-orange-100 text-orange-800',
       medium: 'bg-yellow-100 text-yellow-800',
-      low: 'bg-gray-100 text-gray-800'
+      low: 'bg-gray-100 text-gray-800',
     };
     return colors[priority as keyof typeof colors] || colors.medium;
   };
@@ -231,7 +231,7 @@ const SubmissionQueueDashboard: React.FC = () => {
       under_review: 'bg-purple-100 text-purple-800',
       changes_requested: 'bg-yellow-100 text-yellow-800',
       approved: 'bg-green-100 text-green-800',
-      rejected: 'bg-red-100 text-red-800'
+      rejected: 'bg-red-100 text-red-800',
     };
     return colors[status as keyof typeof colors] || colors.submitted;
   };
@@ -244,7 +244,7 @@ const SubmissionQueueDashboard: React.FC = () => {
     if (hours > 0) return `${hours}h ago`;}
     return 'Just now';
   };
-  return ()
+  return ();
     <div className="submission-queue-dashboard">
       <div className="queue-header">
         <div className="header-content">

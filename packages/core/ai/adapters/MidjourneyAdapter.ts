@@ -124,7 +124,7 @@ export class MidjourneyAdapter extends BaseAIModel {
         tokensPerMinute: 1000,
       },
       tags: ['image-generation', 'artistic', 'creative', 'high-quality'],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     const capabilities: ModelCapabilities = {
       inputTypes: ['text'],
@@ -297,7 +297,7 @@ export class MidjourneyAdapter extends BaseAIModel {
     try {
       const response = await fetch(`${this.config.serverUrl}/health`, {)}
         headers: this._buildHeaders(),
-        signal: AbortSignal.timeout(this.config.timeout || 10000)
+        signal: AbortSignal.timeout(this.config.timeout || 10000),
       });
       if (!response.ok) {
         throw new Error(`Midjourney API health check failed: ${response.status}`);}
@@ -320,7 +320,7 @@ export class MidjourneyAdapter extends BaseAIModel {
     const options: RequestInit = {
       method,
       headers: this._buildHeaders(),
-      signal: AbortSignal.timeout(this.config.timeout || 30000)
+      signal: AbortSignal.timeout(this.config.timeout || 30000),
     };
     if (method === 'POST' && payload) {
       options.body = JSON.stringify(payload);
@@ -405,7 +405,7 @@ export class MidjourneyAdapter extends BaseAIModel {
     originalPrompt: string,
     processedPrompt: string,
     options?: MidjourneyRequestOptions,
-    generationTime: number = 0
+    generationTime: number = 0,
   ): MidjourneyGenerationResult {
     const images = [];
     if (status.imageUrl) {
@@ -433,7 +433,7 @@ export class MidjourneyAdapter extends BaseAIModel {
       },
       usage: {,
         credits: 1,
-        estimatedCost: this._metadata.costPerRequest || 0.10
+        estimatedCost: this._metadata.costPerRequest || 0.10,
       }
     };
   }
@@ -510,7 +510,6 @@ class MidjourneyPromptTemplater {
   parsePromptParameters(prompt: string): {
     cleanPrompt: string;
     parameters: Partial<MidjourneyRequestOptions>;
-  } {
     const parameters: Partial<MidjourneyRequestOptions> = {};
     let cleanPrompt = prompt;
     // Parse version

@@ -59,7 +59,7 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
     return newWorkspace;
   }, [userId]);
   // Update existing workspace
-  const updateWorkspace = useCallback(async (;)
+  const updateWorkspace = useCallback(async (;);
     workspaceId: string,
     data: UpdateWorkspace,
   ): Promise<WorkspaceWithMembership> => {
@@ -98,7 +98,7 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
     setWorkspaces(prev => prev.filter(ws => ws.id !== workspaceId));
   }, [userId]);
   // Invite user to workspace
-  const inviteUser = useCallback(async (;)
+  const inviteUser = useCallback(async (;);
     workspaceId: string,
     userIdToInvite: string,
     role: string,

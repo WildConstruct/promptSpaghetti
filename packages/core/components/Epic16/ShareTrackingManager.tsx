@@ -171,7 +171,7 @@ export const ShareTrackingUtils = {
       period: '7d',
     };
   },
-  aggregateShareData: (shares: ShareRecord[]): ShareTrackingData => {
+  aggregateShareData: (shares: ShareRecord[]): ShareTrackingData => {,
     const platformBreakdown: Record<string, PlatformShareData> = {};
     const timeSeriesData: TimeSeriesPoint[] = [];
     let totalRevenue = 0;
@@ -364,7 +364,7 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({)
           performanceMetrics: {,
             ...prev.performanceMetrics,
             totalReach: prev.performanceMetrics.totalReach + Math.floor(Math.random() * 10),
-            engagementRate: prev.performanceMetrics.engagementRate + (Math.random() - 0.5) * 0.1
+            engagementRate: prev.performanceMetrics.engagementRate + (Math.random() - 0.5) * 0.1,
           }
         };
       });
@@ -395,7 +395,7 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({)
     return trackingData?.alerts.filter(alert => !dismissedAlerts.includes(alert.id)) || [];
   }, [trackingData?.alerts, dismissedAlerts]);
   if (!trackingData) {
-    return ()
+    return ();
       <div className={`bg-white border border-gray-200 rounded-lg p-8 text-center ${className}`}>}
         <ChartBarIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No Share Data Available</h3>
@@ -403,7 +403,7 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`bg-white border border-gray-200 rounded-lg overflow-hidden ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
@@ -449,9 +449,9 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({)
                 success: 'text-green-600 bg-green-100',
                 warning: 'text-yellow-600 bg-yellow-100',
                 error: 'text-red-600 bg-red-100',
-                info: 'text-blue-600 bg-blue-100'
+                info: 'text-blue-600 bg-blue-100',
               };
-              return ()
+              return ();
                 <div key={alert.id} className={`flex items-start gap-3 p-3 rounded-lg ${alertColors[alert.type]}`}>}
                   <AlertIcon className="h-5 w-5 flex-shrink-0" />
                   <div className="flex-1">
@@ -515,7 +515,7 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({)
             { id: 'alerts', label: 'Alerts', icon: FlagIcon }
           ].map((tab) => {
             const Icon = tab.icon;
-            return ()
+            return ();
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
@@ -702,7 +702,7 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({)
                 <div className="space-y-3">
                   {trackingData.demographicInsights.devicePreferences.map(device => {)
                     const DeviceIcon = device.device === 'Mobile' ? DevicePhoneMobileIcon : ComputerDesktopIcon;
-                    return ()
+                    return ();
                       <div key={device.device} className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <DeviceIcon className="h-4 w-4 text-gray-400" />
@@ -791,10 +791,10 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({)
                   success: 'border-green-200 bg-green-50 text-green-800',
                   warning: 'border-yellow-200 bg-yellow-50 text-yellow-800',
                   error: 'border-red-200 bg-red-50 text-red-800',
-                  info: 'border-blue-200 bg-blue-50 text-blue-800'
+                  info: 'border-blue-200 bg-blue-50 text-blue-800',
                 };
                 const isDismissed = dismissedAlerts.includes(alert.id);
-                return ()
+                return ();
                   <div 
                     key={alert.id} 
                     className={`border rounded-lg p-4 ${isDismissed ? 'opacity-50' : ''} ${alertColors[alert.type]}`}

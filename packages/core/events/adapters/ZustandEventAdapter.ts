@@ -60,7 +60,7 @@ export class ZustandEventAdapter {
     stateCreator: StateCreator<T & EventableStore, [], [], T & EventableStore>
   ): StateCreator<T & EventableStore, [], [], T & EventableStore> => {
     return (set, get, api) => {
-      const store = stateCreator(;)
+      const store = stateCreator(;);
         (partial, replace) => {
           // Capture previous state
           const previousState = get();
@@ -105,7 +105,7 @@ export class ZustandEventAdapter {
     }
     // Subscribe to specific paths
     this.config.enabledPaths.forEach(path => {)
-      const unsubscribe = api.subscribe(;)
+      const unsubscribe = api.subscribe(;);
         (state: any) => this.getNestedValue(state, path),
         (currentValue: unknown, previousValue: unknown) => {
           this.publishPathChangeEvent(path, previousValue, currentValue);
@@ -194,7 +194,7 @@ export class ZustandEventAdapter {
       }
     }
     // Handle objects/arrays
-    const allKeys = new Set([;)
+    const allKeys = new Set([;);
       ...Object.keys(previous || {}),
       ...Object.keys(current || {})
     ]);
@@ -227,7 +227,7 @@ export class ZustandEventAdapter {
    */
   public subscribeToStateEvents()
     storeName: string,
-    handler: (event: StateChangeEvent) => void
+    handler: (event: StateChangeEvent) => void,
   ): string {
     return globalEventBus.subscribe()
       {
@@ -278,7 +278,6 @@ export class ZustandEventAdapter {
     subscriptions: number;
     activeDebounces: number;
     config: ZustandEventConfig;
-  } {
     return {
       storeName: this.config.storeName,
       subscriptions: this.subscriptions.size,
@@ -308,14 +307,14 @@ export const ZustandEventUtils = {
   /**
    * Extract event adapter from a Zustand store
    */
-  getEventAdapter: (store: any): ZustandEventAdapter | null => {
+  getEventAdapter: (store: any): ZustandEventAdapter | null => {,
     const state = store.getState();
     return state._eventAdapter || null;
   },
   /**
    * Check if a store has event integration
    */
-  hasEventIntegration: (store: any): boolean => {
+  hasEventIntegration: (store: any): boolean => {,
     return !!ZustandEventUtils.getEventAdapter(store);
   },
   /**

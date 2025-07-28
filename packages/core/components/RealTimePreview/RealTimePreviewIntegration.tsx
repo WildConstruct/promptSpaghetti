@@ -129,7 +129,7 @@ export const RealTimePreviewIntegration: React.FC<RealTimePreviewIntegrationProp
         contentType: 'mixed' as const,
         tags: [`seed-${variant.seed}`, `variant-${index + 1}`]}
       },
-      selected: variant === selectedVariant
+      selected: variant === selectedVariant,
     }));
   }, [variants, selectedVariant]);
   // Calculate display metrics for director interface
@@ -149,7 +149,7 @@ export const RealTimePreviewIntegration: React.FC<RealTimePreviewIntegrationProp
       successRate: performance.successRate,
     };
   }, [variants, performance]);
-  return ()
+  return ();
     <div className="real-time-preview-integration">
       {/* Compact Real-time Preview Panel */}
       <div className={`preview-panel ${isExpanded ? 'expanded' : 'compact'}`}>}

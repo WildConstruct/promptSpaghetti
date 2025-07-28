@@ -201,19 +201,19 @@ export class UnifiedModerationDashboard {
           autoApproved: automatedStats.autoApproved || 0,
           autoRejected: automatedStats.autoRejected || 0,
           escalated: automatedStats.escalated || 0,
-          appealed: automatedStats.appealed || 0
+          appealed: automatedStats.appealed || 0,
         },
         queues: {,
           highPriority: queueStatus.highPriority || 0,
           mediumPriority: queueStatus.mediumPriority || 0,
           lowPriority: queueStatus.lowPriority || 0,
-          automated: queueStatus.automated || 0
+          automated: queueStatus.automated || 0,
         },
         performance: {,
           avgProcessingTime: performanceData.avgProcessingTime || 0,
           throughputLast24h: performanceData.throughput24h || 0,
           moderatorEfficiency: performanceData.efficiency || 0,
-          slaCompliance: performanceData.slaCompliance || 0
+          slaCompliance: performanceData.slaCompliance || 0,
         },
         alerts: this.getActiveAlerts(),
         trends: this.calculateTrends(automatedStats, performanceData)
@@ -318,7 +318,7 @@ export class UnifiedModerationDashboard {
     try {
       // Get active moderators from RBAC
       const moderators = await this.rbacService.getUsersByRole('moderator');
-      const workloads = await Promise.all(;)
+      const workloads = await Promise.all(;);
         moderators.map(async (moderator) => {
           const workload = await this.calculateModeratorWorkload(moderator.id);
           return workload;
@@ -336,7 +336,7 @@ export class UnifiedModerationDashboard {
    */
   async distributeWorkload()
     items: string[],
-    distribution: 'urgent' | 'balanced' | 'expertise'
+    distribution: 'urgent' | 'balanced' | 'expertise',
   ): Promise<{
     assignments: Array<{ moderatorId: string; itemIds: string[] }>;
     unassigned: string[];
@@ -371,7 +371,7 @@ export class UnifiedModerationDashboard {
   async getDashboardMetrics(timeRange?: { start: Date; end: Date }): Promise<DashboardMetrics> {
     const range = timeRange || {
       start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
-      end: new Date()
+      end: new Date(),
     };
     try {
       const [realTimeData, historicalData, predictions] = await Promise.all([)
@@ -411,7 +411,7 @@ export class UnifiedModerationDashboard {
       avgProcessingTime: 15.5, // minutes
       throughput24h: 1250,
       efficiency: 94.2, // percentage
-      slaCompliance: 98.7 // percentage
+      slaCompliance: 98.7 // percentage,
     };
   }
   private getActiveAlerts(): ModerationAlert[] {
@@ -422,7 +422,7 @@ export class UnifiedModerationDashboard {
     return {
       volumeTrend: 'increasing' as const,
       violationTrend: 'stable' as const,
-      performanceTrend: 'improving' as const
+      performanceTrend: 'improving' as const,
     };
   }
   private async checkAndGenerateAlerts(overview: DashboardOverview): Promise<void> {
@@ -589,7 +589,7 @@ export class UnifiedModerationDashboard {
     // Match items to moderators with relevant expertise
     for (const item of items) {
       const itemType = await this.getItemType(item);
-      const expertModerators = moderators.filter(m => ;)
+      const expertModerators = moderators.filter(m => ;);
         m.specializations.includes(itemType) && m.utilization < 85
       );
       if (expertModerators.length > 0) {
@@ -623,7 +623,7 @@ export class UnifiedModerationDashboard {
       activeModerators: 12,
       itemsBeingReviewed: 45,
       averageWaitTime: 8.5, // minutes
-      systemLoad: 67 // percentage
+      systemLoad: 67 // percentage,
     };
   }
   private async getHistoricalMetrics(range: { start: Date; end: Date }): Promise<any> {

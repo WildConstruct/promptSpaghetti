@@ -106,7 +106,7 @@ export const ActivityItem: React.FC<ActivityItemProps> = ({)
   const title = getActivityTitle();
   const description = getActivityDescription();
   const icon = getActivityIcon(activity.event_type);
-  return ()
+  return ();
     <div 
       className={`activity-item ${compact ? 'activity-item--compact' : ''} ${onClick ? 'activity-item--clickable' : ''} ${isLast ? 'activity-item--last' : ''}`}
       onClick={onClick}

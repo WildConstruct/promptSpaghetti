@@ -154,14 +154,14 @@ export const [isPreview, setIsPreview] = useState(false);
       .replace(/`(.*?)`/g, '<code>$1</code>')
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
       .replace(/\n/g, '<br>');
-    return ()
+    return ();
       <div 
         className="min-h-[100px] p-3 border border-gray-300 rounded-md prose prose-sm max-w-none"
         dangerouslySetInnerHTML={{ __html: previewContent || '<em>Nothing to preview</em>' }}
       />
     );
   };
-  return ()
+  return ();
     <div className="relative">
       {/* Toolbar */}
       {allowFormatting && ()
@@ -258,7 +258,7 @@ export const [isPreview, setIsPreview] = useState(false);
       {/* Editor/Preview */}
       <div className="relative">
         {isPreview ? ()
-          renderPreview()
+          renderPreview();
         ) : ()
           <textarea
             ref={textareaRef}

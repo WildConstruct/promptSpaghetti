@@ -138,7 +138,7 @@ export const ComplianceChecker: React.FC<ComplianceCheckerProps> = ({)
     for (const framework of frameworks) {
       for (const category of framework.categories) {
         for (const requirement of category.requirements) {
-          const checkResult = await checkRequirement(;)
+          const checkResult = await checkRequirement(;);
             document, 
             framework, 
             category, 
@@ -158,7 +158,7 @@ export const ComplianceChecker: React.FC<ComplianceCheckerProps> = ({)
     onComplianceResults(results);
     setIsChecking(false);
   }, [document, selectedFrameworks, onComplianceResults]);
-  const checkRequirement = async (;)
+  const checkRequirement = async (;);
     doc: LegalDocument,
     framework: ComplianceFramework,
     category: ComplianceCategory,
@@ -166,11 +166,11 @@ export const ComplianceChecker: React.FC<ComplianceCheckerProps> = ({)
   ): Promise<ComplianceCheck | null> => {
     const content = doc.content.toLowerCase();
     // Check for keyword matches
-    const keywordMatches = requirement.keywords.filter(keyword => ;)
+    const keywordMatches = requirement.keywords.filter(keyword => ;);
       content.includes(keyword.toLowerCase())
     );
     // Check for pattern matches
-    const patternMatches = requirement.patterns.some(pattern => ;)
+    const patternMatches = requirement.patterns.some(pattern => ;);
       pattern.test(doc.content)
     );
     // Determine compliance status
@@ -204,12 +204,12 @@ export const ComplianceChecker: React.FC<ComplianceCheckerProps> = ({)
       regulation: `${framework.name} - ${requirement.title}`,}
       requirement: requirement.description,
       status,
-      severity: requirement.severity === 'critical' ? 'critical' : 
+      severity: requirement.severity === 'critical' ? 'critical' : ,
         requirement.severity === 'high' ? 'error' :
           requirement.severity === 'medium' ? 'warning' : 'info',
       description,
       remediation: remediation.length > 0 ? remediation : undefined,
-      affectedSections: [] // Would be populated with actual section analysis
+      affectedSections: [] // Would be populated with actual section analysis,
     };
   };
   useEffect(() => {
@@ -271,7 +271,7 @@ export const ComplianceChecker: React.FC<ComplianceCheckerProps> = ({)
     default: return '❓';
     }
   };
-  return ()
+  return ();
     <div className={`compliance-checker ${className}`}>}
       <style>
         {`

@@ -7,14 +7,12 @@
  * Provides comprehensive toggle status management including basic controls,
  * percentage rollouts, emergency controls, and status overrides.
  */
-
 import React, { useState } from 'react';
 import { 
   ToggleLeft, ToggleRight, Percent, Shield, AlertTriangle, 
   Settings, Zap, TrendingUp, Activity,
   RefreshCw, Pause, Play, CheckCircle
 } from 'lucide-react';
-
 interface FeatureToggle {
   id: string;
   key: string;
@@ -30,7 +28,6 @@ interface FeatureToggle {
   currentPercentage?: number;
   claudeImpact?: string;
 }
-
 interface EnhancedToggleStatusControlsProps {
   toggle: FeatureToggle;
   onToggleChange: (toggle: FeatureToggle) => void;
@@ -39,8 +36,7 @@ interface EnhancedToggleStatusControlsProps {
   onEmergencyDisable?: (toggleId: string, reason: string) => void;
   compact?: boolean;
 }
-
-const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> = ({
+const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> = ({)
   toggle,
   onToggleChange,
   onPercentageChange,
@@ -52,48 +48,41 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
   const [showEmergencyConfirm, setShowEmergencyConfirm] = useState(false);
   const [emergencyReason, setEmergencyReason] = useState('');
   const [tempPercentage, setTempPercentage] = useState(toggle.percentage || 0);
-
   // Handle basic toggle activation/deactivation
   const handleBasicToggle = () => {
     const updatedToggle = { ...toggle, enabled: !toggle.enabled };
     onToggleChange(updatedToggle);
   };
-
   // Handle percentage rollout changes
   const handlePercentageUpdate = () => {
     onPercentageChange?.(toggle.id, tempPercentage);
     setShowPercentageSlider(false);
   };
-
   // Handle emergency disable
   const handleEmergencyDisable = () => {
     if (!emergencyReason.trim()) {
       alert('Please provide a reason for emergency disable');
       return;
     }
-    
     onEmergencyDisable?.(toggle.id, emergencyReason);
     setShowEmergencyConfirm(false);
     setEmergencyReason('');
   };
-
   // Handle rollout status controls
   const handleRolloutControl = (action: 'pause' | 'resume' | 'rollback') => {
     // Implementation would depend on specific rollout management system
-    console.log(`Rollout ${action} for toggle ${toggle.id}`);
+    console.log(`Rollout ${action} for toggle ${toggle.id}`);}
   };
-
   // Get status indicator based on toggle state and overrides
   const getStatusIndicator = () => {
     if (toggle.hasActiveOverride) {
-      return (
+      return ()
         <div className="flex items-center space-x-1">
           <Shield className="w-4 h-4 text-orange-500" />
           <span className="text-xs text-orange-600 font-medium">OVERRIDE</span>
         </div>
       );
     }
-    
     if (toggle.type === 'PERCENTAGE' && toggle.rolloutStatus) {
       const statusConfig = {
         'PAUSED': { icon: Pause, color: 'text-yellow-600', bg: 'bg-yellow-50' },
@@ -101,41 +90,35 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
         'COMPLETED': { icon: CheckCircle, color: 'text-blue-600', bg: 'bg-blue-50' },
         'ROLLING_BACK': { icon: RefreshCw, color: 'text-red-600', bg: 'bg-red-50' }
       };
-      
       const config = statusConfig[toggle.rolloutStatus];
       const Icon = config.icon;
-      
-      return (
-        <div className={`flex items-center space-x-1 px-2 py-1 rounded-full ${config.bg}`}>
-          <Icon className={`w-3 h-3 ${config.color}`} />
-          <span className={`text-xs font-medium ${config.color}`}>
+      return ()
+        <div className={`flex items-center space-x-1 px-2 py-1 rounded-full ${config.bg}`}>}
+          <Icon className={`w-3 h-3 ${config.color}`} />}
+          <span className={`text-xs font-medium ${config.color}`}>}
             {toggle.rolloutStatus.replace('_', ' ')}
           </span>
         </div>
       );
     }
-
-    return toggle.enabled ? (
+    return toggle.enabled ? ()
       <span className="text-xs text-green-600 font-medium">ACTIVE</span>
-    ) : (
+    ) : ()
       <span className="text-xs text-gray-500 font-medium">DISABLED</span>
     );
   };
-
   // Get percentage display for rollout toggles
   const getPercentageDisplay = () => {
     if (toggle.type !== 'PERCENTAGE') return null;
-    
     const current = toggle.currentPercentage || toggle.percentage || 0;
     const target = toggle.targetPercentage || toggle.percentage || 0;
-    
-    return (
+    return ()
       <div className="flex items-center space-x-2">
         <div className="flex items-center space-x-1">
           <Percent className="w-3 h-3 text-blue-500" />
           <span className="text-sm font-medium">{current}%</span>
         </div>
-        {target !== current && (
+        {target !== current && ()
           <div className="flex items-center space-x-1 text-gray-500">
             <TrendingUp className="w-3 h-3" />
             <span className="text-xs">→ {target}%</span>
@@ -144,9 +127,8 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
       </div>
     );
   };
-
   if (compact) {
-    return (
+    return ()
       <div className="flex items-center space-x-2">
         {/* Basic Toggle */}
         <button
@@ -155,21 +137,18 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
           title={toggle.enabled ? 'Click to disable' : 'Click to enable'}
           disabled={toggle.hasActiveOverride}
         >
-          {toggle.enabled ? (
+          {toggle.enabled ? ()
             <ToggleRight className="toggle-enabled" size={16} />
-          ) : (
+          ) : ()
             <ToggleLeft className="toggle-disabled" size={16} />
           )}
         </button>
-
         {/* Status Indicator */}
         {getStatusIndicator()}
-
         {/* Percentage Display (for percentage toggles) */}
         {getPercentageDisplay()}
-
         {/* Override Indicator */}
-        {toggle.hasActiveOverride && (
+        {toggle.hasActiveOverride && ()
           <button
             onClick={() => onOverrideClick?.(toggle.id)}
             className="p-1 text-orange-500 hover:text-orange-700 transition-colors"
@@ -181,15 +160,13 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="bg-gray-50 rounded-lg p-4 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h3 className="font-medium text-gray-900">Status Controls</h3>
         {getStatusIndicator()}
       </div>
-
       {/* Primary Controls */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {/* Basic Enable/Disable */}
@@ -206,9 +183,9 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
             }`}
             disabled={toggle.hasActiveOverride}
           >
-            {toggle.enabled ? (
+            {toggle.enabled ? ()
               <ToggleRight className="w-5 h-5" />
-            ) : (
+            ) : ()
               <ToggleLeft className="w-5 h-5" />
             )}
             <span className="font-medium">
@@ -216,9 +193,8 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
             </span>
           </button>
         </div>
-
         {/* Percentage Control (for percentage toggles) */}
-        {toggle.type === 'PERCENTAGE' && (
+        {toggle.type === 'PERCENTAGE' && ()
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Rollout Percentage
@@ -235,7 +211,7 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
                 <Settings className="w-4 h-4" />
               </button>
             </div>
-            {showPercentageSlider && (
+            {showPercentageSlider && ()
               <div className="space-y-3 p-3 bg-white rounded-lg border">
                 <div className="flex items-center space-x-3">
                   <input
@@ -269,7 +245,6 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
             )}
           </div>
         )}
-
         {/* Override Controls */}
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">
@@ -286,9 +261,8 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
           </button>
         </div>
       </div>
-
       {/* Rollout Controls (for percentage toggles) */}
-      {toggle.type === 'PERCENTAGE' && toggle.rolloutStatus && (
+      {toggle.type === 'PERCENTAGE' && toggle.rolloutStatus && ()
         <div className="border-t pt-4">
           <div className="flex items-center justify-between mb-3">
             <label className="block text-sm font-medium text-gray-700">
@@ -299,7 +273,7 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            {toggle.rolloutStatus === 'ACTIVE' && (
+            {toggle.rolloutStatus === 'ACTIVE' && ()
               <button
                 onClick={() => handleRolloutControl('pause')}
                 className="flex items-center space-x-1 px-3 py-1 text-sm bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors"
@@ -308,7 +282,7 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
                 <span>Pause</span>
               </button>
             )}
-            {toggle.rolloutStatus === 'PAUSED' && (
+            {toggle.rolloutStatus === 'PAUSED' && ()
               <button
                 onClick={() => handleRolloutControl('resume')}
                 className="flex items-center space-x-1 px-3 py-1 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors"
@@ -327,7 +301,6 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
           </div>
         </div>
       )}
-
       {/* Emergency Controls */}
       <div className="border-t pt-4">
         <div className="flex items-center justify-between">
@@ -348,9 +321,8 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
             <span>Emergency Disable</span>
           </button>
         </div>
-
         {/* Emergency Confirmation */}
-        {showEmergencyConfirm && (
+        {showEmergencyConfirm && ()
           <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
             <div className="flex items-center space-x-2 mb-2">
               <AlertTriangle className="w-4 h-4 text-red-600" />
@@ -384,9 +356,8 @@ const EnhancedToggleStatusControls: React.FC<EnhancedToggleStatusControlsProps> 
           </div>
         )}
       </div>
-
       {/* Claude Impact Warning */}
-      {toggle.claudeImpact && toggle.claudeImpact !== 'NONE' && (
+      {toggle.claudeImpact && toggle.claudeImpact !== 'NONE' && ()
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
           <div className="flex items-center space-x-2">
             <AlertTriangle className="w-4 h-4 text-amber-600" />

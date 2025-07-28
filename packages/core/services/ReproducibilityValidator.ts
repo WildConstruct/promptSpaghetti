@@ -66,7 +66,7 @@ export class ReproducibilityValidator {
   /**
    * Comprehensive validation of VFX export reproducibility
    */
-  validateReproducibility()
+  validateReproducibility();
     exportData: VFXExportFormat,
     options: ReproducibilityValidationOptions = {}
   ): ReproducibilityValidationReport {
@@ -118,7 +118,7 @@ export class ReproducibilityValidator {
         message: 'Master seed is missing or invalid',
         severity: 'critical',
         field: 'execution.randomization.masterSeed',
-        suggestion: 'Ensure master seed is exported during graph execution'
+        suggestion: 'Ensure master seed is exported during graph execution',
       });
     } else {
       report.integrity.seedsValid = true;
@@ -130,14 +130,14 @@ export class ReproducibilityValidator {
         message: 'Per-node seeds are missing or invalid',
         severity: 'high',
         field: 'execution.randomization.nodeSeed',
-        suggestion: 'Export individual node seeds for exact reproducibility'
+        suggestion: 'Export individual node seeds for exact reproducibility',
       });
     } else if (Object.keys(randomization.nodeSeed).length === 0) {
       report.warnings.push({)
         code: 'EMPTY_NODE_SEEDS',
         message: 'Per-node seeds object is empty',
         impact: 'reproducibility',
-        suggestion: 'Ensure node seeds are generated during execution'
+        suggestion: 'Ensure node seeds are generated during execution',
       });
     } else {
       // Validate node seeds match graph nodes
@@ -150,7 +150,7 @@ export class ReproducibilityValidator {
           code: 'INCOMPLETE_NODE_SEEDS',
           message: `Missing seeds for nodes: ${missingSeeds.join(', ')}`,}
           impact: 'reproducibility',
-          suggestion: 'Ensure all graph nodes have corresponding seeds'
+          suggestion: 'Ensure all graph nodes have corresponding seeds',
         });
       }
       if (extraSeeds.length > 0) {
@@ -158,7 +158,7 @@ export class ReproducibilityValidator {
           code: 'EXTRA_NODE_SEEDS',
           message: `Extra seeds for non-existent nodes: ${extraSeeds.join(', ')}`,}
           impact: 'quality',
-          suggestion: 'Clean up orphaned seed data'
+          suggestion: 'Clean up orphaned seed data',
         });
       }
     }
@@ -168,7 +168,7 @@ export class ReproducibilityValidator {
         code: 'MISSING_RNG_STATE',
         message: 'RNG state not preserved - approximate reproducibility only',
         impact: 'reproducibility',
-        suggestion: 'Include RNG state for exact reproducibility'
+        suggestion: 'Include RNG state for exact reproducibility',
       });
       report.approximateReproducible = true;
     } else {
@@ -180,7 +180,7 @@ export class ReproducibilityValidator {
         code: 'MISSING_REPRODUCIBILITY_HASH',
         message: 'Reproducibility hash missing - cannot verify data integrity',
         impact: 'reproducibility',
-        suggestion: 'Generate reproducibility hash for data validation'
+        suggestion: 'Generate reproducibility hash for data validation',
       });
     }
     // Check execution sequence
@@ -189,7 +189,7 @@ export class ReproducibilityValidator {
         code: 'MISSING_EXECUTION_SEQUENCE',
         message: 'Execution sequence not recorded - order-dependent reproduction may fail',
         impact: 'reproducibility',
-        suggestion: 'Record node execution sequence for deterministic reproduction'
+        suggestion: 'Record node execution sequence for deterministic reproduction',
       });
     }
     // Validate per-node RNG states if present
@@ -241,7 +241,7 @@ export class ReproducibilityValidator {
           code: 'INVALID_NODE_STRUCTURE',
           message: `Node missing required id or type: ${JSON.stringify(node)}`,}
           severity: 'high',
-          suggestion: 'Ensure all nodes have valid id and type properties'
+          suggestion: 'Ensure all nodes have valid id and type properties',
         });
         configurationsValid = false;
       }
@@ -251,7 +251,7 @@ export class ReproducibilityValidator {
           code: 'MISSING_NODE_CONFIGURATION',
           message: `Node ${node.id} missing configuration data`,}
           impact: 'reproducibility',
-          suggestion: 'Export complete node configuration for exact reproduction'
+          suggestion: 'Export complete node configuration for exact reproduction',
         });
         configurationsValid = false;
       }
@@ -263,7 +263,7 @@ export class ReproducibilityValidator {
           code: 'MISSING_REPRODUCIBILITY_DATA',
           message: `Node ${node.id} missing reproducibility metadata`,}
           impact: 'reproducibility',
-          suggestion: 'Include node reproducibility data for better validation'
+          suggestion: 'Include node reproducibility data for better validation',
         });
       }
     });
@@ -296,7 +296,7 @@ export class ReproducibilityValidator {
             code: 'CONFIGURATION_HASH_MISMATCH',
             message: `Node ${node.id} configuration hash mismatch - data may have been modified`,}
             impact: 'reproducibility',
-            suggestion: 'Recalculate configuration hash or check for data corruption'
+            suggestion: 'Recalculate configuration hash or check for data corruption',
           });
         }
       }
@@ -313,7 +313,7 @@ export class ReproducibilityValidator {
         code: 'MISSING_VERSION',
         message: 'Export version not specified',
         severity: 'high',
-        suggestion: 'Include version information for compatibility checking'
+        suggestion: 'Include version information for compatibility checking',
       });
       return;
     }
@@ -323,7 +323,7 @@ export class ReproducibilityValidator {
         code: 'INCOMPLETE_VERSION_INFO',
         message: 'Incomplete generator version information',
         impact: 'compatibility',
-        suggestion: 'Include core and exporter version numbers'
+        suggestion: 'Include core and exporter version numbers',
       });
     }
     // Check dependency versions
@@ -332,7 +332,7 @@ export class ReproducibilityValidator {
         code: 'MISSING_DEPENDENCIES',
         message: 'Dependency versions not recorded',
         impact: 'compatibility',
-        suggestion: 'Record dependency versions for reproducibility'
+        suggestion: 'Record dependency versions for reproducibility',
       });
     } else {
       // Validate critical dependencies
@@ -354,7 +354,7 @@ export class ReproducibilityValidator {
         code: 'INCOMPLETE_ENVIRONMENT_INFO',
         message: 'Runtime environment information incomplete',
         impact: 'compatibility',
-        suggestion: 'Record Node.js version and platform for environment matching'
+        suggestion: 'Record Node.js version and platform for environment matching',
       });
     }
     report.integrity.versionCompatible = report.errors.filter(e => )
@@ -379,7 +379,7 @@ export class ReproducibilityValidator {
           code: 'REPRODUCIBILITY_HASH_MISMATCH',
           message: 'Reproducibility hash validation failed',
           severity: 'high',
-          suggestion: 'Check for data corruption or hash calculation errors'
+          suggestion: 'Check for data corruption or hash calculation errors',
         });
         report.integrity.checksumValid = false;
       } else {
@@ -556,7 +556,7 @@ export class ReproducibilityValidator {
         success: true,
         identicalResults: true,
         differences: [],
-        reproductionTime: Date.now() - startTime
+        reproductionTime: Date.now() - startTime,
       };
       return reproduced;
     } catch (error) {
@@ -564,7 +564,7 @@ export class ReproducibilityValidator {
         success: false,
         identicalResults: false,
         differences: [`Reproduction failed: ${error}`],}
-        reproductionTime: Date.now() - startTime
+        reproductionTime: Date.now() - startTime,
       };
     }
   }

@@ -216,7 +216,7 @@ export declare class ConversionMetricsCalculator {
     private config;
     private metricCache;
     constructor(config: MetricCalculationConfig);
-    calculateMetrics()
+    calculateMetrics();
       query: ConversionMetricQuery,
       events: FlexibleConversionEvent[],
     ): Promise<ConversionMetricResult[]>;

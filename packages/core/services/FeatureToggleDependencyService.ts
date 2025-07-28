@@ -339,7 +339,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
       ...dependency,
       id,
       created: new Date(),
-      lastValidated: new Date()
+      lastValidated: new Date(),
     };
     // Validate dependency doesn't create conflicts
     const validation = await this.validateDependency(fullDependency);
@@ -423,7 +423,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
     const edges: DependencyEdge[] = [];
     const nodeMap = new Map<string, ToggleNode>();
     // Determine which toggles to include
-    const includeToggles = toggleIds || Array.from(new Set([;)
+    const includeToggles = toggleIds || Array.from(new Set([;);
       ...Array.from(this.dependencies.values()).map(d => d.sourceToggleId),
       ...Array.from(this.dependencies.values()).map(d => d.targetToggleId)
     ]));
@@ -468,7 +468,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
           metadata: {,
             reason: dependency.reason,
             validated: dependency.lastValidated,
-            violations: await this.countDependencyViolations(dependency.id)
+            violations: await this.countDependencyViolations(dependency.id),
           }
         };
         edges.push(edge);
@@ -587,7 +587,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
         circularDependencies: 0,
         conflictCount: 0,
         healthScore: 100,
-        lastAnalyzed: new Date()
+        lastAnalyzed: new Date(),
       }
     };
   }
@@ -759,7 +759,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
       circularDependencies,
       conflictCount,
       healthScore,
-      lastAnalyzed: new Date()
+      lastAnalyzed: new Date(),
     };
   }
   // Additional helper methods would continue here...

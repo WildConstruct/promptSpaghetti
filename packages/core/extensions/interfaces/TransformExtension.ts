@@ -454,7 +454,7 @@ export namespace TransformExtensionHelpers {
       description: config.description || 'A custom data transform',
       version: config.version || '1.0.0',
       type: config.type || TransformType.CUSTOM,
-      transformClass: config.transformClass || class implements DataTransform {
+      transformClass: config.transformClass || class implements DataTransform {,
         id = config.id || 'custom-transform';
         name = config.name || 'Custom Transform';
         type = config.type || TransformType.CUSTOM;
@@ -476,7 +476,7 @@ export namespace TransformExtensionHelpers {
       ui: config.ui || {},
       runtime: config.runtime || {},
       pipeline: config.pipeline || {},
-      metadata: config.metadata || {
+      metadata: config.metadata || {,
         author: 'Unknown',
         license: 'MIT',
       }

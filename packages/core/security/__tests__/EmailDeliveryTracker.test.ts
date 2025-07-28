@@ -35,7 +35,7 @@ describe('EmailDeliveryTracker', () => {
         subject: 'Verify your account',
         content: {,
           html: '<p>Please verify your account</p>',
-          text: 'Please verify your account'
+          text: 'Please verify your account',
         },
         metadata: {,
           userId: 'user-123',
@@ -67,7 +67,7 @@ describe('EmailDeliveryTracker', () => {
         recipient: 'fail@example.com',
         subject: 'Reset your password',
         content: {,
-          text: 'Reset link here'
+          text: 'Reset link here',
         },
         metadata: {,
           userId: 'user-fail',
@@ -90,7 +90,7 @@ describe('EmailDeliveryTracker', () => {
         recipient: 'mfa@example.com',
         subject: 'Your MFA code',
         content: {,
-          text: 'Your code is: 123456'
+          text: 'Your code is: 123456',
         },
         metadata: {,
           userId: 'user-mfa',
@@ -164,7 +164,7 @@ describe('EmailDeliveryTracker', () => {
         type: BounceType.HARD,
         subType: BounceSubType.NO_EMAIL,
         reason: 'Email address does not exist',
-        diagnosticCode: '550 5.1.1 User unknown'
+        diagnosticCode: '550 5.1.1 User unknown',
       };
       tracker.updateStatus(mockEmailId, DeliveryStatus.BOUNCED, { bounceInfo });
       const record = tracker.getDeliveryRecord(mockEmailId);
@@ -228,7 +228,7 @@ describe('EmailDeliveryTracker', () => {
         timestamp: new Date(),
         ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
-        reason: 'Too many emails'
+        reason: 'Too many emails',
       };
       tracker.addTrackingEvent(mockEmailId, 'unsubscribe', unsubEvent);
       const record = tracker.getDeliveryRecord(mockEmailId);
@@ -380,12 +380,12 @@ describe('EmailDeliveryTracker', () => {
           attemptNumber: 1,
           timestamp: new Date(),
           status: DeliveryStatus.FAILED,
-          error: 'Network timeout'
+          error: 'Network timeout',
         }],
         tracking: { opens: [], clicks: [], unsubscribes: [] },
         providerData: {,
           htmlContent: '<p>Reset your password</p>',
-          textContent: 'Reset your password'
+          textContent: 'Reset your password',
         }
       };
       (tracker as any).deliveryRecords.set(mockEmailId, failedRecord);
@@ -445,7 +445,7 @@ describe('EmailDeliveryTracker', () => {
         bounceInfo: {,
           type: BounceType.HARD,
           subType: BounceSubType.NO_EMAIL,
-          reason: 'Invalid email address'
+          reason: 'Invalid email address',
         }
       });
     });
@@ -467,7 +467,7 @@ describe('EmailDeliveryTracker', () => {
         bounceInfo: {,
           type: BounceType.HARD,
           subType: BounceSubType.NO_EMAIL,
-          reason: 'Invalid email address'
+          reason: 'Invalid email address',
         }
       });
     });

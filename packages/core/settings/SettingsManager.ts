@@ -107,7 +107,7 @@ export class SettingsManager {
    */
   public updateSettings()
     newSettings: Partial<AdvancedSettings>,
-    source: 'user' | 'system' | 'import' = 'user'
+    source: 'user' | 'system' | 'import' = 'user',
   ): SettingsValidationResult {
     const previousSettings = { ...this.settings };
     const mergedSettings = { ...this.settings, ...newSettings };
@@ -144,7 +144,7 @@ export class SettingsManager {
   public updateSetting<K extends keyof AdvancedSettings>()
     key: K, 
     value: AdvancedSettings[K], 
-    source: 'user' | 'system' | 'import' = 'user'
+    source: 'user' | 'system' | 'import' = 'user',
   ): SettingsValidationResult {
     return this.updateSettings({ [key]: value } as Partial<AdvancedSettings>, source);
   }
@@ -231,7 +231,7 @@ export class SettingsManager {
     if (validation.success) {
       return { valid: true, errors: [], warnings: [] };
     }
-    const errors = validation.error.errors.map(err => ;)
+    const errors = validation.error.errors.map(err => ;);
       `${err.path.join('.')}: ${err.message}`}
     );
     return { valid: false, errors, warnings: [] };
@@ -282,7 +282,7 @@ export class SettingsManager {
       metadata: {,
         exportedAt: new Date().toISOString(),
         version: SETTINGS_VERSION,
-        appVersion: '1.0.0' // TODO: Get from package.json
+        appVersion: '1.0.0' // TODO: Get from package.json,
       }
     };
   }

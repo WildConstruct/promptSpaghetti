@@ -111,7 +111,7 @@ export function useCollaborativeReactFlow() {
         source: connection.source,
         target: connection.target,
         sourceHandle: connection.sourceHandle || undefined,
-        targetHandle: connection.targetHandle || undefined
+        targetHandle: connection.targetHandle || undefined,
       };
       addEdge(newEdge);
     }
@@ -209,7 +209,7 @@ export function useCollaborativeReactFlow() {
     getUserCursors,
     getRemoteSelections,
     // Utility
-    isConnected: connectionStatus === 'connected'
+    isConnected: connectionStatus === 'connected',
   };
 }
 /**

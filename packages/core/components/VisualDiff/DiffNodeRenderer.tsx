@@ -23,7 +23,7 @@ export const DiffNodeRenderer = memo<NodeProps<DiffNodeData>>(({ data, selected 
       fontSize: '14px',
       fontWeight: '500',
       transition: 'all 0.2s ease',
-      position: 'relative' as const
+      position: 'relative' as const,
     };
     const stateStyles = {
       added: {,
@@ -66,7 +66,7 @@ export const DiffNodeRenderer = memo<NodeProps<DiffNodeData>>(({ data, selected 
       unchanged: { text: '=', color: '#6b7280' }
     };
     const badge = badges[diffState];
-    return ()
+    return ();
       <div
         className="absolute -top-2 -right-2 w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center text-white"
         style={{ backgroundColor: badge.color }}
@@ -90,7 +90,7 @@ export const DiffNodeRenderer = memo<NodeProps<DiffNodeData>>(({ data, selected 
     const changes = Object.keys(changeDetails).length;
     return changes > 0 ? ` (${changes} changes)` : '';}
   };
-  return ()
+  return ();
     <div style={getNodeStyle()}>
       {getBadge()}
       {/* Main Content */}

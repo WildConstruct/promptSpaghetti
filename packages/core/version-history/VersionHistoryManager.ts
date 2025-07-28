@@ -137,11 +137,10 @@ export class VersionHistoryManager {
   private branches = new Map<string, Branch>();
   private changeEvents: ChangeEvent[] = [];
   private currentSessionId: string;
-  constructor()
+  constructor();
     private apiClient: any,
     private projectId: string,
     private userId: string
-  ) {
     this.currentSessionId = crypto.randomUUID();
   }
   // Snapshot Management
@@ -369,7 +368,7 @@ export class VersionHistoryManager {
         target_branch_id: targetBranchId,
         merge_message: options.merge_message,
         strategy: options.strategy || 'merge',
-        delete_source: options.delete_source || false
+        delete_source: options.delete_source || false,
       });
       const mergeSnapshot = response.data;
       this.snapshots.set(mergeSnapshot.id, mergeSnapshot);
@@ -383,7 +382,7 @@ export class VersionHistoryManager {
           strategy: options.strategy,
         },
         affected_nodes: [],
-        change_magnitude: 5 // Merges are significant changes
+        change_magnitude: 5 // Merges are significant changes,
       });
       return mergeSnapshot;
     } catch (error) {
@@ -412,7 +411,7 @@ export class VersionHistoryManager {
         affected_properties: this.extractAffectedProperties(event.event_data),
         change_magnitude: event.change_magnitude,
         workflow_state: event.workflow_state,
-        approval_required: event.approval_required || false
+        approval_required: event.approval_required || false,
       };
       const response = await this.apiClient.post('/api/change-events', eventData);
       const changeEvent = response.data;
@@ -554,7 +553,7 @@ export class VersionHistoryManager {
         project_id: this.projectId,
         days_old: options.days_old || 90,
         keep_milestones: options.keep_milestones !== false,
-        keep_tagged_versions: options.keep_tagged_versions !== false
+        keep_tagged_versions: options.keep_tagged_versions !== false,
       });
       return response.data;
     } catch (error) {

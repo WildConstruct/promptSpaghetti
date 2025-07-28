@@ -182,7 +182,7 @@ export class NotificationManager {
       body: notification.message,
       icon: '/favicon.ico',
       tag: notification.id,
-      requireInteraction: notification.priority === 'urgent'
+      requireInteraction: notification.priority === 'urgent',
     });
     browserNotification.onclick = () => {
       window.focus();

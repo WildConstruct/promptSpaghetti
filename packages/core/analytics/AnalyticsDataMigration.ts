@@ -125,11 +125,10 @@ export class AnalyticsDataMigrationService {
   private activeMigrations: Map<string, MigrationProgress> = new Map();
   private transformationRules: Map<string, DataTransformationRule[]> = new Map();
   private migrationResults: Map<string, MigrationResult> = new Map();
-  constructor()
+  constructor();
     eventBus: UnifiedEventBus,
     adapterManager: AnalyticsAdapterManager,
     eventRepository: EventRepository,
-  ) {
     this.eventBus = eventBus;
     this.adapterManager = adapterManager;
     this.eventRepository = eventRepository;
@@ -157,7 +156,7 @@ export class AnalyticsDataMigrationService {
         targetField: 'userId',
         transformationType: 'computed',
         transformation: {,
-          expression: 'value ? value.toString() : null'
+          expression: 'value ? value.toString() : null',
         },
         validation: { required: false, type: 'string' }
       },
@@ -168,7 +167,7 @@ export class AnalyticsDataMigrationService {
         targetField: 'timestamp',
         transformationType: 'computed',
         transformation: {,
-          expression: 'typeof value === "string" ? Date.parse(value) : value'
+          expression: 'typeof value === "string" ? Date.parse(value) : value',
         },
         validation: { required: true, type: 'number' }
       },
@@ -399,7 +398,7 @@ export class AnalyticsDataMigrationService {
         const batch = sourceData.slice(startIdx, endIdx);
         this.updateCurrentOperation(migrationId, `Processing batch ${batchIndex + 1}/${totalBatches}`);}
         // Process batch with concurrency control
-        const batchResults = await this.processBatch(;)
+        const batchResults = await this.processBatch(;);
           batch,
           systemName,
           transformationRules,
@@ -520,7 +519,7 @@ export class AnalyticsDataMigrationService {
       migrated: 0,
       failed: 0,
       skipped: 0,
-      validationErrors: [] as ValidationError[]
+      validationErrors: [] as ValidationError[],
     };
     // Process records with concurrency control
     const semaphore = new Array(config.concurrency).fill(null);
@@ -775,7 +774,7 @@ export class AnalyticsDataMigrationService {
       // Count migrated records
       const actualCount = await this.eventRepository.count({)
         sources: [systemName],
-        startTime: Date.now() - (24 * 60 * 60 * 1000) // Last 24 hours
+        startTime: Date.now() - (24 * 60 * 60 * 1000) // Last 24 hours,
       });
       if (actualCount < expectedCount) {
         errors.push({)
@@ -996,7 +995,6 @@ export class AnalyticsDataMigrationService {
     failedMigrations: number;
     totalRecordsMigrated: number;
     totalValidationErrors: number;
-  } {
     const results = Array.from(this.migrationResults.values());
     return {
       totalMigrations: results.length + this.activeMigrations.size,

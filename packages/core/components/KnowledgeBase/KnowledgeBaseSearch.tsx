@@ -173,7 +173,7 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
         score: 0.8,
       }));
     }
-    const filtered = popularSearches.filter(search =>;)
+    const filtered = popularSearches.filter(search =>;);
       search.toLowerCase().includes(searchState.query.toLowerCase())
     );
     return [
@@ -195,7 +195,7 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
   const formatCategoryName = useCallback((category: string) => {
     return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   }, []);
-  return ()
+  return ();
     <div className={`knowledge-base-search ${className}`}>}
       {/* Search Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8">

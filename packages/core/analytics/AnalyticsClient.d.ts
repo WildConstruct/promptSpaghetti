@@ -87,7 +87,7 @@ export declare class AnalyticsClient extends EventEmitter {
     /**
      * Get time series data
      */
-    getTimeSeries()
+    getTimeSeries();
       metric: 'executions' | 'tokens' | 'cost' | 'errors',
       timeRange: TimeRange,
     ): Promise<AnalyticsResponse>;

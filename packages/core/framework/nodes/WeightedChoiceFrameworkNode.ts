@@ -51,7 +51,7 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
             label: 'Choices',
             dataType: 'stringArray',
             required: true,
-            description: 'Array of choice options'
+            description: 'Array of choice options',
           },
           {
             id: 'weights',
@@ -68,14 +68,14 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
             label: 'Selected Choice',
             dataType: 'string',
             required: true,
-            description: 'The randomly selected choice'
+            description: 'The randomly selected choice',
           },
           {
             id: 'index',
             label: 'Choice Index',
             dataType: 'number',
             required: false,
-            description: 'Index of the selected choice'
+            description: 'Index of the selected choice',
           }
         ] as IOPortDefinition[]
       },
@@ -155,7 +155,6 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
       normalizedWeight: number;
       percentage: number;
     }>;
-    } {
     const choiceDistribution = this.data.choices.map((choice, index) => {
       const weight = this.data.weights[index] || 1;
       const normalizedWeight = this.normalizedWeights[index];
@@ -186,7 +185,6 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
       actual: number;
       deviation: number;
     }>;
-  } {
     const results: Record<string, number> = {};
     const random = seed ? this.createSeededRandom(seed) : Math.random;
     // Initialize result counts

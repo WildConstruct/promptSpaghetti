@@ -179,11 +179,11 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
     )).length,
     totalViews: contributions.reduce((sum, c) => sum + c.views, 0),
     totalLikes: contributions.reduce((sum, c) => sum + c.likes, 0),
-    avgQualityScore: contributions.length > 0 
+    avgQualityScore: contributions.length > 0 ,
       ? Math.round(contributions.reduce((sum, c) => sum + c.qualityScore, 0) / contributions.length) 
       : 0
   };
-  return ()
+  return ();
     <div className={`contribution-dashboard ${className}`}>}
       {/* Dashboard Header */}
       <div className="dashboard-header">
@@ -291,7 +291,7 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
             value={filter.type || ''}
             onChange={(e) => setFilter(prev => ({ )
               ...prev, 
-              type: e.target.value ? e.target.value as ContributionType : undefined 
+              type: e.target.value ? e.target.value as ContributionType : undefined ,
             }))}
             className="filter-select"
           >
@@ -307,7 +307,7 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({)
             value={filter.sortBy || 'created_at'}
             onChange={(e) => setFilter(prev => ({ )
               ...prev, 
-              sortBy: e.target.value as any 
+              sortBy: e.target.value as any ,
             }))}
             className="sort-select"
           >

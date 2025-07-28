@@ -89,7 +89,7 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({)
         analysis: analysis || undefined,
         complianceResults: complianceResults.length > 0 ? complianceResults : undefined,
         citations,
-        terminologyResults: terminologyResults.length > 0 ? terminologyResults : undefined
+        terminologyResults: terminologyResults.length > 0 ? terminologyResults : undefined,
       };
       onWorkflowComplete(results);
     }
@@ -149,7 +149,7 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({)
     default: return false;
     }
   };
-  return ()
+  return ();
     <div className={`legal-toolkit ${className}`}>}
       <style>
         {`

@@ -69,7 +69,7 @@ export helpInteractions: [] as Array<{ event: string; data: any; timestamp: numb
       const helpId = data.helpId;
       analytics.effectiveness[helpId] = {
         views: (analytics.effectiveness[helpId]?.views || 0) + 1,
-        helpful: (analytics.effectiveness[helpId]?.helpful || 0) + (data.wasEffective ? 1 : 0)
+        helpful: (analytics.effectiveness[helpId]?.helpful || 0) + (data.wasEffective ? 1 : 0),
       };
       break;
     }
@@ -87,7 +87,7 @@ export helpInteractions: [] as Array<{ event: string; data: any; timestamp: numb
       helpId,
       views: stats.views,
       helpful: stats.helpful,
-      effectivenessRate: stats.views > 0 ? (stats.helpful / stats.views) * 100 : 0
+      effectivenessRate: stats.views > 0 ? (stats.helpful / stats.views) * 100 : 0,
     }));
     return report.sort((a, b) => b.effectivenessRate - a.effectivenessRate);
   };

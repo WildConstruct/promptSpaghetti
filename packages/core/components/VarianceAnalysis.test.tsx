@@ -96,7 +96,7 @@ const mockVarianceInfo = {
   background: '#fffbeb',
   border: '#fed7aa',
   icon: '🟡',
-  description: 'Good balance of consistency and variety'
+  description: 'Good balance of consistency and variety',
 };
 describe('VarianceAnalysis', () => {
   beforeEach(() => {
@@ -223,7 +223,7 @@ describe('VarianceAnalysis', () => {
         createMockResult(1, 'First result'),
         createMockResult(2, 'Second result')
       ];
-      render()
+      render();
         <VarianceAnalysis 
           results={results} 
           onSuggestionClick={mockOnSuggestionClick}
@@ -239,7 +239,7 @@ describe('VarianceAnalysis', () => {
         createMockResult(1, 'First result'),
         createMockResult(2, 'Second result')
       ];
-      render()
+      render();
         <VarianceAnalysis 
           results={results} 
           onSuggestionClick={mockOnSuggestionClick}
@@ -262,7 +262,7 @@ describe('VarianceAnalysis', () => {
         background: '#fef2f2',
         border: '#fecaca',
         icon: '🔴',
-        description: 'Results are very similar'
+        description: 'Results are very similar',
       };
       mockVarianceService.analyzeVariance.mockReturnValue(lowVarianceAnalysis as unknown);
       mockVarianceService.getVarianceLevelInfo.mockReturnValue(lowVarianceInfo as unknown);
@@ -286,7 +286,7 @@ describe('VarianceAnalysis', () => {
         background: '#f0fdf4',
         border: '#bbf7d0',
         icon: '🟢',
-        description: 'High creative diversity'
+        description: 'High creative diversity',
       };
       mockVarianceService.analyzeVariance.mockReturnValue(highVarianceAnalysis as unknown);
       mockVarianceService.getVarianceLevelInfo.mockReturnValue(highVarianceInfo as unknown);

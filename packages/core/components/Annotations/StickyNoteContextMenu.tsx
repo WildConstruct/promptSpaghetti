@@ -75,7 +75,7 @@ export
         border: 'none',
         borderRadius: 4,
         transition: 'background-color 0.15s ease',
-        opacity: disabled ? 0.5 : 1
+        opacity: disabled ? 0.5 : 1,
       }}
       onMouseEnter={(e) => {
         if (!disabled) {
@@ -101,7 +101,7 @@ export
       )}
     </div>
   );
-  return ()
+  return ();
     <div
       ref={menuRef}
       style={{
@@ -136,7 +136,7 @@ export
       <div style={{
         height: 1,
         background: '#e5e7eb',
-        margin: '4px 0'
+        margin: '4px 0',
       }} />
       {/* Color Options */}
       <div style={{ padding: '8px 12px' }}>
@@ -198,7 +198,7 @@ export
       <div style={{
         height: 1,
         background: '#e5e7eb',
-        margin: '4px 0'
+        margin: '4px 0',
       }} />
       {/* Delete */}
       <MenuItem

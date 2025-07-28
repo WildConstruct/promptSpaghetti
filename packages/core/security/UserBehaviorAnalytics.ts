@@ -287,7 +287,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
   private updateGeographicPatterns(profile: UserBehaviorProfile, event: UserBehaviorEvent): void {
     if (!event.geolocation) return;
     // Add to common locations if not already present
-    const existingLocation = profile.commonLocations.find(loc =>;)
+    const existingLocation = profile.commonLocations.find(loc =>;);
       this.calculateDistance(loc, event.geolocation!) < 50 // 50km threshold
     );
     if (!existingLocation) {
@@ -419,7 +419,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
     const anomalies: BehaviorAnomaly[] = [];
     if (!event.geolocation) return anomalies;
     // Check for unknown location
-    const minDistance = Math.min(...profile.commonLocations.map(loc =>;)
+    const minDistance = Math.min(...profile.commonLocations.map(loc =>;);
       this.calculateDistance(loc, event.geolocation!)
     ));
     if (minDistance > profile.suspiciousLocationThreshold) {
@@ -484,7 +484,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
     const anomalies: BehaviorAnomaly[] = [];
     // Check excessive access volume
     const recentEvents = this.getRecentEvents(event.userId, undefined, 60 * 60 * 1000); // Last hour;
-    const averageHourlyActivity = profile.totalEvents / Math.max(1, ;)
+    const averageHourlyActivity = profile.totalEvents / Math.max(1, ;);
       (Date.now() - profile.createdAt.getTime()) / (60 * 60 * 1000)
     );
     if (recentEvents.length > averageHourlyActivity * 5) {
@@ -619,7 +619,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
   private getRecentEvents()
     userId: string, 
     actionType?: UserActionType, 
-    timeframeMs: number = 24 * 60 * 60 * 1000
+    timeframeMs: number = 24 * 60 * 60 * 1000,
   ): UserBehaviorEvent[] {
     const userEvents = this.recentEvents.get(userId) || [];
     const cutoff = Date.now() - timeframeMs;
@@ -656,7 +656,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
       businessImpact,
       probabilityOfThreat,
       potentialDamage: this.getPotentialDamage(type),
-      mitigationUrgency: overallRisk > 80 ? 'immediate' : 
+      mitigationUrgency: overallRisk > 80 ? 'immediate' : ,
                          overallRisk > 60 ? 'high' : 
                          overallRisk > 40 ? 'medium' : 'low'
     };
@@ -695,7 +695,7 @@ export class UserBehaviorAnalytics extends EventEmitter {
     const userEvents = this.recentEvents.get(userId);
     if (!userEvents) return;
     const cutoff = Date.now() - (7 * 24 * 60 * 60 * 1000); // 7 days;
-    const filteredEvents = userEvents.filter(event => ;)
+    const filteredEvents = userEvents.filter(event => ;);
       event.timestamp.getTime() > cutoff
     );
     this.recentEvents.set(userId, filteredEvents);

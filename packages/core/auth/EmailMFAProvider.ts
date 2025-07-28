@@ -95,7 +95,7 @@ interface EmailMFAStorage {
 const EmailEnrollmentSchema = z.object({)
   methodType: z.literal(MFAMethodType.EMAIL),
   displayName: z.string().min(1).max(100),
-  emailAddress: z.string().email().max(320) // RFC 5321 limit
+  emailAddress: z.string().email().max(320) // RFC 5321 limit,
 });
 const EmailVerificationSchema = z.object({)
   configurationId: z.string().uuid(),
@@ -112,12 +112,11 @@ export class EmailMFAProvider {
   private emailService: EmailService;
   private storage: EmailMFAStorage;
   private encryptionKey: Buffer;
-  constructor()
+  constructor();
     config: EmailMFAConfig,
     emailService: EmailService,
     storage: EmailMFAStorage,
     encryptionKey: string,
-  ) {
     this.config = config;
     this.emailService = emailService;
     this.storage = storage;
@@ -172,7 +171,7 @@ export class EmailMFAProvider {
       isVerified: false,
       failedAttempts: 0,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
     // Save configuration
     await this.storage.saveConfiguration(configuration);
@@ -182,7 +181,7 @@ export class EmailMFAProvider {
       configurationId,
       methodType: MFAMethodType.EMAIL,
       requiresVerification: true,
-      expiresAt: new Date(Date.now() + MFA_CONSTANTS.EMAIL.TOKEN_EXPIRY * 1000)
+      expiresAt: new Date(Date.now() + MFA_CONSTANTS.EMAIL.TOKEN_EXPIRY * 1000),
     };
   }
   async completeEnrollment(userId: string, verificationId: string, code: string): Promise<void> {
@@ -288,7 +287,7 @@ export class EmailMFAProvider {
         return {
           success: false,
           result: MFAVerificationResult.USER_LOCKED,
-          lockoutDuration: Math.ceil((configuration.lockedUntil.getTime() - Date.now()) / 1000)
+          lockoutDuration: Math.ceil((configuration.lockedUntil.getTime() - Date.now()) / 1000),
         };
       }
       // Check rate limiting
@@ -375,7 +374,7 @@ export class EmailMFAProvider {
         result: MFAVerificationResult.INVALID_CODE,
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        processingTimeMs: Date.now() - startTime
+        processingTimeMs: Date.now() - startTime,
       });
       throw error;
     }
@@ -416,7 +415,7 @@ export class EmailMFAProvider {
     emailAddress: string,
     code: string,
     displayName: string,
-    includeSecurityWarning: boolean = false
+    includeSecurityWarning: boolean = false,
   ): Promise<void> {
     const template: EmailTemplate = {
       subject: 'Your PromptScape Verification Code',
@@ -428,7 +427,7 @@ export class EmailMFAProvider {
       code,
       displayName,
       expiryMinutes: '10',
-      securityWarning: includeSecurityWarning ? 'This login attempt appears to be from an unusual location or device.' : ''
+      securityWarning: includeSecurityWarning ? 'This login attempt appears to be from an unusual location or device.' : '',
     });
   }
   // ========================================
@@ -543,7 +542,7 @@ export class EmailMFAProvider {
     await this.storage.logVerificationAttempt({)
       id: crypto.randomUUID(),
       ...attempt,
-      attemptedAt: new Date()
+      attemptedAt: new Date(),
     });
   }
   // ========================================

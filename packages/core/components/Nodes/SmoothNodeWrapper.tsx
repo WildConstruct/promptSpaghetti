@@ -148,7 +148,7 @@ export const SmoothNodeWrapper: React.FC<SmoothNodeWrapperProps> = ({)
       background: 'linear-gradient(135deg, rgba(31, 41, 55, 0.95) 0%, rgba(17, 24, 39, 0.98) 100%)',
       border: `2px solid ${selected || isSelected ? colors.primary : 'rgba(55, 65, 81, 0.8)'}`,}
       backdropFilter: 'blur(8px)',
-      boxShadow: selected || isSelected 
+      boxShadow: selected || isSelected ,
         ? `0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px ${colors.primary}40`}
         : isHovered 
           ? '0 12px 40px rgba(0, 0, 0, 0.25)'
@@ -161,7 +161,6 @@ export const SmoothNodeWrapper: React.FC<SmoothNodeWrapperProps> = ({)
         ['transform', 'box-shadow', 'border-color', 'background'],
         animationDurations.normal,
         easingFunctions.cinema4d.professional
-      )
     };
     // Apply hover and selection effects
     if (isPressed) {
@@ -192,7 +191,6 @@ export const SmoothNodeWrapper: React.FC<SmoothNodeWrapperProps> = ({)
     ...createSmoothTransition()
       ['background', 'border-color', 'box-shadow', 'transform'],
       animationDurations.micro
-    )
   });
   const handleHoverStyle: React.CSSProperties = {
     transform: 'scale(1.2)',
@@ -200,7 +198,7 @@ export const SmoothNodeWrapper: React.FC<SmoothNodeWrapperProps> = ({)
     borderColor: colors.accent,
     boxShadow: `0 4px 12px ${colors.primary}60`}
   };
-  return ()
+  return ();
     <div
       ref={nodeRef}
       style={getNodeStyle()}
@@ -272,7 +270,7 @@ export const SmoothNodeWrapper: React.FC<SmoothNodeWrapperProps> = ({)
               background: `radial-gradient(circle at center, ${colors.primary}15, transparent)`,}
               pointerEvents: 'none',
               zIndex: -1,
-              animation: 'fadeIn 0.3s ease-out'
+              animation: 'fadeIn 0.3s ease-out',
             }}
           />
         )}
@@ -332,7 +330,7 @@ export const NodeCreationAnimator: React.FC<NodeCreationAnimatorProps> = ({)
       return () => clearTimeout(timer);
     }
   }, [isCreating, onAnimationComplete]);
-  return ()
+  return ();
     <div
       className={isCreating ? 'animate-node-create' : ''}
       style={{

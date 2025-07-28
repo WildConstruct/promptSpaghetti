@@ -271,7 +271,7 @@ export interface ISecurityDomain {
   };
   // React Hooks
   hooks: {,
-    useAuth: () => {
+    useAuth: () => {,
       user: User | null;
       permissions: Permission[];
       isAuthenticated: boolean;
@@ -279,28 +279,28 @@ export interface ISecurityDomain {
       logout: () => Promise<void>;
       checkPermission: (resource: string, action: PermissionAction) => boolean;
     };
-    usePermissions: () => {
+    usePermissions: () => {,
       permissions: Permission[];
       loading: boolean;
       hasPermission: (resource: string, action: PermissionAction) => boolean;
       hasRole: (roleName: string) => boolean;
       refreshPermissions: () => Promise<void>;
     };
-    useAuditLogs: () => {
+    useAuditLogs: () => {,
       logs: AuditLog[];
       loading: boolean;
       error: string | null;
       fetchLogs: (filters?: AuditLogFilters) => Promise<void>;
       exportLogs: (format: string) => Promise<void>;
     };
-    useSecurityAlerts: () => {
+    useSecurityAlerts: () => {,
       alerts: SecurityAlert[];
       unreadCount: number;
       loading: boolean;
       acknowledgeAlert: (alertId: string) => Promise<void>;
       resolveAlert: (alertId: string, resolution: string) => Promise<void>;
     };
-    useSecurityMetrics: () => {
+    useSecurityMetrics: () => {,
       metrics: SecurityMetrics | null;
       loading: boolean;
       refreshMetrics: () => Promise<void>;
@@ -318,7 +318,7 @@ export interface ISecurityDomain {
     encryption: IEncryptionService;
   };
   // Event System
-  events: SecurityDomainEvents & {
+  events: SecurityDomainEvents & {,
     subscribe: (event: keyof SecurityDomainEvents, callback: Function) => () => void;
     emit: (event: keyof SecurityDomainEvents, ...args: any[]) => void;
   };

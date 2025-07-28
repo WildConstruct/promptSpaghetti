@@ -8,7 +8,6 @@
  * Part of Epic 17 - Backstage Admin Controls
  * Task: E17-1753114397411-1FA735 - Implement verification display
  */
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -33,42 +32,37 @@ import {
   Copy,
   Download
 } from 'lucide-react';
-
 interface VerificationDisplayConfig {
   // Display Settings
   showTrustScores: boolean;
   showBadgeCount: boolean;
   showVerificationLevel: boolean;
   showReputation: boolean;
-  
   // Style Configuration
   badgeStyle: 'compact' | 'detailed' | 'minimal';
   trustIndicatorSize: 'small' | 'medium' | 'large';
   colorScheme: 'default' | 'professional' | 'vibrant';
   animationsEnabled: boolean;
-  
   // Visibility Rules
-  publicDisplaySettings: {
+  publicDisplaySettings: {,
     unverifiedUsers: boolean;
     lowReputationUsers: boolean;
     flaggedUsers: boolean;
   };
-  
   // Thresholds
-  displayThresholds: {
+  displayThresholds: {,
     minTrustScore: number;
     minBadgeCount: number;
     hideUnverified: boolean;
   };
 }
-
 interface TrustDisplayPreview {
   userId: string;
   username: string;
   trustScore: number;
   reputationLevel: string;
   verificationLevel: string;
-  badges: Array<{
+  badges: Array<{,
     badgeType: string;
     name: string;
     verified: boolean;
@@ -76,7 +70,6 @@ interface TrustDisplayPreview {
   }>;
   flagged: boolean;
 }
-
 interface VerificationDisplayManagerProps {
   className?: string;
 }
@@ -87,9 +80,8 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
   const [activeTab, setActiveTab] = useState('display-config');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
   // Configuration state
-  const [config, setConfig] = useState<VerificationDisplayConfig>({
+  const [config, setConfig] = useState<VerificationDisplayConfig>({)
     showTrustScores: true,
     showBadgeCount: true,
     showVerificationLevel: true,
@@ -98,18 +90,17 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
     trustIndicatorSize: 'medium',
     colorScheme: 'default',
     animationsEnabled: true,
-    publicDisplaySettings: {
+    publicDisplaySettings: {,
       unverifiedUsers: true,
       lowReputationUsers: true,
-      flaggedUsers: false
+      flaggedUsers: false,
     },
-    displayThresholds: {
+    displayThresholds: {,
       minTrustScore: 0,
       minBadgeCount: 0,
-      hideUnverified: false
+      hideUnverified: false,
     }
   });
-
   // Load preview data
   const loadPreviewData = async (): Promise<void> => {
     try {
@@ -117,15 +108,14 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
       // Get sample users with different trust levels for preview
       const response = await fetch('/api/admin/reputation/users?limit=6');
       const result = await response.json();
-      
       if (result.success) {
-        const mappedData = result.data.map((user: Record<string, unknown>): TrustDisplayPreview => ({
+        const mappedData = result.data.map((user: Record<string, unknown>): TrustDisplayPreview => ({)
           userId: (user.userId as string) || '',
           username: (user.username as string) || '',
           trustScore: (user.overallTrustScore as number) || 0,
           reputationLevel: (user.reputationLevel as string) || 'bronze',
-          verificationLevel: (
-            (user.verification as Record<string,
+          verificationLevel: (),
+            (user.verification as Record<string,)
             unknown>
           )?.verificationLevel as string) || 'unverified',
           badges: [], // Would be populated from user reputation data
@@ -140,17 +130,15 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
       setLoading(false);
     }
   };
-
   // Save configuration
   const saveConfiguration = async (): Promise<void> => {
     try {
       setLoading(true);
-      const response = await fetch('/api/admin/verification-display/config', {
+      const response = await fetch('/api/admin/verification-display/config', {)
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(config)
+        body: JSON.stringify(config),
       });
-      
       if (response.ok) {
         // Configuration saved successfully
         console.log('Configuration saved');
@@ -162,7 +150,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
       setLoading(false);
     }
   };
-
   // Export configuration
   const exportConfiguration = (): void => {
     const configString = JSON.stringify(config, null, 2);
@@ -170,18 +157,16 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `verification-display-config-${Date.now()}.json`;
+    a.download = `verification-display-config-${Date.now()}.json`;}
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-
   // Load preview data on component mount
   useEffect(() => {
     loadPreviewData();
   }, []);
-
   // Mock trust indicator component based on configuration
   const TrustIndicatorPreview: React.FC<{ user: TrustDisplayPreview; size: string }> = ({ user, size }) => {
     // eslint-disable-next-line react/prop-types
@@ -195,7 +180,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
       default: return <CheckCircle className="w-4 h-4 text-gray-400" />;
       }
     };
-
     const getTrustColor = (level: string): string => {
       switch (level) {
       case 'diamond': return 'border-purple-300 bg-purple-50';
@@ -206,30 +190,28 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
       default: return 'border-gray-200 bg-gray-50';
       }
     };
-
     const sizeClass = size === 'small' ? 'text-xs p-2' : size === 'large' ? 'text-base p-4' : 'text-sm p-3';
-    const containerClass = `border rounded-lg ${getTrustColor(user.reputationLevel)} ${sizeClass}`;
-
-    return (
+    const containerClass = `border rounded-lg ${getTrustColor(user.reputationLevel)} ${sizeClass}`;}
+    return ()
       <div className={containerClass}>
         <div className="flex items-center gap-2">
           {getTrustIcon(user.reputationLevel)}
           <div className="flex-1">
             <div className="font-medium">{user.username}</div>
-            {config.showTrustScores && (
+            {config.showTrustScores && ()
               <div className="text-xs text-gray-600">Trust: {user.trustScore}/1000</div>
             )}
-            {config.showVerificationLevel && (
+            {config.showVerificationLevel && ()
               <Badge variant="secondary" className="text-xs mt-1">
                 {user.verificationLevel}
               </Badge>
             )}
-            {config.showBadgeCount && (
+            {config.showBadgeCount && ()
               <div className="text-xs text-gray-500 mt-1">
                 {user.badges.length} badges
               </div>
             )}
-            {user.flagged && !config.publicDisplaySettings.flaggedUsers && (
+            {user.flagged && !config.publicDisplaySettings.flaggedUsers && ()
               <Badge variant="destructive" className="text-xs mt-1">
                 Flagged
               </Badge>
@@ -239,8 +221,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
       </div>
     );
   };
-
-  return (
+  return ()
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -249,7 +230,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
           <Badge variant="secondary">Epic 17</Badge>
         </CardTitle>
       </CardHeader>
-      
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-4">
@@ -258,7 +238,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
             <TabsTrigger value="visibility-rules">Visibility</TabsTrigger>
             <TabsTrigger value="preview">Preview</TabsTrigger>
           </TabsList>
-
           <TabsContent value="display-config" className="space-y-4">
             <Card>
               <CardHeader>
@@ -277,7 +256,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     }
                   />
                 </div>
-
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="font-medium">Show Badge Count</label>
@@ -290,7 +268,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     }
                   />
                 </div>
-
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="font-medium">Show Verification Level</label>
@@ -303,7 +280,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     }
                   />
                 </div>
-
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="font-medium">Show Reputation Level</label>
@@ -319,7 +295,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
               </CardContent>
             </Card>
           </TabsContent>
-
           <TabsContent value="style-config" className="space-y-4">
             <Card>
               <CardHeader>
@@ -347,7 +322,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div className="space-y-2">
                   <label className="font-medium">Trust Indicator Size</label>
                   <Select 
@@ -366,7 +340,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div className="space-y-2">
                   <label className="font-medium">Color Scheme</label>
                   <Select 
@@ -385,7 +358,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="font-medium">Enable Animations</label>
@@ -401,7 +373,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
               </CardContent>
             </Card>
           </TabsContent>
-
           <TabsContent value="visibility-rules" className="space-y-4">
             <Card>
               <CardHeader>
@@ -416,14 +387,13 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                   <Switch
                     checked={config.publicDisplaySettings.unverifiedUsers}
                     onCheckedChange={(checked) => 
-                      setConfig(prev => ({
+                      setConfig(prev => ({)
                         ...prev,
                         publicDisplaySettings: { ...prev.publicDisplaySettings, unverifiedUsers: checked }
                       }))
                     }
                   />
                 </div>
-
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="font-medium">Show Low Reputation Users</label>
@@ -432,14 +402,13 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                   <Switch
                     checked={config.publicDisplaySettings.lowReputationUsers}
                     onCheckedChange={(checked) => 
-                      setConfig(prev => ({
+                      setConfig(prev => ({)
                         ...prev,
                         publicDisplaySettings: { ...prev.publicDisplaySettings, lowReputationUsers: checked }
                       }))
                     }
                   />
                 </div>
-
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="font-medium">Show Flagged Users</label>
@@ -448,7 +417,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                   <Switch
                     checked={config.publicDisplaySettings.flaggedUsers}
                     onCheckedChange={(checked) => 
-                      setConfig(prev => ({
+                      setConfig(prev => ({)
                         ...prev,
                         publicDisplaySettings: { ...prev.publicDisplaySettings, flaggedUsers: checked }
                       }))
@@ -457,7 +426,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Display Thresholds</CardTitle>
@@ -470,7 +438,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     type="number"
                     value={config.displayThresholds.minTrustScore}
                     onChange={(e) => 
-                      setConfig(prev => ({
+                      setConfig(prev => ({)
                         ...prev,
                         displayThresholds: { ...prev.displayThresholds, minTrustScore: parseInt(e.target.value) || 0 }
                       }))
@@ -479,7 +447,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     max="1000"
                   />
                 </div>
-
                 <div className="space-y-2">
                   <label className="font-medium">Minimum Badge Count</label>
                   <p className="text-sm text-gray-600">Minimum badges required to show badge count</p>
@@ -487,7 +454,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     type="number"
                     value={config.displayThresholds.minBadgeCount}
                     onChange={(e) => 
-                      setConfig(prev => ({
+                      setConfig(prev => ({)
                         ...prev,
                         displayThresholds: { ...prev.displayThresholds, minBadgeCount: parseInt(e.target.value) || 0 }
                       }))
@@ -495,7 +462,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                     min="0"
                   />
                 </div>
-
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="font-medium">Hide Unverified Completely</label>
@@ -504,7 +470,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                   <Switch
                     checked={config.displayThresholds.hideUnverified}
                     onCheckedChange={(checked) => 
-                      setConfig(prev => ({
+                      setConfig(prev => ({)
                         ...prev,
                         displayThresholds: { ...prev.displayThresholds, hideUnverified: checked }
                       }))
@@ -514,7 +480,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
               </CardContent>
             </Card>
           </TabsContent>
-
           <TabsContent value="preview" className="space-y-4">
             {/* Device Selection */}
             <div className="flex items-center gap-2 mb-4">
@@ -549,7 +514,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                 </Button>
               </div>
             </div>
-
             {/* Preview Container */}
             <Card>
               <CardHeader>
@@ -562,22 +526,22 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                 </div>
               </CardHeader>
               <CardContent>
-                {loading ? (
+                {loading ? ()
                   <div className="text-center py-8">
                     <div className="animate-pulse">Loading preview data...</div>
                   </div>
-                ) : error ? (
+                ) : error ? ()
                   <div className="text-center py-8 text-red-600">
                     <AlertTriangle className="w-6 h-6 mx-auto mb-2" />
                     {error}
                   </div>
-                ) : (
+                ) : ()
                   <div className={`grid gap-3 ${
                     selectedDevice === 'mobile' ? 'grid-cols-1' :
                       selectedDevice === 'tablet' ? 'grid-cols-2' :
                         'grid-cols-3'
                   }`}>
-                    {previewData.map((user) => (
+                    {previewData.map((user) => ()
                       /* eslint-disable-next-line react/prop-types */
                       <TrustIndicatorPreview 
                         key={user.userId} 
@@ -591,7 +555,6 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
             </Card>
           </TabsContent>
         </Tabs>
-
         {/* Action Buttons */}
         <div className="flex justify-between items-center mt-6 pt-4 border-t">
           <div className="flex gap-2">
@@ -604,13 +567,11 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
               Copy Config
             </Button>
           </div>
-          
           <Button onClick={saveConfiguration} disabled={loading} className="flex items-center gap-2">
             <Save className="w-4 h-4" />
             Save Configuration
           </Button>
         </div>
-
         {/* Configuration Summary */}
         <div className="mt-4 text-xs text-gray-500">
           Configuration: {config.badgeStyle} badges, {config.trustIndicatorSize} size, 

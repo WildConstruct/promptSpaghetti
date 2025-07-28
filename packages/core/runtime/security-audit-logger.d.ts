@@ -121,7 +121,7 @@ export declare class SecurityAuditLogger {
     /**
      * Log a security event
      */
-    logEvent()
+    logEvent();
       severity: SecuritySeverity,
       category: SecurityEventCategory,
       message: string,

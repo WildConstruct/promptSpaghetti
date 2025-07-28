@@ -126,7 +126,7 @@ export class MemoryRateLimitStore implements RateLimitStore {
   async set(key: string, data: RateLimitData, ttlMs: number): Promise<void> {
     this.store.set(key, {)
       ...data,
-      resetTime: Date.now() + ttlMs
+      resetTime: Date.now() + ttlMs,
     });
   }
   async increment(key: string, windowMs: number): Promise<{ hits: number; resetTime: Date }> {
@@ -143,7 +143,7 @@ export class MemoryRateLimitStore implements RateLimitStore {
       this.store.set(key, data);
       return {
         hits: 1,
-        resetTime: new Date(resetTime)
+        resetTime: new Date(resetTime),
       };
     } else {
       // Increment existing
@@ -151,7 +151,7 @@ export class MemoryRateLimitStore implements RateLimitStore {
       this.store.set(key, existing);
       return {
         hits: existing.hits,
-        resetTime: new Date(existing.resetTime)
+        resetTime: new Date(existing.resetTime),
       };
     }
   }
@@ -302,14 +302,14 @@ export class FixedWindowStrategy extends RateLimitStrategy {
         windowStart,
         windowEnd: resetTime,
         exceeded,
-        retryAfter: exceeded ? Math.ceil((resetTime.getTime() - now.getTime()) / 1000) : undefined
+        retryAfter: exceeded ? Math.ceil((resetTime.getTime() - now.getTime()) / 1000) : undefined,
       };
       const headers = this.generateHeaders(info);
       return {
         allowed: !exceeded,
         info,
         headers,
-        error: exceeded ? this.generateErrorMessage(info) : undefined
+        error: exceeded ? this.generateErrorMessage(info) : undefined,
       };
     } catch (error) {
       console.error('Rate limit check failed:', error);
@@ -328,7 +328,7 @@ export class FixedWindowStrategy extends RateLimitStrategy {
         allowed: true,
         info: defaultInfo,
         headers: this.generateHeaders(defaultInfo),
-        error: 'Rate limit store unavailable'
+        error: 'Rate limit store unavailable',
       };
     }
   }
@@ -432,7 +432,7 @@ export class RateLimiter {
       resetTime,
       windowStart,
       windowEnd: resetTime,
-      exceeded: data.hits > this.config.maxRequests
+      exceeded: data.hits > this.config.maxRequests,
     };
   }
   /**

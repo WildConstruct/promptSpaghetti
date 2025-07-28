@@ -213,7 +213,7 @@ export const EmbedCodeGenerator: React.FC<{
       console.error('Failed to copy code:', err);
     }
   }, [embedCode]);
-  return ()
+  return ();
     <div className="bg-white border border-gray-200 rounded-lg">
       <div className="border-b border-gray-200">
         <div className="flex items-center justify-between p-4">
@@ -288,7 +288,7 @@ export const EmbedCustomizationPanel: React.FC<{
       branding: { ...customization.branding, ...updates }
     });
   }, [customization.branding, onCustomizationChange]);
-  return ()
+  return ();
     <div className="bg-white border border-gray-200 rounded-lg">
       <div className="border-b border-gray-200">
         <h3 className="font-semibold text-gray-900 p-4">Customize Embed</h3>
@@ -301,7 +301,7 @@ export const EmbedCustomizationPanel: React.FC<{
             { id: 'branding', label: 'Branding', icon: PaintBrushIcon }
           ].map((section) => {
             const Icon = section.icon;
-            return ()
+            return ();
               <button
                 key={section.id}
                 onClick={() => setActiveSection(section.id as any)}
@@ -325,7 +325,7 @@ export const EmbedCustomizationPanel: React.FC<{
             <div className="grid grid-cols-2 gap-3 mb-4">
               {PREVIEW_SIZES.map((size) => {
                 const Icon = size.icon;
-                return ()
+                return ();
                   <button
                     key={size.label}
                     onClick={() => onPreviewSizeChange(size)}
@@ -619,7 +619,7 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
       return 'p-4 text-sm';
     }
   };
-  return ()
+  return ();
     <div className={`bg-white border border-gray-200 rounded-lg overflow-hidden ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 p-4">

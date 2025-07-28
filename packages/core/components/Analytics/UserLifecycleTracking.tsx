@@ -2527,7 +2527,7 @@ export const UserLifecycleTracking: React.FC<UserLifecycleTrackingProps> = ({)
     }, {} as Record<string, number>);
     const avgProgression = mockLifecycleData.reduce((sum, user) => ;
       sum + user.progressionAnalysis.overallProgression.progressionRate, 0) / totalUsers;
-    const healthyUsers = mockLifecycleData.filter(user => ;)
+    const healthyUsers = mockLifecycleData.filter(user => ;);
       user.healthAssessment.overall > 70).length;
     return {
       totalUsers,
@@ -2541,7 +2541,7 @@ export const UserLifecycleTracking: React.FC<UserLifecycleTrackingProps> = ({)
   const selectedUserData = useMemo(() => {
     return selectedUser ? mockLifecycleData.find(u => u.userId === selectedUser) : null;
   }, [selectedUser, mockLifecycleData]);
-  return ()
+  return ();
     <div className="user-lifecycle-tracking">
       <div className="lifecycle-header">
         <div className="header-section">

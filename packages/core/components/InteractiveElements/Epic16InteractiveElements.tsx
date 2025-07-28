@@ -177,7 +177,7 @@ export const Epic16InteractiveElements: React.FC<Epic16InteractiveElementsProps>
                   main: 'Community Chat Widget',
                   input: 'Type your message',
                   send: 'Send message',
-                  close: 'Close chat'
+                  close: 'Close chat',
                 },
                 keyboard_navigation: true,
                 screen_reader_support: true,
@@ -359,7 +359,7 @@ export const Epic16InteractiveElements: React.FC<Epic16InteractiveElementsProps>
                 accessibility: {,
                   aria_labels: {,
                     main: `${config.name} Progress Bar`,}
-                    progress: 'Progress indicator'
+                    progress: 'Progress indicator',
                   },
                   keyboard_navigation: false,
                   screen_reader_support: true,
@@ -517,7 +517,7 @@ export const Epic16InteractiveElements: React.FC<Epic16InteractiveElementsProps>
   }, [elements]);
   // Render loading state
   if (loading) {
-    return ()
+    return ();
       <div className="fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 z-50">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
@@ -528,7 +528,7 @@ export const Epic16InteractiveElements: React.FC<Epic16InteractiveElementsProps>
   }
   // Render error state
   if (error) {
-    return ()
+    return ();
       <div className="fixed bottom-4 right-4 bg-red-50 border border-red-200 rounded-lg p-4 z-50 max-w-sm">
         <div className="flex">
           <div className="flex-shrink-0">
@@ -548,7 +548,7 @@ export const Epic16InteractiveElements: React.FC<Epic16InteractiveElementsProps>
   }
   const chatElement = getChatElement();
   const progressElements = getProgressElements();
-  return ()
+  return ();
     <>
       {/* Live Chat Widget */}
       {chatElement && chatElement.isVisible && ()
@@ -569,7 +569,7 @@ export const Epic16InteractiveElements: React.FC<Epic16InteractiveElementsProps>
       {progressElements.map(elementState => {)
         const progressId = elementState.element.name.toLowerCase().replace(/\s+/g, '_');
         const currentValue = progressValues[progressId] || 0;
-        return ()
+        return ();
           <div key={elementState.id} className="mb-4">
             <h3 className="text-sm font-medium text-gray-900 mb-2">
               {elementState.element.name}

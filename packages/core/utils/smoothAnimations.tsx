@@ -57,7 +57,7 @@ export const cssAnimationClasses = {
 export function createAnimationStyle()
   property: string, 
   duration: number = animationDurations.normal,
-  easing: string = easingFunctions.cinema4d.professional
+  easing: string = easingFunctions.cinema4d.professional,
 ): React.CSSProperties {
   return {
     transition: `${property} ${duration}ms ${easing}`,}
@@ -70,7 +70,7 @@ export function createAnimationStyle()
 export function createSmoothTransition()
   properties: string[],
   duration: number = animationDurations.normal,
-  easing: string = easingFunctions.cinema4d.professional
+  easing: string = easingFunctions.cinema4d.professional,
 ): React.CSSProperties {
   return {
     transition: properties.map(prop => `${prop} ${duration}ms ${easing}`).join(', '),}
@@ -119,7 +119,7 @@ export function useAnimation(initialState: boolean = false) {
 export function smoothScrollTo()
   element: HTMLElement,
   top: number,
-  duration: number = animationDurations.smooth
+  duration: number = animationDurations.smooth,
 ): void {
   const start = element.scrollTop;
   const change = top - start;
@@ -194,8 +194,7 @@ export const globalAnimationManager = new AnimationManager();
  * Hook for managing element hover states with smooth transitions
  */
 export function useSmoothHover()
-  duration: number = animationDurations.micro
-) {
+  duration: number = animationDurations.micro,
   const [isHovered, setIsHovered] = React.useState(false);
   const [isTransitioning, setIsTransitioning] = React.useState(false);
   const handleMouseEnter = React.useCallback(() => {
@@ -290,10 +289,10 @@ export const AnimatedContainer: React.FC<AnimatedProps> = ({)
     return {
       ...baseStyle,
       opacity: 1,
-      transform: 'translateY(0) scale(1)'
+      transform: 'translateY(0) scale(1)',
     };
   };
-  return ()
+  return ();
     <div 
       className={className}
       style={{

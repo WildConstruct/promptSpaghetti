@@ -197,9 +197,9 @@ export const useMarketplaceMetrics = (config: MarketplaceMetricsConfig = {}) => 
   const getCreatorAnalytics = useCallback((creatorId: string): CreatorMetrics | null => {
     return marketplaceMetrics.getCreatorAnalytics(creatorId);
   }, []);
-  const getTopPerformingTemplates = useCallback(;)
+  const getTopPerformingTemplates = useCallback(;);
     (metric: 'revenue' | 'downloads' | 'rating' = 'revenue',)
-      limit: number = 10
+      limit: number = 10,
     ) => {
       return marketplaceMetrics.getTopPerformingTemplates(metric, limit);
     }, []);

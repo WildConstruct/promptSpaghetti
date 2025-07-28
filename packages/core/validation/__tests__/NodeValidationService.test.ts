@@ -10,7 +10,7 @@ describe('NodeValidationService', () => {
     service = new NodeValidationService({)
       enableCaching: true,
       enableMonitoring: true,
-      cacheExpirationMs: 1000 // 1 second for testing
+      cacheExpirationMs: 1000 // 1 second for testing,
     });
   });
   afterEach(() => {
@@ -156,7 +156,7 @@ describe('NodeValidationService', () => {
     });
     it('should respect batch size configuration', async () => {
       const smallBatchService = new NodeValidationService({)
-        batchSize: 1 // Process one at a time
+        batchSize: 1 // Process one at a time,
       });
       const progressEvents: any[] = [];
       smallBatchService.on('batch_validation_progress', (data) => progressEvents.push(data));
@@ -300,7 +300,7 @@ describe('NodeValidationService', () => {
     });
     it('should automatically expire cache entries', async () => {
       const shortCacheService = new NodeValidationService({)
-        cacheExpirationMs: 100 // 100ms expiration
+        cacheExpirationMs: 100 // 100ms expiration,
       });
       const nodeData: AdvancedNodeData = {
         id: 'expire-node',
@@ -332,7 +332,7 @@ describe('NodeValidationService', () => {
       service.on('config_updated', (data) => configEvents.push(data));
       service.updateConfig({)
         strictTypeValidation: false,
-        maxMemoryUsage: 100 * 1024 * 1024 // 100MB
+        maxMemoryUsage: 100 * 1024 * 1024 // 100MB,
       });
       expect(configEvents).toHaveLength(1);
       expect(configEvents[0].newConfig.strictTypeValidation).toBe(false);
@@ -352,7 +352,7 @@ describe('NodeValidationService', () => {
           stateful: false,
         },
         data: {,
-          condition: 'eval("should be blocked but isn\'t")'
+          condition: 'eval("should be blocked but isn\'t")',
         }
       };
       const result = await service.validateNode(dangerousNode);

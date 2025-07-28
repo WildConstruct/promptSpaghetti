@@ -51,7 +51,7 @@ export class ConstraintSuggestionEngine {
   /**
    * Generate suggestions for constraint violations
    */
-  generateSuggestions()
+  generateSuggestions();
     validationResult: ConstraintValidationResult,
     nodes: UTDGNode[],
     context: SuggestionContext,
@@ -152,7 +152,7 @@ export class ConstraintSuggestionEngine {
           specific_actions: [{,
             action_type: 'add_context',
             description: 'Add transitional period context to justify era mixing',
-            rationale: 'Transitional periods naturally contain elements from multiple eras'
+            rationale: 'Transitional periods naturally contain elements from multiple eras',
           }],
           historical_context: 'Historical periods often overlapped, creating transitional phases',
           trade_offs: ['Maintains visual variety', 'Requires additional historical justification']
@@ -250,7 +250,7 @@ export class ConstraintSuggestionEngine {
             action_type: 'add_context',
             description: 'Add educational context about cultural significance',
             target_node_ids: [node.id],
-            rationale: 'Religious and ceremonial items require proper cultural understanding'
+            rationale: 'Religious and ceremonial items require proper cultural understanding',
           }],
           historical_context: `${node.content} had specific cultural and religious significance in ${context.era.name}`,}
           trade_offs: ['Requires additional research', 'Maintains cultural sensitivity']
@@ -268,9 +268,9 @@ export class ConstraintSuggestionEngine {
               action_type: 'replace_node',
               description: 'Replace with non-ceremonial alternative',
               target_node_ids: [node.id],
-              rationale: 'Avoids cultural sensitivity issues while maintaining visual appeal'
+              rationale: 'Avoids cultural sensitivity issues while maintaining visual appeal',
             }],
-            historical_context: 'Secular versions often existed alongside ceremonial ones'
+            historical_context: 'Secular versions often existed alongside ceremonial ones',
           });
         }
       }
@@ -300,7 +300,7 @@ export class ConstraintSuggestionEngine {
           action_type: 'modify_attribute',
           description: 'Adjust temporal attributes to common period',
           target_node_ids: affectedNodes.map(n => n.id),
-          rationale: 'Items should coexist within the same historical timeframe'
+          rationale: 'Items should coexist within the same historical timeframe',
         }],
         historical_context: `Items from ${commonPeriod.start}-${commonPeriod.end} would have coexisted naturally`}
       });
@@ -358,9 +358,9 @@ export class ConstraintSuggestionEngine {
         specific_actions: [{,
           action_type: 'add_context',
           description: 'Research items using museum databases and historical sources',
-          rationale: 'Higher authenticity improves educational and cultural value'
+          rationale: 'Higher authenticity improves educational and cultural value',
         }],
-        historical_context: 'Well-documented items provide better historical learning opportunities'
+        historical_context: 'Well-documented items provide better historical learning opportunities',
       });
     }
     // Suggest variety if needed
@@ -376,9 +376,9 @@ export class ConstraintSuggestionEngine {
         specific_actions: [{,
           action_type: 'add_node',
           description: 'Add complementary item types (accessories, tools, decorations)',
-          rationale: 'Variety creates more realistic and visually interesting results'
+          rationale: 'Variety creates more realistic and visually interesting results',
         }],
-        historical_context: 'Historical contexts typically included diverse object types'
+        historical_context: 'Historical contexts typically included diverse object types',
       });
     }
     return suggestions;

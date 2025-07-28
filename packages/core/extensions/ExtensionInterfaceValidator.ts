@@ -53,7 +53,7 @@ export class ExtensionInterfaceValidator {
       errors.push(...typeValidation.errors);
     }
     // Interface validation
-    const interfaceValidation = this.validateInterface(;)
+    const interfaceValidation = this.validateInterface(;);
       extension,
       requiredInterface
     );
@@ -239,7 +239,7 @@ export class ExtensionInterfaceValidator {
         name: validation.name,
         valid: validation.result.valid,
         errors: validation.result.errors || [],
-        warnings: validation.result.warnings || []
+        warnings: validation.result.warnings || [],
       });
       if (!validation.result.valid) {
         report.overallValid = false;

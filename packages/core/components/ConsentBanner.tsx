@@ -252,7 +252,7 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({)
     }
   };
   if (!isVisible) return null;
-  return ()
+  return ();
     <div className={`fixed z-50 ${getPositionClasses()}`}>}
       <div className={`border-2 shadow-2xl ${getThemeClasses()} ${position === 'overlay' || position === 'modal' ? 'max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-lg' : 'w-full'}`}>}
         {!showDetails ? ()

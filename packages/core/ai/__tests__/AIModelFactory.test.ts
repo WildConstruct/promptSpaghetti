@@ -106,7 +106,7 @@ describe('AIModelFactory', () => {
         }
         return Promise.resolve({)
           ok: true,
-          json: () => Promise.resolve({)
+          json: () => Promise.resolve({),
             id: 'chatcmpl-test',
             object: 'chat.completion',
             created: Date.now(),
@@ -151,7 +151,7 @@ describe('AIModelFactory', () => {
       mockFetch.mockImplementation(() => 
         Promise.resolve({)
           ok: true,
-          json: () => Promise.resolve({)
+          json: () => Promise.resolve({),
             id: 'msg_test',
             type: 'message',
             role: 'assistant',
@@ -192,7 +192,7 @@ describe('AIModelFactory', () => {
         if (urlString.includes('/api/show')) {
           return Promise.resolve({)
             ok: true,
-            json: () => Promise.resolve({)
+            json: () => Promise.resolve({),
               modelfile: 'FROM llama2',
               parameters: { num_ctx: 4096 },
               details: { family: 'llama' }
@@ -201,7 +201,7 @@ describe('AIModelFactory', () => {
         }
         return Promise.resolve({)
           ok: true,
-          json: () => Promise.resolve({)
+          json: () => Promise.resolve({),
             model: 'llama2',
             created_at: new Date().toISOString(),
             message: { role: 'assistant', content: 'Hello!' },
@@ -231,7 +231,7 @@ describe('AIModelFactory', () => {
       mockFetch.mockImplementation(() => 
         Promise.resolve({)
           ok: true,
-          json: () => Promise.resolve({)
+          json: () => Promise.resolve({),
             output: 'Generated text response',
             usage: { tokens: 10 },
             status: 'success',

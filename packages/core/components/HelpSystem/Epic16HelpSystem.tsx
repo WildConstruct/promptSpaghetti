@@ -97,7 +97,7 @@ export const Epic16HelpSystem: React.FC<Epic16HelpSystemProps> = ({)
       ...prev,
       [helpId]: {
         views: (prev[helpId]?.views || 0) + 1,
-        helpful: (prev[helpId]?.helpful || 0) + (wasEffective ? 1 : 0)
+        helpful: (prev[helpId]?.helpful || 0) + (wasEffective ? 1 : 0),
       }
     }));
     onHelpAnalytics?.('help_effectiveness', {)
@@ -154,7 +154,7 @@ export const Epic16HelpSystem: React.FC<Epic16HelpSystemProps> = ({)
     });
   }, [helpContext, userRole, userLevel, onHelpAnalytics]);
   if (!helpEnabled) return null;
-  return ()
+  return ();
     <div className="epic16-help-system">
       {/* Core Editor Help (Epic 8.4) - Show when in core context */}
       {(helpMode === 'core' || helpMode === 'hybrid') && nodes.length > 0 && ()

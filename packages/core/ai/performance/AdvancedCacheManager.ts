@@ -271,7 +271,7 @@ export class AdvancedCacheManager {
     return {
       itemsEvicted: initialCount - finalCount,
       memoryFreed: initialMemory - finalMemory,
-      optimizationTime: Date.now() - startTime
+      optimizationTime: Date.now() - startTime,
     };
   }
   // Performance analysis methods
@@ -279,7 +279,6 @@ export class AdvancedCacheManager {
     topKeys: Array<{ key: string; hitRate: number; accessCount: number }>;
     lowPerformanceKeys: Array<{ key: string; performance: number }>;
     recommendations: string[];
-  } {
     const keyStats = new Map<string, { hits: number; misses: number; accessCount: number }>();
     for (const [key, item] of this.cache.entries()) {
       keyStats.set(key, {)
@@ -330,7 +329,7 @@ export class AdvancedCacheManager {
     const maxMemory = this.config.maxMemoryMB * 1024 * 1024;
     if (this.cache.size >= this.config.maxSize || )
         currentMemory + additionalSize > maxMemory) {
-      const itemsToEvict = Math.max(;)
+      const itemsToEvict = Math.max(;);
         Math.ceil(this.config.maxSize * 0.1), // Evict 10% of max size
         1
       );

@@ -395,7 +395,7 @@ export class SecurityLogger extends EventEmitter {
       details: {,
         reason,
         outcome,
-        timestamp: new Date()
+        timestamp: new Date(),
       },
       outcome,
       severity: outcome === 'failure' ? 'medium' : 'low',
@@ -455,7 +455,7 @@ export class SecurityLogger extends EventEmitter {
         emergencyCode: this.maskSensitiveData(emergencyCode),
         justification,
         fullEmergencyCodeHash: this.hashSensitiveData(emergencyCode),
-        timestamp: new Date()
+        timestamp: new Date(),
       },
       outcome: 'success',
       severity: 'critical',
@@ -584,7 +584,6 @@ export class SecurityLogger extends EventEmitter {
     logs: SecurityLogEntry[];
     total: number;
     hasMore: boolean;
-  } {
     let logs = Array.from(this.logs.values());
     // Apply filters
     if (query.startTime) {
@@ -612,7 +611,6 @@ export class SecurityLogger extends EventEmitter {
       logs = logs.filter(log => )
         query.compliance!.some(framework => )
           log.compliance.frameworks.includes(framework)
-        )
       );
     }
     if (query.search) {
@@ -659,7 +657,7 @@ export class SecurityLogger extends EventEmitter {
     return {
       logs,
       total,
-      hasMore: (offset + limit) < total
+      hasMore: (offset + limit) < total,
     };
   }
   /**
@@ -681,7 +679,7 @@ export class SecurityLogger extends EventEmitter {
     framework: ComplianceFramework,
     startTime: Date,
     endTime: Date,
-    format: 'json' | 'csv' | 'xml' = 'json'
+    format: 'json' | 'csv' | 'xml' = 'json',
   ): {
     data: string;
     metadata: {,
@@ -691,7 +689,6 @@ export class SecurityLogger extends EventEmitter {
       exportTime: Date;
       signature: string;
     };
-  } {
     const query: LogQuery = {
       startTime,
       endTime,
@@ -703,11 +700,10 @@ export class SecurityLogger extends EventEmitter {
       period: { start: startTime, end: endTime },
       recordCount: result.total,
       logs: result.logs,
-      auditTrail: Array.from(this.auditTrail.values()).filter(entry =>)
+      auditTrail: Array.from(this.auditTrail.values()).filter(entry =>),
         entry.compliance.includes(framework) &&
         entry.timestamp >= startTime &&
         entry.timestamp <= endTime
-      )
     };
     let data: string;
     switch (format) {
@@ -832,7 +828,7 @@ export class SecurityLogger extends EventEmitter {
     const defaultStart = new Date(now.getTime() - 24 * 60 * 60 * 1000); // Last 24 hours;
     const start = startTime || defaultStart;
     const end = endTime || now;
-    const logs = Array.from(this.logs.values()).filter(log => ;)
+    const logs = Array.from(this.logs.values()).filter(log => ;);
       log.timestamp >= start && log.timestamp <= end
     );
     // Calculate lockout metrics
@@ -858,13 +854,13 @@ export class SecurityLogger extends EventEmitter {
         total: alertLogs.length,
         bySeverity: this.groupBySeverity(alertLogs),
         falsePositives: 0, // Would need additional tracking
-        responseTime: 0 // Would need additional tracking
+        responseTime: 0 // Would need additional tracking,
       },
       compliance: {,
         violations: logs.filter(log => log.eventType === SecurityEventType.POLICY_VIOLATION).length,
         reportingRequirements: logs.filter(log => log.compliance.frameworks.length > 0).length,
         dataRetention: logs.filter(log => log.compliance.retention > 0).length,
-        auditAccess: logs.filter(log => log.eventType === SecurityEventType.AUDIT_LOG_ACCESS).length
+        auditAccess: logs.filter(log => log.eventType === SecurityEventType.AUDIT_LOG_ACCESS).length,
       },
       threatLandscape: {,
         topAttackVectors: this.getTopAttackVectors(logs),
@@ -914,7 +910,7 @@ export class SecurityLogger extends EventEmitter {
   private calculateAverageResolutionTime(lockoutLogs: SecurityLogEntry[], unlockLogs: SecurityLogEntry[]): number {
     const resolutionTimes: number[] = [];
     lockoutLogs.forEach(lockoutLog => {)
-      const matchingUnlock = unlockLogs.find(unlockLog => ;)
+      const matchingUnlock = unlockLogs.find(unlockLog => ;);
         unlockLog.context.lockoutId === lockoutLog.context.lockoutId
       );
       if (matchingUnlock) {
@@ -989,7 +985,7 @@ export class SecurityLogger extends EventEmitter {
       'ID', 'Timestamp', 'Level', 'Event Type', 'Message', 'Actor Type', 'Actor ID',
       'Target Type', 'Target ID', 'Outcome', 'Severity', 'IP Address', 'User Agent'
     ];
-    const rows = logs.map(log => [;)
+    const rows = logs.map(log => [;);
       log.id,
       log.timestamp.toISOString(),
       log.level,

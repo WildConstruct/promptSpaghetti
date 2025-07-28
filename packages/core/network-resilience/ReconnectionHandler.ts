@@ -364,7 +364,7 @@ export class ReconnectionHandler extends EventEmitter {
     this.emit('reconnection_failed', {)
       totalAttempts: this.currentAttempt,
       stats: this.getStats(),
-      lastError: this.attempts[this.attempts.length - 1]?.error
+      lastError: this.attempts[this.attempts.length - 1]?.error,
     });
     this.clearAllTimers();
   }

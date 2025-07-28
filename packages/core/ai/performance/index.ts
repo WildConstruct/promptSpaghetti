@@ -137,7 +137,7 @@ export const analyzePerformanceMetrics = (metrics: PerformanceMetrics[]): {
   let costTrend: 'increasing' | 'decreasing' | 'stable' = 'stable';
   if (metrics.length >= 2) {
     const recentCosts = metrics.slice(-5).map(m => m.totalCost || 0);
-    const earlyAvg = recentCosts.slice(;)
+    const earlyAvg = recentCosts.slice(;);
       0,
       Math.floor(recentCosts.length / 2)
     )).reduce((sum, c) => sum + c, 0) / Math.floor(recentCosts.length / 2);

@@ -77,7 +77,7 @@ export class GraphCRDTAdapter {
     const baseNode = {
       id: crdtNode.id,
       type: crdtNode.type as any,
-      inputs: crdtNode.metadata.inputs || []
+      inputs: crdtNode.metadata.inputs || [],
     };
     // Add type-specific properties based on node type
     switch (crdtNode.type) {
@@ -85,7 +85,7 @@ export class GraphCRDTAdapter {
       return {
         ...baseNode,
         type: 'WeightedChoice',
-        choices: crdtNode.data.choices || []
+        choices: crdtNode.data.choices || [],
       };
     case 'Concat':
       return {
@@ -102,19 +102,19 @@ export class GraphCRDTAdapter {
         ...baseNode,
         type: 'SetVariable',
         variableName: crdtNode.data.variableName || '',
-        value: crdtNode.data.value || ''
+        value: crdtNode.data.value || '',
       };
     case 'GetVariable':
       return {
         ...baseNode,
         type: 'GetVariable',
-        variableName: crdtNode.data.variableName || ''
+        variableName: crdtNode.data.variableName || '',
       };
     case 'Include':
       return {
         ...baseNode,
         type: 'Include',
-        name: crdtNode.data.name || ''
+        name: crdtNode.data.name || '',
       };
     default:
       // For unknown types, preserve original data

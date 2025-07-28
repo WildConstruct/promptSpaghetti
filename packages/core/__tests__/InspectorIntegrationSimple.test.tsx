@@ -15,7 +15,7 @@ jest.mock('../graphStore', () => ({)
   useGraphStore: () => ({ nodes: [], edges: [] })
 }));
 jest.mock('../hooks/useRealTimePreview', () => ({)
-  useRealTimePreview: () => ({)
+  useRealTimePreview: () => ({),
     variants: [],
     isGenerating: false,
     performance: { averageExecutionTime: 0, totalGenerations: 0, successRate: 100 },
@@ -24,7 +24,7 @@ jest.mock('../hooks/useRealTimePreview', () => ({)
     forcePreview: jest.fn<unknown[], unknown>(),
     refreshVariant: jest.fn<unknown[], unknown>(),
     clearVariants: jest.fn<unknown[], unknown>(),
-    getPerformanceInsights: () => []
+    getPerformanceInsights: () => [],
   })
 }));
 jest.mock('../components/Inspector/WeightControlSlider', () => ({)
@@ -50,11 +50,11 @@ describe('Inspector Integration - Basic Validation', () => {
   });
   it('help integration is properly imported in editors', () => {
     // Test that the import statements work
-    const concatEditorSource = require('fs').readFileSync(;)
+    const concatEditorSource = require('fs').readFileSync(;);
       require.resolve('../components/Inspector/editors/ConcatEditor'), 
       'utf8'
     );
-    const outputEditorSource = require('fs').readFileSync(;)
+    const outputEditorSource = require('fs').readFileSync(;);
       require.resolve('../components/Inspector/editors/OutputEditor'), 
       'utf8'
     );
@@ -76,7 +76,7 @@ describe('Inspector Integration - Basic Validation', () => {
       return wrapWithHelp(<div>Test Content</div>);
     };
     expect(() => {
-      render()
+      render();
         <HelpProvider>
           <TestComponent />
         </HelpProvider>

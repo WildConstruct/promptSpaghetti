@@ -131,7 +131,7 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({)
     } catch (error) {
       setImportResult({)
         success: false,
-        message: error instanceof Error ? error.message : 'Import failed with unknown error'
+        message: error instanceof Error ? error.message : 'Import failed with unknown error',
       });
     } finally {
       setUploading(false);
@@ -158,7 +158,7 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({)
       onClose();
     }
   };
-  return ()
+  return ();
     <div className={`import-dialog ${className}`}>}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-2">

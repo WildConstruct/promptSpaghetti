@@ -125,14 +125,14 @@ describe('ClassificationEncryptionPolicyService', () => {
   });
   describe('Encryption Compliance Validation', () => {
     it('should validate compliant encryption for internal data', async () => {
-      const result = await service.validateEncryptionCompliance(;)
+      const result = await service.validateEncryptionCompliance(;);
         'data123',
         'INTERNAL',
         {
           encrypted: true,
           algorithm: 'AES-256',
           keyLength: 256,
-          lastRotationDate: new Date()
+          lastRotationDate: new Date(),
         },
         mockContext
       );
@@ -140,7 +140,7 @@ describe('ClassificationEncryptionPolicyService', () => {
       expect(result.errors).toHaveLength(0);
     });
     it('should detect encryption requirement violations', async () => {
-      const result = await service.validateEncryptionCompliance(;)
+      const result = await service.validateEncryptionCompliance(;);
         'data123',
         'CONFIDENTIAL',
         {
@@ -153,14 +153,14 @@ describe('ClassificationEncryptionPolicyService', () => {
     });
     it('should validate algorithm compliance', async () => {
       // Test with inappropriate algorithm
-      const result = await service.validateEncryptionCompliance(;)
+      const result = await service.validateEncryptionCompliance(;);
         'data123',
         'CONFIDENTIAL',
         {
           encrypted: true,
           algorithm: 'AES-128', // Too weak for confidential
           keyLength: 128,
-          lastRotationDate: new Date()
+          lastRotationDate: new Date(),
         },
         mockContext
       );
@@ -170,14 +170,14 @@ describe('ClassificationEncryptionPolicyService', () => {
       )).toBe(true);
     });
     it('should validate key length requirements', async () => {
-      const result = await service.validateEncryptionCompliance(;)
+      const result = await service.validateEncryptionCompliance(;);
         'data123',
         'INTERNAL',
         {
           encrypted: true,
           algorithm: 'AES-256',
           keyLength: 128, // Too short for AES-256
-          lastRotationDate: new Date()
+          lastRotationDate: new Date(),
         },
         mockContext
       );
@@ -189,7 +189,7 @@ describe('ClassificationEncryptionPolicyService', () => {
     it('should validate key rotation compliance', async () => {
       const oldRotationDate = new Date();
       oldRotationDate.setDate(oldRotationDate.getDate() - 365); // 1 year ago
-      const result = await service.validateEncryptionCompliance(;)
+      const result = await service.validateEncryptionCompliance(;);
         'data123',
         'CONFIDENTIAL',
         {
@@ -212,7 +212,7 @@ describe('ClassificationEncryptionPolicyService', () => {
           encrypted: true,
           algorithm: 'AES-256',
           keyLength: 256,
-          lastRotationDate: new Date()
+          lastRotationDate: new Date(),
         },
         mockContext
       );
@@ -224,7 +224,7 @@ describe('ClassificationEncryptionPolicyService', () => {
       expect(record?.encryptionStatus).toBe('ENCRYPTED');
     });
     it('should handle invalid classification levels gracefully', async () => {
-      const result = await service.validateEncryptionCompliance(;)
+      const result = await service.validateEncryptionCompliance(;);
         'data123',
         'INVALID' as DataClassificationLevel,
         {
@@ -247,7 +247,7 @@ describe('ClassificationEncryptionPolicyService', () => {
           encrypted: true,
           algorithm: 'AES-256-GCM',
           keyLength: 256,
-          lastRotationDate: new Date()
+          lastRotationDate: new Date(),
         },
         mockContext
       );
@@ -325,7 +325,7 @@ describe('ClassificationEncryptionPolicyService', () => {
       const originalPolicy = service.getEncryptionPolicy('INTERNAL');
       const originalVersion = originalPolicy?.version;
       await service.updateEncryptionPolicy('INTERNAL', {)
-        name: 'Updated Internal Encryption Policy'
+        name: 'Updated Internal Encryption Policy',
       });
       const updatedPolicy = service.getEncryptionPolicy('INTERNAL');
       expect(updatedPolicy?.version).not.toBe(originalVersion);
@@ -439,7 +439,7 @@ describe('ClassificationEncryptionPolicyService', () => {
       // PUBLIC should have fewer approved algorithms than RESTRICTED
       expect(publicAlgorithms.length).toBeLessThanOrEqual(restrictedAlgorithms.length);
       // Check that higher-classification-only algorithms are not in PUBLIC
-      const restrictedOnlyAlgorithms = restrictedAlgorithms.filter(alg => ;)
+      const restrictedOnlyAlgorithms = restrictedAlgorithms.filter(alg => ;);
         alg.minClassification === 'RESTRICTED'
       );
       restrictedOnlyAlgorithms.forEach(alg => {)
@@ -449,7 +449,7 @@ describe('ClassificationEncryptionPolicyService', () => {
   });
   describe('Error Handling and Edge Cases', () => {
     it('should handle empty encryption status gracefully', async () => {
-      const result = await service.validateEncryptionCompliance(;)
+      const result = await service.validateEncryptionCompliance(;);
         'data123',
         'INTERNAL',
         {
@@ -461,7 +461,7 @@ describe('ClassificationEncryptionPolicyService', () => {
       expect(result.errors.some(error => error.includes('mandatory'))).toBe(true);
     });
     it('should handle unknown algorithms gracefully', async () => {
-      const result = await service.validateEncryptionCompliance(;)
+      const result = await service.validateEncryptionCompliance(;);
         'data123',
         'INTERNAL',
         {
@@ -477,7 +477,7 @@ describe('ClassificationEncryptionPolicyService', () => {
       )).toBe(true);
     });
     it('should handle missing last rotation date appropriately', async () => {
-      const result = await service.validateEncryptionCompliance(;)
+      const result = await service.validateEncryptionCompliance(;);
         'data123',
         'INTERNAL',
         {

@@ -194,7 +194,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({)
     tags: [] as string[],
     estimatedTime: undefined as number | undefined,
     deadline: undefined as string | undefined,
-    assignee: undefined as VFXUser | undefined
+    assignee: undefined as VFXUser | undefined,
   });
   // Filter and sort annotations
   const filteredAndSortedAnnotations = useMemo(() => {
@@ -284,7 +284,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({)
       });
       setReplyContent('');
     };
-    return ()
+    return ();
       <Card className={`annotation-card ${typeConfig.borderColor} ${expanded ? 'ring-2 ring-blue-200' : ''}`}>}
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
@@ -446,7 +446,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({)
   };
   if (compact) {
     // Compact view for inspector panels
-    return ()
+    return ();
       <div className={`node-annotations-compact ${className}`}>}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
@@ -485,7 +485,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`node-annotation-system ${className}`}>}
       <Card>
         <CardHeader>

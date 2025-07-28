@@ -161,7 +161,7 @@ export const DefaultExtensionManagerConfig = {
   // Performance settings
   maxConcurrentInstalls: 3,
   installTimeout: 30000,
-  updateCheckInterval: 3600000 // 1 hour
+  updateCheckInterval: 3600000 // 1 hour,
 };
 
 // Extension manager event types

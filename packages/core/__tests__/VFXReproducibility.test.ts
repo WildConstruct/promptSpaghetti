@@ -66,7 +66,7 @@ describe('VFX Reproducibility System', () => {
       finalPrompt: 'A warrior in ancient temple',
       variables: {,
         subject: 'warrior',
-        setting: 'ancient temple'
+        setting: 'ancient temple',
       },
       executionTime: 150,
       seed: 12345,
@@ -388,7 +388,7 @@ describe('VFX Reproducibility System', () => {
         ...exportData,
         metadata: {,
           ...exportData.metadata,
-          exportId: undefined as any // Remove required field
+          exportId: undefined as any // Remove required field,
         }
       };
       const corruptedValidation = exporter.validateExport(corruptedData);

@@ -57,7 +57,7 @@ export const TextFieldEditor: React.FC<TextFieldEditorProps> = ({)
     fontFamily: 'system-ui, -apple-system, sans-serif',
     outline: 'none',
     transition: 'border-color 0.2s ease',
-    resize: multiline ? 'vertical' as const : 'none' as const
+    resize: multiline ? 'vertical' as const : 'none' as const,
   };
   const labelStyle = {
     display: 'block',
@@ -67,7 +67,7 @@ export const TextFieldEditor: React.FC<TextFieldEditorProps> = ({)
     fontSize: 12,
     letterSpacing: '0.025em',
   };
-  return ()
+  return ();
     <div style={{ marginBottom: 16 }}>
       <label htmlFor={inputId} style={labelStyle}>
         {label}

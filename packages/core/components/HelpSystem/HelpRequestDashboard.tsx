@@ -69,7 +69,7 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
         assignedTo: filters.assignedTo,
         dateRange: filters.dateRange,
         limit: pagination.limit,
-        offset: pagination.page * pagination.limit
+        offset: pagination.page * pagination.limit,
       };
       const result = await helpService.getHelpRequests(filterCriteria);
       setRequests(result.requests);
@@ -89,7 +89,7 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
     try {
       const timeRange = {
         start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
-        end: new Date()
+        end: new Date(),
       };
       const analyticsData = await helpService.getAnalytics(timeRange);
       setAnalytics(analyticsData);
@@ -185,7 +185,7 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
       [HelpRequestStatus.CLOSED]: 'bg-gray-300 text-gray-700',
       [HelpRequestStatus.REOPENED]: 'bg-red-100 text-red-800'
     };
-    return ()
+    return ();
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>}
         {status.replace('_', ' ').toUpperCase()}
       </span>
@@ -200,14 +200,14 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
       [HelpPriority.URGENT]: 'bg-orange-100 text-orange-800',
       [HelpPriority.CRITICAL]: 'bg-red-500 text-white'
     };
-    return ()
+    return ();
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>}
         {priority.toUpperCase()}
       </span>
     );
   };
   if (loading && requests.length === 0) {
-    return ()
+    return ();
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -216,7 +216,7 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="help-request-dashboard h-full flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -546,7 +546,7 @@ const HelpRequestListItem: React.FC<HelpRequestListItemProps> = ({)
     'support_agent': '👨‍💼',
     'specialist': '🎯'
   }[routingStrategy] || '❓';
-  return ()
+  return ();
     <div
       className={`relative p-4 hover:bg-gray-50 cursor-pointer ${selected ? 'bg-blue-50 border-l-4 border-blue-500' : ''} ${isOverdue ? 'bg-red-50' : isSLAWarning ? 'bg-yellow-50' : ''}`}
       onClick={onSelect}

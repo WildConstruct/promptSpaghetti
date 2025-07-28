@@ -37,7 +37,7 @@ interface UseAttributionReturn {
 export const useAttribution = (): UseAttributionReturn => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const apiCall = useCallback(async <T>(;)
+  const apiCall = useCallback(async <T>(;);
     url: string,
     options: RequestInit = {}
   ): Promise<T> => {

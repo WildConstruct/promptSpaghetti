@@ -72,14 +72,14 @@ export class TrendingCommentsService {
           total: cachedResults.trendingComments.length,
           limit: validatedRequest.limit,
           offset: validatedRequest.offset,
-          hasMore: cachedResults.trendingComments.length > validatedRequest.offset + validatedRequest.limit
+          hasMore: cachedResults.trendingComments.length > validatedRequest.offset + validatedRequest.limit,
         },
         meta: {,
           requestId,
           processingTime: Date.now() - startTime,
           cacheStatus: 'hit',
           algorithm: this.defaultAlgorithm,
-          dataFreshness: Math.floor((Date.now() - cachedResults.generatedAt.getTime()) / 60000)
+          dataFreshness: Math.floor((Date.now() - cachedResults.generatedAt.getTime()) / 60000),
         }
       };
     }
@@ -90,7 +90,7 @@ export class TrendingCommentsService {
       this.cacheTrendingResults(cacheKey, trendingResults);
     }
     // Apply pagination
-    const paginatedComments = trendingResults.trendingComments.slice(;)
+    const paginatedComments = trendingResults.trendingComments.slice(;);
       validatedRequest.offset,
       validatedRequest.offset + validatedRequest.limit
     );
@@ -103,7 +103,7 @@ export class TrendingCommentsService {
         total: trendingResults.trendingComments.length,
         limit: validatedRequest.limit,
         offset: validatedRequest.offset,
-        hasMore: trendingResults.trendingComments.length > validatedRequest.offset + validatedRequest.limit
+        hasMore: trendingResults.trendingComments.length > validatedRequest.offset + validatedRequest.limit,
       },
       meta: {,
         requestId,
@@ -143,7 +143,7 @@ export class TrendingCommentsService {
       viralityScore: this.calculateViralityScore(engagements, algorithm),
       helpfulnessScore: this.calculateHelpfulnessScore(metrics, algorithm),
       authorityScore: this.calculateAuthorityScore(comment, algorithm),
-      trendingScore: 0 // Will be calculated from other scores
+      trendingScore: 0 // Will be calculated from other scores,
     };
     // Calculate composite trending score
     scores.trendingScore = this.calculateTrendingScore(scores, algorithm);
@@ -198,7 +198,7 @@ export class TrendingCommentsService {
     // Map timeRange to CommentableResourceType for analytics service
     const resourceType = this.inferResourceType(resourceId);
     try {
-      const analytics = await analyticsService.getCommentAnalytics(;)
+      const analytics = await analyticsService.getCommentAnalytics(;);
         resourceId, 
         resourceType,
         { 
@@ -284,7 +284,7 @@ export class TrendingCommentsService {
     // TODO: Fetch actual comments from database
     const mockComments = this.generateMockComments(request.resourceId, request.resourceType);
     // Calculate scores for all comments
-    const scoredComments = await Promise.all(;)
+    const scoredComments = await Promise.all(;);
       mockComments.map(async (comment) => {
         const mockEngagements = this.generateMockEngagements(comment.commentId);
         const score = await this.calculateCommentScore(comment, mockEngagements);
@@ -327,7 +327,7 @@ export class TrendingCommentsService {
       totalReports: 0,
       replyEngagement: 0,
       viewCount: 0,
-      uniqueEngagers: new Set<string>()
+      uniqueEngagers: new Set<string>(),
     };
     engagements.forEach(engagement => {)
       metrics.uniqueEngagers.add(engagement.userId);
@@ -372,7 +372,7 @@ export class TrendingCommentsService {
       helpful: 2.5,
       dislike: -0.5,
     };
-    const score = (;)
+    const score = (;);
       metrics.totalLikes * weights.like +
       metrics.totalReplies * weights.reply +
       metrics.totalShares * weights.share +
@@ -423,7 +423,7 @@ export class TrendingCommentsService {
   private calculateViralityScore(engagements: CommentEngagement[], algorithm: TrendingAlgorithmConfig): number {
     // Calculate share velocity (shares in last hour)
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-    const recentShares = engagements.filter(;)
+    const recentShares = engagements.filter(;);
       e => e.engagementType === 'share' && e.timestamp > oneHourAgo
     ).length;
     return Math.min(100, recentShares * 10);
@@ -451,7 +451,7 @@ export class TrendingCommentsService {
   }
   private calculateTrendingScore(scores: any, algorithm: TrendingAlgorithmConfig): number {
     const weights = algorithm.weights;
-    return ()
+    return ();
       scores.engagementScore * weights.engagementWeight +
       scores.recencyScore * weights.recencyWeight +
       scores.qualityScore * weights.qualityWeight +
@@ -489,7 +489,7 @@ export class TrendingCommentsService {
     if (engagements.length < 6) return 'stagnant';
     // Simple trend calculation based on recent vs older engagements
     const recent = engagements.filter(e => e.timestamp.getTime() > Date.now() - 2 * 60 * 60 * 1000).length;
-    const older = engagements.filter(e => ;)
+    const older = engagements.filter(e => ;);
       e.timestamp.getTime() <= Date.now() - 2 * 60 * 60 * 1000 && 
       e.timestamp.getTime() > Date.now() - 4 * 60 * 60 * 1000
     ).length;
@@ -523,7 +523,7 @@ export class TrendingCommentsService {
         sentimentDistribution: { positive: 0, neutral: 0, negative: 0 },
         topHashtags: [],
         emergingTopics: [],
-        controversyLevel: 'low' as const
+        controversyLevel: 'low' as const,
       };
     }
     const totalScore = comments.reduce((sum, c) => sum + c.score.scores.trendingScore, 0);
@@ -540,7 +540,7 @@ export class TrendingCommentsService {
       sentimentDistribution: this.calculateSentimentDistribution(comments),
       topHashtags: this.extractTopHashtags(comments),
       emergingTopics: this.identifyEmergingTopics(comments),
-      controversyLevel: avgControversy > 30 ? 'high' : avgControversy > 15 ? 'medium' : 'low'
+      controversyLevel: avgControversy > 30 ? 'high' : avgControversy > 15 ? 'medium' : 'low',
     };
   }
   private assessConversationHealth(comments: TrendingComment[]): 'excellent' | 'good' | 'fair' | 'poor' {

@@ -743,7 +743,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
       description: `Attempted to enrich missing field: ${violation.fieldName}`,}
       executedAt: new Date(),
       result: 'partial',
-      details: 'Enrichment service contacted'
+      details: 'Enrichment service contacted',
     };
   }
   private async remediateValidity(violation: DataQualityViolation): Promise<RemediationAction> {
@@ -753,7 +753,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
       description: `Attempted to correct invalid value in: ${violation.fieldName}`,}
       executedAt: new Date(),
       result: 'success',
-      details: 'Value corrected using validation rules'
+      details: 'Value corrected using validation rules',
     };
   }
   private async remediateConsistency(violation: DataQualityViolation): Promise<RemediationAction> {
@@ -763,7 +763,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
       description: `Flagged inconsistent record for manual review`,
       executedAt: new Date(),
       result: 'success',
-      details: 'Record flagged in quality review queue'
+      details: 'Record flagged in quality review queue',
     };
   }
   private async remediateGeneric(violation: DataQualityViolation): Promise<RemediationAction> {
@@ -773,7 +773,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
       description: `Quarantined record due to quality violation`,
       executedAt: new Date(),
       result: 'success',
-      details: 'Record moved to quality quarantine'
+      details: 'Record moved to quality quarantine',
     };
   }
   // ==========================================
@@ -1064,7 +1064,7 @@ export class SecurityDataQualityMonitor extends EventEmitter {
       description: `Manually resolved by ${resolvedBy}`,}
       executedAt: new Date(),
       result: 'success',
-      details: 'Manual intervention'
+      details: 'Manual intervention',
     };
     this.metrics.manualInterventions++;
     this.emit('violationResolved', violation);

@@ -20,7 +20,7 @@ export class ExtensionManifestUtils {
       author: {,
         name: typeof packageJson.author === 'string' ? packageJson.author : packageJson.author?.name || 'Unknown',
         email: typeof packageJson.author === 'object' ? packageJson.author.email : undefined,
-        url: typeof packageJson.author === 'object' ? packageJson.author.url : undefined
+        url: typeof packageJson.author === 'object' ? packageJson.author.url : undefined,
       },
       extension_type: packageJson.extensionType || 'node',
       main: packageJson.main || 'index.js',
@@ -33,7 +33,7 @@ export class ExtensionManifestUtils {
       capabilities: {,
         provides: packageJson.capabilities?.provides || [],
         requires: packageJson.capabilities?.requires || [],
-        optional: packageJson.capabilities?.optional || []
+        optional: packageJson.capabilities?.optional || [],
       },
       metadata: {,
         license: packageJson.license || 'MIT',
@@ -41,11 +41,11 @@ export class ExtensionManifestUtils {
         homepage: packageJson.homepage,
         bugs: packageJson.bugs?.url || packageJson.bugs,
         keywords: packageJson.keywords || [],
-        categories: packageJson.categories || []
+        categories: packageJson.categories || [],
       },
       compatibility: {,
         min_system_version: packageJson.engines?.promptSpaghetti || '1.0.0',
-        platforms: packageJson.platforms || ['web']
+        platforms: packageJson.platforms || ['web'],
       }
     };
     // Add type-specific configurations
@@ -77,7 +77,7 @@ export class ExtensionManifestUtils {
       },
       extensionType: manifest.extension_type,
       engines: {,
-        promptSpaghetti: manifest.dependencies?.system || '1.0.0'
+        promptSpaghetti: manifest.dependencies?.system || '1.0.0',
       },
       dependencies: manifest.dependencies?.npm || {},
       extensionDependencies: manifest.dependencies?.extensions || {},
@@ -86,7 +86,7 @@ export class ExtensionManifestUtils {
       license: manifest.metadata?.license || 'MIT',
       keywords: manifest.metadata?.keywords || [],
       categories: manifest.metadata?.categories || [],
-      platforms: manifest.compatibility?.platforms || ['web']
+      platforms: manifest.compatibility?.platforms || ['web'],
     };
     // Add optional fields
     if (manifest.metadata?.repository) {
@@ -179,7 +179,6 @@ export class ExtensionManifestUtils {
     valid: boolean;
     errors: string[];
     warnings: string[];
-  } {
     const errors: string[] = [];
     const warnings: string[] = [];
     if (!manifest.dependencies) {
@@ -228,7 +227,7 @@ export class ExtensionManifestUtils {
       compressionRatio: compressed.length / jsonString.length,
       fieldCount: this.countFields(manifest),
       dependencyCount: Object.keys(manifest.dependencies?.extensions || {}).length,
-      permissionCount: manifest.permissions?.length || 0
+      permissionCount: manifest.permissions?.length || 0,
     };
   }
   /**
@@ -419,7 +418,7 @@ export class ManifestTemplateGenerator {
         prompt: 'Extension ID (lowercase, alphanumeric, hyphens only):',
         type: 'text',
         required: true,
-        validation: (value: string) => /^[a-z0-9-]+$/.test(value)
+        validation: (value: string) => /^[a-z0-9-]+$/.test(value),
       },
       {
         key: 'name',
@@ -432,7 +431,7 @@ export class ManifestTemplateGenerator {
         prompt: 'Version (semantic versioning):',
         type: 'text',
         default: '1.0.0',
-        validation: (value: string) => /^\d+\.\d+\.\d+$/.test(value)
+        validation: (value: string) => /^\d+\.\d+\.\d+$/.test(value),
       },
       {
         key: 'description',

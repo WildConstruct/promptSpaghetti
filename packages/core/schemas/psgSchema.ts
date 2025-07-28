@@ -79,7 +79,7 @@ export const PsgFileSchema = z.object({)
   extensions: z.record(z.unknown()).optional().describe('Extension data for future features'),
   // File integrity
   checksum: z.string().optional().describe('File integrity checksum'),
-  exportedAt: z.string().datetime().describe('Timestamp when file was created')
+  exportedAt: z.string().datetime().describe('Timestamp when file was created'),
 });
 
 // Type exports
@@ -119,7 +119,7 @@ export function isVersionCompatible(fileVersion: string): { compatible: boolean;
     return {
       compatible: true,
       requiresMigration: fileMinor < currentMinor,
-      message: fileMinor < currentMinor ? 'File will be upgraded to current format version' : undefined
+      message: fileMinor < currentMinor ? 'File will be upgraded to current format version' : undefined,
     };
   }
   // Future major version is not compatible
@@ -127,14 +127,14 @@ export function isVersionCompatible(fileVersion: string): { compatible: boolean;
     return {
       compatible: false,
       requiresMigration: false,
-      message: 'This file was created with a newer version of the application. Please update to the latest version.'
+      message: 'This file was created with a newer version of the application. Please update to the latest version.',
     };
   }
   // Older major version requires migration
   return {
     compatible: true,
     requiresMigration: true,
-    message: 'This file format is outdated and will be automatically upgraded.'
+    message: 'This file format is outdated and will be automatically upgraded.',
   };
 }
 

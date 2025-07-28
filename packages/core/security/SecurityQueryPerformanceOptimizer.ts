@@ -579,7 +579,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
           aggregation_count: this.countAggregations(queryText),
           filter_complexity: this.calculateFilterComplexity(queryText),
           subquery_count: this.countSubqueries(queryText),
-          index_utilization_score: 0 // Will be updated after execution
+          index_utilization_score: 0 // Will be updated after execution,
         },
         performance_metrics: {,
           execution_times_ms: [],
@@ -723,7 +723,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
       execution.error_details = {
         error_type: 'execution_error',
         error_message: error instanceof Error ? error.message : String(error),
-        stack_trace: error instanceof Error ? error.stack : undefined
+        stack_trace: error instanceof Error ? error.stack : undefined,
       };
       console.error(`Query execution failed for ${profileId}:`, error);}
     }
@@ -1098,7 +1098,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
       interaction_type: isHit ? 'hit' : 'miss',
       cache_size_mb: isHit ? profile.caching.cache_size_mb : 0,
       access_time_ms: isHit ? Math.random() * 10 + 1 : 0,
-      data_freshness: isHit ? 0.9 : 0
+      data_freshness: isHit ? 0.9 : 0,
     };
     if (isHit) {
       // Update hit rate
@@ -1164,7 +1164,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
         estimated_cost: 50 * profile.characteristics.aggregation_count,
         estimated_rows: 100,
         optimization_suggestions: ['Use covering index'],
-        alternative_approaches: ['Hash aggregation']
+        alternative_approaches: ['Hash aggregation'],
       });
     }
     steps.push({)
@@ -1346,7 +1346,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
         threshold_value: 2000,
         measurement_unit: 'milliseconds',
         trend_direction: 'stable',
-        impact_assessment: severity === 'critical' ? 'high' : severity === 'warning' ? 'medium' : 'low'
+        impact_assessment: severity === 'critical' ? 'high' : severity === 'warning' ? 'medium' : 'low',
       },
       recommendations: {,
         immediate_actions: this.generateImmediateRecommendations(profile, alertType),
@@ -1531,7 +1531,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
     const improvementDetails: Record<string, number> = {
       response_time_improvement: ((baselineMetrics.avg_response_time_ms - currentMetrics.avg_response_time_ms) / baselineMetrics.avg_response_time_ms) * 100,
       cache_hit_improvement: currentMetrics.cache_hit_rate_percent - baselineMetrics.cache_hit_rate_percent,
-      throughput_improvement: ((currentMetrics.throughput_queries_per_second - baselineMetrics.throughput_queries_per_second) / baselineMetrics.throughput_queries_per_second) * 100
+      throughput_improvement: ((currentMetrics.throughput_queries_per_second - baselineMetrics.throughput_queries_per_second) / baselineMetrics.throughput_queries_per_second) * 100,
     };
     return {
       report_id: reportId,
@@ -1547,14 +1547,14 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
         query_time_improvement_percent: Math.max(0, improvementDetails.response_time_improvement),
         cache_hit_rate_percent: avgCacheHitRate,
         cache_hit_improvement_percent: Math.max(0, improvementDetails.cache_hit_improvement),
-        resource_utilization_reduction_percent: 10 // Estimated
+        resource_utilization_reduction_percent: 10 // Estimated,
       },
       optimization_opportunities: opportunities,
       trends: {,
         query_volume_trend: this.analyzeTrend(historicalMetrics.map(h => h.metrics.throughput_queries_per_second)),
         performance_trend: this.analyzeTrend(historicalMetrics.map(h => h.metrics.avg_response_time_ms), true),
         cache_efficiency_trend: this.analyzeTrend(historicalMetrics.map(h => h.metrics.cache_hit_rate_percent)),
-        resource_usage_trend: this.analyzeTrend(historicalMetrics.map(h => h.metrics.cpu_utilization_percent))
+        resource_usage_trend: this.analyzeTrend(historicalMetrics.map(h => h.metrics.cpu_utilization_percent)),
       },
       recommendations: {,
         high_priority: opportunities.filter(o => o.priority_score >= 8).map(o => o.opportunity_type),
@@ -1669,7 +1669,6 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
     avg_performance_score: number;
     cache_efficiency: number;
     alert_count: number;
-  } {
     const profiles = Array.from(this.queryProfiles.values());
     const optimizationsCount = profiles.filter(p => p.optimization.optimization_applied).length;
     const avgCacheHitRate = profiles.length > 0 ;
@@ -1704,7 +1703,7 @@ export class SecurityQueryPerformanceOptimizer extends EventEmitter {
     }
     // Clean up resolved alerts
     for (const [profileId, alerts] of this.performanceAlerts.entries()) {
-      const filteredAlerts = alerts.filter(a => ;)
+      const filteredAlerts = alerts.filter(a => ;);
         a.detected_at > cutoffTime || !a.resolution.resolved
       );
       this.performanceAlerts.set(profileId, filteredAlerts);

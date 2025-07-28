@@ -393,7 +393,7 @@ export declare enum IntegrationType {
 }
 export interface LiveChatElement extends InteractiveElement {
     type: InteractiveElementType.LIVE_CHAT;
-    config: ElementConfiguration & {
+    config: ElementConfiguration & {,
         chat_config: {,
             max_users: number;
             message_history: number;
@@ -411,7 +411,7 @@ export interface LiveChatElement extends InteractiveElement {
 }
 export interface ProgressBarElement extends InteractiveElement {
     type: InteractiveElementType.PROGRESS_BAR;
-    config: ElementConfiguration & {
+    config: ElementConfiguration & {,
         progress_config: {,
             min_value: number;
             max_value: number;
@@ -437,7 +437,7 @@ export interface Milestone {
 }
 export interface QuickPreviewElement extends InteractiveElement {
     type: InteractiveElementType.QUICK_PREVIEW;
-    config: ElementConfiguration & {
+    config: ElementConfiguration & {,
         preview_config: {,
             preview_type: 'modal' | 'tooltip' | 'sidebar' | 'inline';
             auto_load: boolean;
@@ -452,7 +452,7 @@ export interface QuickPreviewElement extends InteractiveElement {
 }
 export interface InteractiveDemo extends InteractiveElement {
     type: InteractiveElementType.INTERACTIVE_DEMO;
-    config: ElementConfiguration & {
+    config: ElementConfiguration & {,
         demo_config: {,
             auto_start: boolean;
             allow_skip: boolean;

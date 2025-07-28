@@ -420,7 +420,7 @@ export class SecurityCapacityManager extends EventEmitter {
       created_at: Date.now(),
       last_updated: Date.now(),
       last_reviewed: Date.now(),
-      next_review_date: Date.now() + (90 * 24 * 60 * 60 * 1000) // 90 days
+      next_review_date: Date.now() + (90 * 24 * 60 * 60 * 1000) // 90 days,
     };
     this.capacityPlans.set(id, newPlan);
     // Initialize capacity tracking for the service
@@ -581,7 +581,7 @@ export class SecurityCapacityManager extends EventEmitter {
         throughput_rps: currentInstances * (100 + Math.random() * 200),
         error_rate: Math.random() * 2,
         queue_depth: Math.floor(Math.random() * 100),
-        active_connections: currentInstances * (50 + Math.random() * 150)
+        active_connections: currentInstances * (50 + Math.random() * 150),
       },
       resources: {,
         allocated_instances: currentInstances,
@@ -590,7 +590,7 @@ export class SecurityCapacityManager extends EventEmitter {
         terminating_instances: 0,
         total_cpu_cores: currentInstances * 4,
         total_memory_gb: currentInstances * 16,
-        total_storage_gb: currentInstances * 100
+        total_storage_gb: currentInstances * 100,
       },
       cost: {,
         current_hourly_cost: currentInstances * 0.50, // $0.50 per instance per hour
@@ -621,7 +621,7 @@ export class SecurityCapacityManager extends EventEmitter {
       service,
       metrics_id: id,
       health_score: metrics.health.overall_health_score,
-      scaling_needed: metrics.health.scaling_recommendations.length > 0
+      scaling_needed: metrics.health.scaling_recommendations.length > 0,
     });
     return id;
   }
@@ -828,11 +828,11 @@ export class SecurityCapacityManager extends EventEmitter {
         performance_change: {,
           response_time_change_ms: targetCapacity > currentCapacity ? -20 - Math.random() * 30 : 10 + Math.random() * 20,
           throughput_change_rps: (targetCapacity - currentCapacity) * (100 + Math.random() * 100),
-          error_rate_change: targetCapacity > currentCapacity ? -0.1 - Math.random() * 0.5 : 0.05 + Math.random() * 0.3
+          error_rate_change: targetCapacity > currentCapacity ? -0.1 - Math.random() * 0.5 : 0.05 + Math.random() * 0.3,
         },
         cost_impact: {,
           hourly_cost_change: (targetCapacity - currentCapacity) * 0.50,
-          estimated_monthly_impact: (targetCapacity - currentCapacity) * 0.50 * 24 * 30
+          estimated_monthly_impact: (targetCapacity - currentCapacity) * 0.50 * 24 * 30,
         },
         availability_impact: 'minimal',
       },
@@ -886,7 +886,7 @@ export class SecurityCapacityManager extends EventEmitter {
         last_forecast_accuracy: 0.85 + Math.random() * 0.1,
         trend_accuracy: 0.80 + Math.random() * 0.15,
         peak_prediction_accuracy: 0.75 + Math.random() * 0.2,
-        cost_prediction_accuracy: 0.90 + Math.random() * 0.08
+        cost_prediction_accuracy: 0.90 + Math.random() * 0.08,
       }
     };
     this.forecasts.set(id, forecast);
@@ -894,7 +894,7 @@ export class SecurityCapacityManager extends EventEmitter {
       forecast_id: id,
       service,
       horizon_days: horizonDays,
-      peak_capacity_needed: Math.max(...forecast.forecasts.map(f => f.required_capacity.cpu_cores))
+      peak_capacity_needed: Math.max(...forecast.forecasts.map(f => f.required_capacity.cpu_cores)),
     });
     return id;
   }
@@ -925,7 +925,7 @@ export class SecurityCapacityManager extends EventEmitter {
           memory_gb: Math.ceil(baseLoad) * 16,
           storage_gb: Math.ceil(baseLoad) * 100,
           network_bandwidth_mbps: Math.ceil(baseLoad) * 1000,
-          iops_required: Math.ceil(baseLoad) * 1000
+          iops_required: Math.ceil(baseLoad) * 1000,
         },
         estimated_cost: Math.ceil(baseLoad) * 0.50 * 24, // Daily cost
         risk_factors: this.identifyForecastRisks(day, baseLoad, currentCapacity)
@@ -964,12 +964,12 @@ export class SecurityCapacityManager extends EventEmitter {
         estimated_benefit: 'Reduced downtime risk by 80%',
         prerequisites: ['Review current policies', 'Test scaling procedures'],
         risks: ['Potential cost increase if poorly configured'],
-        rollback_plan: 'Disable auto-scaling and revert to manual scaling'
+        rollback_plan: 'Disable auto-scaling and revert to manual scaling',
       },
       timeline: {,
         recommended_start: Date.now(),
         estimated_completion: Date.now() + (24 * 60 * 60 * 1000),
-        deadline: Date.now() + (3 * 24 * 60 * 60 * 1000)
+        deadline: Date.now() + (3 * 24 * 60 * 60 * 1000),
       },
       status: 'pending',
       created_at: Date.now(),
@@ -989,11 +989,11 @@ export class SecurityCapacityManager extends EventEmitter {
         estimated_benefit: '15-20% cost reduction',
         prerequisites: ['Usage analysis', 'Performance testing'],
         risks: ['Temporary performance impact during migration'],
-        rollback_plan: 'Revert to previous instance types within 24 hours'
+        rollback_plan: 'Revert to previous instance types within 24 hours',
       },
       timeline: {,
         recommended_start: Date.now() + (7 * 24 * 60 * 60 * 1000),
-        estimated_completion: Date.now() + (14 * 24 * 60 * 60 * 1000)
+        estimated_completion: Date.now() + (14 * 24 * 60 * 60 * 1000),
       },
       status: 'pending',
       created_at: Date.now(),
@@ -1013,11 +1013,11 @@ export class SecurityCapacityManager extends EventEmitter {
         estimated_benefit: 'Improved availability and reduced latency',
         prerequisites: ['Network architecture review', 'Data replication strategy'],
         risks: ['Increased complexity', 'Initial cost increase'],
-        rollback_plan: 'Consolidate to single region if needed'
+        rollback_plan: 'Consolidate to single region if needed',
       },
       timeline: {,
         recommended_start: Date.now() + (30 * 24 * 60 * 60 * 1000),
-        estimated_completion: Date.now() + (90 * 24 * 60 * 60 * 1000)
+        estimated_completion: Date.now() + (90 * 24 * 60 * 60 * 1000),
       },
       status: 'pending',
       created_at: Date.now(),
@@ -1067,7 +1067,6 @@ export class SecurityCapacityManager extends EventEmitter {
     total_monthly_cost: number;
     scaling_events_last_24h: number;
     recommendations_pending: number;
-  } {
     const services = Array.from(this.capacityPlans.keys()).map(planId => {)
       const plan = this.capacityPlans.get(planId)!;
       const currentCapacity = this.currentCapacity.get(plan.service) || 1;
@@ -1084,7 +1083,7 @@ export class SecurityCapacityManager extends EventEmitter {
         current_capacity: currentCapacity,
         utilization: {,
           cpu: recentMetrics?.current_utilization.cpu_percentage || 0,
-          memory: recentMetrics?.current_utilization.memory_percentage || 0
+          memory: recentMetrics?.current_utilization.memory_percentage || 0,
         },
         health_score: recentMetrics?.health.overall_health_score || 100,
         scaling_status: scalingStatus,
@@ -1095,7 +1094,7 @@ export class SecurityCapacityManager extends EventEmitter {
       ? services.reduce((sum, s) => sum + s.health_score, 0) / services.length 
       : 100;
     const totalMonthlyCost = services.reduce((sum, s) => sum + (s.current_capacity * 0.50 * 24 * 30), 0);
-    const recentScalingEvents = this.scalingEvents.filter(event => ;)
+    const recentScalingEvents = this.scalingEvents.filter(event => ;);
       Date.now() - event.timestamp < 24 * 60 * 60 * 1000
     ).length;
     const pendingRecommendations = Array.from(this.recommendations.values());
@@ -1285,7 +1284,7 @@ export class SecurityCapacityManager extends EventEmitter {
     if (!recentMetrics) return;
     const plan = Array.from(this.capacityPlans.values()).find(p => p.service === service);
     if (!plan) return;
-    const avgUtilization = (recentMetrics.current_utilization.cpu_percentage + ;)
+    const avgUtilization = (recentMetrics.current_utilization.cpu_percentage + ;);
                            recentMetrics.current_utilization.memory_percentage) / 2;
     if (avgUtilization > plan.monitoring.capacity_thresholds.critical_percentage) {
       this.emit('capacity_threshold_critical', {)
@@ -1346,7 +1345,7 @@ export class SecurityCapacityManager extends EventEmitter {
       }
       this.emit('configuration_imported', {)
         plans_imported: config.capacity_plans?.length || 0,
-        policies_imported: config.scaling_policies?.length || 0
+        policies_imported: config.scaling_policies?.length || 0,
       });
     } catch (error) {
       throw new Error(`Failed to import configuration: ${error}`);}

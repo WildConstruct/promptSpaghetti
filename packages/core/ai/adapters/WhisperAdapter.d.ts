@@ -86,13 +86,13 @@ export declare class WhisperAdapter extends BaseAIModel {
         audio?: File | Blob | ArrayBuffer;
         data?: File | Blob | ArrayBuffer;
     }, options?: WhisperRequestOptions): Promise<CostEstimate>;
-    transcribeFile()
+    transcribeFile();
       file: File,
       language?: string,
       options?: Partial<WhisperRequestOptions>
     ): Promise<WhisperTranscriptionResult>;
     translateToEnglish(file: File, options?: Partial<WhisperRequestOptions>): Promise<WhisperTranscriptionResult>;
-    transcribeWithTimestamps()
+    transcribeWithTimestamps();
       file: File,
       granularity?: 'word' | 'segment' | 'both',
       options?: Partial<WhisperRequestOptions>

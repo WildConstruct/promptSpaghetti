@@ -93,7 +93,7 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
       label: {,
         content: newContent || 'Untitled',
         isEditing: false,
-        lastModified: new Date().toISOString()
+        lastModified: new Date().toISOString(),
       }
     });
     onAction({)
@@ -144,7 +144,7 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
     setIsDragging(true);
     setDragStart({)
       x: e.clientX - label.position.x,
-      y: e.clientY - label.position.y
+      y: e.clientY - label.position.y,
     });
   }, [canEdit, isEditing, label.position]);
   // Handle drag movement
@@ -153,7 +153,7 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
     const handleMouseMove = (e: MouseEvent) => {
       const newPosition = {
         x: e.clientX - dragStart.x,
-        y: e.clientY - dragStart.y
+        y: e.clientY - dragStart.y,
       };
       onAction({)
         type: 'move',
@@ -177,7 +177,7 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
     return null;
   }
   const labelStyles = getLabelStyles();
-  return ()
+  return ();
     <div
       ref={labelRef}
       data-testid={`connection-label-${label.id}`}
@@ -267,7 +267,7 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
             alignItems: 'center',
             justifyContent: 'center',
             opacity: 0.8,
-            transition: 'opacity 0.2s ease'
+            transition: 'opacity 0.2s ease',
           }}
           onClick={(e) => {
             e.stopPropagation();
@@ -300,7 +300,7 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
             height: 0,
             borderLeft: '6px solid transparent',
             borderRight: '6px solid transparent',
-            borderTop: '6px solid #fbbf24'
+            borderTop: '6px solid #fbbf24',
           }}
         />
       )}
@@ -313,7 +313,7 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
             background: 'radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, transparent 70%)',
             borderRadius: '12px',
             zIndex: -1,
-            animation: 'pulse 2s infinite'
+            animation: 'pulse 2s infinite',
           }}
         />
       )}

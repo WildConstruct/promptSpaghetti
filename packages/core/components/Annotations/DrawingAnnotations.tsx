@@ -183,7 +183,7 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
     const scaleY = canvas.height / rect.height;
     return {
       x: (event.clientX - rect.left) * scaleX / zoom - pan.x,
-      y: (event.clientY - rect.top) * scaleY / zoom - pan.y
+      y: (event.clientY - rect.top) * scaleY / zoom - pan.y,
     };
   }, [zoom, pan]);
   // Draw background grid
@@ -298,7 +298,7 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
       if (annotation.points.length >= 2) {
         const centerX = annotation.points[0].x;
         const centerY = annotation.points[0].y;
-        const radius = Math.sqrt(;)
+        const radius = Math.sqrt(;);
           Math.pow(annotation.points[1].x - centerX, 2) +
             Math.pow(annotation.points[1].y - centerY, 2)
         );
@@ -375,7 +375,7 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
         if (currentPoints.length === 2) {
           const centerX = currentPoints[0].x;
           const centerY = currentPoints[0].y;
-          const radius = Math.sqrt(;)
+          const radius = Math.sqrt(;);
             Math.pow(currentPoints[1].x - centerX, 2) +
               Math.pow(currentPoints[1].y - centerY, 2)
           );
@@ -490,7 +490,7 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
       visible: layerVisibility[layer.id],
     }));
   }, [annotations, layerVisibility]);
-  return ()
+  return ();
     <div className={`drawing-annotations ${className}`}>}
       <Card>
         <CardHeader>
@@ -756,7 +756,7 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({)
                 }}
                 style={{ 
                   cursor: DRAWING_TOOLS[currentTool]?.cursor || 'crosshair',
-                  pointerEvents: readonly ? 'none' : 'all'
+                  pointerEvents: readonly ? 'none' : 'all',
                 }}
               />
               {/* Readonly overlay */}

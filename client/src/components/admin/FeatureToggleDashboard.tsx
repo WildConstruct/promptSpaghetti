@@ -1,5 +1,4 @@
 // Epic 17.1.2 - Feature Toggle Admin Dashboard
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Settings,
@@ -28,7 +27,6 @@ import { ToggleParametersManager } from './ToggleParametersManager';
 import './FeatureToggleDashboard.css';
 import './CreateToggleModal.css';
 import './ToggleDetailsModal.css';
-
 interface FeatureToggle {
   id: string;
   key: string;
@@ -42,14 +40,12 @@ interface FeatureToggle {
   updatedAt: string;
   version: number;
 }
-
 interface DashboardFilters {
   search: string;
   enabled?: boolean;
   type?: string;
   claudeImpact?: string;
 }
-
 interface DashboardState {
   toggles: FeatureToggle[];
   total: number;
@@ -61,15 +57,14 @@ interface DashboardState {
 }
 
 export const FeatureToggleDashboard: React.FC = () => {
-  const [state, setState] = useState<DashboardState>({
+  const [state, setState] = useState<DashboardState>({)
     toggles: [],
     total: 0,
     loading: true,
     filters: { search: '' },
     currentPage: 1,
-    pageSize: 20
+    pageSize: 20,
   });
-
   const [selectedToggles, setSelectedToggles] = useState<Set<string>>(new Set());
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -82,204 +77,173 @@ export const FeatureToggleDashboard: React.FC = () => {
   const [selectedToggleForOverride, setSelectedToggleForOverride] = useState<string | null>(null);
   const [showParametersManager, setShowParametersManager] = useState(false);
   const [parametersToggleId, setParametersToggleId] = useState<string | null>(null);
-
   // Fetch toggles data
   const fetchToggles = useCallback(async () => {
     setState(prev => ({ ...prev, loading: true, error: undefined }));
-    
     try {
       const params = new URLSearchParams();
-      
       if (state.filters.search) params.append('search', state.filters.search);
       if (state.filters.enabled !== undefined) params.append('enabled', state.filters.enabled.toString());
       if (state.filters.type) params.append('type', state.filters.type);
       if (state.filters.claudeImpact) params.append('claudeImpact', state.filters.claudeImpact);
-      
       params.append('limit', state.pageSize.toString());
       params.append('offset', ((state.currentPage - 1) * state.pageSize).toString());
-
-      const response = await fetch(`/api/feature-toggles/toggles?${params}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      const response = await fetch(`/api/feature-toggles/toggles?${params}`, {)}
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
           'Content-Type': 'application/json'
         }
       });
-
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);}
       }
-
       const data = await response.json();
-      
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
         toggles: data.toggles,
         total: data.total,
-        loading: false
+        loading: false,
       }));
     } catch (error) {
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load toggles'
+        error: error instanceof Error ? error.message : 'Failed to load toggles',
       }));
     }
   }, [state.filters, state.currentPage, state.pageSize]);
-
   useEffect(() => {
     fetchToggles();
   }, [fetchToggles]);
-
   // Toggle activation/deactivation using symmetric endpoints
   const handleToggleStatus = async (toggle: FeatureToggle) => {
     try {
-      const endpoint = toggle.enabled 
-        ? `/api/feature-toggles/toggles/${toggle.id}/deactivate`
-        : `/api/feature-toggles/toggles/${toggle.id}/activate`;
-      
-      const body = toggle.enabled 
+      const endpoint = toggle.enabled ;
+        ? `/api/feature-toggles/toggles/${toggle.id}/deactivate`}
+        : `/api/feature-toggles/toggles/${toggle.id}/activate`;}
+      const body = toggle.enabled ;
         ? { reason: 'Manual deactivation from dashboard' }
         : { reason: 'Manual activation from dashboard' };
-
-      const response = await fetch(endpoint, {
+      const response = await fetch(endpoint, {)
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
-
       if (!response.ok) {
-        throw new Error(`Failed to ${toggle.enabled ? 'deactivate' : 'activate'} toggle`);
+        throw new Error(`Failed to ${toggle.enabled ? 'deactivate' : 'activate'} toggle`);}
       }
-
       // Refresh data
       fetchToggles();
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Operation failed');
     }
   };
-
   // Handle percentage rollout changes
   const handlePercentageChange = async (toggleId: string, percentage: number) => {
     try {
-      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {
+      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {)}
         method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({ ),
           percentage,
-          reason: `Percentage updated to ${percentage}% from dashboard`
+          reason: `Percentage updated to ${percentage}% from dashboard`}
         })
       });
-
       if (!response.ok) {
         throw new Error('Failed to update percentage');
       }
-
       fetchToggles();
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Operation failed');
     }
   };
-
   // Handle override panel opening
   const handleOverrideClick = (toggleId: string) => {
     setSelectedToggleForOverride(toggleId);
     setShowStatusOverridePanel(true);
   };
-
   // Handle emergency disable
   const handleEmergencyDisable = async (toggleId: string, reason: string) => {
     try {
-      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}/deactivate`, {
+      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}/deactivate`, {)}
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ 
-          reason: `EMERGENCY DISABLE: ${reason}`
+        body: JSON.stringify({ ),
+          reason: `EMERGENCY DISABLE: ${reason}`}
         })
       });
-
       if (!response.ok) {
         throw new Error('Failed to emergency disable toggle');
       }
-
       fetchToggles();
       alert('Toggle emergency disabled successfully');
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Emergency disable failed');
     }
   };
-
   // Handle override creation
   const handleOverrideCreated = () => {
     fetchToggles(); // Refresh to show override status
   };
-
   // Handle parameters management
   const handleParametersClick = (toggleId: string) => {
     setParametersToggleId(toggleId);
     setShowParametersManager(true);
   };
-
   const handleParametersChange = async (toggleId: string, parameters: Record<string, unknown>) => {
     try {
-      const response = await fetch(`/api/toggle-parameters/toggles/${toggleId}/parameters`, {
+      const response = await fetch(`/api/toggle-parameters/toggles/${toggleId}/parameters`, {)}
         method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({ ),
           parameters,
-          reason: 'Parameters updated from dashboard'
+          reason: 'Parameters updated from dashboard',
         })
       });
-
       if (!response.ok) {
         throw new Error('Failed to update toggle parameters');
       }
-
       fetchToggles(); // Refresh to show updated toggle
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Failed to update parameters');
     }
   };
-
   const handleParametersSave = async () => {
     // This will be called by the ToggleParametersManager when save is clicked
     setShowParametersManager(false);
     setParametersToggleId(null);
     fetchToggles();
   };
-
   // Handle archive toggle
   const handleArchiveToggle = async (toggleId: string) => {
     try {
-      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {
+      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {)}
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
         }
       });
-
       if (!response.ok) {
         throw new Error('Failed to archive toggle');
       }
-
       fetchToggles();
       setArchiveConfirmToggleId(null);
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Archive failed');
     }
   };
-
   // Get toggle type badge color
   const getTypeColor = (type: string): string => {
     switch (type) {
@@ -291,7 +255,6 @@ export const FeatureToggleDashboard: React.FC = () => {
     default: return 'gray';
     }
   };
-
   // Get Claude impact badge color and icon
   const getClaudeImpactDisplay = (impact: string) => {
     switch (impact) {
@@ -309,35 +272,32 @@ export const FeatureToggleDashboard: React.FC = () => {
       return { color: 'gray', icon: null, text: impact };
     }
   };
-
   // Format toggle value for display
   const formatToggleValue = (toggle: FeatureToggle): string => {
     switch (toggle.type) {
     case 'boolean':
       return toggle.value.enabled ? 'Enabled' : 'Disabled';
     case 'percentage_rollout':
-      return `${toggle.value.percentage}%`;
+      return `${toggle.value.percentage}%`;}
     case 'multivariate':
-      return `${toggle.value.variants?.length || 0} variants`;
+      return `${toggle.value.variants?.length || 0} variants`;}
     case 'scheduled':
       return toggle.value.enabled ? 'Active schedule' : 'Inactive';
     case 'segmentation':
-      return `${toggle.value.rules?.length || 0} rules`;
+      return `${toggle.value.rules?.length || 0} rules`;}
     default:
       return 'Unknown';
     }
   };
-
   const handleFilterChange = (newFilters: Partial<DashboardFilters>) => {
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
       filters: { ...prev.filters, ...newFilters },
-      currentPage: 1 // Reset to first page on filter change
+      currentPage: 1 // Reset to first page on filter change,
     }));
   };
-
   const handleSelectToggle = (toggleId: string) => {
-    setSelectedToggles(prev => {
+    setSelectedToggles(prev => {)
       const newSet = new Set(prev);
       if (newSet.has(toggleId)) {
         newSet.delete(toggleId);
@@ -347,21 +307,18 @@ export const FeatureToggleDashboard: React.FC = () => {
       return newSet;
     });
   };
-
   const handleArchiveToggle = async (toggleId: string) => {
     try {
-      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}/archive`, {
+      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}/archive`, {)}
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
           'Content-Type': 'application/json'
         }
       });
-
       if (!response.ok) {
         throw new Error('Failed to archive toggle');
       }
-
       // Refresh toggles list
       await fetchToggles();
       setArchiveConfirmToggleId(null);
@@ -370,7 +327,6 @@ export const FeatureToggleDashboard: React.FC = () => {
       setState(prev => ({ ...prev, error: 'Failed to archive toggle' }));
     }
   };
-
   const handleSelectAll = () => {
     if (selectedToggles.size === state.toggles.length) {
       setSelectedToggles(new Set());
@@ -378,8 +334,7 @@ export const FeatureToggleDashboard: React.FC = () => {
       setSelectedToggles(new Set(state.toggles.map(t => t.id)));
     }
   };
-
-  const handleCreateToggle = async (toggleData: {
+  const handleCreateToggle = async (toggleData: {)
     key: string;
     name: string;
     description?: string;
@@ -387,26 +342,23 @@ export const FeatureToggleDashboard: React.FC = () => {
     value: boolean | number | string | Record<string, unknown>;
     claudeImpact: string;
   }) => {
-    const response = await fetch('/api/feature-toggles/toggles', {
+    const response = await fetch('/api/feature-toggles/toggles', {)
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      headers: {,
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,}
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(toggleData)
+      body: JSON.stringify(toggleData),
     });
-
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error || 'Failed to create toggle');
     }
-
     // Refresh the toggles list
     fetchToggles();
     setShowCreateModal(false);
   };
-
-  return (
+  return ()
     <div className="feature-toggle-dashboard">
       {/* Header */}
       <div className="dashboard-header">
@@ -416,7 +368,6 @@ export const FeatureToggleDashboard: React.FC = () => {
             Manage feature flags, rollouts, and experiments
           </p>
         </div>
-        
         <div className="header-actions">
           <button
             className="btn btn-secondary"
@@ -425,7 +376,6 @@ export const FeatureToggleDashboard: React.FC = () => {
             <Filter size={16} />
             Filters
           </button>
-          
           <button
             className="btn btn-secondary"
             onClick={fetchToggles}
@@ -434,7 +384,6 @@ export const FeatureToggleDashboard: React.FC = () => {
             <RefreshCw size={16} className={state.loading ? 'animate-spin' : ''} />
             Refresh
           </button>
-          
           <button
             className="btn btn-primary"
             onClick={() => setShowCreateModal(true)}
@@ -444,36 +393,31 @@ export const FeatureToggleDashboard: React.FC = () => {
           </button>
         </div>
       </div>
-
       {/* Stats Cards */}
       <div className="dashboard-stats">
         <div className="stat-card">
           <div className="stat-label">Total Toggles</div>
           <div className="stat-value">{state.total}</div>
         </div>
-        
         <div className="stat-card">
           <div className="stat-label">Active</div>
           <div className="stat-value">
             {state.toggles.filter(t => t.enabled).length}
           </div>
         </div>
-        
         <div className="stat-card">
           <div className="stat-label">Claude Impact</div>
           <div className="stat-value">
             {state.toggles.filter(t => t.claudeImpact !== 'NONE').length}
           </div>
         </div>
-        
         <div className="stat-card">
           <div className="stat-label">Selected</div>
           <div className="stat-value">{selectedToggles.size}</div>
         </div>
       </div>
-
       {/* Filters Panel */}
-      {showFilters && (
+      {showFilters && ()
         <div className="filters-panel">
           <div className="filter-group">
             <label>Search</label>
@@ -487,13 +431,12 @@ export const FeatureToggleDashboard: React.FC = () => {
               />
             </div>
           </div>
-
           <div className="filter-group">
             <label>Status</label>
             <select
               value={state.filters.enabled?.toString() || ''}
-              onChange={(e) => handleFilterChange({ 
-                enabled: e.target.value === '' ? undefined : e.target.value === 'true' 
+              onChange={(e) => handleFilterChange({ )
+                enabled: e.target.value === '' ? undefined : e.target.value === 'true' ,
               })}
             >
               <option value="">All</option>
@@ -501,7 +444,6 @@ export const FeatureToggleDashboard: React.FC = () => {
               <option value="false">Disabled</option>
             </select>
           </div>
-
           <div className="filter-group">
             <label>Type</label>
             <select
@@ -516,7 +458,6 @@ export const FeatureToggleDashboard: React.FC = () => {
               <option value="segmentation">Segmentation</option>
             </select>
           </div>
-
           <div className="filter-group">
             <label>Claude Impact</label>
             <select
@@ -533,9 +474,8 @@ export const FeatureToggleDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Bulk Actions */}
-      {selectedToggles.size > 0 && (
+      {selectedToggles.size > 0 && ()
         <div className="bulk-actions">
           <span>{selectedToggles.size} toggle(s) selected</span>
           <div className="bulk-buttons">
@@ -548,15 +488,14 @@ export const FeatureToggleDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Toggles Table */}
       <div className="toggles-table-container">
-        {state.loading ? (
+        {state.loading ? ()
           <div className="loading-state">
             <LoadingSpinner />
             <p>Loading feature toggles...</p>
           </div>
-        ) : state.error ? (
+        ) : state.error ? ()
           <div className="error-state">
             <AlertTriangle size={24} />
             <p>Error: {state.error}</p>
@@ -564,7 +503,7 @@ export const FeatureToggleDashboard: React.FC = () => {
               Try Again
             </button>
           </div>
-        ) : (
+        ) : ()
           <table className="toggles-table">
             <thead>
               <tr>
@@ -588,8 +527,7 @@ export const FeatureToggleDashboard: React.FC = () => {
             <tbody>
               {state.toggles.map((toggle) => {
                 const claudeDisplay = getClaudeImpactDisplay(toggle.claudeImpact);
-                
-                return (
+                return ()
                   <tr key={toggle.id}>
                     <td>
                       <input
@@ -598,7 +536,6 @@ export const FeatureToggleDashboard: React.FC = () => {
                         onChange={() => handleSelectToggle(toggle.id)}
                       />
                     </td>
-                    
                     <td>
                       <EnhancedToggleStatusControls
                         toggle={{
@@ -606,7 +543,7 @@ export const FeatureToggleDashboard: React.FC = () => {
                           type: toggle.type.toUpperCase().replace('_', '_') as 'BOOLEAN' | 'PERCENTAGE' | 'MULTIVARIATE' | 'SCHEDULED' | 'SEGMENTATION',
                           hasActiveOverride: false, // TODO: Add override detection logic
                           percentage: toggle.type === 'percentage_rollout' ? 50 : undefined,
-                          rolloutStatus: toggle.type === 'percentage_rollout' ? 'ACTIVE' : undefined
+                          rolloutStatus: toggle.type === 'percentage_rollout' ? 'ACTIVE' : undefined,
                         }}
                         onToggleChange={handleToggleStatus}
                         onPercentageChange={handlePercentageChange}
@@ -615,39 +552,33 @@ export const FeatureToggleDashboard: React.FC = () => {
                         compact={true}
                       />
                     </td>
-                    
                     <td>
                       <code className="toggle-key">{toggle.key}</code>
                     </td>
-                    
                     <td>
                       <div className="toggle-name-col">
                         <div className="toggle-name">{toggle.name}</div>
-                        {toggle.description && (
+                        {toggle.description && ()
                           <div className="toggle-description">{toggle.description}</div>
                         )}
                       </div>
                     </td>
-                    
                     <td>
                       <Badge color={getTypeColor(toggle.type)}>
                         {toggle.type.replace('_', ' ')}
                       </Badge>
                     </td>
-                    
                     <td>
                       <span className="toggle-value">
                         {formatToggleValue(toggle)}
                       </span>
                     </td>
-                    
                     <td>
                       <Badge color={claudeDisplay.color}>
                         {claudeDisplay.icon}
                         {claudeDisplay.text}
                       </Badge>
                     </td>
-                    
                     <td>
                       <div className="timestamp">
                         <Clock size={12} />
@@ -655,7 +586,6 @@ export const FeatureToggleDashboard: React.FC = () => {
                       </div>
                       <div className="version">v{toggle.version}</div>
                     </td>
-                    
                     <td>
                       <div className="action-buttons">
                         <button 
@@ -665,7 +595,6 @@ export const FeatureToggleDashboard: React.FC = () => {
                         >
                           <Eye size={14} />
                         </button>
-                        
                         <button 
                           className="btn-icon" 
                           title="Edit Toggle"
@@ -673,7 +602,6 @@ export const FeatureToggleDashboard: React.FC = () => {
                         >
                           <Edit size={14} />
                         </button>
-                        
                         <button 
                           className="btn-icon" 
                           title="Manage Parameters"
@@ -681,7 +609,6 @@ export const FeatureToggleDashboard: React.FC = () => {
                         >
                           <Settings size={14} />
                         </button>
-                        
                         <button 
                           className="btn-icon" 
                           title="View Audit History"
@@ -689,7 +616,6 @@ export const FeatureToggleDashboard: React.FC = () => {
                         >
                           <History size={14} />
                         </button>
-                        
                         <button 
                           className="btn-icon btn-danger" 
                           title="Archive Toggle"
@@ -706,9 +632,8 @@ export const FeatureToggleDashboard: React.FC = () => {
           </table>
         )}
       </div>
-
       {/* Pagination */}
-      {state.total > state.pageSize && (
+      {state.total > state.pageSize && ()
         <div className="pagination">
           <button
             className="btn btn-secondary"
@@ -717,11 +642,9 @@ export const FeatureToggleDashboard: React.FC = () => {
           >
             Previous
           </button>
-          
           <span className="page-info">
             Page {state.currentPage} of {Math.ceil(state.total / state.pageSize)}
           </span>
-          
           <button
             className="btn btn-secondary"
             disabled={state.currentPage >= Math.ceil(state.total / state.pageSize)}
@@ -731,16 +654,14 @@ export const FeatureToggleDashboard: React.FC = () => {
           </button>
         </div>
       )}
-
       {/* Create Toggle Modal */}
       <CreateToggleModal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         onSubmit={handleCreateToggle}
       />
-
       {/* Details Modal */}
-      {detailsToggleId && (
+      {detailsToggleId && ()
         <ToggleDetailsModal
           isOpen={!!detailsToggleId}
           onClose={() => setDetailsToggleId(null)}
@@ -751,9 +672,8 @@ export const FeatureToggleDashboard: React.FC = () => {
           }}
         />
       )}
-
       {/* Edit Modal */}
-      {editToggleId && (
+      {editToggleId && ()
         <EditToggleModal
           isOpen={!!editToggleId}
           onClose={() => setEditToggleId(null)}
@@ -764,7 +684,6 @@ export const FeatureToggleDashboard: React.FC = () => {
           }}
         />
       )}
-
       {/* Bulk Operations Modal */}
       <BulkOperationsModal
         isOpen={showBulkOperations}
@@ -775,9 +694,8 @@ export const FeatureToggleDashboard: React.FC = () => {
           fetchToggles();
         }}
       />
-
       {/* Audit History Modal */}
-      {auditHistoryToggleId && (
+      {auditHistoryToggleId && ()
         <div className="modal-overlay" onClick={() => setAuditHistoryToggleId(null)}>
           <div className="modal audit-history-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
@@ -800,9 +718,8 @@ export const FeatureToggleDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Archive Confirmation Modal */}
-      {archiveConfirmToggleId && (
+      {archiveConfirmToggleId && ()
         <div className="modal-overlay" onClick={() => setArchiveConfirmToggleId(null)}>
           <div className="modal confirm-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
@@ -832,7 +749,6 @@ export const FeatureToggleDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Status Override Panel */}
       <ToggleStatusOverridePanel
         toggleId={selectedToggleForOverride}
@@ -843,9 +759,8 @@ export const FeatureToggleDashboard: React.FC = () => {
         }}
         onOverrideCreated={handleOverrideCreated}
       />
-
       {/* Parameters Manager Modal */}
-      {showParametersManager && parametersToggleId && (
+      {showParametersManager && parametersToggleId && ()
         <div className="modal-overlay" onClick={() => {
           setShowParametersManager(false);
           setParametersToggleId(null);
@@ -867,8 +782,7 @@ export const FeatureToggleDashboard: React.FC = () => {
               {(() => {
                 const toggle = state.toggles.find(t => t.id === parametersToggleId);
                 if (!toggle) return <p>Toggle not found</p>;
-
-                return (
+                return ()
                   <ToggleParametersManager
                     toggleId={toggle.id}
                     toggleType={toggle.type.toUpperCase() as 'BOOLEAN' | 'PERCENTAGE_ROLLOUT' | 'MULTIVARIATE' | 'SCHEDULED' | 'SEGMENTATION'}

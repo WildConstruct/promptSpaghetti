@@ -128,7 +128,7 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({)
       });
     }
     // Default field rendering (basic input)
-    return ()
+    return ();
       <div key={key} style={{ marginBottom: 12 }}>
         <label 
           htmlFor={`field-${nodeId}-${key}`} }
@@ -201,7 +201,7 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({)
     }
   };
   const fieldKeys = getFieldKeys();
-  return ()
+  return ();
     <div className={`base-node-editor ${className}`}>}
       {fieldKeys.length > 0 ? ()
         fieldKeys.map(renderField)

@@ -178,7 +178,6 @@ export class ExtensionPointRegistry {
     byCategory: Record<ExtensionPointCategory, number>;
     byPriority: Record<ExtensionPointPriority, number>;
     byLifecycle: Record<ExtensionPointLifecycle, number>;
-    } {
     const stats = {
       total: this.extensionPoints.size,
       byCategory: {} as Record<ExtensionPointCategory, number>,
@@ -210,7 +209,6 @@ export class ExtensionPointRegistry {
     compatible: boolean;
     warnings: string[];
     errors: string[];
-  } {
     const extensionPoint = this.get(extensionPointId);
     if (!extensionPoint) {
       return {
@@ -267,7 +265,7 @@ export class ExtensionPointRegistry {
             name: 'id',
             type: 'string',
             required: true,
-            description: 'Unique node identifier'
+            description: 'Unique node identifier',
           }
         ],
         returnType: 'TOutput',
@@ -293,7 +291,7 @@ class CustomNode extends RuntimeNode<string> {
       constraints: {,
         performance: {,
           maxExecutionTime: 5000,
-          maxMemoryUsage: 100 * 1024 * 1024
+          maxMemoryUsage: 100 * 1024 * 1024,
         },
         security: {,
           permissions: ['runtime.execute'],
@@ -325,13 +323,13 @@ class CustomNode extends RuntimeNode<string> {
             name: 'id',
             type: 'string',
             required: true,
-            description: 'Unique node identifier'
+            description: 'Unique node identifier',
           },
           {
             name: 'config',
             type: 'AdvancedNodeConfig',
             required: true,
-            description: 'Advanced node configuration'
+            description: 'Advanced node configuration',
           }
         ],
         returnType: 'TOutput',
@@ -366,13 +364,13 @@ class CustomNode extends RuntimeNode<string> {
             name: 'node',
             type: 'any',
             required: true,
-            description: 'Node data object'
+            description: 'Node data object',
           },
           {
             name: 'onChange',
             type: '(partial: Record<string, unknown>) => void',
             required: true,
-            description: 'Change handler function'
+            description: 'Change handler function',
           }
         ],
         returnType: 'React.ReactElement',
@@ -407,7 +405,7 @@ class CustomNode extends RuntimeNode<string> {
             name: 'type',
             type: 'z.literal',
             required: true,
-            description: 'Node type literal'
+            description: 'Node type literal',
           }
         ],
         returnType: 'ZodSchema',
@@ -442,13 +440,13 @@ class CustomNode extends RuntimeNode<string> {
             name: 'request',
             type: 'FastifyRequest',
             required: true,
-            description: 'HTTP request object'
+            description: 'HTTP request object',
           },
           {
             name: 'reply',
             type: 'FastifyReply',
             required: true,
-            description: 'HTTP reply object'
+            description: 'HTTP reply object',
           }
         ],
         returnType: 'Promise<void>',

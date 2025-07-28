@@ -263,7 +263,7 @@ export const useBadgeSystem = (config: BadgeSystemHookConfig = {}) => {
     userExperience: userProgress?.experience || 0,
     totalPoints: userProgress?.totalPoints || 0,
     badgeCount: userBadges.length,
-    completionPercentage: availableBadges.length > 0 
+    completionPercentage: availableBadges.length > 0 ,
       ? Math.round((userBadges.length / availableBadges.length) * 100) 
       : 0,
     // Badge checking

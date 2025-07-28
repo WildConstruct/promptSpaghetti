@@ -273,7 +273,7 @@ export class PerformanceProfiler extends EventEmitter {
         updateLatency: 100, // 100ms
         memoryUsage: 100 * 1024 * 1024, // 100MB
         renderTime: 16, // 16ms for 60fps
-        cacheHitRate: 0.8 // 80%
+        cacheHitRate: 0.8 // 80%,
       },
       ...config
     };
@@ -602,7 +602,7 @@ export class PerformanceProfiler extends EventEmitter {
       prediction: {,
         nextHour: durationTrend.slope * 3600 + durationTrend.intercept,
         nextDay: durationTrend.slope * 86400 + durationTrend.intercept,
-        nextWeek: durationTrend.slope * 604800 + durationTrend.intercept
+        nextWeek: durationTrend.slope * 604800 + durationTrend.intercept,
       },
       inflectionPoints: [],
     });
@@ -626,7 +626,7 @@ export class PerformanceProfiler extends EventEmitter {
           metrics: {,
             duration: sample.metrics.duration,
             threshold,
-            deviationFactor: sample.metrics.duration / mean
+            deviationFactor: sample.metrics.duration / mean,
           },
           possibleCauses: [,
             'Large data processing',
@@ -653,7 +653,7 @@ export class PerformanceProfiler extends EventEmitter {
         strength: Math.abs(correlation) > 0.7 ? 'strong' : Math.abs(correlation) > 0.5 ? 'moderate' : 'weak',
         significance: Math.abs(correlation),
         description: `${correlation > 0 ? 'Positive' : 'Negative'} correlation between execution time and memory allocation`,}
-        implications: correlation > 0 ? 
+        implications: correlation > 0 ? ,
           ['Memory allocation may be causing performance overhead', 'Consider object pooling or reuse'] :
           ['Memory efficiency may be improving performance', 'Current memory management is effective']
       });
@@ -964,7 +964,7 @@ const memoizedCalculation = useMemo(() => {
       cacheEfficiency: 0,
       errorRate: 0,
       throughput: 0,
-      domainBreakdown: new Map()
+      domainBreakdown: new Map(),
     };
   }
   private createEmptyAnalysis(): PerformanceAnalysis {
@@ -1033,7 +1033,7 @@ const memoizedCalculation = useMemo(() => {
       ...profile,
       memorySnapshots: this.memorySnapshots,
       renderProfiles: Object.fromEntries(this.renderProfiles),
-      alerts: this.alerts.filter(a => a.timestamp >= profile.startTime && a.timestamp <= profile.endTime)
+      alerts: this.alerts.filter(a => a.timestamp >= profile.startTime && a.timestamp <= profile.endTime),
     };
   }
 }

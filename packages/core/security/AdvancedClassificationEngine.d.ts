@@ -140,7 +140,7 @@ export declare class AdvancedClassificationEngine extends EventEmitter {
     /**
      * Real-time stream classification
      */
-    classifyStream()
+    classifyStream();
       dataStream: AsyncIterable<DataElement>,
       context: ClassificationContext,
     ): Promise<AsyncGenerator<EnhancedClassificationResult>>;
@@ -167,7 +167,7 @@ export declare class AdvancedClassificationEngine extends EventEmitter {
     /**
      * Execute workflow manually
      */
-    executeWorkflow()
+    executeWorkflow();
       workflowId: string,
       result: EnhancedClassificationResult,
       context: ClassificationContext,

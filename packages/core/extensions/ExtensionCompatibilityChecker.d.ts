@@ -14,7 +14,7 @@ export declare class ExtensionCompatibilityChecker {
     /**
      * Comprehensive compatibility check
      */
-    checkExtensionCompatibility()
+    checkExtensionCompatibility();
       extension: ExtensionManifest,
       context: CompatibilityContext,
     ): ExtensionCompatibilityResult;
@@ -102,7 +102,7 @@ interface CompatibilityRule {
     id: string;
     name: string;
     description: string;
-    check: (extension: ExtensionManifest) => {
+    check: (extension: ExtensionManifest) => {,
         compatible: boolean;
         issues: CompatibilityIssue[];
     };

@@ -170,7 +170,7 @@ export declare class LockoutNotificationService extends EventEmitter {
     /**
      * Send admin notification for approval required
      */
-    sendAdminNotification()
+    sendAdminNotification();
       type: NotificationType,
       lockout: AccountLockout,
       adminRoles: AdminRole[],
@@ -205,7 +205,7 @@ export declare class LockoutNotificationService extends EventEmitter {
     /**
      * Test notification delivery
      */
-    testNotification()
+    testNotification();
       recipient: string,
       channel: NotificationChannel,
       templateId: string,

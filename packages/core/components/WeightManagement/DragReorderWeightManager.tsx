@@ -130,7 +130,7 @@ function SortableWeightItem({)
     transition
   };
   const isCurrentlyDragging = isSortableDragging || draggedItemId === option.id;
-  return ()
+  return ();
     <div
       ref={setNodeRef}
       style={{
@@ -166,7 +166,7 @@ function SortableWeightItem({)
             flexDirection: 'column',
             gap: '2px',
             opacity: option.locked ? 0.3 : 0.6,
-            cursor: option.locked ? 'default' : 'grab'
+            cursor: option.locked ? 'default' : 'grab',
           }}>
             <div style={{
               width: '4px',
@@ -398,12 +398,12 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
   const actualTotalWeight = totalWeight || options.reduce((sum, option) => sum + option.weight, 0);
   const optionsWithPercentages = options.map(option => ({)
     ...option,
-    percentage: actualTotalWeight > 0 ? (option.weight / actualTotalWeight) * 100 : 0
+    percentage: actualTotalWeight > 0 ? (option.weight / actualTotalWeight) * 100 : 0,
   }));
   // Calculate statistics
   const statistics: WeightStatistics = calculateWeightStatistics(options);
   // Configure sensors for better touch and keyboard support
-  const sensors = useSensors(;)
+  const sensors = useSensors(;);
     useSensor(PointerSensor, {)
       activationConstraint: {,
         distance: 8,
@@ -432,7 +432,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
   // Handle weight change
   const handleWeightChange = useCallback((optionId: string, newWeight: number) => {
     if (newWeight < minWeight || newWeight > maxWeight) return;
-    const newOptions = options.map(option => ;)
+    const newOptions = options.map(option => ;);
       option.id === optionId ? { ...option, weight: newWeight } : option
     );
     const option = newOptions.find(opt => opt.id === optionId);
@@ -445,7 +445,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
   }, [options, onChange, onWeightChange, minWeight, maxWeight]);
   // Handle lock toggle
   const handleLockToggle = useCallback((optionId: string) => {
-    const newOptions = options.map(option => ;)
+    const newOptions = options.map(option => ;);
       option.id === optionId ? { ...option, locked: !option.locked } : option
     );
     onChange(newOptions);
@@ -460,7 +460,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
       if (currentTotal > 0) {
         newOptions = options.map(option => ({)
           ...option,
-          weight: (option.weight / currentTotal) * 100
+          weight: (option.weight / currentTotal) * 100,
         }));
       }
       break;
@@ -469,7 +469,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
       const equalWeight = 100 / options.length;
       newOptions = options.map(option => ({)
         ...option,
-        weight: option.locked ? option.weight : equalWeight
+        weight: option.locked ? option.weight : equalWeight,
       }));
       break;
     case 'random':
@@ -478,7 +478,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
         if (option.locked) return option;
         return {
           ...option,
-          weight: Math.random() * 50 + 10 // Random between 10-60
+          weight: Math.random() * 50 + 10 // Random between 10-60,
         };
       });
       break;
@@ -486,7 +486,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
       // Reset all unlocked weights to minimum
       newOptions = options.map(option => ({)
         ...option,
-        weight: option.locked ? option.weight : minWeight
+        weight: option.locked ? option.weight : minWeight,
       }));
       break;
     }
@@ -536,7 +536,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({)
   // Find the dragged option for drag overlay
   const draggedOption = draggedItemId ? options.find(opt => opt.id === draggedItemId) : null;
   const draggedPercentage = draggedOption ? (actualTotalWeight > 0 ? (draggedOption.weight / actualTotalWeight) * 100 : 0) : 0;
-  return ()
+  return ();
     <div 
       ref={containerRef}
       className={`drag-reorder-weight-manager ${className}`}

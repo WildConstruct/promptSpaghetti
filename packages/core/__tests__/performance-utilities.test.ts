@@ -190,7 +190,7 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
           duration: (i + 1) * 50,
           startTime: Date.now() - 100,
           endTime: Date.now(),
-          memory: (i + 1) * 512
+          memory: (i + 1) * 512,
         };
         tracker.addMetric(operation, metrics);
       }
@@ -207,7 +207,7 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
           duration,
           startTime: Date.now() - duration,
           endTime: Date.now(),
-          memory: duration * 2
+          memory: duration * 2,
         });
       });
       const avgMetrics = tracker.getAverageMetrics(operation);
@@ -258,7 +258,7 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
           duration: Math.random() * 1000,
           startTime: Date.now() - 1000,
           endTime: Date.now(),
-          memory: Math.random() * 10000
+          memory: Math.random() * 10000,
         });
       }
       const addTime = Date.now() - start;

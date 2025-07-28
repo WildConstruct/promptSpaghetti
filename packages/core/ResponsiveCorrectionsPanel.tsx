@@ -25,7 +25,7 @@ export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProp
   }, []);
   // Don't render if corrections are not enabled
   if (!isEnabled) return null;
-  return ()
+  return ();
     <>
       {isMobile ? ()
         <MobileCorrectionsPanel 

@@ -75,7 +75,7 @@ invalid@character: value
     test('should build AST from valid tokens', () => {
       const content = `version: 1.0.0;
 metadata:
-  name: "Test Graph"
+  name: "Test Graph",
 ---NODES---
 test_node:
   type: Output,
@@ -285,8 +285,8 @@ invalid_structure
     test('should parse complete valid graph', async () => {
       const content = `version: 1.0.0;
 metadata:
-  name: "Test Graph"
-  description: "Integration test graph"
+  name: "Test Graph",
+  description: "Integration test graph",
   author: "test",
 ---NODES---
 greeting_choice:
@@ -411,7 +411,7 @@ node2:
       // This test would use the serializer from Story 12.1
       const serializedContent = `version: 1.0.0;
 metadata:
-  name: "Round-trip Test"
+  name: "Round-trip Test",
   author: "test",
 ---NODES---
 choice1:

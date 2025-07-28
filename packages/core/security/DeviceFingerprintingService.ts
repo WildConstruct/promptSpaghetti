@@ -253,10 +253,9 @@ export class DeviceFingerprintingService extends EventEmitter {
   private locations: Map<string, LocationData[]> = new Map();
   private riskAssessments: Map<string, RiskAssessment> = new Map();
   private ipLocationCache: Map<string, LocationData> = new Map();
-  constructor()
+  constructor();
     private readonly geoipApiKey?: string,
     private readonly fraudDetectionEnabled: boolean = true
-  ) {
     super();
     this.startCleanupTimer();
   }
@@ -265,7 +264,7 @@ export class DeviceFingerprintingService extends EventEmitter {
    */
   public async generateFingerprint()
     context: FingerprintContext,
-    type: FingerprintType = FingerprintType.ENHANCED
+    type: FingerprintType = FingerprintType.ENHANCED,
   ): Promise<DeviceFingerprint> {
     const fingerprintId = this.calculateFingerprintId(context);
     const existing = this.fingerprints.get(fingerprintId);
@@ -351,7 +350,7 @@ export class DeviceFingerprintingService extends EventEmitter {
       riskScore,
       factors,
       recommendations,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
     this.riskAssessments.set(fingerprint.id, assessment);
     if (overallRisk === RiskLevel.HIGH || overallRisk === RiskLevel.CRITICAL) {
@@ -389,7 +388,6 @@ export class DeviceFingerprintingService extends EventEmitter {
     topCountries: Array<{ country: string; count: number }>;
     deviceTypes: Record<DeviceType, number>;
     avgConfidence: number;
-    } {
     const fingerprints = Array.from(this.fingerprints.values());
     const assessments = Array.from(this.riskAssessments.values());
     const locations = Array.from(this.ipLocationCache.values());
@@ -459,7 +457,7 @@ export class DeviceFingerprintingService extends EventEmitter {
       cookieEnabled: true, // Would be detected client-side
       doNotTrack: context.headers['dnt'] === '1',
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      timezoneOffset: new Date().getTimezoneOffset()
+      timezoneOffset: new Date().getTimezoneOffset(),
     };
   }
   private generateEnhancedFingerprint(context: FingerprintContext): DeviceFingerprint['enhanced'] {
@@ -471,7 +469,7 @@ export class DeviceFingerprintingService extends EventEmitter {
         height: clientData.screen?.height || 1080,
         colorDepth: clientData.screen?.colorDepth || 24,
         pixelRatio: clientData.screen?.pixelRatio || 1,
-        orientation: clientData.screen?.orientation || 'landscape-primary'
+        orientation: clientData.screen?.orientation || 'landscape-primary',
       },
       browser: {,
         name: ua.browser || 'unknown',
@@ -486,7 +484,7 @@ export class DeviceFingerprintingService extends EventEmitter {
       },
       plugins: clientData.plugins || [],
       fonts: clientData.fonts || [],
-      webgl: clientData.webgl || {
+      webgl: clientData.webgl || {,
         vendor: 'unknown',
         renderer: 'unknown',
         version: 'unknown',
@@ -494,12 +492,12 @@ export class DeviceFingerprintingService extends EventEmitter {
         extensions: [],
         parameters: {}
       },
-      canvas: clientData.canvas || {
+      canvas: clientData.canvas || {,
         fingerprint: 'unknown',
         geometry: 'unknown',
         text: 'unknown',
       },
-      audio: clientData.audio || {
+      audio: clientData.audio || {,
         fingerprint: 'unknown',
         sampleRate: 44100,
         channelCount: 2,
@@ -639,7 +637,7 @@ export class DeviceFingerprintingService extends EventEmitter {
         factor: 'bot_user_agent',
         impact: 40,
         confidence: 95,
-        description: 'User agent indicates automated browser'
+        description: 'User agent indicates automated browser',
       });
     }
     // Check screen resolution
@@ -650,7 +648,7 @@ export class DeviceFingerprintingService extends EventEmitter {
         factor: 'common_resolution',
         impact: 5,
         confidence: 60,
-        description: 'Very common screen resolution'
+        description: 'Very common screen resolution',
       });
     }
     return factors;
@@ -663,7 +661,7 @@ export class DeviceFingerprintingService extends EventEmitter {
         factor: 'vpn_detected',
         impact: 20,
         confidence: 85,
-        description: 'VPN usage detected'
+        description: 'VPN usage detected',
       });
     }
     if (location.network.proxyDetected) {
@@ -672,7 +670,7 @@ export class DeviceFingerprintingService extends EventEmitter {
         factor: 'proxy_detected',
         impact: 15,
         confidence: 80,
-        description: 'Proxy server detected'
+        description: 'Proxy server detected',
       });
     }
     if (location.network.torDetected) {
@@ -681,7 +679,7 @@ export class DeviceFingerprintingService extends EventEmitter {
         factor: 'tor_detected',
         impact: 35,
         confidence: 95,
-        description: 'Tor network usage detected'
+        description: 'Tor network usage detected',
       });
     }
     if (location.network.datacenter) {
@@ -690,7 +688,7 @@ export class DeviceFingerprintingService extends EventEmitter {
         factor: 'datacenter_ip',
         impact: 25,
         confidence: 90,
-        description: 'IP address belongs to a datacenter'
+        description: 'IP address belongs to a datacenter',
       });
     }
     return factors;
@@ -710,7 +708,7 @@ export class DeviceFingerprintingService extends EventEmitter {
         factor: 'new_device',
         impact: 10,
         confidence: 90,
-        description: 'First time seeing this device for this user'
+        description: 'First time seeing this device for this user',
       });
     }
     // Check for location consistency
@@ -724,7 +722,7 @@ export class DeviceFingerprintingService extends EventEmitter {
           factor: 'unusual_location',
           impact: 15,
           confidence: 75,
-          description: 'Login from unusual geographic location'
+          description: 'Login from unusual geographic location',
         });
       }
     }

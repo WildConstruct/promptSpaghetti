@@ -185,7 +185,6 @@ export class OptimizedGraphStorage {
       estimatedBytes: number;
       cacheHitRatio?: number;
     };
-    } {
     const nodeTypes: Record<string, number> = {};
     for (const [type, nodeSet] of this.indexes.nodesByType) {
       nodeTypes[type] = nodeSet.size;
@@ -202,7 +201,7 @@ export class OptimizedGraphStorage {
         leafNodes: this.indexes.leafNodes.size,
         rootNodes: this.indexes.rootNodes.size,
         isolatedNodes: this.indexes.isolatedNodes.size,
-        averageConnections: this.nodeMap.size > 0 ? totalConnections / this.nodeMap.size : 0
+        averageConnections: this.nodeMap.size > 0 ? totalConnections / this.nodeMap.size : 0,
       },
       memoryUsage: {,
         estimatedBytes: this.estimateMemoryUsage(),
@@ -295,7 +294,7 @@ export class OptimizedGraphStorage {
       outgoingEdges: new Map(),
       leafNodes: new Set(),
       rootNodes: new Set(),
-      isolatedNodes: new Set()
+      isolatedNodes: new Set(),
     };
   }
   private loadData(nodes: Node[], edges: Edge[]): void {

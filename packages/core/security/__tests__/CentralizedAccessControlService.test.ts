@@ -52,7 +52,7 @@ describe('CentralizedAccessControlService', () => {
       patchLevel: 'current',
       riskScore: 10,
       registered: true,
-      lastSeen: new Date()
+      lastSeen: new Date(),
     },
     behaviorProfile: {,
       normalAccessPatterns: [],
@@ -125,7 +125,7 @@ describe('CentralizedAccessControlService', () => {
     emergencyMode: false,
     ...overrides
   });
-  const createTestRequest = (;)
+  const createTestRequest = (;);
     subject?: Partial<SubjectAttributes>,
     object?: Partial<ObjectAttributes>,
     action?: Partial<ActionAttributes>,
@@ -241,7 +241,7 @@ describe('CentralizedAccessControlService', () => {
   });
   describe('Basic Access Evaluation', () => {
     test('should permit access for valid user with appropriate role', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['USER'], clearanceLevel: 'INTERNAL' },
         { classification: 'INTERNAL' },
         { operation: 'READ' }
@@ -253,7 +253,7 @@ describe('CentralizedAccessControlService', () => {
       expect(decision.riskLevel).toBe('LOW');
     });
     test('should deny access for insufficient clearance level', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['USER'], clearanceLevel: 'INTERNAL' },
         { classification: 'CONFIDENTIAL' },
         { operation: 'READ' }
@@ -263,7 +263,7 @@ describe('CentralizedAccessControlService', () => {
       expect(decision.reason).toContain('Missing required permission');
     });
     test('should deny access for restricted operations', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['USER'], clearanceLevel: 'INTERNAL' },
         { classification: 'INTERNAL' },
         { operation: 'DELETE' }
@@ -273,7 +273,7 @@ describe('CentralizedAccessControlService', () => {
       expect(decision.reason).toContain('Missing required permission');
     });
     test('should permit access for data owner with high clearance', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['DATA_OWNER'], clearanceLevel: 'RESTRICTED' },
         { classification: 'RESTRICTED' },
         { operation: 'READ' }
@@ -287,7 +287,7 @@ describe('CentralizedAccessControlService', () => {
     test('should deny access outside business hours for restricted data', async () => {
       // Mock time to be outside business hours (2 AM)
       jest.setSystemTime(new Date('2024-01-15T02:00:00Z'));
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['DATA_OWNER'], clearanceLevel: 'RESTRICTED' },
         { classification: 'RESTRICTED' },
         { operation: 'READ' }
@@ -297,7 +297,7 @@ describe('CentralizedAccessControlService', () => {
       expect(decision.reason).toContain('time_restriction_policy');
     });
     test('should deny access from unapproved regions', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { 
           roles: ['DATA_STEWARD'], 
           clearanceLevel: 'CONFIDENTIAL',
@@ -311,7 +311,7 @@ describe('CentralizedAccessControlService', () => {
       expect(decision.reason).toContain('location_restriction_policy');
     });
     test('should add monitoring obligations for sensitive data', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['DATA_STEWARD'], clearanceLevel: 'CONFIDENTIAL' },
         { classification: 'CONFIDENTIAL' },
         { operation: 'read' }
@@ -328,7 +328,7 @@ describe('CentralizedAccessControlService', () => {
   });
   describe('Emergency Access', () => {
     test('should grant emergency access with enhanced monitoring', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['USER'], clearanceLevel: 'INTERNAL' },
         { classification: 'CONFIDENTIAL' },
         { operation: 'read' },
@@ -352,7 +352,7 @@ describe('CentralizedAccessControlService', () => {
     test('should emit security alert for emergency access', async () => {
       const alertHandler = jest.fn();
       accessControlService.on('securityAlert', alertHandler);
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['USER'] },
         { classification: 'CONFIDENTIAL' },
         { operation: 'read' },
@@ -369,7 +369,7 @@ describe('CentralizedAccessControlService', () => {
   });
   describe('Compliance Checks', () => {
     test('should enforce MFA requirement for confidential data', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { 
           roles: ['DATA_STEWARD'], 
           clearanceLevel: 'CONFIDENTIAL',
@@ -383,7 +383,7 @@ describe('CentralizedAccessControlService', () => {
       expect(decision.reason).toContain('MFA required');
     });
     test('should enforce managed device requirement for restricted data', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { 
           roles: ['DATA_OWNER'], 
           clearanceLevel: 'RESTRICTED',
@@ -399,7 +399,7 @@ describe('CentralizedAccessControlService', () => {
   });
   describe('Caching', () => {
     test('should cache permit decisions', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['USER'], clearanceLevel: 'INTERNAL' },
         { classification: 'INTERNAL' },
         { operation: 'read' }
@@ -413,7 +413,7 @@ describe('CentralizedAccessControlService', () => {
       expect(decision2.decision).toBe('PERMIT');
     });
     test('should not cache deny decisions', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['USER'], clearanceLevel: 'INTERNAL' },
         { classification: 'CONFIDENTIAL' },
         { operation: 'read' }
@@ -436,7 +436,7 @@ describe('CentralizedAccessControlService', () => {
   });
   describe('Audit Logging', () => {
     test('should create audit log entry for each decision', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['USER'], clearanceLevel: 'INTERNAL' },
         { classification: 'INTERNAL' },
         { operation: 'read' }
@@ -455,12 +455,12 @@ describe('CentralizedAccessControlService', () => {
     });
     test('should filter audit log by criteria', async () => {
       // Create multiple requests
-      const request1 = createTestRequest(;)
+      const request1 = createTestRequest(;);
         { roles: ['USER'] },
         { classification: 'INTERNAL' },
         { operation: 'read' }
       );
-      const request2 = createTestRequest(;)
+      const request2 = createTestRequest(;);
         { roles: ['USER'] },
         { classification: 'CONFIDENTIAL' },
         { operation: 'read' }
@@ -486,7 +486,7 @@ describe('CentralizedAccessControlService', () => {
   });
   describe('Risk Assessment', () => {
     test('should calculate high risk for restricted data operations', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['DATA_OWNER'], clearanceLevel: 'RESTRICTED' },
         { classification: 'RESTRICTED' },
         { operation: 'DELETE' }
@@ -495,7 +495,7 @@ describe('CentralizedAccessControlService', () => {
       expect(decision.riskLevel).toBe('CRITICAL');
     });
     test('should calculate low risk for public data operations', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['USER'], clearanceLevel: 'PUBLIC' },
         { classification: 'PUBLIC' },
         { operation: 'read' }
@@ -504,7 +504,7 @@ describe('CentralizedAccessControlService', () => {
       expect(decision.riskLevel).toBe('LOW');
     });
     test('should increase risk for emergency access', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['USER'] },
         { classification: 'INTERNAL' },
         { operation: 'read' },
@@ -516,12 +516,12 @@ describe('CentralizedAccessControlService', () => {
   });
   describe('Metrics and Monitoring', () => {
     test('should track access metrics', async () => {
-      const request1 = createTestRequest(;)
+      const request1 = createTestRequest(;);
         { roles: ['USER'], clearanceLevel: 'INTERNAL' },
         { classification: 'INTERNAL' },
         { operation: 'read' }
       );
-      const request2 = createTestRequest(;)
+      const request2 = createTestRequest(;);
         { roles: ['USER'], clearanceLevel: 'INTERNAL' },
         { classification: 'CONFIDENTIAL' },
         { operation: 'read' }
@@ -537,7 +537,7 @@ describe('CentralizedAccessControlService', () => {
     test('should emit monitoring events for permitted access', async () => {
       const monitoringHandler = jest.fn();
       accessControlService.on('monitoring', monitoringHandler);
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['USER'], clearanceLevel: 'INTERNAL' },
         { classification: 'INTERNAL' },
         { operation: 'read' }
@@ -603,7 +603,7 @@ describe('CentralizedAccessControlService', () => {
       mockDataClassifier.classify.mockImplementation(() => {
         throw new Error('Classification failed');
       });
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['USER'] },
         { classification: undefined as any }, // Force classification
         { operation: 'read' }
@@ -630,7 +630,7 @@ describe('CentralizedAccessControlService', () => {
       const requests = [];
       // Create 100 concurrent requests
       for (let i = 0; i < 100; i++) {
-        const request = createTestRequest(;)
+        const request = createTestRequest(;);
           { roles: ['USER'], clearanceLevel: 'INTERNAL' },
           { classification: 'INTERNAL', dataId: `data-${i}` },}
           { operation: 'read' }
@@ -649,7 +649,7 @@ describe('CentralizedAccessControlService', () => {
   });
   describe('Integration', () => {
     test('should integrate with data classifier for unknown classifications', async () => {
-      const request = createTestRequest(;)
+      const request = createTestRequest(;);
         { roles: ['USER'], clearanceLevel: 'INTERNAL' },
         { classification: undefined as any }, // Force classification
         { operation: 'read' }

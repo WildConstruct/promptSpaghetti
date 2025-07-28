@@ -103,7 +103,7 @@ export class CategoryPerformanceManager extends EventEmitter {
         maxConcurrentOperations: 100,
         memoryThreshold: 1024 * 1024 * 1024, // 1GB
         cpuThreshold: 80, // 80%
-        responseTimeTarget: 100 // ms
+        responseTimeTarget: 100 // ms,
       },
       ...config
     };
@@ -228,7 +228,7 @@ export class CategoryPerformanceManager extends EventEmitter {
       this.emit('optimization_failed', {)
         actionId,
         category: action.category,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
       return false;
     }
@@ -254,7 +254,7 @@ export class CategoryPerformanceManager extends EventEmitter {
         size: cache.size,
         maxSize: categoryConfig.cacheStrategy.maxSize,
         hitRate: this.categoryMetrics.get(category)?.cacheHitRate || 0,
-        evictions: 0 // Would need to track this
+        evictions: 0 // Would need to track this,
       };
     }
     return stats;
@@ -482,7 +482,7 @@ export class CategoryPerformanceManager extends EventEmitter {
       nodeId,
       nodeType,
       category,
-      queuePosition: insertIndex === -1 ? queue.length - 1 : insertIndex
+      queuePosition: insertIndex === -1 ? queue.length - 1 : insertIndex,
     });
     return executionId;
   }
@@ -546,7 +546,7 @@ export class CategoryPerformanceManager extends EventEmitter {
         this.emit('execution_dequeued', {)
           nodeId: queueItem.nodeId,
           category,
-          waitTime: Date.now() - queueItem.timestamp
+          waitTime: Date.now() - queueItem.timestamp,
         });
       }
     }
@@ -579,7 +579,7 @@ export class CategoryPerformanceManager extends EventEmitter {
         this.optimizationActions.set(action.id, action);
       });
       // Auto-apply low-risk optimizations
-      const autoApplyActions = actions.filter(action => ;)
+      const autoApplyActions = actions.filter(action => ;);
         action.expectedImpact.confidence > 0.8 && 
         action.expectedImpact.resourceCost < 0.2
       );
@@ -603,7 +603,6 @@ export class CategoryPerformanceManager extends EventEmitter {
           targetInstances: Math.min(),
             categoryConfig.resourceLimits.maxConcurrentNodes * 1.5,
             categoryConfig.scalingRules.maxInstances
-          )
         },
         expectedImpact: {,
           performanceGain: 30,

@@ -114,7 +114,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       const contentFilter: ContentFilter = {
         searchQuery: searchQuery || undefined,
         types: typeFilter !== 'all' ? [typeFilter] : undefined,
-        statuses: statusFilter !== 'all' ? [statusFilter] : undefined
+        statuses: statusFilter !== 'all' ? [statusFilter] : undefined,
       };
       // Add date range filter
       if (dateRange !== 'all') {
@@ -200,7 +200,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
   }, [content, searchQuery, typeFilter, statusFilter]);
   const renderOverview = () => {
     if (!stats) return <div>Loading overview...</div>;
-    return ()
+    return ();
       <div className="overview-section">
         <div className="metrics-grid">
           <Card>
@@ -329,7 +329,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       </div>
     );
   };
-  const renderContentList = () => (;)
+  const renderContentList = () => (;);
     <div className="content-section">
       {/* Controls */}
       <div className="content-controls">
@@ -417,7 +417,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       )}
     </div>
   );
-  const renderBatchOperations = () => (;)
+  const renderBatchOperations = () => (;);
     <div className="batch-section">
       <div className="batch-header">
         <h3>Batch Operations</h3>
@@ -447,7 +447,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
   );
   const renderAnalytics = () => {
     if (!stats) return <div>Loading analytics...</div>;
-    return ()
+    return ();
       <div className="analytics-section">
         <div className="analytics-grid">
           <Card>
@@ -459,7 +459,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
                 {Object.entries(stats.performanceMetrics.contentTypePerformance).map(([type, performance]) => {
                   const config = CONTENT_TYPE_CONFIG[type as ContentType];
                   const Icon = config.icon;
-                  return ()
+                  return ();
                     <div key={type} className="type-item">
                       <div className="type-info">
                         <Icon className={`w-4 h-4 ${config.color.split(' ')[0]}`} />}
@@ -489,7 +489,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       </div>
     );
   };
-  return ()
+  return ();
     <div className={`content-scheduling-dashboard ${className}`}>}
       <div className="dashboard-header">
         <div className="header-info">
@@ -866,7 +866,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ )
   const TypeIcon = typeConfig.icon;
   const StatusIcon = statusConfig.icon;
   const canPublish = userRole === 'admin' || userRole === 'editor';
-  return ()
+  return ();
     <Card className="content-card">
       <CardContent className="p-4">
         <div className="content-card-header">
@@ -1039,7 +1039,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
   const progressPercentage = batch.progress.total > 0 ;
     ? (batch.progress.completed / batch.progress.total) * 100 
     : 0;
-  return ()
+  return ();
     <Card className="batch-card">
       <CardContent className="p-4">
         <div className="batch-header">
@@ -1141,7 +1141,7 @@ const ContentDetailModal: React.FC<ContentDetailModalProps> = ({)
   onUpdate,
   userRole
 }) => {
-  return ()
+  return ();
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">

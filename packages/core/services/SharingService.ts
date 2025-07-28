@@ -175,7 +175,6 @@ export class SharingService {
     basic: string;
     responsive: string;
     customizable: string;
-  } {
     const width = config.customization?.layout?.width || 800;
     const height = config.customization?.layout?.height || 600;
     const embedUrl = `${shareLink.fullUrl}?embed=true`;}

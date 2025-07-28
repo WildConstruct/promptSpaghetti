@@ -117,7 +117,7 @@ describe('DataSensitivityLevels', () => {
         expect(restrictedMarking.displayFormat).toBe('banner');
       });
       it('should have distinct colors for different levels', () => {
-        const colors = Object.values(DataSensitivityLevel).map(;)
+        const colors = Object.values(DataSensitivityLevel).map(;);
           level => DATA_SENSITIVITY_DEFINITIONS[level].markingRequirements.color
         );
         // All colors should be unique
@@ -204,7 +204,7 @@ describe('DataSensitivityLevels', () => {
     });
     describe('validateSensitivityAssignment', () => {
       it('should validate appropriate assignments', () => {
-        const result = DataSensitivityUtils.validateSensitivityAssignment(;)
+        const result = DataSensitivityUtils.validateSensitivityAssignment(;);
           'marketing',
           DataSensitivityLevel.PUBLIC
         );
@@ -212,7 +212,7 @@ describe('DataSensitivityLevels', () => {
         expect(result.reasons).toContain('Sensitivity level assignment is appropriate');
       });
       it('should reject inappropriate assignments for PII data', () => {
-        const result = DataSensitivityUtils.validateSensitivityAssignment(;)
+        const result = DataSensitivityUtils.validateSensitivityAssignment(;);
           'email',
           DataSensitivityLevel.PUBLIC
         );
@@ -221,7 +221,7 @@ describe('DataSensitivityLevels', () => {
         expect(result.reasons[0]).toContain('email');
       });
       it('should consider context for PII detection', () => {
-        const result = DataSensitivityUtils.validateSensitivityAssignment(;)
+        const result = DataSensitivityUtils.validateSensitivityAssignment(;);
           'customer_data',
           DataSensitivityLevel.INTERNAL,
           { containsPII: true }
@@ -231,7 +231,7 @@ describe('DataSensitivityLevels', () => {
         expect(result.reasons[0]).toContain('PII');
       });
       it('should handle publicly available data', () => {
-        const result = DataSensitivityUtils.validateSensitivityAssignment(;)
+        const result = DataSensitivityUtils.validateSensitivityAssignment(;);
           'general_data',
           DataSensitivityLevel.CONFIDENTIAL,
           { publiclyAvailable: true }
@@ -379,7 +379,7 @@ describe('DataSensitivityLevels', () => {
       it('should warn about past review dates', () => {
         const pastReview = {
           ...validClassification,
-          reviewDate: new Date(Date.now() - 24 * 60 * 60 * 1000) // Yesterday
+          reviewDate: new Date(Date.now() - 24 * 60 * 60 * 1000) // Yesterday,
         };
         const result = DataSensitivityUtils.validateClassification(pastReview);
         expect(result.valid).toBe(true);
@@ -403,7 +403,7 @@ describe('DataSensitivityLevels', () => {
       });
       it('should have valid actions for all references', () => {
         const { decisionTree } = DATA_SENSITIVITY_GUIDELINES;
-        const validActions = new Set([;)
+        const validActions = new Set([;);
           ...Object.keys(decisionTree.actions),
           'continue_assessment'
         ]);
@@ -466,7 +466,7 @@ describe('DataSensitivityLevels', () => {
   describe('Integration tests', () => {
     it('should handle complex classification scenarios', () => {
       // Test scenario: Email field in customer database
-      const emailValidation = DataSensitivityUtils.validateSensitivityAssignment(;)
+      const emailValidation = DataSensitivityUtils.validateSensitivityAssignment(;);
         'email',
         DataSensitivityLevel.RESTRICTED
       );
@@ -481,7 +481,7 @@ describe('DataSensitivityLevels', () => {
       // Test that automated rules and manual validation agree
       const emailRule = DATA_SENSITIVITY_GUIDELINES.automatedClassificationRules;
         .find(rule => rule.dataType === 'email');
-      const manualValidation = DataSensitivityUtils.validateSensitivityAssignment(;)
+      const manualValidation = DataSensitivityUtils.validateSensitivityAssignment(;);
         'email',
         emailRule!.recommendedLevel
       );

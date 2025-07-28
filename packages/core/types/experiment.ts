@@ -274,24 +274,22 @@ export interface AllocationServiceConfig {
 
 // Error types
 export class ExperimentError extends Error {
-  constructor()
+  constructor();
     message: string,
     public code: string,
     public experimentId?: string,
     public details?: Record<string, unknown>
-  ) {
     super(message);
     this.name = 'ExperimentError';
   }
 }
 
 export class AllocationError extends Error {
-  constructor()
+  constructor();
     message: string,
     public code: string,
     public userId?: string,
     public experimentId?: string
-  ) {
     super(message);
     this.name = 'AllocationError';
   }

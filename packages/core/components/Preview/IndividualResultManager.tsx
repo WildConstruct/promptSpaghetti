@@ -102,7 +102,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
       : 0;
     // Simple readability score (Flesch-like)
     const avgWordsPerSentence = sentences.length > 0 ? words.length / sentences.length : 0;
-    const readabilityScore = Math.max(0, Math.min(100, ;)
+    const readabilityScore = Math.max(0, Math.min(100, ;);
       206.835 - (1.015 * avgWordsPerSentence) - (84.6 * averageWordLength)
     ));
     // Basic sentiment analysis
@@ -143,7 +143,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
       readabilityScore: Math.round(readabilityScore),
       sentiment,
       topics: topTopics,
-      similarity: Math.round(similarity * 100) / 100
+      similarity: Math.round(similarity * 100) / 100,
     };
   }, [results]);
   // Update analytics when results change
@@ -227,7 +227,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
       case 'json':
         content = JSON.stringify({)
           ...result,
-          analytics: analytics || null
+          analytics: analytics || null,
         }, null, 2);
         filename += '.json';
         mimeType = 'application/json';
@@ -306,11 +306,11 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
       dominantSentiment: Object.keys(dominantSentiment).reduce((a, b) => 
         dominantSentiment[a] > dominantSentiment[b] ? a : b
       ),
-      topics: [...new Set(analytics.flatMap(a => a.topics))]
+      topics: [...new Set(analytics.flatMap(a => a.topics))],
     };
   }, [comparisonMode.enabled, selectedResults, resultAnalytics]);
   if (!visible) return null;
-  return ()
+  return ();
     <div
       className={`individual-result-manager ${className}`}
       style={{
@@ -421,7 +421,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
               border: 'none',
               borderRadius: '6px',
               fontSize: '12px',
-              cursor: selectedResults.size > 0 ? 'pointer' : 'not-allowed'
+              cursor: selectedResults.size > 0 ? 'pointer' : 'not-allowed',
             }}
           >
             🗑️ Clear Selection
@@ -457,7 +457,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
         style={{
           maxHeight: comparisonMode.enabled ? '400px' : '500px',
           overflowY: 'auto',
-          padding: '12px 0'
+          padding: '12px 0',
         }}
       >
         {error && ()
@@ -491,7 +491,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
           const analytics = resultAnalytics.get(index);
           const isSelected = selectedResults.has(index);
           const isRegenerating = regeneratingResults.includes(index);
-          return ()
+          return ();
             <div
               key={`${result.seed}-${index}`}
               style={{
@@ -501,7 +501,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                 border: `2px solid ${isSelected ? '#0ea5e9' : result.locked ? '#f59e0b' : '#e2e8f0'}`,}
                 borderRadius: '8px',
                 position: 'relative',
-                transition: 'all 0.2s ease'
+                transition: 'all 0.2s ease',
               }}
             >
               {/* Result Header */}
@@ -521,7 +521,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                     borderRadius: '4px', 
                     fontSize: '11px',
                     fontWeight: '600',
-                    color: result.locked ? '#92400e' : '#374151'
+                    color: result.locked ? '#92400e' : '#374151',
                   }}>
                     Seed {result.seed}
                   </span>
@@ -576,7 +576,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                     background: '#f8fafc',
                     borderRadius: '4px',
                     fontSize: '12px',
-                    border: '1px solid #e2e8f0'
+                    border: '1px solid #e2e8f0',
                   }}
                 >
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat()
@@ -634,7 +634,7 @@ export const IndividualResultManager: React.FC<IndividualResultManagerProps> = (
                     style={{
                       ...menuButtonStyle,
                       color: result.locked || isRegenerating ? '#9ca3af' : '#374151',
-                      cursor: result.locked || isRegenerating ? 'not-allowed' : 'pointer'
+                      cursor: result.locked || isRegenerating ? 'not-allowed' : 'pointer',
                     }}
                   >
                     ⟳ Regenerate

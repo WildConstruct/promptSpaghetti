@@ -245,7 +245,7 @@ describe('KeyManagementService', () => {
         type: KeyType.SYMMETRIC,
         purpose: KeyPurpose.DATA_ENCRYPTION,
         algorithm: KeyAlgorithm.AES_256_GCM,
-        expirationDays: 365 // Not expiring soon
+        expirationDays: 365 // Not expiring soon,
       };
       const originalKey = await service.generateKey(options);
       const rotationOptions: KeyRotationOptions = {
@@ -325,7 +325,7 @@ describe('KeyManagementService', () => {
         iterations: 100000,
         keyLength: 32,
       };
-      const derivedKey = await service.deriveKey(;)
+      const derivedKey = await service.deriveKey(;);
         parentKey.metadata.id,
         derivationParams,
         testRequesterId
@@ -351,7 +351,7 @@ describe('KeyManagementService', () => {
         parallelism: 1,
         keyLength: 32,
       };
-      const derivedKey = await service.deriveKey(;)
+      const derivedKey = await service.deriveKey(;);
         parentKey.metadata.id,
         derivationParams,
         testRequesterId
@@ -447,13 +447,13 @@ describe('KeyManagementService', () => {
         type: KeyType.SYMMETRIC,
         purpose: KeyPurpose.DATA_ENCRYPTION,
         algorithm: KeyAlgorithm.AES_256_GCM,
-        expirationDays: 1 // Expires soon
+        expirationDays: 1 // Expires soon,
       });
       await service.generateKey({)
         type: KeyType.SYMMETRIC,
         purpose: KeyPurpose.DATA_ENCRYPTION,
         algorithm: KeyAlgorithm.AES_256_GCM,
-        expirationDays: 365 // Expires later
+        expirationDays: 365 // Expires later,
       });
       const criteria: KeySearchCriteria = {
         expiringBefore: futureDate,
@@ -502,7 +502,7 @@ describe('KeyManagementService', () => {
       const options: KeyGenerationOptions = {
         type: KeyType.SYMMETRIC,
         purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: 'invalid-algorithm' as KeyAlgorithm
+        algorithm: 'invalid-algorithm' as KeyAlgorithm,
       };
       await expect(service.generateKey(options))
         .rejects.toThrow();
@@ -512,7 +512,7 @@ describe('KeyManagementService', () => {
         type: KeyType.SYMMETRIC,
         purpose: KeyPurpose.DATA_ENCRYPTION,
         algorithm: KeyAlgorithm.AES_256_GCM,
-        keySize: 64 // Too small
+        keySize: 64 // Too small,
       };
       await expect(service.generateKey(options))
         .rejects.toThrow('Key size must be at least 128 bits');

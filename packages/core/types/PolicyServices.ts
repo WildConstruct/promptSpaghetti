@@ -49,7 +49,7 @@ export interface IPolicyService {
   // Validation and testing
   validatePolicy(policy: Partial<BasePolicy>): Promise<PolicyServiceResponse<PolicyValidationResult>>;
   testPolicy(id: string, testCases: PolicyTestCase[]): Promise<PolicyServiceResponse<PolicyTestResult>>;
-  dryRunPolicy()
+  dryRunPolicy();
     policy: Partial<BasePolicy>,
     context: EvaluationContext,
   ): Promise<PolicyServiceResponse<PolicyEvaluation>>;
@@ -94,17 +94,17 @@ export interface IPolicyAssignmentService {
   getAssignments(criteria?: AssignmentSearchCriteria): Promise<PolicyServiceResponse<AssignmentSearchResult>>;
   deleteAssignment(id: string): Promise<PolicyServiceResponse<void>>;
   // Target-based operations
-  getAssignmentsForTarget()
+  getAssignmentsForTarget();
     targetType: AssignmentTargetType,
     targetId: string,
   ): Promise<PolicyServiceResponse<PolicyAssignment[]>>;
-  assignPolicyToTarget()
+  assignPolicyToTarget();
     policyId: string,
     targetType: AssignmentTargetType,
     targetId: string,
     options?: AssignmentOptions
   ): Promise<PolicyServiceResponse<PolicyAssignment>>;
-  unassignPolicyFromTarget()
+  unassignPolicyFromTarget();
     policyId: string,
     targetType: AssignmentTargetType,
     targetId: string,
@@ -113,7 +113,7 @@ export interface IPolicyAssignmentService {
   bulkAssign(assignments: CreateAssignmentRequest[]): Promise<PolicyServiceResponse<BulkOperationResult>>;
   bulkUnassign(criteria: AssignmentSearchCriteria): Promise<PolicyServiceResponse<BulkOperationResult>>;
   // Inheritance and conflict resolution
-  resolveAssignmentConflicts()
+  resolveAssignmentConflicts();
     targetType: AssignmentTargetType,
     targetId: string,
   ): Promise<PolicyServiceResponse<ConflictResolutionResult>>;
@@ -127,12 +127,12 @@ export interface IPolicyAssignmentService {
  */
 export interface IPolicyAnalyticsService {
   // Analytics generation
-  generateAnalytics()
+  generateAnalytics();
     period: AnalyticsPeriod,
     criteria?: AnalyticsSearchCriteria
   ): Promise<PolicyServiceResponse<PolicyAnalytics>>;
   getUsageAnalytics(policyIds?: string[], period?: AnalyticsPeriod): Promise<PolicyServiceResponse<UsageAnalytics>>;
-  getComplianceAnalytics()
+  getComplianceAnalytics();
     frameworks?: ComplianceFramework[],
     period?: AnalyticsPeriod
   ): Promise<PolicyServiceResponse<ComplianceAnalytics>>;
@@ -141,7 +141,7 @@ export interface IPolicyAnalyticsService {
   getRealTimeMetrics(): Promise<PolicyServiceResponse<RealTimeMetrics>>;
   getSystemHealth(): Promise<PolicyServiceResponse<SystemHealthMetrics>>;
   // Reporting
-  generateComplianceReport()
+  generateComplianceReport();
     frameworks: ComplianceFramework[],
     format?: ReportFormat
   ): Promise<PolicyServiceResponse<ComplianceReport>>;
@@ -162,7 +162,7 @@ export interface IPolicyTemplateService {
   getTemplates(criteria?: TemplateSearchCriteria): Promise<PolicyServiceResponse<TemplateSearchResult>>;
   deleteTemplate(id: string): Promise<PolicyServiceResponse<void>>;
   // Template usage
-  createPolicyFromTemplate()
+  createPolicyFromTemplate();
     templateId: string,
     customizations: TemplateCustomization,
   ): Promise<PolicyServiceResponse<BasePolicy>>;
@@ -180,7 +180,7 @@ export interface IPolicyTemplateService {
 export interface IPolicyImportExportService {
   // Export operations
   exportPolicies(criteria: PolicySearchCriteria, options: ExportOptions): Promise<PolicyServiceResponse<PolicyExport>>;
-  exportAssignments()
+  exportAssignments();
     criteria: AssignmentSearchCriteria,
     options: ExportOptions,
   ): Promise<PolicyServiceResponse<PolicyAssignment[]>>;
@@ -190,7 +190,7 @@ export interface IPolicyImportExportService {
   validateImportData(data: ImportData): Promise<PolicyServiceResponse<ImportValidationResult>>;
   getImportStatus(importId: string): Promise<PolicyServiceResponse<PolicyImport>>;
   // Batch operations
-  scheduleBatchExport()
+  scheduleBatchExport();
     criteria: PolicySearchCriteria,
     schedule: ExportSchedule,
   ): Promise<PolicyServiceResponse<BatchJob>>;

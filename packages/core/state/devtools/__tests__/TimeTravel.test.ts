@@ -257,7 +257,7 @@ describe('TimeTravel', () => {
       const targetBranchId = timeTravel.createBranch('target');
       const mergeEntryId = timeTravel.mergeBranch(sourceBranchId, targetBranchId, {)
         strategy: 'merge-commit',
-        message: 'Merge source into target'
+        message: 'Merge source into target',
       });
       expect(mergeEntryId).toBeDefined();
       const timeline = timeTravel.getTimeline();
@@ -468,7 +468,7 @@ describe('TimeTravel', () => {
       const results = timeTravel.queryTimeline({)
         timeRange: {,
           start: now + 2000,
-          end: now + 6000
+          end: now + 6000,
         }
       });
       expect(results.length).toBe(5); // Entries 2, 3, 4, 5, 6

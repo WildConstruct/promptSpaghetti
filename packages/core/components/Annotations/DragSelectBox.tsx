@@ -35,7 +35,7 @@ export const DragSelectBox: React.FC<DragSelectBoxProps> = ({)
       x: (minX - canvasOffset.x) / zoom,
       y: (minY - canvasOffset.y) / zoom,
       width: (maxX - minX) / zoom,
-      height: (maxY - minY) / zoom
+      height: (maxY - minY) / zoom,
     };
   }, [startPoint, currentPoint, canvasOffset, zoom]);
   // Handle mouse down to start selection
@@ -92,9 +92,9 @@ export const DragSelectBox: React.FC<DragSelectBoxProps> = ({)
     left: Math.min(startPoint.x, currentPoint.x),
     top: Math.min(startPoint.y, currentPoint.y),
     width: Math.abs(currentPoint.x - startPoint.x),
-    height: Math.abs(currentPoint.y - startPoint.y)
+    height: Math.abs(currentPoint.y - startPoint.y),
   } : { display: 'none' };
-  return ()
+  return ();
     <>
       {/* Full-screen overlay to capture mouse events */}
       <div

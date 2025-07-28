@@ -286,7 +286,7 @@ export class TimeTravel extends EventEmitter {
         author: options.author || 'anonymous',
         tags: options.tags || [],
         protected: false,
-        color: options.color || this.generateRandomColor()
+        color: options.color || this.generateRandomColor(),
       }
     };
     this.branches.set(branchId, branch);

@@ -790,7 +790,6 @@ export class PasswordGuidanceService extends EventEmitter {
     completed: number;
     percentage: number;
     remainingCritical: number;
-  } {
     const total = session.recommendations.length;
     const completed = session.completedActions.length;
     const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
@@ -833,8 +832,6 @@ export class PasswordGuidanceService extends EventEmitter {
         existing => !indicators.some()
           indicator => indicator.type === existing.type && 
                       indicator.source === existing.source
-        )
-      )
     ].slice(0, 10); // Keep last 10 breaches
     // Recalculate risk score
     profile.riskScore = this.calculateUserRiskScore(profile);
@@ -847,7 +844,7 @@ export class PasswordGuidanceService extends EventEmitter {
   private calculateUserRiskScore(profile: UserSecurityProfile): number {
     let riskScore = 0;
     // Recent breaches increase risk
-    const recentBreaches = profile.recentBreaches.filter(;)
+    const recentBreaches = profile.recentBreaches.filter(;);
       breach => (Date.now() - breach.detectedAt.getTime()) < (30 * 24 * 60 * 60 * 1000) // 30 days
     );
     riskScore += recentBreaches.length * 15;
@@ -869,7 +866,6 @@ export class PasswordGuidanceService extends EventEmitter {
     activeSessions: GuidanceSession[];
     recommendedActions: SecurityRecommendation[];
     securityTips: string[];
-  } {
     const profile = this.userProfiles.get(userId) || null;
     const activeSessions = Array.from(this.sessions.values());
       .filter(session => session.userId === userId && session.status === 'active');

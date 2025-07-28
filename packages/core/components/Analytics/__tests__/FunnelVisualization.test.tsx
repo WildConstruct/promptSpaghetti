@@ -301,7 +301,7 @@ describe('FunnelVisualization', () => {
     });
     it('should handle display mode changes', async () => {
       const onConfigChange = jest.fn();
-      render()
+      render();
         <FunnelVisualization 
           {...defaultProps} 
           onConfigChange={onConfigChange}
@@ -317,7 +317,7 @@ describe('FunnelVisualization', () => {
     });
     it('should handle color scheme changes', async () => {
       const onConfigChange = jest.fn();
-      render()
+      render();
         <FunnelVisualization 
           {...defaultProps} 
           onConfigChange={onConfigChange}
@@ -362,7 +362,7 @@ describe('FunnelVisualization', () => {
   describe('Step Interactions', () => {
     it('should handle step clicks', async () => {
       const onStepClick = jest.fn();
-      render()
+      render();
         <FunnelVisualization 
           {...defaultProps} 
           onStepClick={onStepClick}
@@ -380,7 +380,7 @@ describe('FunnelVisualization', () => {
   describe('Real-time Updates', () => {
     it('should handle real-time updates when enabled', async () => {
       jest.useFakeTimers();
-      render()
+      render();
         <FunnelVisualization 
           {...defaultProps} 
           realTimeUpdates={true}
@@ -401,9 +401,9 @@ describe('FunnelVisualization', () => {
     it('should handle analytics infrastructure errors', async () => {
       const errorInfrastructure = {
         ...mockAnalyticsInfrastructure,
-        queryMetrics: jest.fn().mockRejectedValue(new Error('Network error'))
+        queryMetrics: jest.fn().mockRejectedValue(new Error('Network error')),
       };
-      render()
+      render();
         <FunnelVisualization 
           {...defaultProps} 
           analyticsInfrastructure={errorInfrastructure}
@@ -422,7 +422,7 @@ describe('FunnelVisualization', () => {
           .mockRejectedValueOnce(new Error('Network error'))
           .mockResolvedValue([])
       };
-      render()
+      render();
         <FunnelVisualization 
           {...defaultProps} 
           analyticsInfrastructure={errorInfrastructure}
@@ -439,7 +439,7 @@ describe('FunnelVisualization', () => {
   });
   describe('Comparison Mode', () => {
     it('should render comparison view when enabled', async () => {
-      render()
+      render();
         <FunnelVisualization 
           {...defaultProps} 
           comparisonMode="time_period"
@@ -467,7 +467,7 @@ describe('FunnelConfiguration', () => {
     initialFunnel: {,
       name: 'Test Funnel',
       description: 'Test Description',
-      category: 'acquisition' as const
+      category: 'acquisition' as const,
     },
     templates: [],
     availableEvents: [],
@@ -566,12 +566,12 @@ describe('FunnelComparison', () => {
       baseline: {,
         id: 'baseline',
         name: 'Last Month',
-        description: 'Previous month performance'
+        description: 'Previous month performance',
       },
       comparison: {,
         id: 'comparison',
         name: 'This Month',
-        description: 'Current month performance'
+        description: 'Current month performance',
       },
       timeRange: { start: Date.now() - 2592000000, end: Date.now() },
       significanceLevel: 0.05,
@@ -627,7 +627,7 @@ describe('FunnelComparison', () => {
   describe('Export Functionality', () => {
     it('should handle export requests', async () => {
       const onExportRequest = jest.fn();
-      render()
+      render();
         <FunnelComparison 
           {...comparisonProps} 
           onExportRequest={onExportRequest}
@@ -723,7 +723,7 @@ describe('FunnelSegmentation', () => {
   describe('Segment Analysis', () => {
     it('should call analytics infrastructure when segments are active', async () => {
       const onSegmentAnalysis = jest.fn();
-      render()
+      render();
         <FunnelSegmentation 
           {...segmentationProps} 
           onSegmentAnalysis={onSegmentAnalysis}
@@ -743,7 +743,7 @@ describe('FunnelSegmentation', () => {
 describe('Integration Tests', () => {
   it('should integrate funnel visualization with configuration', async () => {
     const onConfigChange = jest.fn();
-    render()
+    render();
       <FunnelVisualization 
         funnelDefinition={mockFunnelDefinition}
         analyticsInfrastructure={mockAnalyticsInfrastructure}
@@ -760,7 +760,7 @@ describe('Integration Tests', () => {
     });
   });
   it('should integrate segmentation with analytics queries', async () => {
-    render()
+    render();
       <FunnelSegmentation 
         analyticsInfrastructure={mockAnalyticsInfrastructure}
         funnelId="test-funnel"

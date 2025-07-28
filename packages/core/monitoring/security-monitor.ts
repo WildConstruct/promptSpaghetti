@@ -102,7 +102,7 @@ export class SecurityEventMonitor extends EventEmitter {
       severityThreshold: SecurityEventSeverity.MEDIUM,
       rateThreshold: {,
         events: 10,
-        timeWindowMs: 60000 // 1 minute
+        timeWindowMs: 60000 // 1 minute,
       },
       channels: [,
         {
@@ -119,7 +119,7 @@ export class SecurityEventMonitor extends EventEmitter {
   /**
    * Record a security event
    */
-  recordEvent()
+  recordEvent();
     type: SecurityEventType,
     severity: SecurityEventSeverity,
     source: string,
@@ -168,7 +168,7 @@ export class SecurityEventMonitor extends EventEmitter {
   /**
    * Record validation failure event
    */
-  recordValidationFailure()
+  recordValidationFailure();
     input: string,
     inputType: string,
     source: string,
@@ -191,7 +191,7 @@ export class SecurityEventMonitor extends EventEmitter {
   /**
    * Record injection attempt
    */
-  recordInjectionAttempt()
+  recordInjectionAttempt();
     input: string,
     inputType: string,
     source: string,
@@ -217,7 +217,7 @@ export class SecurityEventMonitor extends EventEmitter {
   /**
    * Record anomalous activity
    */
-  recordAnomaly()
+  recordAnomaly();
     description: string,
     source: string,
     riskScore: number,
@@ -260,7 +260,7 @@ export class SecurityEventMonitor extends EventEmitter {
   getStats(timeRangeMs: number = 3600000): SecurityMonitoringStats { // Default 1 hour
     const now = new Date();
     const startTime = new Date(now.getTime() - timeRangeMs);
-    const recentEvents = this.events.filter(;)
+    const recentEvents = this.events.filter(;);
       event => event.timestamp >= startTime
     );
     const eventsByType = Object.values(SecurityEventType).reduce((acc, type) => {
@@ -328,7 +328,7 @@ export class SecurityEventMonitor extends EventEmitter {
         totalEvents: stats.totalEvents,
         criticalEvents: stats.eventsBySeverity[SecurityEventSeverity.CRITICAL],
         averageRiskScore: stats.averageRiskScore,
-        topThreat: stats.topThreats[0]?.threat || 'None'
+        topThreat: stats.topThreats[0]?.threat || 'None',
       },
       charts: {,
         eventsByType: stats.eventsByType,
@@ -504,7 +504,7 @@ export class SecurityEventMonitor extends EventEmitter {
     return Array.from(buckets.entries()).map(([timestamp, data]) => ({)
       timestamp,
       events: data.events,
-      riskScore: data.events > 0 ? data.totalRisk / data.events : 0
+      riskScore: data.events > 0 ? data.totalRisk / data.events : 0,
     }));
   }
 }
@@ -531,7 +531,7 @@ export const result = validationFn(...args);
   /**
    * Create monitoring middleware for API endpoints
    */
-  createApiMiddleware: (source: string) => {
+  createApiMiddleware: (source: string) => {,
     return (req: any, res: any, next: any) => {
       // Monitor request body for security issues
       if (req.body) {

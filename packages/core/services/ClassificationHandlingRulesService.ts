@@ -421,7 +421,7 @@ export class ClassificationHandlingRulesService {
       checkType: operation,
       passed: errors.length === 0,
       details: { errors, warnings, context },
-      timestamp: new Date()
+      timestamp: new Date(),
     };
     this.complianceChecks.push(complianceCheck);
     // Generate violations if there are errors

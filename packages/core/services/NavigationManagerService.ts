@@ -165,14 +165,14 @@ export class NavigationManagerService extends EventEmitter {
       prefs.recentItems[existingIndex] = {
         ...prefs.recentItems[existingIndex],
         accessCount: prefs.recentItems[existingIndex].accessCount + 1,
-        lastAccessed: new Date()
+        lastAccessed: new Date(),
       };
     } else {
       // Add new item at the beginning
       prefs.recentItems.unshift({)
         ...item,
         accessCount: 1,
-        lastAccessed: new Date()
+        lastAccessed: new Date(),
       });
     }
     // Keep only last 20 items

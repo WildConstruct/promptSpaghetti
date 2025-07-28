@@ -307,7 +307,7 @@ export class ClassificationAccessControlService {
         parameters: {,
           logLevel: requirements.auditLogging,
           includeDataAccess: true,
-          realTimeAlerting: requirements.auditLogging === 'REALTIME'
+          realTimeAlerting: requirements.auditLogging === 'REALTIME',
         },
         mandatory: true,
       });

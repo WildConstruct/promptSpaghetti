@@ -77,7 +77,7 @@ describe('ConversionEventValidator', () => {
       // Test future timestamp (should fail)
       const futureEvent = {
         ...mockEvent,
-        timestamp: Date.now() + 3600000 // 1 hour in future
+        timestamp: Date.now() + 3600000 // 1 hour in future,
       };
       const futureResult = await validator.validateEvent(futureEvent);
       expect(futureResult.isValid).toBe(false);
@@ -85,7 +85,7 @@ describe('ConversionEventValidator', () => {
       // Test very old timestamp (should fail)
       const oldEvent = {
         ...mockEvent,
-        timestamp: Date.now() - (8 * 24 * 60 * 60 * 1000) // 8 days ago
+        timestamp: Date.now() - (8 * 24 * 60 * 60 * 1000) // 8 days ago,
       };
       const oldResult = await validator.validateEvent(oldEvent);
       expect(oldResult.isValid).toBe(false);
@@ -138,7 +138,7 @@ describe('ConversionEventValidator', () => {
     it('should detect high-value events as anomalies', async () => {
       const highValueEvent = {
         ...mockEvent,
-        value: 1500 // High value
+        value: 1500 // High value,
       };
       const result = await validator.validateEvent(highValueEvent);
       expect(result.warnings.some(w => w.code === 'HIGH_VALUE_ANOMALY')).toBe(true);
@@ -149,7 +149,7 @@ describe('ConversionEventValidator', () => {
       const recentEvents = Array.from({ length: 6 }, (_, i) => ({)
         ...mockEvent,
         id: `rapid-event-${i}`,}
-        timestamp: now - (500 - i * 100) // Events within last 500ms
+        timestamp: now - (500 - i * 100) // Events within last 500ms,
       }));
       const context = {
         userId: mockEvent.userId,
@@ -188,13 +188,13 @@ describe('ConversionEventValidator', () => {
         category: 'business',
         weight: 0.8,
         enabled: true,
-        validator: (event) => {
+        validator: (event) => {,
           const templateId = event.properties?.templateId;
           const isValid = templateId && typeof templateId === 'string' && templateId.startsWith('tpl-');
           return {
             isValid,
             score: isValid ? 100 : 0,
-            errors: isValid ? [] : [{
+            errors: isValid ? [] : [{,
               rule: 'custom_template_validation',
               field: 'properties.templateId',
               message: 'Template ID must start with "tpl-"',
@@ -228,7 +228,7 @@ describe('ConversionEventValidator', () => {
         category: 'business',
         weight: 1.0,
         enabled: true,
-        validator: () => {
+        validator: () => {,
           throw new Error('Rule execution failed');
         }
       };
@@ -277,7 +277,7 @@ describe('ConversionEventValidator', () => {
         ...mockEvent,
         id: 'different-id',
         value: 26.00, // Slightly different value
-        timestamp: mockEvent.timestamp + 1000 // 1 second later
+        timestamp: mockEvent.timestamp + 1000 // 1 second later,
       };
       const duplicateResult = await validator.checkDuplication(similarEvent);
       expect(duplicateResult.isDuplicate).toBe(true);
@@ -407,7 +407,7 @@ describe('ConversionEventValidator', () => {
               rule: 'profile_validation',
               message: 'High-risk user detected',
               code: 'HIGH_RISK_USER',
-              impact: 'May require additional verification'
+              impact: 'May require additional verification',
             });
           }
           return {

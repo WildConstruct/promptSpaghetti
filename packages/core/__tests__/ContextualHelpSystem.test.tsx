@@ -24,7 +24,7 @@ import {
 
 // Mock the UI settings store
 jest.mock('../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({)
+  useUISettingsStore: () => ({),
     complexityLevel: 'basic',
   })
 }));
@@ -41,7 +41,7 @@ describe('ContextualTooltip', () => {
     priority: 'high',
   };
   it('renders children without tooltip initially', () => {
-    render()
+    render();
       <ContextualTooltip content={mockHelpContent}>
         <button>Test Button</button>
       </ContextualTooltip>
@@ -50,7 +50,7 @@ describe('ContextualTooltip', () => {
     expect(screen.queryByText('Test Feature')).not.toBeInTheDocument();
   });
   it('shows tooltip on hover when trigger is hover', async () => {
-    render()
+    render();
       <ContextualTooltip content={mockHelpContent} delay={0}>
         <button>Test Button</button>
       </ContextualTooltip>
@@ -63,7 +63,7 @@ describe('ContextualTooltip', () => {
     });
   });
   it('hides tooltip on mouse leave', async () => {
-    render()
+    render();
       <ContextualTooltip content={mockHelpContent} delay={0}>
         <button>Test Button</button>
       </ContextualTooltip>
@@ -81,7 +81,7 @@ describe('ContextualTooltip', () => {
     });
   });
   it('shows examples when provided', async () => {
-    render()
+    render();
       <ContextualTooltip content={mockHelpContent} delay={0}>
         <button>Test Button</button>
       </ContextualTooltip>
@@ -93,7 +93,7 @@ describe('ContextualTooltip', () => {
     });
   });
   it('shows keyboard shortcut when provided', async () => {
-    render()
+    render();
       <ContextualTooltip content={mockHelpContent} delay={0}>
         <button>Test Button</button>
       </ContextualTooltip>
@@ -104,7 +104,7 @@ describe('ContextualTooltip', () => {
     });
   });
   it('respects disabled prop', async () => {
-    render()
+    render();
       <ContextualTooltip content={mockHelpContent} disabled={true} delay={0}>
         <button>Test Button</button>
       </ContextualTooltip>
@@ -118,7 +118,7 @@ describe('ContextualTooltip', () => {
   });
   it('handles click trigger correctly', async () => {
     const clickHelpContent = { ...mockHelpContent, trigger: 'click' as const };
-    render()
+    render();
       <ContextualTooltip content={clickHelpContent} delay={0}>
         <button>Test Button</button>
       </ContextualTooltip>
@@ -174,7 +174,7 @@ describe('HelpProvider and useHelpSystem', () => {
       startOnboarding,
       completeOnboarding
     } = useHelpSystem();
-    return ()
+    return ();
       <div>
         <div data-testid="help-content-count">{helpContent.length}</div>
         <div data-testid="onboarding-enabled">{onboardingEnabled.toString()}</div>
@@ -190,7 +190,7 @@ describe('HelpProvider and useHelpSystem', () => {
     localStorage.clear();
   });
   it('provides built-in help content by default', () => {
-    render()
+    render();
       <HelpProvider>
         <TestComponent />
       </HelpProvider>
@@ -201,7 +201,7 @@ describe('HelpProvider and useHelpSystem', () => {
     expect(screen.getByTestId('test-help-exists')).toHaveTextContent('exists');
   });
   it('enables help hints by default', () => {
-    render()
+    render();
       <HelpProvider>
         <TestComponent />
       </HelpProvider>
@@ -209,7 +209,7 @@ describe('HelpProvider and useHelpSystem', () => {
     expect(screen.getByTestId('show-help-hints')).toHaveTextContent('true');
   });
   it('can toggle help hints', () => {
-    render()
+    render();
       <HelpProvider>
         <TestComponent />
       </HelpProvider>
@@ -221,7 +221,7 @@ describe('HelpProvider and useHelpSystem', () => {
     expect(screen.getByTestId('show-help-hints')).toHaveTextContent('true');
   });
   it('handles onboarding state correctly', () => {
-    render()
+    render();
       <HelpProvider>
         <TestComponent />
       </HelpProvider>
@@ -248,7 +248,7 @@ describe('HelpProvider and useHelpSystem', () => {
     expect(screen.getByTestId('show-help-hints')).toHaveTextContent('false');
     expect(screen.getByTestId('onboarding-enabled')).toHaveTextContent('false');
     // Re-render to simulate page reload
-    rerender()
+    rerender();
       <HelpProvider>
         <TestComponent />
       </HelpProvider>
@@ -260,7 +260,7 @@ describe('HelpProvider and useHelpSystem', () => {
 });
 describe('HelpfulInput', () => {
   it('renders input with label', () => {
-    render()
+    render();
       <HelpProvider enableHelpHints={false}>
         <HelpfulInput
           helpId="test-input"
@@ -287,7 +287,7 @@ describe('HelpfulInput', () => {
       </HelpProvider>
     );
     expect(screen.getByText('⚙️')).toBeInTheDocument();
-    rerender()
+    rerender();
       <HelpProvider enableHelpHints={false}>
         <HelpfulInput
           helpId="debug-input"
@@ -301,7 +301,7 @@ describe('HelpfulInput', () => {
     expect(screen.getByText('🔧')).toBeInTheDocument();
   });
   it('displays error messages', () => {
-    render()
+    render();
       <HelpProvider enableHelpHints={false}>
         <HelpfulInput
           helpId="error-input"
@@ -331,7 +331,7 @@ describe('HelpfulButton', () => {
     );
     const button = screen.getByText('Primary');
     expect(button).toHaveStyle('background: #4299e1');
-    rerender()
+    rerender();
       <HelpProvider enableHelpHints={false}>
         <HelpfulButton
           helpId="danger-button"
@@ -360,7 +360,7 @@ describe('HelpfulButton', () => {
       </HelpProvider>
     );
     expect(screen.getByText('Small')).toHaveStyle('padding: 4px 8px');
-    rerender()
+    rerender();
       <HelpProvider enableHelpHints={false}>
         <HelpfulButton
           helpId="large-button"
@@ -377,7 +377,7 @@ describe('HelpfulButton', () => {
 });
 describe('HelpfulSection', () => {
   it('renders section with title', () => {
-    render()
+    render();
       <HelpProvider enableHelpHints={false}>
         <HelpfulSection
           helpId="test-section"
@@ -393,7 +393,7 @@ describe('HelpfulSection', () => {
     expect(screen.getByText('Section Content')).toBeInTheDocument();
   });
   it('handles collapsible sections', () => {
-    render()
+    render();
       <HelpProvider enableHelpHints={false}>
         <HelpfulSection
           helpId="collapsible-section"
@@ -416,7 +416,7 @@ describe('HelpfulSection', () => {
     expect(screen.getByText('Collapsible Content')).toBeInTheDocument();
   });
   it('shows category icons', () => {
-    render()
+    render();
       <HelpProvider enableHelpHints={false}>
         <HelpfulSection
           helpId="advanced-section"
@@ -445,7 +445,7 @@ describe('withHelp HOC', () => {
   };
   it('wraps component with help when hints are enabled', async () => {
     const WrappedButton = withHelp(TestButton, helpContent);
-    render()
+    render();
       <HelpProvider enableHelpHints={true}>
         <WrappedButton>HOC Button</WrappedButton>
       </HelpProvider>
@@ -458,7 +458,7 @@ describe('withHelp HOC', () => {
   });
   it('renders component without help when hints are disabled', () => {
     const WrappedButton = withHelp(TestButton, helpContent);
-    render()
+    render();
       <HelpProvider enableHelpHints={false}>
         <WrappedButton>HOC Button</WrappedButton>
       </HelpProvider>
@@ -471,7 +471,7 @@ describe('withHelp HOC', () => {
 describe('HelpSystemSettings', () => {
   const TestWrapper = () => {
     const { showHelpHints, onboardingComplete } = useHelpSystem();
-    return ()
+    return ();
       <div>
         <div data-testid="hints-enabled">{showHelpHints.toString()}</div>
         <div data-testid="onboarding-complete">{onboardingComplete.toString()}</div>
@@ -483,7 +483,7 @@ describe('HelpSystemSettings', () => {
     localStorage.clear();
   });
   it('renders settings controls', () => {
-    render()
+    render();
       <HelpProvider>
         <TestWrapper />
       </HelpProvider>
@@ -493,7 +493,7 @@ describe('HelpSystemSettings', () => {
     expect(screen.getByText('Reset Help System')).toBeInTheDocument();
   });
   it('allows toggling help hints', () => {
-    render()
+    render();
       <HelpProvider>
         <TestWrapper />
       </HelpProvider>
@@ -504,7 +504,7 @@ describe('HelpSystemSettings', () => {
     expect(screen.getByTestId('hints-enabled')).toHaveTextContent('false');
   });
   it('shows restart tour button when onboarding is complete', () => {
-    render()
+    render();
       <HelpProvider enableOnboarding={false}>
         <TestWrapper />
       </HelpProvider>

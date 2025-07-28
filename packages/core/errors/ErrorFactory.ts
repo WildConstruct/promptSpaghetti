@@ -156,7 +156,7 @@ export class ErrorFactory {
       already_configured: 'Email MFA already configured for this user',
       invalid_email: 'Invalid email address',
       unsuitable_email: 'Email address not suitable for MFA',
-      invalid_config: 'Invalid MFA configuration'
+      invalid_config: 'Invalid MFA configuration',
     };
     const message = details ? `${messages[type]}: ${details}` : messages[type];}
     return ErrorFactory.createMFAError(message, 'email', options);
@@ -173,7 +173,7 @@ export class ErrorFactory {
       invalid_code: 'Invalid verification code',
       too_many_attempts: 'Too many failed attempts',
       method_not_active: 'Method not active',
-      rate_limit: 'Rate limit exceeded. Too many emails sent.'
+      rate_limit: 'Rate limit exceeded. Too many emails sent.',
     };
     return ErrorFactory.createMFAError(messages[type], 'email', options);
   }

@@ -88,7 +88,7 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
     const radius = Math.min(width, height) * 0.35;
     const innerRadius = type === 'donut' ? radius * 0.6 : 0;
     let cumulativeAngle = 0;
-    return ()
+    return ();
       <g>
         {processedOptions.map((option) => {
           const startAngle = cumulativeAngle;
@@ -115,7 +115,7 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
           const labelRadius = radius * (type === 'donut' ? 0.8 : 0.7);
           const labelX = centerX + Math.cos(labelAngle) * labelRadius;
           const labelY = centerY + Math.sin(labelAngle) * labelRadius;
-          return ()
+          return ();
             <g key={option.id}>
               <path
                 d={pathData}
@@ -188,13 +188,13 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
     const chartHeight = height - margin.top - margin.bottom;
     const barHeight = Math.max(16, chartHeight / options.length - 8);
     const maxBarWidth = chartWidth * 0.8;
-    return ()
+    return ();
       <g transform={`translate(${margin.left}, ${margin.top})`}>}
         {processedOptions.map((option, index) => {
           const y = index * (barHeight + 8);
           const barWidth = option.normalizedWeight * maxBarWidth;
           const isHovered = hoveredOption === option.id;
-          return ()
+          return ();
             <g key={option.id}>
               {/* Bar background */}
               <rect
@@ -297,7 +297,7 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
             borderRadius: 4,
             background: hoveredOption === option.id ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
             cursor: 'pointer',
-            transition: 'background 0.2s ease'
+            transition: 'background 0.2s ease',
           }}
           onMouseEnter={() => handleOptionHover(option)}
           onMouseLeave={() => handleOptionHover(null)}
@@ -326,7 +326,7 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
     </div>
   );
   if (options.length === 0) {
-    return ()
+    return ();
       <div
         style={{
           width,
@@ -343,7 +343,7 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
       </div>
     );
   }
-  return ()
+  return ();
     <div style={{ position: 'relative' }}>
       <svg
         width={width}

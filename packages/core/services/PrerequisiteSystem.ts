@@ -26,7 +26,7 @@ const prerequisiteGroupSchema = z.object({)
   prerequisites: z.array(z.string().uuid()).min(1).max(20),
   operator: z.enum(['AND', 'OR', 'XOR']).default('AND'),
   minimumRequired: z.number().min(1).optional(), // for OR operations
-  weight: z.number().min(0).max(100).default(100) // importance weight
+  weight: z.number().min(0).max(100).default(100) // importance weight,
 });
 const userProgressSchema = z.object({)
   userId: z.string().uuid(),
@@ -137,7 +137,7 @@ export class DependencyResolver {
       };
     }
     // Validate prerequisite references exist
-    const missingPrerequisites = group.prerequisites.filter(;)
+    const missingPrerequisites = group.prerequisites.filter(;);
       prereqId => !this.prerequisites.has(prereqId)
     );
     if (missingPrerequisites.length > 0) {
@@ -150,7 +150,7 @@ export class DependencyResolver {
     if (this.hasCircularDependency(group)) {
       return {
         success: false,
-        errors: ['Circular dependency detected']
+        errors: ['Circular dependency detected'],
       };
     }
     this.groups.set(group.id, group);
@@ -164,7 +164,6 @@ export class DependencyResolver {
     missingPrerequisites: string[];
     satisfiedPrerequisites: string[];
     recommendations: string[];
-  } {
     const userProgressData = this.userProgress.get(userId) || [];
     const missingPrerequisites: string[] = [];
     const satisfiedPrerequisites: string[] = [];
@@ -271,7 +270,6 @@ export class DependencyResolver {
   updateUserProgress(userId: string, prerequisiteId: string, progress: Partial<UserProgress>): {
     success: boolean;
     errors?: string[];
-  } {
     // Security validation
     if (!PrerequisiteSecurity.validateUserPermissions(userId, 'update', prerequisiteId)) {
       return { success: false, errors: ['Insufficient permissions'] };
@@ -314,9 +312,8 @@ export class DependencyResolver {
   generateLearningPath(userId: string, targetGoal: string): {
     path: Array<{ prerequisiteId: string; name: string; estimatedTime: number }>;
     totalEstimatedTime: number;
-  } {
     const userProgressData = this.userProgress.get(userId) || [];
-    const completedPrerequisites = new Set(;)
+    const completedPrerequisites = new Set(;);
       userProgressData
         .filter(p => p.status === 'completed')
         .map(p => p.prerequisiteId)
@@ -330,7 +327,7 @@ export class DependencyResolver {
         path.push({)
           prerequisiteId: prereqId,
           name: prerequisite.name,
-          estimatedTime: prerequisite.requiredTime || 60
+          estimatedTime: prerequisite.requiredTime || 60,
         });
         totalTime += prerequisite.requiredTime || 60;
       }
@@ -374,7 +371,7 @@ export class PrerequisiteSystemService {
     } catch (error) {
       return {
         success: false,
-        errors: ['Internal server error during prerequisite creation']
+        errors: ['Internal server error during prerequisite creation'],
       };
     }
   }
@@ -392,7 +389,7 @@ export class PrerequisiteSystemService {
         return {
           canProceed: false,
           evaluation: null,
-          recommendations: ['Access denied']
+          recommendations: ['Access denied'],
         };
       }
       const evaluation = this.resolver.resolvePrerequisitesForUser(userId, targetPrerequisites);
@@ -405,7 +402,7 @@ export class PrerequisiteSystemService {
       return {
         canProceed: false,
         evaluation: null,
-        recommendations: ['Error evaluating prerequisites']
+        recommendations: ['Error evaluating prerequisites'],
       };
     }
   }
@@ -421,7 +418,7 @@ export class PrerequisiteSystemService {
     } catch (error) {
       return {
         success: false,
-        errors: ['Error updating progress']
+        errors: ['Error updating progress'],
       };
     }
   }

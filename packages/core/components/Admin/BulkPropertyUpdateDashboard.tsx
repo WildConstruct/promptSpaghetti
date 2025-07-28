@@ -143,7 +143,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
       const operationFilter: BulkUpdateFilter = {
         searchQuery: searchQuery || undefined,
         statuses: statusFilter !== 'all' ? [statusFilter] : undefined,
-        targetTypes: targetTypeFilter !== 'all' ? [targetTypeFilter] : undefined
+        targetTypes: targetTypeFilter !== 'all' ? [targetTypeFilter] : undefined,
       };
       // Load operations
       const operationsList = bulkPropertyUpdateService.getOperations(operationFilter);
@@ -178,7 +178,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
   };
   const handleCreateOperation = async () => {
     try {
-      const _____operation = await bulkPropertyUpdateService.createOperation(;)
+      const _____operation = await bulkPropertyUpdateService.createOperation(;);
         newOperation.name,
         newOperation.targets,
         newOperation.updates,
@@ -223,7 +223,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
       return true;
     });
   }, [operations, searchQuery, statusFilter, targetTypeFilter]);
-  const renderOperations = () => (;)
+  const renderOperations = () => (;);
     <div className="operations-section">
       {/* Controls */}
       <div className="operations-controls">
@@ -302,7 +302,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
       )}
     </div>
   );
-  const renderTemplates = () => (;)
+  const renderTemplates = () => (;);
     <div className="templates-section">
       <div className="templates-header">
         <h3>Operation Templates</h3>
@@ -333,7 +333,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
   );
   const renderAnalytics = () => {
     if (!stats) return <div>Loading analytics...</div>;
-    return ()
+    return ();
       <div className="analytics-section">
         <div className="analytics-grid">
           <Card>
@@ -401,7 +401,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
                 {Object.entries(stats.successRateByType).map(([type, typeStats]) => {
                   const config = TARGET_TYPE_CONFIG[type as TargetType];
                   const Icon = config.icon;
-                  return ()
+                  return ();
                     <div key={type} className="chart-item">
                       <div className="chart-label">
                         <Icon className={`w-4 h-4 ${config.color.split(' ')[0]}`} />}
@@ -450,7 +450,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
       </div>
     );
   };
-  const renderCreateOperation = () => (;)
+  const renderCreateOperation = () => (;);
     <div className="create-operation-modal">
       <div className="modal-overlay" onClick={() => setIsCreating(false)} />
       <div className="modal-content">
@@ -592,7 +592,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
       </div>
     </div>
   );
-  return ()
+  return ();
     <div className={`bulk-update-dashboard ${className}`}>}
       <div className="dashboard-header">
         <div className="header-info">
@@ -1006,7 +1006,7 @@ const OperationCard: React.FC<OperationCardProps> = ({ )
     : 0;
   const canExecute = userRole === 'admin' && operation.status === 'validated';
   const canRollback = userRole === 'admin' && operation.status === 'completed' && operation.rollback.enabled;
-  return ()
+  return ();
     <Card className="operation-card">
       <CardContent className="p-4">
         <div className="operation-header">
@@ -1110,7 +1110,7 @@ interface TemplateCardProps {
 const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onEdit, onDelete }) => {
   const typeConfig = TARGET_TYPE_CONFIG[template.targetType];
   const TypeIcon = typeConfig.icon;
-  return ()
+  return ();
     <Card className="template-card">
       <CardContent className="p-4">
         <div className="template-header">
@@ -1207,7 +1207,7 @@ const OperationDetailModal: React.FC<OperationDetailModalProps> = ({)
 }) => {
   const statusConfig = STATUS_CONFIG[operation.status];
   const StatusIcon = statusConfig.icon;
-  return ()
+  return ();
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">

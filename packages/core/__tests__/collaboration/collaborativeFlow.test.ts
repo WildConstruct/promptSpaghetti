@@ -29,13 +29,13 @@ jest.mock('../../collaboration/GraphCRDTAdapter', () => ({)
         options.onGraphChange?.(newGraph);
       }, 0);
     }),
-    deleteNode: jest.fn((nodeId) => {
+    deleteNode: jest.fn((nodeId) => {,
       setTimeout(() => {
         const newGraph = { nodes: [], edges: [] };
         options.onGraphChange?.(newGraph);
       }, 0);
     }),
-    addEdge: jest.fn((edge) => {
+    addEdge: jest.fn((edge) => {,
       setTimeout(() => {
         const newGraph = {
           nodes: [],
@@ -50,13 +50,13 @@ jest.mock('../../collaboration/GraphCRDTAdapter', () => ({)
     applyRemoteUpdate: jest.fn<unknown[], unknown>(),
     getDocumentState: jest.fn(() => new Uint8Array([1, 2, 3])),
     createSnapshot: jest.fn(() => new Uint8Array([4, 5, 6])),
-    getMetrics: jest.fn(() => ({)
+    getMetrics: jest.fn(() => ({),
       documentSize: 100,
       nodeCount: 2,
       edgeCount: 1,
       syncState: { connected: true, lastSync: Date.now() }
     })),
-    getSyncState: jest.fn(() => ({)
+    getSyncState: jest.fn(() => ({),
       documentId: 'test-doc',
       userId: 'user1',
       connected: true,
@@ -401,7 +401,7 @@ describe('Collaborative Flow Tests', () => {
       const mockOnConnectionStatus = jest.fn((connected) => {
         useCollaborativeGraphStore.setState({)
           isConnected: connected,
-          connectionStatus: connected ? 'connected' : 'disconnected'
+          connectionStatus: connected ? 'connected' : 'disconnected',
         });
       });
       await act(async () => {

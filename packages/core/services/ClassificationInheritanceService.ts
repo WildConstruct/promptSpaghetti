@@ -125,7 +125,7 @@ export class ClassificationInheritanceService {
         ],
         action: {,
           type: 'INHERIT_EXACT',
-          rationale: 'Direct containment requires same classification level'
+          rationale: 'Direct containment requires same classification level',
         },
         overridePolicy: {,
           allowManualOverride: true,
@@ -150,7 +150,7 @@ export class ClassificationInheritanceService {
         ],
         action: {,
           type: 'APPLY_MINIMUM',
-          rationale: 'Derived data should be at least as protected as source data'
+          rationale: 'Derived data should be at least as protected as source data',
         },
         overridePolicy: {,
           allowManualOverride: true,
@@ -184,7 +184,7 @@ export class ClassificationInheritanceService {
         action: {,
           type: 'INHERIT_REDUCED',
           elevationLevel: -1,
-          rationale: 'Aggregation may reduce individual data sensitivity'
+          rationale: 'Aggregation may reduce individual data sensitivity',
         },
         overridePolicy: {,
           allowManualOverride: true,
@@ -217,12 +217,12 @@ export class ClassificationInheritanceService {
         action: {,
           type: 'INHERIT_ELEVATED',
           elevationLevel: 1,
-          rationale: 'Processing in production requires elevated protection'
+          rationale: 'Processing in production requires elevated protection',
         },
         overridePolicy: {,
           allowManualOverride: false,
           requireApprovalForOverride: true,
-          overrideReasons: ['Approved security exception']
+          overrideReasons: ['Approved security exception'],
         }
       },
       {
@@ -243,7 +243,7 @@ export class ClassificationInheritanceService {
         action: {,
           type: 'APPLY_MINIMUM',
           customClassification: 'INTERNAL',
-          rationale: 'Referenced data requires minimum INTERNAL classification'
+          rationale: 'Referenced data requires minimum INTERNAL classification',
         },
         overridePolicy: {,
           allowManualOverride: true,
@@ -341,7 +341,7 @@ export class ClassificationInheritanceService {
         riskAssessment: 'Risk assessment inherited and may require review',
         regulatoryRequirements: context.businessContext?.regulatoryScope || [],
         dataLineage: [context.parentElement.id],
-        relatedClassifications: context.parentElement.classification ? [context.parentElement.classification.id] : []
+        relatedClassifications: context.parentElement.classification ? [context.parentElement.classification.id] : [],
       }
     };
     // Validate the result
@@ -418,7 +418,6 @@ export class ClassificationInheritanceService {
     rationale: string;
     confidence: number;
     requiresReview: boolean;
-  } {
     const parentClassification = context.parentElement.classification?.classification;
     if (!parentClassification) {
       return { classification: null, rationale: 'No parent classification available', confidence: 0, requiresReview: true };

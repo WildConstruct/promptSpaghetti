@@ -24,7 +24,7 @@ describe('Epic 12 - Randomizer Generator System', () => {
         purpose: 'Short', // Too short
         complexity: 'simple',
         nodeCount: 150, // Too high
-        temperature: 3.0 // Too high
+        temperature: 3.0 // Too high,
       };
       const result = ParameterValidator.validate(parameters);
       expect(result.isValid).toBe(false);
@@ -36,7 +36,7 @@ describe('Epic 12 - Randomizer Generator System', () => {
         complexity: 'simple', // Mismatch with purpose
         nodeCount: 3, // Very low for complex purpose
         style: 'logical',
-        temperature: 1.8 // High for OpenAI
+        temperature: 1.8 // High for OpenAI,
       };
       console.log('Input parameters:', parameters);
       const result = ParameterValidator.validate(parameters);
@@ -50,7 +50,7 @@ describe('Epic 12 - Randomizer Generator System', () => {
     });
     test('should suggest appropriate node types', () => {
       const parameters: Partial<RandomizerParameters> = {
-        purpose: 'Create an interactive story with branching narratives and user choices'
+        purpose: 'Create an interactive story with branching narratives and user choices',
       };
       const suggestions = ParameterValidator.getSuggestions(parameters);
       expect(suggestions).toBeDefined();
@@ -87,7 +87,7 @@ describe('Epic 12 - Randomizer Generator System', () => {
       manager = new ParameterManager({)
         enableHistory: true,
         maxHistorySize: 10,
-        autoSave: false // Disable localStorage for tests
+        autoSave: false // Disable localStorage for tests,
       });
     });
     test('should load default presets', () => {
@@ -125,7 +125,7 @@ describe('Epic 12 - Randomizer Generator System', () => {
         domain: undefined,
         userContext: undefined,
       };
-      const preset = manager.createPreset(;)
+      const preset = manager.createPreset(;);
         'Test Preset',
         'Test description',
         'Testing',
@@ -243,12 +243,12 @@ describe('Epic 12 - Randomizer Generator System', () => {
       };
       const differentParams: RandomizerParameters = {
         ...baseParams,
-        purpose: 'Generate random entertainment content'
+        purpose: 'Generate random entertainment content',
       };
       manager.addToHistory(baseParams, true);
       manager.addToHistory(differentParams, true);
       const similar = manager.findSimilarInHistory({)
-        purpose: 'Create educational content for students'
+        purpose: 'Create educational content for students',
       });
       expect(similar).toHaveLength(1);
       expect(similar[0].parameters.purpose).toContain('educational');
@@ -413,7 +413,7 @@ describe('Epic 12 - Randomizer Generator System', () => {
         outputFormat: 'both',
         includeExplanation: true,
         domain: 'entertainment',
-        userContext: 'Mobile app users'
+        userContext: 'Mobile app users',
       };
       const llmRequest = (workflow as any).prepareLoLLMRequest(parameters);
       expect(llmRequest.purpose).toBe(parameters.purpose);
@@ -428,7 +428,7 @@ describe('Epic 12 - Randomizer Generator System', () => {
     test('should integrate parameter validation with manager', () => {
       const manager = new ParameterManager({ autoSave: false });
       const incompleteParams = {
-        purpose: 'Test integration'
+        purpose: 'Test integration',
         // Missing required fields
       };
       const validation = manager.validateParameters(incompleteParams);

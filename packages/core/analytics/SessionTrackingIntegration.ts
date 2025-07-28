@@ -124,7 +124,7 @@ export class SessionTrackingManager {
     consentStorageKey: 'ps_consent',
     crossDeviceStorageKey: 'ps_cross_device',
     maxSessionAge: 24 * 60 * 60 * 1000, // 24 hours
-    dataRetentionDays: 730 // 2 years for GDPR compliance
+    dataRetentionDays: 730 // 2 years for GDPR compliance,
   };
   constructor(analyticsClient: AnalyticsClient, conversionArchitecture: ConversionArchitectureManager) {
     this.analyticsClient = analyticsClient;
@@ -196,7 +196,6 @@ export class SessionTrackingManager {
     analyticsConsent: boolean;
     personalizationConsent: boolean;
     crossDeviceConsent: boolean;
-  } {
     const stored = localStorage.getItem(this.privacyConfig.consentStorageKey);
     if (stored) {
       try {
@@ -217,7 +216,6 @@ export class SessionTrackingManager {
     deviceType: 'desktop' | 'mobile' | 'tablet';
     browser: string;
     os: string;
-  } {
     const userAgent = navigator.userAgent;
     let deviceType: 'desktop' | 'mobile' | 'tablet' = 'desktop';
     if (/tablet|ipad/i.test(userAgent)) {
@@ -244,14 +242,13 @@ export class SessionTrackingManager {
     utmCampaign?: string;
     utmContent?: string;
     utmTerm?: string;
-  } {
     const params = new URLSearchParams(window.location.search);
     return {
       utmSource: params.get('utm_source') || undefined,
       utmMedium: params.get('utm_medium') || undefined,
       utmCampaign: params.get('utm_campaign') || undefined,
       utmContent: params.get('utm_content') || undefined,
-      utmTerm: params.get('utm_term') || undefined
+      utmTerm: params.get('utm_term') || undefined,
     };
   }
   private getLocationData(): { country?: string; region?: string; city?: string } | undefined {
@@ -388,7 +385,7 @@ export class SessionTrackingManager {
     this.saveSessionToStorage();
     // Send to analytics client
     this.analyticsClient.getSummary({)
-      userId: parseInt(this.currentSession.userId) || undefined
+      userId: parseInt(this.currentSession.userId) || undefined,
     });
   }
   /**
@@ -542,7 +539,7 @@ export class SessionTrackingManager {
     if (this.currentSession?.analyticsConsent) {
       // Send session data to analytics backend
       this.analyticsClient.getSummary({)
-        userId: parseInt(this.currentSession.userId) || undefined
+        userId: parseInt(this.currentSession.userId) || undefined,
       });
     }
   }

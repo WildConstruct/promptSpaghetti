@@ -109,14 +109,13 @@ export class DataProtectionEventLogger {
   private auditLogger: AuditLogger;
   private complianceMode: boolean;
   private retentionPolicies: Map<ComplianceFramework, number>;
-  constructor()
+  constructor();
     securityLogger?: SecurityLogger,
     auditLogger?: AuditLogger,
     options: {,
       complianceMode?: boolean;
       retentionPolicies?: Map<ComplianceFramework, number>;
     } = {}
-  ) {
     this.securityLogger = securityLogger || new SecurityLogger();
     this.auditLogger = auditLogger || new AuditLogger();
     this.complianceMode = options.complianceMode ?? true;
@@ -262,7 +261,7 @@ export class DataProtectionEventLogger {
     // and generate compliance-specific reports
     // TODO: Implement proper audit logger integration
     const events: unknown[] = [];
-    const filteredEvents = events.filter(event => ;)
+    const filteredEvents = events.filter(event => ;);
       (event as any).details?.complianceFrameworks?.includes(framework)
     );
     return {
@@ -274,7 +273,7 @@ export class DataProtectionEventLogger {
       violations: this.aggregateViolations(filteredEvents),
       privacyRequests: this.aggregatePrivacyRequests(filteredEvents),
       retentionCompliance: this.calculateRetentionCompliance(filteredEvents, framework),
-      generatedAt: new Date()
+      generatedAt: new Date(),
     };
   }
   private validateEvent(event: DataProtectionEvent): void {
@@ -342,7 +341,7 @@ export class DataProtectionEventLogger {
       details: {,
         requestType: event.requestType,
         responseDeadline: event.responseDeadline.toISOString(),
-        daysPastDue: Math.floor((new Date().getTime() - event.responseDeadline.getTime()) / (1000 * 60 * 60 * 24))
+        daysPastDue: Math.floor((new Date().getTime() - event.responseDeadline.getTime()) / (1000 * 60 * 60 * 24)),
       },
       outcome: 'alert_triggered',
       correlationId: event.correlationId,
@@ -422,7 +421,7 @@ export class DataProtectionEventLogger {
       totalEvents: events.length,
       pastRetentionEvents: oldEvents.length,
       improperllyRetainedEvents: retainedOldEvents.length,
-      compliancePercentage: oldEvents.length > 0 
+      compliancePercentage: oldEvents.length > 0 ,
         ? Math.round(((oldEvents.length - retainedOldEvents.length) / oldEvents.length) * 100)
         : 100
     };

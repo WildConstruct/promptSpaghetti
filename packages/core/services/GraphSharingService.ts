@@ -185,7 +185,7 @@ export class GraphSharingService {
           type: edge.labelPosition,
           offset: edge.labelOffset,
         },
-        visible: edge.showLabel ?? true
+        visible: edge.showLabel ?? true,
       }));
     const sharedGraph: SharedGraphFormat = {
       metadata: {,
@@ -199,7 +199,7 @@ export class GraphSharingService {
           version: 1,
           changes: ['Initial share'],
           tags: metadata.versionControl?.tags || [],
-          branch: metadata.versionControl?.branch || 'main'
+          branch: metadata.versionControl?.branch || 'main',
         },
         sharing: {,
           permissions: options.permissions || 'read_only',
@@ -214,7 +214,7 @@ export class GraphSharingService {
           canvasPosition: { x: 0, y: 0, zoom: 1 },
           gridVisible: true,
           snapToGrid: false,
-          readonly: options.permissions === 'read_only'
+          readonly: options.permissions === 'read_only',
         }
       },
       annotations: {,
@@ -222,7 +222,7 @@ export class GraphSharingService {
         stickyNotes: annotations.stickyNotes || [],
         nodeLabels: this.extractNodeLabels(nodes),
         regions: annotations.regions || [],
-        comments: options.includeComments ? (annotations.comments || []) : []
+        comments: options.includeComments ? (annotations.comments || []) : [],
       },
       collaboration: {,
         changeHistory: options.includeHistory ? [] : [],
@@ -293,12 +293,12 @@ export class GraphSharingService {
         graph: { nodes, edges },
         annotations,
         errors: errors.length > 0 ? errors : undefined,
-        warnings: warnings.length > 0 ? warnings : undefined
+        warnings: warnings.length > 0 ? warnings : undefined,
       };
     } catch (error) {
       return {
         success: false,
-        errors: [error instanceof Error ? error.message : 'Unknown import error']
+        errors: [error instanceof Error ? error.message : 'Unknown import error'],
       };
     }
   }
@@ -309,7 +309,6 @@ export class GraphSharingService {
     valid: boolean;
     errors: string[];
     warnings: string[];
-  } {
     const errors: string[] = [];
     const warnings: string[] = [];
     // Check required fields
@@ -396,7 +395,7 @@ export class GraphSharingService {
       graph: {,
         ...baseGraph.graph,
         nodes: changes.nodes || baseGraph.graph.nodes,
-        edges: changes.edges || baseGraph.graph.edges
+        edges: changes.edges || baseGraph.graph.edges,
       },
       annotations: {,
         ...baseGraph.annotations,
@@ -415,7 +414,7 @@ export class GraphSharingService {
             description: changes.changeDescription,
           }
         ],
-        lastSync: new Date().toISOString()
+        lastSync: new Date().toISOString(),
       }
     };
     // Store new version
@@ -468,7 +467,7 @@ export class GraphSharingService {
       description: node.data?.description as string,
       tags: Array.isArray(node.data?.tags) ? node.data.tags : [],
       color: node.data?.color as string,
-      notes: node.data?.notes as string
+      notes: node.data?.notes as string,
     })).filter(label => )
       label.label || label.description || label.tags.length > 0 || label.notes
     );
@@ -534,7 +533,7 @@ export class GraphSharingService {
   /**
    * Update sharing permissions
    */
-  updateSharingPermissions()
+  updateSharingPermissions();
     exportId: string,
     permissions: SharedGraphFormat['metadata']['sharing']['permissions'],
     collaborators?: SharedGraphFormat['metadata']['sharing']['collaborators']

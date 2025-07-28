@@ -86,7 +86,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
     if (rect) {
       setDragOffset({)
         x: e.clientX - rect.left,
-        y: e.clientY - rect.top
+        y: e.clientY - rect.top,
       });
       setIsDragging(true);
     }
@@ -110,7 +110,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
       if (isDragging) {
         const newPosition = {
           x: e.clientX - dragOffset.x,
-          y: e.clientY - dragOffset.y
+          y: e.clientY - dragOffset.y,
         };
         onAction({)
           type: 'move',
@@ -120,11 +120,11 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
       } else if (isResizing) {
         const deltaX = e.clientX - resizeStart.x;
         const deltaY = e.clientY - resizeStart.y;
-        const newWidth = Math.max(;)
+        const newWidth = Math.max(;);
           STICKY_NOTE_CONSTRAINTS.minWidth,
           Math.min(STICKY_NOTE_CONSTRAINTS.maxWidth, resizeStart.width + deltaX)
         );
-        const newHeight = Math.max(;)
+        const newHeight = Math.max(;);
           STICKY_NOTE_CONSTRAINTS.minHeight,
           Math.min(STICKY_NOTE_CONSTRAINTS.maxHeight, resizeStart.height + deltaY)
         );
@@ -169,7 +169,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
     e.stopPropagation();
     onContextMenu?.(e, note.id);
   }, [onContextMenu, note.id]);
-  return ()
+  return ();
     <div
       ref={noteRef}
       className="sticky-note"
@@ -189,7 +189,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
         fontFamily: 'system-ui, -apple-system, sans-serif',
         transition: isDragging || isResizing ? 'none' : 'all 0.2s ease',
         transform: selected ? 'scale(1.02)' : 'scale(1)',
-        opacity: isDragging ? 0.8 : 1
+        opacity: isDragging ? 0.8 : 1,
       }}
       onMouseDown={handleMouseDown}
       onContextMenu={handleContextMenu}
@@ -235,7 +235,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
                   cursor: 'pointer',
                   opacity: note.color === color ? 1 : 0.6,
                   transform: note.color === color ? 'scale(1.2)' : 'scale(1)',
-                  transition: 'all 0.15s ease'
+                  transition: 'all 0.15s ease',
                 }}
                 title={info.description}
               />
@@ -261,7 +261,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
                 alignItems: 'center',
                 justifyContent: 'center',
                 opacity: 0.6,
-                transition: 'opacity 0.15s ease'
+                transition: 'opacity 0.15s ease',
               }}
               onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
               onMouseLeave={(e) => e.currentTarget.style.opacity = '0.6'}
@@ -309,7 +309,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
               lineHeight: 1.4,
               wordWrap: 'break-word',
               overflow: 'auto',
-              cursor: canEdit ? 'text' : 'default'
+              cursor: canEdit ? 'text' : 'default',
             }}
             onClick={canEdit ? startEditing : undefined}
           >
@@ -335,7 +335,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
             background: colorInfo.border,
             borderRadius: '8px 0 6px 0',
             opacity: 0.6,
-            transition: 'opacity 0.15s ease'
+            transition: 'opacity 0.15s ease',
           }}
           onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
           onMouseLeave={(e) => e.currentTarget.style.opacity = '0.6'}
@@ -359,7 +359,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
         fontSize: 9,
         color: '#6b7280',
         opacity: selected ? 1 : 0,
-        transition: 'opacity 0.2s ease'
+        transition: 'opacity 0.2s ease',
       }}>
         {note.author} • {new Date(note.timestamp).toLocaleString()}
       </div>

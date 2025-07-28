@@ -365,7 +365,7 @@ export class RealTimeStateManager extends EventEmitter {
     }
   }
   // State subscription system
-  subscribeToStateChanges()
+  subscribeToStateChanges();
     domain: string,
     callback: StateChangeCallback,
     filters: SubscriptionFilter[] = [],
@@ -481,7 +481,7 @@ export class RealTimeStateManager extends EventEmitter {
         rollbackFn: () => this.synchronizer.rollbackOptimisticUpdate(rollbackId),
         timestamp: Date.now(),
         confirmed: false,
-        clientId: this.connection?.id || ''
+        clientId: this.connection?.id || '',
       };
       this.optimisticUpdates.set(updateId, optimisticUpdate);
       // Send to server for confirmation
@@ -702,7 +702,6 @@ export function useStateSubscription()
   domain: string,
   filters?: SubscriptionFilter[],
   options?: SubscriptionOptions
-) {
   // This would be implemented with React hooks
   // Returns current state and manages subscription lifecycle
   return null;

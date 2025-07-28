@@ -63,7 +63,7 @@ export const [showEncryptionDetails, setShowEncryptionDetails] = useState(false)
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [showWebSocketDetails, showEncryptionDetails]);
-  return ()
+  return ();
     <div style={{ 
       position: 'absolute', 
       bottom: 0, 

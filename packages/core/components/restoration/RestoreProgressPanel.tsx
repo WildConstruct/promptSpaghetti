@@ -108,7 +108,7 @@ export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({)
   const isCompleted = progress.status === 'completed';
   const isFailed = progress.status === 'failed';
   const isCancelled = progress.status === 'cancelled';
-  return ()
+  return ();
     <div>
       {/* Status Header */}
       <Card style={{ marginBottom: '16px' }}>
@@ -181,7 +181,7 @@ export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({)
               suffix={`/ ${progress.totalConflicts}`}
               prefix={<WarningOutlined />}
               valueStyle={{ 
-                color: progress.totalConflicts > 0 ? '#fa8c16' : '#3f8600' 
+                color: progress.totalConflicts > 0 ? '#fa8c16' : '#3f8600' ,
               }}
             />
           </Card>

@@ -36,7 +36,7 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
   const handleNameChange = (value: unknown) => {
     onChange({ name: value as string, label: value as string });
   };
-  return ()
+  return ();
     <div className="enhanced-weighted-choice-editor">
       {/* BASIC LEVEL: Essential fields only */}
       <ProgressiveDisclosureSection
@@ -131,7 +131,7 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
           padding: 8, 
           background: '#2a4365', 
           borderRadius: 4,
-          border: '1px solid #4a5568' 
+          border: '1px solid #4a5568' ,
         }}>
           <div style={{ 
             fontSize: 11, 
@@ -169,7 +169,7 @@ export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditor
           background: '#2d1b69',
           padding: 8,
           borderRadius: 4,
-          border: '1px solid #553c9a'
+          border: '1px solid #553c9a',
         }}>
           <div style={{ marginBottom: 6 }}>
             <strong>Node ID:</strong> {nodeId}

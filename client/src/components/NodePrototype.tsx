@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 
 // Professional Design System (copied from EnhancedGraphEditor)
 const professionalColors = {
-  background: {
+  background: {,
     primary: '#1e1e1e',
     secondary: '#2a2a2a',
     tertiary: '#353535',
   },
-  text: {
+  text: {,
     primary: '#e8e8e8',
     secondary: '#b8b8b8',
     accent: '#ff7c00',
   },
-  accent: {
+  accent: {,
     orange: '#ff7c00',
     blue: '#4a9eff',
     cyan: '#00d4ff',
@@ -20,7 +20,7 @@ const professionalColors = {
     green: '#4ade80',
     red: '#ef4444',
   },
-  nodes: {
+  nodes: {,
     text: '#4f46e5',
     logic: '#059669',
     output: '#dc2626',
@@ -28,7 +28,7 @@ const professionalColors = {
     advanced: '#6366f1',
     transform: '#f59e0b',
   },
-  ui: {
+  ui: {,
     border: '#404040',
     borderHover: '#5a5a5a',
     borderActive: '#ff7c00',
@@ -36,9 +36,8 @@ const professionalColors = {
     selection: '#ff7c0040',
   }
 };
-
 const professionalShadows = {
-  node: {
+  node: {,
     default: '0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2)',
     hover: '0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25)',
     selected: '0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)',
@@ -47,10 +46,10 @@ const professionalShadows = {
 
 // Sample data for different node types
 const sampleNodeData = {
-  panelArchetype: {
+  panelArchetype: {,
     label: "Panel Archetype",
     description: "Choose panel type: Cockpit, Bridge Console, Engineering Panel, etc.",
-    options: [
+    options: [,
       { label: "Cockpit Control Surface (Fighter, Shuttle)", value: "Cockpit Control Surface", weight: 1 },
       { label: "Bridge/Command Console (Capital Ship, Ops)", value: "Bridge/Command Center Console", weight: 1 },
       { label: "Machinery/Engineering Panel (Engine Room, Reactor)", value: "Machinery/Engineering Panel", weight: 1 },
@@ -61,10 +60,10 @@ const sampleNodeData = {
       { label: "Laboratory Equipment Interface (Scientific Instruments)", value: "Laboratory Equipment Interface", weight: 1 }
     ]
   },
-  factionAlignment: {
+  factionAlignment: {,
     label: "Faction Alignment",
     description: "Empire/Corporate, Rebel/Resistance, Civilian/Smuggler, etc.",
-    options: [
+    options: [,
       { label: "Galactic Empire/Imperial Navy", value: "Imperial", weight: 2 },
       { label: "Rebel Alliance/Resistance", value: "Rebel", weight: 2 },
       { label: "Corporate/Trade Federation", value: "Corporate", weight: 1 },
@@ -72,10 +71,10 @@ const sampleNodeData = {
       { label: "Civilian/Merchant", value: "Civilian", weight: 1 }
     ]
   },
-  wearLevel: {
+  wearLevel: {,
     label: "Wear Level", 
     description: "Condition: Pristine, Lightly Used, Battle-Scarred, etc.",
-    options: [
+    options: [,
       { label: "Pristine (New Old Stock - retro design, mint condition)", value: "Pristine", weight: 1 },
       { label: "Lightly Used (Minor scuffs, dust, fingerprints)", value: "Lightly Used", weight: 2 },
       { label: "Moderately Worn (Visible scratches, grime, faded labels)", value: "Moderately Worn", weight: 3 },
@@ -86,10 +85,10 @@ const sampleNodeData = {
 };
 
 // Node prototype components
-const CurrentNodeDesign = ({ data, selected = false }: { data: any, selected?: boolean }) => (
+const CurrentNodeDesign = ({ data, selected = false }: { data: any, selected?: boolean }) => ()
   <div style={{
-    background: `linear-gradient(135deg, ${professionalColors.nodes.logic}15, ${professionalColors.nodes.logic}25)`,
-    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,
+    background: `linear-gradient(135deg, ${professionalColors.nodes.logic}15, ${professionalColors.nodes.logic}25)`,}
+    border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,}
     borderRadius: '8px',
     padding: '12px 16px',
     minWidth: '200px',
@@ -107,7 +106,7 @@ const CurrentNodeDesign = ({ data, selected = false }: { data: any, selected?: b
       marginBottom: '6px',
       fontSize: '14px',
       fontWeight: 600,
-      color: professionalColors.nodes.logic
+      color: professionalColors.nodes.logic,
     }}>
       <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
       {data.label}
@@ -115,22 +114,20 @@ const CurrentNodeDesign = ({ data, selected = false }: { data: any, selected?: b
     <div style={{ 
       fontSize: '12px', 
       color: professionalColors.text.secondary,
-      lineHeight: 1.3 
+      lineHeight: 1.3 ,
     }}>
       {data.description}
     </div>
   </div>
 );
-
 const InlineOption1 = ({ data, selected = false }: { data: any, selected?: boolean }) => {
-  const selectedOption = data.options[0]; // Simulate current selection
+  const selectedOption = data.options[0]; // Simulate current selection;
   const totalWeight = data.options.reduce((sum: number, opt: any) => sum + opt.weight, 0);
   const percentage = Math.round((selectedOption.weight / totalWeight) * 100);
-  
-  return (
+  return ()
     <div style={{
-      background: `linear-gradient(135deg, ${professionalColors.nodes.logic}15, ${professionalColors.nodes.logic}25)`,
-      border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,
+      background: `linear-gradient(135deg, ${professionalColors.nodes.logic}15, ${professionalColors.nodes.logic}25)`,}
+      border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,}
       borderRadius: '8px',
       padding: '12px 16px',
       minWidth: '220px',
@@ -148,7 +145,7 @@ const InlineOption1 = ({ data, selected = false }: { data: any, selected?: boole
         marginBottom: '8px',
         fontSize: '14px',
         fontWeight: 600,
-        color: professionalColors.nodes.logic
+        color: professionalColors.nodes.logic,
       }}>
         <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
         {data.label}
@@ -161,27 +158,25 @@ const InlineOption1 = ({ data, selected = false }: { data: any, selected?: boole
         padding: '4px 8px',
         background: professionalColors.accent.orange + '20',
         borderRadius: '4px',
-        border: `1px solid ${professionalColors.accent.orange}40`
+        border: `1px solid ${professionalColors.accent.orange}40`}
       }}>
         📊 "{selectedOption.value}" ({percentage}%)
       </div>
       <div style={{ 
         fontSize: '11px', 
-        color: professionalColors.text.secondary
+        color: professionalColors.text.secondary,
       }}>
         + {data.options.length - 1} more options
       </div>
     </div>
   );
 };
-
 const InlineOption2 = ({ data, selected = false }: { data: any, selected?: boolean }) => {
   const topOptions = data.options.slice(0, 3);
-  
-  return (
+  return ()
     <div style={{
-      background: `linear-gradient(135deg, ${professionalColors.nodes.logic}15, ${professionalColors.nodes.logic}25)`,
-      border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,
+      background: `linear-gradient(135deg, ${professionalColors.nodes.logic}15, ${professionalColors.nodes.logic}25)`,}
+      border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,}
       borderRadius: '8px',
       padding: '12px 16px',
       minWidth: '240px',
@@ -199,27 +194,27 @@ const InlineOption2 = ({ data, selected = false }: { data: any, selected?: boole
         marginBottom: '8px',
         fontSize: '14px',
         fontWeight: 600,
-        color: professionalColors.nodes.logic
+        color: professionalColors.nodes.logic,
       }}>
         <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
         {data.label}
       </div>
       <div style={{ fontSize: '12px', color: professionalColors.text.primary }}>
-        {topOptions.map((option: any, index: number) => (
+        {topOptions.map((option: any, index: number) => ()
           <div key={index} style={{ 
             marginBottom: '3px',
             paddingLeft: '8px',
-            borderLeft: `2px solid ${professionalColors.nodes.logic}40`
+            borderLeft: `2px solid ${professionalColors.nodes.logic}40`}
           }}>
             • {option.value}
           </div>
         ))}
-        {data.options.length > 3 && (
+        {data.options.length > 3 && ()
           <div style={{ 
             color: professionalColors.text.secondary,
             fontSize: '11px',
             marginTop: '4px',
-            fontStyle: 'italic'
+            fontStyle: 'italic',
           }}>
             + {data.options.length - 3} more...
           </div>
@@ -228,14 +223,12 @@ const InlineOption2 = ({ data, selected = false }: { data: any, selected?: boole
     </div>
   );
 };
-
 const InlineOption3 = ({ data, selected = false }: { data: any, selected?: boolean }) => {
   const compactOptions = data.options.slice(0, 4).map((opt: any) => opt.value.split(' ')[0]);
-  
-  return (
+  return ()
     <div style={{
-      background: `linear-gradient(135deg, ${professionalColors.nodes.logic}15, ${professionalColors.nodes.logic}25)`,
-      border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,
+      background: `linear-gradient(135deg, ${professionalColors.nodes.logic}15, ${professionalColors.nodes.logic}25)`,}
+      border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,}
       borderRadius: '8px',
       padding: '12px 16px',
       minWidth: '200px',
@@ -253,7 +246,7 @@ const InlineOption3 = ({ data, selected = false }: { data: any, selected?: boole
         marginBottom: '8px',
         fontSize: '14px',
         fontWeight: 600,
-        color: professionalColors.nodes.logic
+        color: professionalColors.nodes.logic,
       }}>
         <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
         {data.label}
@@ -263,24 +256,24 @@ const InlineOption3 = ({ data, selected = false }: { data: any, selected?: boole
         color: professionalColors.text.primary,
         display: 'flex',
         flexWrap: 'wrap',
-        gap: '4px'
+        gap: '4px',
       }}>
-        {compactOptions.map((option: string, index: number) => (
+        {compactOptions.map((option: string, index: number) => ()
           <span key={index} style={{
             background: professionalColors.background.tertiary,
             padding: '2px 6px',
             borderRadius: '3px',
-            border: `1px solid ${professionalColors.ui.border}`,
-            fontSize: '11px'
+            border: `1px solid ${professionalColors.ui.border}`,}
+            fontSize: '11px',
           }}>
             {option}
           </span>
         ))}
-        {data.options.length > 4 && (
+        {data.options.length > 4 && ()
           <span style={{
             color: professionalColors.text.secondary,
             fontSize: '11px',
-            alignSelf: 'center'
+            alignSelf: 'center',
           }}>
             +{data.options.length - 4}
           </span>
@@ -289,15 +282,13 @@ const InlineOption3 = ({ data, selected = false }: { data: any, selected?: boole
     </div>
   );
 };
-
 const InlineOption4 = ({ data, selected = false }: { data: any, selected?: boolean }) => {
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
   const selectedOption = data.options[selectedOptionIndex];
-  
-  return (
+  return ()
     <div style={{
-      background: `linear-gradient(135deg, ${professionalColors.nodes.logic}15, ${professionalColors.nodes.logic}25)`,
-      border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,
+      background: `linear-gradient(135deg, ${professionalColors.nodes.logic}15, ${professionalColors.nodes.logic}25)`,}
+      border: `1px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.logic}`,}
       borderRadius: '8px',
       padding: '12px 16px',
       minWidth: '260px',
@@ -315,20 +306,18 @@ const InlineOption4 = ({ data, selected = false }: { data: any, selected?: boole
         marginBottom: '8px',
         fontSize: '14px',
         fontWeight: 600,
-        color: professionalColors.nodes.logic
+        color: professionalColors.nodes.logic,
       }}>
         <span style={{ marginRight: '8px', fontSize: '16px' }}>⚡</span>
         {data.label}
       </div>
-      
       <div style={{
         fontSize: '12px',
         color: professionalColors.text.secondary,
-        marginBottom: '6px'
+        marginBottom: '6px',
       }}>
-        Currently: 
+        Currently: ,
       </div>
-      
       <div style={{
         fontSize: '13px',
         fontWeight: 500,
@@ -337,40 +326,39 @@ const InlineOption4 = ({ data, selected = false }: { data: any, selected?: boole
         padding: '4px 8px',
         background: professionalColors.accent.blue + '20',
         borderRadius: '4px',
-        border: `1px solid ${professionalColors.accent.blue}40`
+        border: `1px solid ${professionalColors.accent.blue}40`}
       }}>
         {selectedOption.value}
       </div>
-      
       <div style={{ 
         display: 'flex',
         flexWrap: 'wrap',
         gap: '3px',
-        fontSize: '10px'
+        fontSize: '10px',
       }}>
-        {data.options.slice(0, 3).map((option: any, index: number) => (
+        {data.options.slice(0, 3).map((option: any, index: number) => ()
           <button
             key={index}
             onClick={() => setSelectedOptionIndex(index)}
             style={{
               background: index === selectedOptionIndex ? professionalColors.accent.blue + '40' : professionalColors.background.tertiary,
-              border: `1px solid ${index === selectedOptionIndex ? professionalColors.accent.blue : professionalColors.ui.border}`,
+              border: `1px solid ${index === selectedOptionIndex ? professionalColors.accent.blue : professionalColors.ui.border}`,}
               color: professionalColors.text.primary,
               padding: '2px 6px',
               borderRadius: '3px',
               cursor: 'pointer',
-              fontSize: '10px'
+              fontSize: '10px',
             }}
           >
             {option.value.split(' ')[0]}
           </button>
         ))}
-        {data.options.length > 3 && (
+        {data.options.length > 3 && ()
           <span style={{
             color: professionalColors.text.secondary,
             fontSize: '10px',
             alignSelf: 'center',
-            padding: '2px'
+            padding: '2px',
           }}>
             ...
           </span>
@@ -382,8 +370,7 @@ const InlineOption4 = ({ data, selected = false }: { data: any, selected?: boole
 
 export const NodePrototypePage = () => {
   const [selectedDesign, setSelectedDesign] = useState<string>('current');
-
-  return (
+  return ()
     <div style={{
       width: '100vw',
       height: '100vh',
@@ -394,37 +381,36 @@ export const NodePrototypePage = () => {
     }}>
       <div style={{
         marginBottom: '30px',
-        color: professionalColors.text.primary
+        color: professionalColors.text.primary,
       }}>
         <h1 style={{ 
           fontSize: '28px', 
           fontWeight: 'bold', 
           marginBottom: '10px',
-          color: professionalColors.accent.orange 
+          color: professionalColors.accent.orange ,
         }}>
           Node Design Prototypes
         </h1>
         <p style={{ 
           fontSize: '16px', 
           color: professionalColors.text.secondary,
-          marginBottom: '20px' 
+          marginBottom: '20px' ,
         }}>
           Comparing different approaches to showing node content inline
         </p>
-        
         <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-          {['current', 'option1', 'option2', 'option3', 'option4'].map(design => (
+          {['current', 'option1', 'option2', 'option3', 'option4'].map(design => ()
             <button
               key={design}
               onClick={() => setSelectedDesign(design)}
               style={{
                 background: selectedDesign === design ? professionalColors.accent.orange : professionalColors.background.secondary,
-                border: `1px solid ${selectedDesign === design ? professionalColors.accent.orange : professionalColors.ui.border}`,
+                border: `1px solid ${selectedDesign === design ? professionalColors.accent.orange : professionalColors.ui.border}`,}
                 color: professionalColors.text.primary,
                 padding: '8px 16px',
                 borderRadius: '6px',
                 cursor: 'pointer',
-                fontSize: '14px'
+                fontSize: '14px',
               }}
             >
               {design === 'current' ? 'Current Design' : `Inline ${design.slice(-1)}`}
@@ -432,19 +418,18 @@ export const NodePrototypePage = () => {
           ))}
         </div>
       </div>
-
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
         gap: '20px',
-        marginBottom: '40px'
+        marginBottom: '40px',
       }}>
-        {Object.entries(sampleNodeData).map(([key, data]) => (
+        {Object.entries(sampleNodeData).map(([key, data]) => ()
           <div key={key}>
             <h3 style={{ 
               color: professionalColors.text.primary, 
               marginBottom: '10px',
-              fontSize: '18px' 
+              fontSize: '18px' ,
             }}>
               {data.label}
             </h3>
@@ -458,13 +443,12 @@ export const NodePrototypePage = () => {
           </div>
         ))}
       </div>
-
       <div style={{
         background: professionalColors.background.secondary,
-        border: `1px solid ${professionalColors.ui.border}`,
+        border: `1px solid ${professionalColors.ui.border}`,}
         borderRadius: '8px',
         padding: '20px',
-        color: professionalColors.text.primary
+        color: professionalColors.text.primary,
       }}>
         <h3 style={{ marginBottom: '15px', color: professionalColors.accent.orange }}>Design Comparison</h3>
         <div style={{ fontSize: '14px', lineHeight: 1.6, color: professionalColors.text.secondary }}>

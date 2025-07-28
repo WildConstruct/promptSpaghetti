@@ -4,7 +4,6 @@
  * 
  * Main revenue dashboard component integrating Epic 1 analytics with Epic 16 marketplace
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { RevenueTimeRange, RevenueFilters } from '../../types/revenue';
 import { RevenueOverviewPanel } from './RevenueOverviewPanel';
@@ -21,7 +20,6 @@ import { useRevenueAnalytics } from '../../hooks/useRevenueAnalytics';
 import { useRealtimeRevenue } from '../../hooks/useRealtimeRevenue';
 import { useRevenueForecast } from '../../hooks/useRevenueForecast';
 import './RevenueDashboard.css';
-
 interface RevenueDashboardProps {
   /** Dashboard scope - global, creator-specific, or template-specific */
   scope: 'global' | 'creator' | 'template';
@@ -39,7 +37,7 @@ interface RevenueDashboardProps {
   className?: string;
 }
 
-export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
+export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({)
   scope,
   entityId,
   initialTimeRange = RevenueTimeRange.LAST_30D,
@@ -54,18 +52,17 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
     start: Date | null;
     end: Date | null;
   }>({ start: null, end: null });
-  const [filters, setFilters] = useState<RevenueFilters>({
+  const [filters, setFilters] = useState<RevenueFilters>({)
     paymentProviders: [],
     licenseTypes: [],
     countries: [],
     templates: [],
-    creators: []
+    creators: [],
   });
   const [activeTab, setActiveTab] = useState<'overview' | 'trends' | 'performers' | 'geography' | 'payouts'>('overview');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-
   // Custom hooks for data fetching
   const {
     dashboardData,
@@ -74,53 +71,48 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
     error: analyticsError,
     refreshData,
     exportData
-  } = useRevenueAnalytics({
+  } = useRevenueAnalytics({)
     scope,
     entityId,
     timeRange,
     customDateRange,
     filters,
-    refreshInterval: realtimeEnabled ? 30000 : 0 // 30 seconds for real-time
+    refreshInterval: realtimeEnabled ? 30000 : 0 // 30 seconds for real-time,
   });
-
   // Real-time revenue stream
   const {
     realtimeData,
     isConnected: realtimeConnected,
     connect: connectRealtime,
-    disconnect: disconnectRealtime
-  } = useRealtimeRevenue({
+    disconnect: disconnectRealtime,
+  } = useRealtimeRevenue({)
     enabled: realtimeEnabled,
     scope,
     entityId,
     filters
   });
-
   // Revenue forecasting
   const {
     forecast,
     isLoading: forecastLoading,
     generateForecast,
     forecastAccuracy
-  } = useRevenueForecast({
+  } = useRevenueForecast({)
     scope,
     entityId,
-    historicalPeriod: 90 // 90 days of historical data
+    historicalPeriod: 90 // 90 days of historical data,
   });
-
   // Effects
   useEffect(() => {
     setLoading(analyticsLoading);
     setError(analyticsError);
   }, [analyticsLoading, analyticsError]);
-
   useEffect(() => {
     if (realtimeEnabled) {
       connectRealtime();
       return () => disconnectRealtime();
     }
   }, [realtimeEnabled, connectRealtime, disconnectRealtime]);
-
   // Event handlers
   const handleTimeRangeChange = useCallback((newTimeRange: RevenueTimeRange) => {
     setTimeRange(newTimeRange);
@@ -128,18 +120,15 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
       setCustomDateRange({ start: null, end: null });
     }
   }, []);
-
   const handleCustomDateRangeChange = useCallback((start: Date | null, end: Date | null) => {
     setCustomDateRange({ start, end });
     if (start && end) {
       setTimeRange(RevenueTimeRange.CUSTOM);
     }
   }, []);
-
   const handleFiltersChange = useCallback((newFilters: RevenueFilters) => {
     setFilters(newFilters);
   }, []);
-
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
@@ -150,22 +139,20 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
       setRefreshing(false);
     }
   }, [refreshData]);
-
   const handleExport = useCallback(async (format: 'csv' | 'xlsx' | 'pdf') => {
     try {
-      await exportData(format, {
+      await exportData(format, {)
         scope,
         entityId,
         timeRange,
         customDateRange,
         filters,
-        includeForecast: !!forecast
+        includeForecast: !!forecast,
       });
     } catch {
       setError('Failed to export dashboard data');
     }
   }, [exportData, scope, entityId, timeRange, customDateRange, filters, forecast]);
-
   const handleGenerateForecast = useCallback(async () => {
     try {
       await generateForecast();
@@ -173,7 +160,6 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
       setError('Failed to generate revenue forecast');
     }
   }, [generateForecast]);
-
   // Computed values
   const dashboardTitle = useMemo(() => {
     switch (scope) {
@@ -187,14 +173,12 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
         return 'Revenue Dashboard';
     }
   }, [scope]);
-
   const isCompactLayout = layout === 'compact';
   const isExecutiveLayout = layout === 'executive';
-
   // Loading state
   if (loading && !dashboardData) {
-    return (
-      <div className={`revenue-dashboard revenue-dashboard--loading ${className}`}>
+    return ()
+      <div className={`revenue-dashboard revenue-dashboard--loading ${className}`}>}
         <div className="revenue-dashboard__loading">
           <div className="revenue-dashboard__spinner" />
           <p>Loading revenue analytics...</p>
@@ -202,11 +186,10 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
       </div>
     );
   }
-
   // Error state
   if (error && !dashboardData) {
-    return (
-      <div className={`revenue-dashboard revenue-dashboard--error ${className}`}>
+    return ()
+      <div className={`revenue-dashboard revenue-dashboard--error ${className}`}>}
         <div className="revenue-dashboard__error">
           <h3>Failed to Load Revenue Dashboard</h3>
           <p>{error}</p>
@@ -217,21 +200,19 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`revenue-dashboard revenue-dashboard--${layout} ${className}`}>
+  return ()
+    <div className={`revenue-dashboard revenue-dashboard--${layout} ${className}`}>}
       {/* Dashboard Header */}
       <div className="revenue-dashboard__header">
         <div className="revenue-dashboard__title-section">
           <h2 className="revenue-dashboard__title">{dashboardTitle}</h2>
-          {realtimeEnabled && (
-            <div className={`revenue-dashboard__realtime-indicator ${realtimeConnected ? 'connected' : 'disconnected'}`}>
+          {realtimeEnabled && ()
+            <div className={`revenue-dashboard__realtime-indicator ${realtimeConnected ? 'connected' : 'disconnected'}`}>}
               <span className="revenue-dashboard__realtime-dot" />
               {realtimeConnected ? 'Live' : 'Offline'}
             </div>
           )}
         </div>
-
         <div className="revenue-dashboard__controls">
           {/* Time Range Selector */}
           <div className="revenue-dashboard__time-controls">
@@ -246,8 +227,7 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
               <option value={RevenueTimeRange.LAST_YEAR}>Last year</option>
               <option value={RevenueTimeRange.CUSTOM}>Custom range</option>
             </select>
-            
-            {timeRange === RevenueTimeRange.CUSTOM && (
+            {timeRange === RevenueTimeRange.CUSTOM && ()
               <div className="revenue-dashboard__custom-range">
                 <input 
                   type="date" 
@@ -265,7 +245,6 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
               </div>
             )}
           </div>
-
           {/* Action Buttons */}
           <div className="revenue-dashboard__actions">
             <button 
@@ -276,8 +255,7 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
             >
               {refreshing ? '⟳' : '↻'}
             </button>
-
-            {exportEnabled && (
+            {exportEnabled && ()
               <RevenueExportManager
                 onExport={handleExport}
                 disabled={loading}
@@ -287,9 +265,8 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
           </div>
         </div>
       </div>
-
       {/* Dashboard Navigation */}
-      {!isCompactLayout && (
+      {!isCompactLayout && ()
         <div className="revenue-dashboard__nav">
           <button 
             className={`revenue-dashboard__nav-btn ${activeTab === 'overview' ? 'active' : ''}`}
@@ -315,7 +292,7 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
           >
             Geography
           </button>
-          {scope !== 'template' && (
+          {scope !== 'template' && ()
             <button 
               className={`revenue-dashboard__nav-btn ${activeTab === 'payouts' ? 'active' : ''}`}
               onClick={() => setActiveTab('payouts')}
@@ -325,9 +302,8 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
           )}
         </div>
       )}
-
       {/* Filters Panel */}
-      {!isExecutiveLayout && (
+      {!isExecutiveLayout && ()
         <RevenueFiltersPanel
           filters={filters}
           onFiltersChange={handleFiltersChange}
@@ -335,18 +311,16 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
           className="revenue-dashboard__filters"
         />
       )}
-
       {/* Real-time Revenue Stream */}
-      {realtimeEnabled && realtimeData && (
+      {realtimeEnabled && realtimeData && ()
         <RealTimeRevenueStream
           data={realtimeData}
           className="revenue-dashboard__realtime-stream"
         />
       )}
-
       {/* Dashboard Content */}
       <div className="revenue-dashboard__content">
-        {(activeTab === 'overview' || isCompactLayout) && (
+        {(activeTab === 'overview' || isCompactLayout) && ()
           <div className="revenue-dashboard__overview">
             <RevenueOverviewPanel
               metrics={metrics}
@@ -354,21 +328,18 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
               layout={layout}
               className="revenue-dashboard__overview-panel"
             />
-            
-            {!isExecutiveLayout && (
+            {!isExecutiveLayout && ()
               <>
                 <RevenueTrendChart
                   data={dashboardData?.trends || []}
                   timeRange={timeRange}
                   className="revenue-dashboard__trends"
                 />
-                
                 <div className="revenue-dashboard__overview-widgets">
                   <PaymentMethodBreakdown
                     data={dashboardData?.paymentMethods || []}
                     className="revenue-dashboard__payment-methods"
                   />
-                  
                   <TopPerformersWidget
                     templates={dashboardData?.topTemplates || []}
                     creators={dashboardData?.topCreators || []}
@@ -380,8 +351,7 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
             )}
           </div>
         )}
-
-        {activeTab === 'trends' && !isCompactLayout && (
+        {activeTab === 'trends' && !isCompactLayout && ()
           <div className="revenue-dashboard__trends-detailed">
             <RevenueTrendChart
               data={dashboardData?.trends || []}
@@ -389,7 +359,6 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
               detailed={true}
               className="revenue-dashboard__trends-chart"
             />
-            
             <ForecastingWidget
               forecast={forecast}
               accuracy={forecastAccuracy}
@@ -399,8 +368,7 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
             />
           </div>
         )}
-
-        {activeTab === 'performers' && !isCompactLayout && (
+        {activeTab === 'performers' && !isCompactLayout && ()
           <TopPerformersWidget
             templates={dashboardData?.topTemplates || []}
             creators={dashboardData?.topCreators || []}
@@ -409,15 +377,13 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
             className="revenue-dashboard__performers-detailed"
           />
         )}
-
-        {activeTab === 'geography' && !isCompactLayout && (
+        {activeTab === 'geography' && !isCompactLayout && ()
           <GeographicDistribution
             data={dashboardData?.geography || []}
             className="revenue-dashboard__geography"
           />
         )}
-
-        {activeTab === 'payouts' && scope !== 'template' && !isCompactLayout && (
+        {activeTab === 'payouts' && scope !== 'template' && !isCompactLayout && ()
           <CreatorPayoutTracker
             payouts={dashboardData?.payouts || []}
             scope={scope}
@@ -426,7 +392,6 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
           />
         )}
       </div>
-
       {/* Dashboard Footer */}
       <div className="revenue-dashboard__footer">
         <div className="revenue-dashboard__last-updated">
@@ -435,8 +400,7 @@ export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({
             'Never'
           }
         </div>
-        
-        {dashboardData?.dataQuality && (
+        {dashboardData?.dataQuality && ()
           <div className="revenue-dashboard__data-quality">
             Data quality: {Math.round(dashboardData.dataQuality * 100)}%
           </div>

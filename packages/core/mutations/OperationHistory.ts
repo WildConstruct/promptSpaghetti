@@ -292,7 +292,7 @@ export class OperationHistory {
       payload: {,
         nodeId: operation.payload.node.id,
         snapshot: operation.payload.node,
-        connectedEdges: [] // Would be populated by the engine
+        connectedEdges: [] // Would be populated by the engine,
       }
     };
   }

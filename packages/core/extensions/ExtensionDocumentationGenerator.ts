@@ -132,7 +132,7 @@ export class ExtensionDocumentationGenerator {
       version: '1.0.0',
       generated: new Date().toISOString(),
       count: extensionPoints.length,
-      documents: extensionPoints.map(ep => ({)
+      documents: extensionPoints.map(ep => ({),
         id: ep.id,
         title: ep.name,
         content: `${ep.description} ${ep.interfaces.map(i => i.description).join(' ')}`,}

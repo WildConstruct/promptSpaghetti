@@ -194,7 +194,7 @@ export class SecureSessionManager extends EventEmitter {
     userId: string,
     context: SessionContext,
     securityLevel: SessionSecurityLevel = SessionSecurityLevel.MEDIUM,
-    mfaVerified: boolean = false
+    mfaVerified: boolean = false,
   ): Promise<{ session: SecureSession; token: string }> {
     const config = this.sessionConfigs.get(securityLevel)!;
     const deviceId = this.generateDeviceId(context);
@@ -277,7 +277,7 @@ export class SecureSessionManager extends EventEmitter {
       result.securityIssues.push({)
         type: 'critical',
         description: 'Session not found',
-        recommendation: 'Re-authenticate user'
+        recommendation: 'Re-authenticate user',
       });
       return result;
     }
@@ -287,7 +287,7 @@ export class SecureSessionManager extends EventEmitter {
       result.securityIssues.push({)
         type: 'critical',
         description: 'Invalid session token',
-        recommendation: 'Terminate session and re-authenticate'
+        recommendation: 'Terminate session and re-authenticate',
       });
       await this.terminateSession(sessionId, SessionTerminationReason.SECURITY_VIOLATION);
       return result;
@@ -297,7 +297,7 @@ export class SecureSessionManager extends EventEmitter {
       result.securityIssues.push({)
         type: 'critical',
         description: `Session is ${session.state}`,}
-        recommendation: 'Re-authenticate user'
+        recommendation: 'Re-authenticate user',
       });
       return result;
     }
@@ -307,7 +307,7 @@ export class SecureSessionManager extends EventEmitter {
       result.securityIssues.push({)
         type: 'critical',
         description: 'Session has expired',
-        recommendation: 'Re-authenticate user'
+        recommendation: 'Re-authenticate user',
       });
       await this.terminateSession(sessionId, SessionTerminationReason.TIMEOUT);
       return result;
@@ -446,7 +446,6 @@ export class SecureSessionManager extends EventEmitter {
     bySecurityLevel: Record<SessionSecurityLevel, number>;
     byDevice: Record<string, number>;
     averageSessionDuration: number;
-    } {
     const sessions = Array.from(this.sessions.values());
     const now = new Date();
     const stats = {
@@ -560,7 +559,7 @@ export class SecureSessionManager extends EventEmitter {
         issues.push({)
           type: 'critical',
           description: 'IP address mismatch detected',
-          recommendation: 'Terminate session and re-authenticate'
+          recommendation: 'Terminate session and re-authenticate',
         });
       } else {
         anomalies.push({)
@@ -576,7 +575,7 @@ export class SecureSessionManager extends EventEmitter {
       issues.push({)
         type: 'critical',
         description: 'Device fingerprint mismatch',
-        recommendation: 'Terminate session - possible session hijacking'
+        recommendation: 'Terminate session - possible session hijacking',
       });
     }
     // Check for suspicious location changes
@@ -596,7 +595,7 @@ export class SecureSessionManager extends EventEmitter {
       action,
       endpoint: context.requestHeaders['x-requested-endpoint'] || 'unknown',
       riskScore: this.calculateRiskScore(context),
-      anomalyDetected: false // Would be set by anomaly detection
+      anomalyDetected: false // Would be set by anomaly detection,
     };
     session.activities.push(activity);
     // Keep only last 100 activities
@@ -766,7 +765,7 @@ export class SecureSessionManager extends EventEmitter {
     for (const [sessionId, session] of this.sessions) {
       if (session.state !== SessionState.ACTIVE) continue;
       // Check for rapid activity patterns
-      const recentActivities = session.activities.filter(;)
+      const recentActivities = session.activities.filter(;);
         activity => activity.timestamp >= fiveMinutesAgo
       );
       if (recentActivities.length > 50) { // Too many requests
@@ -775,7 +774,7 @@ export class SecureSessionManager extends EventEmitter {
           type: 'rapidActivity',
           severity: 'high',
           description: 'Unusually high activity detected',
-          recommendation: 'Monitor for automation'
+          recommendation: 'Monitor for automation',
         });
       }
       // Check for location anomalies
@@ -788,7 +787,7 @@ export class SecureSessionManager extends EventEmitter {
             type: 'unusualTime',
             severity: 'medium',
             description: 'Activity outside typical hours',
-            recommendation: 'Verify user identity'
+            recommendation: 'Verify user identity',
           });
         }
       }

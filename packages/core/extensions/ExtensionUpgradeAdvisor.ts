@@ -75,7 +75,7 @@ export class ExtensionUpgradeAdvisor {
     availableVersions: string[],
     context: UpgradeContext,
   ): UpgradeAnalysis {
-    const upgradePath = extensionVersionManager.getUpgradePath(;)
+    const upgradePath = extensionVersionManager.getUpgradePath(;);
       currentExtension.version,
       targetVersion,
       availableVersions
@@ -111,7 +111,7 @@ export class ExtensionUpgradeAdvisor {
     targetVersion: string,
     context: UpgradeContext,
   ): MigrationPlan {
-    const analysis = this.analyzeUpgradePath(;)
+    const analysis = this.analyzeUpgradePath(;);
       currentExtension,
       targetVersion,
       [targetVersion],
@@ -157,7 +157,7 @@ export class ExtensionUpgradeAdvisor {
       changes: applicableChanges,
       impactLevel: this.calculateImpactLevel(applicableChanges),
       migrationRequired: applicableChanges.some(c => c.migrationRequired),
-      automatedMigration: applicableChanges.every(c => c.automatedMigration)
+      automatedMigration: applicableChanges.every(c => c.automatedMigration),
     };
   }
   /**
@@ -168,7 +168,7 @@ export class ExtensionUpgradeAdvisor {
     targetExtension: ExtensionManifest,
     context: UpgradeContext,
   ): UpgradeCompatibilityResult {
-    const compatibilityResult = extensionCompatibilityChecker.checkExtensionCompatibility(;)
+    const compatibilityResult = extensionCompatibilityChecker.checkExtensionCompatibility(;);
       targetExtension,
       {
         systemVersion: context.systemVersion,
@@ -178,12 +178,12 @@ export class ExtensionUpgradeAdvisor {
         browserInfo: context.browserInfo,
       }
     );
-    const dependencyConflicts = this.checkDependencyConflicts(;)
+    const dependencyConflicts = this.checkDependencyConflicts(;);
       currentExtension,
       targetExtension,
       context
     );
-    const permissionChanges = this.analyzePermissionChanges(;)
+    const permissionChanges = this.analyzePermissionChanges(;);
       currentExtension,
       targetExtension
     );
@@ -334,7 +334,7 @@ export class ExtensionUpgradeAdvisor {
         reason: 'Contains security fixes',
         risk,
         benefits: ['Security improvements', 'Vulnerability fixes'],
-        effort: risk === 'medium' ? 'medium' : 'low'
+        effort: risk === 'medium' ? 'medium' : 'low',
       });
     }
     return recommendations;
@@ -356,7 +356,7 @@ export class ExtensionUpgradeAdvisor {
       type: 'preparation',
       required: true,
       automated: false,
-      estimatedDuration: '5 minutes'
+      estimatedDuration: '5 minutes',
     });
     tasks.push({)
       id: 'validate-dependencies',
@@ -365,7 +365,7 @@ export class ExtensionUpgradeAdvisor {
       type: 'validation',
       required: true,
       automated: true,
-      estimatedDuration: '2 minutes'
+      estimatedDuration: '2 minutes',
     });
     // Add version-specific migration tasks
     const rules = this.migrationRules.get(currentExtension.id) || [];
@@ -387,7 +387,7 @@ export class ExtensionUpgradeAdvisor {
   ): UpgradeRisk[] {
     const risks: UpgradeRisk[] = [];
     // Breaking changes risk
-    const breakingChanges = this.checkBreakingChanges(;)
+    const breakingChanges = this.checkBreakingChanges(;);
       currentExtension.id,
       currentExtension.version,
       targetVersion
@@ -547,7 +547,7 @@ export class ExtensionUpgradeAdvisor {
         { name: 'Migration', duration: '30 minutes', tasks: tasks.filter(t => t.type === 'migration') },
         { name: 'Verification', duration: '15 minutes', tasks: tasks.filter(t => t.type === 'verification') }
       ],
-      totalDuration: path.estimatedDuration || '1 hour'
+      totalDuration: path.estimatedDuration || '1 hour',
     };
   }
   private generateMigrationPhases(analysis: UpgradeAnalysis): MigrationPhase[] {
@@ -556,19 +556,19 @@ export class ExtensionUpgradeAdvisor {
         name: 'Pre-upgrade',
         description: 'Prepare for upgrade',
         tasks: analysis.migrationTasks.filter(t => t.type === 'preparation'),
-        duration: '15 minutes'
+        duration: '15 minutes',
       },
       {
         name: 'Upgrade',
         description: 'Perform the upgrade',
         tasks: analysis.migrationTasks.filter(t => t.type === 'migration'),
-        duration: '30 minutes'
+        duration: '30 minutes',
       },
       {
         name: 'Post-upgrade',
         description: 'Verify upgrade success',
         tasks: analysis.migrationTasks.filter(t => t.type === 'verification'),
-        duration: '15 minutes'
+        duration: '15 minutes',
       }
     ];
   }

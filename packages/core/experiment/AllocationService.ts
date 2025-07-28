@@ -37,12 +37,11 @@ export class AllocationService {
   private cache: AllocationCache;
   private storage: AssignmentStorage;
   private metrics: AssignmentMetrics;
-  constructor()
+  constructor();
     config: AllocationServiceConfig,
     cache: AllocationCache,
     storage: AssignmentStorage,
     metrics: AssignmentMetrics,
-  ) {
     this.config = config;
     this.cache = cache;
     this.storage = storage;
@@ -137,7 +136,7 @@ export class AllocationService {
   ): Promise<Record<string, AssignmentResponse>> {
     const results: Record<string, AssignmentResponse> = {};
     // Process assignments in parallel for better performance
-    const assignments = await Promise.allSettled(;)
+    const assignments = await Promise.allSettled(;);
       experimentIds.map(experimentId => )
         this.assignUser({)
           userId,
@@ -145,7 +144,6 @@ export class AllocationService {
           sessionId,
           debugMode
         })
-      )
     );
     experimentIds.forEach((experimentId, index) => {
       const result = assignments[index];
@@ -218,7 +216,7 @@ export class AllocationService {
     // Store previous salt for consistency window
     this.config.saltStorage.previousSalts.push({)
       salt: oldSalt,
-      rotatedAt: new Date()
+      rotatedAt: new Date(),
     });
     // Clean up old salts (keep last 3 months)
     const threeMonthsAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
@@ -378,7 +376,7 @@ export class AllocationService {
       variant,
       assigned: true,
       reason,
-      debugInfo: debugMode ? {
+      debugInfo: debugMode ? {,
         hash: this.generateHash(assignment.userId, assignment.experimentId),
         bucket: this.getBucket(assignment.userId, assignment.experimentId),
         allocation: experiment?.trafficAllocation || {}
@@ -434,7 +432,7 @@ export function createAllocationService()
     async set(key: string, value: string, ttlSeconds: number) {
       this.store.set(key, {)
         value,
-        expires: Date.now() + (ttlSeconds * 1000)
+        expires: Date.now() + (ttlSeconds * 1000),
       });
     },
     async del(key: string) {

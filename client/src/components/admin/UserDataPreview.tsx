@@ -7,7 +7,6 @@
  * Provides comprehensive preview of user data before retention/deletion operations.
  * Shows data categories, volume estimates, affected systems, and retention controls.
  */
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   User, Database, Shield, FileText,
@@ -26,7 +25,6 @@ interface UserDataCategory {
   items: UserDataItem[];
   affectedSystems: string[];
 }
-
 interface UserDataItem {
   id: string;
   type: string;
@@ -37,7 +35,6 @@ interface UserDataItem {
   systemSource: string;
   hasPersonalData: boolean;
 }
-
 interface RetentionPolicy {
   id: string;
   name: string;
@@ -46,14 +43,12 @@ interface RetentionPolicy {
   applicableCategories: string[];
   complianceFramework: string;
 }
-
 interface UserDataPreviewProps {
   userId: string;
   userName: string;
   onRetentionAction?: (action: 'delete' | 'archive' | 'export', categories: string[]) => void;
 }
-
-const UserDataPreview: React.FC<UserDataPreviewProps> = ({ 
+const UserDataPreview: React.FC<UserDataPreviewProps> = ({ )
   userId, 
   userName,
   onRetentionAction 
@@ -66,7 +61,6 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [sensitivityFilter, setSensitivityFilter] = useState<string>('ALL');
   const [showRetentionActions, setShowRetentionActions] = useState(false);
-
   // Mock data for demonstration - wrapped in useMemo to prevent recreation
   const mockDataCategories: UserDataCategory[] = useMemo(() => [
     {
@@ -77,7 +71,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       dataSensitivity: 'HIGH',
       retentionPeriod: 2555, // 7 years
       affectedSystems: ['user_service', 'auth_service'],
-      items: [
+      items: [,
         {
           id: 'profile_1',
           type: 'Personal Info',
@@ -86,7 +80,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
           lastModified: '2024-03-15T00:00:00Z',
           dataSize: 512,
           systemSource: 'user_service',
-          hasPersonalData: true
+          hasPersonalData: true,
         },
         {
           id: 'profile_2',
@@ -96,7 +90,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
           lastModified: '2024-01-10T00:00:00Z',
           dataSize: 256,
           systemSource: 'hr_system',
-          hasPersonalData: true
+          hasPersonalData: true,
         }
       ]
     },
@@ -108,7 +102,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       dataSensitivity: 'MEDIUM',
       retentionPeriod: 365,
       affectedSystems: ['audit_service', 'analytics_service'],
-      items: [
+      items: [,
         {
           id: 'log_1',
           type: 'Login Events',
@@ -117,7 +111,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
           lastModified: '2024-07-22T00:00:00Z',
           dataSize: 8192,
           systemSource: 'audit_service',
-          hasPersonalData: false
+          hasPersonalData: false,
         },
         {
           id: 'log_2',
@@ -127,7 +121,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
           lastModified: '2024-07-21T00:00:00Z',
           dataSize: 7168,
           systemSource: 'analytics_service',
-          hasPersonalData: false
+          hasPersonalData: false,
         }
       ]
     },
@@ -139,7 +133,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       dataSensitivity: 'MEDIUM',
       retentionPeriod: 1095, // 3 years
       affectedSystems: ['content_service', 'graph_service'],
-      items: [
+      items: [,
         {
           id: 'content_1',
           type: 'Prompt Graphs',
@@ -148,7 +142,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
           lastModified: '2024-07-20T00:00:00Z',
           dataSize: 32768,
           systemSource: 'graph_service',
-          hasPersonalData: false
+          hasPersonalData: false,
         },
         {
           id: 'content_2',
@@ -158,7 +152,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
           lastModified: '2024-07-19T00:00:00Z',
           dataSize: 12288,
           systemSource: 'content_service',
-          hasPersonalData: false
+          hasPersonalData: false,
         }
       ]
     },
@@ -170,7 +164,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       dataSensitivity: 'HIGH',
       retentionPeriod: 1825, // 5 years
       affectedSystems: ['notification_service', 'support_service'],
-      items: [
+      items: [,
         {
           id: 'comm_1',
           type: 'Email Communications',
@@ -179,7 +173,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
           lastModified: '2024-07-15T00:00:00Z',
           dataSize: 2048,
           systemSource: 'notification_service',
-          hasPersonalData: true
+          hasPersonalData: true,
         },
         {
           id: 'comm_2',
@@ -189,12 +183,11 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
           lastModified: '2024-06-30T00:00:00Z',
           dataSize: 1024,
           systemSource: 'support_service',
-          hasPersonalData: true
+          hasPersonalData: true,
         }
       ]
     }
   ], []); // Empty dependency array since this is static mock data
-
   const mockRetentionPolicies: RetentionPolicy[] = useMemo(() => [
     {
       id: 'policy_1',
@@ -202,7 +195,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       description: 'Standard retention for user profile and activity data',
       retentionPeriodDays: 2555, // 7 years
       applicableCategories: ['profile_data', 'communication_data'],
-      complianceFramework: 'GDPR'
+      complianceFramework: 'GDPR',
     },
     {
       id: 'policy_2',
@@ -210,7 +203,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       description: 'Short-term retention for system activity logs',
       retentionPeriodDays: 365, // 1 year
       applicableCategories: ['activity_logs'],
-      complianceFramework: 'SOX'
+      complianceFramework: 'SOX',
     },
     {
       id: 'policy_3',
@@ -218,10 +211,9 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       description: 'Medium-term retention for user-generated content',
       retentionPeriodDays: 1095, // 3 years
       applicableCategories: ['content_data'],
-      complianceFramework: 'Internal'
+      complianceFramework: 'Internal',
     }
   ], []); // Empty dependency array since this is static mock data
-
   useEffect(() => {
     // Simulate loading user data
     setLoading(true);
@@ -231,9 +223,8 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       setLoading(false);
     }, 1000);
   }, [userId, mockDataCategories, mockRetentionPolicies]);
-
   const toggleCategoryExpansion = (category: string) => {
-    setExpandedCategories(prev => {
+    setExpandedCategories(prev => {)
       const newSet = new Set(prev);
       if (newSet.has(category)) {
         newSet.delete(category);
@@ -243,9 +234,8 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       return newSet;
     });
   };
-
   const toggleCategorySelection = (category: string) => {
-    setSelectedCategories(prev => {
+    setSelectedCategories(prev => {)
       const newSet = new Set(prev);
       if (newSet.has(category)) {
         newSet.delete(category);
@@ -255,26 +245,21 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
       return newSet;
     });
   };
-
   const selectAllCategories = () => {
     setSelectedCategories(new Set(dataCategories.map(cat => cat.category)));
   };
-
   const clearAllSelections = () => {
     setSelectedCategories(new Set());
   };
-
   const formatDataSize = (bytes: number): string => {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-    return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+    if (bytes < 1024) return `${bytes} B`;}
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;}
+    if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;}
+    return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;}
   };
-
   const formatDate = (dateStr: string): string => {
     return new Date(dateStr).toLocaleDateString();
   };
-
   const getSensitivityColor = (sensitivity: string): string => {
     switch (sensitivity) {
     case 'CRITICAL': return 'text-red-600 bg-red-50 border-red-200';
@@ -284,44 +269,37 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
     default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
-
   const handleRetentionAction = (action: 'delete' | 'archive' | 'export') => {
     if (selectedCategories.size === 0) {
       alert('Please select at least one data category.');
       return;
     }
-
     const selectedCategoryArray = Array.from(selectedCategories);
     onRetentionAction?.(action, selectedCategoryArray);
   };
-
-  const filteredCategories = dataCategories.filter(category => {
-    const matchesSearch = category.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredCategories = dataCategories.filter(category => {)
+    const matchesSearch = category.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||;
                          category.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSensitivity = sensitivityFilter === 'ALL' || category.dataSensitivity === sensitivityFilter;
     return matchesSearch && matchesSensitivity;
   });
-
   const totalSelectedItems = Array.from(selectedCategories).reduce((sum, categoryId) => {
     const category = dataCategories.find(cat => cat.category === categoryId);
     return sum + (category?.itemCount || 0);
   }, 0);
-
   const totalSelectedVolume = Array.from(selectedCategories).reduce((sum, categoryId) => {
     const category = dataCategories.find(cat => cat.category === categoryId);
     return sum + (category?.dataVolume || 0);
   }, 0);
-
   if (loading) {
-    return (
+    return ()
       <div className="p-6 text-center">
         <RefreshCw className="w-8 h-8 mx-auto mb-4 animate-spin text-blue-500" />
         <p>Loading user data preview...</p>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="bg-white rounded-lg shadow-sm border p-6">
@@ -341,7 +319,6 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
             Retention Actions
           </button>
         </div>
-
         {/* Summary Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
           <div className="bg-blue-50 rounded-lg p-4">
@@ -378,7 +355,6 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
           </div>
         </div>
       </div>
-
       {/* Filters and Search */}
       <div className="bg-white rounded-lg shadow-sm border p-4">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0">
@@ -421,10 +397,9 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
           </div>
         </div>
       </div>
-
       {/* Data Categories */}
       <div className="space-y-4">
-        {filteredCategories.map((category) => (
+        {filteredCategories.map((category) => ()
           <div key={category.category} className="bg-white rounded-lg shadow-sm border">
             {/* Category Header */}
             <div className="p-4 border-b">
@@ -440,16 +415,16 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
                     onClick={() => toggleCategoryExpansion(category.category)}
                     className="flex items-center space-x-2 text-left"
                   >
-                    {expandedCategories.has(category.category) ? (
+                    {expandedCategories.has(category.category) ? ()
                       <ChevronDown className="w-4 h-4 text-gray-400" />
-                    ) : (
+                    ) : ()
                       <ChevronRight className="w-4 h-4 text-gray-400" />
                     )}
                     <h3 className="text-lg font-medium text-gray-900">{category.displayName}</h3>
                   </button>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getSensitivityColor(category.dataSensitivity)}`}>
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getSensitivityColor(category.dataSensitivity)}`}>}
                     {category.dataSensitivity}
                   </span>
                   <span className="text-sm text-gray-500">
@@ -460,13 +435,12 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
                   </span>
                 </div>
               </div>
-
               {/* Category Summary */}
               <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div>
                   <span className="text-gray-500">Affected Systems:</span>
                   <div className="mt-1">
-                    {category.affectedSystems.map((system) => (
+                    {category.affectedSystems.map((system) => ()
                       <span key={system} className="inline-block bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs mr-1 mb-1">
                         {system}
                       </span>
@@ -485,18 +459,17 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
                 </div>
               </div>
             </div>
-
             {/* Expanded Category Details */}
-            {expandedCategories.has(category.category) && (
+            {expandedCategories.has(category.category) && ()
               <div className="p-4">
                 <h4 className="text-sm font-medium text-gray-900 mb-3">Data Items</h4>
                 <div className="space-y-3">
-                  {category.items.map((item) => (
+                  {category.items.map((item) => ()
                     <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2">
                           <h5 className="font-medium text-gray-900">{item.type}</h5>
-                          {item.hasPersonalData && (
+                          {item.hasPersonalData && ()
                             <span className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full">
                               Personal Data
                             </span>
@@ -520,13 +493,11 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
           </div>
         ))}
       </div>
-
       {/* Retention Actions Panel */}
-      {showRetentionActions && (
+      {showRetentionActions && ()
         <div className="bg-white rounded-lg shadow-sm border p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Retention Actions</h3>
-          
-          {selectedCategories.size > 0 ? (
+          {selectedCategories.size > 0 ? ()
             <div className="space-y-4">
               <div className="p-4 bg-blue-50 rounded-lg">
                 <h4 className="font-medium text-blue-900 mb-2">Selection Summary</h4>
@@ -545,7 +516,6 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
                   </div>
                 </div>
               </div>
-
               <div className="flex space-x-3">
                 <button
                   onClick={() => handleRetentionAction('export')}
@@ -570,7 +540,7 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
                 </button>
               </div>
             </div>
-          ) : (
+          ) : ()
             <div className="text-center py-8">
               <AlertTriangle className="w-12 h-12 mx-auto text-yellow-500 mb-4" />
               <p className="text-gray-600">Select one or more data categories to perform retention actions.</p>
@@ -578,12 +548,11 @@ const UserDataPreview: React.FC<UserDataPreviewProps> = ({
           )}
         </div>
       )}
-
       {/* Applicable Retention Policies */}
       <div className="bg-white rounded-lg shadow-sm border p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Applicable Retention Policies</h3>
         <div className="space-y-3">
-          {retentionPolicies.map((policy) => (
+          {retentionPolicies.map((policy) => ()
             <div key={policy.id} className="p-4 border border-gray-200 rounded-lg">
               <div className="flex items-center justify-between">
                 <div>

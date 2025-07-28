@@ -65,7 +65,7 @@ export interface ProviderRegistry {
   unregister: (hookId: string) => void;
   getHooks: () => ProviderHook[];
   getHook: (hookId: string) => ProviderHook | undefined;
-  executeHooks: <T extends keyof ProviderHook>()
+  executeHooks: <T extends keyof ProviderHook>(),
     hookName: T, 
     ...args: any[]
   ) => Promise<void>;
@@ -79,7 +79,7 @@ export const useEditorProviders = ()
   initialNodes: Node[],
   initialEdges: Edge[],
   selectedNodeId: string | null,
-  validationErrors: any[] = []
+  validationErrors: any[] = [],
 ) => {
   const graphStore = useGraphStore();
   const reactFlowInstance = useReactFlow();
@@ -100,7 +100,7 @@ export const useEditorProviders = ()
   }), [initialNodes, initialEdges, selectedNodeId, isLoading, graphStore.hasUnsavedChanges, validationErrors]);
   // Create editor actions
   const editorActions = useMemo((): EditorActions => ({)
-    addNode: async (node: Node) => {
+    addNode: async (node: Node) => {,
       // Execute provider hooks before adding
       const hooks = getSortedHooks();
       for (const hook of hooks) {
@@ -126,7 +126,7 @@ export const useEditorProviders = ()
       }
       graphStore.updateNode(nodeId, data);
     },
-    removeNode: async (nodeId: string) => {
+    removeNode: async (nodeId: string) => {,
       // Execute provider hooks before removing - allow prevention
       const hooks = getSortedHooks();
       for (const hook of hooks) {
@@ -139,7 +139,7 @@ export const useEditorProviders = ()
       }
       graphStore.deleteNode(nodeId);
     },
-    addEdge: async (edge: Edge) => {
+    addEdge: async (edge: Edge) => {,
       // Execute provider hooks before adding
       const hooks = getSortedHooks();
       for (const hook of hooks) {
@@ -152,7 +152,7 @@ export const useEditorProviders = ()
       }
       graphStore.addEdge(edge);
     },
-    removeEdge: async (edgeId: string) => {
+    removeEdge: async (edgeId: string) => {,
       // Execute provider hooks before removing - allow prevention
       const hooks = getSortedHooks();
       for (const hook of hooks) {
@@ -166,11 +166,11 @@ export const useEditorProviders = ()
       const newEdges = initialEdges.filter(e => e.id !== edgeId);
       graphStore.setEdges(newEdges);
     },
-    selectNode: (nodeId: string | null) => {
+    selectNode: (nodeId: string | null) => {,
       // This would be handled by the parent component
       // Provider hooks will be called via useEffect when selectedNodeId changes
     },
-    focusNode: (nodeId: string) => {
+    focusNode: (nodeId: string) => {,
       if (reactFlowInstance) {
         const node = initialNodes.find(n => n.id === nodeId);
         if (node) {
@@ -178,7 +178,7 @@ export const useEditorProviders = ()
         }
       }
     },
-    saveGraph: async () => {
+    saveGraph: async () => {,
       setIsLoading(true);
       try {
         // Execute pre-save hooks
@@ -191,7 +191,7 @@ export const useEditorProviders = ()
         // Perform actual save (would integrate with existing save logic)
         await graphStore.saveProject({)
           name: 'Current Graph',
-          description: 'Auto-saved graph'
+          description: 'Auto-saved graph',
         });
       } finally {
         setIsLoading(false);
@@ -212,7 +212,7 @@ export const useEditorProviders = ()
         setIsLoading(false);
       }
     },
-    exportGraph: (format = 'json') => {
+    exportGraph: (format = 'json') => {,
       // Return graph data in requested format
       const data = { nodes: initialNodes, edges: initialEdges };
       switch (format) {
@@ -225,11 +225,11 @@ export const useEditorProviders = ()
         return data;
       }
     },
-    validateGraph: () => {
+    validateGraph: () => {,
       // This would trigger validation - actual validation logic would be elsewhere
       // Providers can hook into onValidationChange
     },
-    executeGraph: async () => {
+    executeGraph: async () => {,
       setIsLoading(true);
       try {
         // Execute pre-execution hooks
@@ -268,7 +268,7 @@ export const useEditorProviders = ()
   }, []);
   // Provider registry implementation
   const registry: ProviderRegistry = useMemo(() => ({)
-    register: (hook: ProviderHook) => {
+    register: (hook: ProviderHook) => {,
       if (providerRegistry.has(hook.id)) {
         console.warn(`Provider hook ${hook.id} is already registered. Replacing existing hook.`);}
       }
@@ -278,7 +278,7 @@ export const useEditorProviders = ()
         hook.onInit(editorContext, editorActions);
       }
     },
-    unregister: (hookId: string) => {
+    unregister: (hookId: string) => {,
       const hook = providerRegistry.get(hookId);
       if (hook) {
         if (hook.onDestroy) {
@@ -289,7 +289,7 @@ export const useEditorProviders = ()
     },
     getHooks: () => getSortedHooks(),
     getHook: (hookId: string) => providerRegistry.get(hookId),
-    executeHooks: async <T extends keyof ProviderHook>()
+    executeHooks: async <T extends keyof ProviderHook>(),
       hookName: T,
       ...args: any[]
     ) => {
@@ -410,7 +410,7 @@ export const createConsoleLoggerHook = (): ProviderHook => createProviderHook({)
       prevCount: prevEdges.length ,
     });
   },
-  onSelectionChange: (selectedNodeId) => {
+  onSelectionChange: (selectedNodeId) => {,
     console.log('[EditorProvider] Selection changed', { selectedNodeId });
   }
 });
@@ -430,7 +430,7 @@ export const createAutoSaveHook = (interval = 30000): ProviderHook => {
         }
       }, interval);
     },
-    onDestroy: () => {
+    onDestroy: () => {,
       if (autoSaveTimer) {
         clearInterval(autoSaveTimer);
         autoSaveTimer = null;
@@ -463,7 +463,7 @@ export const createValidationHook = (): ProviderHook => createProviderHook({)
       _validationTimestamp: Date.now(),
     };
   },
-  onValidationChange: (errors) => {
+  onValidationChange: (errors) => {,
     if (errors.length > 0) {
       console.warn('[EditorProvider] Validation errors detected', errors);
     }

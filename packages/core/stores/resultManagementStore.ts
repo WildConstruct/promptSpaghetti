@@ -131,7 +131,7 @@ interface ResultManagementState {
 }
 
 export const useResultManagementStore = create<ResultManagementState>()()
-  persist()
+  persist();
     (set, get) => ({)
       // Initial state
       savedResults: {},
@@ -204,13 +204,13 @@ export const useResultManagementStore = create<ResultManagementState>()()
             [id]: {
               ...currentResult,
               ...updates,
-              lastModified: new Date()
+              lastModified: new Date(),
             }
           }
         }));
         get().refreshStats();
       },
-      deleteResult: (id: string) => {
+      deleteResult: (id: string) => {,
         const { [id]: deleted, ...remainingResults } = get().savedResults;
         const now = new Date();
         set((state) => ({)
@@ -223,7 +223,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
                 type: 'save',
                 timestamp: now,
                 resultId: id,
-                details: 'Result deleted'
+                details: 'Result deleted',
               },
               ...state.stats.recentActivity.slice(0, 49)
             ]
@@ -239,7 +239,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
         });
         get().refreshStats();
       },
-      duplicateResult: async (id: string) => {
+      duplicateResult: async (id: string) => {,
         const original = get().savedResults[id];
         if (!original) {
           throw ErrorFactory.createValidationError()
@@ -264,26 +264,26 @@ export const useResultManagementStore = create<ResultManagementState>()()
         return get().saveResult(duplicated);
       },
       // Selection Actions
-      selectResult: (id: string) => {
+      selectResult: (id: string) => {,
         set((state) => ({)
           selectedResultIds: new Set([...state.selectedResultIds, id])
         }));
       },
-      deselectResult: (id: string) => {
+      deselectResult: (id: string) => {,
         set((state) => ({)
-          selectedResultIds: new Set([...state.selectedResultIds].filter(rid => rid !== id))
+          selectedResultIds: new Set([...state.selectedResultIds].filter(rid => rid !== id)),
         }));
       },
-      selectAll: (filtered = true) => {
+      selectAll: (filtered = true) => {,
         const results = filtered ? get().getFilteredResults() : Object.values(get().savedResults);
         set({)
-          selectedResultIds: new Set(results.map(r => r.id))
+          selectedResultIds: new Set(results.map(r => r.id)),
         });
       },
-      clearSelection: () => {
+      clearSelection: () => {,
         set({ selectedResultIds: new Set() });
       },
-      toggleResultSelection: (id: string) => {
+      toggleResultSelection: (id: string) => {,
         const isSelected = get().selectedResultIds.has(id);
         if (isSelected) {
           get().deselectResult(id);
@@ -304,7 +304,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
         get().updateResult(id, {)
           metadata: {,
             ...get().savedResults[id]?.metadata,
-            rating: rating as 1 | 2 | 3 | 4 | 5
+            rating: rating as 1 | 2 | 3 | 4 | 5,
           }
         });
         const now = new Date();
@@ -362,7 +362,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
                 type: 'note',
                 timestamp: now,
                 resultId: id,
-                details: 'Added note'
+                details: 'Added note',
               },
               ...state.stats.recentActivity.slice(0, 49)
             ]
@@ -412,12 +412,12 @@ export const useResultManagementStore = create<ResultManagementState>()()
             [id]: {
               ...current,
               ...updates,
-              lastModified: new Date()
+              lastModified: new Date(),
             }
           }
         }));
       },
-      deleteCollection: (id: string) => {
+      deleteCollection: (id: string) => {,
         const { [id]: deleted, ...remainingCollections } = get().collections;
         set({ collections: remainingCollections });
       },
@@ -434,16 +434,16 @@ export const useResultManagementStore = create<ResultManagementState>()()
         get().updateCollection(collectionId, { resultIds: filteredIds });
       },
       // Filtering and Search Actions
-      setFilter: (filter: ResultFilter) => {
+      setFilter: (filter: ResultFilter) => {,
         set({ currentFilter: filter });
       },
-      clearFilter: () => {
+      clearFilter: () => {,
         set({ currentFilter: {} });
       },
       setSorting: (sortBy: ResultManagementState['sortBy'], order: 'asc' | 'desc') => {
         set({ sortBy, sortOrder: order });
       },
-      searchResults: (query: string) => {
+      searchResults: (query: string) => {,
         const results = Object.values(get().savedResults);
         const lowerQuery = query.toLowerCase();
         return results.filter(result => )
@@ -461,7 +461,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
       bulkUpdateWorkflow: (resultIds: string[], workflow: Partial<SavedResult['workflow']>) => {
         resultIds.forEach(id => get().updateWorkflowStatus(id, workflow));
       },
-      bulkDelete: (resultIds: string[]) => {
+      bulkDelete: (resultIds: string[]) => {,
         resultIds.forEach(id => get().deleteResult(id));
       },
       bulkExport: async (resultIds: string[], format: string) => {
@@ -486,7 +486,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
         }));
       },
       // Analytics Actions
-      refreshStats: () => {
+      refreshStats: () => {,
         const results = Object.values(get().savedResults);
         if (results.length === 0) {
           set((state) => ({)
@@ -538,7 +538,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
           }
         }));
       },
-      getFilteredResults: () => {
+      getFilteredResults: () => {,
         const { savedResults, currentFilter, sortBy, sortOrder } = get();
         let results = Object.values(savedResults);
         // Apply filters
@@ -597,7 +597,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
         });
         return results;
       },
-      getResultsByCollection: (collectionId: string) => {
+      getResultsByCollection: (collectionId: string) => {,
         const collection = get().collections[collectionId];
         if (!collection) return [];
         const { savedResults } = get();
@@ -605,13 +605,13 @@ export const useResultManagementStore = create<ResultManagementState>()()
           .map(id => savedResults[id])
           .filter(Boolean);
       },
-      getRecentResults: (limit = 10) => {
+      getRecentResults: (limit = 10) => {,
         const results = Object.values(get().savedResults);
         return results
           .sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime())
           .slice(0, limit);
       },
-      getTopRatedResults: (limit = 10) => {
+      getTopRatedResults: (limit = 10) => {,
         const results = Object.values(get().savedResults);
         return results
           .filter(r => r.metadata?.rating && r.metadata.rating > 0)
@@ -622,11 +622,11 @@ export const useResultManagementStore = create<ResultManagementState>()()
     {
       name: 'result-management-storage',
       // Custom serializer to handle Set and Date objects
-      serialize: (state) => JSON.stringify({)
+      serialize: (state) => JSON.stringify({),
         ...state,
         selectedResultIds: Array.from(state.selectedResultIds),
       }),
-      deserialize: (str) => {
+      deserialize: (str) => {,
         const parsed = JSON.parse(str);
         return {
           ...parsed,
@@ -641,7 +641,7 @@ export const useResultManagementStore = create<ResultManagementState>()()
                 lastModified: new Date(result.lastModified),
                 metadata: {,
                   ...result.metadata,
-                  createdAt: result.metadata?.createdAt ? new Date(result.metadata.createdAt) : undefined
+                  createdAt: result.metadata?.createdAt ? new Date(result.metadata.createdAt) : undefined,
                 }
               }
             ])
@@ -652,12 +652,10 @@ export const useResultManagementStore = create<ResultManagementState>()()
               {
                 ...collection,
                 createdAt: new Date(collection.createdAt),
-                lastModified: new Date(collection.lastModified)
+                lastModified: new Date(collection.lastModified),
               }
             ])
-          )
         };
       }
     }
-  )
 );

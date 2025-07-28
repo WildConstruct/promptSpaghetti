@@ -398,7 +398,7 @@ export const FunnelTimeTracking: React.FC<FunnelTimeTrackingProps> = ({)
         aggregation: { interval: selectedTimeframe }
       };
       const results = await analyticsInfrastructure.queryMetrics(query);
-      const processedData = await processTimeTrackingData(;)
+      const processedData = await processTimeTrackingData(;);
         funnelDefinition,
         results,
         selectedTimeframe,
@@ -452,7 +452,7 @@ export const FunnelTimeTracking: React.FC<FunnelTimeTrackingProps> = ({)
       insights: {,
         trends: trackingData.trendAnalysis.flatMap(t => t.insights),
         seasonal: trackingData.seasonalPatterns.flatMap(p => p.recommendations),
-        anomalies: trackingData.anomalies.filter(a => a.severity === 'critical' || a.severity === 'high')
+        anomalies: trackingData.anomalies.filter(a => a.severity === 'critical' || a.severity === 'high'),
       },
       metadata: {,
         exportedAt: Date.now(),
@@ -466,14 +466,14 @@ export const FunnelTimeTracking: React.FC<FunnelTimeTrackingProps> = ({)
     return <TimeTrackingLoadingState />;
   }
   if (error || !trackingData) {
-    return ()
+    return ();
       <TimeTrackingErrorState 
         error={error || 'No data available'} 
         onRetry={loadTrackingData} 
       />
     );
   }
-  return ()
+  return ();
     <div className="funnel-time-tracking">
       <TimeTrackingHeader
         funnelDefinition={funnelDefinition}
@@ -542,7 +542,7 @@ const TimeTrackingHeader: React.FC<TimeTrackingHeaderProps> = ({)
     { key: 'seasonality', label: 'Seasonality' },
     { key: 'anomalies', label: 'Anomalies' }
   ];
-  return ()
+  return ();
     <div className="time-tracking-header">
       <div className="header-info">
         <h3>Time-based Performance: {funnelDefinition.name}</h3>
@@ -617,7 +617,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({)
   conversionVelocity,
   granularity
 }) => {
-  return ()
+  return ();
     <div className="timeline-view">
       <div className="timeline-charts">
         <ConversionRateTimeline
@@ -651,7 +651,7 @@ const ConversionRateTimeline: React.FC<ConversionRateTimelineProps> = ({ data, g
   const maxRate = Math.max(...data.map(d => d.overallMetrics.conversionRate));
   const chartWidth = 800;
   const chartHeight = 200;
-  return ()
+  return ();
     <div className="conversion-rate-timeline">
       <h4>Conversion Rate Over Time</h4>
       <svg width={chartWidth} height={chartHeight} className="timeline-chart">
@@ -660,7 +660,7 @@ const ConversionRateTimeline: React.FC<ConversionRateTimelineProps> = ({ data, g
           {data.map((point, index) => {
             const x = (index / (data.length - 1)) * (chartWidth - 120);
             const y = ((maxRate - point.overallMetrics.conversionRate) / maxRate) * (chartHeight - 40);
-            return ()
+            return ();
               <g key={point.timestamp}>
                 <circle
                   cx={x}
@@ -697,7 +697,7 @@ const ConversionRateTimeline: React.FC<ConversionRateTimelineProps> = ({ data, g
           {/* Y-axis labels */}
           {[0, 25, 50, 75, 100].map(tick => {)
             const y = ((100 - tick) / 100) * (chartHeight - 40);
-            return ()
+            return ();
               <g key={tick}>
                 <text
                   x="-10"
@@ -732,7 +732,7 @@ interface VelocityTimelineProps {
   granularity: TimeGranularity;
 }
 const VelocityTimeline: React.FC<VelocityTimelineProps> = ({ data, granularity }) => {
-  return ()
+  return ();
     <div className="velocity-timeline">
       <h4>Conversion Velocity Trends</h4>
       <div className="velocity-metrics">
@@ -771,7 +771,7 @@ interface StepTimeCardProps {
   analysis: StepTimeAnalysis;
 }
 const StepTimeCard: React.FC<StepTimeCardProps> = ({ analysis }) => {
-  return ()
+  return ();
     <div className="step-time-card">
       <h5>{analysis.stepName}</h5>
       <div className="time-metrics">
@@ -810,7 +810,7 @@ interface TrendsViewProps {
 }
 const TrendsView: React.FC<TrendsViewProps> = ({ trendAnalysis, comparativePeriods }) => {
   const significantTrends = trendAnalysis.filter(t => t.significance < 0.05);
-  return ()
+  return ();
     <div className="trends-view">
       <div className="trends-overview">
         <h4>Significant Trends</h4>
@@ -838,7 +838,7 @@ interface TrendCardProps {
   trend: TrendAnalysis;
 }
 const TrendCard: React.FC<TrendCardProps> = ({ trend }) => {
-  return ()
+  return ();
     <div className={`trend-card ${trend.trend}`}>}
       <div className="trend-header">
         <h5>{trend.stepName || 'Overall Funnel'}</h5>
@@ -886,7 +886,7 @@ interface ComparativePeriodCardProps {
   comparison: ComparativePeriodAnalysis;
 }
 const ComparativePeriodCard: React.FC<ComparativePeriodCardProps> = ({ comparison }) => {
-  return ()
+  return ();
     <div className="comparative-period-card">
       <div className="period-header">
         <h5>{comparison.comparisonPeriod.label} vs {comparison.baselinePeriod.label}</h5>
@@ -924,7 +924,7 @@ interface SeasonalityViewProps {
   seasonalPatterns: SeasonalPattern[];
 }
 const SeasonalityView: React.FC<SeasonalityViewProps> = ({ seasonalPatterns }) => {
-  return ()
+  return ();
     <div className="seasonality-view">
       <h4>Seasonal Patterns</h4>
       <div className="patterns-grid">
@@ -942,7 +942,7 @@ interface SeasonalPatternCardProps {
   pattern: SeasonalPattern;
 }
 const SeasonalPatternCard: React.FC<SeasonalPatternCardProps> = ({ pattern }) => {
-  return ()
+  return ();
     <div className="seasonal-pattern-card">
       <h5>{pattern.pattern.toUpperCase()} Pattern</h5>
       <p>{pattern.description}</p>
@@ -995,7 +995,7 @@ interface AnomaliesViewProps {
 const AnomaliesView: React.FC<AnomaliesViewProps> = ({ anomalies, onAnomalyInvestigate }) => {
   const activeAnomalies = anomalies.filter(a => !a.autoResolved && a.investigationStatus !== 'resolved');
   const criticalAnomalies = activeAnomalies.filter(a => a.severity === 'critical');
-  return ()
+  return ();
     <div className="anomalies-view">
       <div className="anomalies-summary">
         <h4>Performance Anomalies</h4>
@@ -1035,7 +1035,7 @@ interface AnomalyCardProps {
   onInvestigate: () => void;
 }
 const AnomalyCard: React.FC<AnomalyCardProps> = ({ anomaly, onInvestigate }) => {
-  return ()
+  return ();
     <div className={`anomaly-card ${anomaly.severity}`}>}
       <div className="anomaly-header">
         <h5>{anomaly.stepName || 'Overall Funnel'} - {anomaly.metric}</h5>
@@ -1151,7 +1151,7 @@ async function processTimeTrackingData()
         revenuePerEntry: 2.5 + Math.random(),
         revenuePerConversion: 15 + Math.random() * 10,
         dropOffCount: 850 + Math.floor(Math.random() * 100),
-        dropOffRate: 85 - conversionRate
+        dropOffRate: 85 - conversionRate,
       },
       stepMetrics: funnelDefinition.steps.map((step, stepIndex) => ({)
         stepId: step.id,
@@ -1162,7 +1162,7 @@ async function processTimeTrackingData()
         averageTimeSpent: 60000 + (stepIndex * 30000) + Math.random() * 30000,
         dropOffs: 150 + Math.floor(Math.random() * 50),
         dropOffRate: 15 + (stepIndex * 5) + Math.random() * 5,
-        revenue: 500 + Math.random() * 200
+        revenue: 500 + Math.random() * 200,
       })),
       environmentalFactors: [,
         {
@@ -1212,7 +1212,7 @@ async function processTimeTrackingData()
           value: 18.5,
           consistency: 0.8,
           duration: 1,
-          contributingFactors: ['Business user engagement']
+          contributingFactors: ['Business user engagement'],
         }
       ],
       troughs: [,
@@ -1221,7 +1221,7 @@ async function processTimeTrackingData()
           value: 12.3,
           consistency: 0.7,
           duration: 1,
-          contributingFactors: ['Lower traffic volume']
+          contributingFactors: ['Lower traffic volume'],
         }
       ],
       businessImpact: 12.5,
@@ -1271,7 +1271,7 @@ async function processTimeTrackingData()
     trendAnalysis,
     seasonalPatterns,
     anomalies,
-    stepTimeAnalysis: funnelDefinition.steps.map(step => ({)
+    stepTimeAnalysis: funnelDefinition.steps.map(step => ({),
       stepId: step.id,
       stepName: step.name,
       timeToReach: {,
@@ -1317,23 +1317,23 @@ async function processTimeTrackingData()
           frequency: 35,
           impact: 12,
           timeframe: 'Step completion',
-          description: 'Users spend 3x longer browsing before converting'
+          description: 'Users spend 3x longer browsing before converting',
         }
       ]
     })),
-    conversionVelocity: performanceTimeline.map(point => ({)
+    conversionVelocity: performanceTimeline.map(point => ({),
       timestamp: point.timestamp,
       period: point.period,
       averageConversionTime: point.overallMetrics.averageTimeToConvert,
       conversionVelocity: point.overallMetrics.totalConversions / 24, // per hour
       velocityTrend: Math.random() > 0.5 ? 'accelerating' : 'stable',
-      stepVelocities: point.stepMetrics.map(step => ({)
+      stepVelocities: point.stepMetrics.map(step => ({),
         stepId: step.stepId,
         stepName: step.stepName,
         averageProcessingTime: step.averageTimeSpent,
         throughput: step.conversions / 24,
         efficiency: step.conversionRate / (step.averageTimeSpent / 60000),
-        bottleneckSeverity: step.conversionRate < 70 ? 'moderate' : 'minor'
+        bottleneckSeverity: step.conversionRate < 70 ? 'moderate' : 'minor',
       })),
       bottleneckAnalysis: point.stepMetrics,
         .filter(step => step.conversionRate < 70)

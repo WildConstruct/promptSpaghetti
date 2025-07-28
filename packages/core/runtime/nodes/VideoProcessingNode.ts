@@ -115,7 +115,7 @@ export class VideoGenerationNode extends AdvancedRuntimeNode {
           provider,
           model: result.metadata.model,
           generation_time: generationTime,
-          cost: result.usage.cost || result.usage.estimated_cost
+          cost: result.usage.cost || result.usage.estimated_cost,
         }
       };
       return {
@@ -168,7 +168,7 @@ export class VideoGenerationNode extends AdvancedRuntimeNode {
               endpoint: config.endpoint || 'http://localhost:7860',
               apiType: 'automatic1111',
               apiKey: config.apiKey,
-              defaultModel: config.model || 'svd-xt'
+              defaultModel: config.model || 'svd-xt',
             }
           );
           break;
@@ -271,7 +271,7 @@ export class VideoToVideoNode extends AdvancedRuntimeNode {
         },
         executionTime: processingTime,
         tokensUsed: { input: prompt.length, output: 0 },
-        cost: result.usage.cost || 0
+        cost: result.usage.cost || 0,
       };
     } catch (error) {
       throw new Error(`Video transformation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
@@ -281,7 +281,7 @@ export class VideoToVideoNode extends AdvancedRuntimeNode {
     // Similar to VideoGenerationNode initialization
     // Only supporting RunwayML for video-to-video currently
     if (config.provider === 'runwayml') {
-      const adapter = new RunwayMLAdapter(;)
+      const adapter = new RunwayMLAdapter(;);
         `runwayml-v2v-${this.nodeId}`,}
         {
           apiKey: config.apiKey || '',

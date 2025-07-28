@@ -45,7 +45,7 @@ describe('PasswordComplexityValidator', () => {
     });
     test('should detect configuration errors', () => {
       validator.updateConfig({)
-        minimumScore: 150 // Invalid score > 100
+        minimumScore: 150 // Invalid score > 100,
       });
       const validation = validator.validateConfig();
       expect(validation.valid).toBe(false);
@@ -203,10 +203,10 @@ describe('PasswordComplexityValidator', () => {
         weight: 5,
         category: 'pattern' as const,
         severity: 'warning' as const,
-        validate: (password: string) => ({)
+        validate: (password: string) => ({),
           passed: password.includes('custom'),
           score: password.includes('custom') ? 10 : 0,
-          message: 'Custom rule result'
+          message: 'Custom rule result',
         })
       };
       validator.addRule(customRule);
@@ -313,7 +313,7 @@ describe('PasswordComplexityValidator', () => {
         'VeryStr0ng!P@ssw0rd123'
       ];
       const startTime = Date.now();
-      const results = await Promise.all(;)
+      const results = await Promise.all(;);
         passwords.map(pwd => validator.validatePassword(pwd))
       );
       const endTime = Date.now();
@@ -337,7 +337,7 @@ describe('PasswordComplexityValidator', () => {
         weight: 5,
         category: 'pattern' as const,
         severity: 'error' as const,
-        validate: () => {
+        validate: () => {,
           throw new Error('Validation error');
         }
       };
@@ -347,7 +347,7 @@ describe('PasswordComplexityValidator', () => {
       expect(result).toBeDefined();
       expect(result.ruleResults.length).toBeGreaterThan(0);
       // Find the faulty rule result
-      const faultyResult = result.ruleResults.find(r => ;)
+      const faultyResult = result.ruleResults.find(r => ;);
         r.message.includes('Rule validation failed')
       );
       expect(faultyResult).toBeDefined();
@@ -359,32 +359,32 @@ describe('PasswordComplexityValidator', () => {
       {
         password: 'password',
         expectedValid: false,
-        description: 'common weak password'
+        description: 'common weak password',
       },
       {
         password: 'Password123',
         expectedValid: false,
-        description: 'predictable pattern'
+        description: 'predictable pattern',
       },
       {
         password: 'MyS3cur3!P@ssw0rd',
         expectedValid: true,
-        description: 'strong mixed password'
+        description: 'strong mixed password',
       },
       {
         password: 'Tr7$mK9#nQ2@pL8&',
         expectedValid: true,
-        description: 'very strong random password'
+        description: 'very strong random password',
       },
       {
         password: '123456789',
         expectedValid: false,
-        description: 'numeric sequence'
+        description: 'numeric sequence',
       },
       {
         password: 'qwertyuiop',
         expectedValid: false,
-        description: 'keyboard pattern'
+        description: 'keyboard pattern',
       }
     ];
     testCases.forEach(({ password, expectedValid, description }) => {

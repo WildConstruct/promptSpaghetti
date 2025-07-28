@@ -23,7 +23,7 @@ export declare class ExtensionManifestManager {
     /**
      * Validate manifest with context
      */
-    validateManifest()
+    validateManifest();
       manifest: ExtensionManifest,
       systemVersion?: string,
       platform?: string,

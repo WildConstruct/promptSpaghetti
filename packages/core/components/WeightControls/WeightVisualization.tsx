@@ -81,11 +81,11 @@ const PieChart: React.FC<WeightVisualizationProps> = ({)
     const labelRadius = radius * 0.7;
     return {
       x: centerX + labelRadius * Math.cos(midAngleRad),
-      y: centerY + labelRadius * Math.sin(midAngleRad)
+      y: centerY + labelRadius * Math.sin(midAngleRad),
     };
   };
   if (totalWeight === 0) {
-    return ()
+    return ();
       <div className={`weight-visualization pie-chart ${className}`} style={{ width, height }}>}
         <svg width={width} height={height}>
           <circle
@@ -110,7 +110,7 @@ const PieChart: React.FC<WeightVisualizationProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`weight-visualization pie-chart ${className}`} style={{ width, height }}>}
       <svg width={width} height={height}>
         {slices.map((slice, index) => ()
@@ -164,7 +164,7 @@ const BarGraph: React.FC<WeightVisualizationProps> = ({)
   }, [options, height]);
   const barWidth = Math.max(20, (width - 40) / options.length - 5);
   const barSpacing = 5;
-  return ()
+  return ();
     <div className={`weight-visualization bar-graph ${className}`} style={{ width, height }}>}
       <svg width={width} height={height}>
         {/* Y-axis */}
@@ -189,7 +189,7 @@ const BarGraph: React.FC<WeightVisualizationProps> = ({)
         {bars.map((bar, index) => {
           const x = 35 + index * (barWidth + barSpacing);
           const y = height - 40 - bar.height;
-          return ()
+          return ();
             <g key={bar.option.id}>
               <rect
                 x={x}
@@ -255,7 +255,7 @@ export interface WeightLegendProps {
 }
 
 export 
-        return ()
+        return ();
           <div
             key={option.id}
             style={{

@@ -302,7 +302,7 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({)
     }
     return <div className="flex items-center">{stars}</div>;
   }, []);
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
       <div 
         ref={containerRef}
@@ -325,7 +325,7 @@ export const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps> = ({)
               }`}
               style={{ 
                 transform: `scale(${zoomLevel})`,}
-                filter: imageLoaded ? 'none' : 'blur(4px)'
+                filter: imageLoaded ? 'none' : 'blur(4px)',
               }}
               onLoad={() => setImageLoaded(true)}
               onClick={previewConfig.zoom_enabled ? toggleZoom : undefined}

@@ -38,7 +38,7 @@ describe('SessionPriorityManager', () => {
         securityRequirement: 70,
         businessCriticality: 65,
       };
-      const result = manager.registerSession(;)
+      const result = manager.registerSession(;);
         'session-1',
         'user-1',
         'device-1',

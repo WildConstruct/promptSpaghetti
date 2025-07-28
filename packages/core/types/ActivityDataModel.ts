@@ -460,7 +460,7 @@ export const ACTIVITY_TYPE_LABELS: Record<ActivityType, string> = {
   authentication: 'Authentication',
   authorization: 'Authorization',
   file_operation: 'File Operation',
-  workflow_event: 'Workflow Event'
+  workflow_event: 'Workflow Event',
 };
 
 export const ACTIVITY_SEVERITY_COLORS: Record<ActivitySeverity, string> = {

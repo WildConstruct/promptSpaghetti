@@ -461,7 +461,7 @@ export class RateLimitConfigurationManager {
       ...profile,
       metadata: {,
         ...profile.metadata,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
     });
   }
@@ -508,7 +508,7 @@ export class RateLimitConfigurationManager {
         continue;
       }
       // Check all conditions
-      const allConditionsMet = rule.conditions.every(condition =>;)
+      const allConditionsMet = rule.conditions.every(condition =>;);
         ConditionEvaluator.evaluate(condition, requestContext)
       );
       if (allConditionsMet) {
@@ -783,7 +783,7 @@ export class RateLimitConfigurationPresets {
           maxRequests: 100,
           scope: RateLimitScope.USER,
           action: { type: 'block', statusCode: 402 },
-          customMessage: 'Free tier limit exceeded. Please upgrade your plan.'
+          customMessage: 'Free tier limit exceeded. Please upgrade your plan.',
         },
         {
           id: 'premium-tier',

@@ -393,7 +393,7 @@ The Team`
     userId: UserId,
     channel: string,
     _template: unknown, // Unused parameter
-    _context: NotificationContext // Unused parameter
+    _context: NotificationContext // Unused parameter,
   ): Promise<void> {
     const delivery: NotificationDelivery = {
       id: `${notification.id}_${channel}_${Date.now()}`,}
@@ -540,7 +540,7 @@ The Team`
       data: {,
         notifications,
         count: notifications.length,
-        activities: notifications.map(n => ({)
+        activities: notifications.map(n => ({),
           description: n.message,
           actor_name: 'User', // Would fetch from database
           time_ago: this.getTimeAgo(n.created_at),

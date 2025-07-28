@@ -81,7 +81,7 @@ export class LocalModelAdapter extends BaseAIModel {
         tokensPerMinute: 50000,
       },
       tags: ['local', 'open-source', config.modelType || 'custom'],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     const capabilities: ModelCapabilities = {
       inputTypes: ['text', 'json'],
@@ -205,7 +205,7 @@ export class LocalModelAdapter extends BaseAIModel {
       const response = await fetch(`${this.config.endpoint}${healthEndpoint}`, {)}
         method: 'GET',
         headers: this._buildHeaders(),
-        signal: AbortSignal.timeout(this.config.timeout || 10000)
+        signal: AbortSignal.timeout(this.config.timeout || 10000),
       });
       if (!response.ok) {
         throw new Error(`Connection test failed: ${response.status} ${response.statusText}`);}
@@ -236,7 +236,7 @@ export class LocalModelAdapter extends BaseAIModel {
   }
   private async _warmupModel(): Promise<void> {
     try {
-      const warmupPayload = this._buildPayload(;)
+      const warmupPayload = this._buildPayload(;);
         [{ role: 'user', content: 'Hello' }],
         { max_tokens: 1, temperature: 0 }
       );
@@ -291,7 +291,7 @@ export class LocalModelAdapter extends BaseAIModel {
             temperature: options?.temperature || 0.8,
             top_p: options?.top_p || 0.9,
             top_k: options?.top_k || 40,
-            repetition_penalty: options?.repeat_penalty || 1.1
+            repetition_penalty: options?.repeat_penalty || 1.1,
           }
         };
       default:
@@ -308,7 +308,7 @@ export class LocalModelAdapter extends BaseAIModel {
           method: 'POST',
           headers: this._buildHeaders(),
           body: JSON.stringify(payload),
-          signal: AbortSignal.timeout(this.config.timeout || 60000)
+          signal: AbortSignal.timeout(this.config.timeout || 60000),
         });
         if (!response.ok) {
           const errorData = await response.text().catch(() => '');
@@ -339,7 +339,7 @@ export class LocalModelAdapter extends BaseAIModel {
         }
         return {
           role: msg.role || 'user',
-          content: msg.content || JSON.stringify(msg)
+          content: msg.content || JSON.stringify(msg),
         };
       }));
     } else if (input && typeof input === 'object' && input.messages) {
@@ -359,7 +359,7 @@ export class LocalModelAdapter extends BaseAIModel {
     const usage = {
       input_tokens: response.prompt_eval_count || 0,
       output_tokens: response.eval_count || 0,
-      total_tokens: (response.prompt_eval_count || 0) + (response.eval_count || 0)
+      total_tokens: (response.prompt_eval_count || 0) + (response.eval_count || 0),
     };
     return {
       content,
@@ -389,7 +389,7 @@ export class LocalModelAdapter extends BaseAIModel {
       // Update other parameters based on model info
       this.updateMetadata({)
         description: `${this._metadata.description} - ${modelInfo.details?.family || 'Unknown family'}`,}
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       });
     }
   }

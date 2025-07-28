@@ -152,7 +152,7 @@ export declare class AuditLogger extends BrowserEventEmitter {
     /**
      * Log a data access operation
      */
-    logDataAccess()
+    logDataAccess();
       context: OperationContext,
       resourceType: string,
       resourceId: string,

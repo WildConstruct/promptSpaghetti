@@ -418,7 +418,7 @@ export class ConversionArchitectureManager {
       requiresExplicitConsent: true,
       deterministicOnly: false,
       probabilisticThreshold: 0.8,
-      linkingCooldown: 24 * 60 * 60 * 1000 // 24 hours
+      linkingCooldown: 24 * 60 * 60 * 1000 // 24 hours,
     });
   }
   /**
@@ -456,7 +456,6 @@ export class ConversionArchitectureManager {
   private calculateAttribution(touchpoints: TouchPoint[]): {
     primary: AttributionModel;
     assisted: AttributionModel[];
-  } {
     if (touchpoints.length === 0) {
       // Return default attribution for direct conversion
       const defaultTouchpoint: TouchPoint = {
@@ -498,7 +497,7 @@ export class ConversionArchitectureManager {
       name: 'first_touch',
       weight: 1.0,
       touchpoint: firstTouchpoint,
-      attribution_value: firstTouchpoint.value || 0
+      attribution_value: firstTouchpoint.value || 0,
     };
   }
   private calculateLastTouchAttribution(touchpoints: TouchPoint[]): AttributionModel {
@@ -507,7 +506,7 @@ export class ConversionArchitectureManager {
       name: 'last_touch',
       weight: 1.0,
       touchpoint: lastTouchpoint,
-      attribution_value: lastTouchpoint.value || 0
+      attribution_value: lastTouchpoint.value || 0,
     };
   }
   private calculateLinearAttribution(touchpoints: TouchPoint[]): AttributionModel {
@@ -517,7 +516,7 @@ export class ConversionArchitectureManager {
       name: 'linear',
       weight,
       touchpoint: touchpoints[Math.floor(touchpoints.length / 2)], // Representative touchpoint
-      attribution_value: totalValue * weight
+      attribution_value: totalValue * weight,
     };
   }
   private calculateTimeDecayAttribution(touchpoints: TouchPoint[]): AttributionModel {
@@ -537,7 +536,7 @@ export class ConversionArchitectureManager {
       name: 'time_decay',
       weight: normalizedWeights[maxWeightIndex],
       touchpoint: touchpoints[maxWeightIndex],
-      attribution_value: (touchpoints[maxWeightIndex].value || 0) * normalizedWeights[maxWeightIndex]
+      attribution_value: (touchpoints[maxWeightIndex].value || 0) * normalizedWeights[maxWeightIndex],
     };
   }
   private calculatePositionBasedAttribution(touchpoints: TouchPoint[]): AttributionModel {
@@ -558,7 +557,7 @@ export class ConversionArchitectureManager {
       name: 'position_based',
       weight: weights[maxWeightIndex],
       touchpoint: touchpoints[maxWeightIndex],
-      attribution_value: (touchpoints[maxWeightIndex].value || 0) * weights[maxWeightIndex]
+      attribution_value: (touchpoints[maxWeightIndex].value || 0) * weights[maxWeightIndex],
     };
   }
   private selectPrimaryAttribution(models: AttributionModel[]): AttributionModel {

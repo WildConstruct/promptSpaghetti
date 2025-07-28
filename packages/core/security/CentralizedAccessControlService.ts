@@ -120,11 +120,10 @@ export class CentralizedAccessControlService extends EventEmitter {
   private auditLog: AuditLogEntry[] = [];
   private metrics: AccessControlMetrics;
   private policies: Map<string, ClassificationAccessPolicy> = new Map();
-  constructor()
+  constructor();
     config: AccessControlConfig,
     inheritanceFramework: InheritanceFramework,
     dataClassifier: DataClassifier,
-  ) {
     super();
     this.config = config;
     this.dataClassifier = dataClassifier;
@@ -174,7 +173,7 @@ export class CentralizedAccessControlService extends EventEmitter {
         abacDecision = await this.abacEngine.evaluate(request);
       }
       // Combine decisions
-      const finalDecision = await this.combineDecisions(;)
+      const finalDecision = await this.combineDecisions(;);
         request,
         rbacDecision,
         abacDecision,
@@ -196,7 +195,7 @@ export class CentralizedAccessControlService extends EventEmitter {
       }
       return finalDecision;
     } catch (error) {
-      const errorDecision = this.createDecision(;)
+      const errorDecision = this.createDecision(;);
         'INDETERMINATE',
         `Access control error: ${error.message}`,}
         request
@@ -238,7 +237,7 @@ export class CentralizedAccessControlService extends EventEmitter {
         environment: 'system',
         timestamp: new Date(),
         source: 'access_control_service',
-        requestId: 'perm_eval_' + Date.now()
+        requestId: 'perm_eval_' + Date.now(),
       }
     );
   }
@@ -315,7 +314,7 @@ export class CentralizedAccessControlService extends EventEmitter {
           dataType: request.object.dataType || 'unknown',
           context: {},
           source: 'access_control_service',
-          timestamp: new Date()
+          timestamp: new Date(),
         });
         request.object.classification = classificationResult.level as unknown as DataClassificationLevel;
       } catch (error) {
@@ -565,7 +564,7 @@ export class CentralizedAccessControlService extends EventEmitter {
    */
   private async checkCompliance()
     request: AccessRequest,
-    decision: 'PERMIT' | 'DENY' | 'INDETERMINATE'
+    decision: 'PERMIT' | 'DENY' | 'INDETERMINATE',
   ): Promise<{ compliant: boolean; reason?: string }> {
     // Check time-based restrictions
     if (request.object.classification === 'RESTRICTED') {
@@ -664,7 +663,7 @@ export class CentralizedAccessControlService extends EventEmitter {
     this.emit('notification', {)
       type: obligation.action,
       parameters: obligation.parameters,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -675,7 +674,7 @@ export class CentralizedAccessControlService extends EventEmitter {
     this.emit('encryptionRequired', {)
       action: obligation.action,
       parameters: obligation.parameters,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -686,7 +685,7 @@ export class CentralizedAccessControlService extends EventEmitter {
     this.emit('monitoringSetup', {)
       action: obligation.action,
       parameters: obligation.parameters,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**

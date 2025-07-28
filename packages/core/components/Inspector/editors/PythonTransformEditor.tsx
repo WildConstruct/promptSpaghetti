@@ -157,7 +157,7 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
     }
     return baseStyles;
   };
-  return ()
+  return ();
     <div className="python-transform-editor">
       {/* BASIC LEVEL: Essential code editor for filmmakers */}
       <ProgressiveDisclosureSection
@@ -199,7 +199,7 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
                   borderRadius: 2,
                   color: 'white',
                   cursor: 'pointer',
-                  opacity: isValidating ? 0.5 : 1
+                  opacity: isValidating ? 0.5 : 1,
                 }}
               >
                 Validate
@@ -360,7 +360,7 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
                       borderRadius: 2,
                       color: 'white',
                       cursor: 'pointer',
-                      opacity: allowedModules.includes(module) ? 1 : 0.7
+                      opacity: allowedModules.includes(module) ? 1 : 0.7,
                     }}
                   >
                     {module}

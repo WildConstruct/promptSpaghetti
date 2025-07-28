@@ -134,7 +134,7 @@ export declare class SessionPriorityManager extends EventEmitter {
     /**
      * Register a new session with priority management
      */
-    registerSession()
+    registerSession();
       sessionId: string,
       userId: string,
       deviceId: string,

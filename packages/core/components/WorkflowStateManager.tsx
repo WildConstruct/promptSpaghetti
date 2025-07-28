@@ -87,7 +87,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
     ? locks.filter(lock => lock.resource_id === resourceId)
     : [];
   // Get pending approvals for current user
-  const pendingApprovals = approvals.filter(approval => ;)
+  const pendingApprovals = approvals.filter(approval => ;);
     approval.status === 'pending' && 
     (approval.requester_id === currentUserId || approval.approved_by === currentUserId)
   );
@@ -110,7 +110,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
       console.error('Failed to transition state:', error);
     }
   }, [resourceId, currentUserId, transitionResourceState, onStateChange]);
-  const handleApprovalAction = useCallback(async (;)
+  const handleApprovalAction = useCallback(async (;);
     approvalId: string, 
     action: 'approve' | 'reject', 
     comment?: string
@@ -128,7 +128,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
       console.error(`Failed to ${action} workflow:`, error);}
     }
   }, [currentUserId, approveWorkflow, rejectWorkflow, fetchApprovals, fetchStates, workspaceId]);
-  const handleLockAction = useCallback(async (;)
+  const handleLockAction = useCallback(async (;);
     action: 'acquire' | 'release',
     lockId?: string,
     lockType?: 'edit' | 'state_change' | 'delete' | 'custom'
@@ -137,7 +137,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
     try {
       if (action === 'acquire') {
         const lock = await acquireLock(resourceId, currentUserId, lockType || 'edit', {)
-          reason: 'Manual lock acquisition'
+          reason: 'Manual lock acquisition',
         });
         onLockAcquired?.(lock.id);
       } else if (lockId) {
@@ -173,14 +173,14 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
     return transitions.filter(t => t.from_state_id === stateId);
   };
   if (loading) {
-    return ()
+    return ();
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <XCircleIcon className="h-5 w-5 text-red-400" />
@@ -192,7 +192,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="bg-white rounded-lg shadow">
       {/* Header */}
       <div className="border-b border-gray-200">

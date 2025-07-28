@@ -6,7 +6,6 @@
  * 
  * Task: E18-1753114562561-695DBB - Create quality dashboards
  */
-
 import React, { useState } from 'react';
 import {
   BarChart,
@@ -56,13 +55,12 @@ export interface CodeQualityMetricsProps {
   className?: string;
 }
 
-export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
+export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({)
   metrics,
   compact = false,
   className = ''
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
-
   // Color scheme for charts
   const chartColors = {
     excellent: '#10b981',
@@ -70,39 +68,34 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
     fair: '#f59e0b',
     poor: '#ef4444',
     critical: '#dc2626',
-    primary: '#6366f1'
+    primary: '#6366f1',
   };
-
   // Prepare complexity distribution data
-  const complexityData = [
+  const complexityData = [;
     { range: '1-5 (Simple)', count: metrics.complexity.distribution['1-5'], color: chartColors.excellent },
     { range: '6-10 (Moderate)', count: metrics.complexity.distribution['6-10'], color: chartColors.good },
     { range: '11-20 (Complex)', count: metrics.complexity.distribution['11-20'], color: chartColors.fair },
     { range: '21-50 (Very Complex)', count: metrics.complexity.distribution['21-50'], color: chartColors.poor },
     { range: '50+ (Extremely Complex)', count: metrics.complexity.distribution['50+'], color: chartColors.critical }
   ];
-
   // Prepare maintainability trend data
-  const maintainabilityTrendData = metrics.maintainability.trends.map((index, day) => ({
-    day: `Day ${day + 1}`,
-    index: Math.round(index)
+  const maintainabilityTrendData = metrics.maintainability.trends.map((index, day) => ({)
+    day: `Day ${day + 1}`,}
+    index: Math.round(index),
   }));
-
   // Prepare linting data
-  const lintingTrendData = metrics.linting.trends.map((issues, day) => ({
-    day: `Day ${day + 1}`,
-    issues: issues
+  const lintingTrendData = metrics.linting.trends.map((issues, day) => ({)
+    day: `Day ${day + 1}`,}
+    issues: issues,
   }));
-
   // Prepare rule breakdown data
-  const ruleBreakdownData = metrics.linting.ruleBreakdowns
+  const ruleBreakdownData = metrics.linting.ruleBreakdowns;
     .sort((a, b) => b.count - a.count)
     .slice(0, 10)
-    .map(rule => ({
+    .map(rule => ({)
       ...rule,
-      color: rule.severity === 'error' ? chartColors.poor : chartColors.fair
+      color: rule.severity === 'error' ? chartColors.poor : chartColors.fair,
     }));
-
   // Get maintainability status
   const getMaintainabilityStatus = (index: number) => {
     if (index >= 90) return { status: 'excellent', color: 'text-green-600' };
@@ -111,7 +104,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
     if (index >= 60) return { status: 'poor', color: 'text-orange-600' };
     return { status: 'critical', color: 'text-red-600' };
   };
-
   // Get technical debt priority color
   const getTechnicalDebtColor = (priority: string) => {
     switch (priority) {
@@ -127,14 +119,13 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
       return 'outline';
     }
   };
-
   // Custom tooltip for charts
   const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: unknown[]; label?: string }) => {
     if (active && payload && payload.length) {
-      return (
+      return ()
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900 mb-2">{label}</p>
-          {payload.map((entry: unknown, index: number) => (
+          {payload.map((entry: unknown, index: number) => ()
             <div key={index} className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-2">
                 <div 
@@ -151,10 +142,9 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
     }
     return null;
   };
-
   if (compact) {
-    return (
-      <div className={`code-quality-metrics-compact ${className}`}>
+    return ()
+      <div className={`code-quality-metrics-compact ${className}`}>}
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center justify-between">
@@ -176,9 +166,7 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                   <div className="text-lg font-bold">{metrics.linting.totalIssues}</div>
                 </div>
               </div>
-              
               <Progress value={metrics.maintainability.index} className="h-2" />
-              
               <div className="text-xs text-gray-600">
                 {metrics.duplication.percentage}% duplication • {metrics.technicalDebt.totalMinutes}min debt
               </div>
@@ -188,11 +176,9 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
       </div>
     );
   }
-
   const maintainabilityStatus = getMaintainabilityStatus(metrics.maintainability.index);
-
-  return (
-    <div className={`code-quality-metrics ${className}`}>
+  return ()
+    <div className={`code-quality-metrics ${className}`}>}
       {/* Header */}
       <div className="mb-6">
         <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
@@ -202,15 +188,13 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                 <div className="flex items-center space-x-3">
                   <Code className="w-8 h-8 text-purple-600" />
                   <div>
-                    <h2 className={`text-2xl font-bold ${maintainabilityStatus.color}`}>
+                    <h2 className={`text-2xl font-bold ${maintainabilityStatus.color}`}>}
                       {metrics.maintainability.index}/100
                     </h2>
                     <p className="text-gray-600">Maintainability Index</p>
                   </div>
                 </div>
-                
                 <div className="h-16 border-l border-gray-300"></div>
-                
                 <div className="grid grid-cols-4 gap-6 text-sm">
                   <div>
                     <div className="font-medium text-gray-700">Avg Complexity</div>
@@ -234,7 +218,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                   </div>
                 </div>
               </div>
-              
               <Badge className={maintainabilityStatus.color} variant="outline" size="lg">
                 {maintainabilityStatus.status}
               </Badge>
@@ -242,7 +225,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
           </CardContent>
         </Card>
       </div>
-
       {/* Code Quality Details Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-5">
@@ -252,7 +234,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
           <TabsTrigger value="linting">Linting</TabsTrigger>
           <TabsTrigger value="debt">Tech Debt</TabsTrigger>
         </TabsList>
-
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6 mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -285,7 +266,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                 </div>
               </CardContent>
             </Card>
-
             {/* Issues Trend */}
             <Card>
               <CardHeader>
@@ -316,7 +296,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
               </CardContent>
             </Card>
           </div>
-
           {/* High Complexity Files */}
           <Card>
             <CardHeader>
@@ -324,7 +303,7 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {metrics.complexity.highComplexityFiles.slice(0, 10).map((file, index) => (
+                {metrics.complexity.highComplexityFiles.slice(0, 10).map((file, index) => ()
                   <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded">
                     <div className="flex items-center space-x-2">
                       <AlertTriangle className="w-4 h-4 text-amber-500" />
@@ -333,7 +312,7 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                     <Badge variant="secondary" size="sm">High Complexity</Badge>
                   </div>
                 ))}
-                {metrics.complexity.highComplexityFiles.length === 0 && (
+                {metrics.complexity.highComplexityFiles.length === 0 && ()
                   <div className="text-center py-8">
                     <CheckCircle className="w-12 h-12 mx-auto mb-3 text-green-500" />
                     <p className="text-gray-600">No high complexity files detected</p>
@@ -343,7 +322,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
             </CardContent>
           </Card>
         </TabsContent>
-
         {/* Complexity Tab */}
         <TabsContent value="complexity" className="space-y-6 mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -366,8 +344,8 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                         fill="#8884d8"
                         dataKey="count"
                       >
-                        {complexityData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        {complexityData.map((entry, index) => ()
+                          <Cell key={`cell-${index}`} fill={entry.color} />}
                         ))}
                       </Pie>
                       <Tooltip content={<CustomTooltip />} />
@@ -377,7 +355,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                 </div>
               </CardContent>
             </Card>
-
             {/* Complexity Stats */}
             <Card>
               <CardHeader>
@@ -399,8 +376,7 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                       <div className="text-sm text-gray-600">Maximum Complexity</div>
                     </div>
                   </div>
-                  
-                  {complexityData.map((range, index) => (
+                  {complexityData.map((range, index) => ()
                     <div key={index} className="space-y-2">
                       <div className="flex justify-between text-sm">
                         <span>{range.range}</span>
@@ -417,7 +393,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
             </Card>
           </div>
         </TabsContent>
-
         {/* Duplication Tab */}
         <TabsContent value="duplication" className="space-y-6 mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
@@ -434,7 +409,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                 </div>
               </CardContent>
             </Card>
-            
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center space-x-3">
@@ -450,7 +424,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                 </div>
               </CardContent>
             </Card>
-            
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center space-x-3">
@@ -467,7 +440,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
               </CardContent>
             </Card>
           </div>
-
           {/* Duplicate Blocks */}
           <Card>
             <CardHeader>
@@ -475,7 +447,7 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {metrics.duplication.duplicatedBlocks.map((block, index) => (
+                {metrics.duplication.duplicatedBlocks.map((block, index) => ()
                   <div key={index} className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center space-x-3">
@@ -491,11 +463,10 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                         {block.files.length} files
                       </Badge>
                     </div>
-                    
                     <div className="text-sm">
                       <div className="font-medium text-gray-700 mb-2">Affected Files:</div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
-                        {block.files.map((file, fileIndex) => (
+                        {block.files.map((file, fileIndex) => ()
                           <div key={fileIndex} className="font-mono text-xs text-gray-600 p-1 bg-gray-50 rounded">
                             {file}
                           </div>
@@ -504,8 +475,7 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                     </div>
                   </div>
                 ))}
-                
-                {metrics.duplication.duplicatedBlocks.length === 0 && (
+                {metrics.duplication.duplicatedBlocks.length === 0 && ()
                   <div className="text-center py-12">
                     <CheckCircle className="w-16 h-16 mx-auto mb-4 text-green-500" />
                     <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -520,7 +490,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
             </CardContent>
           </Card>
         </TabsContent>
-
         {/* Linting Tab */}
         <TabsContent value="linting" className="space-y-6 mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -543,7 +512,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                 </div>
               </CardContent>
             </Card>
-
             {/* Issue Summary */}
             <Card>
               <CardHeader>
@@ -565,14 +533,12 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                       <div className="text-sm text-gray-600">Warnings</div>
                     </div>
                   </div>
-                  
                   <div>
                     <div className="text-3xl font-bold text-gray-900">
                       {metrics.linting.totalIssues}
                     </div>
                     <div className="text-sm text-gray-600">Total Issues</div>
                   </div>
-                  
                   <Progress 
                     value={((metrics.linting.totalIssues - metrics.linting.errorCount) / metrics.linting.totalIssues) * 100} 
                     className="h-2"
@@ -581,7 +547,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
               </CardContent>
             </Card>
           </div>
-
           {/* Rule Details */}
           <Card>
             <CardHeader>
@@ -589,10 +554,10 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {metrics.linting.ruleBreakdowns.map((rule, index) => (
+                {metrics.linting.ruleBreakdowns.map((rule, index) => ()
                   <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded">
                     <div className="flex items-center space-x-3">
-                      <Bug className={`w-4 h-4 ${rule.severity === 'error' ? 'text-red-500' : 'text-yellow-500'}`} />
+                      <Bug className={`w-4 h-4 ${rule.severity === 'error' ? 'text-red-500' : 'text-yellow-500'}`} />}
                       <div>
                         <div className="font-medium">{rule.rule}</div>
                         <div className="text-sm text-gray-600">{rule.count} occurrences</div>
@@ -611,7 +576,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
             </CardContent>
           </Card>
         </TabsContent>
-
         {/* Technical Debt Tab */}
         <TabsContent value="debt" className="space-y-6 mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
@@ -628,7 +592,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                 </div>
               </CardContent>
             </Card>
-            
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center space-x-3">
@@ -642,7 +605,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                 </div>
               </CardContent>
             </Card>
-            
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center space-x-3">
@@ -657,7 +619,6 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
               </CardContent>
             </Card>
           </div>
-
           {/* Technical Debt Breakdown */}
           <Card>
             <CardHeader>
@@ -667,7 +628,7 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
               <div className="space-y-4">
                 {metrics.technicalDebt.breakdown
                   .sort((a, b) => b.minutes - a.minutes)
-                  .map((category, index) => (
+                  .map((category, index) => ()
                     <div key={index} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
                         <div>
@@ -680,21 +641,19 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                           {category.priority}
                         </Badge>
                       </div>
-                      
                       <Progress 
                         value={(category.minutes / metrics.technicalDebt.totalMinutes) * 100} 
                         className="h-2 mb-3"
                       />
-                      
                       <div className="text-sm">
                         <div className="font-medium text-gray-700 mb-2">Affected Files:</div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
-                          {category.files.slice(0, 6).map((file, fileIndex) => (
+                          {category.files.slice(0, 6).map((file, fileIndex) => ()
                             <div key={fileIndex} className="font-mono text-xs text-gray-600 p-1 bg-gray-50 rounded">
                               {file}
                             </div>
                           ))}
-                          {category.files.length > 6 && (
+                          {category.files.length > 6 && ()
                             <div className="text-xs text-gray-500 p-1">
                               +{category.files.length - 6} more files
                             </div>
@@ -704,8 +663,7 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
                     </div>
                   ))
                 }
-                
-                {metrics.technicalDebt.breakdown.length === 0 && (
+                {metrics.technicalDebt.breakdown.length === 0 && ()
                   <div className="text-center py-12">
                     <CheckCircle className="w-16 h-16 mx-auto mb-4 text-green-500" />
                     <h3 className="text-lg font-medium text-gray-900 mb-2">

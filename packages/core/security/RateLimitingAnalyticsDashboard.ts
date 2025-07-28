@@ -215,12 +215,11 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
   private mlUpdateTimer?: NodeJS.Timeout;
   private historicalData: Map<string, any[]> = new Map();
   private startTime: Date;
-  constructor()
+  constructor();
     rateLimitingService: RateLimitingService,
     throttlingEngine?: AdaptiveThrottlingRulesEngine,
     performanceMetrics?: RateLimitingPerformanceMetrics,
     config?: Partial<AnalyticsDashboardConfig>
-  ) {
     super();
     this.rateLimitingService = rateLimitingService;
     this.throttlingEngine = throttlingEngine;
@@ -317,7 +316,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
     } catch (error) {
       this.emit('analyticsError', {)
         error,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -453,18 +452,18 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
         rateLimiting: 90 + Math.random() * 10,
         throttling: 85 + Math.random() * 10,
         dataProcessing: 88 + Math.random() * 10,
-        alerting: 92 + Math.random() * 8
+        alerting: 92 + Math.random() * 8,
       },
-      degradationFactors: overallScore < 80 ? [
+      degradationFactors: overallScore < 80 ? [,
         {
           factor: 'High memory usage',
           impact: 15,
-          recommendation: 'Consider increasing allocated memory'
+          recommendation: 'Consider increasing allocated memory',
         },
         {
           factor: 'Response time degradation',
           impact: 20,
-          recommendation: 'Optimize rate limiting algorithms'
+          recommendation: 'Optimize rate limiting algorithms',
         }
       ] : []
     };
@@ -481,12 +480,12 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
       currentCapacity,
       peakCapacity: Math.max(currentCapacity, 85 + Math.random() * 10),
       averageUtilization: currentCapacity * 0.8,
-      bottlenecks: currentCapacity > 80 ? [
+      bottlenecks: currentCapacity > 80 ? [,
         {
           component: 'Rate Limiting Engine',
           utilizationLevel: currentCapacity,
           impactScore: 75,
-          scalingRecommendation: 'Scale horizontally by adding more rate limiting nodes'
+          scalingRecommendation: 'Scale horizontally by adding more rate limiting nodes',
         }
       ] : []
     };
@@ -504,13 +503,13 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
         target: 100,
         current: metrics?.responseTime?.average || 85,
         compliance: Math.max(0, 100 - ((metrics?.responseTime?.average || 85) - 100) / 100 * 100),
-        violations: Math.floor(Math.random() * 5)
+        violations: Math.floor(Math.random() * 5),
       },
       availabilitySLA: {,
         target: 99.9,
         current: 99.95,
         downtime: Math.random() * 10,
-        incidents: Math.floor(Math.random() * 3)
+        incidents: Math.floor(Math.random() * 3),
       },
       throughputSLA: {,
         target: 1000,
@@ -546,7 +545,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
           '/api/users': Math.floor(Math.random() * 50) + 20
         },
         conversionRate: 85 + Math.random() * 10,
-        riskScore: 15 + Math.random() * 10
+        riskScore: 15 + Math.random() * 10,
       },
       {
         segment: 'Free Users',
@@ -557,7 +556,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
           '/api/users': Math.floor(Math.random() * 100) + 50
         },
         conversionRate: 45 + Math.random() * 20,
-        riskScore: 35 + Math.random() * 15
+        riskScore: 35 + Math.random() * 15,
       }
     ];
   }
@@ -573,7 +572,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
       averageResponseTime: 80 + Math.random() * 100,
       errorRate: Math.random() * 5,
       businessValue: Math.random() * 100,
-      optimizationPotential: Math.random() * 50
+      optimizationPotential: Math.random() * 50,
     }));
   }
   /**
@@ -586,7 +585,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
       blockedRequests: rateLimitingStats.blockedAttempts,
       estimatedRevenueLoss: (rateLimitingStats.blockedAttempts * 0.1 * 2.5), // Estimated $2.5 per legitimate blocked request
       falsePositiveImpact: (rateLimitingStats.blockedAttempts * 0.05 * 5), // Estimated $5 per false positive
-      securityROI: 250 + Math.random() * 100 // ROI percentage
+      securityROI: 250 + Math.random() * 100 // ROI percentage,
     };
   }
   // ========================================
@@ -599,7 +598,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
     this.predictiveInsights = {
       threatPredictions: this.generateThreatPredictions(),
       capacityForecasts: this.generateCapacityForecasts(),
-      anomalyDetections: this.predictiveInsights.anomalyDetections // Keep existing anomalies
+      anomalyDetections: this.predictiveInsights.anomalyDetections // Keep existing anomalies,
     };
   }
   /**
@@ -647,7 +646,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
         predictedValue: 1200,
         forecastHorizon: 6,
         confidence: 78,
-        scalingRecommendation: 'Scale up by 40% within 4 hours'
+        scalingRecommendation: 'Scale up by 40% within 4 hours',
       },
       {
         forecastId: `capacity-${Date.now() + 1}`,}
@@ -656,7 +655,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
         predictedValue: 85,
         forecastHorizon: 12,
         confidence: 82,
-        scalingRecommendation: 'Add 2GB memory within 8 hours'
+        scalingRecommendation: 'Add 2GB memory within 8 hours',
       }
     ];
   }
@@ -672,7 +671,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
       this.predictiveInsights.anomalyDetections.push(anomaly);
       this.emit('anomalyDetected', {)
         anomaly,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     });
     // Keep only recent anomalies (last 24 hours)
@@ -830,7 +829,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
         currentValue: currentThreatLevel,
         trend: 'stable',
         changePercent: 0,
-        status: currentThreatLevel === ThreatLevel.LOW ? 'good' : 
+        status: currentThreatLevel === ThreatLevel.LOW ? 'good' : ,
                currentThreatLevel === ThreatLevel.MEDIUM ? 'warning' : 'critical'
       },
       {
@@ -875,7 +874,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
     const history = this.historicalData.get(dataType)!;
     history.push({)
       timestamp: new Date(),
-      data: JSON.parse(JSON.stringify(data)) // Deep clone
+      data: JSON.parse(JSON.stringify(data)) // Deep clone,
     });
     // Limit historical data size
     const maxEntries = this.config.dataRetentionDays * 24; // One entry per hour;
@@ -933,7 +932,6 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
       lastUpdate: Date;
       dataRetention: number;
     };
-  } {
     return {
       securityAnalytics: this.securityAnalytics,
       predictiveInsights: this.predictiveInsights,
@@ -1025,7 +1023,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
       this.emit('securityEvent', {)
         type: 'rate_limit_exceeded',
         data,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     });
     // Listen for performance metrics updates
@@ -1033,7 +1031,7 @@ export class RateLimitingAnalyticsDashboard extends EventEmitter {
       this.performanceMetrics.on('alertCreated', (alert) => {
         this.emit('performanceAlert', {)
           alert,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       });
     }

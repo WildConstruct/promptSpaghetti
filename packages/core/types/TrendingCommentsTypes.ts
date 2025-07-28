@@ -39,7 +39,7 @@ export const CommentScoreSchema = z.object({)
     controversyScore: z.number().min(0), // Like/dislike ratio controversy
     viralityScore: z.number().min(0), // Share and mention velocity
     helpfulnessScore: z.number().min(0), // Helpful votes score
-    authorityScore: z.number().min(0) // Author credibility score
+    authorityScore: z.number().min(0) // Author credibility score,
   }),
   metrics: z.object({),
     totalLikes: z.number().default(0),
@@ -50,7 +50,7 @@ export const CommentScoreSchema = z.object({)
     totalReports: z.number().default(0),
     replyEngagement: z.number().default(0), // Engagement on reply threads
     viewCount: z.number().default(0),
-    uniqueEngagers: z.number().default(0) // Unique users who engaged
+    uniqueEngagers: z.number().default(0) // Unique users who engaged,
   }),
   trends: z.object({),
     hourlyGrowth: z.number().default(0),
@@ -123,7 +123,7 @@ export const TrendingAlgorithmConfigSchema = z.object({)
     qualityWeight: z.number().min(0).max(1).default(0.15), // Content quality signals
     authorityWeight: z.number().min(0).max(1).default(0.1), // Author reputation
     controversyWeight: z.number().min(0).max(1).default(0.05), // Healthy debate factor
-    viralityWeight: z.number().min(0).max(1).default(0.05) // Share velocity
+    viralityWeight: z.number().min(0).max(1).default(0.05) // Share velocity,
   }),
   parameters: z.object({),
     timeDecayHalfLife: z.number().positive().default(24), // Hours for 50% decay
@@ -133,7 +133,7 @@ export const TrendingAlgorithmConfigSchema = z.object({)
     authorMinReputation: z.number().default(0), // Min author reputation
     spamPenaltyFactor: z.number().min(0).max(1).default(0.1), // Penalty for spam-like content
     maxCommentAge: z.number().default(168), // Max hours to consider (7 days)
-    boostNewAuthors: z.boolean().default(true) // Give new authors a small boost
+    boostNewAuthors: z.boolean().default(true) // Give new authors a small boost,
   }),
   moderationRules: z.object({),
     autoFlag: z.object({),
@@ -201,7 +201,7 @@ export const CommentAnalyticsSchema = z.object({)
     commentsGrowthRate: z.number().default(0), // Percentage growth
     engagementRate: z.number().min(0).max(1).default(0), // Engagements per comment
     responseRate: z.number().min(0).max(1).default(0), // Comments with replies
-    moderationRate: z.number().min(0).max(1).default(0) // Flagged/removed percentage
+    moderationRate: z.number().min(0).max(1).default(0) // Flagged/removed percentage,
   }),
   trends: z.object({),
     commentVelocity: z.array(z.object({),
@@ -266,7 +266,7 @@ export const GetTrendingCommentsRequestSchema = z.object({)
   includeReplies: z.boolean().default(true),
   minScore: z.number().min(0).optional(),
   language: z.string().optional(),
-  userId: z.string().uuid().optional() // For personalized results
+  userId: z.string().uuid().optional() // For personalized results,
 });
 
 export const TrendingCommentsResponseSchema = z.object({)
@@ -282,7 +282,7 @@ export const TrendingCommentsResponseSchema = z.object({)
     processingTime: z.number(), // milliseconds
     cacheStatus: z.enum(['hit', 'miss', 'stale']),
     algorithm: z.string(),
-    dataFreshness: z.number() // minutes
+    dataFreshness: z.number() // minutes,
   })
 });
 

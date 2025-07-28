@@ -117,7 +117,7 @@ export const BatchNodeEditor: React.FC<BatchNodeEditorProps> = ({)
   };
   const colors = getThemeColors();
   if (!isActive || selectedNodes.length === 0) return null;
-  return ()
+  return ();
     <div
       className="batch-node-editor"
       style={{
@@ -269,7 +269,7 @@ const BatchEditForm: React.FC<BatchEditFormProps> = ({)
   onFieldUpdate,
   colors
 }) => {
-  return ()
+  return ();
     <div>
       <div style={{ marginBottom: 16 }}>
         <h4 style={{ margin: '0 0 8px 0', fontSize: 14, fontWeight: 600 }}>
@@ -385,7 +385,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({)
   };
   switch (fieldType) {
     case 'boolean':
-      return ()
+      return ();
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <input
             type="checkbox"
@@ -397,7 +397,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({)
         </label>
       );
     case 'number':
-      return ()
+      return ();
         <input
           type="number"
           value={value || ''}
@@ -407,7 +407,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({)
         />
       );
     case 'textarea':
-      return ()
+      return ();
         <textarea
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
@@ -416,7 +416,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({)
         />
       );
     default:
-      return ()
+      return ();
         <input
           type="text"
           value={value || ''}
@@ -441,7 +441,7 @@ const BatchPreview: React.FC<BatchPreviewProps> = ({)
   selectedFields,
   colors
 }) => {
-  return ()
+  return ();
     <div>
       <h4 style={{ margin: '0 0 16px 0', fontSize: 14, fontWeight: 600 }}>
         Preview Changes

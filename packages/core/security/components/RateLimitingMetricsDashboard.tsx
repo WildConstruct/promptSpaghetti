@@ -133,13 +133,13 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
         value: formatNumber(currentMetrics.throughput.requestsPerSecond),
         unit: 'rps',
         trend: 'stable',
-        severity: currentMetrics.throughput.requestsPerSecond > 1000 ? 'normal' : 'warning'
+        severity: currentMetrics.throughput.requestsPerSecond > 1000 ? 'normal' : 'warning',
       },
       {
         label: 'Avg Response Time',
         value: formatDuration(currentMetrics.responseTime.average),
         trend: 'stable',
-        severity: currentMetrics.responseTime.average > 200 ? 'critical' : 
+        severity: currentMetrics.responseTime.average > 200 ? 'critical' : ,
                  currentMetrics.responseTime.average > 100 ? 'warning' : 'normal'
       },
       {
@@ -147,7 +147,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
         value: currentMetrics.errorRates.blockRate.toFixed(1),
         unit: '%',
         trend: 'down',
-        severity: currentMetrics.errorRates.blockRate > 25 ? 'critical' : 
+        severity: currentMetrics.errorRates.blockRate > 25 ? 'critical' : ,
                  currentMetrics.errorRates.blockRate > 10 ? 'warning' : 'normal'
       },
       {
@@ -155,7 +155,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
         value: currentMetrics.errorRates.errorRate.toFixed(1),
         unit: '%',
         trend: 'stable',
-        severity: currentMetrics.errorRates.errorRate > 10 ? 'critical' : 
+        severity: currentMetrics.errorRates.errorRate > 10 ? 'critical' : ,
                  currentMetrics.errorRates.errorRate > 5 ? 'warning' : 'normal'
       },
       {
@@ -163,7 +163,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
         value: formatNumber(currentMetrics.resourceUtilization.memoryUsage),
         unit: 'MB',
         trend: 'up',
-        severity: currentMetrics.resourceUtilization.memoryUsage > 1000 ? 'warning' : 'normal'
+        severity: currentMetrics.resourceUtilization.memoryUsage > 1000 ? 'warning' : 'normal',
       },
       {
         label: 'Active Connections',
@@ -177,7 +177,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
     if (!visualizationData) return null;
     const { timeSeriesData } = visualizationData;
     return {
-      labels: timeSeriesData.timestamps.map(ts => )
+      labels: timeSeriesData.timestamps.map(ts => ),
         new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       ),
       datasets: [,
@@ -224,7 +224,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
   const handleExportData = (format: 'json' | 'csv') => {
     const exportData = metricsService.exportMetrics(format);
     const blob = new Blob([exportData], { )
-      type: format === 'json' ? 'application/json' : 'text/csv' 
+      type: format === 'json' ? 'application/json' : 'text/csv' ,
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -238,7 +238,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
   // ========================================
   // Render Methods
   // ========================================
-  const renderMetricCard = (stat: MetricStat, index: number) => (;)
+  const renderMetricCard = (stat: MetricStat, index: number) => (;);
     <div
       key={index}
       className={`
@@ -283,7 +283,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
       </div>
     </div>
   );
-  const renderAlerts = () => (;)
+  const renderAlerts = () => (;);
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
       <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
         <h3 className="text-lg font-medium text-gray-900 dark:text-white">
@@ -336,7 +336,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
   );
   const renderTimeSeriesChart = () => {
     if (!getTimeSeriesChartData) return null;
-    return ()
+    return ();
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white">
@@ -360,7 +360,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
   const renderHeatmap = () => {
     if (!visualizationData) return null;
     const { heatmapData } = visualizationData;
-    return ()
+    return ();
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white">
@@ -381,7 +381,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
       </div>
     );
   };
-  const renderControls = () => (;)
+  const renderControls = () => (;);
     <div className="flex items-center justify-between mb-6">
       <div className="flex items-center space-x-4">
         <select
@@ -423,7 +423,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
   // Main Render
   // ========================================
   if (isLoading && !currentMetrics) {
-    return ()
+    return ();
       <div className={`p-8 ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
@@ -434,7 +434,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`p-6 ${className} ${theme === 'dark' ? 'dark' : ''}`}>}
       <div className="max-w-7xl mx-auto">
         {/* Header */}

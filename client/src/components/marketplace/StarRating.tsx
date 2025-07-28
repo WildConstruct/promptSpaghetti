@@ -1,7 +1,6 @@
 // Epic 16 Marketplace - Star Rating Component
 import React from 'react';
 import './StarRating.css';
-
 interface StarRatingProps {
   rating: number;
   maxRating?: number;
@@ -11,7 +10,7 @@ interface StarRatingProps {
   className?: string;
 }
 
-export const StarRating: React.FC<StarRatingProps> = ({
+export const StarRating: React.FC<StarRatingProps> = ({)
   rating,
   maxRating = 5,
   size = 'medium',
@@ -20,29 +19,24 @@ export const StarRating: React.FC<StarRatingProps> = ({
   className = ''
 }) => {
   const [hoveredRating, setHoveredRating] = React.useState<number | null>(null);
-
   const handleStarClick = (starRating: number) => {
     if (interactive && onRatingChange) {
       onRatingChange(starRating);
     }
   };
-
   const handleStarHover = (starRating: number) => {
     if (interactive) {
       setHoveredRating(starRating);
     }
   };
-
   const handleMouseLeave = () => {
     if (interactive) {
       setHoveredRating(null);
     }
   };
-
   const getStarFill = (starIndex: number): 'empty' | 'half' | 'full' => {
     const effectiveRating = hoveredRating !== null ? hoveredRating : rating;
     const starValue = starIndex + 1;
-    
     if (effectiveRating >= starValue) {
       return 'full';
     } else if (effectiveRating >= starValue - 0.5) {
@@ -51,12 +45,10 @@ export const StarRating: React.FC<StarRatingProps> = ({
       return 'empty';
     }
   };
-
   const renderStar = (index: number) => {
     const fill = getStarFill(index);
     const starValue = index + 1;
-
-    return (
+    return ()
       <button
         key={index}
         type="button"
@@ -73,9 +65,9 @@ export const StarRating: React.FC<StarRatingProps> = ({
           fill="none"
           className="star-svg"
         >
-          {fill === 'half' && (
+          {fill === 'half' && ()
             <defs>
-              <linearGradient id={`half-fill-${index}`} x1="0%" y1="0%" x2="100%" y2="0%">
+              <linearGradient id={`half-fill-${index}`} x1="0%" y1="0%" x2="100%" y2="0%">}
                 <stop offset="50%" stopColor="var(--star-fill-color)" />
                 <stop offset="50%" stopColor="var(--star-empty-color)" />
               </linearGradient>
@@ -87,7 +79,7 @@ export const StarRating: React.FC<StarRatingProps> = ({
               fill === 'full' 
                 ? 'var(--star-fill-color)' 
                 : fill === 'half' 
-                  ? `url(#half-fill-${index})` 
+                  ? `url(#half-fill-${index})` }
                   : 'var(--star-empty-color)'
             }
             stroke="var(--star-stroke-color)"
@@ -99,8 +91,7 @@ export const StarRating: React.FC<StarRatingProps> = ({
       </button>
     );
   };
-
-  return (
+  return ()
     <div 
       className={`star-rating ${size} ${interactive ? 'interactive' : ''} ${className}`}
       onMouseLeave={handleMouseLeave}
@@ -110,8 +101,7 @@ export const StarRating: React.FC<StarRatingProps> = ({
       <div className="stars">
         {Array.from({ length: maxRating }, (_, index) => renderStar(index))}
       </div>
-      
-      {!interactive && (
+      {!interactive && ()
         <span className="rating-value" aria-hidden="true">
           {rating.toFixed(1)}
         </span>

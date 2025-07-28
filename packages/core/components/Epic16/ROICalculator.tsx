@@ -50,7 +50,7 @@ export const ROICalculator: React.FC<ROICalculatorProps> = ({)
     developerHourlyRate: 85,
     manualTokensPerUse: 2500,
     analysisMonths: 12,
-    claudeTokenCostPer1K: 0.015 // Claude 3 Haiku pricing
+    claudeTokenCostPer1K: 0.015 // Claude 3 Haiku pricing,
   });
   const [activeScenario, setActiveScenario] = useState<string>(presetScenario || 'individual');
   // Preset scenarios for different user types
@@ -166,7 +166,7 @@ export const ROICalculator: React.FC<ROICalculatorProps> = ({)
     if (roi >= 0) return 'text-yellow-600';
     return 'text-red-600';
   };
-  return ()
+  return ();
     <div className={`bg-white rounded-lg shadow-lg border border-gray-200 ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 px-6 py-4">

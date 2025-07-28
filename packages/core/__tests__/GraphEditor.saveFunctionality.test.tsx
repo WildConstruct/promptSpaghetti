@@ -19,7 +19,7 @@ jest.mock('reactflow', () => ({)
   Background: () => <div>Background</div>,
   Controls: () => <div>Controls</div>,
   MiniMap: () => <div>MiniMap</div>,
-  useReactFlow: () => ({)
+  useReactFlow: () => ({),
     fitView: jest.fn<unknown[], unknown>(),
     setNodes: jest.fn<unknown[], unknown>(),
     setEdges: jest.fn<unknown[], unknown>()
@@ -31,36 +31,36 @@ jest.mock('reactflow', () => ({)
 // Mock other components
 jest.mock('../components/Inspector', () => ({)
   InspectorPanel: () => <div data-testid="inspector-panel">Inspector</div>,
-  SmoothInspectorPanel: () => <div data-testid="smooth-inspector-panel">Smooth Inspector</div>
+  SmoothInspectorPanel: () => <div data-testid="smooth-inspector-panel">Smooth Inspector</div>,
 }));
 jest.mock('../Palette', () => ({)
-  Palette: () => <div data-testid="palette">Palette</div>
+  Palette: () => <div data-testid="palette">Palette</div>,
 }));
 
 // Mock all heavy components to avoid dependency issues
 jest.mock('../components/ExtensionManager/ExtensionManagerPanel', () => ({)
-  ExtensionManagerPanel: () => <div>ExtensionManager</div>
+  ExtensionManagerPanel: () => <div>ExtensionManager</div>,
 }));
 jest.mock('../ResponsiveCorrectionsPanel', () => ({)
-  ResponsiveCorrectionsPanel: () => <div>ResponsiveCorrectionsPanel</div>
+  ResponsiveCorrectionsPanel: () => <div>ResponsiveCorrectionsPanel</div>,
 }));
 jest.mock('../components/CorrectionsStatsDashboard', () => ({)
-  CorrectionsStatsDashboard: () => <div>CorrectionsStatsDashboard</div>
+  CorrectionsStatsDashboard: () => <div>CorrectionsStatsDashboard</div>,
 }));
 jest.mock('../correctionsStore', () => ({)
-  useCorrectionsEnabled: () => true
+  useCorrectionsEnabled: () => true,
 }));
 jest.mock('../palette/TabbedPalette', () => ({)
-  TabbedPalette: () => <div>TabbedPalette</div>
+  TabbedPalette: () => <div>TabbedPalette</div>,
 }));
 jest.mock('../components/NodeRenderer', () => ({)
-  NodeRenderer: () => <div>NodeRenderer</div>
+  NodeRenderer: () => <div>NodeRenderer</div>,
 }));
 jest.mock('../components/VariablePortNodeRenderer', () => ({)
-  VariablePortNodeRenderer: () => <div>VariablePortNodeRenderer</div>
+  VariablePortNodeRenderer: () => <div>VariablePortNodeRenderer</div>,
 }));
 jest.mock('../components/RestorePrompt', () => ({)
-  RestorePrompt: () => <div>RestorePrompt</div>
+  RestorePrompt: () => <div>RestorePrompt</div>,
 }));
 jest.mock('../components/EncryptionStatus', () => ({)
   EncryptionState: {},
@@ -70,7 +70,7 @@ jest.mock('../nodeSchemas', () => ({)
   nodeSchemas: {}
 }));
 jest.mock('../utils/canvasOptimization', () => ({)
-  useCanvasOptimization: () => ({)
+  useCanvasOptimization: () => ({),
     optimizer: {},
     metrics: { fps: 60, visibleNodes: 10 },
     isPerformanceGood: true,
@@ -81,47 +81,47 @@ jest.mock('../utils/smoothAnimations', () => ({)
   globalAnimationManager: {}
 }));
 jest.mock('../components/LoadingStates/ProfessionalSpinner', () => ({)
-  ProfessionalSpinner: () => <div>ProfessionalSpinner</div>
+  ProfessionalSpinner: () => <div>ProfessionalSpinner</div>,
 }));
 jest.mock('../components/Nodes/SmoothNodeWrapper', () => ({)
-  SmoothNodeWrapper: () => <div>SmoothNodeWrapper</div>
+  SmoothNodeWrapper: () => <div>SmoothNodeWrapper</div>,
 }));
 jest.mock('../components/Demo/DemoModeManager', () => ({)
   DemoModeManager: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
 }));
 jest.mock('../components/Demo/DemoPerformanceTester', () => ({)
-  DemoPerformanceTester: () => <div>DemoPerformanceTester</div>
+  DemoPerformanceTester: () => <div>DemoPerformanceTester</div>,
 }));
 
 // Mock all the Epic 8 components
 jest.mock('../components/GraphOptimization', () => ({)
   GraphAnalysisPanel: () => <div>GraphAnalysisPanel</div>,
   PerformanceMonitor: () => <div>PerformanceMonitor</div>,
-  OptimizationControls: () => <div>OptimizationControls</div>
+  OptimizationControls: () => <div>OptimizationControls</div>,
 }));
 jest.mock('../components/StickyNotes/StickyNotesManager', () => ({)
-  StickyNotesManager: () => <div>StickyNotesManager</div>
+  StickyNotesManager: () => <div>StickyNotesManager</div>,
 }));
 jest.mock('../components/NodeLabels/NodeLabelsManager', () => ({)
-  NodeLabelsManager: () => <div>NodeLabelsManager</div>
+  NodeLabelsManager: () => <div>NodeLabelsManager</div>,
 }));
 jest.mock('../components/RegionGroups/RegionGroupsManager', () => ({)
-  RegionGroupsManager: () => <div>RegionGroupsManager</div>
+  RegionGroupsManager: () => <div>RegionGroupsManager</div>,
 }));
 jest.mock('../components/Annotations/ConnectionAnnotationsLayer', () => ({)
-  ConnectionAnnotationsLayer: () => <div>ConnectionAnnotationsLayer</div>
+  ConnectionAnnotationsLayer: () => <div>ConnectionAnnotationsLayer</div>,
 }));
 jest.mock('../components/Preview/RealTimePreviewPanel', () => ({)
-  RealTimePreviewPanel: () => <div>RealTimePreviewPanel</div>
+  RealTimePreviewPanel: () => <div>RealTimePreviewPanel</div>,
 }));
 jest.mock('../components/Preview/IndividualResultManager', () => ({)
-  IndividualResultManager: () => <div>IndividualResultManager</div>
+  IndividualResultManager: () => <div>IndividualResultManager</div>,
 }));
 jest.mock('../components/DirectorToolbar/DirectorPreviewToolbar', () => ({)
-  DirectorPreviewToolbar: () => <div>DirectorPreviewToolbar</div>
+  DirectorPreviewToolbar: () => <div>DirectorPreviewToolbar</div>,
 }));
 jest.mock('../components/Modal/SettingsModal', () => ({)
-  SettingsModal: () => <div>SettingsModal</div>
+  SettingsModal: () => <div>SettingsModal</div>,
 }));
 jest.mock('../components/ContextualHelp', () => ({)
   ContextualHelpSystem: () => <div>ContextualHelpSystem</div>,
@@ -131,14 +131,14 @@ jest.mock('../components/ContextualHelp', () => ({)
   }
 }));
 jest.mock('../components/TemplateDialogs/SaveTemplateDialog', () => ({)
-  SaveTemplateDialog: () => <div>SaveTemplateDialog</div>
+  SaveTemplateDialog: () => <div>SaveTemplateDialog</div>,
 }));
 jest.mock('../components/TemplateDialogs/TemplateBrowser', () => ({)
-  TemplateBrowser: () => <div>TemplateBrowser</div>
+  TemplateBrowser: () => <div>TemplateBrowser</div>,
 }));
 jest.mock('../components/ProjectDialogs/ExportBundleDialog', () => ({)
   ExportBundleDialog: () => <div>ExportBundleDialog</div>,
-  default: () => <div>ExportBundleDialog</div>
+  default: () => <div>ExportBundleDialog</div>,
 }));
 jest.mock('../validation', () => ({)
   ValidationError: {}
@@ -150,7 +150,6 @@ jest.mock('../components/StatusBar', () => ({)
       <button data-testid="load-button" onClick={onLoadProject}>Load</button>
       <button data-testid="new-button" onClick={onNewProject}>New</button>
     </div>
-  )
 }));
 jest.mock('../components/ProjectDialogs/SaveProjectDialog', () => ({)
   SaveProjectDialog: ({ isOpen, onClose, onSave }: unknown) => 
@@ -207,10 +206,10 @@ jest.mock('../components/ProjectDialogs/LoadProjectDialog', () => ({)
 
 // Mock all the other heavy dependencies
 jest.mock('../PreviewModal', () => ({)
-  PreviewModal: () => <div>PreviewModal</div>
+  PreviewModal: () => <div>PreviewModal</div>,
 }));
 jest.mock('../usePreviewSeeds', () => ({)
-  usePreviewSeeds: () => ({)
+  usePreviewSeeds: () => ({),
     runPreview: jest.fn<unknown[], unknown>(),
     previewResults: [],
     previewLoading: false,
@@ -219,20 +218,20 @@ jest.mock('../usePreviewSeeds', () => ({)
   })
 }));
 jest.mock('../hooks/useValidation', () => ({)
-  useValidation: () => ({)
+  useValidation: () => ({),
     errors: [],
     validateGraph: jest.fn<unknown[], unknown>()
   })
 }));
 jest.mock('../hooks/useAutosave', () => ({)
-  useAutosave: () => ({)
+  useAutosave: () => ({),
     showRestorePrompt: false,
     restoreDraft: jest.fn<unknown[], unknown>(),
     setShowRestorePrompt: jest.fn<unknown[], unknown>()
   })
 }));
 jest.mock('../hooks/useNodeUtils', () => ({)
-  useNodeUtils: () => ({)
+  useNodeUtils: () => ({),
     addNode: jest.fn<unknown[], unknown>(),
     updateNode: jest.fn<unknown[], unknown>(),
     removeNode: jest.fn<unknown[], unknown>()

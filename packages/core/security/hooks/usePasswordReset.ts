@@ -226,7 +226,7 @@ export const usePasswordReset = (options: UsePasswordResetOptions = {}): UsePass
       ...details,
       timestamp: new Date().toISOString(),
       userAgent: navigator.userAgent,
-      ipAddress: '192.168.1.100' // Would be detected from client
+      ipAddress: '192.168.1.100' // Would be detected from client,
     });
   }, [onSecurityEvent]);
   // Main actions
@@ -252,7 +252,7 @@ export const usePasswordReset = (options: UsePasswordResetOptions = {}): UsePass
       setCurrentToken({)
         token: result.token,
         tokenId: result.tokenId,
-        expiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 minutes
+        expiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 minutes,
       });
       setSuccess(`Reset code sent to ${email}`);}
       setResendTimer(resendCooldown);
@@ -268,7 +268,7 @@ export const usePasswordReset = (options: UsePasswordResetOptions = {}): UsePass
       handleError(err instanceof Error ? err : new Error('Failed to send reset code'));
       logSecurityEvent('password_reset_request_failed', {)
         email,
-        error: err instanceof Error ? err.message : 'Unknown error'
+        error: err instanceof Error ? err.message : 'Unknown error',
       });
       return false;
     } finally {
@@ -289,7 +289,7 @@ export const usePasswordReset = (options: UsePasswordResetOptions = {}): UsePass
     setLoading(true);
     clearMessages();
     try {
-      const validation = await passwordResetTokenManager.validateToken(;)
+      const validation = await passwordResetTokenManager.validateToken(;);
         currentToken.token,
         '192.168.1.100',
         navigator.userAgent
@@ -311,7 +311,7 @@ export const usePasswordReset = (options: UsePasswordResetOptions = {}): UsePass
       handleError(err instanceof Error ? err : new Error('Failed to verify code'));
       logSecurityEvent('reset_token_verification_failed', {)
         email,
-        error: err instanceof Error ? err.message : 'Unknown error'
+        error: err instanceof Error ? err.message : 'Unknown error',
       });
       return false;
     } finally {
@@ -336,7 +336,7 @@ export const usePasswordReset = (options: UsePasswordResetOptions = {}): UsePass
     setLoading(true);
     clearMessages();
     try {
-      const usage = await passwordResetTokenManager.useToken(;)
+      const usage = await passwordResetTokenManager.useToken(;);
         currentToken.token,
         '192.168.1.100',
         navigator.userAgent
@@ -360,7 +360,7 @@ export const usePasswordReset = (options: UsePasswordResetOptions = {}): UsePass
       handleError(err instanceof Error ? err : new Error('Failed to reset password'));
       logSecurityEvent('password_reset_failed', {)
         email,
-        error: err instanceof Error ? err.message : 'Unknown error'
+        error: err instanceof Error ? err.message : 'Unknown error',
       });
       return false;
     } finally {
@@ -390,7 +390,7 @@ export const usePasswordReset = (options: UsePasswordResetOptions = {}): UsePass
       setCurrentToken({)
         token: result.token,
         tokenId: result.tokenId,
-        expiresAt: new Date(Date.now() + 30 * 60 * 1000)
+        expiresAt: new Date(Date.now() + 30 * 60 * 1000),
       });
       setSuccess('New reset code sent');
       setResendTimer(resendCooldown);

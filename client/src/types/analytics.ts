@@ -18,7 +18,7 @@ export const MetricType = {
   REVENUE: 'revenue' as const,
   USAGE_TIME: 'usage_time' as const,
   ERROR_RATE: 'error_rate' as const,
-  CONVERSION: 'conversion' as const
+  CONVERSION: 'conversion' as const,
 } as const;
 
 export type TimeRange = 
@@ -38,7 +38,7 @@ export const TimeRange = {
   LAST_90D: 'last_90d' as const,
   LAST_YEAR: 'last_year' as const,
   ALL_TIME: 'all_time' as const,
-  CUSTOM: 'custom' as const
+  CUSTOM: 'custom' as const,
 } as const;
 
 export type AggregationType = 
@@ -58,7 +58,7 @@ export const AggregationType = {
   UNIQUE: 'unique' as const,
   MAX: 'max' as const,
   MIN: 'min' as const,
-  MEDIAN: 'median' as const
+  MEDIAN: 'median' as const,
 } as const;
 
 export type DashboardLayout = 
@@ -72,7 +72,7 @@ export const DashboardLayout = {
   GRID: 'grid' as const,
   LIST: 'list' as const,
   CHARTS: 'charts' as const,
-  MIXED: 'mixed' as const
+  MIXED: 'mixed' as const,
 } as const;
 
 export interface AnalyticsEvent {
@@ -81,7 +81,7 @@ export interface AnalyticsEvent {
   user_id?: string;
   event_type: MetricType;
   event_data: Record<string, unknown>;
-  metadata: {
+  metadata: {,
     user_agent?: string;
     ip_address?: string;
     referrer?: string;
@@ -101,7 +101,7 @@ export interface TemplateMetrics {
   template_id: string;
   period_start: Date;
   period_end: Date;
-  metrics: {
+  metrics: {,
     views: number;
     unique_views: number;
     downloads: number;
@@ -114,19 +114,19 @@ export interface TemplateMetrics {
     success_rate: number;
     conversion_rate: number;
   };
-  demographics: {
+  demographics: {,
     top_countries: Array<{ country: string; count: number; percentage: number }>;
     device_breakdown: Array<{ device: string; count: number; percentage: number }>;
     user_segments: Array<{ segment: string; count: number; percentage: number }>;
   };
-  trends: {
-    daily_metrics: Array<{
+  trends: {,
+    daily_metrics: Array<{,
       date: Date;
       views: number;
       downloads: number;
       revenue: number;
     }>;
-    growth_rates: {
+    growth_rates: {,
       views_growth: number;
       downloads_growth: number;
       revenue_growth: number;
@@ -139,14 +139,14 @@ export interface CreatorDashboard {
   period: TimeRange;
   period_start: Date;
   period_end: Date;
-  overview: {
+  overview: {,
     total_templates: number;
     active_templates: number;
     total_views: number;
     total_downloads: number;
     total_revenue: number;
     average_rating: number;
-    top_performing_template: {
+    top_performing_template: {,
       id: string;
       title: string;
       views: number;
@@ -154,7 +154,7 @@ export interface CreatorDashboard {
       revenue: number;
     };
   };
-  performance_summary: {
+  performance_summary: {,
     views_trend: number;
     downloads_trend: number;
     revenue_trend: number;
@@ -162,19 +162,19 @@ export interface CreatorDashboard {
     market_share: number;
     ranking_position: number;
   };
-  traffic_metrics: {
+  traffic_metrics: {,
     unique_visitors: number;
     returning_visitors: number;
     bounce_rate: number;
     average_session_duration: number;
     top_referrers: Array<{ source: string; visits: number; percentage: number }>;
   };
-  financial_metrics: {
+  financial_metrics: {,
     gross_revenue: number;
     net_revenue: number;
     platform_fee: number;
     payout_amount: number;
-    revenue_by_template: Array<{
+    revenue_by_template: Array<{,
       template_id: string;
       title: string;
       revenue: number;
@@ -212,9 +212,9 @@ export interface CustomReport {
   creator_id: string;
   name: string;
   description?: string;
-  configuration: {
+  configuration: {,
     query: AnalyticsQuery;
-    visualization: {
+    visualization: {,
       chart_type: 'line' | 'bar' | 'pie' | 'area' | 'table' | 'metric';
       layout: DashboardLayout;
       show_legend: boolean;
@@ -238,7 +238,7 @@ export interface AnalyticsInsight {
   type: 'trend' | 'anomaly' | 'opportunity' | 'warning';
   title: string;
   description: string;
-  data: {
+  data: {,
     metric: MetricType;
     current_value: number;
     previous_value: number;
@@ -257,7 +257,7 @@ export interface ChartDataPoint {
 
 export interface TrendData {
   labels: string[];
-  datasets: Array<{
+  datasets: Array<{,
     label: string;
     data: number[];
     borderColor: string;
@@ -287,13 +287,13 @@ export interface TimeRangeSelectorProps {
 // Service interfaces
 export interface AnalyticsService {
   trackEvent(event: Partial<AnalyticsEvent>): Promise<void>;
-  getCreatorDashboard(
+  getCreatorDashboard()
     creatorId: string,
     timeRange: TimeRange,
     startDate?: Date,
     endDate?: Date
   ): Promise<CreatorDashboard>;
-  getTemplateMetrics(
+  getTemplateMetrics()
     templateId: string,
     timeRange: TimeRange,
     startDate?: Date,

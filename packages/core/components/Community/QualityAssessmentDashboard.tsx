@@ -80,7 +80,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
       const newMetrics = await qualityService.runComprehensiveAssessment(contentId, versionId, {)
         include_automated: true,
         include_editorial: type === 'comprehensive',
-        include_community: type === 'comprehensive'
+        include_community: type === 'comprehensive',
       });
       setQualityMetrics(newMetrics);
       onQualityImproved?.(newMetrics.overallQualityScore);
@@ -90,9 +90,9 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
       setRunningAssessment(false);
     }
   };
-  const handleAssignReview = async (;)
+  const handleAssignReview = async (;);
     reviewerId: string,
-    reviewType: 'quick_review' | 'comprehensive_review' | 'specialist_review'
+    reviewType: 'quick_review' | 'comprehensive_review' | 'specialist_review',
   ) => {
     try {
       const updatedWorkflow = await qualityService.assignEditorialReview(contentId, versionId, reviewerId, {)
@@ -106,7 +106,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
   };
   const handleApplyAutomatedFixes = async () => {
     try {
-      const result = await qualityService.applyAutomatedFixes(;)
+      const result = await qualityService.applyAutomatedFixes(;);
         contentId,
         versionId,
         ['grammar', 'formatting', 'seo'],
@@ -151,12 +151,12 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
     const priorities = {
       high: '🔴 High',
       medium: '🟡 Medium',
-      low: '🟢 Low'
+      low: '🟢 Low',
     };
     return priorities[priority as keyof typeof priorities] || priority;
   };
   if (loading) {
-    return ()
+    return ();
       <div className={`quality-assessment-dashboard loading ${className}`}>}
         <div className="loading-content">
           <div className="loading-spinner"></div>
@@ -165,7 +165,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`quality-assessment-dashboard ${className}`}>}
       {/* Header */}
       <div className="dashboard-header">

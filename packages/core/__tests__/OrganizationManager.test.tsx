@@ -19,7 +19,7 @@ jest.mock('lucide-react', () => ({)
   Shield: () => <div data-testid="shield-icon" />,
   BarChart3: () => <div data-testid="chart-icon" />,
   ChevronRight: () => <div data-testid="chevron-right-icon" />,
-  Palette: () => <div data-testid="palette-icon" />
+  Palette: () => <div data-testid="palette-icon" />,
 }));
 describe('OrganizationManager', () => {
   const mockOrganizations = [;
@@ -35,7 +35,7 @@ describe('OrganizationManager', () => {
       plan: 'free' as const,
       maxUsers: 10,
       createdAt: new Date('2023-01-01'),
-      updatedAt: new Date('2023-01-01')
+      updatedAt: new Date('2023-01-01'),
     },
     {
       id: 'org-2',
@@ -49,7 +49,7 @@ describe('OrganizationManager', () => {
       plan: 'pro' as const,
       maxUsers: 100,
       createdAt: new Date('2023-01-02'),
-      updatedAt: new Date('2023-01-02')
+      updatedAt: new Date('2023-01-02'),
     }
   ];
   const mockStats = {
@@ -110,7 +110,7 @@ describe('OrganizationManager', () => {
   it('handles organization creation form submission', async () => {
     const user = userEvent.setup();
     const mockCreate = jest.fn().mockResolvedValue({});
-    render()
+    render();
       <OrganizationManager 
         organizations={mockOrganizations} 
         {...defaultProps}
@@ -142,7 +142,7 @@ describe('OrganizationManager', () => {
   it('validates required fields in create form', async () => {
     const user = userEvent.setup();
     const mockCreate = jest.fn();
-    render()
+    render();
       <OrganizationManager 
         organizations={mockOrganizations} 
         {...defaultProps}
@@ -171,7 +171,7 @@ describe('OrganizationManager', () => {
   it('handles organization update form submission', async () => {
     const user = userEvent.setup();
     const mockUpdate = jest.fn().mockResolvedValue({});
-    render()
+    render();
       <OrganizationManager 
         organizations={mockOrganizations} 
         {...defaultProps}
@@ -211,7 +211,7 @@ describe('OrganizationManager', () => {
   it('handles organization deletion', async () => {
     const user = userEvent.setup();
     const mockDelete = jest.fn().mockResolvedValue({});
-    render()
+    render();
       <OrganizationManager 
         organizations={mockOrganizations} 
         {...defaultProps}
@@ -231,7 +231,7 @@ describe('OrganizationManager', () => {
   it('displays organization statistics when stats button is clicked', async () => {
     const user = userEvent.setup();
     const mockViewStats = jest.fn().mockResolvedValue(mockStats);
-    render()
+    render();
       <OrganizationManager 
         organizations={mockOrganizations} 
         {...defaultProps}
@@ -247,10 +247,10 @@ describe('OrganizationManager', () => {
   });
   it('displays loading state during operations', async () => {
     const user = userEvent.setup();
-    const mockCreate = jest.fn().mockImplementation(;)
+    const mockCreate = jest.fn().mockImplementation(;);
       () => new Promise(resolve => setTimeout(resolve, 1000))
     );
-    render()
+    render();
       <OrganizationManager 
         organizations={mockOrganizations} 
         {...defaultProps}
@@ -297,7 +297,7 @@ describe('OrganizationManager', () => {
   it('validates website URL format', async () => {
     const user = userEvent.setup();
     const mockCreate = jest.fn();
-    render()
+    render();
       <OrganizationManager 
         organizations={mockOrganizations} 
         {...defaultProps}

@@ -244,7 +244,7 @@ export declare class ExperimentError extends Error {
     code: string;
     experimentId?: string | undefined;
     details?: Record<string, unknown> | undefined;
-    constructor()
+    constructor();
       message: string,
       code: string,
       experimentId?: string | undefined,

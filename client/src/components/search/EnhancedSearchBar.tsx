@@ -4,11 +4,9 @@
  * Extends the base SearchBar with autocomplete suggestions,
  * trending searches, and saved searches integration.
  */
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearch } from './SearchContext';
 import { searchApiService } from '../../services/searchApiService';
-
 interface EnhancedSearchBarProps {
   placeholder?: string;
   showHistory?: boolean;
@@ -19,7 +17,7 @@ interface EnhancedSearchBarProps {
   className?: string;
 }
 
-export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
+export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({)
   placeholder = "Search templates...",
   showHistory = true,
   showSuggestions = true,
@@ -36,7 +34,6 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
     loadSavedSearch,
     saveSearch
   } = useSearch();
-
   // Local state
   const [inputValue, setInputValue] = useState(query.text);
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -44,18 +41,15 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
-
   // Refs
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
   // Debounced autocomplete
   useEffect(() => {
     if (!showSuggestions || !inputValue.trim() || inputValue.length < 2) {
       setSuggestions([]);
       return;
     }
-
     const timeoutId = setTimeout(async () => {
       try {
         setIsLoading(true);
@@ -67,10 +61,8 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
         setIsLoading(false);
       }
     }, 300);
-
     return () => clearTimeout(timeoutId);
   }, [inputValue, showSuggestions]);
-
   // Load trending searches on mount
   useEffect(() => {
     if (showTrending) {
@@ -79,29 +71,24 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
         .catch(error => console.warn('Failed to get trending searches:', error));
     }
   }, [showTrending]);
-
   // Sync with external search query changes
   useEffect(() => {
     setInputValue(query.text);
   }, [query.text]);
-
   // Handle input changes
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
     setText(value);
     setSelectedIndex(-1);
-    
     if (value.trim() || isDropdownOpen) {
       setIsDropdownOpen(true);
     }
   }, [setText, isDropdownOpen]);
-
   // Handle input focus
   const handleInputFocus = useCallback(() => {
     setIsDropdownOpen(true);
   }, []);
-
   // Handle input blur
   const handleInputBlur = useCallback((e: React.FocusEvent) => {
     // Delay closing to allow clicking dropdown items
@@ -112,7 +99,6 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
       }
     }, 150);
   }, []);
-
   // Handle search submission
   const handleSubmit = useCallback((searchText?: string) => {
     const text = searchText || inputValue.trim();
@@ -121,37 +107,31 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
     setSelectedIndex(-1);
     onSearch?.(text);
   }, [inputValue, setText, onSearch]);
-
   // Handle form submission
   const handleFormSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    
     // If an item is selected, use it
-    const allItems = [
+    const allItems = [;
       ...suggestions,
       ...searchHistory.map(h => h.text).filter(t => t.toLowerCase().includes(inputValue.toLowerCase())),
       ...trendingSearches.map(t => t.query),
       ...savedSearches.map(s => s.name)
     ];
-    
     if (selectedIndex >= 0 && selectedIndex < allItems.length) {
       handleSubmit(allItems[selectedIndex]);
     } else {
       handleSubmit();
     }
   }, [suggestions, searchHistory, trendingSearches, savedSearches, selectedIndex, inputValue, handleSubmit]);
-
   // Handle keyboard navigation
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (!isDropdownOpen) return;
-
-    const allItems = [
+    const allItems = [;
       ...suggestions,
       ...searchHistory.map(h => h.text).filter(t => t.toLowerCase().includes(inputValue.toLowerCase())),
       ...trendingSearches.map(t => t.query),
       ...savedSearches.map(s => s.name)
     ];
-
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
@@ -174,7 +154,6 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
         break;
     }
   }, [isDropdownOpen, suggestions, searchHistory, trendingSearches, savedSearches, selectedIndex, inputValue, setText]);
-
   // Handle item click
   const handleItemClick = useCallback((item: string, type: 'suggestion' | 'history' | 'trending' | 'saved') => {
     if (type === 'saved') {
@@ -186,7 +165,6 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
       handleSubmit(item);
     }
   }, [savedSearches, loadSavedSearch, handleSubmit]);
-
   // Handle save search
   const handleSaveSearch = useCallback(() => {
     if (inputValue.trim()) {
@@ -196,20 +174,18 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
       }
     }
   }, [inputValue, saveSearch]);
-
   // Prepare dropdown items
   const dropdownItems = [];
   let itemIndex = 0;
-
   // Suggestions
   if (showSuggestions && suggestions.length > 0) {
-    dropdownItems.push(
+    dropdownItems.push()
       <div key="suggestions-header" style={{ padding: '8px 12px', fontSize: '12px', fontWeight: '600', color: '#718096', borderBottom: '1px solid #e2e8f0' }}>
         Suggestions
       </div>
     );
     suggestions.forEach((suggestion, index) => {
-      dropdownItems.push(
+      dropdownItems.push()
         <div
           key={`suggestion-${index}`}
           style={{
@@ -217,7 +193,7 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
             cursor: 'pointer',
             fontSize: '14px',
             backgroundColor: selectedIndex === itemIndex ? '#edf2f7' : 'transparent',
-            color: '#4a5568'
+            color: '#4a5568',
           }}
           onMouseEnter={() => setSelectedIndex(itemIndex)}
           onClick={() => handleItemClick(suggestion, 'suggestion')}
@@ -228,22 +204,20 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
       itemIndex++;
     });
   }
-
   // History
   if (showHistory && searchHistory.length > 0) {
-    const relevantHistory = searchHistory
+    const relevantHistory = searchHistory;
       .map(h => h.text)
       .filter(t => t && t.toLowerCase().includes(inputValue.toLowerCase()))
       .slice(0, 3);
-
     if (relevantHistory.length > 0) {
-      dropdownItems.push(
+      dropdownItems.push()
         <div key="history-header" style={{ padding: '8px 12px', fontSize: '12px', fontWeight: '600', color: '#718096', borderBottom: '1px solid #e2e8f0' }}>
           Recent Searches
         </div>
       );
       relevantHistory.forEach((historyItem, index) => {
-        dropdownItems.push(
+        dropdownItems.push()
           <div
             key={`history-${index}`}
             style={{
@@ -251,7 +225,7 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
               cursor: 'pointer',
               fontSize: '14px',
               backgroundColor: selectedIndex === itemIndex ? '#edf2f7' : 'transparent',
-              color: '#4a5568'
+              color: '#4a5568',
             }}
             onMouseEnter={() => setSelectedIndex(itemIndex)}
             onClick={() => handleItemClick(historyItem, 'history')}
@@ -263,16 +237,15 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
       });
     }
   }
-
   // Trending (show when input is empty or short)
   if (showTrending && trendingSearches.length > 0 && inputValue.length < 2) {
-    dropdownItems.push(
+    dropdownItems.push()
       <div key="trending-header" style={{ padding: '8px 12px', fontSize: '12px', fontWeight: '600', color: '#718096', borderBottom: '1px solid #e2e8f0' }}>
         Trending Now
       </div>
     );
     trendingSearches.slice(0, 3).forEach((trending, index) => {
-      dropdownItems.push(
+      dropdownItems.push()
         <div
           key={`trending-${index}`}
           style={{
@@ -283,7 +256,7 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
             color: '#4a5568',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
           onMouseEnter={() => setSelectedIndex(itemIndex)}
           onClick={() => handleItemClick(trending.query, 'trending')}
@@ -297,16 +270,15 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
       itemIndex++;
     });
   }
-
   // Saved searches
   if (showSavedSearches && savedSearches.length > 0 && inputValue.length < 2) {
-    dropdownItems.push(
+    dropdownItems.push()
       <div key="saved-header" style={{ padding: '8px 12px', fontSize: '12px', fontWeight: '600', color: '#718096', borderBottom: '1px solid #e2e8f0' }}>
         Saved Searches
       </div>
     );
     savedSearches.slice(0, 3).forEach((saved, index) => {
-      dropdownItems.push(
+      dropdownItems.push()
         <div
           key={`saved-${index}`}
           style={{
@@ -314,7 +286,7 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
             cursor: 'pointer',
             fontSize: '14px',
             backgroundColor: selectedIndex === itemIndex ? '#edf2f7' : 'transparent',
-            color: '#4a5568'
+            color: '#4a5568',
           }}
           onMouseEnter={() => setSelectedIndex(itemIndex)}
           onClick={() => handleItemClick(saved.name, 'saved')}
@@ -325,9 +297,8 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
       itemIndex++;
     });
   }
-
-  return (
-    <div className={`enhanced-search-bar ${className}`} style={{ position: 'relative', width: '100%' }}>
+  return ()
+    <div className={`enhanced-search-bar ${className}`} style={{ position: 'relative', width: '100%' }}>}
       <form onSubmit={handleFormSubmit} style={{ position: 'relative' }}>
         <div style={{ position: 'relative' }}>
           <input
@@ -345,7 +316,7 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
               borderRadius: '8px',
               outline: 'none',
               transition: 'border-color 0.2s ease',
-              backgroundColor: '#ffffff'
+              backgroundColor: '#ffffff',
             }}
             onFocus={(e) => {
               e.target.style.borderColor = '#3182ce';
@@ -356,7 +327,6 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
               handleInputBlur(e);
             }}
           />
-          
           {/* Search button */}
           <button
             type="submit"
@@ -370,15 +340,14 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
               border: 'none',
               cursor: 'pointer',
               color: '#718096',
-              fontSize: '16px'
+              fontSize: '16px',
             }}
           >
             {isLoading ? '⏳' : '🔍'}
           </button>
         </div>
-
         {/* Dropdown */}
-        {isDropdownOpen && dropdownItems.length > 0 && (
+        {isDropdownOpen && dropdownItems.length > 0 && ()
           <div
             ref={dropdownRef}
             style={{
@@ -393,13 +362,12 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
               zIndex: 1000,
               maxHeight: '400px',
               overflowY: 'auto',
-              marginTop: '4px'
+              marginTop: '4px',
             }}
           >
             {dropdownItems}
-            
             {/* Save search option */}
-            {inputValue.trim() && (
+            {inputValue.trim() && ()
               <div style={{ borderTop: '1px solid #e2e8f0', padding: '8px 12px' }}>
                 <button
                   type="button"
@@ -410,7 +378,7 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
                     cursor: 'pointer',
                     fontSize: '12px',
                     color: '#3182ce',
-                    textDecoration: 'underline'
+                    textDecoration: 'underline',
                   }}
                 >
                   💾 Save this search

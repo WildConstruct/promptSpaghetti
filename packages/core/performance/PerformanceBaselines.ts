@@ -205,7 +205,6 @@ export class PerformanceBaselineManager {
     status: 'ok' | 'warning' | 'critical';
     message: string;
     baseline: PerformanceBaseline;
-  } {
     const baseline = this.baselines.get(baselineId);
     if (!baseline) {
       throw new Error(`Baseline not found: ${baselineId}`);}
@@ -272,7 +271,6 @@ export class PerformanceBaselineManager {
     trend: 'improving' | 'stable' | 'degrading';
     percentage: number;
     measurements: PerformanceMeasurement[];
-  } {
     const baseline = this.baselines.get(baselineId);
     if (!baseline) {
       throw new Error(`Baseline not found: ${baselineId}`);}
@@ -322,7 +320,6 @@ export class PerformanceBaselineManager {
       trend: 'improving' | 'stable' | 'degrading';
       lastMeasurement?: PerformanceMeasurement;
     }>;
-    } {
     const baselines = Array.from(this.baselines.values());
     const categories = {} as Record<BaselineCategory, number>;
     let alerts = 0;
@@ -371,7 +368,7 @@ export class PerformanceBaselineManager {
           arch: process.arch,
         },
         buildInfo: {,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         },
         testConfig: {,
           environment: this.environment,

@@ -114,7 +114,7 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
       allowBacktracking: false,
       requireSequentialSteps: true,
       enableParallelPaths: false,
-      dropOffGracePeriod: 300000 // 5 minutes
+      dropOffGracePeriod: 300000 // 5 minutes,
     },
     steps: [],
     conditionalPaths: [],
@@ -288,15 +288,14 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
   const handleStepUpdate = useCallback((stepId: string, updates: Partial<ConversionStep>) => {
     setFunnel(prev => ({)
       ...prev,
-      steps: prev.steps?.map(step => )
+      steps: prev.steps?.map(step => ),
         step.id === stepId ? { ...step, ...updates } : step
-      )
     }));
   }, []);
   const handleStepDelete = useCallback((stepId: string) => {
     setFunnel(prev => ({)
       ...prev,
-      steps: prev.steps?.filter(step => step.id !== stepId)
+      steps: prev.steps?.filter(step => step.id !== stepId),
     }));
   }, []);
   const handleStepReorder = useCallback((fromIndex: number, toIndex: number) => {
@@ -307,7 +306,7 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
       // Update order values
       const reorderedSteps = steps.map((step, index) => ({)
         ...step,
-        order: index + 1
+        order: index + 1,
       }));
       return {
         ...prev,
@@ -330,19 +329,19 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
         type: stepTemplate.type || 'engagement',
         isRequired: stepTemplate.isRequired ?? true,
         isTerminal: stepTemplate.isTerminal ?? false,
-        eventCriteria: stepTemplate.eventCriteria || {
+        eventCriteria: stepTemplate.eventCriteria || {,
           eventType: '',
           propertyMatchers: [],
         },
         conditions: stepTemplate.conditions || [],
         timeConstraints: stepTemplate.timeConstraints || {},
-        successMetrics: stepTemplate.successMetrics || {
+        successMetrics: stepTemplate.successMetrics || {,
           expectedCompletionRate: 50,
           averageTimeToComplete: 60000,
           criticalSuccessFactors: [],
         },
         branches: stepTemplate.branches || [],
-        metadata: stepTemplate.metadata || {
+        metadata: stepTemplate.metadata || {,
           businessValue: 1,
           complexity: 'medium',
           dependencies: [],
@@ -365,7 +364,7 @@ export const FunnelConfiguration: React.FC<FunnelConfigurationProps> = ({)
     }
   }, [funnel, validateFunnel, onSave]);
   const isValid = validationErrors.filter(e => e.severity === 'error').length === 0;
-  return ()
+  return ();
     <div className="funnel-configuration">
       <div className="configuration-header">
         <h2>Funnel Configuration</h2>
@@ -472,7 +471,7 @@ const ValidationPanel: React.FC<ValidationPanelProps> = ({ errors }) => {
       return acc;
     }, {} as Record<string, ValidationError[]>);
   }, [errors]);
-  return ()
+  return ();
     <div className="validation-panel">
       <h4>Validation Results</h4>
       {Object.entries(errorsByField).map(([field, fieldErrors]) => ()
@@ -504,7 +503,7 @@ const BasicConfiguration: React.FC<BasicConfigurationProps> = ({)
   onChange,
   onConfigChange
 }) => {
-  return ()
+  return ();
     <div className="basic-configuration">
       <div className="form-section">
         <h3>Funnel Information</h3>
@@ -580,7 +579,7 @@ const BasicConfiguration: React.FC<BasicConfigurationProps> = ({)
             value={funnel.metadata?.expectedConversionRate || 0}
             onChange={(e) => onChange('metadata', { )
               ...funnel.metadata, 
-              expectedConversionRate: parseFloat(e.target.value) || 0 
+              expectedConversionRate: parseFloat(e.target.value) || 0 ,
             })}
             className="form-input"
           />
@@ -676,7 +675,7 @@ const StepsConfiguration: React.FC<StepsConfigurationProps> = ({)
   onDragStart,
   onDragEnd
 }) => {
-  return ()
+  return ();
     <div className="steps-configuration">
       <div className="steps-header">
         <h3>Funnel Steps</h3>
@@ -757,7 +756,7 @@ const StepEditor: React.FC<StepEditorProps> = ({)
     }
     onDragEnd();
   };
-  return ()
+  return ();
     <div 
       className="step-editor"
       draggable
@@ -874,7 +873,7 @@ const EventCriteriaEditor: React.FC<EventCriteriaEditorProps> = ({)
   onChange
 }) => {
   const selectedEvent = availableEvents.find(e => e.type === criteria.eventType);
-  return ()
+  return ();
     <div className="event-criteria-editor">
       <h4>Event Criteria</h4>
       <div className="form-group">
@@ -948,7 +947,7 @@ const PropertyMatchersEditor: React.FC<PropertyMatchersEditorProps> = ({)
   const removeMatcher = (index: number) => {
     onChange(matchers.filter((_, i) => i !== index));
   };
-  return ()
+  return ();
     <div className="property-matchers-editor">
       <div className="matchers-header">
         <h5>Property Matchers</h5>
@@ -1041,7 +1040,7 @@ const TimeConstraintsEditor: React.FC<TimeConstraintsEditorProps> = ({)
   constraints,
   onChange
 }) => {
-  return ()
+  return ();
     <div className="time-constraints-editor">
       <h5>Time Constraints</h5>
       <div className="form-row">
@@ -1053,7 +1052,7 @@ const TimeConstraintsEditor: React.FC<TimeConstraintsEditorProps> = ({)
             value={constraints.minTimeFromPrevious ? constraints.minTimeFromPrevious / 1000 : ''}
             onChange={(e) => onChange({)
               ...constraints,
-              minTimeFromPrevious: e.target.value ? parseInt(e.target.value) * 1000 : undefined
+              minTimeFromPrevious: e.target.value ? parseInt(e.target.value) * 1000 : undefined,
             })}
             className="form-input"
           />
@@ -1066,7 +1065,7 @@ const TimeConstraintsEditor: React.FC<TimeConstraintsEditorProps> = ({)
             value={constraints.maxTimeFromPrevious ? constraints.maxTimeFromPrevious / 1000 : ''}
             onChange={(e) => onChange({)
               ...constraints,
-              maxTimeFromPrevious: e.target.value ? parseInt(e.target.value) * 1000 : undefined
+              maxTimeFromPrevious: e.target.value ? parseInt(e.target.value) * 1000 : undefined,
             })}
             className="form-input"
           />
@@ -1080,7 +1079,7 @@ const TimeConstraintsEditor: React.FC<TimeConstraintsEditorProps> = ({)
           value={constraints.maxTimeFromStart ? constraints.maxTimeFromStart / 1000 : ''}
           onChange={(e) => onChange({)
             ...constraints,
-            maxTimeFromStart: e.target.value ? parseInt(e.target.value) * 1000 : undefined
+            maxTimeFromStart: e.target.value ? parseInt(e.target.value) * 1000 : undefined,
           })}
           className="form-input"
         />
@@ -1112,7 +1111,7 @@ const TemplateSelectionModal: React.FC<TemplateSelectionModalProps> = ({)
   onSelect,
   onClose
 }) => {
-  return ()
+  return ();
     <div className="modal-overlay">
       <div className="template-modal">
         <div className="modal-header">

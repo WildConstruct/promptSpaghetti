@@ -1,20 +1,17 @@
 // Epic 17.1.3 - Bulk Operations Modal Component
-
 import React, { useState } from 'react';
 import { X, Play, Pause, Archive, AlertTriangle, CheckCircle } from 'lucide-react';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { ValidationMessage } from '../common/ValidationMessage';
-
 interface BulkOperationsModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedToggleIds: string[];
   onComplete: () => void;
 }
-
 type BulkOperation = 'enable' | 'disable' | 'archive';
 
-export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
+export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({)
   isOpen,
   onClose,
   selectedToggleIds,
@@ -29,106 +26,88 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
     failed: Array<{ id: string; error: string }>;
   } | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
-
   if (!isOpen) return null;
-
   const operationConfig = {
-    enable: {
+    enable: {,
       title: 'Enable Toggles',
       description: 'Enable the selected feature toggles',
       icon: <Play size={16} />,
       color: 'green',
       confirmPhrase: 'ENABLE TOGGLES',
-      warning: 'This will immediately activate these toggles for users.'
+      warning: 'This will immediately activate these toggles for users.',
     },
-    disable: {
+    disable: {,
       title: 'Disable Toggles',
       description: 'Disable the selected feature toggles',
       icon: <Pause size={16} />,
       color: 'orange',
       confirmPhrase: 'DISABLE TOGGLES',
-      warning: 'This will immediately deactivate these toggles for users.'
+      warning: 'This will immediately deactivate these toggles for users.',
     },
-    archive: {
+    archive: {,
       title: 'Archive Toggles',
       description: 'Archive the selected feature toggles (cannot be undone)',
       icon: <Archive size={16} />,
       color: 'red',
       confirmPhrase: 'ARCHIVE TOGGLES',
-      warning: 'Archived toggles cannot be restored and will be permanently disabled.'
+      warning: 'Archived toggles cannot be restored and will be permanently disabled.',
     }
   };
-
   const config = operationConfig[operation];
-
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
-
     if (!reason.trim()) {
       newErrors.reason = 'Reason is required for bulk operations';
     }
-
     if (confirmText !== config.confirmPhrase) {
-      newErrors.confirm = `Please type "${config.confirmPhrase}" to confirm`;
+      newErrors.confirm = `Please type "${config.confirmPhrase}" to confirm`;}
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const executeBulkOperation = async () => {
     if (!validateForm()) {
       return;
     }
-
     setProcessing(true);
     setResults(null);
-
     const success: string[] = [];
     const failed: Array<{ id: string; error: string }> = [];
-
     // Process toggles sequentially to avoid overwhelming the server
     for (const toggleId of selectedToggleIds) {
       try {
-        const endpoint = operation === 'enable' 
-          ? `/api/feature-toggles/toggles/${toggleId}/activate`
-          : `/api/feature-toggles/toggles/${toggleId}`;
-
+        const endpoint = operation === 'enable' ;
+          ? `/api/feature-toggles/toggles/${toggleId}/activate`}
+          : `/api/feature-toggles/toggles/${toggleId}`;}
         const method = operation === 'enable' ? 'POST' : operation === 'archive' ? 'DELETE' : 'PUT';
-        
-        const body = operation === 'enable' 
+        const body = operation === 'enable' ;
           ? { reason }
           : operation === 'disable'
             ? { enabled: false, reason }
             : undefined;
-
-        const response = await fetch(endpoint, {
+        const response = await fetch(endpoint, {)
           method,
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          headers: {,
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,}
             'Content-Type': 'application/json'
           },
-          body: body ? JSON.stringify(body) : undefined
+          body: body ? JSON.stringify(body) : undefined,
         });
-
         if (!response.ok) {
           const error = await response.json();
-          throw new Error(error.error || `HTTP ${response.status}`);
+          throw new Error(error.error || `HTTP ${response.status}`);}
         }
-
         success.push(toggleId);
       } catch (error) {
-        failed.push({
+        failed.push({)
           id: toggleId,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     }
-
     setResults({ success, failed });
     setProcessing(false);
   };
-
   const handleComplete = () => {
     onComplete();
     onClose();
@@ -139,8 +118,7 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
     setResults(null);
     setErrors({});
   };
-
-  return (
+  return ()
     <div className="modal-overlay">
       <div className="modal-content bulk-operations-modal">
         <div className="modal-header">
@@ -150,20 +128,18 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
               <span>{selectedToggleIds.length} toggles selected</span>
             </div>
           </div>
-          
           <button className="modal-close" onClick={onClose}>
             <X size={20} />
           </button>
         </div>
-
         <div className="modal-body">
-          {!results ? (
+          {!results ? ()
             <>
               {/* Operation Selection */}
               <div className="operation-selector">
                 <h3>Select Operation</h3>
                 <div className="operation-options">
-                  {Object.entries(operationConfig).map(([key, op]) => (
+                  {Object.entries(operationConfig).map(([key, op]) => ()
                     <label key={key} className="operation-option">
                       <input
                         type="radio"
@@ -172,7 +148,7 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
                         checked={operation === key}
                         onChange={(e) => setOperation(e.target.value as BulkOperation)}
                       />
-                      <div className={`option-content ${operation === key ? 'selected' : ''}`}>
+                      <div className={`option-content ${operation === key ? 'selected' : ''}`}>}
                         <div className="option-header">
                           {op.icon}
                           <span>{op.title}</span>
@@ -183,15 +159,13 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
                   ))}
                 </div>
               </div>
-
               {/* Warning */}
-              <div className={`operation-warning ${config.color}`}>
+              <div className={`operation-warning ${config.color}`}>}
                 <AlertTriangle size={16} />
                 <div>
                   <strong>Warning:</strong> {config.warning}
                 </div>
               </div>
-
               {/* Reason */}
               <div className="form-group">
                 <label>Reason for Bulk Operation *</label>
@@ -204,7 +178,6 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
                 />
                 {errors.reason && <ValidationMessage type="error" message={errors.reason} />}
               </div>
-
               {/* Confirmation */}
               <div className="form-group">
                 <label>Confirmation *</label>
@@ -220,15 +193,14 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
                   This confirmation is required for security
                 </div>
               </div>
-
               {/* Toggle List Preview */}
               <div className="selected-toggles-preview">
                 <h4>Affected Toggles ({selectedToggleIds.length})</h4>
                 <div className="toggle-ids-list">
-                  {selectedToggleIds.slice(0, 10).map(id => (
+                  {selectedToggleIds.slice(0, 10).map(id => ()
                     <code key={id} className="toggle-id">{id}</code>
                   ))}
-                  {selectedToggleIds.length > 10 && (
+                  {selectedToggleIds.length > 10 && ()
                     <span className="more-indicator">
                       ... and {selectedToggleIds.length - 10} more
                     </span>
@@ -236,7 +208,7 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
                 </div>
               </div>
             </>
-          ) : (
+          ) : ()
             /* Results Display */
             <div className="results-display">
               <div className="results-summary">
@@ -246,7 +218,7 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
                     <CheckCircle size={20} />
                     <span>{results.success.length} Successful</span>
                   </div>
-                  {results.failed.length > 0 && (
+                  {results.failed.length > 0 && ()
                     <div className="stat failed">
                       <AlertTriangle size={20} />
                       <span>{results.failed.length} Failed</span>
@@ -254,12 +226,11 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
                   )}
                 </div>
               </div>
-
-              {results.failed.length > 0 && (
+              {results.failed.length > 0 && ()
                 <div className="failed-operations">
                   <h4>Failed Operations</h4>
                   <div className="failed-list">
-                    {results.failed.map(({ id, error }) => (
+                    {results.failed.map(({ id, error }) => ()
                       <div key={id} className="failed-item">
                         <code className="failed-id">{id}</code>
                         <span className="error-message">{error}</span>
@@ -268,7 +239,6 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
                   </div>
                 </div>
               )}
-
               <div className="operation-details">
                 <div className="detail-item">
                   <label>Operation</label>
@@ -285,8 +255,7 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
               </div>
             </div>
           )}
-
-          {processing && (
+          {processing && ()
             <div className="processing-overlay">
               <LoadingSpinner />
               <p>Processing {operation} operation...</p>
@@ -296,9 +265,8 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
             </div>
           )}
         </div>
-
         <div className="modal-footer">
-          {!results ? (
+          {!results ? ()
             <>
               <button
                 type="button"
@@ -318,7 +286,7 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
                 {processing ? 'Processing...' : `${config.title}`}
               </button>
             </>
-          ) : (
+          ) : ()
             <button
               type="button"
               className="btn btn-primary"

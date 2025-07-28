@@ -2,7 +2,6 @@
  * QR Code Generator - Epic 19 Implementation
  * Secure QR code generation for TOTP authenticator app enrollment with customization options
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Button } from '../ui/Button';
@@ -45,7 +44,6 @@ export interface QRCodeStyle {
   logoSize?: number;
   borderRadius?: number;
 }
-
 interface QRCodeGeneratorProps {
   qrData: QRCodeData;
   onRegenerateSecret?: () => Promise<QRCodeData>;
@@ -53,7 +51,6 @@ interface QRCodeGeneratorProps {
   showSecretDetails?: boolean;
   className?: string;
 }
-
 interface GeneratorState {
   style: QRCodeStyle;
   showAdvanced: boolean;
@@ -64,54 +61,51 @@ interface GeneratorState {
   error: string | null;
   validationPassed: boolean;
 }
-
 const DEFAULT_STYLE: QRCodeStyle = {
   size: 256,
   margin: 4,
   errorCorrectionLevel: 'H',
   includeMargin: true,
   backgroundColor: '#FFFFFF',
-  foregroundColor: '#000000'
+  foregroundColor: '#000000',
 };
-
 const ERROR_CORRECTION_LEVELS = {
   L: { label: 'Low (~7%)', description: 'Basic error recovery' },
   M: { label: 'Medium (~15%)', description: 'Standard error recovery' },
   Q: { label: 'Quartile (~25%)', description: 'Good error recovery' },
   H: { label: 'High (~30%)', description: 'Best error recovery (recommended)' }
 };
-
 const PRESET_STYLES = {
-  standard: {
+  standard: {,
     name: 'Standard',
     style: { ...DEFAULT_STYLE }
   },
-  large: {
+  large: {,
     name: 'Large',
     style: { ...DEFAULT_STYLE, size: 384, margin: 6 }
   },
-  minimal: {
+  minimal: {,
     name: 'Minimal',
     style: { ...DEFAULT_STYLE, size: 200, margin: 2 }
   },
-  highContrast: {
+  highContrast: {,
     name: 'High Contrast',
     style: { ...DEFAULT_STYLE, foregroundColor: '#000000', backgroundColor: '#FFFFFF' }
   },
-  darkMode: {
+  darkMode: {,
     name: 'Dark Mode',
     style: { ...DEFAULT_STYLE, foregroundColor: '#FFFFFF', backgroundColor: '#1a1a1a' }
   }
 };
 
-export function QRCodeGenerator({ 
+export function QRCodeGenerator({ )
   qrData, 
   onRegenerateSecret,
   showCustomization = true,
   showSecretDetails = true,
   className = ''
 }: QRCodeGeneratorProps) {
-    const [state, setState] = useState<GeneratorState>({
+    const [state, setState] = useState<GeneratorState>({)
     style: DEFAULT_STYLE,
     showAdvanced: false,
     showSecret: false,
@@ -119,56 +113,45 @@ export function QRCodeGenerator({
     downloading: false,
     regenerating: false,
     error: null,
-    validationPassed: false
+    validationPassed: false,
   });
-
   const validateQRData = useCallback(() => {
     const issues: string[] = [];
-
     if (!qrData.uri || !qrData.uri.startsWith('otpauth://totp/')) {
       issues.push('Invalid TOTP URI format');
     }
-
     if (!qrData.secret || qrData.secret.length < 16) {
       issues.push('Secret too short (minimum 16 characters)');
     }
-
     if (qrData.digits !== 6 && qrData.digits !== 8) {
       issues.push('Digits must be 6 or 8');
     }
-
     if (qrData.period < 15 || qrData.period > 300) {
       issues.push('Period must be between 15 and 300 seconds');
     }
-
     const isValid = issues.length === 0;
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
       validationPassed: isValid,
       error: isValid ? null : issues.join('; ')
     }));
   }, [qrData]);
-
   // Validate QR data on mount and when it changes
   useEffect(() => {
     validateQRData();
   }, [validateQRData]);
-
   const updateStyle = (updates: Partial<QRCodeStyle>) => {
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
       style: { ...prev.style, ...updates }
     }));
   };
-
   const applyPreset = (presetKey: keyof typeof PRESET_STYLES) => {
     const preset = PRESET_STYLES[presetKey];
     updateStyle(preset.style);
   };
-
   const copyToClipboard = async (text: string) => {
     setState(prev => ({ ...prev, copying: true }));
-    
     try {
       await navigator.clipboard.writeText(text);
       setTimeout(() => {
@@ -177,31 +160,26 @@ export function QRCodeGenerator({
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       console.error('Copy failed:', error);
-      setState(prev => ({ 
+      setState(prev => ({ )
         ...prev, 
         copying: false,
-        error: 'Failed to copy to clipboard'
+        error: 'Failed to copy to clipboard',
       }));
     }
   };
-
   const downloadQRCode = (format: 'png' | 'svg' = 'png') => {
     setState(prev => ({ ...prev, downloading: true }));
-
     try {
       if (format === 'png') {
         // Create canvas element for PNG download
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         if (!ctx) throw new Error('Canvas context not available');
-
         canvas.width = state.style.size;
         canvas.height = state.style.size;
-
         // Fill background
         ctx.fillStyle = state.style.backgroundColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
         // Generate QR code on canvas (would need actual QR generation library)
         // For now, create a simple download
         canvas.toBlob((blob) => {
@@ -209,7 +187,7 @@ export function QRCodeGenerator({
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `promptscape-qr-${qrData.accountName}-${Date.now()}.png`;
+            a.download = `promptscape-qr-${qrData.accountName}-${Date.now()}.png`;}
             a.click();
             URL.revokeObjectURL(url);
           }
@@ -223,42 +201,37 @@ export function QRCodeGenerator({
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `promptscape-qr-${qrData.accountName}-${Date.now()}.svg`;
+          a.download = `promptscape-qr-${qrData.accountName}-${Date.now()}.svg`;}
           a.click();
           URL.revokeObjectURL(url);
         }
       }
     } catch (error) {
-      setState(prev => ({ 
+      setState(prev => ({ )
         ...prev, 
-        error: `Failed to download QR code: ${error.message}`
+        error: `Failed to download QR code: ${error.message}`}
       }));
     } finally {
       setState(prev => ({ ...prev, downloading: false }));
     }
   };
-
   const regenerateSecret = async () => {
     if (!onRegenerateSecret) return;
-
     setState(prev => ({ ...prev, regenerating: true, error: null }));
-
     try {
       await onRegenerateSecret();
     } catch (error) {
-      setState(prev => ({ 
+      setState(prev => ({ )
         ...prev, 
-        error: `Failed to regenerate secret: ${error.message}`
+        error: `Failed to regenerate secret: ${error.message}`}
       }));
     } finally {
       setState(prev => ({ ...prev, regenerating: false }));
     }
   };
-
   const formatSecret = (secret: string): string => {
     return secret.replace(/(.{4})/g, '$1 ').trim();
   };
-
   const getSecurityLevel = (): { level: string; color: string; description: string } => {
     if (qrData.secret.length >= 32 && qrData.algorithm === 'SHA256') {
       return { level: 'High', color: 'green', description: 'Excellent security' };
@@ -268,31 +241,28 @@ export function QRCodeGenerator({
       return { level: 'Basic', color: 'yellow', description: 'Meets minimum requirements' };
     }
   };
-
   const security = getSecurityLevel();
-
-  return (
-    <div className={`space-y-6 ${className}`}>
+  return ()
+    <div className={`space-y-6 ${className}`}>}
       {/* Main QR Code Display */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Smartphone className="h-5 w-5" />
             Authenticator App Setup
-            <Badge variant="outline" className={`text-${security.color}-700 border-${security.color}-300`}>
+            <Badge variant="outline" className={`text-${security.color}-700 border-${security.color}-300`}>}
               {security.level} Security
             </Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {state.error && (
+          {state.error && ()
             <Alert variant="destructive">
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>{state.error}</AlertDescription>
             </Alert>
           )}
-
-          {state.validationPassed && (
+          {state.validationPassed && ()
             <div className="text-center space-y-4">
               <div className="inline-block p-4 bg-white rounded-lg shadow-sm border">
                 <QRCodeSVG
@@ -306,7 +276,6 @@ export function QRCodeGenerator({
                   bgColor={state.style.backgroundColor}
                 />
               </div>
-
               <div className="flex flex-wrap gap-2 justify-center">
                 <Button
                   variant="outline"
@@ -335,23 +304,22 @@ export function QRCodeGenerator({
                   <Download className="h-4 w-4 mr-1" />
                   Download SVG
                 </Button>
-                {onRegenerateSecret && (
+                {onRegenerateSecret && ()
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={regenerateSecret}
                     disabled={state.regenerating}
                   >
-                    <RefreshCw className={`h-4 w-4 mr-1 ${state.regenerating ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`h-4 w-4 mr-1 ${state.regenerating ? 'animate-spin' : ''}`} />}
                     Regenerate
                   </Button>
                 )}
               </div>
             </div>
           )}
-
           {/* Manual Entry Option */}
-          {showSecretDetails && (
+          {showSecretDetails && ()
             <div className="space-y-4 border-t pt-4">
               <div className="flex items-center justify-between">
                 <h4 className="font-medium">Manual Entry</h4>
@@ -364,8 +332,7 @@ export function QRCodeGenerator({
                   {state.showSecret ? 'Hide' : 'Show'} Secret
                 </Button>
               </div>
-
-              {state.showSecret && (
+              {state.showSecret && ()
                 <div className="space-y-3">
                   <div>
                     <label className="text-sm font-medium text-gray-700">Secret Key</label>
@@ -382,7 +349,6 @@ export function QRCodeGenerator({
                       Copy Secret
                     </Button>
                   </div>
-
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <span className="font-medium">Account:</span> {qrData.accountName}
@@ -409,9 +375,8 @@ export function QRCodeGenerator({
           )}
         </CardContent>
       </Card>
-
       {/* Customization Panel */}
-      {showCustomization && (
+      {showCustomization && ()
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -434,7 +399,7 @@ export function QRCodeGenerator({
             <div>
               <label className="block text-sm font-medium mb-2">Quick Presets</label>
               <div className="flex flex-wrap gap-2">
-                {Object.entries(PRESET_STYLES).map(([key, preset]) => (
+                {Object.entries(PRESET_STYLES).map(([key, preset]) => ()
                   <Button
                     key={key}
                     variant="outline"
@@ -446,7 +411,6 @@ export function QRCodeGenerator({
                 ))}
               </div>
             </div>
-
             {/* Basic Settings */}
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -476,14 +440,13 @@ export function QRCodeGenerator({
                 />
               </div>
             </div>
-
             {/* Advanced Settings */}
-            {state.showAdvanced && (
+            {state.showAdvanced && ()
               <div className="space-y-4 border-t pt-4">
                 <div>
                   <label className="block text-sm font-medium mb-2">Error Correction Level</label>
                   <div className="grid grid-cols-2 gap-2">
-                    {Object.entries(ERROR_CORRECTION_LEVELS).map(([level, config]) => (
+                    {Object.entries(ERROR_CORRECTION_LEVELS).map(([level, config]) => ()
                       <Button
                         key={level}
                         variant={state.style.errorCorrectionLevel === level ? 'default' : 'outline'}
@@ -499,7 +462,6 @@ export function QRCodeGenerator({
                     ))}
                   </div>
                 </div>
-
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">Background Color</label>
@@ -520,7 +482,6 @@ export function QRCodeGenerator({
                     />
                   </div>
                 </div>
-
                 <div className="flex items-center space-x-2">
                   <Switch
                     checked={state.style.includeMargin}
@@ -533,7 +494,6 @@ export function QRCodeGenerator({
           </CardContent>
         </Card>
       )}
-
       {/* Security Information */}
       <Alert>
         <CheckCircle className="h-4 w-4" />

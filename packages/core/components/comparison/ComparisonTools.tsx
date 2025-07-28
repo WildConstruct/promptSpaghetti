@@ -246,7 +246,7 @@ export const ComparisonTools: React.FC<ComparisonToolsProps> = ({)
       }
     });
   }, [filteredSessions, sortBy]);
-  return ()
+  return ();
     <div className={`comparison-tools ${className}`}>}
       <Card className="comparison-tools-card">
         <CardHeader>
@@ -414,7 +414,7 @@ const ComparisonSessionCard: React.FC<ComparisonSessionCardProps> = ({)
   onExport
 }) => {
   const [showActions, setShowActions] = useState(false);
-  return ()
+  return ();
     <div 
       className={`comparison-session-card ${isActive ? 'active' : ''} ${isSelected ? 'selected' : ''}`}
       onClick={onSelect}
@@ -543,7 +543,7 @@ const ComparisonSessionRow: React.FC<ComparisonSessionRowProps> = ({)
   onUpdate,
   onDelete
 }) => {
-  return ()
+  return ();
     <div 
       className={`comparison-session-row ${isActive ? 'active' : ''} ${isSelected ? 'selected' : ''}`}
       onClick={onSelect}
@@ -642,7 +642,7 @@ const ComparisonTimeline: React.FC<ComparisonTimelineProps> = ({)
         sessions: sessions.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       }));
   }, [sessions]);
-  return ()
+  return ();
     <div className="comparison-timeline">
       {groupedSessions.map(({ date, sessions }) => ()
         <div key={date.toDateString()} className="timeline-group">
@@ -729,7 +729,7 @@ export const AdvancedDiffViewer: React.FC<AdvancedDiffViewerProps> = ({)
       filters: { ...session.filters, ...filters }
     });
   }, [session.filters, onSessionUpdate]);
-  return ()
+  return ();
     <div className={`advanced-diff-viewer ${className}`}>}
       <div className="diff-viewer-header">
         <div className="diff-viewer-title">
@@ -812,7 +812,7 @@ const DiffViewerToolbar: React.FC<DiffViewerToolbarProps> = ({)
   showAnnotations,
   onToggleAnnotations
 }) => {
-  return ()
+  return ();
     <div className="diff-viewer-toolbar">
       <div className="toolbar-section">
         <label>View Mode:</label>

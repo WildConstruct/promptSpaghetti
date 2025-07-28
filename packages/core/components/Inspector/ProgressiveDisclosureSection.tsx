@@ -135,7 +135,7 @@ const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> 
         return '';
     }
   };
-  return ()
+  return ();
     <div 
       style={sectionStyles} 
       className={className}

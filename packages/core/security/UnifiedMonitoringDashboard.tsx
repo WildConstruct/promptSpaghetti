@@ -176,14 +176,14 @@ const MetricCard: React.FC<{
   const statusColors = {
     good: 'bg-green-50 border-green-200',
     warning: 'bg-yellow-50 border-yellow-200',
-    critical: 'bg-red-50 border-red-200'
+    critical: 'bg-red-50 border-red-200',
   };
   const trendIcons = {
     up: <TrendingUp className="w-4 h-4 text-green-500" />,
     down: <TrendingDown className="w-4 h-4 text-red-500" />,
-    stable: <div className="w-4 h-4" />
+    stable: <div className="w-4 h-4" />,
   };
-  return ()
+  return ();
     <div 
       className={`p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md ${statusColors[status]}`}
       onClick={onClick}
@@ -207,20 +207,20 @@ const AlertCard: React.FC<{ alert: AlertSummary; onAcknowledge: (id: string) => 
     low: 'border-blue-300 bg-blue-50',
     medium: 'border-yellow-300 bg-yellow-50',
     high: 'border-orange-300 bg-orange-50',
-    critical: 'border-red-300 bg-red-50'
+    critical: 'border-red-300 bg-red-50',
   };
   const severityIcons = {
     low: <AlertCircle className="w-4 h-4 text-blue-600" />,
     medium: <AlertTriangle className="w-4 h-4 text-yellow-600" />,
     high: <AlertTriangle className="w-4 h-4 text-orange-600" />,
-    critical: <XCircle className="w-4 h-4 text-red-600" />
+    critical: <XCircle className="w-4 h-4 text-red-600" />,
   };
   const statusIcons = {
     active: <AlertCircle className="w-4 h-4 text-red-500" />,
     investigating: <Clock className="w-4 h-4 text-yellow-500" />,
-    resolved: <CheckCircle className="w-4 h-4 text-green-500" />
+    resolved: <CheckCircle className="w-4 h-4 text-green-500" />,
   };
-  return ()
+  return ();
     <div className={`p-4 rounded-lg border-2 ${severityColors[alert.severity]}`}>}
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center space-x-2">
@@ -261,9 +261,9 @@ const SystemStatusIndicator: React.FC<{ system: SystemStatus }> = ({ system }) =
     healthy: <CheckCircle className="w-4 h-4 text-green-600" />,
     degraded: <AlertTriangle className="w-4 h-4 text-yellow-600" />,
     unhealthy: <AlertTriangle className="w-4 h-4 text-orange-600" />,
-    offline: <XCircle className="w-4 h-4 text-red-600" />
+    offline: <XCircle className="w-4 h-4 text-red-600" />,
   };
-  return ()
+  return ();
     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
       <div className="flex items-center space-x-3">
         <div className={`w-3 h-3 rounded-full ${statusColors[system.status]}`} />}
@@ -288,7 +288,7 @@ const SimpleChart: React.FC<{ data: TimeSeriesData[]; height?: number }> = ({ da
   const maxValue = Math.max(...data.map(d => d.value));
   const minValue = Math.min(...data.map(d => d.value));
   const range = maxValue - minValue || 1;
-  return ()
+  return ();
     <div className="relative" style={{ height }}>
       <svg className="w-full h-full">
         <polyline
@@ -326,13 +326,13 @@ export const UnifiedMonitoringDashboard: React.FC = () => {
   const generateTimeSeriesData = (baseValue: number, variance: number, points: number = 24): TimeSeriesData[] => {
     return Array.from({ length: points }, (_, i) => ({)
       timestamp: Date.now() - (points - i) * 60 * 60 * 1000,
-      value: baseValue + (Math.random() - 0.5) * variance
+      value: baseValue + (Math.random() - 0.5) * variance,
     }));
   };
   const responseTimeData = generateTimeSeriesData(metrics.performance.avg_response_time, 100);
   const requestRateData = generateTimeSeriesData(metrics.performance.requests_per_minute, 300);
   const activeUsersData = generateTimeSeriesData(metrics.analytics.active_users, 500);
-  return ()
+  return ();
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="mb-6">

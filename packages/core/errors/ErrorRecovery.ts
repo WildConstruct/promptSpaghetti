@@ -69,7 +69,7 @@ export class ErrorRecovery {
         }
         // Don't delay after the last attempt
         if (attempt < maxAttempts) {
-          const delay = Math.min(;)
+          const delay = Math.min(;);
             baseDelay * Math.pow(backoffMultiplier, attempt - 1),
             maxDelay
           );
@@ -352,12 +352,10 @@ interface CircuitBreakerState extends CircuitBreakerOptions {
 export function withErrorRecovery<T extends any[], R>()
   retryOptions?: Partial<RetryOptions>,
   fallbackOptions?: FallbackOptions<R>
-) {
   return function ()
     target: any,
     propertyKey: string,
     descriptor: PropertyDescriptor,
-  ) {
     const originalMethod = descriptor.value;
     descriptor.value = async function (...args: T): Promise<R> {
       const context = `${target.constructor.name}.${propertyKey}`;}

@@ -1,5 +1,4 @@
 // Epic 17.1.4 - Targeting Rule Builder Component
-
 import React, { useState } from 'react';
 import { 
   Plus, 
@@ -12,7 +11,6 @@ import {
   Check
 } from 'lucide-react';
 import { Badge } from '../../common/Badge';
-
 interface TargetingRule {
   id: string;
   attribute: string;
@@ -20,7 +18,6 @@ interface TargetingRule {
   value: Error;
   logicalOperator?: 'AND' | 'OR';
 }
-
 interface UserSegment {
   id: string;
   name: string;
@@ -29,15 +26,13 @@ interface UserSegment {
   estimatedUsers?: number;
   isActive: boolean;
 }
-
 interface TargetingRuleBuilderProps {
   initialRules?: TargetingRule[];
   onRulesChange: (rules: TargetingRule[]) => void;
   segments?: UserSegment[];
   onTestRule?: (rules: TargetingRule[]) => Promise<{ matches: boolean; userCount: number }>;
 }
-
-const AVAILABLE_ATTRIBUTES = [
+const AVAILABLE_ATTRIBUTES = [;
   { key: 'user_id', label: 'User ID', type: 'string', description: 'Unique user identifier' },
   { key: 'email', label: 'Email', type: 'string', description: 'User email address' },
   { key: 'org_id', label: 'Organization ID', type: 'string', description: 'Organization identifier' },
@@ -52,7 +47,6 @@ const AVAILABLE_ATTRIBUTES = [
   { key: 'experiment_group', label: 'Experiment Group', type: 'string', description: 'A/B test group assignment' },
   { key: 'custom_attribute', label: 'Custom Attribute', type: 'string', description: 'Custom user attribute' }
 ];
-
 const OPERATORS = {
   equals: { label: 'Equals', symbol: '=', description: 'Exact match' },
   not_equals: { label: 'Not Equals', symbol: '≠', description: 'Does not match' },
@@ -66,35 +60,30 @@ const OPERATORS = {
   not_exists: { label: 'Not Exists', symbol: '∄', description: 'Attribute is missing' }
 };
 
-export   const [testResult, setTestResult] = useState<{ matches: boolean; userCount: number } | null>(null);
+export const [testResult, setTestResult] = useState<{ matches: boolean; userCount: number } | null>(null);
   const [testing, setTesting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [rules, setRules] = useState<TargetingRule[]>(initialRules);
-
-  const generateRuleId = () => `rule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
+  const generateRuleId = () => `rule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
   const addRule = () => {
     const newRule: TargetingRule = {
       id: generateRuleId(),
       attribute: 'user_type',
       operator: 'equals',
       value: '',
-      logicalOperator: rules.length > 0 ? 'AND' : undefined
+      logicalOperator: rules.length > 0 ? 'AND' : undefined,
     };
-    
     const updatedRules = [...rules, newRule];
     setRules(updatedRules);
     onRulesChange(updatedRules);
   };
-
   const updateRule = (id: string, updates: Partial<TargetingRule>) => {
-    const updatedRules = rules.map(rule => 
+    const updatedRules = rules.map(rule => ;)
       rule.id === id ? { ...rule, ...updates } : rule
     );
     setRules(updatedRules);
     onRulesChange(updatedRules);
   };
-
   const removeRule = (id: string) => {
     const updatedRules = rules.filter(rule => rule.id !== id);
     // Remove logical operator from first rule if it exists
@@ -104,31 +93,25 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
     setRules(updatedRules);
     onRulesChange(updatedRules);
   };
-
   const duplicateRule = (id: string) => {
     const ruleToDuplicate = rules.find(rule => rule.id === id);
     if (!ruleToDuplicate) return;
-
     const duplicatedRule: TargetingRule = {
       ...ruleToDuplicate,
       id: generateRuleId(),
-      logicalOperator: 'AND'
+      logicalOperator: 'AND',
     };
-
     const ruleIndex = rules.findIndex(rule => rule.id === id);
-    const updatedRules = [
+    const updatedRules = [;
       ...rules.slice(0, ruleIndex + 1),
       duplicatedRule,
       ...rules.slice(ruleIndex + 1)
     ];
-    
     setRules(updatedRules);
     onRulesChange(updatedRules);
   };
-
   const testRules = async () => {
     if (!onTestRule || rules.length === 0) return;
-
     setTesting(true);
     try {
       const result = await onTestRule(rules);
@@ -139,18 +122,15 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
       setTesting(false);
     }
   };
-
   const renderValueInput = (rule: TargetingRule) => {
     const attribute = AVAILABLE_ATTRIBUTES.find(attr => attr.key === rule.attribute);
-    
     // No value input needed for exists/not_exists operators
     if (rule.operator === 'exists' || rule.operator === 'not_exists') {
       return null;
     }
-
     // Multiple values for in/not_in operators
     if (rule.operator === 'in' || rule.operator === 'not_in') {
-      return (
+      return ()
         <textarea
           className="rule-value-input multi-value"
           placeholder="Enter values separated by commas"
@@ -163,26 +143,24 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
         />
       );
     }
-
     // Enum dropdown
     if (attribute?.type === 'enum' && attribute.options) {
-      return (
+      return ()
         <select
           className="rule-value-input"
           value={rule.value}
           onChange={(e) => updateRule(rule.id, { value: e.target.value })}
         >
           <option value="">Select value</option>
-          {attribute.options.map(option => (
+          {attribute.options.map(option => ()
             <option key={option} value={option}>{option}</option>
           ))}
         </select>
       );
     }
-
     // Date input
     if (attribute?.type === 'date') {
-      return (
+      return ()
         <input
           type="datetime-local"
           className="rule-value-input"
@@ -191,10 +169,9 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
         />
       );
     }
-
     // Number input
     if (attribute?.type === 'number') {
-      return (
+      return ()
         <input
           type="number"
           className="rule-value-input"
@@ -204,9 +181,8 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
         />
       );
     }
-
     // Default text input
-    return (
+    return ()
       <input
         type="text"
         className="rule-value-input"
@@ -216,24 +192,20 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
       />
     );
   };
-
   const generateReadableRule = (rule: TargetingRule): string => {
     const attribute = AVAILABLE_ATTRIBUTES.find(attr => attr.key === rule.attribute);
     const operator = OPERATORS[rule.operator];
-    
     let valueDisplay = '';
     if (rule.operator === 'exists' || rule.operator === 'not_exists') {
       valueDisplay = '';
     } else if (Array.isArray(rule.value)) {
-      valueDisplay = `[${rule.value.join(', ')}]`;
+      valueDisplay = `[${rule.value.join(', ')}]`;}
     } else {
       valueDisplay = String(rule.value);
     }
-
-    return `${attribute?.label || rule.attribute} ${operator.symbol} ${valueDisplay}`.trim();
+    return `${attribute?.label || rule.attribute} ${operator.symbol} ${valueDisplay}`.trim();}
   };
-
-  return (
+  return ()
     <div className="targeting-rule-builder">
       {/* Header */}
       <div className="builder-header">
@@ -244,7 +216,6 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
           </h3>
           <p>Define who should see this feature toggle</p>
         </div>
-        
         <div className="header-actions">
           <button
             className="btn btn-secondary btn-sm"
@@ -253,8 +224,7 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
             <Code size={16} />
             {showPreview ? 'Hide' : 'Show'} Preview
           </button>
-          
-          {onTestRule && (
+          {onTestRule && ()
             <button
               className="btn btn-primary btn-sm"
               onClick={testRules}
@@ -266,10 +236,9 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
           )}
         </div>
       </div>
-
       {/* Test Results */}
-      {testResult && (
-        <div className={`test-result ${testResult.matches ? 'success' : 'info'}`}>
+      {testResult && ()
+        <div className={`test-result ${testResult.matches ? 'success' : 'info'}`}>}
           <div className="result-icon">
             {testResult.matches ? <Check size={16} /> : <Info size={16} />}
           </div>
@@ -281,10 +250,9 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
           </div>
         </div>
       )}
-
       {/* Rules List */}
       <div className="rules-container">
-        {rules.length === 0 ? (
+        {rules.length === 0 ? ()
           <div className="empty-rules">
             <Filter size={32} />
             <h4>No targeting rules defined</h4>
@@ -294,17 +262,17 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
               Add First Rule
             </button>
           </div>
-        ) : (
+        ) : ()
           <div className="rules-list">
-            {rules.map((rule, index) => (
+            {rules.map((rule, index) => ()
               <div key={rule.id} className="rule-item">
                 {/* Logical Operator */}
-                {index > 0 && (
+                {index > 0 && ()
                   <div className="logical-operator">
                     <select
                       value={rule.logicalOperator || 'AND'}
-                      onChange={(e) => updateRule(rule.id, { 
-                        logicalOperator: e.target.value as 'AND' | 'OR' 
+                      onChange={(e) => updateRule(rule.id, { )
+                        logicalOperator: e.target.value as 'AND' | 'OR' ,
                       })}
                       className="operator-select"
                     >
@@ -313,7 +281,6 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
                     </select>
                   </div>
                 )}
-
                 {/* Rule Content */}
                 <div className="rule-content">
                   <div className="rule-inputs">
@@ -322,51 +289,47 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
                       <label>Attribute</label>
                       <select
                         value={rule.attribute}
-                        onChange={(e) => updateRule(rule.id, { 
+                        onChange={(e) => updateRule(rule.id, { )
                           attribute: e.target.value,
-                          value: '' // Reset value when attribute changes
+                          value: '' // Reset value when attribute changes,
                         })}
                         className="rule-input"
                       >
-                        {AVAILABLE_ATTRIBUTES.map(attr => (
+                        {AVAILABLE_ATTRIBUTES.map(attr => ()
                           <option key={attr.key} value={attr.key}>
                             {attr.label}
                           </option>
                         ))}
                       </select>
                     </div>
-
                     {/* Operator */}
                     <div className="input-group">
                       <label>Operator</label>
                       <select
                         value={rule.operator}
-                        onChange={(e) => updateRule(rule.id, { 
+                        onChange={(e) => updateRule(rule.id, { )
                           operator: e.target.value as 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'contains' | 'regex' | 'exists' | 'not_exists',
-                          value: '' // Reset value when operator changes
+                          value: '' // Reset value when operator changes,
                         })}
                         className="rule-input"
                       >
-                        {Object.entries(OPERATORS).map(([key, op]) => (
+                        {Object.entries(OPERATORS).map(([key, op]) => ()
                           <option key={key} value={key}>
                             {op.label} ({op.symbol})
                           </option>
                         ))}
                       </select>
                     </div>
-
                     {/* Value */}
                     <div className="input-group">
                       <label>Value</label>
                       {renderValueInput(rule)}
                     </div>
                   </div>
-
                   {/* Rule Preview */}
                   <div className="rule-preview">
                     <code>{generateReadableRule(rule)}</code>
                   </div>
-
                   {/* Rule Actions */}
                   <div className="rule-actions">
                     <button
@@ -376,7 +339,6 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
                     >
                       <Copy size={14} />
                     </button>
-                    
                     <button
                       className="btn-icon btn-danger"
                       title="Remove Rule"
@@ -388,7 +350,6 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
                 </div>
               </div>
             ))}
-
             {/* Add Rule Button */}
             <button className="add-rule-btn" onClick={addRule}>
               <Plus size={16} />
@@ -397,16 +358,15 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
           </div>
         )}
       </div>
-
       {/* Rule Preview Panel */}
-      {showPreview && rules.length > 0 && (
+      {showPreview && rules.length > 0 && ()
         <div className="preview-panel">
           <h4>Generated Query</h4>
           <div className="preview-content">
             <div className="logical-preview">
-              {rules.map((rule, index) => (
+              {rules.map((rule, index) => ()
                 <span key={rule.id} className="preview-rule">
-                  {index > 0 && (
+                  {index > 0 && ()
                     <span className="preview-operator">
                       {rule.logicalOperator || 'AND'}
                     </span>
@@ -415,7 +375,6 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
                 </span>
               ))}
             </div>
-            
             <div className="json-preview">
               <h5>JSON Configuration:</h5>
               <pre>{JSON.stringify(rules, null, 2)}</pre>
@@ -423,32 +382,29 @@ export   const [testResult, setTestResult] = useState<{ matches: boolean; userCo
           </div>
         </div>
       )}
-
       {/* Available Segments */}
-      {segments.length > 0 && (
+      {segments.length > 0 && ()
         <div className="segments-section">
           <h4>
             <Users size={16} />
             Predefined Segments
           </h4>
           <div className="segments-list">
-            {segments.map(segment => (
+            {segments.map(segment => ()
               <div key={segment.id} className="segment-item">
                 <div className="segment-info">
                   <div className="segment-name">{segment.name}</div>
                   <div className="segment-description">{segment.description}</div>
-                  {segment.estimatedUsers && (
+                  {segment.estimatedUsers && ()
                     <div className="segment-users">
                       ~{segment.estimatedUsers.toLocaleString()} users
                     </div>
                   )}
                 </div>
-                
                 <div className="segment-actions">
                   <Badge color={segment.isActive ? 'green' : 'gray'}>
                     {segment.isActive ? 'Active' : 'Inactive'}
                   </Badge>
-                  
                   <button
                     className="btn btn-secondary btn-sm"
                     onClick={() => {

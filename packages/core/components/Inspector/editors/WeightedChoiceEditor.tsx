@@ -37,7 +37,7 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({ )
   const weightOptions: WeightControlOption[] = choices.map((choice, index) => ({)
     id: `choice_${index}`,}
     text: choice,
-    weight: weights[index] || 1
+    weight: weights[index] || 1,
   }));
   // Real-time preview integration
   const {
@@ -56,7 +56,7 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({ )
     {
       maxVariants: 5,
       debounceMs: 300,
-      enablePerformanceTracking: complexityLevel !== 'basic'
+      enablePerformanceTracking: complexityLevel !== 'basic',
     }
   );
   // Weight control integration with global preview support
@@ -132,7 +132,7 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({ )
     relatedFeatures: ['weight-presets', 'distribution-charts'],
     priority: 'medium',
   });
-  return ()
+  return ();
     <div className="weighted-choice-editor">
       {/* BASIC LEVEL: Essential node configuration */}
       <ProgressiveDisclosureSection
@@ -270,7 +270,7 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({ )
                   height: 6,
                   borderRadius: '50%',
                   background: Date.now() - lastUpdateTime < 2000 ? '#10b981' : '#6b7280',
-                  animation: Date.now() - lastUpdateTime < 2000 ? 'pulse 1.5s infinite' : 'none'
+                  animation: Date.now() - lastUpdateTime < 2000 ? 'pulse 1.5s infinite' : 'none',
                 }} />
               </div>
             </div>
@@ -309,7 +309,7 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({ )
                     borderRadius: 2,
                     color: '#e2e8f0',
                     cursor: isGenerating ? 'wait' : 'pointer',
-                    opacity: isGenerating ? 0.6 : 1
+                    opacity: isGenerating ? 0.6 : 1,
                   }}
                 >
                   🔄 Refresh
@@ -451,7 +451,7 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({ )
                 const percentage = weights.length > 0 ;
                   ? Math.round((weight / weights.reduce((sum, w) => sum + w, 0)) * 100)
                   : Math.round(100 / choices.length);
-                return ()
+                return ();
                   <div key={index} style={{ 
                     display: 'flex', 
                     justifyContent: 'space-between',

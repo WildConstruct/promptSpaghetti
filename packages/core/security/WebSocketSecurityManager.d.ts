@@ -119,7 +119,7 @@ export declare class WebSocketSecurityManager extends EventEmitter {
     private rateLimiters;
     private suspiciousIPs;
     private blockedConnections;
-    constructor()
+    constructor();
       config: WebSocketSecurityConfig,
       keyManagementService: KeyManagementService,
       dataClassifier: DataClassifier,

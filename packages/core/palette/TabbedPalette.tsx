@@ -155,7 +155,7 @@ export const TabbedPalette: React.FC<TabbedPaletteProps> = ({)
     const nodeCategories = getNodeCategories(node.id);
     const primaryCategory = nodeCategories[0];
     const categoryColor = getCategoryColor(primaryCategory, 0.6);
-    return ()
+    return ();
       <div
         key={node.id}
         role="button"
@@ -293,7 +293,7 @@ export const TabbedPalette: React.FC<TabbedPaletteProps> = ({)
     const isSearchResults = category.id === SPECIAL_CATEGORIES.SEARCH_RESULTS;
     const CategoryIcon = category.icon;
     if (categoryNodes.length === 0) return null;
-    return ()
+    return ();
       <div key={category.id} style={{ marginBottom: 12 }}>
         {/* Category header */}
         <div
@@ -368,7 +368,7 @@ export const TabbedPalette: React.FC<TabbedPaletteProps> = ({)
       </div>
     );
   }, [getNodesForCategory, collapsedCategories, handleCategoryToggle, renderNodeItem]);
-  return ()
+  return ();
     <aside
       aria-label="Enhanced Node Palette"
       style={{
@@ -507,7 +507,7 @@ export const TabbedPalette: React.FC<TabbedPaletteProps> = ({)
           {availableCategories.slice(0, 4).map((category) => {
             const isActive = activeTab === category.id;
             const CategoryIcon = category.icon;
-            return ()
+            return ();
               <button
                 key={category.id}
                 onClick={() => setActiveTab(category.id)}
@@ -539,7 +539,7 @@ export const TabbedPalette: React.FC<TabbedPaletteProps> = ({)
       <div style={{ 
         flex: 1, 
         overflowY: 'auto', 
-        padding: collapsed ? '4px 2px' : '8px'
+        padding: collapsed ? '4px 2px' : '8px',
       }}>
         {collapsed ? ()
           // Collapsed view - show all nodes as icons

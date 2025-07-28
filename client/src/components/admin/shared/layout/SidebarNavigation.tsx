@@ -4,7 +4,6 @@
  * 
  * Provides hierarchical navigation with permissions and active state management
  */
-
 import React, { useState } from 'react';
 import { 
   Home, 
@@ -20,7 +19,6 @@ import {
   ChevronDown,
   ChevronRight
 } from 'lucide-react';
-
 interface NavItem {
   id: string;
   label: string;
@@ -30,25 +28,23 @@ interface NavItem {
   permission?: string;
   badge?: string | number;
 }
-
 interface SidebarNavigationProps {
   collapsed?: boolean;
   onToggle?: () => void;
   currentPath?: string;
 }
-
 const navigationItems: NavItem[] = [
   {
     id: 'dashboard',
     label: 'Dashboard',
     href: '/admin',
-    icon: Home
+    icon: Home,
   },
   {
     id: 'users',
     label: 'User Management',
     icon: Users,
-    children: [
+    children: [,
       { id: 'users-list', label: 'All Users', href: '/admin/users' },
       { id: 'users-roles', label: 'Roles & Permissions', href: '/admin/users/roles' },
       { id: 'users-groups', label: 'User Groups', href: '/admin/users/groups' }
@@ -58,7 +54,7 @@ const navigationItems: NavItem[] = [
     id: 'features',
     label: 'Feature Toggles',
     icon: ToggleLeft,
-    children: [
+    children: [,
       { id: 'features-list', label: 'All Toggles', href: '/admin/features' },
       { id: 'features-create', label: 'Create Toggle', href: '/admin/features/create' },
       { id: 'features-audit', label: 'Audit Log', href: '/admin/features/audit' }
@@ -68,7 +64,7 @@ const navigationItems: NavItem[] = [
     id: 'policies',
     label: 'Policy Management',
     icon: Shield,
-    children: [
+    children: [,
       { id: 'policies-list', label: 'Policies', href: '/admin/policies' },
       { id: 'policies-assignments', label: 'Assignments', href: '/admin/policies/assignments' },
       { id: 'policies-compliance', label: 'Compliance', href: '/admin/policies/compliance' }
@@ -78,7 +74,7 @@ const navigationItems: NavItem[] = [
     id: 'analytics',
     label: 'Analytics',
     icon: BarChart3,
-    children: [
+    children: [,
       { id: 'analytics-usage', label: 'Usage Metrics', href: '/admin/analytics/usage' },
       { id: 'analytics-performance', label: 'Performance', href: '/admin/analytics/performance' },
       { id: 'analytics-reports', label: 'Reports', href: '/admin/analytics/reports' }
@@ -88,7 +84,7 @@ const navigationItems: NavItem[] = [
     id: 'data',
     label: 'Data Management',
     icon: Database,
-    children: [
+    children: [,
       { id: 'data-sources', label: 'Data Sources', href: '/admin/data/sources' },
       { id: 'data-classification', label: 'Classification', href: '/admin/data/classification' },
       { id: 'data-retention', label: 'Retention', href: '/admin/data/retention' }
@@ -98,7 +94,7 @@ const navigationItems: NavItem[] = [
     id: 'audit',
     label: 'Audit & Compliance',
     icon: FileText,
-    children: [
+    children: [,
       { id: 'audit-logs', label: 'Audit Logs', href: '/admin/audit/logs' },
       { id: 'audit-reports', label: 'Reports', href: '/admin/audit/reports' },
       { id: 'audit-calendar', label: 'Calendar', href: '/admin/audit/calendar' }
@@ -109,13 +105,13 @@ const navigationItems: NavItem[] = [
     label: 'Notifications',
     href: '/admin/notifications',
     icon: Bell,
-    badge: 3
+    badge: 3,
   },
   {
     id: 'security',
     label: 'Security',
     icon: Lock,
-    children: [
+    children: [,
       { id: 'security-monitoring', label: 'Monitoring', href: '/admin/security/monitoring' },
       { id: 'security-incidents', label: 'Incidents', href: '/admin/security/incidents' },
       { id: 'security-settings', label: 'Settings', href: '/admin/security/settings' }
@@ -125,20 +121,18 @@ const navigationItems: NavItem[] = [
     id: 'settings',
     label: 'System Settings',
     href: '/admin/settings',
-    icon: Settings
+    icon: Settings,
   }
 ];
 
-export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
+export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({)
   collapsed = false,
   currentPath = '/admin'
 }) => {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['users', 'features']));
-
   const toggleExpanded = (itemId: string) => {
     if (collapsed) return; // Don't expand when sidebar is collapsed
-    
-    setExpandedItems(prev => {
+    setExpandedItems(prev => {)
       const newSet = new Set(prev);
       if (newSet.has(itemId)) {
         newSet.delete(itemId);
@@ -148,25 +142,21 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
       return newSet;
     });
   };
-
   const isActive = (href?: string) => {
     if (!href) return false;
     return currentPath === href || currentPath.startsWith(href + '/');
   };
-
   const hasActiveChild = (children?: NavItem[]) => {
     if (!children) return false;
     return children.some(child => isActive(child.href));
   };
-
   const renderNavItem = (item: NavItem, level = 0) => {
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = expandedItems.has(item.id);
     const isItemActive = isActive(item.href);
     const hasActiveChildItem = hasActiveChild(item.children);
     const showAsActive = isItemActive || hasActiveChildItem;
-
-    return (
+    return ()
       <li key={item.id} className="nav-item">
         <div
           className={`nav-link ${showAsActive ? 'active' : ''} ${level > 0 ? 'child' : ''}`}
@@ -179,32 +169,28 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
           }}
         >
           {/* Icon */}
-          {item.icon && level === 0 && (
+          {item.icon && level === 0 && ()
             <span className="nav-icon">
               <item.icon size={18} />
             </span>
           )}
-
           {/* Label */}
-          {!collapsed && (
+          {!collapsed && ()
             <span className="nav-label">{item.label}</span>
           )}
-
           {/* Badge */}
-          {!collapsed && item.badge && (
+          {!collapsed && item.badge && ()
             <span className="nav-badge">{item.badge}</span>
           )}
-
           {/* Expand/Collapse Arrow */}
-          {!collapsed && hasChildren && (
+          {!collapsed && hasChildren && ()
             <span className="nav-arrow">
               {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             </span>
           )}
         </div>
-
         {/* Children */}
-        {!collapsed && hasChildren && isExpanded && (
+        {!collapsed && hasChildren && isExpanded && ()
           <ul className="nav-children">
             {item.children!.map(child => renderNavItem(child, level + 1))}
           </ul>
@@ -212,25 +198,22 @@ export const SidebarNavigation: React.FC<SidebarNavigationProps> = ({
       </li>
     );
   };
-
-  return (
-    <nav className={`admin-sidebar ${collapsed ? 'collapsed' : ''}`}>
+  return ()
+    <nav className={`admin-sidebar ${collapsed ? 'collapsed' : ''}`}>}
       <div className="sidebar-header">
-        {!collapsed && (
+        {!collapsed && ()
           <div className="sidebar-logo">
             <h2>Admin Panel</h2>
           </div>
         )}
       </div>
-
       <div className="sidebar-content">
         <ul className="nav-list">
           {navigationItems.map(item => renderNavItem(item))}
         </ul>
       </div>
-
       <div className="sidebar-footer">
-        {!collapsed && (
+        {!collapsed && ()
           <div className="sidebar-version">
             <span>v2.1.0</span>
           </div>

@@ -64,7 +64,7 @@ export const {
   if (!isOpen) return null;
   // Don't render if corrections are not enabled
   if (!isEnabled) return null;
-  return ()
+  return ();
     <div
       style={{
         position: 'fixed',
@@ -99,7 +99,7 @@ export const {
             color: '#fff',
             fontSize: '20px',
             cursor: 'pointer',
-            padding: '4px 8px'
+            padding: '4px 8px',
           }}
           aria-label="Close corrections panel"
         >
@@ -345,7 +345,7 @@ export const {
                 border: 'none',
                 padding: '8px 16px',
                 borderRadius: '4px',
-                cursor: newRule.name.trim() && newRule.findPattern.trim() ? 'pointer' : 'not-allowed'
+                cursor: newRule.name.trim() && newRule.findPattern.trim() ? 'pointer' : 'not-allowed',
               }}
             >
               Add Rule

@@ -33,7 +33,7 @@ describe('AI Multi-Model Integration', () => {
         }
         return Promise.resolve({)
           ok: true,
-          json: () => Promise.resolve({)
+          json: () => Promise.resolve({),
             id: 'chatcmpl-test',
             object: 'chat.completion',
             created: Date.now(),
@@ -50,7 +50,7 @@ describe('AI Multi-Model Integration', () => {
       if (urlString.includes('anthropic.com')) {
         return Promise.resolve({)
           ok: true,
-          json: () => Promise.resolve({)
+          json: () => Promise.resolve({),
             id: 'msg_test',
             type: 'message',
             role: 'assistant',
@@ -70,7 +70,7 @@ describe('AI Multi-Model Integration', () => {
         }
         return Promise.resolve({)
           ok: true,
-          json: () => Promise.resolve({)
+          json: () => Promise.resolve({),
             model: 'llama2',
             created_at: new Date().toISOString(),
             message: { role: 'assistant', content: 'Hello from Local!' },
@@ -196,7 +196,7 @@ describe('AI Multi-Model Integration', () => {
         id: 'test-request',
         input: 'Hello, world!',
         options: { max_tokens: 50 },
-        createdAt: new Date()
+        createdAt: new Date(),
       };
       const response = await manager.processRequest('lb-pool', request);
       expect(response).toBeDefined();
@@ -222,7 +222,7 @@ describe('AI Multi-Model Integration', () => {
         id: 'cost-estimate',
         input: 'Estimate the cost of this request',
         options: { max_tokens: 100 },
-        createdAt: new Date()
+        createdAt: new Date(),
       };
       const estimate = await manager.estimateRequest('cost-pool', request);
       expect(estimate).toBeDefined();
@@ -353,7 +353,7 @@ describe('AI Multi-Model Integration', () => {
         if (urlString.includes('anthropic.com')) {
           return Promise.resolve({)
             ok: true,
-            json: () => Promise.resolve({)
+            json: () => Promise.resolve({),
               id: 'msg_test',
               type: 'message',
               role: 'assistant',
@@ -388,7 +388,7 @@ describe('AI Multi-Model Integration', () => {
       const request: AIRequest = {
         id: 'resilience-test',
         input: 'Test resilience',
-        createdAt: new Date()
+        createdAt: new Date(),
       };
       const response = await manager.processRequest('resilient-pool', request);
       expect(response.output.content).toBe('Backup response');
@@ -424,7 +424,7 @@ describe('AI Multi-Model Integration', () => {
         const request: AIRequest = {
           id: `metrics-request-${i}`,}
           input: `Test request ${i}`,}
-          createdAt: new Date()
+          createdAt: new Date(),
         };
         await manager.processRequest('metrics-pool', request);
       }

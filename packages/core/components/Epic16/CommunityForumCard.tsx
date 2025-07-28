@@ -113,7 +113,7 @@ export const CommunityForumCard: React.FC<CommunityForumCardProps> = ({)
     onBookmark?.(post.id);
   };
   const canModerate = currentUser?.isModerator || currentUser?.id === post.author.id;
-  const renderUserBadges = (user: ForumUser) => (;)
+  const renderUserBadges = (user: ForumUser) => (;);
     <div className="flex items-center space-x-1">
       {user.isVerified && ()
         <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
@@ -136,7 +136,7 @@ export const CommunityForumCard: React.FC<CommunityForumCardProps> = ({)
     </div>
   );
   if (variant === 'compact') {
-    return ()
+    return ();
       <div 
         className={`bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer ${className}`}
         onClick={() => onClick?.(post)}
@@ -191,7 +191,7 @@ export const CommunityForumCard: React.FC<CommunityForumCardProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow ${className}`}>}
       {/* Header */}
       <div className="p-4 border-b border-gray-100">

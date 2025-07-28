@@ -70,7 +70,7 @@ export const LockNotifications: React.FC<LockNotificationsProps> = ({)
     return `${days}d ago`;}
   };
   if (notifications.length === 0) {
-    return ()
+    return ();
       <div className="text-center py-8">
         <Bell className="h-12 w-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No Notifications</h3>
@@ -80,7 +80,7 @@ export const LockNotifications: React.FC<LockNotificationsProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="space-y-4">
       {/* Filters */}
       <div className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">

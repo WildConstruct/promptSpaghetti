@@ -460,7 +460,7 @@ export class FormatValidator {
       result.warnings.push({)
         type: 'best-practice',
         message: 'Graph has no Output nodes',
-        suggestion: 'Add at least one Output node to generate results'
+        suggestion: 'Add at least one Output node to generate results',
       });
     }
     // Check for unreachable nodes

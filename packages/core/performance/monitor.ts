@@ -315,6 +315,6 @@ export function usePerformanceMonitor() {
     recordMetric: (name: string, value: number) => performanceMonitor.recordMetric(name, value),
     getMetrics: () => performanceMonitor.getMetrics(),
     getSummary: () => performanceMonitor.getSummary(),
-    measureMemory: (name: string) => performanceMonitor.measureMemory(name)
+    measureMemory: (name: string) => performanceMonitor.measureMemory(name),
   };
 }

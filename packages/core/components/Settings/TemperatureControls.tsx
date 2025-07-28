@@ -81,7 +81,7 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({)
     if (temp < 1.5) return '#f97316'; // Orange
     return '#ef4444'; // Red
   };
-  return ()
+  return ();
     <div style={{ marginBottom: '24px' }}>
       {/* Section Header */}
       <div style={{
@@ -233,10 +233,10 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({)
                     flexDirection: 'column',
                     alignItems: 'center',
                     padding: '8px 12px',
-                    backgroundColor: Math.abs(settings.value - preset.value) < 0.01
+                    backgroundColor: Math.abs(settings.value - preset.value) < 0.01,
                       ? getTemperatureColor(preset.value) + '20'
                       : uiColors.ui.hover,
-                    border: Math.abs(settings.value - preset.value) < 0.01
+                    border: Math.abs(settings.value - preset.value) < 0.01,
                       ? `1px solid ${getTemperatureColor(preset.value)}`}
                       : `1px solid ${uiColors.ui.border}`,}
                     borderRadius: '6px',
@@ -259,7 +259,7 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({)
                   <div style={{
                     fontSize: '12px',
                     fontWeight: 600,
-                    color: Math.abs(settings.value - preset.value) < 0.01
+                    color: Math.abs(settings.value - preset.value) < 0.01,
                       ? getTemperatureColor(preset.value)
                       : uiColors.text.primary,
                     marginBottom: '2px',
@@ -268,7 +268,7 @@ export const TemperatureControls: React.FC<TemperatureControlsProps> = ({)
                   </div>
                   <div style={{
                     fontSize: '11px',
-                    color: Math.abs(settings.value - preset.value) < 0.01
+                    color: Math.abs(settings.value - preset.value) < 0.01,
                       ? getTemperatureColor(preset.value)
                       : uiColors.text.secondary
                   }}>

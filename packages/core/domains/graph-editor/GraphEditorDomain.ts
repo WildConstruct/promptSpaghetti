@@ -70,18 +70,18 @@ export interface IGraphEditorDomain {
   // React Hooks
   hooks: {,
     useGraphState: () => GraphEditorState;
-    useNodeSelection: () => {
+    useNodeSelection: () => {,
       selectedNodeIds: string[];
       selectNodes: (nodeIds: string[], isMultiSelect?: boolean) => void;
       clearSelection: () => void;
       isSelected: (nodeId: string) => boolean;
     };
-    useGraphValidation: () => {
+    useGraphValidation: () => {,
       errors: ValidationError[];
       validateGraph: (graph: Graph) => Promise<ValidationError[]>;
       isValid: boolean;
     };
-    usePreviewSeeds: () => {
+    usePreviewSeeds: () => {,
       seeds: number[];
       results: Record<string, any>;
       isExecuting: boolean;
@@ -89,7 +89,7 @@ export interface IGraphEditorDomain {
       addSeed: () => void;
       removeSeed: (index: number) => void;
     };
-    useGraphOperations: () => {
+    useGraphOperations: () => {,
       addNode: (nodeType: string, position: { x: number; y: number }) => void;
       removeNode: (nodeId: string) => void;
       updateNode: (nodeId: string, updates: Partial<Node>) => void;
@@ -97,7 +97,7 @@ export interface IGraphEditorDomain {
       removeEdge: (edgeId: string) => void;
       moveNode: (nodeId: string, position: { x: number; y: number }) => void;
     };
-    useAutosave: () => {
+    useAutosave: () => {,
       isEnabled: boolean;
       isDirty: boolean;
       lastSaved: Date | null;
@@ -113,7 +113,7 @@ export interface IGraphEditorDomain {
     state: IGraphStateService;
   };
   // Event System
-  events: GraphDomainEvents & {
+  events: GraphDomainEvents & {,
     subscribe: (event: keyof GraphDomainEvents, callback: Function) => () => void;
     emit: (event: keyof GraphDomainEvents, ...args: any[]) => void;
   };

@@ -132,7 +132,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
       selectedCount: selected.length,
       averageConfidence,
       highConfidenceCount: selected.filter(s => s.confidence >= 80).length,
-      estimatedGenerationTime: Math.ceil(selected.length / 10) // Rough estimate
+      estimatedGenerationTime: Math.ceil(selected.length / 10) // Rough estimate,
     };
   }, [suggestions, selectedSuggestions]);
   // Confidence color helper
@@ -151,7 +151,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
     };
     return icons[category as keyof typeof icons] || '📋';
   };
-  return ()
+  return ();
     <div
       style={{
         width: '800px',
@@ -259,7 +259,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
               color: styles.accent,
               fontSize: '14px',
               cursor: isGenerating ? 'not-allowed' : 'pointer',
-              opacity: isGenerating ? 0.5 : 1
+              opacity: isGenerating ? 0.5 : 1,
             }}
             aria-label="Select all suggestions"
           >
@@ -276,7 +276,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
               color: styles.textSecondary,
               fontSize: '14px',
               cursor: isGenerating ? 'not-allowed' : 'pointer',
-              opacity: isGenerating ? 0.5 : 1
+              opacity: isGenerating ? 0.5 : 1,
             }}
             aria-label="Clear all selections"
           >
@@ -293,7 +293,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
         }}>
           {suggestions.map(suggestion => {)
             const isSelected = selectedSuggestions.has(suggestion.id);
-            return ()
+            return ();
               <div
                 key={suggestion.id}
                 onClick={() => !isGenerating && toggleSuggestion(suggestion.id)}
@@ -420,7 +420,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
               value={generationOptions.layout}
               onChange={(e) => setGenerationOptions(prev => ({ )
                 ...prev, 
-                layout: e.target.value as LayoutType 
+                layout: e.target.value as LayoutType ,
               }))}
               disabled={isGenerating}
               style={{
@@ -454,7 +454,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
               value={generationOptions.connectionPattern}
               onChange={(e) => setGenerationOptions(prev => ({ )
                 ...prev, 
-                connectionPattern: e.target.value as ConnectionPattern 
+                connectionPattern: e.target.value as ConnectionPattern ,
               }))}
               disabled={isGenerating}
               style={{
@@ -532,7 +532,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
             color: styles.text,
             fontSize: '14px',
             cursor: isGenerating ? 'not-allowed' : 'pointer',
-            opacity: isGenerating ? 0.5 : 1
+            opacity: isGenerating ? 0.5 : 1,
           }}
         >
           Cancel
@@ -552,7 +552,7 @@ export const [generationOptions, setGenerationOptions] = useState<GenerationOpti
                 border: `2px solid ${styles.accent}`,}
                 borderTop: '2px solid transparent',
                 borderRadius: '50%',
-                animation: 'spin 1s linear infinite'
+                animation: 'spin 1s linear infinite',
               }} />
               Generating...
             </div>

@@ -89,7 +89,7 @@ const generateRetentionData = (): RetentionData => {
         retainedUsers: Math.floor(cohortSize * retention),
         retentionRate: retention,
         benchmark: Math.pow(0.8, period),
-        variance: (Math.random() - 0.5) * 0.1
+        variance: (Math.random() - 0.5) * 0.1,
       };
     }),
     segments: [],
@@ -110,13 +110,13 @@ const generateChurnPredictionData = (): ChurnPredictionData => {
         factor: 'declining_engagement',
         impact: Math.random() * 0.4 + 0.1,
         trend: 'increasing',
-        daysActive: Math.floor(Math.random() * 30) + 1
+        daysActive: Math.floor(Math.random() * 30) + 1,
       },
       {
         factor: 'reduced_session_frequency',
         impact: Math.random() * 0.3 + 0.1,
         trend: 'stable',
-        daysActive: Math.floor(Math.random() * 14) + 1
+        daysActive: Math.floor(Math.random() * 14) + 1,
       }
     ],
     predictions: [,
@@ -145,14 +145,14 @@ const generateChurnPredictionData = (): ChurnPredictionData => {
         priority: riskLevel === 'critical' ? 'high' : 'medium',
         expectedImpact: Math.random() * 0.3 + 0.1,
         cost: 'low',
-        timeline: '1-2 days'
+        timeline: '1-2 days',
       },
       {
         action: 'offer_personalized_content',
         priority: 'medium',
         expectedImpact: Math.random() * 0.2 + 0.15,
         cost: 'medium',
-        timeline: '3-5 days'
+        timeline: '3-5 days',
       }
     ]
   };
@@ -251,7 +251,7 @@ export const RetentionChurnAnalysis: React.FC<RetentionChurnAnalysisProps> = ({)
   const selectedCohortData = useMemo(() => {
     return selectedCohort ? retentionData.find(c => c.cohortId === selectedCohort) : null;
   }, [selectedCohort, retentionData]);
-  return ()
+  return ();
     <div className="retention-churn-analysis">
       <div className="analysis-header">
         <div className="header-section">

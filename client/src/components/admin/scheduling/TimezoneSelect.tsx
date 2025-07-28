@@ -1,5 +1,4 @@
 // Epic 17.1.5 - Timezone Selector Component
-
 import React, { useState, useMemo } from 'react';
 import {
   TextField,
@@ -10,7 +9,6 @@ import {
 } from '@mui/material';
 import { Autocomplete } from '@mui/material';
 import { Public as PublicIcon, Schedule as ScheduleIcon } from '@mui/icons-material';
-
 interface TimezoneSelectProps {
   value: string;
   onChange: (timezone: string) => void;
@@ -80,26 +78,22 @@ const ALL_TIMEZONES = Intl.supportedValuesOf('timeZone');
 // Format timezone for display
 const formatTimezone = (timezone: string): { label: string; offset: string; city: string } => {
   const now = new Date();
-    
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      
   // Get offset
-  const offset = new Intl.DateTimeFormat('en', {
+  const offset = new Intl.DateTimeFormat('en', {)
     timeZone: timezone,
-    timeZoneName: 'longOffset'
+    timeZoneName: 'longOffset',
   }).formatToParts(now).find(part => part.type === 'timeZoneName')?.value || '';
-  
   // Extract city name
   const city = timezone.split('/').pop()?.replace(/_/g, ' ') || timezone;
-  
   return {
-    label: `${city} (${offset})`,
+    label: `${city} (${offset})`,}
     offset: offset,
-    city: city
+    city: city,
   };
 };
 
-export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({ 
+export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({ )
   value, 
   onChange, 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -113,7 +107,6 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [internalSearchTerm, setInternalSearchTerm] = useState('');
   const searchTerm = externalSearchTerm ?? internalSearchTerm;
-  
   // Create timezone options
   const timezoneOptions = useMemo(() => {
     const options: Array<{
@@ -123,12 +116,11 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
       city: string;
       group: string;
     }> = [];
-
     // Add grouped timezones
     Object.entries(TIMEZONE_GROUPS).forEach(([group, timezones]) => {
-      timezones.forEach(timezone => {
+      timezones.forEach(timezone => {)
         const formatted = formatTimezone(timezone);
-        options.push({
+        options.push({)
           value: timezone,
           label: formatted.label,
           offset: formatted.offset,
@@ -137,58 +129,49 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
         });
       });
     });
-
     // Add other timezones
     const groupedTimezones = new Set(Object.values(TIMEZONE_GROUPS).flat());
-    ALL_TIMEZONES.forEach(timezone => {
+    ALL_TIMEZONES.forEach(timezone => {)
       if (!groupedTimezones.has(timezone)) {
         const formatted = formatTimezone(timezone);
         const continent = timezone.split('/')[0];
-        options.push({
+        options.push({)
           value: timezone,
           label: formatted.label,
           offset: formatted.offset,
           city: formatted.city,
-          group: continent
+          group: continent,
         });
       }
     });
-
     return options.sort((a, b) => a.label.localeCompare(b.label));
   }, []);
-
   // Filter options based on search
   const filteredOptions = useMemo(() => {
     if (!searchTerm) return timezoneOptions;
-    
     const search = searchTerm.toLowerCase();
-    return timezoneOptions.filter(option =>
+    return timezoneOptions.filter(option =>)
       option.label.toLowerCase().includes(search) ||
       option.city.toLowerCase().includes(search) ||
       option.value.toLowerCase().includes(search) ||
       option.offset.toLowerCase().includes(search)
     );
   }, [timezoneOptions, searchTerm]);
-
   // Group filtered options
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        
-    filteredOptions.forEach(option => {
+    filteredOptions.forEach(option => {)
       if (!groups[option.group]) {
         groups[option.group] = [];
       }
       groups[option.group].push(option);
     });
-    
     return groups;
   }, [filteredOptions]);
-
   // Get current timezone display info
   const currentTimezoneInfo = useMemo(() => {
     const option = timezoneOptions.find(opt => opt.value === value);
     return option || formatTimezone(value);
   }, [value, timezoneOptions]);
-
   const handleChange = (_event: unknown, newValue: unknown) => {
     if (newValue && typeof newValue === 'object' && 'value' in newValue) {
       onChange((newValue as { value: string }).value);
@@ -196,8 +179,7 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
       onChange(newValue);
     }
   };
-
-  return (
+  return ()
     <Box>
       <Autocomplete
         value={timezoneOptions.find(opt => opt.value === value) || null}
@@ -205,7 +187,7 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
         options={timezoneOptions}
         groupBy={(option) => option.group}
         getOptionLabel={(option) => option.label}
-        renderInput={(params) => (
+        renderInput={(params) => ()
           <TextField
             {...params}
             label={label}
@@ -218,7 +200,7 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
             }}
           />
         )}
-        renderOption={(props, option) => (
+        renderOption={(props, option) => ()
           <Box component="li" {...props}>
             <Box>
               <Typography variant="body2">
@@ -230,7 +212,7 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
             </Box>
           </Box>
         )}
-        renderGroup={(params) => (
+        renderGroup={(params) => ()
           <Box key={params.key}>
             <ListSubheader component="div" sx={{ bgcolor: 'background.paper' }}>
               <Typography variant="subtitle2" color="primary">
@@ -242,7 +224,7 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
         )}
         filterOptions={(options, { inputValue }) => {
           const search = inputValue.toLowerCase();
-          return options.filter(option =>
+          return options.filter(option =>)
             option.label.toLowerCase().includes(search) ||
             option.city.toLowerCase().includes(search) ||
             option.value.toLowerCase().includes(search) ||
@@ -252,9 +234,8 @@ export const TimezoneSelect: React.FC<TimezoneSelectProps> = ({
         isOptionEqualToValue={(option, value) => option.value === value.value}
         sx={{ width: fullWidth ? '100%' : 300 }}
       />
-      
       {/* Current timezone info */}
-      {value && (
+      {value && ()
         <Box mt={1} display="flex" alignItems="center" gap={1}>
           <ScheduleIcon fontSize="small" color="action" />
           <Typography variant="caption" color="text.secondary">

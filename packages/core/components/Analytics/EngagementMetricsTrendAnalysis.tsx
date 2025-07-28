@@ -94,42 +94,42 @@ const generateMockEngagementMetrics = (): EngagementMetricsData => {
         value: Math.floor(Math.random() * 1000) + 2000,
         change: (Math.random() - 0.5) * 20,
         trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
-        confidence: Math.random() * 0.3 + 0.7
+        confidence: Math.random() * 0.3 + 0.7,
       },
       {
         metricId: 'session_duration',
         value: Math.random() * 300 + 180,
         change: (Math.random() - 0.5) * 30,
         trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
-        confidence: Math.random() * 0.3 + 0.7
+        confidence: Math.random() * 0.3 + 0.7,
       },
       {
         metricId: 'pages_per_session',
         value: Math.random() * 5 + 3,
         change: (Math.random() - 0.5) * 2,
         trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
-        confidence: Math.random() * 0.3 + 0.7
+        confidence: Math.random() * 0.3 + 0.7,
       },
       {
         metricId: 'engagement_score',
         value: Math.random() * 40 + 60,
         change: (Math.random() - 0.5) * 10,
         trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
-        confidence: Math.random() * 0.3 + 0.7
+        confidence: Math.random() * 0.3 + 0.7,
       },
       {
         metricId: 'interaction_rate',
         value: Math.random() * 0.5 + 0.3,
         change: (Math.random() - 0.5) * 0.1,
         trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
-        confidence: Math.random() * 0.3 + 0.7
+        confidence: Math.random() * 0.3 + 0.7,
       }
     ],
     segmentData: [],
     metadata: {,
       lastUpdated: baseTimestamp,
       dataQuality: Math.random() * 0.2 + 0.8,
-      sampleSize: Math.floor(Math.random() * 5000) + 10000
+      sampleSize: Math.floor(Math.random() * 5000) + 10000,
     }
   };
 };
@@ -140,7 +140,7 @@ const generateTrendAnalysis = (metricId: string): TrendAnalysis => ({)
     strength: Math.random(),
     duration: Math.floor(Math.random() * 30) + 7,
     significance: Math.random(),
-    changeRate: (Math.random() - 0.5) * 10
+    changeRate: (Math.random() - 0.5) * 10,
   },
   forecast: {,
     predictions: Array.from({ length: 7 }, (_, i) => ({)
@@ -149,7 +149,7 @@ const generateTrendAnalysis = (metricId: string): TrendAnalysis => ({)
       confidence: Math.random() * 0.3 + 0.6,
       range: {,
         lower: Math.random() * 20 + 30,
-        upper: Math.random() * 20 + 70
+        upper: Math.random() * 20 + 70,
       }
     })),
     accuracy: Math.random() * 0.3 + 0.7,
@@ -233,7 +233,7 @@ export const EngagementMetricsTrendAnalysis: React.FC<EngagementMetricsTrendAnal
           exportTimestamp: Date.now(),
           version: '1.0.0',
           totalDataPoints: metricsData.length,
-          metricsIncluded: metricsData[0]?.metrics.map(m => m.metricId) || []
+          metricsIncluded: metricsData[0]?.metrics.map(m => m.metricId) || [],
         }
       };
       onExport(exportData);
@@ -251,11 +251,11 @@ export const EngagementMetricsTrendAnalysis: React.FC<EngagementMetricsTrendAnal
       return {
         timestamp: data.timestamp,
         value: metric?.value || 0,
-        date: new Date(data.timestamp).toLocaleDateString()
+        date: new Date(data.timestamp).toLocaleDateString(),
       };
     });
   }, [metricsData, selectedMetric]);
-  return ()
+  return ();
     <div className="engagement-metrics-trend-analysis">
       <div className="metrics-header">
         <div className="header-section">
@@ -416,7 +416,7 @@ export const EngagementMetricsTrendAnalysis: React.FC<EngagementMetricsTrendAnal
           <div className="comparison-grid">
             {currentMetrics.map(metric => {)
               const analysis = trendAnalyses.find(t => t.metric === metric.metricId);
-              return ()
+              return ();
                 <div key={metric.metricId} className="comparison-card">
                   <div className="comparison-header">
                     <h4>{metric.metricId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h4>

@@ -315,7 +315,7 @@ describe('AccessibilityManager', () => {
         hasTextAlternative: true,
         hasAnimations: false,
         respectsReducedMotion: true,
-        hasAudioFallback: false // Critical for this user
+        hasAudioFallback: false // Critical for this user,
       };
       const result = manager.validateAccessibilityCompliance(authFlow, userProfile);
       expect(result.issues.some(issue => )
@@ -327,7 +327,7 @@ describe('AccessibilityManager', () => {
   });
   describe('Emergency Accessibility Bypass', () => {
     test('should create emergency bypass', async () => {
-      const bypassId = await manager.createEmergencyBypass(;)
+      const bypassId = await manager.createEmergencyBypass(;);
         'user123',
         'User unable to access due to assistive technology failure',
         'admin456',
@@ -338,7 +338,7 @@ describe('AccessibilityManager', () => {
       expect(bypassId).toMatch(/^[0-9a-f-]{36}$/);
     });
     test('should use emergency bypass successfully', async () => {
-      const bypassId = await manager.createEmergencyBypass(;)
+      const bypassId = await manager.createEmergencyBypass(;);
         'user123',
         'Emergency access needed',
         'admin456'
@@ -351,7 +351,7 @@ describe('AccessibilityManager', () => {
       expect(result.remainingUses).toBe(2); // 3 max - 1 used
     });
     test('should reject expired emergency bypass', async () => {
-      const bypassId = await manager.createEmergencyBypass(;)
+      const bypassId = await manager.createEmergencyBypass(;);
         'user123',
         'Test bypass',
         'admin456',
@@ -362,7 +362,7 @@ describe('AccessibilityManager', () => {
       expect(result.reason).toBe('Bypass has expired');
     });
     test('should reject bypass after maximum usages', async () => {
-      const bypassId = await manager.createEmergencyBypass(;)
+      const bypassId = await manager.createEmergencyBypass(;);
         'user123',
         'Test bypass',
         'admin456',

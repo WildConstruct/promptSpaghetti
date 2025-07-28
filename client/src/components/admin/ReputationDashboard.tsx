@@ -8,7 +8,6 @@
  * Part of Epic 17 - Backstage Admin Controls
  * Task: E17-1753114397412-B12019 - Add reputation system
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -27,44 +26,42 @@ import {
   Flag,
   Eye
 } from 'lucide-react';
-
 interface ReputationMetrics {
   totalUsers: number;
-  reputationDistribution: {
+  reputationDistribution: {,
     veryHigh: number;
     high: number;
     medium: number;
     low: number;
     veryLow: number;
   };
-  verificationStats: {
+  verificationStats: {,
     identityVerified: number;
     emailVerified: number;
     phoneVerified: number;
     fullyVerified: number;
     verificationRate: number;
   };
-  trustTrends: {
+  trustTrends: {,
     averageTrustScore: number;
     trendDirection: 'improving' | 'stable' | 'declining';
     monthlyChange: number;
     topReputationUsers: Array<{ userId: string; username: string; score: number }>;
   };
-  riskAnalysis: {
+  riskAnalysis: {,
     highRiskUsers: number;
     flaggedUsers: number;
     suspiciousActivity: number;
-    fraudPrevented: {
+    fraudPrevented: {,
       estimatedValue: number;
       incidentsBlocked: number;
     };
   };
-  badgeStats: {
+  badgeStats: {,
     totalBadgesAwarded: number;
     mostPopularBadges: Array<{ badgeType: string; count: number }>;
   };
 }
-
 interface ReputationAlert {
   alertId: string;
   userId: string;
@@ -82,7 +79,6 @@ interface ReputationAlert {
   priority: number;
   escalated: boolean;
 }
-
 interface UserReputationSummary {
   userId: string;
   username: string;
@@ -93,9 +89,8 @@ interface UserReputationSummary {
   flagged: boolean;
   lastCalculated: Date;
 }
-
 interface ReputationDashboardData {
-  overview: {
+  overview: {,
     totalUsers: number;
     averageTrustScore: number;
     verificationRate: number;
@@ -108,13 +103,12 @@ interface ReputationDashboardData {
   systemHealth: unknown;
   lastUpdated: Date;
 }
-
 interface ReputationDashboardProps {
   className?: string;
   refreshInterval?: number;
 }
 
-export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
+export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({)
   className,
   refreshInterval = 60000
 }) => {
@@ -122,20 +116,17 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
-  
   // User search and filtering
   const [userSearchResults, setUserSearchResults] = useState<UserReputationSummary[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchFilters, setSearchFilters] = useState({
+  const [searchFilters, setSearchFilters] = useState({)
     reputationLevel: '',
     verificationLevel: '',
     riskLevel: '',
-    flagged: ''
+    flagged: '',
   });
-  
   // Selected user for detailed view
   const [, setSelectedUser] = useState<string | null>(null);
-  
   // Leaderboard data
   const [leaderboard, setLeaderboard] = useState<Array<{
     userId: string;
@@ -146,13 +137,11 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
     verificationLevel: string;
     overallTrustScore: number;
   }>>([]);
-
   // Fetch dashboard data
   const fetchDashboardData = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/reputation/dashboard');
       const result = await response.json();
-      
       if (result.success) {
         setDashboardData(result.data);
         setError(null);
@@ -166,7 +155,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
       setLoading(false);
     }
   }, []);
-
   // Search users
   const searchUsers = useCallback(async () => {
     try {
@@ -176,10 +164,8 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
       if (searchFilters.verificationLevel) params.append('verificationLevel', searchFilters.verificationLevel);
       if (searchFilters.riskLevel) params.append('riskLevel', searchFilters.riskLevel);
       if (searchFilters.flagged) params.append('flagged', searchFilters.flagged);
-      
-      const response = await fetch(`/api/admin/reputation/users?${params}`);
+      const response = await fetch(`/api/admin/reputation/users?${params}`);}
       const result = await response.json();
-      
       if (result.success) {
         setUserSearchResults(result.data);
       }
@@ -187,13 +173,11 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
       console.error('Error searching users:', err);
     }
   }, [searchQuery, searchFilters]);
-
   // Fetch leaderboard
   const fetchLeaderboard = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/reputation/leaderboard?limit=10');
       const result = await response.json();
-      
       if (result.success) {
         setLeaderboard(result.data);
       }
@@ -201,16 +185,14 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
       console.error('Error fetching leaderboard:', err);
     }
   }, []);
-
   // Handle user flag/unflag
   const handleFlagUser = useCallback(async (userId: string, reason: string) => {
     try {
-      const response = await fetch(`/api/admin/reputation/users/${userId}/flag`, {
+      const response = await fetch(`/api/admin/reputation/users/${userId}/flag`, {)}
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason, restrictionLevel: 'limited' })
       });
-      
       if (response.ok) {
         // Refresh user search results
         searchUsers();
@@ -220,14 +202,12 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
       console.error('Error flagging user:', err);
     }
   }, [searchUsers, fetchDashboardData]);
-
   // Handle reputation recalculation
   const handleRecalculateReputation = useCallback(async (userId: string) => {
     try {
-      const response = await fetch(`/api/admin/reputation/users/${userId}/recalculate`, {
-        method: 'POST'
+      const response = await fetch(`/api/admin/reputation/users/${userId}/recalculate`, {)}
+        method: 'POST',
       });
-      
       if (response.ok) {
         // Refresh data
         searchUsers();
@@ -237,16 +217,14 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
       console.error('Error recalculating reputation:', err);
     }
   }, [searchUsers, fetchDashboardData]);
-
   // Handle alert acknowledgment
   const handleAcknowledgeAlert = useCallback(async (alertId: string) => {
     try {
-      const response = await fetch(`/api/admin/reputation/alerts/${alertId}/assign`, {
+      const response = await fetch(`/api/admin/reputation/alerts/${alertId}/assign`, {)}
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ assignedTo: 'current_admin' })
       });
-      
       if (response.ok) {
         fetchDashboardData();
       }
@@ -254,25 +232,21 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
       console.error('Error acknowledging alert:', err);
     }
   }, [fetchDashboardData]);
-
   // Setup periodic refresh
   useEffect(() => {
     fetchDashboardData();
     fetchLeaderboard();
-    
     const interval = setInterval(fetchDashboardData, refreshInterval);
     return () => clearInterval(interval);
   }, [refreshInterval, fetchDashboardData, fetchLeaderboard]);
-
   // Search users when filters change
   useEffect(() => {
     if (searchQuery || Object.values(searchFilters).some(v => v)) {
       searchUsers();
     }
   }, [searchQuery, searchFilters, searchUsers]);
-
   if (loading) {
-    return (
+    return ()
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div className="animate-pulse">Loading reputation dashboard...</div>
@@ -280,9 +254,8 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
       </Card>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div className="text-red-600">
@@ -293,9 +266,8 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
       </Card>
     );
   }
-
   if (!dashboardData) {
-    return (
+    return ()
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div>No reputation data available</div>
@@ -303,10 +275,8 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
       </Card>
     );
   }
-
   const { overview, metrics, alerts } = dashboardData;
-
-  return (
+  return ()
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -317,7 +287,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
           </Badge>
         </CardTitle>
       </CardHeader>
-      
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-6">
@@ -328,7 +297,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
             <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
           </TabsList>
-
           <TabsContent value="overview" className="space-y-4">
             {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -336,7 +304,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                 <div className="text-2xl font-bold text-blue-600">{overview.totalUsers}</div>
                 <div className="text-sm text-gray-600">Total Users</div>
               </div>
-              
               <div className="text-center">
                 <div className="text-2xl font-bold text-green-600">{overview.averageTrustScore}</div>
                 <div className="text-sm text-gray-600">Avg Trust Score</div>
@@ -346,13 +313,11 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                   {metrics.trustTrends.monthlyChange > 0 ? '+' : ''}{metrics.trustTrends.monthlyChange}%
                 </div>
               </div>
-              
               <div className="text-center">
                 <div className="text-2xl font-bold text-purple-600">{overview.verificationRate}%</div>
                 <div className="text-sm text-gray-600">Verification Rate</div>
                 <Progress value={overview.verificationRate} className="mt-2" />
               </div>
-              
               <div className="text-center">
                 <div className="text-2xl font-bold text-orange-600">{overview.activeAlerts}</div>
                 <div className="text-sm text-gray-600">Active Alerts</div>
@@ -360,7 +325,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                   {overview.criticalAlerts} critical
                 </div>
               </div>
-              
               <div className="text-center">
                 <div className="text-2xl font-bold text-red-600">{metrics.riskAnalysis.highRiskUsers}</div>
                 <div className="text-sm text-gray-600">High Risk Users</div>
@@ -369,12 +333,11 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                 </div>
               </div>
             </div>
-
             {/* Reputation Distribution */}
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-3">Reputation Distribution</h3>
               <div className="space-y-2">
-                {Object.entries(metrics.reputationDistribution).map(([level, count]) => (
+                {Object.entries(metrics.reputationDistribution).map(([level, count]) => ()
                   <div key={level} className="flex justify-between items-center">
                     <span className="text-sm capitalize">{level.replace(/([A-Z])/g, ' $1')}</span>
                     <div className="flex items-center gap-2">
@@ -387,12 +350,11 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                 ))}
               </div>
             </div>
-
             {/* Recent Alerts */}
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-3">Recent Alerts</h3>
               <div className="space-y-2">
-                {alerts.slice(0, 5).map((alert) => (
+                {alerts.slice(0, 5).map((alert) => ()
                   <div
                     key={alert.alertId}
                     className={`flex justify-between items-center p-2 rounded ${
@@ -429,12 +391,10 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
               </div>
             </div>
           </TabsContent>
-
           <TabsContent value="users" className="space-y-4">
             {/* User Search */}
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-3">User Search & Management</h3>
-              
               {/* Search Controls */}
               <div className="flex gap-2 mb-4">
                 <div className="flex-1">
@@ -450,7 +410,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                   Search
                 </Button>
               </div>
-              
               {/* Filters */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
                 <Select value={searchFilters.reputationLevel} onValueChange={(value) => 
@@ -469,7 +428,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                     <SelectItem value="newcomer">Newcomer</SelectItem>
                   </SelectContent>
                 </Select>
-                
                 <Select value={searchFilters.verificationLevel} onValueChange={(value) => 
                   setSearchFilters(prev => ({ ...prev, verificationLevel: value }))
                 }>
@@ -485,7 +443,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                     <SelectItem value="unverified">Unverified</SelectItem>
                   </SelectContent>
                 </Select>
-                
                 <Select value={searchFilters.flagged} onValueChange={(value) => 
                   setSearchFilters(prev => ({ ...prev, flagged: value }))
                 }>
@@ -498,7 +455,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                     <SelectItem value="false">Not Flagged</SelectItem>
                   </SelectContent>
                 </Select>
-                
                 <Button 
                   variant="outline" 
                   onClick={() => {
@@ -512,10 +468,9 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                 </Button>
               </div>
             </div>
-
             {/* User Results */}
             <div className="space-y-2">
-              {userSearchResults.map((user) => (
+              {userSearchResults.map((user) => ()
                 <div key={user.userId} className="border rounded-lg p-4">
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
@@ -531,7 +486,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                         </Badge>
                         {user.flagged && <Badge variant="destructive">Flagged</Badge>}
                       </div>
-                      
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div>
                           <span className="text-gray-600">Trust Score:</span>
@@ -551,7 +505,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                         </div>
                       </div>
                     </div>
-                    
                     <div className="flex gap-2">
                       <Button size="sm" variant="outline" onClick={() => setSelectedUser(user.userId)}>
                         <Eye className="w-4 h-4" />
@@ -563,7 +516,7 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                       >
                         Recalculate
                       </Button>
-                      {!user.flagged && (
+                      {!user.flagged && ()
                         <Button 
                           size="sm" 
                           variant="destructive"
@@ -581,7 +534,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
               ))}
             </div>
           </TabsContent>
-
           <TabsContent value="verification" className="space-y-4">
             {/* Verification Statistics */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -590,26 +542,22 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                 <div className="text-sm text-gray-600">Email Verified</div>
                 <Progress value={(metrics.verificationStats.emailVerified / overview.totalUsers) * 100} className="mt-2" />
               </div>
-              
               <div className="border rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-green-600">{metrics.verificationStats.identityVerified}</div>
                 <div className="text-sm text-gray-600">Identity Verified</div>
                 <Progress value={(metrics.verificationStats.identityVerified / overview.totalUsers) * 100} className="mt-2" />
               </div>
-              
               <div className="border rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-purple-600">{metrics.verificationStats.phoneVerified}</div>
                 <div className="text-sm text-gray-600">Phone Verified</div>
                 <Progress value={(metrics.verificationStats.phoneVerified / overview.totalUsers) * 100} className="mt-2" />
               </div>
-              
               <div className="border rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-orange-600">{metrics.verificationStats.fullyVerified}</div>
                 <div className="text-sm text-gray-600">Fully Verified</div>
                 <Progress value={(metrics.verificationStats.fullyVerified / overview.totalUsers) * 100} className="mt-2" />
               </div>
             </div>
-
             {/* Verification Queue - Placeholder */}
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-3">Pending Verifications</h3>
@@ -618,15 +566,14 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
               </div>
             </div>
           </TabsContent>
-
           <TabsContent value="alerts" className="space-y-4">
-            {alerts.length === 0 ? (
+            {alerts.length === 0 ? ()
               <div className="text-center py-8 text-gray-500">
                 No active reputation alerts
               </div>
-            ) : (
+            ) : ()
               <div className="space-y-3">
-                {alerts.map((alert) => (
+                {alerts.map((alert) => ()
                   <div
                     key={alert.alertId}
                     className={`border rounded-lg p-4 ${
@@ -656,30 +603,26 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                           </Badge>
                           {alert.escalated && <Badge variant="destructive">Escalated</Badge>}
                         </div>
-                        
                         <p className="text-sm text-gray-600 mb-2">{alert.description}</p>
-                        
                         <div className="grid grid-cols-2 gap-4 text-xs text-gray-500 mb-2">
                           <div>User: {alert.userId}</div>
                           <div>Score: {alert.currentScore} (was {alert.triggerScore})</div>
                           <div>Created: {new Date(alert.createdAt).toLocaleDateString()}</div>
                           <div>Status: {alert.status}</div>
                         </div>
-                        
-                        {alert.suggestedActions.length > 0 && (
+                        {alert.suggestedActions.length > 0 && ()
                           <div className="mb-2">
                             <div className="text-xs text-gray-600 mb-1">Suggested Actions:</div>
                             <ul className="text-xs text-gray-500">
-                              {alert.suggestedActions.map((action, i) => (
+                              {alert.suggestedActions.map((action, i) => ()
                                 <li key={i}>• {action}</li>
                               ))}
                             </ul>
                           </div>
                         )}
                       </div>
-                      
                       <div className="flex flex-col gap-2">
-                        {alert.status === 'active' && (
+                        {alert.status === 'active' && ()
                           <>
                             <Button size="sm" onClick={() => handleAcknowledgeAlert(alert.alertId)}>
                               Investigate
@@ -692,7 +635,7 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                             </Button>
                           </>
                         )}
-                        {alert.assignedTo && (
+                        {alert.assignedTo && ()
                           <div className="text-xs text-gray-500">
                             Assigned to: {alert.assignedTo}
                           </div>
@@ -704,12 +647,11 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
               </div>
             )}
           </TabsContent>
-
           <TabsContent value="leaderboard" className="space-y-4">
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-3">Top Reputation Users</h3>
               <div className="space-y-2">
-                {leaderboard.map((user) => (
+                {leaderboard.map((user) => ()
                   <div key={user.userId} className="flex items-center gap-3 p-2 rounded hover:bg-gray-50">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gold to-yellow-400 flex items-center justify-center text-white font-bold text-sm">
                       {user.rank}
@@ -738,14 +680,13 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
               </div>
             </div>
           </TabsContent>
-
           <TabsContent value="analytics" className="space-y-4">
             {/* Fraud Prevention Impact */}
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-3">Fraud Prevention Impact</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">${metrics.riskAnalysis.fraudPrevented.estimatedValue}</div>
+                  <div className="text-2xl font-bold text-green-600">${metrics.riskAnalysis.fraudPrevented.estimatedValue}</div>}
                   <div className="text-sm text-gray-600">Estimated Value Protected</div>
                 </div>
                 <div className="text-center">
@@ -754,7 +695,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                 </div>
               </div>
             </div>
-
             {/* Badge Statistics */}
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-3">Badge Statistics</h3>
@@ -763,7 +703,7 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
                   Total Badges Awarded: {metrics.badgeStats.totalBadgesAwarded}
                 </div>
                 <div className="space-y-1">
-                  {metrics.badgeStats.mostPopularBadges.map((badge, i) => (
+                  {metrics.badgeStats.mostPopularBadges.map((badge, i) => ()
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm capitalize">{badge.badgeType.replace(/_/g, ' ')}</span>
                       <Badge variant="secondary">{badge.count}</Badge>
@@ -774,7 +714,6 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
             </div>
           </TabsContent>
         </Tabs>
-
         {/* Data freshness indicator */}
         <div className="mt-4 text-xs text-gray-500 text-center">
           Last updated: {dashboardData.lastUpdated.toLocaleString()}

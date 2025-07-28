@@ -19,7 +19,7 @@ export const LockIndicator: React.FC<LockIndicatorProps> = ({)
   const sizeClasses = {
     small: 'h-4 w-4',
     medium: 'h-5 w-5',
-    large: 'h-6 w-6'
+    large: 'h-6 w-6',
   };
   const containerSizeClasses = {
     small: 'p-1',
@@ -82,7 +82,7 @@ export const LockIndicator: React.FC<LockIndicatorProps> = ({)
     }
     return `${minutes}m`;}
   };
-  const tooltipContent = showTooltip ? (;)
+  const tooltipContent = showTooltip ? (;);
     <div className="invisible group-hover:visible absolute z-10 w-64 p-3 bg-gray-900 text-white text-sm rounded-lg shadow-lg -top-2 left-full ml-2">
       <div className="space-y-1">
         <div className="font-medium">
@@ -106,7 +106,7 @@ export const LockIndicator: React.FC<LockIndicatorProps> = ({)
       <div className="absolute top-3 -left-1 w-2 h-2 bg-gray-900 transform rotate-45"></div>
     </div>
   ) : null;
-  return ()
+  return ();
     <div className={`relative inline-block group ${className}`}>}
       <div
         className={`
@@ -136,7 +136,7 @@ export const ResourceLockStatus: React.FC<ResourceLockStatusProps> = ({)
 }) => {
   const resourceLocks = locks.filter(lock => lock.resource_id === resourceId);
   if (resourceLocks.length === 0) {
-    return ()
+    return ();
       <div className={`inline-flex items-center space-x-1 ${className}`}>}
         <div className="h-4 w-4 rounded-full bg-green-100 border border-green-300">
           <div className="h-full w-full rounded-full bg-green-500 opacity-20"></div>
@@ -145,7 +145,7 @@ export const ResourceLockStatus: React.FC<ResourceLockStatusProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`inline-flex items-center space-x-1 ${className}`}>}
       <div className="flex -space-x-1">
         {resourceLocks.slice(0, 3).map((lock) => ()
@@ -183,7 +183,7 @@ export const LockTypeBadge: React.FC<LockTypeBadgeProps> = ({)
 }) => {
   const sizeClasses = {
     small: 'px-2 py-1 text-xs',
-    medium: 'px-3 py-1 text-sm'
+    medium: 'px-3 py-1 text-sm',
   };
   const getTypeConfig = () => {
     switch (lockType) {
@@ -202,7 +202,7 @@ export const LockTypeBadge: React.FC<LockTypeBadgeProps> = ({)
     }
   };
   const { color, label } = getTypeConfig();
-  return ()
+  return ();
     <span className={`inline-flex items-center rounded-full font-medium ${color} ${sizeClasses[size]} ${className}`}>}
       {label}
     </span>

@@ -382,11 +382,10 @@ export class SecurityIncidentResponseService extends EventEmitter {
     falsePositiveRate: number;
     procedureEffectiveness: Map<string, number>;
   };
-  constructor()
+  constructor();
     config: IncidentResponseConfig,
     alertingSystem: CrossSystemAlertingSystem,
     securityMonitor: SecurityAnalyticsMonitor,
-  ) {
     super();
     this.config = config;
     this.alertingSystem = alertingSystem;
@@ -586,7 +585,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
         handler: collectedBy,
         timestamp: Date.now(),
         action: 'collected',
-        notes: 'Evidence collected and added to incident'
+        notes: 'Evidence collected and added to incident',
       }]
     };
     incident.evidence.push(fullEvidence);
@@ -648,7 +647,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
         }
       }
       // Generate recommendations
-      const recommendations = this.generateTroubleshootingRecommendations(;)
+      const recommendations = this.generateTroubleshootingRecommendations(;);
         incident,
         workflow,
         diagnosticResults,
@@ -732,9 +731,9 @@ export class SecurityIncidentResponseService extends EventEmitter {
   /**
    * Generate incident response report
    */
-  generateIncidentReport()
+  generateIncidentReport();
     incidentId: string,
-    reportType: 'executive' | 'technical' | 'compliance' | 'post_incident' = 'technical'
+    reportType: 'executive' | 'technical' | 'compliance' | 'post_incident' = 'technical',
   ): {
     incident: SecurityIncident;
     summary: {,
@@ -752,7 +751,6 @@ export class SecurityIncidentResponseService extends EventEmitter {
       compliant: boolean;
       gaps: string[];
     }[];
-  } {
     const incident = this.activeIncidents.get(incidentId);
     if (!incident) {
       throw new Error(`Incident ${incidentId} not found`);}
@@ -794,7 +792,6 @@ export class SecurityIncidentResponseService extends EventEmitter {
       responseTime: number;
       resolutionTime: number;
     };
-  } {
     const incidents = Array.from(this.activeIncidents.values());
     // Count by status
     const incidentsByStatus = incidents.reduce((counts, incident) => {
@@ -867,7 +864,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
         ip_addresses: alert.details?.ip_addresses || [],
         user_agents: alert.details?.user_agents || [],
         request_patterns: alert.details?.request_patterns || [],
-        data_accessed: alert.details?.data_accessed || []
+        data_accessed: alert.details?.data_accessed || [],
       },
       metadata: {,
         threat_level: alert.threatLevel || 5,
@@ -917,7 +914,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
       ddos: 'DDoS Attack',
       insider_threat: 'Insider Threat',
       compliance_violation: 'Compliance Violation',
-      operational: 'Operational Security Incident'
+      operational: 'Operational Security Incident',
     };
     const baseTitle = categoryTitles[category];
     if (eventCount > 1) {
@@ -1014,35 +1011,33 @@ export class SecurityIncidentResponseService extends EventEmitter {
         critical: 'Major data breach with potential regulatory fines and customer impact',
         high: 'Significant data exposure requiring customer notification',
         medium: 'Limited data exposure with containment measures in place',
-        low: 'Minor data access anomaly with no confirmed exposure'
+        low: 'Minor data access anomaly with no confirmed exposure',
       },
       system_compromise: {,
         critical: 'Critical system compromise affecting core business operations',
         high: 'System compromise with potential data integrity issues',
         medium: 'System compromise contained to non-critical systems',
-        low: 'Suspicious system activity under investigation'
+        low: 'Suspicious system activity under investigation',
       },
       ddos: {,
         critical: 'Complete service outage affecting all customers',
         high: 'Significant service degradation impacting customer experience',
         medium: 'Intermittent service issues with workarounds available',
-        low: 'Minor performance impact detected and mitigated'
+        low: 'Minor performance impact detected and mitigated',
       }
     };
     return impacts[category]?.[severity] || `${severity} ${category} incident requiring investigation`;}
   }
   private determineDataClassification(events: SecurityEvent[]): SecurityIncident['impactAssessment']['dataClassification'] {
     // Analyze events to determine highest data classification affected
-    const hasRestrictedData = events.some(e => ;)
+    const hasRestrictedData = events.some(e => ;);
       e.details.data_accessed?.some(data => )
         data.includes('restricted') || data.includes('confidential')
-      )
     );
     if (hasRestrictedData) return 'restricted';
-    const hasConfidentialData = events.some(e => ;)
+    const hasConfidentialData = events.some(e => ;);
       e.details.data_accessed?.some(data => )
         data.includes('internal') || data.includes('private')
-      )
     );
     if (hasConfidentialData) return 'confidential';
     return 'internal';
@@ -1073,7 +1068,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   }
   private async applyIncidentProcedures(incident: SecurityIncident): Promise<void> {
     // Find applicable procedures
-    const applicableProcedures = Array.from(this.procedures.values()).filter(procedure => ;)
+    const applicableProcedures = Array.from(this.procedures.values()).filter(procedure => ;);
       procedure.category === incident.category &&
       (procedure.severity === incident.severity || procedure.severity === 'low') // Low includes all severities
     );
@@ -1113,7 +1108,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
         assignedTo: incident.assignedTo || incident.responderTeam[0],
         status: 'pending',
         priority: this.mapPriorityFromSeverity(incident.severity),
-        deadline: step.estimatedDuration ? Date.now() + step.estimatedDuration : undefined
+        deadline: step.estimatedDuration ? Date.now() + step.estimatedDuration : undefined,
       }, 'automated_system');
       // Execute automated steps immediately
       if (step.type === 'automated' && step.automationScript) {
@@ -1171,7 +1166,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   }
   private async triggerAutomatedResponse(incident: SecurityIncident): Promise<void> {
     // Find applicable automated actions
-    const applicableProcedures = Array.from(this.procedures.values()).filter(procedure => ;)
+    const applicableProcedures = Array.from(this.procedures.values()).filter(procedure => ;);
       procedure.category === incident.category
     );
     for (const procedure of applicableProcedures) {
@@ -1222,7 +1217,7 @@ export class SecurityIncidentResponseService extends EventEmitter {
   }
   private async sendIncidentNotifications()
     incident: SecurityIncident,
-    eventType: 'created' | 'status_updated' | 'escalated' | 'resolved'
+    eventType: 'created' | 'status_updated' | 'escalated' | 'resolved',
   ): Promise<void> {
     // Determine notification recipients based on event type and incident severity
     const recipients = this.determineNotificationRecipients(incident, eventType);
@@ -1423,7 +1418,7 @@ Incident Dashboard: /incidents/${incident.id}
     const nextSteps: string[] = [];
     while (currentNode) {
       // Find matching route based on diagnostic results
-      const matchingRoute = currentNode.routes.find(route => ;)
+      const matchingRoute = currentNode.routes.find(route => ;);
         this.evaluateDecisionCondition(route.condition, diagnosticResults)
       );
       if (!matchingRoute) {
@@ -1647,7 +1642,7 @@ Incident Dashboard: /incidents/${incident.id}
       averageResolutionTime: 0,
       escalationRate: 0,
       falsePositiveRate: 0,
-      procedureEffectiveness: new Map()
+      procedureEffectiveness: new Map(),
     };
   }
   private loadDefaultProcedures(): void {
@@ -1682,7 +1677,7 @@ Incident Dashboard: /incidents/${incident.id}
                 checklistItems: ['Review triggering alerts', 'Analyze logs', 'Interview witnesses'],
                 tools: ['SIEM', 'Log analyzer'],
                 skills: ['Incident analysis'],
-                estimatedDuration: 30 * 60 * 1000 // 30 minutes
+                estimatedDuration: 30 * 60 * 1000 // 30 minutes,
               }
             ],
             successCriteria: ['Breach confirmed or ruled out'],
@@ -1776,7 +1771,7 @@ Incident Dashboard: /incidents/${incident.id}
         createdAt: Date.now(),
         lastUpdated: Date.now(),
         successRate: 0.8,
-        averageResolutionTime: 2 * 60 * 60 * 1000 // 2 hours
+        averageResolutionTime: 2 * 60 * 60 * 1000 // 2 hours,
       });
     });
   }

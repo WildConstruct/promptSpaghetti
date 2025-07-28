@@ -138,7 +138,7 @@ export interface BasePromotion {
  * Price-based discount promotion
  */
 export interface DiscountPromotion extends BasePromotion {
-  type: 
+  type: ,
     | PromotionType.PERCENTAGE_DISCOUNT 
     | PromotionType.FIXED_AMOUNT_DISCOUNT 
     | PromotionType.BULK_DISCOUNT

@@ -38,7 +38,7 @@ export declare const useIdentityValidation: (config?: IdentityValidationHookConf
     checkValidationStatus: (requestId: string) => IdentityValidationRequest | null;
     getValidationResult: (requestId: string) => ValidationResult | null;
     getVerificationCompletionPercentage: () => number;
-    getRecommendedVerificationSteps: () => {
+    getRecommendedVerificationSteps: () => {,
         type: IdentityValidationType;
         title: string;
         description: string;

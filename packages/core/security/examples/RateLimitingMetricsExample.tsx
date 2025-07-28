@@ -22,13 +22,13 @@ export function BasicMetricsExample() {
   // Create rate limiting service
   const rateLimitingService = new RateLimitingService();
   // Create adaptive throttling engine
-  const throttlingEngine = new AdaptiveThrottlingRulesEngine(;)
+  const throttlingEngine = new AdaptiveThrottlingRulesEngine(;);
     rateLimitingService,
     true, // Enable default rules
     { enableAnalytics: true }
   );
   // Create performance metrics service
-  const metricsService = new RateLimitingPerformanceMetrics(;)
+  const metricsService = new RateLimitingPerformanceMetrics(;);
     rateLimitingService,
     throttlingEngine,
     {
@@ -39,7 +39,7 @@ export function BasicMetricsExample() {
         enableHeatmaps: true,
         enableTimeseries: true,
         enableGeospatialMaps: true,
-        refreshInterval: 5 // 5 seconds
+        refreshInterval: 5 // 5 seconds,
       },
       alerting: {,
         enableAlerts: true,
@@ -60,7 +60,7 @@ export function BasicMetricsExample() {
       responseTime: data.metrics.responseTime.average.toFixed(2) + 'ms',
       throughput: data.metrics.throughput.requestsPerSecond.toFixed(1) + ' rps',
       blockRate: data.metrics.errorRates.blockRate.toFixed(1) + '%',
-      collectionTime: data.collectionTime + 'ms'
+      collectionTime: data.collectionTime + 'ms',
     });
   });
   metricsService.on('alertCreated', (alert) => {
@@ -112,7 +112,7 @@ export function RateLimitingDashboardExample() {
     return () => clearInterval(trafficTimer);
   }, [rateLimitingService]);
   if (metricsHook.error) {
-    return ()
+    return ();
       <div className="p-8 bg-red-50 dark:bg-red-900/20 rounded-lg">
         <h2 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
           Metrics Error
@@ -127,7 +127,7 @@ export function RateLimitingDashboardExample() {
       </div>
     );
   }
-  return ()
+  return ();
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Dashboard Header */}
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
@@ -169,7 +169,6 @@ export function RateLimitingDashboardExample() {
           new RateLimitingPerformanceMetrics()
             rateLimitingService,
             throttlingEngine
-          )
         }
         theme="light"
         autoRefresh={true}
@@ -186,12 +185,12 @@ export function RateLimitingDashboardExample() {
 export function AdvancedVisualizationExample() {
   console.log('=== Advanced Visualization Features Example ===');
   const rateLimitingService = new RateLimitingService();
-  const throttlingEngine = new AdaptiveThrottlingRulesEngine(;)
+  const throttlingEngine = new AdaptiveThrottlingRulesEngine(;);
     rateLimitingService,
     true,
     { enableAnalytics: true }
   );
-  const metricsService = new RateLimitingPerformanceMetrics(;)
+  const metricsService = new RateLimitingPerformanceMetrics(;);
     rateLimitingService,
     throttlingEngine,
     {
@@ -222,7 +221,7 @@ export function AdvancedVisualizationExample() {
     console.log('🔥 Heatmap Data:', {)
       endpoints: heatmapData.endpoints.length,
       timeSlots: heatmapData.timeSlots.length,
-      totalDataPoints: heatmapData.activityMatrix.length * heatmapData.activityMatrix[0].length
+      totalDataPoints: heatmapData.activityMatrix.length * heatmapData.activityMatrix[0].length,
     });
     // Get geospatial data
     const geoData = metricsService.generateGeospatialData();
@@ -321,7 +320,7 @@ export function CustomWidgetExample() {
 export function AlertManagementExample() {
   console.log('=== Alert Management System Example ===');
   const rateLimitingService = new RateLimitingService();
-  const metricsService = new RateLimitingPerformanceMetrics(;)
+  const metricsService = new RateLimitingPerformanceMetrics(;);
     rateLimitingService,
     undefined,
     {

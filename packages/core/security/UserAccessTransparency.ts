@@ -469,7 +469,7 @@ export class UserAccessTransparencyService extends EventEmitter {
       this.emit('dataInventoryGenerated', {)
         userId,
         inventory,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return inventory;
     } catch (error) {
@@ -477,7 +477,7 @@ export class UserAccessTransparencyService extends EventEmitter {
         operation: 'generateUserDataInventory',
         userId,
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       throw error;
     }
@@ -526,7 +526,7 @@ export class UserAccessTransparencyService extends EventEmitter {
     }
     this.emit('dsarSubmitted', {)
       request,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return request;
   }
@@ -552,7 +552,7 @@ export class UserAccessTransparencyService extends EventEmitter {
     this.emit('settingsUpdated', {)
       userId,
       settings: updatedSettings,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return updatedSettings;
   }
@@ -600,7 +600,7 @@ export class UserAccessTransparencyService extends EventEmitter {
     this.emit('dataExported', {)
       userId,
       response,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return response;
   }
@@ -617,7 +617,7 @@ export class UserAccessTransparencyService extends EventEmitter {
       retentionSummary: await this.calculateRetentionSummary(userId),
       thirdPartySharing: await this.getThirdPartySharing(userId),
       complianceStatus: await this.assessUserCompliance(userId),
-      privacyScore: await this.calculatePrivacyScore(userId)
+      privacyScore: await this.calculatePrivacyScore(userId),
     };
   }
   private async gatherDataCategories(userId: string): Promise<DataCategory[]> {
@@ -648,7 +648,7 @@ export class UserAccessTransparencyService extends EventEmitter {
       violations: [],
       pendingActions: [],
       lastAssessment: new Date(),
-      nextAssessment: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000) // 90 days
+      nextAssessment: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000) // 90 days,
     };
   }
   private async calculatePrivacyScore(userId: string): Promise<PrivacyScore> {
@@ -665,7 +665,7 @@ export class UserAccessTransparencyService extends EventEmitter {
       },
       trends: [],
       recommendations: [],
-      lastCalculated: new Date()
+      lastCalculated: new Date(),
     };
   }
   // Additional helper methods would be implemented here...

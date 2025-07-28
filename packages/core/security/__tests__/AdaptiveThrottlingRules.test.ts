@@ -7,7 +7,7 @@ import { RateLimitingService, ThreatLevel } from '../RateLimitingService';
 
 // Mock RateLimitingService
 jest.mock('../RateLimitingService', () => ({)
-  RateLimitingService: jest.fn().mockImplementation(() => ({)
+  RateLimitingService: jest.fn().mockImplementation(() => ({),
     checkRateLimit: jest.fn(),
     recordAttempt: jest.fn(),
     addExemption: jest.fn(),
@@ -345,7 +345,7 @@ describe('AdaptiveThrottlingRulesEngine', () => {
         systemLoad: 50,
         threatLevel: ThreatLevel.LOW,
         recentFailures: 0,
-        consecutiveFailures: 4 // Above threshold
+        consecutiveFailures: 4 // Above threshold,
       };
       // Record failures to trigger circuit breaker
       for (let i = 0; i < 3; i++) {
@@ -447,7 +447,7 @@ describe('AdaptiveThrottlingRulesEngine', () => {
         consecutiveFailures: 0,
       };
       // Run multiple requests to test load shedding percentage
-      const results = await Promise.all(;)
+      const results = await Promise.all(;);
         Array(20).fill(null).map(() => engine.applyThrottling(context))
       );
       const shedResults = results.filter(r => r.action === 'shed');
@@ -628,7 +628,7 @@ describe('AdaptiveThrottlingRulesEngine', () => {
           {
             type: 'threat_level',
             operator: 'greater_than',
-            threshold: 2 // MEDIUM level and above
+            threshold: 2 // MEDIUM level and above,
           }
         ],
         baseDelay: 500,

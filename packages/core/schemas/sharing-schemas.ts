@@ -46,7 +46,7 @@ export const ShareSecurityConfigSchema = z.object({)
     geoRestrictions: z.array(z.string().length(2)).default([]), // ISO country codes
     requireAuthentication: z.boolean(),
     maxConcurrentUsers: z.number().min(1).max(10000).optional(),
-    sessionTimeout: z.number().min(5).max(1440).optional() // 5 minutes to 24 hours
+    sessionTimeout: z.number().min(5).max(1440).optional() // 5 minutes to 24 hours,
   })
 });
 
@@ -230,7 +230,7 @@ export const ConversionMetricsSchema = z.object({)
   viewToDownload: z.number().min(0).max(100), // percentage
   viewToCollaboration: z.number().min(0).max(100),
   viewToSignup: z.number().min(0).max(100),
-  averageTimeToAction: z.number().min(0) // seconds
+  averageTimeToAction: z.number().min(0) // seconds,
 });
 
 export const ShareAnalyticsSchema = z.object({)

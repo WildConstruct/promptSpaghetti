@@ -171,7 +171,7 @@ export const darkTheme: CorrectionsTheme = {
   transitions: {,
     fast: 'all 0.1s ease',
     normal: 'all 0.2s ease',
-    slow: 'all 0.3s ease'
+    slow: 'all 0.3s ease',
   },
   breakpoints: {,
     mobile: '768px',
@@ -227,7 +227,7 @@ export const CorrectionsThemeProvider: React.FC<CorrectionsThemeProviderProps> =
   const toggleTheme = () => {
     setIsDark(!isDark);
   };
-  return ()
+  return ();
     <CorrectionsThemeContext.Provider value={{ theme, isDark, toggleTheme }}>
       {children}
     </CorrectionsThemeContext.Provider>
@@ -348,7 +348,7 @@ export const createStyles = (theme: CorrectionsTheme) => ({)
       width: '100vw',
       overflow: 'hidden',
       display: 'flex',
-      flexDirection: 'column' as const
+      flexDirection: 'column' as const,
     }
   },
   // Status styles

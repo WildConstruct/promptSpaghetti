@@ -35,7 +35,7 @@ export interface AsyncMiddleware<T> {
 export class ValidationMiddleware<T> implements StateMiddleware<T> {
   name = 'validation';
   order = 100;
-  constructor()
+  constructor();
     private validators: Array<(state: T) => ValidationResult>,
     private options: {
       failOnError?: boolean;
@@ -71,7 +71,7 @@ export class ValidationMiddleware<T> implements StateMiddleware<T> {
 export class AuditMiddleware<T> implements StateMiddleware<T> {
   name = 'audit';
   order = 50;
-  constructor()
+  constructor();
     private auditLogger: (entry: AuditEntry) => Promise<void>,
     private options: {
       includeStateSnapshot?: boolean;
@@ -154,7 +154,7 @@ export class PerformanceMiddleware<T> implements StateMiddleware<T> {
       console.warn(`Slow state update detected:`, {)
         changeType: change.type,
         duration: metric.duration,
-        memoryDelta: metric.memoryAfter - metric.memoryBefore
+        memoryDelta: metric.memoryAfter - metric.memoryBefore,
       });
     }
     // Cleanup old metrics
@@ -182,7 +182,7 @@ export class PerformanceMiddleware<T> implements StateMiddleware<T> {
       maxDuration: Math.max(...durations),
       minDuration: Math.min(...durations),
       totalOperations: metrics.length,
-      operationsPerSecond: timeSpan > 0 ? (metrics.length / timeSpan) * 1000 : 0
+      operationsPerSecond: timeSpan > 0 ? (metrics.length / timeSpan) * 1000 : 0,
     };
   }
   private getMemoryUsage(): number {
@@ -203,7 +203,7 @@ export class PerformanceMiddleware<T> implements StateMiddleware<T> {
 export class SecurityMiddleware<T> implements StateMiddleware<T> {
   name = 'security';
   order = 200; // High priority
-  constructor()
+  constructor();
     private securityRules: SecurityRule[],
     private options: {
       blockOnViolation?: boolean;
@@ -255,7 +255,7 @@ export class SecurityMiddleware<T> implements StateMiddleware<T> {
 export class TransformationMiddleware<T> implements StateMiddleware<T> {
   name = 'transformation';
   order = 75;
-  constructor()
+  constructor();
     private transformers: Array<(state: T, change: StateChange<T>) => T>,
     private options: {
       skipOnError?: boolean;
@@ -270,7 +270,7 @@ export class TransformationMiddleware<T> implements StateMiddleware<T> {
         if (this.options.logTransformations) {
           console.log('State transformation applied:', {)
             transformer: transformer.name,
-            hasChanges: newState !== transformedState
+            hasChanges: newState !== transformedState,
           });
         }
         transformedState = newState;

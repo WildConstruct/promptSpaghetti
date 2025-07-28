@@ -175,7 +175,7 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
       running: experiments.filter(e => e.status === 'running').length,
       draft: experiments.filter(e => e.status === 'draft').length,
       completed: experiments.filter(e => e.status === 'completed').length,
-      archived: experiments.filter(e => e.status === 'archived').length
+      archived: experiments.filter(e => e.status === 'archived').length,
     };
     return stats;
   }, [experiments]);
@@ -240,7 +240,7 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     return `${days} day${days !== 1 ? 's' : ''}`;}
   }, []);
-  return ()
+  return ();
     <div className={`experiment-manager ${className}`}>}
       {/* Header */}
       <div className="manager-header">
@@ -376,7 +376,7 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
                 </Select>
                 <Select value={`${state.sortBy}-${state.sortOrder}`} onValueChange={(value) => {}
                   const [sortBy, sortOrder] = value.split('-');
-                  setState()
+                  setState();
                     prev => ({ ...prev,)
                     sortBy: sortBy as 'created' | 'updated' | 'name' | 'status',
                     sortOrder: sortOrder as 'asc' | 'desc' }
@@ -651,7 +651,7 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
                     const successRate = typeExperiments.length > 0 ;
                       ? (typeExperiments.filter(e => e.status === 'completed').length / typeExperiments.length) * 100
                       : 0;
-                    return ()
+                    return ();
                       <div key={type} className="flex items-center justify-between">
                         <span className="text-sm capitalize">{type}</span>
                         <div className="flex items-center space-x-2">

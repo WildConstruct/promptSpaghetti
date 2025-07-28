@@ -358,7 +358,7 @@ describe('ConversionDataRelationshipManager', () => {
       const incompleteEvent = {
         ...mockBaseEvent,
         userId: '', // Empty user ID
-        sessionId: '' // Empty session ID
+        sessionId: '' // Empty session ID,
       };
       const enrichedEvent = await manager.enrichConversionEvent(incompleteEvent);
       // Should still enrich what it can
@@ -396,7 +396,7 @@ describe('ConversionDataRelationshipManager', () => {
         userId: `user-${i}`}
       }));
       const startTime = Date.now();
-      const enrichedEvents = await Promise.all(;)
+      const enrichedEvents = await Promise.all(;);
         events.map(event => manager.enrichConversionEvent(event))
       );
       const endTime = Date.now();

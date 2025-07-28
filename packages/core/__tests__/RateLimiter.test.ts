@@ -133,7 +133,7 @@ describe('RateLimiter', () => {
       expect(() => {
         new RateLimiter({)
           windowMs: 60000,
-          maxRequests: 0 // Invalid
+          maxRequests: 0 // Invalid,
         });
       }).toThrow('Invalid rate limit configuration');
     });
@@ -249,7 +249,7 @@ describe('RateLimiter', () => {
       const limiter = new RateLimiter({)
         windowMs: 60000,
         maxRequests: 10,
-        store: failingStore as any
+        store: failingStore as any,
       });
       const context: RateLimitContext = { ip: '192.168.1.1' };
       const result = await limiter.checkLimit(context);
@@ -585,7 +585,7 @@ describe('ConditionEvaluator', () => {
         type: 'header' as const,
         operator: 'equals' as const,
         field: 'authorization',
-        value: 'Bearer token123'
+        value: 'Bearer token123',
       };
       const context = {
         headers: { authorization: 'Bearer token123' }

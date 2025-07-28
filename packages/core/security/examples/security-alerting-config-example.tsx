@@ -104,7 +104,7 @@ export const SecurityConfigurationPage: React.FC<SecurityConfigurationPageProps>
           setCurrentConfig(config);
         } else {
           // Create default configuration for first-time setup
-          const success = await configService.saveConfiguration(;)
+          const success = await configService.saveConfiguration(;);
             configId, 
             DEFAULT_SECURITY_CONFIG,
             {
@@ -130,7 +130,7 @@ export const SecurityConfigurationPage: React.FC<SecurityConfigurationPageProps>
     try {
       setError(null);
       const configId = `org-${organizationId}`;}
-      const success = await configService.saveConfiguration(;)
+      const success = await configService.saveConfiguration(;);
         configId,
         newConfig,
         {
@@ -157,12 +157,12 @@ export const SecurityConfigurationPage: React.FC<SecurityConfigurationPageProps>
       const validation = await configService.validateConfiguration(config);
       return {
         isValid: validation.isValid,
-        errors: validation.errors.map(error => ({)
+        errors: validation.errors.map(error => ({),
           field: error.field,
           message: error.message,
           severity: error.severity,
         })),
-        warnings: validation.warnings.map(warning => ({)
+        warnings: validation.warnings.map(warning => ({),
           field: warning.field,
           message: warning.message,
           impact: warning.impact,
@@ -175,7 +175,7 @@ export const SecurityConfigurationPage: React.FC<SecurityConfigurationPageProps>
         errors: [{,
           field: 'general',
           message: err instanceof Error ? err.message : 'Validation failed',
-          severity: 'error' as const
+          severity: 'error' as const,
         }],
         warnings: [],
         securityScore: 0,
@@ -187,7 +187,7 @@ export const SecurityConfigurationPage: React.FC<SecurityConfigurationPageProps>
   const allowAdvancedSettings = userRole === 'admin' || userRole === 'security_admin';
   // Loading state
   if (isLoading) {
-    return ()
+    return ();
       <div style={{
         display: 'flex',
         justifyContent: 'center',
@@ -205,7 +205,7 @@ export const SecurityConfigurationPage: React.FC<SecurityConfigurationPageProps>
             borderTopColor: '#4f46e5',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
-            margin: '0 auto 16px'
+            margin: '0 auto 16px',
           }} />
           <p>Loading security configuration...</p>
         </div>
@@ -219,7 +219,7 @@ export const SecurityConfigurationPage: React.FC<SecurityConfigurationPageProps>
       </div>
     );
   }
-  return ()
+  return ();
     <div style={{
       minHeight: '100vh',
       background: theme === 'light' ? '#f8fafc' : '#0f172a',
@@ -229,14 +229,14 @@ export const SecurityConfigurationPage: React.FC<SecurityConfigurationPageProps>
       <div style={{
         background: theme === 'light' ? '#ffffff' : '#1e293b',
         borderBottom: `1px solid ${theme === 'light' ? '#e2e8f0' : '#334155'}`,}
-        padding: '16px 24px'
+        padding: '16px 24px',
       }}>
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           maxWidth: '1200px',
-          margin: '0 auto'
+          margin: '0 auto',
         }}>
           <div>
             <nav style={{
@@ -250,7 +250,7 @@ export const SecurityConfigurationPage: React.FC<SecurityConfigurationPageProps>
               margin: '0',
               fontSize: '20px',
               fontWeight: 600,
-              color: theme === 'light' ? '#1e293b' : '#f1f5f9'
+              color: theme === 'light' ? '#1e293b' : '#f1f5f9',
             }}>
               Security Alerting Configuration
             </h1>
@@ -262,7 +262,7 @@ export const SecurityConfigurationPage: React.FC<SecurityConfigurationPageProps>
           }}>
             <div style={{
               fontSize: '14px',
-              color: theme === 'light' ? '#64748b' : '#94a3b8'
+              color: theme === 'light' ? '#64748b' : '#94a3b8',
             }}>
               Org: {organizationId}
             </div>
@@ -394,7 +394,7 @@ export const SecurityConfigurationPage: React.FC<SecurityConfigurationPageProps>
           justifyContent: 'space-between',
           alignItems: 'center',
           fontSize: '12px',
-          color: theme === 'light' ? '#64748b' : '#94a3b8'
+          color: theme === 'light' ? '#64748b' : '#94a3b8',
         }}>
           <div>
             Security Alerting Configuration v1.0.0
@@ -430,7 +430,7 @@ export const BasicSecurityConfigExample: React.FC = () => {
       warnings.push({)
         field: 'alertRetentionDays',
         message: 'Consider longer retention for compliance',
-        impact: 'medium' as const
+        impact: 'medium' as const,
       });
       score -= 10;
     }
@@ -438,7 +438,7 @@ export const BasicSecurityConfigExample: React.FC = () => {
       warnings.push({)
         field: 'enableRealTimeAnalytics',
         message: 'Real-time analytics recommended for security',
-        impact: 'high' as const
+        impact: 'high' as const,
       });
       score -= 15;
     }
@@ -449,7 +449,7 @@ export const BasicSecurityConfigExample: React.FC = () => {
       securityScore: score,
     };
   }, []);
-  return ()
+  return ();
     <SecurityAlertingConfigurationUI
       currentConfig={config}
       onConfigChange={handleConfigChange}
@@ -485,7 +485,7 @@ export const HookBasedExample: React.FC = () => {
       securityScore: state.securityScore,
     };
   }, [actions, state]);
-  return ()
+  return ();
     <div>
       {/* Display hook state information */}
       <div style={{ 

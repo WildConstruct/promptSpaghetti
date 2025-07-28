@@ -71,7 +71,7 @@ describe('SecurityAlertingConfigurationUI', () => {
   });
   describe('Rendering', () => {
     it('renders the main configuration interface', () => {
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -84,7 +84,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       expect(screen.getByText('Configure comprehensive security alerting, threat detection, and automated response systems')).toBeInTheDocument();
     });
     it('displays user role badge correctly', () => {
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -96,7 +96,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       expect(screen.getByText('SECURITY ADMIN')).toBeInTheDocument();
     });
     it('renders all navigation tabs', () => {
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -112,7 +112,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       expect(screen.getByText('Compliance')).toBeInTheDocument();
     });
     it('shows general settings tab as active by default', () => {
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -127,7 +127,7 @@ describe('SecurityAlertingConfigurationUI', () => {
   });
   describe('General Settings Tab', () => {
     it('displays all core alert settings checkboxes', () => {
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -143,7 +143,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       expect(screen.getByLabelText('Enable Machine Learning Analysis')).not.toBeChecked();
     });
     it('displays alert retention period input with correct value', () => {
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -160,7 +160,7 @@ describe('SecurityAlertingConfigurationUI', () => {
     });
     it('handles checkbox changes correctly', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -179,7 +179,7 @@ describe('SecurityAlertingConfigurationUI', () => {
     });
     it('handles retention period changes', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -199,7 +199,7 @@ describe('SecurityAlertingConfigurationUI', () => {
   describe('Alert Thresholds Tab', () => {
     it('switches to thresholds tab and displays threshold inputs', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -218,7 +218,7 @@ describe('SecurityAlertingConfigurationUI', () => {
     });
     it('handles threshold value changes', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -241,7 +241,7 @@ describe('SecurityAlertingConfigurationUI', () => {
   describe('Validation', () => {
     it('triggers validation automatically after changes', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -273,7 +273,7 @@ describe('SecurityAlertingConfigurationUI', () => {
         securityScore: 70,
       };
       mockOnValidateConfig.mockResolvedValue(validationWithWarnings);
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={{
             ...mockConfig,
@@ -301,14 +301,14 @@ describe('SecurityAlertingConfigurationUI', () => {
           {
             field: 'alertRetentionDays',
             message: 'Alert retention period exceeds maximum allowed',
-            severity: 'error' as const
+            severity: 'error' as const,
           }
         ],
         warnings: [],
         securityScore: 20,
       };
       mockOnValidateConfig.mockResolvedValue(validationWithErrors);
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -330,7 +330,7 @@ describe('SecurityAlertingConfigurationUI', () => {
   describe('Save and Reset Actions', () => {
     it('enables save button only when configuration is valid and has changes', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -356,7 +356,7 @@ describe('SecurityAlertingConfigurationUI', () => {
     });
     it('calls onConfigChange when save is clicked', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -379,7 +379,7 @@ describe('SecurityAlertingConfigurationUI', () => {
     });
     it('resets configuration when reset button is clicked', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -406,7 +406,7 @@ describe('SecurityAlertingConfigurationUI', () => {
   });
   describe('Read-Only Mode', () => {
     it('disables all inputs when readOnly is true', () => {
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -421,7 +421,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       expect(screen.getByDisplayValue('90')).toBeDisabled();
     });
     it('disables save and reset buttons when readOnly is true', () => {
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -437,7 +437,7 @@ describe('SecurityAlertingConfigurationUI', () => {
   });
   describe('Advanced Settings', () => {
     it('hides advanced settings when allowAdvancedSettings is false', () => {
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -452,7 +452,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       expect(screen.getByText('(Advanced)')).toBeInTheDocument();
     });
     it('enables advanced settings when allowAdvancedSettings is true', () => {
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -514,7 +514,7 @@ describe('SecurityAlertingConfigurationUI', () => {
   describe('Tab Navigation', () => {
     it('switches between tabs correctly', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -543,7 +543,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       mockOnValidateConfig.mockImplementation()
         () => new Promise(resolve => setTimeout(() => resolve(mockValidationResult), 1000))
       );
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -562,7 +562,7 @@ describe('SecurityAlertingConfigurationUI', () => {
       mockOnConfigChange.mockImplementation()
         () => new Promise(resolve => setTimeout(resolve, 1000))
       );
-      render()
+      render();
         <SecurityAlertingConfigurationUI
           currentConfig={mockConfig}
           onConfigChange={mockOnConfigChange}
@@ -587,7 +587,7 @@ describe('SecurityAlertingConfigurationUI', () => {
 });
 describe('SecurityAlertingConfigurationUI Accessibility', () => {
   it('has proper ARIA labels and roles', () => {
-    render()
+    render();
       <SecurityAlertingConfigurationUI
         currentConfig={mockConfig}
         onConfigChange={mockOnConfigChange}
@@ -603,7 +603,7 @@ describe('SecurityAlertingConfigurationUI Accessibility', () => {
   });
   it('supports keyboard navigation', async () => {
     const user = userEvent.setup();
-    render()
+    render();
       <SecurityAlertingConfigurationUI
         currentConfig={mockConfig}
         onConfigChange={mockOnConfigChange}
@@ -619,7 +619,7 @@ describe('SecurityAlertingConfigurationUI Accessibility', () => {
     expect(screen.getByText('Response Automation')).toHaveFocus();
   });
   it('provides meaningful help text and descriptions', () => {
-    render()
+    render();
       <SecurityAlertingConfigurationUI
         currentConfig={mockConfig}
         onConfigChange={mockOnConfigChange}

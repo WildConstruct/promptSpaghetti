@@ -1,15 +1,13 @@
 // Epic 11 Email Suggestions Component
 // Smart email suggestions for typo correction
-
 import React from 'react';
-
 interface EmailSuggestionsProps {
   suggestion: string;
   onAccept: (suggestion: string) => void;
   className?: string;
 }
 
-export const EmailSuggestions: React.FC<EmailSuggestionsProps> = ({
+export const EmailSuggestions: React.FC<EmailSuggestionsProps> = ({)
   suggestion,
   onAccept,
   className = ''
@@ -17,9 +15,8 @@ export const EmailSuggestions: React.FC<EmailSuggestionsProps> = ({
   if (!suggestion) {
     return null;
   }
-
-  return (
-    <div className={`mt-2 p-2 bg-blue-50 border border-blue-200 rounded-md ${className}`}>
+  return ()
+    <div className={`mt-2 p-2 bg-blue-50 border border-blue-200 rounded-md ${className}`}>}
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <svg className="w-4 h-4 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

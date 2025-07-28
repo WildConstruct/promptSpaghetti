@@ -59,7 +59,7 @@ describe('DataRetrievalRateLimit', () => {
       patchLevel: 'current',
       riskScore: 10,
       registered: true,
-      lastSeen: new Date()
+      lastSeen: new Date(),
     },
     behaviorProfile: {,
       normalAccessPatterns: [],
@@ -139,7 +139,7 @@ describe('DataRetrievalRateLimit', () => {
       const subject = createTestSubject();
       const object = createTestObject();
       const requestDetails = createTestRequestDetails();
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -158,7 +158,7 @@ describe('DataRetrievalRateLimit', () => {
       const subject = createTestSubject();
       const object = createTestObject();
       const requestDetails = createTestRequestDetails();
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -198,9 +198,9 @@ describe('DataRetrievalRateLimit', () => {
       const subject = createTestSubject({ clearanceLevel: 'CONFIDENTIAL' });
       const object = createTestObject({ classification: 'CONFIDENTIAL' });
       const requestDetails = createTestRequestDetails({)
-        estimatedBytes: 10485760 // 10MB
+        estimatedBytes: 10485760 // 10MB,
       });
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -212,9 +212,9 @@ describe('DataRetrievalRateLimit', () => {
       const subject = createTestSubject({ clearanceLevel: 'RESTRICTED' });
       const object = createTestObject({ classification: 'RESTRICTED' });
       const requestDetails = createTestRequestDetails({)
-        estimatedBytes: 512000 // 500KB
+        estimatedBytes: 512000 // 500KB,
       });
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -226,9 +226,9 @@ describe('DataRetrievalRateLimit', () => {
       const subject = createTestSubject({ clearanceLevel: 'RESTRICTED' });
       const object = createTestObject({ classification: 'RESTRICTED' });
       const requestDetails = createTestRequestDetails({)
-        estimatedBytes: 5242880 // 5MB - exceeds restricted limits
+        estimatedBytes: 5242880 // 5MB - exceeds restricted limits,
       });
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -245,7 +245,7 @@ describe('DataRetrievalRateLimit', () => {
       // Make multiple requests to accumulate bytes
       for (let i = 0; i < 5; i++) {
         const requestDetails = createTestRequestDetails({)
-          estimatedBytes: 20971520 // 20MB each
+          estimatedBytes: 20971520 // 20MB each,
         });
         await dataRetrievalRateLimit.checkDataRetrievalLimit()
           subject,
@@ -256,9 +256,9 @@ describe('DataRetrievalRateLimit', () => {
       }
       // Next request should be denied due to volume limit
       const finalRequest = createTestRequestDetails({)
-        estimatedBytes: 20971520 // 20MB
+        estimatedBytes: 20971520 // 20MB,
       });
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -271,9 +271,9 @@ describe('DataRetrievalRateLimit', () => {
       const subject = createTestSubject();
       const object = createTestObject();
       const requestDetails = createTestRequestDetails({)
-        estimatedRecords: 15000 // Exceeds hourly limit
+        estimatedRecords: 15000 // Exceeds hourly limit,
       });
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -291,7 +291,7 @@ describe('DataRetrievalRateLimit', () => {
       });
       const object = createTestObject();
       const requestDetails = createTestRequestDetails();
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -309,7 +309,7 @@ describe('DataRetrievalRateLimit', () => {
       });
       const object = createTestObject({ classification: 'CONFIDENTIAL' });
       const requestDetails = createTestRequestDetails();
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -324,7 +324,7 @@ describe('DataRetrievalRateLimit', () => {
       const subject = createTestSubject();
       const object = createTestObject({ classification: 'RESTRICTED' });
       const requestDetails = createTestRequestDetails();
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -340,9 +340,9 @@ describe('DataRetrievalRateLimit', () => {
       const subject = createTestSubject();
       const object = createTestObject();
       const requestDetails = createTestRequestDetails({)
-        estimatedBytes: 104857600 // 100MB - unusually large
+        estimatedBytes: 104857600 // 100MB - unusually large,
       });
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -361,7 +361,7 @@ describe('DataRetrievalRateLimit', () => {
       });
       const object = createTestObject();
       const requestDetails = createTestRequestDetails();
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -380,15 +380,15 @@ describe('DataRetrievalRateLimit', () => {
           subject,
           lowerObject,
           'read',
-          createTestRequestDetails()
+          createTestRequestDetails();
         );
       }
       // Now request restricted data
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
-        createTestRequestDetails()
+        createTestRequestDetails();
       );
       expect(decision.decision).toBe('ALLOW');
     });
@@ -403,8 +403,7 @@ describe('DataRetrievalRateLimit', () => {
             subject,
             object,
             'read',
-            createTestRequestDetails()
-          )
+            createTestRequestDetails();
         );
       }
       const decisions = await Promise.all(promises);
@@ -419,9 +418,9 @@ describe('DataRetrievalRateLimit', () => {
       const object = createTestObject();
       // Simulate quota near limit
       const largeRequest = createTestRequestDetails({)
-        estimatedBytes: 536870912000 // 500GB - exceeds daily quota
+        estimatedBytes: 536870912000 // 500GB - exceeds daily quota,
       });
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -434,7 +433,7 @@ describe('DataRetrievalRateLimit', () => {
       const subject = createTestSubject();
       const object = createTestObject();
       const requestDetails = createTestRequestDetails();
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -470,9 +469,9 @@ describe('DataRetrievalRateLimit', () => {
       };
       dataRetrievalRateLimit.addExemption(exemption);
       const requestDetails = createTestRequestDetails({)
-        estimatedBytes: 104857600 // Large request that would normally be limited
+        estimatedBytes: 104857600 // Large request that would normally be limited,
       });
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -507,7 +506,7 @@ describe('DataRetrievalRateLimit', () => {
         operation: 'DELETE',
         estimatedBytes: 1024,
       });
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'DELETE',
@@ -521,9 +520,9 @@ describe('DataRetrievalRateLimit', () => {
       const object = createTestObject();
       const requestDetails = createTestRequestDetails({)
         operation: 'EXPORT',
-        estimatedBytes: 52428800 // 50MB
+        estimatedBytes: 52428800 // 50MB,
       });
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'EXPORT',
@@ -538,7 +537,7 @@ describe('DataRetrievalRateLimit', () => {
         operation: 'SEARCH',
         estimatedRecords: 100,
       });
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'SEARCH',
@@ -557,7 +556,7 @@ describe('DataRetrievalRateLimit', () => {
           subject,
           object,
           'read',
-          createTestRequestDetails()
+          createTestRequestDetails();
         );
       }
       const metrics = dataRetrievalRateLimit.getMetrics();
@@ -590,7 +589,7 @@ describe('DataRetrievalRateLimit', () => {
           object,
           i % 2 === 0 ? 'read' : 'EXPORT',
           createTestRequestDetails({)
-            estimatedBytes: Math.random() * 10485760 // Random size up to 10MB
+            estimatedBytes: Math.random() * 10485760 // Random size up to 10MB,
           })
         );
       }
@@ -606,7 +605,7 @@ describe('DataRetrievalRateLimit', () => {
       const subject = createTestSubject();
       const object = createTestObject();
       const requestDetails = createTestRequestDetails();
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -626,7 +625,7 @@ describe('DataRetrievalRateLimit', () => {
         requestType: 'INVALID' as any,
         context: {}
       };
-      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;)
+      const decision = await dataRetrievalRateLimit.checkDataRetrievalLimit(;);
         subject,
         object,
         'read',
@@ -649,8 +648,7 @@ describe('DataRetrievalRateLimit', () => {
             subject,
             object,
             'read',
-            createTestRequestDetails()
-          )
+            createTestRequestDetails();
         );
       }
       const decisions = await Promise.all(promises);
@@ -669,7 +667,7 @@ describe('DataRetrievalRateLimit', () => {
           subject,
           object,
           'read',
-          createTestRequestDetails()
+          createTestRequestDetails();
         );
       }
       const metrics = dataRetrievalRateLimit.getMetrics();
@@ -698,7 +696,7 @@ describe('DataRetrievalConfigurationFactory', () => {
   });
   test('should apply operation modifiers correctly', () => {
     const baseLimits = STANDARD_DATA_RETRIEVAL_LIMITS.INTERNAL;
-    const deleteLimits = DataRetrievalConfigurationFactory.createOperationLimits(;)
+    const deleteLimits = DataRetrievalConfigurationFactory.createOperationLimits(;);
       baseLimits,
       'DELETE'
     );
@@ -720,7 +718,7 @@ describe('DataRetrievalConfigurationFactory', () => {
     expect(optimized.enableAnomalyDetection).toBe(false);
   });
   test('should create role-based exemptions', () => {
-    const exemption = DataRetrievalConfigurationFactory.createRoleExemption(;)
+    const exemption = DataRetrievalConfigurationFactory.createRoleExemption(;);
       'exemption-123',
       'SYSTEM_ADMIN',
       'admin-user',

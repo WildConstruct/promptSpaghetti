@@ -54,7 +54,7 @@ export const RegionGroupsManager: React.FC<RegionGroupsManagerProps> = ({)
   if (disabled) {
     return null;
   }
-  return ()
+  return ();
     <RegionGroupsLayer
       nodes={nodes}
       regionGroups={annotations.regionGroups}

@@ -407,7 +407,7 @@ export class StatePersistenceManager extends EventEmitter {
     const batchData = {
       batch: true,
       timestamp: Date.now(),
-      items: tasks.map(task => ({)
+      items: tasks.map(task => ({),
         key: task.metadata?.key || task.domain,
         data: task.data,
         timestamp: task.timestamp,
@@ -518,26 +518,26 @@ export class StatePersistenceManager extends EventEmitter {
     this.storageAdapters.set('LOCAL_STORAGE', {)
       name: 'LOCAL_STORAGE',
       isAvailable: () => typeof localStorage !== 'undefined',
-      read: async (key: string) => {
+      read: async (key: string) => {,
         const data = localStorage.getItem(key);
         return data ? JSON.parse(data) : null;
       },
       write: async (key: string, data: any) => {
         localStorage.setItem(key, JSON.stringify(data));
       },
-      delete: async (key: string) => {
+      delete: async (key: string) => {,
         localStorage.removeItem(key);
       },
-      clear: async () => {
+      clear: async () => {,
         localStorage.clear();
       },
-      size: async () => {
+      size: async () => {,
         return JSON.stringify(localStorage).length;
       },
-      keys: async () => {
+      keys: async () => {,
         return Object.keys(localStorage);
       },
-      supports: (feature: string) => {
+      supports: (feature: string) => {,
         return ['compression', 'ttl'].includes(feature);
       }
     });
@@ -545,7 +545,7 @@ export class StatePersistenceManager extends EventEmitter {
     this.storageAdapters.set('INDEXED_DB', {)
       name: 'INDEXED_DB',
       isAvailable: () => typeof indexedDB !== 'undefined',
-      read: async (key: string) => {
+      read: async (key: string) => {,
         // Simplified IndexedDB implementation
         return new Promise((resolve, reject) => {
           const request = indexedDB.open('StateDB', 1);
@@ -580,7 +580,7 @@ export class StatePersistenceManager extends EventEmitter {
           };
         });
       },
-      delete: async (key: string) => {
+      delete: async (key: string) => {,
         return new Promise((resolve, reject) => {
           const request = indexedDB.open('StateDB', 1);
           request.onerror = () => reject(request.error);
@@ -594,7 +594,7 @@ export class StatePersistenceManager extends EventEmitter {
           };
         });
       },
-      clear: async () => {
+      clear: async () => {,
         return new Promise((resolve, reject) => {
           const request = indexedDB.open('StateDB', 1);
           request.onerror = () => reject(request.error);
@@ -608,11 +608,11 @@ export class StatePersistenceManager extends EventEmitter {
           };
         });
       },
-      size: async () => {
+      size: async () => {,
         // Approximate size calculation
         return 0;
       },
-      keys: async () => {
+      keys: async () => {,
         return new Promise((resolve, reject) => {
           const request = indexedDB.open('StateDB', 1);
           request.onerror = () => reject(request.error);
@@ -626,7 +626,7 @@ export class StatePersistenceManager extends EventEmitter {
           };
         });
       },
-      supports: (feature: string) => {
+      supports: (feature: string) => {,
         return ['compression', 'encryption', 'large_data'].includes(feature);
       }
     });
@@ -635,25 +635,25 @@ export class StatePersistenceManager extends EventEmitter {
     this.storageAdapters.set('MEMORY', {)
       name: 'MEMORY',
       isAvailable: () => true,
-      read: async (key: string) => {
+      read: async (key: string) => {,
         return memoryStorage.get(key) || null;
       },
       write: async (key: string, data: any) => {
         memoryStorage.set(key, data);
       },
-      delete: async (key: string) => {
+      delete: async (key: string) => {,
         memoryStorage.delete(key);
       },
-      clear: async () => {
+      clear: async () => {,
         memoryStorage.clear();
       },
-      size: async () => {
+      size: async () => {,
         return JSON.stringify(Array.from(memoryStorage.entries())).length;
       },
-      keys: async () => {
+      keys: async () => {,
         return Array.from(memoryStorage.keys());
       },
-      supports: (feature: string) => {
+      supports: (feature: string) => {,
         return ['fast_access'].includes(feature);
       }
     });
@@ -902,7 +902,7 @@ export class StatePersistenceManager extends EventEmitter {
       ...this.metrics,
       writeLatency: [...this.metrics.writeLatency],
       readLatency: [...this.metrics.readLatency],
-      storageUsage: new Map(this.metrics.storageUsage)
+      storageUsage: new Map(this.metrics.storageUsage),
     };
   }
   getDomainRules(): Map<string, PersistenceRule> {

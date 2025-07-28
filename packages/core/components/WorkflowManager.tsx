@@ -91,7 +91,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({ )
       return '#a0aec0';
     }
   };
-  const getStatusBadge = (rule: CorrectionRule) => (;)
+  const getStatusBadge = (rule: CorrectionRule) => (;);
     <span style={{
       padding: '2px 6px',
       borderRadius: '3px',
@@ -103,7 +103,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({ )
       {rule.status.toUpperCase()}
     </span>
   );
-  const renderRuleCard = (rule: CorrectionRule) => (;)
+  const renderRuleCard = (rule: CorrectionRule) => (;);
     <div
       key={rule.id}
       style={{
@@ -229,7 +229,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({ )
   const renderTabContent = () => {
     const currentRules = rulesByStatus[activeTab];
     if (currentRules.length === 0) {
-      return ()
+      return ();
         <div style={{ 
           textAlign: 'center',
           padding: '40px',
@@ -239,7 +239,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({ )
         </div>
       );
     }
-    return ()
+    return ();
       <div>
         {/* Bulk actions */}
         <div style={{ 
@@ -248,7 +248,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({ )
           alignItems: 'center',
           marginBottom: '16px',
           padding: '8px 0',
-          borderBottom: '1px solid #4a5568'
+          borderBottom: '1px solid #4a5568',
         }}>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <button
@@ -330,7 +330,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({ )
     );
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div
       style={{
         position: 'fixed',
@@ -374,7 +374,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({ )
               color: '#a0aec0',
               cursor: 'pointer',
               fontSize: '20px',
-              padding: '4px 8px'
+              padding: '4px 8px',
             }}
           >
             ×
@@ -476,7 +476,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({ )
                     borderRadius: '4px',
                     padding: '8px 16px',
                     fontSize: '14px',
-                    cursor: deprecationReason.trim() ? 'pointer' : 'not-allowed'
+                    cursor: deprecationReason.trim() ? 'pointer' : 'not-allowed',
                   }}
                 >
                   Deprecate

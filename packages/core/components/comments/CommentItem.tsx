@@ -86,7 +86,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({)
       .replace(/\n/g, '<br />');
   };
   if (deleting) {
-    return ()
+    return ();
       <div className="comment-item comment-item--deleting">
         <div className="comment-item__content">
           <div className="deletion-notice">
@@ -96,7 +96,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div 
       className={`comment-item ${compact ? 'comment-item--compact' : ''} ${isReply ? 'comment-item--reply' : ''} ${isThreadRoot ? 'comment-item--thread-root' : ''} ${isLast ? 'comment-item--last' : ''} ${isResolved ? 'comment-item--resolved' : ''}`}
       onMouseEnter={() => setShowActions(true)}

@@ -57,9 +57,8 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({)
         k !== 'template' && 
         k !== 'text' && 
         k !== 'content'
-      )
       .slice(0, 2); // Limit to 2 properties since we need space for variable ports
-    return ()
+    return ();
       <div
         role="button"
         data-testid={`node-${id}`}
@@ -165,7 +164,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({)
                 fontSize: 10,
                 fontWeight: 'bold',
                 boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)',
-                transition: 'all 0.2s ease'
+                transition: 'all 0.2s ease',
               }}
               title={`${data.variations.length} variations`}
             >
@@ -189,7 +188,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({)
             lineHeight: 1.3,
             // Subtle glow for selected state
             ...(selected && {)
-              textShadow: '0 0 8px var(--accent-orange)40'
+              textShadow: '0 0 8px var(--accent-orange)40',
             })
           }}>
             {data?.label || nodeMeta.label || nodeType || id}
@@ -233,7 +232,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({)
               fontSize: 'var(--font-size-xs)', 
               color: 'var(--text-secondary)', 
               lineHeight: 1.4,
-              fontFamily: 'var(--font-mono)' // Monospace for technical properties
+              fontFamily: 'var(--font-mono)' // Monospace for technical properties,
             }}>
               {properties.map(([k, v], idx) => ()
                 <div key={k} style={{ 
@@ -279,7 +278,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({)
           const spacing = totalPorts > 1 ? 60 / (totalPorts - 1) : 0; // Distribute across 60px height;
           const baseOffset = 40; // Start from 40px from top;
           const yOffset = totalPorts > 1 ? baseOffset + (index * spacing) : baseOffset + 20;
-          return ()
+          return ();
             <React.Fragment key={port.id}>
               {/* Variable Port Handle */}
               <Handle
@@ -349,7 +348,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({)
   } catch (error) {
     console.error('VariablePortNodeRenderer error:', error, 'Props:', { id, data });
     // Professional error state
-    return ()
+    return ();
       <div
         style={{
           cursor: 'pointer',

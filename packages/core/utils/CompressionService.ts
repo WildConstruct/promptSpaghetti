@@ -220,7 +220,7 @@ export class CompressionService {
         level: opts.level,
         compressionTime,
         data: Buffer.alloc(0),
-        error: error instanceof Error ? error.message : 'Unknown compression error'
+        error: error instanceof Error ? error.message : 'Unknown compression error',
       };
     }
   }
@@ -389,7 +389,7 @@ export class CompressionService {
         level: opts.level,
         compressionTime: performance.now() - startTime,
         data: Buffer.alloc(0),
-        error: error instanceof Error ? error.message : 'Streaming compression failed'
+        error: error instanceof Error ? error.message : 'Streaming compression failed',
       };
     }
   }
@@ -480,7 +480,6 @@ export class CompressionService {
     averageCompressionRatio: number;
     bestPerformingAlgorithm: CompressionAlgorithm;
     recommendedSettings: CompressionOptions;
-    } {
     const totalOriginal = this.stats.totalBytesCompressed;
     const totalCompressed = Array.from(this.stats.algorithmStats.values());
       .reduce((sum, stat) => sum + (stat.totalBytesProcessed * (1 - stat.averageCompressionRatio)), 0);
@@ -529,7 +528,7 @@ export class CompressionService {
       totalCompressionTime: 0,
       totalDecompressionTime: 0,
       averageCompressionRatio: 1.0,
-      algorithmStats: new Map()
+      algorithmStats: new Map(),
     };
   }
   private updateCompressionStats()

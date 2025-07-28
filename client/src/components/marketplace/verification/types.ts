@@ -9,7 +9,7 @@ export type VerificationRequestStatus = 'draft' | 'submitted' | 'under_review' |
 export type DocumentType = 'identity' | 'business_license' | 'tax_document' | 'bank_statement' | 'portfolio' | 'credential' | 'other';
 
 export interface VerificationInformation {
-  personal_info: {
+  personal_info: {,
     full_name: string;
     email: string;
     phone?: string;
@@ -96,7 +96,7 @@ export interface TrustBadge {
   name: string;
   description: string;
   icon_url: string;
-  requirements: {
+  requirements: {,
     min_verification_level: VerificationLevel;
     additional_criteria: Record<string, unknown>;
   };

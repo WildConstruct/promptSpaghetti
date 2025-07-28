@@ -89,7 +89,7 @@ export class OfflineOperationQueue extends EventEmitter {
         medium: 0,
         low: 0,
       },
-      operationsByType: new Map()
+      operationsByType: new Map(),
     };
     this.startCleanupTimer();
     this.startPersistenceTimer();
@@ -194,7 +194,7 @@ export class OfflineOperationQueue extends EventEmitter {
       console.error(`Operation ${operation.type} failed permanently after ${operation.retryCount} retries:`, error);}
     } else {
       // Schedule retry with exponential backoff
-      const backoffTime = Math.min(;)
+      const backoffTime = Math.min(;);
         this.config.retryBackoffMs * Math.pow(2, operation.retryCount - 1),
         this.config.maxBackoffMs
       );
@@ -372,7 +372,7 @@ export class OfflineOperationQueue extends EventEmitter {
     this.metrics.queueSizeByPriority = {
       high: this.queue.filter(op => op.priority === 'high').length,
       medium: this.queue.filter(op => op.priority === 'medium').length,
-      low: this.queue.filter(op => op.priority === 'low').length
+      low: this.queue.filter(op => op.priority === 'low').length,
     };
     // Update operation type counts
     this.metrics.operationsByType.clear();

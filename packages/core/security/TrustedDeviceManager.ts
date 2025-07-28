@@ -149,7 +149,7 @@ export class TrustedDeviceManager extends EventEmitter {
   private trustedDevices: Map<string, TrustedDevice[]> = new Map(); // userId -> devices
   private deviceLookup: Map<string, TrustedDevice> = new Map(); // deviceId -> device
   private verificationTokens: Map<string, { userId: string; deviceId: string; expires: Date }> = new Map();
-  constructor()
+  constructor();
     private fingerprintService: DeviceFingerprintingService,
     private config: TrustedDeviceConfig = {
       maxDevicesPerUser: 5,
@@ -168,7 +168,6 @@ export class TrustedDeviceManager extends EventEmitter {
       enableAnomalyDetection: true,
       enableAutoRenewal: true,
     }
-  ) {
     super();
     this.startMaintenanceTimer();
   }
@@ -182,7 +181,7 @@ export class TrustedDeviceManager extends EventEmitter {
   ): Promise<TrustDecision> {
     try {
       // Generate fingerprint for the current device
-      const fingerprint = await this.fingerprintService.generateFingerprint(;)
+      const fingerprint = await this.fingerprintService.generateFingerprint(;);
         context,
         FingerprintType.ENHANCED
       );
@@ -221,7 +220,7 @@ export class TrustedDeviceManager extends EventEmitter {
           userId,
           device: matchingDevice,
           decision,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       } else {
         matchingDevice.failedAttempts++;
@@ -229,7 +228,7 @@ export class TrustedDeviceManager extends EventEmitter {
           userId,
           device: matchingDevice,
           decision,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
       return decision;
@@ -237,7 +236,7 @@ export class TrustedDeviceManager extends EventEmitter {
       this.emit('error', {)
         operation: 'checkDeviceTrust',
         userId,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
       return {
         trusted: false,
@@ -324,7 +323,7 @@ export class TrustedDeviceManager extends EventEmitter {
     this.verificationTokens.set(verificationToken, {)
       userId,
       deviceId,
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours,
     });
     // Store device
     if (!this.trustedDevices.has(userId)) {
@@ -335,7 +334,7 @@ export class TrustedDeviceManager extends EventEmitter {
     this.emit('deviceRegistered', {)
       userId,
       device,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return device;
   }
@@ -367,7 +366,7 @@ export class TrustedDeviceManager extends EventEmitter {
     this.emit('deviceVerified', {)
       userId: device.userId,
       device,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return device;
   }
@@ -387,7 +386,7 @@ export class TrustedDeviceManager extends EventEmitter {
       userId: device.userId,
       device,
       reason,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -412,7 +411,7 @@ export class TrustedDeviceManager extends EventEmitter {
       userId: device.userId,
       device,
       settings,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return device;
   }
@@ -429,7 +428,7 @@ export class TrustedDeviceManager extends EventEmitter {
       userId: device.userId,
       device,
       newName,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return device;
   }

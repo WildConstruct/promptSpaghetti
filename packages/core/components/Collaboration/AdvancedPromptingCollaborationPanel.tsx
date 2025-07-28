@@ -74,7 +74,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
   const handleCreateSession = useCallback(async () => {
     if (!newSessionTitle.trim()) return;
     try {
-      const session = await collaborationService.createCollaborationSession(;)
+      const session = await collaborationService.createCollaborationSession(;);
         newSessionTitle,
         selectedMethodology,
         currentUser.id
@@ -101,7 +101,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
   const handleVFXExport = useCallback(async () => {
     if (!currentSession) return;
     try {
-      const exportData = await collaborationService.generateVFXExport(;)
+      const exportData = await collaborationService.generateVFXExport(;);
         currentSession.sessionId,
         currentUser.id
       );
@@ -128,13 +128,13 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       zada: '#10b981', // Green - Natural language
       mars: '#3b82f6', // Blue - Technical
       hybrid: '#8b5cf6', // Purple - Combined
-      custom: '#f59e0b' // Orange - Custom
+      custom: '#f59e0b' // Orange - Custom,
     };
     return colors[methodology];
   };
       return compatibility[role]?.includes(methodology) || false;
   };
-  const SessionsTab = () => (;)
+  const SessionsTab = () => (;);
     <div style={{ padding: 20 }}>
       {/* Session Creation */}
       <div style={{ 
@@ -244,7 +244,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
             color: '#6b7280',
             background: '#f9fafb',
             borderRadius: 8,
-            border: '1px dashed #d1d5db'
+            border: '1px dashed #d1d5db',
           }}>
             <div style={{ fontSize: 24, marginBottom: 8 }}>🤝</div>
             <div>No active collaboration sessions</div>
@@ -258,7 +258,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
               <div
                 key={session.sessionId}
                 style={{
-                  background: currentSession?.sessionId === session.sessionId 
+                  background: currentSession?.sessionId === session.sessionId ,
                     ? 'rgba(59, 130, 246, 0.1)' 
                     : 'white',
                   border: `1px solid ${currentSession?.sessionId === session.sessionId }
@@ -267,7 +267,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                   borderRadius: 8,
                   padding: 16,
                   cursor: 'pointer',
-                  transition: 'all 0.2s'
+                  transition: 'all 0.2s',
                 }}
                 onClick={() => handleJoinSession(session.sessionId)}
               >
@@ -346,7 +346,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       </div>
     </div>
   );
-  const MARSTab = () => (;)
+  const MARSTab = () => (;);
     <div style={{ padding: 20 }}>
       <h4 style={{ margin: '0 0 16px 0', color: '#1e293b', fontSize: 16 }}>
         🏷️ MARS Region Templates
@@ -435,7 +435,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       </div>
     </div>
   );
-  const ZadaTab = () => (;)
+  const ZadaTab = () => (;);
     <div style={{ padding: 20 }}>
       <h4 style={{ margin: '0 0 16px 0', color: '#1e293b', fontSize: 16 }}>
         💬 Zada Prompt Patterns
@@ -471,7 +471,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                 {pattern.methodology.toUpperCase()}
               </span>
               <span style={{
-                background: pattern.complexity === 'simple' ? '#10b981' 
+                background: pattern.complexity === 'simple' ? '#10b981' ,
                          : pattern.complexity === 'intermediate' ? '#f59e0b' 
                          : '#ef4444',
                 color: 'white',
@@ -547,7 +547,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       </div>
     </div>
   );
-  const WorkflowsTab = () => (;)
+  const WorkflowsTab = () => (;);
     <div style={{ padding: 20 }}>
       <h4 style={{ margin: '0 0 16px 0', color: '#1e293b', fontSize: 16 }}>
         🎬 Film Industry Workflows
@@ -626,7 +626,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
                     padding: 12,
                     background: '#f8fafc',
                     borderRadius: 6,
-                    border: '1px solid #e2e8f0'
+                    border: '1px solid #e2e8f0',
                   }}
                 >
                   <div style={{
@@ -693,7 +693,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       </div>
     </div>
   );
-  const ExportTab = () => (;)
+  const ExportTab = () => (;);
     <div style={{ padding: 20 }}>
       <h4 style={{ margin: '0 0 16px 0', color: '#1e293b', fontSize: 16 }}>
         🚀 VFX Pipeline Export
@@ -705,7 +705,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
           color: '#6b7280',
           background: '#f9fafb',
           borderRadius: 8,
-          border: '1px dashed #d1d5db'
+          border: '1px dashed #d1d5db',
         }}>
           <div style={{ fontSize: 24, marginBottom: 8 }}>🤝</div>
           <div>No active session</div>
@@ -798,7 +798,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
       )}
     </div>
   );
-  return ()
+  return ();
     <div className={`advanced-prompting-collaboration-panel ${className}`} style={{}
       background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
       borderRadius: 12,
@@ -860,7 +860,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
               fontSize: 13,
               fontWeight: 500,
               cursor: 'pointer',
-              transition: 'all 0.2s'
+              transition: 'all 0.2s',
             }}
           >
             {tab.label}

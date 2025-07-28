@@ -5,7 +5,7 @@ export interface ExportStatsDashboardProps {
 }
 
 export const ExportStatsDashboard: React.FC<ExportStatsDashboardProps> = ({ className = '' }) => {
-  return ()
+  return ();
     <div className={`export-stats-dashboard ${className}`}>}
       <h3>Export Statistics</h3>
       <div className="stats-grid">

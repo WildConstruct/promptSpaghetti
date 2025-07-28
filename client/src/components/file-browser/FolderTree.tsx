@@ -7,12 +7,11 @@
  * - Drag-and-drop support
  * - Context menu integration
  */
-
 import React from 'react';
 import { FileItem } from './FileItem';
 import { FolderTreeProps, TreeNode, DragDropData } from './types';
 
-export const FolderTree: React.FC<FolderTreeProps> = ({
+export const FolderTree: React.FC<FolderTreeProps> = ({)
   nodes,
   selectedItems,
   expandedFolders,
@@ -24,12 +23,10 @@ export const FolderTree: React.FC<FolderTreeProps> = ({
   className = ''
 }) => {
   const [dragOverItem, setDragOverItem] = React.useState<string | null>(null);
-
   const renderNode = (node: TreeNode, level: number = 0): React.ReactNode => {
     const isExpanded = node.type === 'folder' && expandedFolders.has(node.id);
     const isSelected = selectedItems.includes(node.id);
-
-    return (
+    return ()
       <div key={node.id}>
         <FileItem
           item={node}
@@ -59,9 +56,8 @@ export const FolderTree: React.FC<FolderTreeProps> = ({
             const dragData: DragDropData = {
               sourceItems: [item],
               targetPath: '',
-              operation: 'move'
+              operation: 'move',
             };
-            
             // Set drag data
             const dragEvent = event as React.DragEvent<HTMLElement>;
             if (dragEvent?.dataTransfer) {
@@ -72,7 +68,6 @@ export const FolderTree: React.FC<FolderTreeProps> = ({
           onDragOver={(item, e) => {
             e.preventDefault();
             e.stopPropagation();
-            
             if (item.type === 'folder') {
               setDragOverItem(item.id);
               e.dataTransfer.dropEffect = 'move';
@@ -80,20 +75,18 @@ export const FolderTree: React.FC<FolderTreeProps> = ({
           }}
           onDrop={(targetItem, dragData) => {
             setDragOverItem(null);
-            
             if (targetItem.type === 'folder') {
               const updatedDragData: DragDropData = {
                 ...dragData,
-                targetPath: targetItem.path
+                targetPath: targetItem.path,
               };
               onDrop(updatedDragData);
             }
           }}
           className={dragOverItem === node.id ? 'drag-over' : ''}
         />
-        
         {/* Render children if folder is expanded */}
-        {node.type === 'folder' && isExpanded && node.children && (
+        {node.type === 'folder' && isExpanded && node.children && ()
           <div style={{ marginLeft: '20px' }}>
             {node.children.map(child => renderNode(child, level + 1))}
           </div>
@@ -101,39 +94,35 @@ export const FolderTree: React.FC<FolderTreeProps> = ({
       </div>
     );
   };
-
   const handleContainerDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setDragOverItem(null);
-    
     try {
       const dragDataStr = e.dataTransfer.getData('application/json');
       if (dragDataStr) {
         const dragData: DragDropData = JSON.parse(dragDataStr);
         // Drop to root if not over a specific folder
-        onDrop({
+        onDrop({)
           ...dragData,
-          targetPath: '/'
+          targetPath: '/',
         });
       }
     } catch (error) {
       console.error('Failed to parse drag data:', error);
     }
   };
-
   const handleContainerDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
   };
-
-  return (
+  return ()
     <div 
       className={`folder-tree ${className}`}
       style={{
         padding: '8px',
         height: '100%',
         overflow: 'auto',
-        userSelect: 'none'
+        userSelect: 'none',
       }}
       onDrop={handleContainerDrop}
       onDragOver={handleContainerDragOver}
@@ -144,21 +133,17 @@ export const FolderTree: React.FC<FolderTreeProps> = ({
           .file-item {
             transition: background-color 0.2s ease;
           }
-          
           .file-item:hover {
             background-color: #f5f5f5;
           }
-          
           .file-item.selected {
             background-color: #e3f2fd;
             color: #1976d2;
           }
-          
           .file-item.drag-over {
             background-color: #e8f5e8;
             border: 2px dashed #4caf50;
           }
-          
           .file-item-icon {
             width: 16px;
             height: 16px;
@@ -166,7 +151,6 @@ export const FolderTree: React.FC<FolderTreeProps> = ({
             text-align: center;
             margin-right: 6px;
           }
-          
           .expand-toggle {
             width: 16px;
             height: 16px;
@@ -178,22 +162,18 @@ export const FolderTree: React.FC<FolderTreeProps> = ({
             user-select: none;
             border-radius: 2px;
           }
-          
           .expand-toggle:hover {
             background-color: #e0e0e0;
           }
-          
           .expand-toggle.empty {
             cursor: default;
           }
-          
           .file-item-text {
             flex: 1;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
           }
-          
           .file-item-metadata {
             font-size: 12px;
             color: #666;
@@ -202,47 +182,40 @@ export const FolderTree: React.FC<FolderTreeProps> = ({
             gap: 8px;
             align-items: center;
           }
-          
           .file-size {
             min-width: 60px;
             text-align: right;
           }
-          
           .file-date {
             min-width: 100px;
             text-align: right;
           }
-          
           .folder-tree::-webkit-scrollbar {
             width: 8px;
           }
-          
           .folder-tree::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 4px;
           }
-          
           .folder-tree::-webkit-scrollbar-thumb {
             background: #c1c1c1;
             border-radius: 4px;
           }
-          
           .folder-tree::-webkit-scrollbar-thumb:hover {
             background: #a8a8a8;
           }
         `}
       </style>
-      
-      {nodes.length === 0 ? (
+      {nodes.length === 0 ? ()
         <div style={{
           textAlign: 'center',
           color: '#666',
           padding: '40px 20px',
-          fontStyle: 'italic'
+          fontStyle: 'italic',
         }}>
           No files found
         </div>
-      ) : (
+      ) : ()
         nodes.map(node => renderNode(node))
       )}
     </div>

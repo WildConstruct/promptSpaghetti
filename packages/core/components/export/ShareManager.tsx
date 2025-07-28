@@ -153,7 +153,7 @@ export const ShareManager: React.FC<ShareManagerProps> = ({)
   const getShareUrl = (share: ExportShare) => {
     return share.share_url || `${window.location.origin}/shared/${share.share_token}`;}
   };
-  return ()
+  return ();
     <div className={`share-manager ${className}`}>}
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
@@ -258,7 +258,7 @@ export const ShareManager: React.FC<ShareManagerProps> = ({)
         <div className="space-y-4">
           {shares.map((share) => {
             const expired = isShareExpired(share);
-            return ()
+            return ();
               <div
                 key={share.id}
                 className={`bg-white dark:bg-gray-800 rounded-lg border shadow-sm p-4 ${

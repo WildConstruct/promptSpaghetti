@@ -78,7 +78,7 @@ export const PerformanceControls: React.FC<PerformanceControlsProps> = ({)
           enabled: settings.showExecutionTimes,
           handler: handleShowExecutionTimesChange,
           icon: FiCpu,
-          impact: 'Low performance impact'
+          impact: 'Low performance impact',
         },
         {
           key: 'showMemoryUsage' as const,
@@ -87,7 +87,7 @@ export const PerformanceControls: React.FC<PerformanceControlsProps> = ({)
           enabled: settings.showMemoryUsage,
           handler: handleShowMemoryUsageChange,
           icon: FiDatabase,
-          impact: 'Medium performance impact'
+          impact: 'Medium performance impact',
         }
       ]
     },
@@ -103,7 +103,7 @@ export const PerformanceControls: React.FC<PerformanceControlsProps> = ({)
           enabled: settings.enableCaching,
           handler: handleEnableCachingChange,
           icon: FiDatabase,
-          impact: 'High performance benefit'
+          impact: 'High performance benefit',
         }
       ]
     },
@@ -119,7 +119,7 @@ export const PerformanceControls: React.FC<PerformanceControlsProps> = ({)
           enabled: settings.logExecutionSteps,
           handler: handleLogExecutionStepsChange,
           icon: FiFileText,
-          impact: 'High performance impact'
+          impact: 'High performance impact',
         }
       ]
     }
@@ -135,7 +135,7 @@ export const PerformanceControls: React.FC<PerformanceControlsProps> = ({)
   // Get enabled settings count
   const enabledCount = Object.values(settings).filter(Boolean).length;
   const totalCount = Object.keys(settings).length;
-  return ()
+  return ();
     <div style={{ marginBottom: '24px' }}>
       {/* Section Header */}
       <div style={{
@@ -190,12 +190,12 @@ export const PerformanceControls: React.FC<PerformanceControlsProps> = ({)
           fontSize: '12px',
           padding: '4px 8px',
           borderRadius: '4px',
-          backgroundColor: enabledCount <= 2 
+          backgroundColor: enabledCount <= 2 ,
             ? '#10b981' + '20'
             : enabledCount <= 3 
             ? '#f59e0b' + '20'
             : '#ef4444' + '20',
-          color: enabledCount <= 2 
+          color: enabledCount <= 2 ,
             ? '#10b981'
             : enabledCount <= 3 
             ? '#f59e0b'
@@ -222,7 +222,7 @@ export const PerformanceControls: React.FC<PerformanceControlsProps> = ({)
       {/* Performance Settings Sections */}
       {performanceSections.map((section) => {
         const SectionIcon = section.icon;
-        return ()
+        return ();
           <div key={section.id} style={{ marginBottom: '24px' }}>
             {/* Section Title */}
             <div style={{
@@ -250,7 +250,7 @@ export const PerformanceControls: React.FC<PerformanceControlsProps> = ({)
             }}>
               {section.settings.map((setting) => {
                 const SettingIcon = setting.icon;
-                return ()
+                return ();
                   <div key={setting.key} style={{
                     display: 'flex',
                     alignItems: 'flex-start',
@@ -404,7 +404,7 @@ export const PerformanceControls: React.FC<PerformanceControlsProps> = ({)
           <span>{settings.logExecutionSteps ? 'Enabled' : 'Disabled'}</span>
           <span>Profile:</span>
           <span style={{
-            color: enabledCount <= 2 
+            color: enabledCount <= 2 ,
               ? '#10b981'
               : enabledCount <= 3 
               ? '#f59e0b'

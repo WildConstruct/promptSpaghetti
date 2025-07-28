@@ -46,7 +46,7 @@ describe('usePreviewSeeds - Individual Result Management', () => {
     (fetch as jest.MockedFunction<typeof fetch>).mockClear();
     (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue({)
       ok: true,
-      json: async ( as unknown) => mockApiResponse
+      json: async ( as unknown) => mockApiResponse,
     } as Response);
   });
   describe('Result Locking', () => {
@@ -132,11 +132,11 @@ describe('usePreviewSeeds - Individual Result Management', () => {
       (fetch as jest.MockedFunction<typeof fetch>)
         .mockResolvedValueOnce({)
           ok: true,
-          json: async () => mockApiResponse
+          json: async () => mockApiResponse,
         } as Response)
         .mockResolvedValueOnce({)
           ok: true,
-          json: async () => ({)
+          json: async () => ({),
             results: [{,
               seed: 99999,
               output: 'Regenerated Result',
@@ -193,7 +193,7 @@ describe('usePreviewSeeds - Individual Result Management', () => {
       (fetch as jest.MockedFunction<typeof fetch>)
         .mockResolvedValueOnce({)
           ok: true,
-          json: async () => mockApiResponse
+          json: async () => mockApiResponse,
         } as Response)
         .mockRejectedValueOnce(new Error('Network error'));
       const { result } = renderHook(() => usePreviewSeeds());
@@ -219,7 +219,7 @@ describe('usePreviewSeeds - Individual Result Management', () => {
       (fetch as jest.MockedFunction<typeof fetch>)
         .mockResolvedValueOnce({)
           ok: true,
-          json: async () => mockApiResponse
+          json: async () => mockApiResponse,
         } as Response)
         .mockImplementationOnce(() => regenerationPromise as Promise<Response>);
       const { result } = renderHook(() => usePreviewSeeds());
@@ -237,7 +237,7 @@ describe('usePreviewSeeds - Individual Result Management', () => {
       act(() => {
         resolveRegeneration!({)
           ok: true,
-          json: async () => ({)
+          json: async () => ({),
             results: [{,
               seed: 99999,
               output: 'Regenerated',

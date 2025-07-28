@@ -318,7 +318,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
       meta: isMac ? '⌘' : 'Ctrl',
       ctrl: isMac ? '⌘' : 'Ctrl',
       shift: '⇧',
-      alt: isMac ? '⌥' : 'Alt'
+      alt: isMac ? '⌥' : 'Alt',
     };
     const parts = [;
       ...shortcut.modifiers.map(mod => modifierSymbols[mod]),
@@ -372,7 +372,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
     file: '📁',
     generation: '✨',
   };
-  return ()
+  return ();
     <>
       {/* Help Overlay */}
       {showHelp && ()
@@ -494,7 +494,7 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
                             background: styles.secondary,
                             border: `1px solid ${styles.border}`,}
                             borderRadius: '8px',
-                            transition: 'all var(--transition-fast)'
+                            transition: 'all var(--transition-fast)',
                           }}
                         >
                           <div style={{
@@ -511,17 +511,17 @@ export const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps> =
                           }}>
                             {formatShortcut(shortcut).split(/(\+|⌘|⇧|⌥|Ctrl|Alt)/).map((part, index) => {
                               if (part === '+') {
-                                return ()
+                                return ();
                                   <span key={index} style={{
                                     color: styles.textSecondary,
                                     fontSize: '12px',
-                                    margin: '0 2px'
+                                    margin: '0 2px',
                                   }}>
                                     +
                                   </span>
                                 );
                               }
-                              return ()
+                              return ();
                                 <kbd
                                   key={index}
                                   style={{

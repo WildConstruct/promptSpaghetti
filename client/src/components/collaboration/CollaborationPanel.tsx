@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 interface CollaborationUser {
   id: string;
   name: string;
@@ -8,7 +7,6 @@ interface CollaborationUser {
   role: 'owner' | 'editor' | 'viewer';
   lastActive?: Date;
 }
-
 interface CollaborationActivity {
   id: string;
   userId: string;
@@ -17,7 +15,6 @@ interface CollaborationActivity {
   timestamp: Date;
   details?: string;
 }
-
 interface CollaborationPanelProps {
   projectId: string;
   currentUserId: string;
@@ -28,7 +25,7 @@ interface CollaborationPanelProps {
   onRemoveUser?: (userId: string) => void;
 }
 
-export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({
+export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   projectId: _,
   currentUserId,
@@ -42,7 +39,6 @@ export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState<'editor' | 'viewer'>('editor');
   const [showInviteForm, setShowInviteForm] = useState(false);
-
   const handleInvite = (e: React.FormEvent) => {
     e.preventDefault();
     if (inviteEmail.trim()) {
@@ -51,7 +47,6 @@ export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({
       setShowInviteForm(false);
     }
   };
-
   const getStatusIcon = (status: CollaborationUser['status']) => {
     switch (status) {
     case 'online': return '🟢';
@@ -59,7 +54,6 @@ export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({
     case 'offline': return '⚫';
     }
   };
-
   const getRoleColor = (role: CollaborationUser['role']) => {
     switch (role) {
     case 'owner': return '#dc3545';
@@ -67,8 +61,7 @@ export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({
     case 'viewer': return '#6c757d';
     }
   };
-
-  return (
+  return ()
     <div className="collaboration-panel">
       <div className="panel-header">
         <h3>Collaboration</h3>
@@ -79,8 +72,7 @@ export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({
           + Invite
         </button>
       </div>
-
-      {showInviteForm && (
+      {showInviteForm && ()
         <form className="invite-form" onSubmit={handleInvite}>
           <input
             type="email"
@@ -100,7 +92,6 @@ export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({
           <button type="button" onClick={() => setShowInviteForm(false)}>Cancel</button>
         </form>
       )}
-
       <div className="panel-tabs">
         <button 
           className={`tab ${activeTab === 'users' ? 'active' : ''}`}
@@ -115,11 +106,10 @@ export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({
           Activity
         </button>
       </div>
-
       <div className="panel-content">
-        {activeTab === 'users' ? (
+        {activeTab === 'users' ? ()
           <div className="users-list">
-            {users.map(user => (
+            {users.map(user => ()
               <div key={user.id} className="user-item">
                 <div className="user-info">
                   <span className="status-icon">{getStatusIcon(user.status)}</span>
@@ -135,7 +125,7 @@ export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({
                   >
                     {user.role}
                   </span>
-                  {user.id !== currentUserId && (
+                  {user.id !== currentUserId && ()
                     <div className="user-menu">
                       <select
                         value={user.role}
@@ -159,17 +149,17 @@ export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({
               </div>
             ))}
           </div>
-        ) : (
+        ) : ()
           <div className="activity-list">
-            {activities.length === 0 ? (
+            {activities.length === 0 ? ()
               <div className="no-activity">No recent activity</div>
-            ) : (
-              activities.map(activity => (
+            ) : ()
+              activities.map(activity => ()
                 <div key={activity.id} className="activity-item">
                   <div className="activity-content">
                     <span className="activity-user">{activity.userName}</span>
                     <span className="activity-action">{activity.action}</span>
-                    {activity.details && (
+                    {activity.details && ()
                       <div className="activity-details">{activity.details}</div>
                     )}
                   </div>

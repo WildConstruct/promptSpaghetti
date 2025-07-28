@@ -173,10 +173,10 @@ describe('Wild Construct Integration Framework', () => {
         ...testCrowdRequest,
         crowd: {,
           ...testCrowdRequest.crowd,
-          size: -1 // Invalid size
+          size: -1 // Invalid size,
         }
       };
-      const pipeline = new CrowdGenerationPipeline(;)
+      const pipeline = new CrowdGenerationPipeline(;);
         {} as any, {} as any, {} as any, {} as any, {} as any
       );
       await expect(pipeline.generateCrowd(invalidRequest))
@@ -207,13 +207,13 @@ describe('Wild Construct Integration Framework', () => {
             type: 'urban',
             description: 'Medieval castle courtyard with stone walls and timber buildings',
             authenticity: 0.95,
-            socialContext: 'noble court'
+            socialContext: 'noble court',
           },
           atmosphere: {,
             timeOfDay: 'morning',
             season: 'spring',
             weather: 'partly cloudy',
-            mood: 'bustling activity'
+            mood: 'bustling activity',
           },
           assets: {,
             buildings: [,
@@ -291,7 +291,7 @@ describe('Wild Construct Integration Framework', () => {
           materials: ['glass', 'metal', 'tungsten']
         }
       ];
-      const medievalAssets = assets.filter(asset => ;)
+      const medievalAssets = assets.filter(asset => ;);
         asset.historicalPeriod === 'High Middle Ages' && asset.authenticity > 0.8
       );
       expect(medievalAssets).toHaveLength(1);
@@ -315,7 +315,7 @@ describe('Wild Construct Integration Framework', () => {
             humidity: 0.65,
             windSpeed: 3.2, // m/s
             precipitation: 0.1,
-            visibility: 5000 // meters
+            visibility: 5000 // meters,
           },
           effects: {,
             particles: [,
@@ -366,7 +366,7 @@ describe('Wild Construct Integration Framework', () => {
         'solar_minimum'
       ];
       // Medieval period (1000-1300) should use medieval warm period
-      const medievalClimate = climateFactors.filter(factor => ;)
+      const medievalClimate = climateFactors.filter(factor => ;);
         factor.includes('medieval') || factor.includes('warm')
       );
       expect(medievalClimate).toContain('medieval_warm_period');
@@ -382,7 +382,7 @@ describe('Wild Construct Integration Framework', () => {
             foreground: ['crowd', 'market_stalls', 'cart'],
             midground: ['buildings', 'well', 'trees'],
             background: ['castle_walls', 'towers', 'sky'],
-            depth: 100 // meters
+            depth: 100 // meters,
           },
           timing: {,
             duration: 30, // seconds
@@ -500,7 +500,7 @@ describe('Wild Construct Integration Framework', () => {
               target: 'peasant_tunic',
               relationship: 'enhances',
               strength: 0.9,
-              historicalBasis: 'Wool was primary fabric for peasant clothing'
+              historicalBasis: 'Wool was primary fabric for peasant clothing',
             }
           ],
           metadata: {,
@@ -525,7 +525,7 @@ describe('Wild Construct Integration Framework', () => {
               type: 'temporal',
               rule: 'No synthetic materials before 19th century',
               enforcement: 'strict',
-              context: 'Material availability constraints'
+              context: 'Material availability constraints',
             }
           ],
           validation: {,
@@ -553,7 +553,7 @@ describe('Wild Construct Integration Framework', () => {
                 subsurface: 0.1,
                 specular: 0.2,
               },
-              historicalBasis: 'Natural wool fiber properties'
+              historicalBasis: 'Natural wool fiber properties',
             }
           ],
           compatibilityFlags: {,
@@ -587,13 +587,13 @@ describe('Wild Construct Integration Framework', () => {
           type: 'temporal' as const,
           rule: 'No plastic materials before 1907',
           enforcement: 'strict' as const,
-          context: 'Historical material availability'
+          context: 'Historical material availability',
         },
         {
           type: 'social' as const,
           rule: 'Purple dyes restricted to nobility',
           enforcement: 'warning' as const,
-          context: 'Medieval social hierarchy'
+          context: 'Medieval social hierarchy',
         }
       ];
       // Test constraint validation logic
@@ -772,7 +772,7 @@ describe('Wild Construct Integration Framework', () => {
         historicalQueryTime: 2000, // 2 seconds
         validationTime: 500, // 500ms
         vfxExportTime: 30000, // 30 seconds
-        systemIntegrationTime: 1000 // 1 second
+        systemIntegrationTime: 1000 // 1 second,
       };
       // Simulate performance measurements
       const mockPerformance = {
@@ -796,7 +796,7 @@ describe('Wild Construct Integration Framework', () => {
         Promise.resolve({)
           id: `request_${i}`,}
           status: 'success',
-          processingTime: Math.random() * 1000
+          processingTime: Math.random() * 1000,
         })
       );
       const results = await Promise.all(requests);

@@ -34,7 +34,7 @@ describe('RecentProjectsManager', () => {
           created: '2025-07-24T10:00:00.000Z',
           modified: '2025-07-24T10:00:00.000Z',
           version: '1.0.0',
-          description: 'Test description'
+          description: 'Test description',
         },
         thumbnail: 'data:image/svg+xml;base64,dGVzdA==',
         fileSize: 1024,

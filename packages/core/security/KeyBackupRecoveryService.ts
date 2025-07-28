@@ -306,10 +306,9 @@ export class KeyBackupRecoveryService extends EventEmitter {
   private backupScheduler?: NodeJS.Timeout;
   private verificationScheduler?: NodeJS.Timeout;
   private statistics: BackupStatistics;
-  constructor()
+  constructor();
     private keyManagementService: KeyManagementService,
     private config: BackupConfiguration
-  ) {
     super();
     this.initializeStatistics();
     this.startScheduledTasks();
@@ -379,7 +378,7 @@ export class KeyBackupRecoveryService extends EventEmitter {
         type,
         keyCount: metadata.keyCount,
         size: metadata.totalSize,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return metadata;
     } catch (error) {
@@ -387,7 +386,7 @@ export class KeyBackupRecoveryService extends EventEmitter {
       this.emit('backupFailed', {)
         type,
         error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       throw error;
     }
@@ -431,7 +430,7 @@ export class KeyBackupRecoveryService extends EventEmitter {
           severity: 'critical',
           type: 'integrity_failure',
           description: 'Backup integrity hash mismatch',
-          detectedAt: new Date()
+          detectedAt: new Date(),
         });
         result.successful = false;
       }
@@ -446,7 +445,7 @@ export class KeyBackupRecoveryService extends EventEmitter {
             severity: 'critical',
             type: 'encryption_error',
             description: 'Failed to decrypt backup data',
-            detectedAt: new Date()
+            detectedAt: new Date(),
           });
           result.successful = false;
         }
@@ -460,7 +459,7 @@ export class KeyBackupRecoveryService extends EventEmitter {
           severity: 'high',
           type: 'metadata_mismatch',
           description: `Key count mismatch: expected ${backup.keyCount}, found ${backupPackage.keyManifest.length}`,}
-          detectedAt: new Date()
+          detectedAt: new Date(),
         });
         result.successful = false;
       }
@@ -473,7 +472,7 @@ export class KeyBackupRecoveryService extends EventEmitter {
           severity: 'high',
           type: 'corruption',
           description: 'One or more key checksums failed verification',
-          detectedAt: new Date()
+          detectedAt: new Date(),
         });
         result.successful = false;
       }
@@ -489,14 +488,14 @@ export class KeyBackupRecoveryService extends EventEmitter {
         successful: result.successful,
         issues: result.issues.length,
         verificationTime: result.verificationTime,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return result;
     } catch (error) {
       this.emit('backupVerificationFailed', {)
         backupId,
         error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       throw error;
     }
@@ -590,7 +589,7 @@ export class KeyBackupRecoveryService extends EventEmitter {
         recoveredKeys: result.recoveredKeys,
         failedKeys: result.failedKeys.length,
         duration: result.duration,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return result;
     } catch (error) {
@@ -598,7 +597,7 @@ export class KeyBackupRecoveryService extends EventEmitter {
       this.emit('recoveryFailed', {)
         requestId: request.id,
         error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       throw error;
     }
@@ -649,7 +648,7 @@ export class KeyBackupRecoveryService extends EventEmitter {
     this.emit('backupDeleted', {)
       backupId,
       reason,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -674,7 +673,7 @@ export class KeyBackupRecoveryService extends EventEmitter {
       package: backupPackage,
       instructions: this.generateRecoveryInstructions(),
       emergencyContacts: this.config.emergencyContactNotification ? emergencyBackup.emergencyContacts : [],
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     return Buffer.from(JSON.stringify(recoveryPackage));
   }
@@ -892,12 +891,12 @@ export class KeyBackupRecoveryService extends EventEmitter {
   private async performScheduledBackup(): Promise<void> {
     try {
       await this.createBackup(BackupType.INCREMENTAL, {)
-        description: 'Scheduled incremental backup'
+        description: 'Scheduled incremental backup',
       });
     } catch (error) {
       this.emit('scheduledBackupFailed', {)
         error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -915,7 +914,7 @@ export class KeyBackupRecoveryService extends EventEmitter {
         this.emit('scheduledVerificationFailed', {)
           backupId: backup.id,
           error: error instanceof Error ? error.message : 'Unknown error',
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     }

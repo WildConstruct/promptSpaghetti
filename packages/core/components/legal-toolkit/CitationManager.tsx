@@ -197,7 +197,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({)
       court: formData.court || undefined,
       date: formData.date || undefined,
       url: formData.url || undefined,
-      pinpoint: formData.pinpoint || undefined
+      pinpoint: formData.pinpoint || undefined,
     };
     if (editingCitation) {
       onCitationEdit(editingCitation.id, citation);
@@ -260,7 +260,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({)
         return (b.date || '').localeCompare(a.date || '');
       }
     });
-  return ()
+  return ();
     <div className={`citation-manager ${className}`}>}
       <style>
         {`

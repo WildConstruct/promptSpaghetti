@@ -148,7 +148,7 @@ export declare class RateLimitingPerformanceMetrics extends EventEmitter {
     private dashboardWidgets;
     private metricsCollectionTimer?;
     private startTime;
-    constructor()
+    constructor();
       rateLimitingService: RateLimitingService,
       throttlingEngine?: AdaptiveThrottlingRulesEngine,
       config?: Partial<RateLimitingMetricsConfig>

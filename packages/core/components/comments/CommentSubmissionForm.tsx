@@ -205,7 +205,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
       if (suspiciousPatterns.length > 0) {
         errors.push({ )
           field: 'content', 
-          message: 'Content may require moderation review' 
+          message: 'Content may require moderation review' ,
         });
       }
     }
@@ -240,7 +240,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
           contentLength: content.length,
           hasAttachments: attachments.length > 0,
           hasMentions: mentions.length > 0,
-          hasHashtags: hashtags.length > 0
+          hasHashtags: hashtags.length > 0,
         }
       };
       if (onSubmit) {
@@ -302,7 +302,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
         preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
         metadata: {,
           originalFile: file,
-          uploadedAt: new Date().toISOString()
+          uploadedAt: new Date().toISOString(),
         }
       };
       newAttachments.push(attachment);
@@ -339,7 +339,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
       attachments,
       mentions,
       hashtags,
-      lastSaved: new Date()
+      lastSaved: new Date(),
     };
     localStorage.setItem(`comment_draft_${resourceId}_${authorId}`, JSON.stringify(draft));}
     setDraftSaved(true);
@@ -387,7 +387,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
   useEffect(() => {
     loadDraft();
   }, [resourceId, authorId]);
-  return ()
+  return ();
     <div className={`comment-submission-form ${className}`} style={{}
       border: '1px solid #e5e7eb',
       borderRadius: '8px',
@@ -493,7 +493,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
               fontSize: '14px',
               lineHeight: '1.5',
               fontFamily: 'inherit',
-              backgroundColor: disabled ? '#f9fafb' : 'white'
+              backgroundColor: disabled ? '#f9fafb' : 'white',
             }}
           />
         )}
@@ -520,7 +520,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
         <div style={{
           padding: '12px 16px',
           backgroundColor: '#f8fafc',
-          borderTop: '1px solid #e5e7eb'
+          borderTop: '1px solid #e5e7eb',
         }}>
           <div style={{
             fontSize: '12px',
@@ -552,7 +552,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
         <div style={{
           padding: '12px 16px',
           backgroundColor: '#fef2f2',
-          borderTop: '1px solid #fecaca'
+          borderTop: '1px solid #fecaca',
         }}>
           {validationErrors.map((error, index) => ()
             <div
@@ -560,7 +560,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
               style={{
                 fontSize: '12px',
                 color: '#dc2626',
-                marginBottom: index < validationErrors.length - 1 ? '4px' : 0
+                marginBottom: index < validationErrors.length - 1 ? '4px' : 0,
               }}
             >
               ❌ {error.message}
@@ -679,7 +679,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
               borderRadius: '6px',
               fontSize: '14px',
               color: '#374151',
-              cursor: isSubmitting ? 'not-allowed' : 'pointer'
+              cursor: isSubmitting ? 'not-allowed' : 'pointer',
             }}
           >
             Cancel
@@ -708,7 +708,7 @@ export const CommentSubmissionForm: React.FC<CommentSubmissionFormProps> = ({)
                 border: '2px solid white',
                 borderTop: '2px solid transparent',
                 borderRadius: '50%',
-                animation: 'spin 1s linear infinite'
+                animation: 'spin 1s linear infinite',
               }} />
             )}
             {parentCommentId ? 'Reply' : 'Comment'}
@@ -734,7 +734,7 @@ interface AttachmentPreviewProps {
   onRemove: () => void;
 }
 const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({ attachment, onRemove }) => {
-  return ()
+  return ();
     <div style={{
       display: 'flex',
       alignItems: 'center',
@@ -841,7 +841,7 @@ function formatFileSize(bytes: number): string {
 function renderPreview(content: string, contentType: 'text' | 'markdown' | 'rich'): React.ReactNode {
   // Simple preview - in real app would use proper markdown/rich text renderer
   if (contentType === 'markdown') {
-    return ()
+    return ();
       <div style={{ whiteSpace: 'pre-wrap' }}>
         {content
           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')

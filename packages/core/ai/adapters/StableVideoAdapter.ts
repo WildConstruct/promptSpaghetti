@@ -116,7 +116,7 @@ export class StableVideoAdapter extends BaseAIModel {
         tokensPerMinute: 2000,
       },
       tags: ['video-generation', 'image-to-video', 'stable-diffusion', 'temporal'],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     const capabilities: ModelCapabilities = {
       inputTypes: ['image'],
@@ -275,7 +275,7 @@ export class StableVideoAdapter extends BaseAIModel {
   }
   async enhanceVideoQuality()
     frames: string[],
-    upscaleFactor: number = 2
+    upscaleFactor: number = 2,
   ): Promise<string[]> {
     const enhancedFrames: string[] = [];
     for (const frame of frames) {
@@ -316,7 +316,7 @@ export class StableVideoAdapter extends BaseAIModel {
         max_frames: 14,
         resolution: '576x1024',
         description: 'Base Stable Video Diffusion model',
-        memory_requirements: '8GB VRAM'
+        memory_requirements: '8GB VRAM',
       },
       {
         name: 'svd-xt',
@@ -324,7 +324,7 @@ export class StableVideoAdapter extends BaseAIModel {
         max_frames: 25,
         resolution: '576x1024',
         description: 'Extended Stable Video Diffusion with longer sequences',
-        memory_requirements: '12GB VRAM'
+        memory_requirements: '12GB VRAM',
       },
       {
         name: 'svd-img2vid',
@@ -332,7 +332,7 @@ export class StableVideoAdapter extends BaseAIModel {
         max_frames: 14,
         resolution: '512x512',
         description: 'Optimized for image-to-video conversion',
-        memory_requirements: '6GB VRAM'
+        memory_requirements: '6GB VRAM',
       },
       {
         name: 'svd-xt-1-1',
@@ -340,7 +340,7 @@ export class StableVideoAdapter extends BaseAIModel {
         max_frames: 25,
         resolution: '1024x576',
         description: 'High-resolution SVD-XT model',
-        memory_requirements: '16GB VRAM'
+        memory_requirements: '16GB VRAM',
       }
     ];
   }
@@ -366,7 +366,7 @@ export class StableVideoAdapter extends BaseAIModel {
       }
       const response = await fetch(`${this.config.endpoint}${testEndpoint}`, {)}
         headers: this._buildHeaders(),
-        signal: AbortSignal.timeout(this.config.timeout || 10000)
+        signal: AbortSignal.timeout(this.config.timeout || 10000),
       });
       if (!response.ok && response.status !== 405) {
         throw new Error(`Connection test failed: ${response.status} ${response.statusText}`);}
@@ -503,7 +503,7 @@ export class StableVideoAdapter extends BaseAIModel {
       motion_bucket_id: options.motion_bucket_id || 127,
       cond_aug: options.cond_aug || 0.02,
       num_frames: options.num_frames || 14,
-      fps: options.fps || 6
+      fps: options.fps || 6,
     };
   }
   private _buildStabilityAIPayload(imageData: string, options: Omit<StableVideoRequestOptions, 'image'>): any {
@@ -511,7 +511,7 @@ export class StableVideoAdapter extends BaseAIModel {
       image: imageData,
       cfg_scale: options.cfg_scale || 2.5,
       motion_bucket_id: options.motion_bucket_id || 127,
-      seed: options.seed || -1
+      seed: options.seed || -1,
     };
   }
   private _buildGenericPayload(imageData: string, options: Omit<StableVideoRequestOptions, 'image'>): any {
@@ -526,7 +526,7 @@ export class StableVideoAdapter extends BaseAIModel {
       cfg_scale: options.cfg_scale || 2.5,
       seed: options.seed || -1,
       width: options.width || 576,
-      height: options.height || 1024
+      height: options.height || 1024,
     };
   }
   private _processVideoResult()
@@ -544,7 +544,7 @@ export class StableVideoAdapter extends BaseAIModel {
     } else if (response.output) {
       frames = Array.isArray(response.output) ? response.output : [response.output];
     }
-    const computeUnits = this._calculateComputeUnits(;)
+    const computeUnits = this._calculateComputeUnits(;);
       options.model || 'svd-xt',
       options.num_frames || 14,
       options.steps || 20
@@ -557,7 +557,7 @@ export class StableVideoAdapter extends BaseAIModel {
         duration: (options.num_frames || 14) / (options.fps || 6),
         resolution: {,
           width: options.width || 576,
-          height: options.height || 1024
+          height: options.height || 1024,
         },
         fps: options.fps || 6,
         frame_count: frames.length,
@@ -585,7 +585,7 @@ export class StableVideoAdapter extends BaseAIModel {
     const options: RequestInit = {
       method,
       headers: this._buildHeaders(),
-      signal: AbortSignal.timeout(this.config.timeout || 300000) // 5 minutes for video
+      signal: AbortSignal.timeout(this.config.timeout || 300000) // 5 minutes for video,
     };
     if (method === 'POST' && payload) {
       options.body = JSON.stringify(payload);

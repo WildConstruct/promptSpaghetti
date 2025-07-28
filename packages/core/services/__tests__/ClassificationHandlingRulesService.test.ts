@@ -83,7 +83,7 @@ describe('ClassificationHandlingRulesService', () => {
   });
   describe('Data Handling Validation', () => {
     it('should validate public data handling successfully', async () => {
-      const result = await service.validateDataHandling(;)
+      const result = await service.validateDataHandling(;);
         'data123',
         'PUBLIC',
         'read',
@@ -97,7 +97,7 @@ describe('ClassificationHandlingRulesService', () => {
         ...mockContext,
         environment: 'production',
       };
-      const result = await service.validateDataHandling(;)
+      const result = await service.validateDataHandling(;);
         'data123',
         'INTERNAL',
         'read',
@@ -111,7 +111,7 @@ describe('ClassificationHandlingRulesService', () => {
         ...mockContext,
         environment: 'development',
       };
-      const result = await service.validateDataHandling(;)
+      const result = await service.validateDataHandling(;);
         'data123',
         'INTERNAL',
         'read',
@@ -122,7 +122,7 @@ describe('ClassificationHandlingRulesService', () => {
       expect(result.errors.some(error => error.includes('approved environments'))).toBe(true);
     });
     it('should validate confidential data handling with strict requirements', async () => {
-      const result = await service.validateDataHandling(;)
+      const result = await service.validateDataHandling(;);
         'data123',
         'CONFIDENTIAL',
         'read',
@@ -144,7 +144,7 @@ describe('ClassificationHandlingRulesService', () => {
         ...mockContext,
         environment: 'isolated_production',
       };
-      const result = await service.validateDataHandling(;)
+      const result = await service.validateDataHandling(;);
         'data123',
         'RESTRICTED',
         'read',
@@ -202,7 +202,7 @@ describe('ClassificationHandlingRulesService', () => {
         ...originalReqs!,
         storage: {,
           ...originalReqs!.storage,
-          keyRotationDays: 45 // Change from default 90 days
+          keyRotationDays: 45 // Change from default 90 days,
         }
       };
       service.updateHandlingRequirements('INTERNAL', updatedReqs);
@@ -286,7 +286,7 @@ describe('ClassificationHandlingRulesService', () => {
         ...mockContext,
         environment: 'development',
       };
-      const result = await service.validateDataHandling(;)
+      const result = await service.validateDataHandling(;);
         'data123',
         'INTERNAL',
         'read',
@@ -296,7 +296,7 @@ describe('ClassificationHandlingRulesService', () => {
       expect(result.valid).toBe(false);
     });
     it('should validate transmission requirements appropriately', async () => {
-      const result = await service.validateDataHandling(;)
+      const result = await service.validateDataHandling(;);
         'data123',
         'CONFIDENTIAL',
         'transmit',
@@ -310,7 +310,7 @@ describe('ClassificationHandlingRulesService', () => {
         ...mockContext,
         environment: 'staging',
       };
-      const result = await service.validateDataHandling(;)
+      const result = await service.validateDataHandling(;);
         'data123',
         'RESTRICTED',
         'process',
@@ -321,7 +321,7 @@ describe('ClassificationHandlingRulesService', () => {
       expect(result.errors.some(error => error.includes('approved environments'))).toBe(true);
     });
     it('should validate monitoring requirements appropriately', async () => {
-      const result = await service.validateDataHandling(;)
+      const result = await service.validateDataHandling(;);
         'data123',
         'RESTRICTED',
         'read',
@@ -333,7 +333,7 @@ describe('ClassificationHandlingRulesService', () => {
   });
   describe('Error Handling', () => {
     it('should handle invalid classification levels gracefully', async () => {
-      const result = await service.validateDataHandling(;)
+      const result = await service.validateDataHandling(;);
         'data123',
         'INVALID' as DataClassificationLevel,
         'read',
@@ -347,7 +347,7 @@ describe('ClassificationHandlingRulesService', () => {
         ...mockContext,
         environment: '',
       };
-      const result = await service.validateDataHandling(;)
+      const result = await service.validateDataHandling(;);
         'data123',
         'INTERNAL',
         'read',

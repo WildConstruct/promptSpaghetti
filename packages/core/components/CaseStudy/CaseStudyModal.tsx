@@ -68,7 +68,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
   };
   if (!isOpen) return null;
   const roiDisplay = getROIDisplay();
-  return ()
+  return ();
     <div className={`case-study-modal-overlay ${className}`} onClick={handleBackdropClick}>}
       <div className="case-study-modal">
         {/* Header */}
@@ -380,7 +380,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({)
               <div className="media-gallery">
                 {Object.entries(caseStudy.media).map(([category, mediaItems]) => {
                   if (mediaItems.length === 0) return null;
-                  return ()
+                  return ();
                     <section key={category} className="media-category">
                       <h3>{category.charAt(0).toUpperCase() + category.slice(1)}</h3>
                       <div className="media-grid">

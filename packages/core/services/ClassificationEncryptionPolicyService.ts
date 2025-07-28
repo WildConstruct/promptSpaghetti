@@ -331,7 +331,7 @@ export class ClassificationEncryptionPolicyService {
     }
     // Check algorithm compliance
     if (encryptionStatus.encrypted && encryptionStatus.algorithm) {
-      const algorithmValid = this.validateEncryptionAlgorithm(;)
+      const algorithmValid = this.validateEncryptionAlgorithm(;);
         encryptionStatus.algorithm,
         classification,
         encryptionStatus.keyLength || 0
@@ -343,7 +343,7 @@ export class ClassificationEncryptionPolicyService {
     }
     // Check key rotation compliance
     if (encryptionStatus.encrypted && encryptionStatus.lastRotationDate) {
-      const rotationValid = this.validateKeyRotation(;)
+      const rotationValid = this.validateKeyRotation(;);
         encryptionStatus.lastRotationDate,
         policy.keyManagement.keyRotationDays
       );
@@ -359,13 +359,13 @@ export class ClassificationEncryptionPolicyService {
       encryptionStatus: encryptionStatus.encrypted ? 'ENCRYPTED' : 'NOT_ENCRYPTED',
       algorithm: encryptionStatus.algorithm,
       keyLength: encryptionStatus.keyLength,
-      keyRotationCompliant: encryptionStatus.lastRotationDate ? 
+      keyRotationCompliant: encryptionStatus.lastRotationDate ? ,
         this.validateKeyRotation(encryptionStatus.lastRotationDate, policy.keyManagement.keyRotationDays) : false,
       lastRotationDate: encryptionStatus.lastRotationDate,
       complianceScore: this.calculateComplianceScore(errors, warnings),
       violations: errors,
       recommendations,
-      assessmentDate: new Date()
+      assessmentDate: new Date(),
     };
     this.complianceRecords.set(dataId, compliance);
     // Record audit event

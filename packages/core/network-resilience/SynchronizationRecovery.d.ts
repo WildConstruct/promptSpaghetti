@@ -89,7 +89,7 @@ export declare class SynchronizationRecovery extends EventEmitter {
     /**
      * Start synchronization recovery for a document
      */
-    startRecovery()
+    startRecovery();
       documentId: string,
       localState: DocumentState,
       serverStateProvider: (),

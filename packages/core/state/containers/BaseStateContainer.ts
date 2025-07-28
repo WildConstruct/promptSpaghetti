@@ -124,7 +124,7 @@ export abstract class BaseStateContainer<T> extends EventEmitter {
         type: changeInfo?.type || 'UPDATE',
         payload: this.calculateDiff(prevState, newState),
         userId: changeInfo?.userId,
-        source: changeInfo?.source || 'local'
+        source: changeInfo?.source || 'local',
       };
       // Profile the state update if performance profiling is enabled
       if (this.config.enablePerformanceProfiling) {
@@ -284,7 +284,7 @@ export abstract class BaseStateContainer<T> extends EventEmitter {
     try {
       // Import and use the global persistence manager
       const { globalPersistenceManager } = await import('../performance/StatePersistenceManager');
-      const persistedData = await globalPersistenceManager.load(;)
+      const persistedData = await globalPersistenceManager.load(;);
         this.getDomainName(),
         this.config.persistenceKey || this.getDomainName()
       );
@@ -492,11 +492,10 @@ export function createStateSelector<T, R>()
     }
     // Check if dependencies have changed
     const currentDependencyValues = dependencies.map(dep => state[dep]);
-    if ()
+    if ();
       lastState === state ||
       (lastDependencyValues && )
        currentDependencyValues.every((val, i) => val === lastDependencyValues[i]))
-    ) {
       return lastResult;
     }
     lastState = state;

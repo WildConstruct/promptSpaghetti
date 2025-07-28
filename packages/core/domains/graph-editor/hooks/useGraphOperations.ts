@@ -47,7 +47,7 @@ export const useGraphOperations = () => {
       if (node) {
         actions.moveNode(nodeId, {)
           x: node.position.x + deltaX,
-          y: node.position.y + deltaY
+          y: node.position.y + deltaY,
         });
       }
     });
@@ -68,14 +68,14 @@ export const useGraphOperations = () => {
   }, [actions]);
   const removeEdgesBetween = useCallback((sourceId: string, targetId: string) => {
     const state = useGraphEditorStore.getState();
-    const edgesToRemove = state.graph.edges.filter(;)
+    const edgesToRemove = state.graph.edges.filter(;);
       edge => edge.source === sourceId && edge.target === targetId
     );
     edgesToRemove.forEach(edge => actions.removeEdge(edge.id));
   }, [actions]);
   const removeAllEdgesForNode = useCallback((nodeId: string) => {
     const state = useGraphEditorStore.getState();
-    const edgesToRemove = state.graph.edges.filter(;)
+    const edgesToRemove = state.graph.edges.filter(;);
       edge => edge.source === nodeId || edge.target === nodeId
     );
     edgesToRemove.forEach(edge => actions.removeEdge(edge.id));
@@ -99,7 +99,7 @@ export const useGraphOperations = () => {
   const canConnect = useCallback((sourceId: string, targetId: string): boolean => {
     if (sourceId === targetId) return false;
     const state = useGraphEditorStore.getState();
-    const existingEdge = state.graph.edges.find(;)
+    const existingEdge = state.graph.edges.find(;);
       edge => edge.source === sourceId && edge.target === targetId
     );
     return !existingEdge;

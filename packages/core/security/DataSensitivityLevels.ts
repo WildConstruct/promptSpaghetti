@@ -434,7 +434,6 @@ class DataSensitivityUtils {
     valid: boolean;
     recommendedLevel?: DataSensitivityLevel;
     reasons: string[];
-  } {
     const reasons: string[] = [];
     let recommendedLevel: DataSensitivityLevel | undefined;
     // Define data type mappings
@@ -502,7 +501,6 @@ class DataSensitivityUtils {
     displayFormat: string;
     htmlBadge: string;
     textMarking: string;
-  } {
     const definition = DATA_SENSITIVITY_DEFINITIONS[level];
     const marking = definition.markingRequirements;
     return {
@@ -520,7 +518,6 @@ class DataSensitivityUtils {
     valid: boolean;
     errors: string[];
     warnings: string[];
-  } {
     const errors: string[] = [];
     const warnings: string[] = [];
     // Validate required fields

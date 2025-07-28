@@ -420,7 +420,7 @@ export declare class UserAccessTransparencyService extends EventEmitter {
     /**
      * Submit Data Subject Access Request
      */
-    submitDSAR()
+    submitDSAR();
       userId: string,
       requestType: DataSubjectAccessRequest['requestType'],
       details: DSARRequestDetails,
@@ -444,7 +444,7 @@ export declare class UserAccessTransparencyService extends EventEmitter {
     /**
      * Export user data for portability
      */
-    exportUserData()
+    exportUserData();
       userId: string,
       format?: 'JSON' | 'XML' | 'CSV' | 'PDF',
       categories?: string[]

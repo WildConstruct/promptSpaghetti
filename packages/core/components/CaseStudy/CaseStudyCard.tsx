@@ -110,7 +110,7 @@ export const CaseStudyCard: React.FC<CaseStudyCardProps> = ({)
   const typeDisplay = getTypeDisplay(caseStudy.type);
   const roiDisplay = getROIDisplay();
   const industryIcon = getIndustryIcon(caseStudy.industry);
-  return ()
+  return ();
     <div 
       className={`case-study-card ${variant} ${className}`}
       onClick={handleCardClick}

@@ -75,7 +75,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
       const response = await this.apiClient.post(`/api/content/${contentId}/skill-tags`, {)}
         ...skillTag,
         tagged_at: new Date().toISOString(),
-        last_updated: new Date().toISOString()
+        last_updated: new Date().toISOString(),
       });
       return response.data;
     } catch (error) {
@@ -110,7 +110,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
         this.getUserPeerFeedback(userId, domain)
       ]);
       // Calculate skill levels across subcategories
-      const skillLevels = await this.calculateUserSkillLevels(;)
+      const skillLevels = await this.calculateUserSkillLevels(;);
         userId,
         domain,
         { completionHistory, assessmentResults, communityContributions, peerFeedback }
@@ -124,11 +124,11 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
           content_completed: completionHistory,
           skill_progression: await this.getSkillProgressionHistory(userId),
           assessment_results: assessmentResults,
-          struggle_patterns: await this.identifyStrugglePatterns(userId)
+          struggle_patterns: await this.identifyStrugglePatterns(userId),
         },
         learning_goals: await this.getUserLearningGoals(userId),
         motivation_factors: await this.inferMotivationFactors(userId),
-        career_context: await this.getUserCareerContext(userId)
+        career_context: await this.getUserCareerContext(userId),
       };
       return profile;
     } catch (error) {
@@ -179,7 +179,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
     try {
       const userProfile = await this.getUserProfile(userId);
       const currentSkillTags = await this.getContentSkillTags(currentContent);
-      const suggestions = await this.generateNextContentSuggestions(;)
+      const suggestions = await this.generateNextContentSuggestions(;);
         userProfile,
         currentSkillTags,
         currentContent
@@ -217,7 +217,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
       // Analyze user's current skills vs path requirements
       const skillGaps = await this.identifySkillGaps(userProfile, originalPath);
       // Optimize sequence based on user's profile
-      const optimizedSequence = await this.optimizeContentSequence(;)
+      const optimizedSequence = await this.optimizeContentSequence(;);
         userProfile,
         originalPath,
         skillGaps
@@ -249,7 +249,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
       await this.apiClient.put(`/api/content/${contentId}/skill-tags`, {)}
         tags: updatedTags,
         community_feedback: feedback,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       });
       // Trigger re-assessment if feedback significantly disagrees with current classification
       if (this.shouldTriggerReassessment(feedback)) {
@@ -280,7 +280,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
       await this.apiClient.post(`/api/content/${contentId}/skill-feedback`, {)}
         user_id: userId,
         feedback,
-        submitted_at: new Date().toISOString()
+        submitted_at: new Date().toISOString(),
       });
     } catch (error) {
       console.error('Failed to submit skill feedback:', error);
@@ -303,7 +303,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
         this.getExpertSkillReviews(contentId),
         this.analyzeContent(await this.getContentById(contentId))
       ]);
-      const validation = this.performValidationAnalysis(;)
+      const validation = this.performValidationAnalysis(;);
         currentTags,
         communityFeedback,
         expertReviews,
@@ -441,7 +441,7 @@ export class SkillLevelTaggingService implements SkillAssessmentEngine {
         tools_required: content.tools_required || [],
         setup_complexity: this.assessSetupComplexity(content),
         external_resources_needed: (content.external_resources || []).length > 0,
-        mentor_support_recommended: classification.level === 'expert'
+        mentor_support_recommended: classification.level === 'expert',
       },
       success_factors: {,
         completion_rate_target: this.calculateTargetCompletionRate(classification.level),

@@ -41,11 +41,11 @@ describe('WeightedAdvanced Node', () => {
       for (let i = 0; i < 10; i++) {
         const ctx1 = AdvancedExecutionUtils.enhanceContext({)
           variables: {},
-          seed: 12345 + i
+          seed: 12345 + i,
         });
         const ctx2 = AdvancedExecutionUtils.enhanceContext({)
           variables: {},
-          seed: 54321 + i
+          seed: 54321 + i,
         });
         results1.push(node.run(ctx1));
         results2.push(node.run(ctx2));
@@ -54,7 +54,7 @@ describe('WeightedAdvanced Node', () => {
       expect(results1).not.toEqual(results2);
     });
     test('should handle single choice', () => {
-      const singleChoiceNode = new WeightedAdvancedNode('single', [;)
+      const singleChoiceNode = new WeightedAdvancedNode('single', [;);
         { value: 'only', weight: 1 }
       ]);
       const result = singleChoiceNode.run(context);
@@ -85,7 +85,7 @@ describe('WeightedAdvanced Node', () => {
       const counts = {
         first: results.filter(r => r === 'first').length,
         second: results.filter(r => r === 'second').length,
-        third: results.filter(r => r === 'third').length
+        third: results.filter(r => r === 'third').length,
       };
       // Should roughly follow 4:2:1 ratio
       expect(counts.first).toBeGreaterThan(counts.second);
@@ -103,7 +103,7 @@ describe('WeightedAdvanced Node', () => {
       const counts = {
         first: results.filter(r => r === 'first').length,
         second: results.filter(r => r === 'second').length,
-        third: results.filter(r => r === 'third').length
+        third: results.filter(r => r === 'third').length,
       };
       // Exponential should make higher weights even more dominant
       expect(counts.first).toBeGreaterThan(counts.second * 2);

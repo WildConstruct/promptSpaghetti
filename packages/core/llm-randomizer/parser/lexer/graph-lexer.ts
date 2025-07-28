@@ -314,7 +314,7 @@ export class GraphLexer {
     case 'metadata': return TokenType.METADATA;
     case 'true': case 'false': return TokenType.BOOLEAN;
     case 'null': case 'nil': return TokenType.NULL;
-    default: 
+    default: ,
       // Determine if key or value based on position
       return this.isAtLineStart() || this.isAfterIndent() ? TokenType.KEY : TokenType.VALUE;
     }
@@ -329,7 +329,7 @@ export class GraphLexer {
       position: {,
         line: this.line,
         column: this.column - value.length,
-        offset: this.position - value.length
+        offset: this.position - value.length,
       }
     });
   }

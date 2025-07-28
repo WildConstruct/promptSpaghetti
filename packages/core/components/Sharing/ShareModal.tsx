@@ -96,7 +96,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({)
     }
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 0,
@@ -121,7 +121,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({)
         {/* Header */}
         <div style={{
           padding: '24px 24px 0 24px',
-          borderBottom: '1px solid #e5e7eb'
+          borderBottom: '1px solid #e5e7eb',
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h2 style={{ margin: 0, fontSize: '24px', fontWeight: '600', color: '#111827' }}>
@@ -268,7 +268,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({)
                         cursor: 'pointer',
                         fontSize: '12px',
                         textTransform: 'capitalize',
-                        color: selectedPlatforms.includes(platform as SocialPlatform) ? '#3b82f6' : '#6b7280'
+                        color: selectedPlatforms.includes(platform as SocialPlatform) ? '#3b82f6' : '#6b7280',
                       }}
                     >
                       {platform}
@@ -285,7 +285,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({)
               </h3>
               {Object.entries(permissions).map(([key, value]) => {
                 if (typeof value !== 'boolean') return null;
-                return ()
+                return ();
                   <label key={key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <input
                       type="checkbox"

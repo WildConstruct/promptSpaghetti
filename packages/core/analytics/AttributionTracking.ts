@@ -1014,7 +1014,7 @@ export class AttributionTracker extends EventEmitter {
     const updatedModel = {
       ...model,
       ...updates,
-      updated: new Date()
+      updated: new Date(),
     };
     this.models.set(modelId, updatedModel);
     this.emit('modelUpdated', { modelId, model: updatedModel });
@@ -1053,7 +1053,7 @@ export class AttributionTracker extends EventEmitter {
     // Find journeys for each device
     const deviceJourneys = new Map<string, CustomerJourney[]>();
     for (const deviceId of deviceIds) {
-      const journeys = Array.from(this.journeys.values()).filter(;)
+      const journeys = Array.from(this.journeys.values()).filter(;);
         journey => journey.deviceId === deviceId
       );
       deviceJourneys.set(deviceId, journeys);
@@ -1065,7 +1065,7 @@ export class AttributionTracker extends EventEmitter {
   // Privacy and Compliance
   async deleteUserData(userId: string): Promise<void> {
     // Find all journeys for the user
-    const userJourneys = Array.from(this.journeys.values()).filter(;)
+    const userJourneys = Array.from(this.journeys.values()).filter(;);
       journey => journey.userId === userId
     );
     // Delete journeys
@@ -1076,7 +1076,7 @@ export class AttributionTracker extends EventEmitter {
   }
   async anonymizeUserData(userId: string): Promise<void> {
     // Find all journeys for the user
-    const userJourneys = Array.from(this.journeys.values()).filter(;)
+    const userJourneys = Array.from(this.journeys.values()).filter(;);
       journey => journey.userId === userId
     );
     // Anonymize journeys
@@ -1088,7 +1088,7 @@ export class AttributionTracker extends EventEmitter {
     this.emit('userDataAnonymized', { userId, journeyCount: userJourneys.length });
   }
   async exportUserData(userId: string): Promise<any> {
-    const userJourneys = Array.from(this.journeys.values()).filter(;)
+    const userJourneys = Array.from(this.journeys.values()).filter(;);
       journey => journey.userId === userId
     );
     return {
@@ -1275,7 +1275,7 @@ export class AttributionTracker extends EventEmitter {
         isActive: true,
         version: '1.0',
         created: new Date(),
-        updated: new Date()
+        updated: new Date(),
       },
       {
         id: 'last_touch',
@@ -1295,7 +1295,7 @@ export class AttributionTracker extends EventEmitter {
         isActive: true,
         version: '1.0',
         created: new Date(),
-        updated: new Date()
+        updated: new Date(),
       },
       {
         id: 'linear',
@@ -1315,7 +1315,7 @@ export class AttributionTracker extends EventEmitter {
         isActive: true,
         version: '1.0',
         created: new Date(),
-        updated: new Date()
+        updated: new Date(),
       }
     ];
     for (const model of defaultModels) {
@@ -1366,7 +1366,7 @@ export class AttributionTracker extends EventEmitter {
       content: data.content,
       term: data.term,
       timestamp: data.timestamp || new Date(),
-      data: data.data || {
+      data: data.data || {,
         url: '',
         page: { title: '', path: '', tags: [] },
         user: { behavior: { sessionCount: 0, pageViews: 0, timeOnSite: 0, bounceRate: 0, previousVisits: [], interactionHistory: [] }, preferences: {} },
@@ -1374,7 +1374,7 @@ export class AttributionTracker extends EventEmitter {
         location: {},
         custom: {}
       },
-      context: data.context || {
+      context: data.context || {,
         timeContext: {,
           dayOfWeek: new Date().toLocaleDateString('en', { weekday: 'long' }),
           hourOfDay: new Date().getHours(),
@@ -1401,7 +1401,7 @@ export class AttributionTracker extends EventEmitter {
       journeyId: data.journeyId || '',
       type: data.type || 'custom',
       value: data.value || { custom: {} },
-      attribution: data.attribution || {
+      attribution: data.attribution || {,
         touchPoints: [],
         models: {},
         primary: { model: '', credit: [], confidence: 0, methodology: '' },
@@ -1578,10 +1578,10 @@ export class AttributionTracker extends EventEmitter {
       credit: creditPerTouchPoint,
       percentage: (creditPerTouchPoint * 100),
       channel: tp.channel,
-      position: index + 1
+      position: index + 1,
     }));
     return {
-      touchPoints: credits.map(c => ({)
+      touchPoints: credits.map(c => ({),
         credit: c.credit,
         weight: c.credit,
         models: { [model.id]: c.credit },
@@ -1633,7 +1633,7 @@ export class AttributionTracker extends EventEmitter {
         credit: decay,
         percentage: 0, // Will be calculated after normalization
         channel: tp.channel,
-        position: index + 1
+        position: index + 1,
       };
     });
     // Normalize credits to sum to 1.0
@@ -1643,7 +1643,7 @@ export class AttributionTracker extends EventEmitter {
       c.percentage = c.credit * 100;
     });
     return {
-      touchPoints: credits.map(c => ({)
+      touchPoints: credits.map(c => ({),
         credit: c.credit,
         weight: c.credit,
         models: { [model.id]: c.credit },
@@ -1734,12 +1734,12 @@ export class AttributionTracker extends EventEmitter {
           credit: creditPerMiddle,
           percentage: creditPerMiddle * 100,
           channel: tp.channel,
-          position: index + 2
+          position: index + 2,
         });
       });
     }
     return {
-      touchPoints: credits.map(c => ({)
+      touchPoints: credits.map(c => ({),
         credit: c.credit,
         weight: c.credit,
         models: { [model.id]: c.credit },
@@ -1835,7 +1835,7 @@ export class AttributionTracker extends EventEmitter {
         tags: [],
       },
       created: new Date(),
-      updated: new Date()
+      updated: new Date(),
     };
   }
   private updateJourneyTimeline(journey: CustomerJourney, touchPoint: TouchPoint): void {
@@ -1949,17 +1949,17 @@ export class AttributionTracker extends EventEmitter {
         totalJourneys: journeys.length,
         totalConversions: conversions.length,
         totalTouchPoints: journeys.reduce((sum, j) => sum + j.touchPoints.length, 0),
-        averageJourneyLength: journeys.length > 0 ? journeys.reduce()
+        averageJourneyLength: journeys.length > 0 ? journeys.reduce(),
           (sum,)
           j
         ) => sum + j.touchPoints.length, 0) / journeys.length : 0,
-        conversionRate: journeys.length > 0 ? conversions.length / journeys.length : 0
+        conversionRate: journeys.length > 0 ? conversions.length / journeys.length : 0,
       },
       models: [],
       channels: [],
       paths: [],
       insights: [],
-      generatedAt: new Date()
+      generatedAt: new Date(),
     };
   }
   private async calculateChannelPerformance(journeys: CustomerJourney[]): Promise<ChannelPerformanceReport> {
@@ -1973,7 +1973,7 @@ export class AttributionTracker extends EventEmitter {
         averageROAS: 0,
       },
       timeRange: { start: new Date(), end: new Date() },
-      generatedAt: new Date()
+      generatedAt: new Date(),
     };
   }
   private async analyzeConversionPaths(journeys: CustomerJourney[], options: any): Promise<ConversionPath[]> {
@@ -1986,7 +1986,7 @@ export class AttributionTracker extends EventEmitter {
       opportunities: [],
       recommendations: [],
       confidence: 0.8,
-      generatedAt: new Date()
+      generatedAt: new Date(),
     };
   }
 }

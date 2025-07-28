@@ -5,7 +5,6 @@
  * Provides emergency controls to rapidly disable feature toggles in crisis situations.
  * Critical safety interface for preventing system-wide issues.
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   AlertTriangle,
@@ -23,7 +22,6 @@ import {
 import { Badge } from '../common/Badge';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import './EmergencyKillSwitchPanel.css';
-
 interface EmergencyKillSwitch {
   id: string;
   name: string;
@@ -38,7 +36,6 @@ interface EmergencyKillSwitch {
   lastActivatedBy?: string;
   activationCount: number;
 }
-
 interface KillSwitchActivation {
   id: string;
   killSwitchId: string;
@@ -49,7 +46,6 @@ interface KillSwitchActivation {
   status: 'ACTIVE' | 'ROLLED_BACK' | 'EXPIRED';
   autoRollbackAt?: string;
 }
-
 interface EmergencyMetrics {
   totalKillSwitches: number;
   activeKillSwitches: number;
@@ -65,172 +61,145 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
   const [metrics, setMetrics] = useState<EmergencyMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
   // Modal states
   const [showActivateModal, setShowActivateModal] = useState<string | null>(null);
   const [showRollbackModal, setShowRollbackModal] = useState<string | null>(null);
   const [activationReason, setActivationReason] = useState('');
   const [rollbackReason, setRollbackReason] = useState('');
   const [autoRollbackMinutes, setAutoRollbackMinutes] = useState<number | undefined>(undefined);
-
   // Load emergency data
   const loadEmergencyData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
       // Load kill switches, activations, and metrics in parallel
-      const [killSwitchesRes, activationsRes, metricsRes] = await Promise.all([
-        fetch('/api/emergency/kill-switches', {
+      const [killSwitchesRes, activationsRes, metricsRes] = await Promise.all([)
+        fetch('/api/emergency/kill-switches', {)
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/emergency/activations/active', {
+        fetch('/api/emergency/activations/active', {)
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/emergency/metrics', {
+        fetch('/api/emergency/metrics', {)
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         })
       ]);
-
       if (!killSwitchesRes.ok || !activationsRes.ok || !metricsRes.ok) {
         throw new Error('Failed to load emergency data');
       }
-
-      const [killSwitchesData, activationsData, metricsData] = await Promise.all([
+      const [killSwitchesData, activationsData, metricsData] = await Promise.all([)
         killSwitchesRes.json(),
         activationsRes.json(),
         metricsRes.json()
       ]);
-
       setKillSwitches(killSwitchesData.killSwitches || []);
       setActiveActivations(activationsData.activations || []);
       setMetrics(metricsData.metrics || null);
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load emergency data');
     } finally {
       setLoading(false);
     }
   }, []);
-
   useEffect(() => {
     loadEmergencyData();
     // Refresh every 30 seconds for emergency monitoring
     const interval = setInterval(loadEmergencyData, 30000);
     return () => clearInterval(interval);
   }, [loadEmergencyData]);
-
   // Emergency action handlers
   const handleEmergencyAll = async () => {
     if (!confirm('🚨 EMERGENCY: This will disable ALL feature toggles! Are you absolutely sure?')) {
       return;
     }
-
     const reason = prompt('Emergency reason (required):');
     if (!reason) return;
-
     try {
-      const response = await fetch('/api/emergency/disable-all', {
+      const response = await fetch('/api/emergency/disable-all', {)
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ reason })
       });
-
       if (!response.ok) throw new Error('Emergency action failed');
-
       alert('🚨 EMERGENCY: All toggles have been disabled!');
       loadEmergencyData();
     } catch (err) {
-      alert(`Emergency action failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      alert(`Emergency action failed: ${err instanceof Error ? err.message : 'Unknown error'}`);}
     }
   };
-
   const handleEmergencyClaudeImpact = async () => {
     if (!confirm('🚨 EMERGENCY: This will disable all Claude-impacting toggles! Continue?')) {
       return;
     }
-
     const reason = prompt('Emergency reason (required):');
     if (!reason) return;
-
     try {
-      const response = await fetch('/api/emergency/disable-claude-impact', {
+      const response = await fetch('/api/emergency/disable-claude-impact', {)
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ reason })
       });
-
       if (!response.ok) throw new Error('Emergency action failed');
-
       alert('🚨 EMERGENCY: Claude-impacting toggles have been disabled!');
       loadEmergencyData();
     } catch (err) {
-      alert(`Emergency action failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      alert(`Emergency action failed: ${err instanceof Error ? err.message : 'Unknown error'}`);}
     }
   };
-
   const handleActivateKillSwitch = async (killSwitchId: string) => {
     if (!activationReason.trim()) {
       alert('Activation reason is required');
       return;
     }
-
     try {
-      const response = await fetch(`/api/emergency/kill-switches/${killSwitchId}/activate`, {
+      const response = await fetch(`/api/emergency/kill-switches/${killSwitchId}/activate`, {)}
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({ ),
           reason: activationReason,
           autoRollbackMinutes 
         })
       });
-
       if (!response.ok) throw new Error('Kill switch activation failed');
-
       setShowActivateModal(null);
       setActivationReason('');
       setAutoRollbackMinutes(undefined);
       loadEmergencyData();
     } catch (err) {
-      alert(`Activation failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      alert(`Activation failed: ${err instanceof Error ? err.message : 'Unknown error'}`);}
     }
   };
-
   const handleRollbackActivation = async (activationId: string) => {
     if (!rollbackReason.trim()) {
       alert('Rollback reason is required');
       return;
     }
-
     try {
-      const response = await fetch(`/api/emergency/activations/${activationId}/rollback`, {
+      const response = await fetch(`/api/emergency/activations/${activationId}/rollback`, {)}
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ reason: rollbackReason })
       });
-
       if (!response.ok) throw new Error('Rollback failed');
-
       setShowRollbackModal(null);
       setRollbackReason('');
       loadEmergencyData();
     } catch (err) {
-      alert(`Rollback failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      alert(`Rollback failed: ${err instanceof Error ? err.message : 'Unknown error'}`);}
     }
   };
-
   const getScopeDisplay = (scope: string) => {
     switch (scope) {
     case 'ALL':
@@ -245,7 +214,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
       return { text: scope, color: 'gray', icon: null };
     }
   };
-
   const getActivationStatusDisplay = (status: string) => {
     switch (status) {
     case 'ACTIVE':
@@ -258,18 +226,16 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
       return { text: status, color: 'gray', icon: null };
     }
   };
-
   if (loading) {
-    return (
+    return ()
       <div className="emergency-panel loading">
         <LoadingSpinner />
         <p>Loading emergency controls...</p>
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="emergency-panel error">
         <AlertTriangle size={24} />
         <p>Error: {error}</p>
@@ -279,8 +245,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="emergency-kill-switch-panel">
       {/* Emergency Alert Header */}
       <div className="emergency-header">
@@ -292,9 +257,8 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
           ⚠️ These controls can rapidly disable feature toggles system-wide. Use only in emergency situations.
         </div>
       </div>
-
       {/* System Status */}
-      {metrics && (
+      {metrics && ()
         <div className="emergency-metrics">
           <div className="metric-card">
             <Activity size={20} />
@@ -303,7 +267,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
               <div className="metric-label">Active Emergencies</div>
             </div>
           </div>
-          
           <div className="metric-card">
             <Shield size={20} />
             <div className="metric-info">
@@ -311,7 +274,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
               <div className="metric-label">Available Kill Switches</div>
             </div>
           </div>
-          
           <div className="metric-card">
             <Power size={20} />
             <div className="metric-info">
@@ -319,7 +281,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
               <div className="metric-label">Disabled Toggles</div>
             </div>
           </div>
-          
           <div className="metric-card">
             <Clock size={20} />
             <div className="metric-info">
@@ -329,7 +290,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Quick Emergency Actions */}
       <div className="emergency-quick-actions">
         <h3>🚨 Quick Emergency Actions</h3>
@@ -344,7 +304,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
               <div className="action-subtitle">Nuclear option - disables everything</div>
             </div>
           </button>
-
           <button 
             className="emergency-btn emergency-claude"
             onClick={handleEmergencyClaudeImpact}
@@ -357,17 +316,15 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
           </button>
         </div>
       </div>
-
       {/* Active Activations */}
-      {activeActivations.length > 0 && (
+      {activeActivations.length > 0 && ()
         <div className="active-activations-section">
           <h3>🔴 Active Emergency Activations</h3>
           <div className="activations-list">
             {activeActivations.map((activation) => {
               const killSwitch = killSwitches.find(ks => ks.id === activation.killSwitchId);
               const statusDisplay = getActivationStatusDisplay(activation.status);
-              
-              return (
+              return ()
                 <div key={activation.id} className="activation-card active">
                   <div className="activation-header">
                     <div className="activation-title">
@@ -379,7 +336,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
                       {statusDisplay.text}
                     </Badge>
                   </div>
-                  
                   <div className="activation-details">
                     <div className="activation-reason">
                       <strong>Reason:</strong> {activation.reason}
@@ -389,13 +345,12 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
                       <span>Time: {new Date(activation.activatedAt).toLocaleString()}</span>
                       <span>Affected: {activation.affectedToggles.length} toggles</span>
                     </div>
-                    {activation.autoRollbackAt && (
+                    {activation.autoRollbackAt && ()
                       <div className="auto-rollback-info">
                         ⏰ Auto-rollback at: {new Date(activation.autoRollbackAt).toLocaleString()}
                       </div>
                     )}
                   </div>
-                  
                   <div className="activation-actions">
                     <button
                       className="btn btn-danger btn-sm"
@@ -411,7 +366,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Kill Switches List */}
       <div className="kill-switches-section">
         <h3>⚡ Available Kill Switches</h3>
@@ -419,9 +373,8 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
           {killSwitches.map((killSwitch) => {
             const scopeDisplay = getScopeDisplay(killSwitch.scope);
             const isActive = activeActivations.some(a => a.killSwitchId === killSwitch.id);
-            
-            return (
-              <div key={killSwitch.id} className={`kill-switch-card ${isActive ? 'active' : ''}`}>
+            return ()
+              <div key={killSwitch.id} className={`kill-switch-card ${isActive ? 'active' : ''}`}>}
                 <div className="kill-switch-header">
                   <div className="kill-switch-title">
                     <Badge color={scopeDisplay.color}>
@@ -430,32 +383,29 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
                     </Badge>
                     <span className="kill-switch-name">{killSwitch.name}</span>
                   </div>
-                  {isActive && (
+                  {isActive && ()
                     <div className="active-indicator">
                       <AlertCircle size={16} />
                       ACTIVE
                     </div>
                   )}
                 </div>
-                
                 <div className="kill-switch-description">
                   {killSwitch.description}
                 </div>
-                
                 <div className="kill-switch-stats">
                   <span>Activations: {killSwitch.activationCount}</span>
-                  {killSwitch.lastActivated && (
+                  {killSwitch.lastActivated && ()
                     <span>Last: {new Date(killSwitch.lastActivated).toLocaleDateString()}</span>
                   )}
                 </div>
-                
                 <div className="kill-switch-actions">
-                  {killSwitch.enabled ? (
-                    isActive ? (
+                  {killSwitch.enabled ? ()
+                    isActive ? ()
                       <button className="btn btn-secondary btn-sm" disabled>
                         Currently Active
                       </button>
-                    ) : (
+                    ) : ()
                       <button
                         className="btn btn-danger btn-sm"
                         onClick={() => setShowActivateModal(killSwitch.id)}
@@ -463,8 +413,7 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
                         <Power size={14} />
                         Activate
                       </button>
-                    )
-                  ) : (
+                  ) : ()
                     <button className="btn btn-secondary btn-sm" disabled>
                       Disabled
                     </button>
@@ -475,9 +424,8 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
           })}
         </div>
       </div>
-
       {/* Activate Kill Switch Modal */}
-      {showActivateModal && (
+      {showActivateModal && ()
         <div className="modal-overlay" onClick={() => setShowActivateModal(null)}>
           <div className="modal emergency-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
@@ -486,7 +434,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
                 ×
               </button>
             </div>
-            
             <div className="modal-body">
               <div className="warning-box">
                 <AlertTriangle size={20} />
@@ -495,7 +442,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
                   Only proceed if you understand the consequences.
                 </div>
               </div>
-              
               <div className="form-group">
                 <label>Emergency Reason (Required):</label>
                 <textarea
@@ -506,7 +452,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
                   className="form-control"
                 />
               </div>
-              
               <div className="form-group">
                 <label>Auto-Rollback (Optional):</label>
                 <input
@@ -523,7 +468,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
                 </div>
               </div>
             </div>
-            
             <div className="modal-footer">
               <button 
                 className="btn btn-secondary"
@@ -542,9 +486,8 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Rollback Modal */}
-      {showRollbackModal && (
+      {showRollbackModal && ()
         <div className="modal-overlay" onClick={() => setShowRollbackModal(null)}>
           <div className="modal rollback-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
@@ -553,7 +496,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
                 ×
               </button>
             </div>
-            
             <div className="modal-body">
               <div className="info-box">
                 <CheckCircle size={20} />
@@ -561,7 +503,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
                   <strong>Rollback:</strong> This will restore the previous state of all affected toggles.
                 </div>
               </div>
-              
               <div className="form-group">
                 <label>Rollback Reason (Required):</label>
                 <textarea
@@ -573,7 +514,6 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
                 />
               </div>
             </div>
-            
             <div className="modal-footer">
               <button 
                 className="btn btn-secondary"

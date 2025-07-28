@@ -2,7 +2,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { TemplateCard } from './TemplateCard';
 import './FeaturedTemplates.css';
-
 interface Template {
   id: string;
   title: string;
@@ -23,7 +22,6 @@ interface Template {
   is_ai_generated?: boolean;
   claude_compat: string[];
 }
-
 interface FeaturedTemplatesProps {
   templates: Template[];
   onTemplateClick: (templateId: string) => void;
@@ -32,7 +30,7 @@ interface FeaturedTemplatesProps {
   className?: string;
 }
 
-export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({
+export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({)
   templates,
   onTemplateClick,
   autoPlay = true,
@@ -45,66 +43,54 @@ export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({
   const [_isDragging, _setIsDragging] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
   const totalSlides = templates.length;
-  const maxVisibleSlides = Math.min(3, totalSlides); // Show up to 3 templates at once
-
+  const maxVisibleSlides = Math.min(3, totalSlides); // Show up to 3 templates at once;
   useEffect(() => {
     if (isPlaying && totalSlides > 1) {
       timeoutRef.current = setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % totalSlides);
       }, autoPlayInterval);
     }
-
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
     };
   }, [currentIndex, isPlaying, totalSlides, autoPlayInterval]);
-
   const handlePrevious = () => {
     setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
     setIsPlaying(false);
   };
-
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % totalSlides);
     setIsPlaying(false);
   };
-
   const handleDotClick = (index: number) => {
     setCurrentIndex(index);
     setIsPlaying(false);
   };
-
   const handleTemplateClick = (templateId: string) => {
     onTemplateClick(templateId);
   };
-
   const handleMouseEnter = () => {
     setIsPlaying(false);
   };
-
   const handleMouseLeave = () => {
     if (autoPlay) {
       setIsPlaying(true);
     }
   };
-
   if (templates.length === 0) {
-    return (
-      <div className={`featured-templates empty ${className}`}>
+    return ()
+      <div className={`featured-templates empty ${className}`}>}
         <p>No featured templates available</p>
       </div>
     );
   }
-
   const getVisibleTemplates = () => {
     if (totalSlides <= maxVisibleSlides) {
       return templates;
     }
-
     const visible = [];
     for (let i = 0; i < maxVisibleSlides; i++) {
       const index = (currentIndex + i) % totalSlides;
@@ -112,10 +98,8 @@ export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({
     }
     return visible;
   };
-
   const visibleTemplates = getVisibleTemplates();
-
-  return (
+  return ()
     <div 
       className={`featured-templates ${className}`}
       onMouseEnter={handleMouseEnter}
@@ -123,7 +107,7 @@ export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({
     >
       <div className="carousel-container">
         {/* Navigation Arrows */}
-        {totalSlides > maxVisibleSlides && (
+        {totalSlides > maxVisibleSlides && ()
           <>
             <button
               onClick={handlePrevious}
@@ -140,7 +124,6 @@ export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({
                 />
               </svg>
             </button>
-
             <button
               onClick={handleNext}
               className="carousel-arrow next"
@@ -158,17 +141,16 @@ export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({
             </button>
           </>
         )}
-
         {/* Templates Carousel */}
         <div 
           ref={carouselRef}
           className="carousel-track"
           style={{
-            transform: totalSlides <= maxVisibleSlides ? 'translateX(0)' : undefined
+            transform: totalSlides <= maxVisibleSlides ? 'translateX(0)' : undefined,
           }}
         >
-          {visibleTemplates.map((template, index) => (
-            <div key={`${template.id}-${currentIndex}-${index}`} className="carousel-slide">
+          {visibleTemplates.map((template, index) => ()
+            <div key={`${template.id}-${currentIndex}-${index}`} className="carousel-slide">}
               <TemplateCard
                 template={template}
                 onClick={() => handleTemplateClick(template.id)}
@@ -179,11 +161,10 @@ export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({
           ))}
         </div>
       </div>
-
       {/* Carousel Indicators */}
-      {totalSlides > 1 && (
+      {totalSlides > 1 && ()
         <div className="carousel-indicators">
-          {Array.from({ length: totalSlides }, (_, index) => (
+          {Array.from({ length: totalSlides }, (_, index) => ()
             <button
               key={index}
               onClick={() => handleDotClick(index)}
@@ -193,16 +174,15 @@ export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({
           ))}
         </div>
       )}
-
       {/* Playback Controls */}
-      {totalSlides > 1 && autoPlay && (
+      {totalSlides > 1 && autoPlay && ()
         <div className="playback-controls">
           <button
             onClick={() => setIsPlaying(!isPlaying)}
             className="play-pause-button"
             aria-label={isPlaying ? 'Pause carousel' : 'Play carousel'}
           >
-            {isPlaying ? (
+            {isPlaying ? ()
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M6 3V13M10 3V13"
@@ -211,7 +191,7 @@ export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({
                   strokeLinecap="round"
                 />
               </svg>
-            ) : (
+            ) : ()
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M3 2L13 8L3 14V2Z"

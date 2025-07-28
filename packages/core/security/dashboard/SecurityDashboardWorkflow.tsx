@@ -260,7 +260,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
     initializeFramework();
   }, [workspaceId, dashboardType, userRole, fetchStates, fetchTransitions, fetchApprovals]);
   // Create dashboard configuration based on type and role
-  const createSecurityDashboardConfig = async (;)
+  const createSecurityDashboardConfig = async (;);
     type: DashboardType, 
     role: SecurityRole,
   ): Promise<DashboardConfig> => {
@@ -316,7 +316,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
           peakUsageHours: [9, 10, 11, 14, 15, 16]
         }
       },
-      dataClassification: 'CONFIDENTIAL' as any
+      dataClassification: 'CONFIDENTIAL' as any,
     };
     return baseConfig;
   };
@@ -347,7 +347,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
           configure: [SecurityRole.SECURITY_ADMIN],
           export: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
           drillDown: [role],
-          dataAccess: ['CONFIDENTIAL' as any]
+          dataAccess: ['CONFIDENTIAL' as any],
         }
       },
       {
@@ -373,7 +373,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
           configure: [SecurityRole.SECURITY_ADMIN],
           export: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
           drillDown: [role],
-          dataAccess: ['INTERNAL' as any]
+          dataAccess: ['INTERNAL' as any],
         }
       }
     ];
@@ -402,7 +402,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
           configure: [SecurityRole.SECURITY_ADMIN],
           export: [SecurityRole.SECURITY_ADMIN],
           drillDown: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
-          dataAccess: ['CONFIDENTIAL' as any]
+          dataAccess: ['CONFIDENTIAL' as any],
         }
       });
     }
@@ -463,7 +463,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
       const initialState = states.find(state => state.is_initial);
       if (!initialState) return;
       // Create workflow resource for the security event
-      const result = await transitionResourceState(;)
+      const result = await transitionResourceState(;);
         event.id,
         initialState.id,
         'system',
@@ -472,7 +472,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
           metadata: {,
             securityEvent: event,
             autoCreated: true,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           }
         }
       );
@@ -483,7 +483,6 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
             e.id === event.id 
               ? { ...e, workflowState: result.new_state_id }
               : e
-          )
         );
       }
     } catch (error) {
@@ -550,7 +549,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         await fetch('/api/security/notifications', {)
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ )
+          body: JSON.stringify({ ),
             type: 'security_alert', 
             target: 'security_team',
             message: action.parameters.reason,
@@ -571,7 +570,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
   // Check compliance requirements
   const checkComplianceRequirements = async (event: SecurityWorkflowEvent) => {
     try {
-      const applicableRequirements = workflowConfig.complianceRequirements.filter(req =>;)
+      const applicableRequirements = workflowConfig.complianceRequirements.filter(req =>;);
         req.alertTypes.includes(event.type)
       );
       for (const requirement of applicableRequirements) {
@@ -599,7 +598,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
   };
   // Handle manual workflow transitions
       try {
-        const result = await transitionResourceState(;)
+        const result = await transitionResourceState(;);
           eventId,
           toStateId,
           userId,
@@ -612,7 +611,6 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
               event.id === eventId
                 ? { ...event, workflowState: result.new_state_id }
                 : event
-            )
           );
           // Notify parent component
           onWorkflowTransition?.(result);
@@ -621,7 +619,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
       } finally {
         // Always release the lock
         const locks = await useWorkflowStore.getState().locks;
-        const eventLock = locks.find(lock => ;)
+        const eventLock = locks.find(lock => ;);
           lock.resource_id === eventId && lock.locked_by === userId
         );
         if (eventLock) {
@@ -634,7 +632,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
     }
   };
   // Handle approval actions
-  const handleApprovalAction = async (;)
+  const handleApprovalAction = async (;);
     approvalId: string,
     action: 'approve' | 'reject',
     comment?: string
@@ -658,7 +656,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
   };
   // Render loading state
   if (loading) {
-    return ()
+    return ();
       <div className="security-dashboard-loading">
         <div className="loading-spinner"></div>
         <p>Initializing Security Dashboard Workflow...</p>
@@ -667,7 +665,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
   }
   // Render error state
   if (error) {
-    return ()
+    return ();
       <div className="security-dashboard-error">
         <div className="error-icon">⚠️</div>
         <h3>Dashboard Error</h3>
@@ -682,7 +680,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
     );
   }
   // Main dashboard render
-  return ()
+  return ();
     <div className="security-dashboard-workflow">
       {/* Dashboard Header */}
       <header className="dashboard-header">

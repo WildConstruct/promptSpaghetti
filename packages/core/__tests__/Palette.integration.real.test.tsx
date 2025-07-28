@@ -16,7 +16,7 @@ const createDragEvent = (type: string, clientX: number, clientY: number, dataTra
   }) as any;
   // Add dataTransfer for drag events
   event.dataTransfer = {
-    getData: (format: string) => {
+    getData: (format: string) => {,
       if (format === 'application/reactflow' || format === 'application/node-type') {
         return dataTransferData;
       }

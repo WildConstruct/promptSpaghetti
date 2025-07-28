@@ -792,7 +792,7 @@ export const [error, setError] = useState<string | null>(null);
     }
   }, [funnelDefinition, analyticsInfrastructure, timeRange, creatorId, creatorProfile]);
   // Process creator data
-  const processCreatorData = async (;)
+  const processCreatorData = async (;);
     rawData: unknown,
     profile: CreatorProfile,
   ): Promise<CreatorOptimizationData> => {
@@ -849,7 +849,7 @@ export const [error, setError] = useState<string | null>(null);
         favoriteCount: Math.floor(Math.random() * 100 + 20),
         shareCount: Math.floor(Math.random() * 30 + 5),
         bounceRate: Math.random() * 0.4 + 0.3,
-        timeOnPage: Math.floor(Math.random() * 300 + 60)
+        timeOnPage: Math.floor(Math.random() * 300 + 60),
       },
       conversionFunnel: {,
         steps: [,
@@ -917,7 +917,7 @@ export const [error, setError] = useState<string | null>(null);
             direction: 'growing',
             impact: 'high',
             opportunity: 'Adapt templates to minimalist trend',
-            threat: 'Current detailed styles may become outdated'
+            threat: 'Current detailed styles may become outdated',
           }
         ]
       },
@@ -1010,7 +1010,7 @@ export const [error, setError] = useState<string | null>(null);
               metrics: [,
                 { metric: 'patterns_identified', target: 5, current: 0, progress: 0 }
               ],
-              reward: 'Portfolio insights unlocked'
+              reward: 'Portfolio insights unlocked',
             }
           ],
           resources: [,
@@ -1028,7 +1028,7 @@ export const [error, setError] = useState<string | null>(null);
               probability: 0.3,
               impact: 0.2,
               mitigation: 'Start with variations of proven designs',
-              contingency: 'Pivot to different template types if needed'
+              contingency: 'Pivot to different template types if needed',
             }
           ]
         },
@@ -1076,7 +1076,7 @@ export const [error, setError] = useState<string | null>(null);
               metrics: [,
                 { metric: 'revenue_increase', target: 15, current: 0, progress: 0 }
               ],
-              reward: 'Pricing optimization insights'
+              reward: 'Pricing optimization insights',
             }
           ],
           resources: [,
@@ -1094,7 +1094,7 @@ export const [error, setError] = useState<string | null>(null);
               probability: 0.25,
               impact: 0.15,
               mitigation: 'Start with small price increases and monitor closely',
-              contingency: 'Revert to original pricing if conversion drop exceeds 10%'
+              contingency: 'Revert to original pricing if conversion drop exceeds 10%',
             }
           ]
         },
@@ -1258,7 +1258,7 @@ export const [error, setError] = useState<string | null>(null);
               dependency: 'Mobile Design Tool Access',
               type: 'technology',
               criticality: 'high',
-              mitigation: 'Subscribe to design platform with mobile capabilities'
+              mitigation: 'Subscribe to design platform with mobile capabilities',
             }
           ]
         },
@@ -1268,7 +1268,7 @@ export const [error, setError] = useState<string | null>(null);
             probability: 0.4,
             impact: 0.3,
             mitigation: 'Focus on unique design style and niche markets',
-            monitoring: 'Track competitor launches and market saturation'
+            monitoring: 'Track competitor launches and market saturation',
           }
         ]
       }
@@ -1307,7 +1307,7 @@ export const [error, setError] = useState<string | null>(null);
         rating: 4.6,
         relevanceScore: 0.89,
         relatedSkills: ['Marketing', 'Analytics', 'User Psychology'],
-        prerequisites: ['Basic marketplace knowledge']
+        prerequisites: ['Basic marketplace knowledge'],
       }
     ];
   };
@@ -1389,7 +1389,7 @@ export const [error, setError] = useState<string | null>(null);
         date: Date.now() - (29 - i) * 24 * 60 * 60 * 1000,
         value: goal.target.currentValue + (Math.random() - 0.4) * goal.target.currentValue * 0.1,
         target: goal.target.currentValue + (goal.target.targetValue - goal.target.currentValue) * (i / 29),
-        progress: (i / 29) * 100
+        progress: (i / 29) * 100,
       })),
       insights: [,
         {
@@ -1442,7 +1442,7 @@ export const [error, setError] = useState<string | null>(null);
     onExport(exportData);
   }, [optimizationData, creatorProfile, onExport]);
   if (loading) {
-    return ()
+    return ();
       <div className="creator-optimization-loading">
         <div className="loading-spinner"></div>
         <p>Loading your optimization dashboard...</p>
@@ -1450,7 +1450,7 @@ export const [error, setError] = useState<string | null>(null);
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className="creator-optimization-error">
         <h3>Dashboard Error</h3>
         <p className="error-message">{error}</p>
@@ -1463,7 +1463,7 @@ export const [error, setError] = useState<string | null>(null);
   if (!optimizationData) {
     return <div className="creator-optimization-error">No data available</div>;
   }
-  return ()
+  return ();
     <div className="creator-optimization-dashboard">
       <div className="dashboard-header">
         <div className="creator-info">

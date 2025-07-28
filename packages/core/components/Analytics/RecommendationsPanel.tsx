@@ -27,7 +27,7 @@ import {
 const PRIORITY_COLORS = {
   high: 'text-red-600 bg-red-50 border-red-200',
   medium: 'text-yellow-600 bg-yellow-50 border-yellow-200',
-  low: 'text-green-600 bg-green-50 border-green-200'
+  low: 'text-green-600 bg-green-50 border-green-200',
 };
 /**
  * Recommendation type icons
@@ -101,7 +101,7 @@ const RecommendationItem: React.FC<RecommendationItemProps> = ({)
       return <TrendingUp className="w-4 h-4 text-gray-600" />;
     }
   };
-  return ()
+  return ();
     <Card className={`recommendation-item ${priorityClass} border-l-4`}>}
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between">
@@ -252,7 +252,7 @@ const RecommendationSummary: React.FC<RecommendationSummaryProps> = ({)
   const totalSavings = recommendations.reduce((sum, rec) => sum + (rec.estimatedSavings || 0), 0);
   const highPriorityCount = recommendations.filter(rec => rec.priority === 'high').length;
   const implementedCount = recommendations.filter(rec => rec.implementationProgress === 100).length;
-  return ()
+  return ();
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
       <Card>
         <CardHeader className="pb-2">
@@ -384,9 +384,9 @@ export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({)
   /**
    * Handle recommendation feedback
    */
-  const handleRecommendationFeedback = useCallback(async (;)
+  const handleRecommendationFeedback = useCallback(async (;);
     recommendationId: string, 
-    feedback: 'positive' | 'negative'
+    feedback: 'positive' | 'negative',
   ) => {
     // This would send feedback to the analytics system
     console.log('Recommendation feedback:', recommendationId, feedback);
@@ -398,12 +398,12 @@ export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({)
     const types = {
       cost_reduction: recommendations.filter(r => r.type === 'model_switch' || r.type === 'usage_optimization' || r.type === 'budget_adjustment'),
       performance: recommendations.filter(r => r.type === 'performance_improvement'),
-      feature_adoption: recommendations.filter(r => r.type === 'feature_adoption')
+      feature_adoption: recommendations.filter(r => r.type === 'feature_adoption'),
     };
     return types;
   };
   if (recommendations.length === 0) {
-    return ()
+    return ();
       <div className={`recommendations-panel ${className}`}>}
         <Card>
           <CardContent className="text-center py-8">
@@ -424,7 +424,7 @@ export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({)
     );
   }
   const recommendationsByType = getRecommendationsByType();
-  return ()
+  return ();
     <div className={`recommendations-panel ${className}`}>}
       <RecommendationSummary recommendations={recommendations} onRefresh={onRefresh} />
       <Tabs defaultValue="all" className="w-full">

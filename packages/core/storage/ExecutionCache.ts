@@ -244,7 +244,6 @@ export class ExecutionCache {
     resultCacheEntries: number;
     estimatedMemoryMB: number;
     oldestEntry?: number;
-    } {
     let oldestTimestamp = Date.now();
     for (const cached of this.resultCache.values()) {
       if (cached.timestamp < oldestTimestamp) {
@@ -255,7 +254,7 @@ export class ExecutionCache {
       graphCacheEntries: this.graphStateCache.size,
       resultCacheEntries: this.resultCache.size,
       estimatedMemoryMB: Math.round(this.estimateMemoryUsage() / 1024 / 1024),
-      oldestEntry: oldestTimestamp < Date.now() ? oldestTimestamp : undefined
+      oldestEntry: oldestTimestamp < Date.now() ? oldestTimestamp : undefined,
     };
   }
   // Private methods

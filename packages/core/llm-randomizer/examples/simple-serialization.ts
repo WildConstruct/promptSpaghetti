@@ -39,7 +39,7 @@ const serialized = GraphSerializer.serialize(simpleGraph, {)
   name: 'Simple Greeting Generator',
   description: 'Generates personalized greetings',
   author: 'claude-agent',
-  created: new Date().toISOString()
+  created: new Date().toISOString(),
 });
 console.log('=== LLM-Friendly Serialized Format ===');
 console.log(serialized);

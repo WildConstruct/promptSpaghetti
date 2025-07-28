@@ -746,7 +746,7 @@ export const [error, setError] = useState<string | null>(null);
       };
       const result = await analyticsInfrastructure.executeQuery(query);
       if (result.success && result.data) {
-        const processedData = await processTemplatePerformanceData(;)
+        const processedData = await processTemplatePerformanceData(;);
           result.data,
           templateMetadata,
           funnelDefinition
@@ -762,7 +762,7 @@ export const [error, setError] = useState<string | null>(null);
     }
   }, [funnelDefinition, analyticsInfrastructure, timeRange, templateId, templateMetadata]);
   // Process template performance data
-  const processTemplatePerformanceData = async (;)
+  const processTemplatePerformanceData = async (;);
     rawData: unknown,
     metadata: TemplateMetadata,
     funnel: ConversionFunnelDefinition,
@@ -858,7 +858,7 @@ export const [error, setError] = useState<string | null>(null);
           date: Date.now() - (29 - i) * 24 * 60 * 60 * 1000,
           revenue: 100 + Math.random() * 50,
           conversions: 30 + Math.random() * 20,
-          averageValue: 3.0 + Math.random() * 1.0
+          averageValue: 3.0 + Math.random() * 1.0,
         }))
       },
       quality: {,
@@ -1386,7 +1386,7 @@ export const [error, setError] = useState<string | null>(null);
     }
   }, [onIndicatorClick]);
   // Handle optimization action
-  const handleOptimizationAction = useCallback(;)
+  const handleOptimizationAction = useCallback(;);
     (actionType: string,)
     targetId: string,
     details: Record<string,
@@ -1439,7 +1439,7 @@ export const [error, setError] = useState<string | null>(null);
     onExport(exportData);
   }, [performanceData, templateMetadata, timeRange, onExport]);
   if (loading) {
-    return ()
+    return ();
       <div className="template-performance-loading">
         <div className="loading-spinner"></div>
         <p>Loading performance indicators...</p>
@@ -1447,7 +1447,7 @@ export const [error, setError] = useState<string | null>(null);
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className="template-performance-error">
         <h3>Performance Indicators Error</h3>
         <p className="error-message">{error}</p>
@@ -1464,7 +1464,7 @@ export const [error, setError] = useState<string | null>(null);
   const renderIndicators = () => {
     switch (displayMode) {
       case 'compact':
-        return ()
+        return ();
           <div className="performance-indicators compact">
             <div className="indicators-grid compact">
               {performanceData.performanceIndicators.slice(0, 4).map(indicator => ()
@@ -1488,7 +1488,7 @@ export const [error, setError] = useState<string | null>(null);
           </div>
         );
       case 'mobile':
-        return ()
+        return ();
           <div className="performance-indicators mobile">
             <div className="mobile-header">
               <h3>Performance</h3>
@@ -1524,7 +1524,7 @@ export const [error, setError] = useState<string | null>(null);
           </div>
         );
       case 'overlay':
-        return ()
+        return ();
           <div className="performance-indicators overlay">
             <div className="overlay-toggle">
               <button 
@@ -1556,8 +1556,8 @@ export const [error, setError] = useState<string | null>(null);
             )}
           </div>
         );
-      default: // 'standard' or 'detailed' or 'dashboard'
-        return ()
+      default: // 'standard' or 'detailed' or 'dashboard',
+        return ();
           <div className={`performance-indicators ${displayMode}`}>}
             <div className="indicators-header">
               <h3>Performance Indicators</h3>
@@ -1670,7 +1670,7 @@ export const [error, setError] = useState<string | null>(null);
                           key={action.actionId}
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleOptimizationAction()
+                            handleOptimizationAction();
                               action.actionType,
                               indicator.indicatorId,
                               { actionId: action.actionId }
@@ -1743,7 +1743,7 @@ export const [error, setError] = useState<string | null>(null);
         );
     }
   };
-  return ()
+  return ();
     <div className="template-performance-indicators-container">
       {renderIndicators()}
     </div>

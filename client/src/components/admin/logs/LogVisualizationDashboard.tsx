@@ -5,7 +5,6 @@
  * Comprehensive visual analytics dashboard for the log analysis infrastructure.
  * Provides real-time monitoring, pattern analysis, and interactive exploration.
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Box,
@@ -61,7 +60,6 @@ interface ChartData {
   category?: string;
   severity?: string;
 }
-
 interface LogMetrics {
   totalLogs: number;
   errorRate: number;
@@ -72,7 +70,6 @@ interface LogMetrics {
   anomalies: number;
   patterns: number;
 }
-
 interface LogSource {
   name: string;
   status: 'healthy' | 'warning' | 'error';
@@ -80,7 +77,6 @@ interface LogSource {
   messageCount: number;
   errorRate: number;
 }
-
 interface PatternAlert {
   id: string;
   type: string;
@@ -91,13 +87,11 @@ interface PatternAlert {
   affectedSources: string[];
   count: number;
 }
-
 interface TimeRangeOption {
   label: string;
   value: string;
   hours: number;
 }
-
 const TIME_RANGES: TimeRangeOption[] = [
   { label: 'Last 15 minutes', value: '15m', hours: 0.25 },
   { label: 'Last hour', value: '1h', hours: 1 },
@@ -106,43 +100,37 @@ const TIME_RANGES: TimeRangeOption[] = [
   { label: 'Last 7 days', value: '7d', hours: 168 },
   { label: 'Last 30 days', value: '30d', hours: 720 }
 ];
-
 const SEVERITY_COLORS = {
   low: '#2196f3',
   medium: '#ff9800', 
   high: '#f44336',
-  critical: '#d32f2f'
+  critical: '#d32f2f',
 };
-
-const LOG_SOURCES = [
+const LOG_SOURCES = [;
   'application', 'database', 'web_server', 'system', 'security', 'audit', 'performance', 'user_activity'
 ];
-
 const LOG_LEVELS = ['debug', 'info', 'warn', 'error', 'fatal', 'trace'];
 
 // Simple chart component (placeholder for actual chart library)
-const SimpleChart: React.FC<{ data: ChartData[]; height?: number; type?: 'line' | 'bar' }> = ({ 
+const SimpleChart: React.FC<{ data: ChartData[]; height?: number; type?: 'line' | 'bar' }> = ({ )
   data, 
   height = 200, 
   type = 'line' 
 }) => {
   const maxValue = Math.max(...data.map(d => d.value), 1);
-  
-  return (
+  return ()
     <Box sx={{ height, position: 'relative', p: 2 }}>
       <svg width="100%" height="100%" viewBox="0 0 400 200">
         {/* Grid lines */}
-        {[0, 50, 100, 150, 200].map(y => (
+        {[0, 50, 100, 150, 200].map(y => ()
           <line key={y} x1="0" y1={y} x2="400" y2={y} stroke="#e0e0e0" strokeWidth="1" />
         ))}
-        
         {/* Data visualization */}
         {data.map((point, index) => {
           const x = (index / (data.length - 1)) * 400;
           const y = 200 - (point.value / maxValue) * 180;
-          
           if (type === 'bar') {
-            return (
+            return ()
               <rect
                 key={index}
                 x={x - 5}
@@ -154,7 +142,7 @@ const SimpleChart: React.FC<{ data: ChartData[]; height?: number; type?: 'line' 
               />
             );
           } else {
-            return (
+            return ()
               <circle
                 key={index}
                 cx={x}
@@ -165,14 +153,13 @@ const SimpleChart: React.FC<{ data: ChartData[]; height?: number; type?: 'line' 
             );
           }
         })}
-        
         {/* Connect points for line chart */}
-        {type === 'line' && data.length > 1 && (
+        {type === 'line' && data.length > 1 && ()
           <polyline
             points={data.map((point, index) => {
               const x = (index / (data.length - 1)) * 400;
               const y = 200 - (point.value / maxValue) * 180;
-              return `${x},${y}`;
+              return `${x},${y}`;}
             }).join(' ')}
             fill="none"
             stroke="#2196f3"
@@ -184,7 +171,7 @@ const SimpleChart: React.FC<{ data: ChartData[]; height?: number; type?: 'line' 
   );
 };
 
-export   const [timeRange, setTimeRange] = useState<string>('1h');
+export const [timeRange, setTimeRange] = useState<string>('1h');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedSources, _setSelectedSources] = useState<string[]>(LOG_SOURCES);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -199,56 +186,48 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [logDetailsOpen, setLogDetailsOpen] = useState<boolean>(false);
   const [selectedLogSource, setSelectedLogSource] = useState<string | null>(null);
-
   // Fetch data from actual LogAnalysisService API
   const fetchAnalyticsData = useCallback(async (): Promise<void> => {
     const now = new Date();
     const hours = TIME_RANGES.find(r => r.value === timeRange)?.hours || 1;
     const startDate = new Date(now.getTime() - (hours * 60 * 60 * 1000));
-    
     try {
       // Get analytics report
-      const analyticsResponse = await fetch(`/api/log-analysis/analytics?start_date=${startDate.toISOString().split('T')[0]}&end_date=${now.toISOString().split('T')[0]}&include_patterns=true`);
+      const analyticsResponse = await fetch(`/api/log-analysis/analytics?start_date=${startDate.toISOString().split('T')[0]}&end_date=${now.toISOString().split('T')[0]}&include_patterns=true`);}
       const analytics = await analyticsResponse.json();
-      
       // Get alerts
       const alertsResponse = await fetch('/api/log-analysis/alerts?status=new&status=acknowledged');
       const alertsData = await alertsResponse.json();
-      
       // Get system health
       const healthResponse = await fetch('/api/log-analysis/health');
       const healthData = await healthResponse.json();
-      
       if (analytics.success && alertsData.success && healthData.success) {
         // Process analytics data
         const analyticsResult = analytics.analytics;
-        
         // Generate chart data from analytics
         const chartPoints: ChartData[] = [];
         if (analyticsResult.hourly_log_counts) {
           Object.entries(analyticsResult.hourly_log_counts).forEach(([hour, count]) => {
-            chartPoints.push({
+            chartPoints.push({)
               timestamp: new Date(hour),
               value: count as number,
-              category: 'all'
+              category: 'all',
             });
           });
         }
-        
         // Process source status from health data
-        const sourcesStatus: LogSource[] = LOG_SOURCES.map(source => ({
+        const sourcesStatus: LogSource[] = LOG_SOURCES.map(source => ({)
           name: source,
           status: 'healthy' as const,
           lastSeen: new Date(),
           messageCount: analyticsResult.logs_by_source?.[source] || 0,
-          errorRate: analyticsResult.error_rates_by_source?.[source] || 0
+          errorRate: analyticsResult.error_rates_by_source?.[source] || 0,
         }));
-        
         // Process alerts data
-        const processedAlerts: PatternAlert[] = alertsData.alerts.map(
-          (alert: Record<string,
+        const processedAlerts: PatternAlert[] = alertsData.alerts.map()
+          (alert: Record<string,)
           unknown>
-        ): PatternAlert => ({
+        ): PatternAlert => ({)
           id: (alert.alert_id as string) || '',
           type: (alert.anomaly_type as string) || '',
           severity: (alert.severity as 'low' | 'medium' | 'high' | 'critical') || 'low',
@@ -258,7 +237,6 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
           affectedSources: (alert.affected_sources as string[]) || [],
           count: ((alert.trigger_conditions_met as Record<string, unknown>)?.occurrences as number) || 1
         }));
-        
         // Build metrics object
         const processedMetrics: LogMetrics = {
           totalLogs: analyticsResult.total_logs || 0,
@@ -268,9 +246,8 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
           sources: analyticsResult.logs_by_source || {},
           levels: analyticsResult.logs_by_level || {},
           anomalies: analyticsResult.anomaly_count || 0,
-          patterns: analyticsResult.pattern_count || 0
+          patterns: analyticsResult.pattern_count || 0,
         };
-        
         setChartData(chartPoints);
         setSources(sourcesStatus);
         setAlerts(processedAlerts);
@@ -285,53 +262,47 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
       generateMockData();
     }
   }, [timeRange, generateMockData]);
-
   // Mock data generation for development/fallback
   const generateMockData = useCallback((): void => {
     const now = new Date();
     const hours = TIME_RANGES.find(r => r.value === timeRange)?.hours || 1;
-    const points = Math.min(50, Math.max(10, hours * 4)); // 4 points per hour, max 50
-    
+    const points = Math.min(50, Math.max(10, hours * 4)); // 4 points per hour, max 50;
     const mockChartData: ChartData[] = [];
     const mockSources: LogSource[] = [];
     const mockAlerts: PatternAlert[] = [];
-    
     // Generate time series data
     for (let i = 0; i < points; i++) {
       const timestamp = new Date(now.getTime() - (hours * 60 * 60 * 1000) + (i * (hours * 60 * 60 * 1000) / points));
-      mockChartData.push({
+      mockChartData.push({)
         timestamp,
         value: Math.random() * 100 + Math.sin(i * 0.5) * 20,
-        category: LOG_SOURCES[Math.floor(Math.random() * LOG_SOURCES.length)]
+        category: LOG_SOURCES[Math.floor(Math.random() * LOG_SOURCES.length)],
       });
     }
-    
     // Generate source status
-    LOG_SOURCES.forEach(source => {
-      mockSources.push({
+    LOG_SOURCES.forEach(source => {)
+      mockSources.push({)
         name: source,
         status: Math.random() > 0.8 ? 'warning' : Math.random() > 0.95 ? 'error' : 'healthy',
         lastSeen: new Date(now.getTime() - Math.random() * 5 * 60 * 1000),
         messageCount: Math.floor(Math.random() * 10000),
-        errorRate: Math.random() * 5
+        errorRate: Math.random() * 5,
       });
     });
-    
     // Generate alerts
     const alertTypes = ['error_spike', 'performance_degradation', 'security_threat', 'unusual_activity'];
     for (let i = 0; i < Math.floor(Math.random() * 5) + 1; i++) {
-      mockAlerts.push({
-        id: `alert-${i}`,
+      mockAlerts.push({)
+        id: `alert-${i}`,}
         type: alertTypes[Math.floor(Math.random() * alertTypes.length)],
         severity: ['low', 'medium', 'high', 'critical'][Math.floor(Math.random() * 4)] as 'low' | 'medium' | 'high' | 'critical',
-        title: `Alert ${i + 1}`,
-        description: `Detected anomaly in ${LOG_SOURCES[Math.floor(Math.random() * LOG_SOURCES.length)]} logs`,
+        title: `Alert ${i + 1}`,}
+        description: `Detected anomaly in ${LOG_SOURCES[Math.floor(Math.random() * LOG_SOURCES.length)]} logs`,}
         timestamp: new Date(now.getTime() - Math.random() * 60 * 60 * 1000),
         affectedSources: [LOG_SOURCES[Math.floor(Math.random() * LOG_SOURCES.length)]],
-        count: Math.floor(Math.random() * 100) + 1
+        count: Math.floor(Math.random() * 100) + 1,
       });
     }
-    
     const mockMetrics: LogMetrics = {
       totalLogs: Math.floor(Math.random() * 100000) + 50000,
       errorRate: Math.random() * 5,
@@ -346,15 +317,13 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
         return acc;
       }, {} as Record<string, number>),
       anomalies: Math.floor(Math.random() * 10),
-      patterns: Math.floor(Math.random() * 25) + 5
+      patterns: Math.floor(Math.random() * 25) + 5,
     };
-    
     setChartData(mockChartData);
     setSources(mockSources);
     setAlerts(mockMetrics);
     setMetrics(mockMetrics);
   }, [timeRange]);
-
   // Load data
   const loadData = useCallback(async (): Promise<void> => {
     setLoading(true);
@@ -368,49 +337,41 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
       setLoading(false);
     }
   }, [fetchAnalyticsData, generateMockData]);
-
   // Auto refresh effect
   useEffect(() => {
     if (autoRefresh) {
-      const interval = setInterval(loadData, 30000); // Refresh every 30 seconds
+      const interval = setInterval(loadData, 30000); // Refresh every 30 seconds;
       return () => clearInterval(interval);
     }
   }, [autoRefresh, loadData]);
-
   // Initial load
   useEffect(() => {
     loadData();
   }, [loadData]);
-
   // WebSocket for real-time updates
   useEffect(() => {
     if (!autoRefresh) return;
-
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/ws/log-analysis`;
-    
+    const wsUrl = `${protocol}//${window.location.host}/ws/log-analysis`;}
     try {
       const ws = new WebSocket(wsUrl);
-      
       ws.onopen = () => {
         setIsConnected(true);
         console.log('Connected to log analysis WebSocket');
       };
-      
       ws.onmessage = (event) => {
         try {
           const update = JSON.parse(event.data);
-          
           if (update.type === 'new_alert') {
             setAlerts(prev => [update.alert, ...prev.slice(0, 9)]);
           } else if (update.type === 'metrics_update') {
             setMetrics(prev => prev ? { ...prev, ...update.metrics } : null);
           } else if (update.type === 'log_volume_update') {
-            setChartData(prev => {
+            setChartData(prev => {)
               const newPoint = {
                 timestamp: new Date(update.timestamp),
                 value: update.volume,
-                category: update.source || 'all'
+                category: update.source || 'all',
               };
               return [...prev.slice(-49), newPoint];
             });
@@ -419,17 +380,14 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
           console.error('Failed to process WebSocket message:', error);
         }
       };
-      
       ws.onclose = () => {
         setIsConnected(false);
         console.log('Disconnected from log analysis WebSocket');
       };
-      
       ws.onerror = (error) => {
         console.error('WebSocket error:', error);
         setIsConnected(false);
       };
-      
       return () => {
         ws.close();
       };
@@ -437,51 +395,44 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
       console.error('Failed to establish WebSocket connection:', error);
     }
   }, [autoRefresh]);
-
   // Filtered chart data
   const filteredChartData = useMemo(() => {
-    return chartData.filter(point => 
+    return chartData.filter(point => )
       !point.category || selectedSources.includes(point.category)
     );
   }, [chartData, selectedSources]);
-
   const handleExportData = (): void => {
     // Export functionality
     const data = {
       timeRange,
       metrics,
       alerts,
-      exportedAt: new Date().toISOString()
+      exportedAt: new Date().toISOString(),
     };
-    
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `log-analysis-${timeRange}-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `log-analysis-${timeRange}-${new Date().toISOString().split('T')[0]}.json`;}
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-
   const handleSourceClick = (sourceName: string): void => {
     setSelectedLogSource(sourceName);
     setLogDetailsOpen(true);
   };
-
   const formatNumber = (num: number): string => {
-    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
-    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
+    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;}
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;}
     return num.toString();
   };
-
   const formatLatency = (ms: number): string => {
-    if (ms >= 1000) return `${(ms / 1000).toFixed(1)}s`;
-    return `${ms.toFixed(0)}ms`;
+    if (ms >= 1000) return `${(ms / 1000).toFixed(1)}s`;}
+    return `${ms.toFixed(0)}ms`;}
   };
-
-  return (
+  return ()
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box sx={{ p: 3, bgcolor: '#f5f5f5', minHeight: '100vh' }}>
         {/* Header */}
@@ -493,7 +444,6 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
             Real-time monitoring and pattern analysis across all log sources
           </Typography>
         </Box>
-
         {/* Controls */}
         <Paper sx={{ p: 2, mb: 3 }}>
           <Grid container spacing={2} alignItems="center">
@@ -505,7 +455,7 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
                   onChange={(e) => setTimeRange(e.target.value)}
                   label="Time Range"
                 >
-                  {TIME_RANGES.map(range => (
+                  {TIME_RANGES.map(range => ()
                     <MenuItem key={range.value} value={range.value}>
                       {range.label}
                     </MenuItem>
@@ -514,8 +464,7 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
                 </Select>
               </FormControl>
             </Grid>
-            
-            {timeRange === 'custom' && (
+            {timeRange === 'custom' && ()
               <>
                 <Grid item xs={12} sm={6} md={2}>
                   <DateTimePicker
@@ -535,7 +484,6 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
                 </Grid>
               </>
             )}
-            
             <Grid item xs={12} sm={6} md={2}>
               <FormControlLabel
                 control={
@@ -547,7 +495,7 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     Auto Refresh
-                    {autoRefresh && (
+                    {autoRefresh && ()
                       <Chip
                         label={isConnected ? 'Live' : 'Offline'}
                         size="small"
@@ -559,7 +507,6 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
                 }
               />
             </Grid>
-            
             <Grid item xs={12} sm={6} md={3}>
               <ButtonGroup size="small" fullWidth>
                 <Button
@@ -579,11 +526,9 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
             </Grid>
           </Grid>
         </Paper>
-
         {loading && <LinearProgress sx={{ mb: 2 }} />}
-
         {/* Key Metrics */}
-        {metrics && (
+        {metrics && ()
           <Grid container spacing={3} sx={{ mb: 3 }}>
             <Grid item xs={12} sm={6} md={3}>
               <Card>
@@ -602,7 +547,6 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
                 </CardContent>
               </Card>
             </Grid>
-            
             <Grid item xs={12} sm={6} md={3}>
               <Card>
                 <CardContent>
@@ -620,7 +564,6 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
                 </CardContent>
               </Card>
             </Grid>
-            
             <Grid item xs={12} sm={6} md={3}>
               <Card>
                 <CardContent>
@@ -638,7 +581,6 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
                 </CardContent>
               </Card>
             </Grid>
-            
             <Grid item xs={12} sm={6} md={3}>
               <Card>
                 <CardContent>
@@ -660,7 +602,6 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
             </Grid>
           </Grid>
         )}
-
         <Grid container spacing={3}>
           {/* Main Chart */}
           <Grid item xs={12} md={8}>
@@ -678,14 +619,13 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
               </CardContent>
             </Card>
           </Grid>
-
           {/* Source Status */}
           <Grid item xs={12} md={4}>
             <Card>
               <CardHeader title="Log Sources" />
               <CardContent>
                 <List dense>
-                  {sources.map(source => (
+                  {sources.map(source => ()
                     <ListItem 
                       key={source.name} 
                       button 
@@ -721,17 +661,16 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
               </CardContent>
             </Card>
           </Grid>
-
           {/* Alerts */}
           <Grid item xs={12} md={6}>
             <Card>
               <CardHeader title="Recent Alerts" />
               <CardContent>
-                {alerts.length === 0 ? (
+                {alerts.length === 0 ? ()
                   <Typography color="text.secondary">No active alerts</Typography>
-                ) : (
+                ) : ()
                   <List>
-                    {alerts.slice(0, 5).map(alert => (
+                    {alerts.slice(0, 5).map(alert => ()
                       <ListItem key={alert.id}>
                         <ListItemIcon>
                           <SecurityIcon 
@@ -752,7 +691,7 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
                                   sx={{ 
                                     bgcolor: SEVERITY_COLORS[alert.severity] + '20',
                                     color: SEVERITY_COLORS[alert.severity],
-                                    mr: 1
+                                    mr: 1,
                                   }}
                                 />
                                 <Typography variant="caption" color="text.secondary">
@@ -769,18 +708,17 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
               </CardContent>
             </Card>
           </Grid>
-
           {/* Log Level Distribution */}
           <Grid item xs={12} md={6}>
             <Card>
               <CardHeader title="Log Level Distribution" />
               <CardContent>
-                {metrics && (
+                {metrics && ()
                   <Box>
-                    {LOG_LEVELS.map(level => {
+                    {LOG_LEVELS.map(level => {)
                       const count = metrics.levels[level] || 0;
                       const percentage = count / Math.max(metrics.totalLogs, 1) * 100;
-                      return (
+                      return ()
                         <Box key={level} sx={{ mb: 2 }}>
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                             <Typography variant="body2" sx={{ textTransform: 'capitalize' }}>
@@ -804,7 +742,6 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
             </Card>
           </Grid>
         </Grid>
-
         {/* Log Details Modal */}
         <Dialog
           open={logDetailsOpen}
@@ -827,7 +764,7 @@ export   const [timeRange, setTimeRange] = useState<string>('1h');
             </Box>
           </DialogTitle>
           <DialogContent sx={{ p: 0 }}>
-            {selectedLogSource && (
+            {selectedLogSource && ()
               <Box sx={{ height: 600 }}>
                 {/* Embedded AuditLogViewer component for detailed logs */}
                 <iframe

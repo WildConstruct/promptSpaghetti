@@ -163,7 +163,7 @@ export class EventBus extends EventEmitter {
       filter,
       handler: handler as EventHandler,
       priority: options?.priority ?? EventPriority.MEDIUM,
-      once: options?.once ?? false
+      once: options?.once ?? false,
     };
     this.subscriptions.set(subscription.id, subscription);
     // Set up Node.js EventEmitter listeners for direct event types
@@ -231,7 +231,7 @@ export class EventBus extends EventEmitter {
           source: 'event-bus',
           originalEvent: event,
           subscriptionId: subscription.id,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     }
@@ -269,7 +269,6 @@ export class EventBus extends EventEmitter {
     middleware: number;
     historySize: number;
     eventTypes: string[];
-    } {
     const eventTypes = [...new Set(this.eventHistory.map(e => e.type))];
     return {
       subscriptions: this.subscriptions.size,

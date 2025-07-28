@@ -94,7 +94,7 @@ describe('BreachNotificationService - Basic Tests', () => {
       dataTypes: ['test'],
       affectedSystems: ['test'],
     });
-    const notifications = await service.sendNotification(;)
+    const notifications = await service.sendNotification(;);
       incidentId,
       NotificationType.INTERNAL_ALERT,
       ['test@example.com']

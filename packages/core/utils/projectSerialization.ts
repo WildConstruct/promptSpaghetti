@@ -84,7 +84,7 @@ export function serializeProject()
     // Convert ReactFlow nodes/edges to graph schema format
     const graph: Graph = {
       nodes: graphState.nodes.map(convertReactFlowNodeToGraphNode),
-      seed: undefined // Will be set during execution if needed
+      seed: undefined // Will be set during execution if needed,
     };
     // Build the .psg file structure
     const psgFile: PsgFile = {
@@ -93,7 +93,7 @@ export function serializeProject()
       metadata: includeMetadata ? metadata : createDefaultMetadata('Untitled Project'),
       settings: includeSettings ? settings : createDefaultSettings(),
       graph,
-      exportedAt: new Date().toISOString()
+      exportedAt: new Date().toISOString(),
     };
     // Add collaboration data if available and requested
     if (includeCollaboration && graphState.annotations) {
@@ -129,7 +129,7 @@ export function serializeProject()
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown serialization error'
+      error: error instanceof Error ? error.message : 'Unknown serialization error',
     };
   }
 }
@@ -153,7 +153,7 @@ export function deserializeProject()
     } catch (parseError) {
       return {
         success: false,
-        error: 'Invalid JSON format in .psg file'
+        error: 'Invalid JSON format in .psg file',
       };
     }
     // Validate file format
@@ -176,7 +176,7 @@ export function deserializeProject()
     if (!compatibility.compatible) {
       return {
         success: false,
-        error: compatibility.message || 'Incompatible file version'
+        error: compatibility.message || 'Incompatible file version',
       };
     }
     if (compatibility.requiresMigration) {
@@ -189,7 +189,7 @@ export function deserializeProject()
       }
     }
     // Convert graph nodes back to ReactFlow format
-    const reactFlowNodes = psgFile.graph.nodes.map(node => ;)
+    const reactFlowNodes = psgFile.graph.nodes.map(node => ;);
       convertGraphNodeToReactFlowNode(node, { preserveIds })
     );
     // Create edges array (empty for now, will be populated based on node inputs)
@@ -222,7 +222,7 @@ export function deserializeProject()
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown deserialization error'
+      error: error instanceof Error ? error.message : 'Unknown deserialization error',
     };
   }
 }
@@ -252,7 +252,7 @@ function convertReactFlowNodeToGraphNode(reactFlowNode: Node): Record<string, un
   const baseNode = {
     id: reactFlowNode.id,
     type: schemaType,
-    inputs: [] // Will be calculated from edge connections
+    inputs: [] // Will be calculated from edge connections,
   };
   // Copy node-specific data, excluding ReactFlow-specific fields
   if (reactFlowNode.data) {
@@ -262,7 +262,7 @@ function convertReactFlowNodeToGraphNode(reactFlowNode: Node): Record<string, un
       // Convert variations array to choices format for WeightedChoice nodes
       baseNode.choices = (nodeData.variations as string[]).map((value: string) => ({)
         value,
-        weight: 1.0 // Default equal weight
+        weight: 1.0 // Default equal weight,
       }));
       // Don't include the original variations field
       const { variations: _variations, ...restData } = nodeData;
@@ -379,6 +379,6 @@ export function createEmptyProject()
     metadata: createDefaultMetadata(name, author),
     settings: createDefaultSettings(),
     graph: { nodes: [] },
-    exportedAt: new Date().toISOString()
+    exportedAt: new Date().toISOString(),
   };
 }

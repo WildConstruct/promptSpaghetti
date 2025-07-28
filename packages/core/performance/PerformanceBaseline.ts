@@ -376,7 +376,7 @@ export class PerformanceBaseline extends EventEmitter {
       excellent: target.kpiSnapshots.filter(k => k.status === 'excellent').length,
       good: target.kpiSnapshots.filter(k => k.status === 'good').length,
       warning: target.kpiSnapshots.filter(k => k.status === 'warning').length,
-      critical: target.kpiSnapshots.filter(k => k.status === 'critical').length
+      critical: target.kpiSnapshots.filter(k => k.status === 'critical').length,
     };
     const criticalKPIs = target.kpiSnapshots.filter(k => {)
       const kpi = corePerformanceKPIs.find(def => def.id === k.kpiId);
@@ -400,7 +400,7 @@ export class PerformanceBaseline extends EventEmitter {
     const averages: any = {};
     for (const category of categories) {
       const categoryKPIs = corePerformanceKPIs.filter(kpi => kpi.category === category);
-      const categorySnapshots = snapshots.filter(snapshot => ;)
+      const categorySnapshots = snapshots.filter(snapshot => ;);
         categoryKPIs.some(kpi => kpi.id === snapshot.kpiId)
       );
       if (categorySnapshots.length > 0) {
@@ -455,7 +455,6 @@ export class PerformanceBaseline extends EventEmitter {
     improved: string[];
     degraded: string[];
     unchanged: string[];
-  } {
     const improved: string[] = [];
     const degraded: string[] = [];
     const unchanged: string[] = [];

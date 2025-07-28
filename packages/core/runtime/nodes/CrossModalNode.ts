@@ -98,7 +98,7 @@ export class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
         analyze_sentiment: analyzeSentiment,
         detect_emotions: detectEmotions,
         cross_reference: crossReference,
-        vision_detail: detailLevel === 'comprehensive' ? 'high' : 'auto'
+        vision_detail: detailLevel === 'comprehensive' ? 'high' : 'auto',
       });
       const processingTime = Date.now() - startTime;
       // Create comprehensive analysis
@@ -329,7 +329,7 @@ export class ContentComparisonNode extends AdvancedRuntimeNode {
       differences: this._extractDifferences(summary),
       recommendation: this._generateRecommendation(summary),
       aspects_analyzed: aspects,
-      cross_modal_findings: result.understanding.cross_modal_connections || []
+      cross_modal_findings: result.understanding.cross_modal_connections || [],
     };
   }
   private _extractCharacteristics(content: MultimodalInput[]): unknown {
@@ -456,7 +456,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
       // Analyze source content first
       const sourceAnalysis = await this.adapter.understandContent(sourceContent);
       // Create adaptation plan
-      const adaptationPlan = this._createAdaptationPlan(;)
+      const adaptationPlan = this._createAdaptationPlan(;);
         sourceContent,
         sourceAnalysis,
         targetModality,
@@ -465,7 +465,7 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
         constraints
       );
       // Generate adapted content specification
-      const adaptedContent = this._generateAdaptedContentSpec(;)
+      const adaptedContent = this._generateAdaptedContentSpec(;);
         sourceAnalysis,
         targetModality,
         adaptationPlan
@@ -719,13 +719,13 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
         structure: 'narrative',
         sections: ['introduction', 'main_content', 'conclusion'],
         key_points: keyInsights,
-        estimated_length: '500-1000 words'
+        estimated_length: '500-1000 words',
       },
       'image': {
         composition: 'visual_narrative',
         elements: ['primary_subject', 'background', 'text_overlay'],
         style_notes: 'Based on content themes',
-        dimensions: '1920x1080 recommended'
+        dimensions: '1920x1080 recommended',
       },
       'audio': {
         format: 'structured_audio',
@@ -747,19 +747,19 @@ export class ContentAdaptationNode extends AdvancedRuntimeNode {
       'text': {
         format: 'markdown',
         encoding: 'UTF-8',
-        max_length: constraints.max_length || 2000
+        max_length: constraints.max_length || 2000,
       },
       'image': {
         format: 'PNG/JPEG',
         resolution: constraints.resolution || '1920x1080',
         color_depth: '24-bit',
-        file_size: constraints.file_size || '< 5MB'
+        file_size: constraints.file_size || '< 5MB',
       },
       'audio': {
         format: 'MP3/WAV',
         sample_rate: '44.1kHz',
         bitrate: '320kbps',
-        duration: constraints.duration || '< 5 minutes'
+        duration: constraints.duration || '< 5 minutes',
       },
       'video': {
         format: 'MP4',

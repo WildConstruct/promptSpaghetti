@@ -86,7 +86,7 @@ export class MutationCoordinator {
   private onConflictDetected?: (conflict: ConflictOperation) => void;
   private onConflictResolved?: (resolution: ConflictResolution) => void;
   private onBatchCompleted?: (result: BatchResult) => void;
-  constructor()
+  constructor();
     graphCRDT: GraphCRDT,
     documentId: string,
     clientId: string,
@@ -96,7 +96,6 @@ export class MutationCoordinator {
       maxOperationHistory?: number;
       operationTimeout?: number;
     }
-  ) {
     this.graphCRDT = graphCRDT;
     this.documentId = documentId;
     this.clientId = clientId;
@@ -752,7 +751,6 @@ export class MutationCoordinator {
     conflictResolutionStrategy: ResolutionStrategy;
     maxOperationHistory: number;
     operationTimeout: number;
-    } {
     return {
       conflictResolutionStrategy: this.conflictResolutionStrategy,
       maxOperationHistory: this.maxOperationHistory,

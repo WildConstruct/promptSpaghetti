@@ -57,7 +57,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
           nodesPerProject: Math.random() * 20 + 15,
           connectionsPerProject: Math.random() * 18 + 12,
           previewGenerations: Math.random() * 25 + 20,
-          iterationCycles: Math.random() * 8 + 4
+          iterationCycles: Math.random() * 8 + 4,
         }
       });
       // Generate workflow insights
@@ -94,26 +94,26 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
           name: 'Character Development Framework',
           usage: 89,
           category: 'Pre-Production',
-          description: 'Systematic approach to character arc development'
+          description: 'Systematic approach to character arc development',
         },
         {
           id: 'scene-breakdown',
           name: 'Scene Breakdown Template',
           usage: 76,
           category: 'Production',
-          description: 'Comprehensive scene analysis and planning'
+          description: 'Comprehensive scene analysis and planning',
         },
         {
           id: 'story-structure',
           name: 'Three-Act Story Structure',
           usage: 94,
           category: 'Writing',
-          description: 'Classical story structure with modern adaptations'
+          description: 'Classical story structure with modern adaptations',
         }
       ] as any);
     }
   }, [conversionData, timeRange]);
-  const renderCreativeWorkflowMetrics = () => (;)
+  const renderCreativeWorkflowMetrics = () => (;);
     <div className="creative-workflow-section">
       <h4>Creative Workflow Performance</h4>
       <div className="workflow-grid">
@@ -148,7 +148,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
       </div>
     </div>
   );
-  const renderWorkflowInsights = () => (;)
+  const renderWorkflowInsights = () => (;);
     <div className="workflow-insights">
       <h4>Director Workflow Insights</h4>
       <div className="insights-list">
@@ -171,7 +171,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
       </div>
     </div>
   );
-  const renderTemplateRecommendations = () => (;)
+  const renderTemplateRecommendations = () => (;);
     <div className="template-recommendations">
       <h4>Recommended Templates</h4>
       <div className="templates-grid">
@@ -197,14 +197,14 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({)
     </div>
   );
   if (loading) {
-    return ()
+    return ();
       <div className="director-analytics loading">
         <div className="loading-spinner"></div>
         <p>Loading director analytics...</p>
       </div>
     );
   }
-  return ()
+  return ();
     <div className="director-analytics-view">
       {/* Director Overview Cards */}
       <div className="director-overview">

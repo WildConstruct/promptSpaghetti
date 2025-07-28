@@ -175,7 +175,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
     script: '🎬 Screenplay Formats',
     vfx: '🤖 VFX Pipeline',
     data: '📊 Data Exports',
-    report: '📈 Professional Reports'
+    report: '📈 Professional Reports',
   };
   // Handle format selection
   const handleFormatSelect = useCallback((format: ExportFormat) => {
@@ -186,7 +186,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
       includeMetadata: true,
       includeExecutionPath: format.vfxCompatible,
       includeVarianceAnalysis: format.category === 'report',
-      compressOutput: format.extension === 'zip'
+      compressOutput: format.extension === 'zip',
     };
     // Add VFX-specific defaults
     if (format.vfxCompatible) {
@@ -217,7 +217,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
     setIsExporting(true);
     try {
       // Prepare export payload based on format
-      const exportPayload = await prepareExportPayload(;)
+      const exportPayload = await prepareExportPayload(;);
         selectedResults,
         exportOptions
       );
@@ -286,7 +286,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
     return `${prefix}-${timestamp}.${format.extension}`;}
   };
   if (selectedResults.length === 0) {
-    return ()
+    return ();
       <div className={className}>
         <div style={{
           padding: 24,
@@ -294,7 +294,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
           color: '#64748b',
           background: '#f8fafc',
           borderRadius: 8,
-          border: '1px dashed #cbd5e1'
+          border: '1px dashed #cbd5e1',
         }}>
           <div style={{ fontSize: 24, marginBottom: 8 }}>📤</div>
           <div style={{ fontSize: 16, fontWeight: 500, marginBottom: 4 }}>
@@ -307,7 +307,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`result-export-manager ${className}`} style={{}
       background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
       borderRadius: 12,
@@ -571,7 +571,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
                           ...prev,
                           vfxOptions: {,
                             ...prev.vfxOptions,
-                            targetPipeline: e.target.value as any
+                            targetPipeline: e.target.value as any,
                           }
                         } : null)}
                         style={{
@@ -742,7 +742,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
                     border: '2px solid rgba(255,255,255,0.3)',
                     borderTop: '2px solid white',
                     borderRadius: '50%',
-                    animation: 'spin 1s linear infinite'
+                    animation: 'spin 1s linear infinite',
                   }} />
                   Exporting...
                 </>
@@ -774,7 +774,7 @@ async function prepareExportPayload()
 ): Promise<unknown> {
   const { format, includeMetadata, includeExecutionPath, includeVarianceAnalysis } = options;
   const basePayload = {
-    results: results.map(result => ({)
+    results: results.map(result => ({),
       id: result.id,
       seed: result.seed,
       output: result.output,
@@ -782,7 +782,7 @@ async function prepareExportPayload()
       ...(includeExecutionPath && { executionPath: result.executionPath || null })
     })),
     exportOptions: options,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
   // Add format-specific data
   switch (format.category) {
@@ -800,7 +800,7 @@ async function prepareExportPayload()
       ...basePayload,
       scriptData: {,
         format: options.filmOptions?.scriptFormat,
-        includeNotes: options.filmOptions?.includeCharacterNotes || options.filmOptions?.includeDirectorNotes
+        includeNotes: options.filmOptions?.includeCharacterNotes || options.filmOptions?.includeDirectorNotes,
       }
     };
   case 'report':

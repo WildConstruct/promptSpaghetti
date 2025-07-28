@@ -196,10 +196,9 @@ export class DataRetrievalRateLimit extends EventEmitter {
   private userQuotas: Map<string, UserQuota> = new Map();
   private metrics: RetrievalMetrics;
   private exemptions: Map<string, DataAccessExemption> = new Map();
-  constructor()
+  constructor();
     rateLimitingService: RateLimitingService,
     config: DataRetrievalConfig,
-  ) {
     super();
     this.rateLimitingService = rateLimitingService;
     this.config = config;
@@ -254,7 +253,7 @@ export class DataRetrievalRateLimit extends EventEmitter {
           this.emit('anomalyDetected', {)
             userId: subject.userId,
             anomaly: anomalyCheck,
-            timestamp: new Date()
+            timestamp: new Date(),
           });
           if (anomalyCheck.severity === 'HIGH' || anomalyCheck.severity === 'CRITICAL') {
             this.recordAccess(subject, object, operation, requestDetails, false, true, 'ANOMALY_DETECTED');
@@ -274,7 +273,7 @@ export class DataRetrievalRateLimit extends EventEmitter {
         error: error.message,
         userId: subject.userId,
         resourceId: object.dataId,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return this.createDecision('DENY', 'Service error, access denied for safety', null, 60);
     }
@@ -341,7 +340,7 @@ export class DataRetrievalRateLimit extends EventEmitter {
     // Use the existing rate limiting service with extended endpoint categories
     const endpoint = this.getEndpointFromOperation(requestDetails.operation);
     // Check multiple rate limit scopes
-    const checks = await Promise.all([;)
+    const checks = await Promise.all([;);
       this.rateLimitingService.checkRateLimit(subject.userId, endpoint),
       this.rateLimitingService.checkRateLimit(subject.location.country, endpoint),
       this.rateLimitingService.checkRateLimit(subject.device.deviceId, endpoint)
@@ -375,14 +374,14 @@ export class DataRetrievalRateLimit extends EventEmitter {
       return {
         allowed: false,
         reason: 'Hourly byte limit exceeded',
-        retryAfter: 3600 - Math.floor((now.getTime() - oneHourAgo.getTime()) / 1000)
+        retryAfter: 3600 - Math.floor((now.getTime() - oneHourAgo.getTime()) / 1000),
       };
     }
     if (totalRecords + requestDetails.estimatedRecords > limits.limits.recordsPerHour) {
       return {
         allowed: false,
         reason: 'Hourly record limit exceeded',
-        retryAfter: 3600 - Math.floor((now.getTime() - oneHourAgo.getTime()) / 1000)
+        retryAfter: 3600 - Math.floor((now.getTime() - oneHourAgo.getTime()) / 1000),
       };
     }
     return { allowed: true };
@@ -445,7 +444,7 @@ export class DataRetrievalRateLimit extends EventEmitter {
       severity = 'HIGH';
     }
     // Rapid request pattern
-    const recentRequests = userHistory.filter(h => ;)
+    const recentRequests = userHistory.filter(h => ;);
       new Date().getTime() - h.timestamp.getTime() < 5 * 60 * 1000 // Last 5 minutes
     );
     if (recentRequests.length > 50) {

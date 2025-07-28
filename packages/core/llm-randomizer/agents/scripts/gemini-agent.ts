@@ -85,7 +85,7 @@ export class GeminiGraphAgent {
                   model: this.config.model,
                   temperature: currentTemperature,
                   tokenCount: response.tokenCount || 0,
-                  generationTime: Date.now() - startTime
+                  generationTime: Date.now() - startTime,
                 }
               };
             } else {
@@ -101,7 +101,7 @@ export class GeminiGraphAgent {
                     model: this.config.model,
                     temperature: currentTemperature,
                     tokenCount: response.tokenCount || 0,
-                    generationTime: Date.now() - startTime
+                    generationTime: Date.now() - startTime,
                   }
                 };
               }
@@ -123,7 +123,7 @@ export class GeminiGraphAgent {
                 model: this.config.model,
                 temperature: currentTemperature,
                 tokenCount: 0,
-                generationTime: Date.now() - startTime
+                generationTime: Date.now() - startTime,
               }
             };
           }
@@ -142,7 +142,7 @@ export class GeminiGraphAgent {
         model: this.config.model,
         temperature: currentTemperature,
         tokenCount: 0,
-        generationTime: Date.now() - startTime
+        generationTime: Date.now() - startTime,
       }
     };
   }
@@ -158,8 +158,8 @@ Generate creative and practical graphs that solve real problems while strictly a
 \`\`\`yaml
 version: 1.0.0,
 metadata:
-  name: "Descriptive Name"
-  description: "Clear purpose statement"
+  name: "Descriptive Name",
+  description: "Clear purpose statement",
   author: "llm-agent",
   created: "${new Date().toISOString()}"}
 ---NODES---
@@ -245,7 +245,7 @@ Generate structured, creative, and functional graphs.`;
     const complexityDescriptions = {
       simple: '3-8 nodes with straightforward logic flow',
       moderate: '8-20 nodes with some branching and multiple features',
-      complex: '20-50 nodes with advanced logic and sophisticated workflows'
+      complex: '20-50 nodes with advanced logic and sophisticated workflows',
     };
     let prompt = `## GENERATION REQUEST;
 **Purpose**: ${request.purpose}
@@ -367,7 +367,7 @@ Create a complete, valid graph that:
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   }
@@ -379,8 +379,8 @@ Create a complete, valid graph that:
 \`\`\`yaml
 version: 1.0.0,
 metadata:
-  name: "Gemini Generated Graph"
-  description: "Structured content generation system"
+  name: "Gemini Generated Graph",
+  description: "Structured content generation system",
   author: "llm-agent",
   created: "${new Date().toISOString()}"}
 ---NODES---
@@ -421,12 +421,12 @@ personalized_content:
   props:
     branches:
       - condition: "content_type == 'creative'"
-        output: "Let your imagination guide this exploration"
+        output: "Let your imagination guide this exploration",
         label: "creative_intro",
       - condition: "content_type == 'analytical'"
-        output: "Let's examine this systematically"
+        output: "Let's examine this systematically",
         label: "analytical_intro",
-    default: "Here's what you need to know"
+    default: "Here's what you need to know",
 final_assembly:
   type: Concat,
   inputs: [personalized_content, topic_focus, complexity_level]

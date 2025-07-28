@@ -68,7 +68,7 @@ export const WebSocketStatus: React.FC<WebSocketStatusProps> = ({)
     const date = new Date(timestamp);
     return date.toLocaleTimeString();
   };
-  return ()
+  return ();
     <div className={`flex items-center space-x-2 ${className}`}>}
       <span 
         className={`text-sm font-mono ${getStatusColor(connectionState.status)}`}
@@ -123,7 +123,7 @@ export const WebSocketStatusIcon: React.FC<{
     disconnected: '#6b7280',
     error: '#ef4444',
   }[connectionState.status];
-  return ()
+  return ();
     <div 
       className="cursor-pointer" 
       onClick={onClick}
@@ -158,7 +158,7 @@ export const WebSocketDetails: React.FC<{
 }) => {
   const isConnected = connectionState.status === 'connected' || connectionState.status === 'authenticated';
   const canReconnect = connectionState.status === 'disconnected' || connectionState.status === 'error';
-  return ()
+  return ();
     <div className="p-4 bg-white rounded-lg shadow-lg border w-80">
       <div className="space-y-3">
         <div className="flex items-center justify-between">

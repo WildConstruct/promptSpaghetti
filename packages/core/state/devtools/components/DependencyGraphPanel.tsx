@@ -68,7 +68,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
   };
   const renderGraph = () => {
     if (!dependencyGraph || dependencyGraph.nodes.length === 0) {
-      return ()
+      return ();
         <div className="empty-graph">
           <span>🔗</span>
           <p>No dependency graph generated</p>
@@ -93,7 +93,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
     });
     const svgWidth = 800;
     const svgHeight = 600;
-    return ()
+    return ();
       <svg
         ref={svgRef}
         width={svgWidth}
@@ -121,7 +121,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
             const strokeWidth = Math.max(1, edge.weight * 3);
             const strokeColor = isDifferentDomain ? '#f39c12' : '#61dafb';
             const opacity = isDifferentDomain ? 0.6 : 0.8;
-            return ()
+            return ();
               <g key={edge.id}>
                 <line
                   x1={fromNode.position.x}
@@ -170,7 +170,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
             const isSelected = selectedNode === node.id;
             const strokeWidth = isSelected ? 3 : 1;
             const strokeColor = isSelected ? '#fff' : nodeColor;
-            return ()
+            return ();
               <g key={node.id} className="node" onClick={() => handleNodeClick(node.id)}>
                 <circle
                   cx={node.position.x}
@@ -214,7 +214,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
     );
   };
   const selectedNodeData = selectedNode && dependencyGraph?.nodes.find(n => n.id === selectedNode);
-  return ()
+  return ();
     <div className="dependency-graph-panel">
       {/* Controls */}
       <div className="graph-controls">

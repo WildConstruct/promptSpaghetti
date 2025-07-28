@@ -190,7 +190,7 @@ describe('ConversionAnalyticsInfrastructure', () => {
         riskScore: 0.2,
         engagementScore: 0.8,
         profileCompleteness: 0.9,
-        lastActivity: Date.now() - 86400000
+        lastActivity: Date.now() - 86400000,
       },
       templateContext: {,
         templateId: 'tpl-001',
@@ -382,11 +382,11 @@ describe('ConversionAnalyticsInfrastructure', () => {
           endDate: Date.now(),
           metrics: ['conversion_rate', 'user_count'],
           aggregation: {,
-            interval: 'hour' as const
+            interval: 'hour' as const,
           }
         },
         compression: 'gzip' as const,
-        destination: 'download' as const
+        destination: 'download' as const,
       };
       const result = await infrastructure.exportData(exportRequest);
       expect(result).toBeDefined();
@@ -403,7 +403,7 @@ describe('ConversionAnalyticsInfrastructure', () => {
             endDate: Date.now(),
             metrics: ['user_count'],
             aggregation: {,
-              interval: 'day' as const
+              interval: 'day' as const,
             }
           }
         };

@@ -84,7 +84,7 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({)
     }).format(date);
   };
   if (loading) {
-    return ()
+    return ();
       <div className={`compliance-dashboard ${className}`}>}
         <div className="animate-pulse">
           <div className="h-8 bg-gray-300 rounded mb-4"></div>
@@ -99,7 +99,7 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({)
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className={`compliance-dashboard ${className}`}>}
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex">
@@ -124,7 +124,7 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({)
     );
   }
   if (!dashboardData) return null;
-  return ()
+  return ();
     <div className={`compliance-dashboard ${className} space-y-6`}>}
       {/* Header */}
       <div className="flex justify-between items-center">

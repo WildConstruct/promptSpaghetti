@@ -6,7 +6,6 @@
  * 
  * Task: E18-1753114562561-695DBB - Create quality dashboards
  */
-
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 // =============================================================================
@@ -25,7 +24,7 @@ export interface QualityMetrics {
   trends: QualityTrends;
   recommendations: QualityRecommendation[];
   alerts: QualityAlert[];
-  metadata: {
+  metadata: {,
     collectionDuration: number;
     dataSourcesActive: string[];
     lastUpdated: Date;
@@ -38,7 +37,7 @@ export interface OverallQualityScore {
   grade: 'A+' | 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D' | 'F';
   status: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
   improvement: number;
-  componentScores: {
+  componentScores: {,
     testCoverage: number;
     codeQuality: number;
     performance: number;
@@ -46,7 +45,7 @@ export interface OverallQualityScore {
     documentation: number;
     buildHealth: number;
   };
-  weights: {
+  weights: {,
     testCoverage: number;
     codeQuality: number;
     performance: number;
@@ -57,7 +56,7 @@ export interface OverallQualityScore {
 }
 
 export interface TestCoverageMetrics {
-  overall: {
+  overall: {,
     percentage: number;
     linesTotal: number;
     linesCovered: number;
@@ -66,27 +65,27 @@ export interface TestCoverageMetrics {
     functionsTotal: number;
     functionsCovered: number;
   };
-  byPackage: Array<{
+  byPackage: Array<{,
     name: string;
     percentage: number;
     linesTotal: number;
     linesCovered: number;
   }>;
-  byComponent: Array<{
+  byComponent: Array<{,
     name: string;
     type: 'component' | 'service' | 'utility';
     percentage: number;
     criticalPaths: number;
     uncoveredPaths: number;
   }>;
-  trends: {
+  trends: {,
     last7Days: number[];
     last30Days: number[];
     changeFromLastWeek: number;
     changeFromLastMonth: number;
   };
   uncoveredCriticalPaths: string[];
-  coverageHotspots: Array<{
+  coverageHotspots: Array<{,
     file: string;
     function: string;
     coverage: number;
@@ -96,10 +95,10 @@ export interface TestCoverageMetrics {
 }
 
 export interface CodeQualityMetrics {
-  complexity: {
+  complexity: {,
     average: number;
     maximum: number;
-    distribution: {
+    distribution: {,
       '1-5': number;
       '6-10': number;
       '11-20': number;
@@ -108,19 +107,19 @@ export interface CodeQualityMetrics {
     };
     highComplexityFiles: string[];
   };
-  duplication: {
+  duplication: {,
     percentage: number;
     duplicatedLines: number;
     totalLines: number;
-    duplicatedBlocks: Array<{
+    duplicatedBlocks: Array<{,
       lines: number;
       files: string[];
       similarity: number;
     }>;
   };
-  maintainability: {
+  maintainability: {,
     index: number;
-    byFile: Array<{
+    byFile: Array<{,
       file: string;
       index: number;
       complexity: number;
@@ -129,11 +128,11 @@ export interface CodeQualityMetrics {
     }>;
     trends: number[];
   };
-  linting: {
+  linting: {,
     totalIssues: number;
     errorCount: number;
     warningCount: number;
-    ruleBreakdowns: Array<{
+    ruleBreakdowns: Array<{,
       rule: string;
       count: number;
       severity: 'error' | 'warning';
@@ -141,9 +140,9 @@ export interface CodeQualityMetrics {
     }>;
     trends: number[];
   };
-  technicalDebt: {
+  technicalDebt: {,
     totalMinutes: number;
-    breakdown: Array<{
+    breakdown: Array<{,
       category: string;
       minutes: number;
       files: string[];
@@ -154,41 +153,41 @@ export interface CodeQualityMetrics {
 }
 
 export interface PerformanceQualityMetrics {
-  responseTime: {
+  responseTime: {,
     average: number;
     p50: number;
     p90: number;
     p95: number;
     p99: number;
   };
-  throughput: {
+  throughput: {,
     requestsPerSecond: number;
     peakRps: number;
     trends: number[];
   };
-  resourceUtilization: {
-    cpu: {
+  resourceUtilization: {,
+    cpu: {,
       average: number;
       peak: number;
       trends: number[];
     };
-    memory: {
+    memory: {,
       average: number;
       peak: number;
       trends: number[];
     };
-    disk: {
+    disk: {,
       usage: number;
       iops: number;
     };
   };
-  errorRates: {
+  errorRates: {,
     overall: number;
     by4xx: number;
     by5xx: number;
     trends: number[];
   };
-  loadTestResults: Array<{
+  loadTestResults: Array<{,
     timestamp: Date;
     duration: number;
     virtualUsers: number;
@@ -200,7 +199,7 @@ export interface PerformanceQualityMetrics {
 }
 
 export interface SecurityQualityMetrics {
-  vulnerabilities: {
+  vulnerabilities: {,
     total: number;
     critical: number;
     high: number;
@@ -208,42 +207,42 @@ export interface SecurityQualityMetrics {
     low: number;
     trends: number[];
   };
-  dependencies: {
+  dependencies: {,
     total: number;
     outdated: number;
     vulnerable: number;
-    licenses: Array<{
+    licenses: Array<{,
       license: string;
       count: number;
       compatible: boolean;
       risk: 'low' | 'medium' | 'high';
     }>;
   };
-  codeSecurityIssues: {
+  codeSecurityIssues: {,
     total: number;
-    byCategory: Array<{
+    byCategory: Array<{,
       category: string;
       count: number;
       severity: 'low' | 'medium' | 'high' | 'critical';
     }>;
     highRiskFiles: string[];
   };
-  compliance: {
-    frameworks: Array<{
+  compliance: {,
+    frameworks: Array<{,
       framework: string;
       score: number;
       status: 'compliant' | 'non_compliant' | 'partial';
       lastAssessed: Date;
     }>;
     overallScore: number;
-    gaps: Array<{
+    gaps: Array<{,
       framework: string;
       requirement: string;
       status: 'missing' | 'partial' | 'outdated';
       priority: 'low' | 'medium' | 'high' | 'critical';
     }>;
   };
-  accessControl: {
+  accessControl: {,
     privilegedAccounts: number;
     dormantAccounts: number;
     lastSecurityReview: Date;
@@ -251,24 +250,24 @@ export interface SecurityQualityMetrics {
 }
 
 export interface DocumentationQualityMetrics {
-  coverage: {
+  coverage: {,
     apiDocumentation: number;
     codeDocumentation: number;
     userGuides: number;
     overall: number;
   };
-  accuracy: {
+  accuracy: {,
     validCodeExamples: number;
     validApiExamples: number;
     brokenLinks: number;
     outdatedSections: string[];
   };
-  completeness: {
+  completeness: {,
     missingApiDocs: string[];
     missingUserGuides: string[];
     incompleteSections: string[];
   };
-  maintenance: {
+  maintenance: {,
     lastUpdated: Date;
     staleSections: string[];
     maintenanceScore: number;
@@ -276,10 +275,10 @@ export interface DocumentationQualityMetrics {
 }
 
 export interface BuildHealthMetrics {
-  builds: {
+  builds: {,
     successRate: number;
     averageDuration: number;
-    failureReasons: Array<{
+    failureReasons: Array<{,
       reason: string;
       count: number;
       percentage: number;
@@ -287,11 +286,11 @@ export interface BuildHealthMetrics {
     }>;
     trends: number[];
   };
-  tests: {
+  tests: {,
     passRate: number;
     totalTests: number;
     flakyTests: string[];
-    slowTests: Array<{
+    slowTests: Array<{,
       name: string;
       duration: number;
       file: string;
@@ -299,14 +298,14 @@ export interface BuildHealthMetrics {
     }>;
     trends: number[];
   };
-  deployments: {
+  deployments: {,
     successRate: number;
     frequency: number;
     rollbackRate: number;
     averageDeployTime: number;
   };
-  pipeline: {
-    stages: Array<{
+  pipeline: {,
+    stages: Array<{,
       name: string;
       averageDuration: number;
       successRate: number;
@@ -344,13 +343,13 @@ export interface QualityRecommendation {
   description: string;
   impact: 'low' | 'medium' | 'high';
   effort: 'low' | 'medium' | 'high';
-  actions: Array<{
+  actions: Array<{,
     description: string;
     type: 'code_change' | 'configuration' | 'process' | 'tooling';
     effort: 'low' | 'medium' | 'high';
     automated: boolean;
   }>;
-  expectedImprovement: {
+  expectedImprovement: {,
     metric: string;
     currentValue: number;
     projectedValue: number;
@@ -399,12 +398,10 @@ export interface UseQualityMetricsReturn {
   trends: QualityTrends | null;
   alerts: QualityAlert[];
   recommendations: QualityRecommendation[];
-  
   // State
   isLoading: boolean;
   error: string | null;
   lastUpdated: Date | null;
-  
   // Actions
   refreshMetrics: () => Promise<void>;
   acknowledgeAlert: (alertId: string) => Promise<void>;
@@ -425,7 +422,6 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
     onError,
     onMetricsUpdate
   } = options;
-  
   // State
   const [metrics, setMetrics] = useState<QualityMetrics | null>(null);
   const [trends, setTrends] = useState<QualityTrends | null>(null);
@@ -434,81 +430,67 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  
   // Refs
   const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const cacheRef = useRef<{
     metrics: QualityMetrics | null;
     timestamp: number;
   }>({ metrics: null, timestamp: 0 });
-  
   // API Base URL
   const API_BASE = '/api/quality';
-  
   // Fetch quality metrics from API
   const fetchMetrics = useCallback(async (): Promise<QualityMetrics | null> => {
     try {
-      const response = await fetch(`${API_BASE}/metrics`);
-      
+      const response = await fetch(`${API_BASE}/metrics`);}
       if (!response.ok) {
-        throw new Error(`Failed to fetch metrics: ${response.status} ${response.statusText}`);
+        throw new Error(`Failed to fetch metrics: ${response.status} ${response.statusText}`);}
       }
-      
       const data = await response.json();
-      
       // Transform dates from strings to Date objects
       const transformedMetrics: QualityMetrics = {
         ...data,
         timestamp: new Date(data.timestamp),
-        metadata: {
+        metadata: {,
           ...data.metadata,
-          lastUpdated: new Date(data.metadata.lastUpdated)
+          lastUpdated: new Date(data.metadata.lastUpdated),
         },
-        recommendations: data.recommendations.map((rec: any) => ({
+        recommendations: data.recommendations.map((rec: any) => ({),
           ...rec,
           createdAt: new Date(rec.createdAt),
-          updatedAt: new Date(rec.updatedAt)
+          updatedAt: new Date(rec.updatedAt),
         })),
-        alerts: data.alerts.map((alert: any) => ({
+        alerts: data.alerts.map((alert: any) => ({),
           ...alert,
           timestamp: new Date(alert.timestamp),
           acknowledgedAt: alert.acknowledgedAt ? new Date(alert.acknowledgedAt) : undefined,
-          resolvedAt: alert.resolvedAt ? new Date(alert.resolvedAt) : undefined
+          resolvedAt: alert.resolvedAt ? new Date(alert.resolvedAt) : undefined,
         }))
       };
-      
       return transformedMetrics;
-      
     } catch (err) {
       console.error('Error fetching quality metrics:', err);
       throw err;
     }
   }, []);
-  
   // Fetch trends data
   const fetchTrends = useCallback(async (timeframe: 'week' | 'month' | 'quarter' = 'month'): Promise<QualityTrends | null> => {
     try {
-      const response = await fetch(`${API_BASE}/trends?timeframe=${timeframe}`);
-      
+      const response = await fetch(`${API_BASE}/trends?timeframe=${timeframe}`);}
       if (!response.ok) {
-        throw new Error(`Failed to fetch trends: ${response.status} ${response.statusText}`);
+        throw new Error(`Failed to fetch trends: ${response.status} ${response.statusText}`);}
       }
-      
       return await response.json();
-      
     } catch (err) {
       console.error('Error fetching quality trends:', err);
       return null;
     }
   }, []);
-  
   // Refresh metrics function
   const refreshMetrics = useCallback(async () => {
     try {
       setError(null);
-      
       // Check cache first if enabled
-      if (enableCache && cacheRef.current.metrics && 
+      if (enableCache && cacheRef.current.metrics && )
           Date.now() - cacheRef.current.timestamp < cacheTimeout) {
         setMetrics(cacheRef.current.metrics);
         setAlerts(cacheRef.current.metrics.alerts);
@@ -517,43 +499,35 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
         setLastUpdated(cacheRef.current.metrics.metadata.lastUpdated);
         return;
       }
-      
       setIsLoading(true);
-      
       // Fetch fresh data
-      const [metricsData, trendsData] = await Promise.all([
+      const [metricsData, trendsData] = await Promise.all([)
         fetchMetrics(),
-        fetchTrends()
+        fetchTrends();
       ]);
-      
       if (metricsData) {
         setMetrics(metricsData);
         setAlerts(metricsData.alerts);
         setRecommendations(metricsData.recommendations);
         setLastUpdated(metricsData.metadata.lastUpdated);
-        
         // Update cache
         if (enableCache) {
           cacheRef.current = {
             metrics: metricsData,
-            timestamp: Date.now()
+            timestamp: Date.now(),
           };
         }
-        
         // Call update callback
         if (onMetricsUpdate) {
           onMetricsUpdate(metricsData);
         }
       }
-      
       if (trendsData) {
         setTrends(trendsData);
       }
-      
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(errorMessage);
-      
       if (onError) {
         onError(err instanceof Error ? err : new Error(errorMessage));
       }
@@ -561,105 +535,87 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
       setIsLoading(false);
     }
   }, [fetchMetrics, fetchTrends, enableCache, cacheTimeout, onError, onMetricsUpdate]);
-  
   // Acknowledge alert
   const acknowledgeAlert = useCallback(async (alertId: string) => {
     try {
-      const response = await fetch(`${API_BASE}/alerts/${alertId}/acknowledge`, {
+      const response = await fetch(`${API_BASE}/alerts/${alertId}/acknowledge`, {)}
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         }
       });
-      
       if (!response.ok) {
-        throw new Error(`Failed to acknowledge alert: ${response.status} ${response.statusText}`);
+        throw new Error(`Failed to acknowledge alert: ${response.status} ${response.statusText}`);}
       }
-      
       // Update local state
-      setAlerts(prevAlerts => 
-        prevAlerts.map(alert => 
+      setAlerts(prevAlerts => )
+        prevAlerts.map(alert => )
           alert.id === alertId 
             ? { ...alert, status: 'acknowledged', acknowledgedAt: new Date() }
             : alert
-        )
       );
-      
     } catch (err) {
       console.error('Error acknowledging alert:', err);
       throw err;
     }
   }, []);
-  
   // Update recommendation status
   const updateRecommendation = useCallback(async (recommendationId: string, status: string) => {
     try {
-      const response = await fetch(`${API_BASE}/recommendations/${recommendationId}`, {
+      const response = await fetch(`${API_BASE}/recommendations/${recommendationId}`, {)}
         method: 'PATCH',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ status })
       });
-      
       if (!response.ok) {
-        throw new Error(`Failed to update recommendation: ${response.status} ${response.statusText}`);
+        throw new Error(`Failed to update recommendation: ${response.status} ${response.statusText}`);}
       }
-      
       // Update local state
-      setRecommendations(prevRecs => 
-        prevRecs.map(rec => 
+      setRecommendations(prevRecs => )
+        prevRecs.map(rec => )
           rec.id === recommendationId 
             ? { ...rec, status: status as any, updatedAt: new Date() }
             : rec
-        )
       );
-      
     } catch (err) {
       console.error('Error updating recommendation:', err);
       throw err;
     }
   }, []);
-  
   // Get trends for specific timeframe
   const getTrends = useCallback(async (timeframe: 'week' | 'month' | 'quarter' = 'month'): Promise<QualityTrends | null> => {
     return await fetchTrends(timeframe);
   }, [fetchTrends]);
-  
   // Get historical metrics
   const getHistoricalMetrics = useCallback(async (startDate: Date, endDate: Date): Promise<QualityMetrics[]> => {
     try {
-      const response = await fetch(
-        `${API_BASE}/metrics/historical?start=${startDate.toISOString()}&end=${endDate.toISOString()}`
+      const response = await fetch(;)
+        `${API_BASE}/metrics/historical?start=${startDate.toISOString()}&end=${endDate.toISOString()}`}
       );
-      
       if (!response.ok) {
-        throw new Error(`Failed to fetch historical metrics: ${response.status} ${response.statusText}`);
+        throw new Error(`Failed to fetch historical metrics: ${response.status} ${response.statusText}`);}
       }
-      
       const data = await response.json();
-      
       // Transform dates
-      return data.map((metrics: any) => ({
+      return data.map((metrics: any) => ({)
         ...metrics,
         timestamp: new Date(metrics.timestamp),
-        metadata: {
+        metadata: {,
           ...metrics.metadata,
-          lastUpdated: new Date(metrics.metadata.lastUpdated)
+          lastUpdated: new Date(metrics.metadata.lastUpdated),
         }
       }));
-      
     } catch (err) {
       console.error('Error fetching historical metrics:', err);
       return [];
     }
   }, []);
-  
   // Setup auto-refresh
   useEffect(() => {
     if (refreshInterval > 0) {
       refreshIntervalRef.current = setInterval(refreshMetrics, refreshInterval);
-      
       return () => {
         if (refreshIntervalRef.current) {
           clearInterval(refreshIntervalRef.current);
@@ -667,12 +623,10 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
       };
     }
   }, [refreshInterval, refreshMetrics]);
-  
   // Initial load
   useEffect(() => {
     refreshMetrics();
   }, [refreshMetrics]);
-  
   // Cleanup
   useEffect(() => {
     return () => {
@@ -681,19 +635,16 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
       }
     };
   }, []);
-  
   return {
     // Data
     metrics,
     trends,
     alerts,
     recommendations,
-    
     // State
     isLoading,
     error,
     lastUpdated,
-    
     // Actions
     refreshMetrics,
     acknowledgeAlert,

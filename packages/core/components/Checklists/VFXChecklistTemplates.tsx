@@ -509,7 +509,7 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({)
       onTemplateClone(templateId, newName);
     }
   }, [allTemplates, onTemplateClone]);
-  return ()
+  return ();
     <div className={`vfx-checklist-templates ${className}`}>}
       <Card>
         <CardHeader>
@@ -701,7 +701,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({)
     const IconComponent = iconMap[category] || FileText;
     return <IconComponent className="w-4 h-4" />;
   };
-  return ()
+  return ();
     <Card className={`template-card cursor-pointer hover:shadow-lg transition-all ${isSelected ? 'ring-2 ring-blue-500' : ''} ${isBuiltIn ? 'border-blue-200 bg-blue-50' : ''}`}>}
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
@@ -760,7 +760,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({)
                     <div 
                       className="w-2 h-2 rounded-full"
                       style={{ 
-                        backgroundColor: item.priority === 'critical' ? '#dc2626' : 
+                        backgroundColor: item.priority === 'critical' ? '#dc2626' : ,
                           item.priority === 'high' ? '#ef4444' :
                             item.priority === 'medium' ? '#f59e0b' : '#10b981'
                       }}

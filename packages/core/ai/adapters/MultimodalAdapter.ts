@@ -136,7 +136,7 @@ export class MultimodalAdapter extends BaseAIModel {
         tokensPerMinute: 40000,
       },
       tags: ['multimodal', 'vision', 'audio', 'cross-modal', 'understanding'],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     const capabilities: ModelCapabilities = {
       inputTypes: ['text', 'image', 'audio', 'video', 'multimodal'],
@@ -324,7 +324,7 @@ export class MultimodalAdapter extends BaseAIModel {
       emotions: result.extracted_data.emotions || [],
       topics: result.extracted_data.topics || [],
       visual_descriptions: result.extracted_data.visual_descriptions || [],
-      audio_descriptions: result.extracted_data.audio_descriptions || []
+      audio_descriptions: result.extracted_data.audio_descriptions || [],
     };
   }
   // Static helper methods
@@ -414,7 +414,7 @@ export class MultimodalAdapter extends BaseAIModel {
         method: 'POST',
         headers: this._buildHeaders(),
         body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(this.config.timeout || 10000)
+        signal: AbortSignal.timeout(this.config.timeout || 10000),
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
@@ -611,7 +611,7 @@ export class MultimodalAdapter extends BaseAIModel {
           source: {,
             type: 'base64',
             media_type: 'image/jpeg',
-            data: typeof input.content === 'string' ? input.content.replace()
+            data: typeof input.content === 'string' ? input.content.replace(),
               /^data:image\/[^;]+;base64,/,
               ''
             ) : 'placeholder'
@@ -647,7 +647,7 @@ export class MultimodalAdapter extends BaseAIModel {
         return {
           inline_data: {,
             mime_type: 'image/jpeg',
-            data: typeof input.content === 'string' ? input.content.replace()
+            data: typeof input.content === 'string' ? input.content.replace(),
               /^data:image\/[^;]+;base64,/,
               ''
             ) : 'placeholder'
@@ -673,7 +673,7 @@ export class MultimodalAdapter extends BaseAIModel {
     'inputs'>
   ): Record<string, unknown> {
     return {
-      inputs: inputs.map(input => ({)
+      inputs: inputs.map(input => ({),
         type: input.type,
         content: input.content,
         metadata: input.metadata,
@@ -700,7 +700,7 @@ export class MultimodalAdapter extends BaseAIModel {
           method: 'POST',
           headers: this._buildHeaders(),
           body: JSON.stringify(payload),
-          signal: AbortSignal.timeout(this.config.timeout || 60000)
+          signal: AbortSignal.timeout(this.config.timeout || 60000),
         });
         if (!response.ok) {
           const errorData = await response.json().catch(() => null);
@@ -791,7 +791,6 @@ export class MultimodalAdapter extends BaseAIModel {
       emotions: string[];
       topics: string[];
     };
-  } {
     // Advanced parsing of multimodal response
     // This would typically use NLP techniques or structured prompting
     const lines = content.split('\n').filter(line => line.trim());
@@ -928,13 +927,13 @@ export class MultimodalAdapter extends BaseAIModel {
       'art': ['creative', 'design', 'aesthetic', 'visual', 'artistic']
     };
     Object.entries(topicKeywords).forEach(([topic, keywords]) => {
-      const matches = keywords.filter(keyword => ;)
+      const matches = keywords.filter(keyword => ;);
         new RegExp(`\\b${keyword}\\b`, 'i').test(content)}
       );
       if (matches.length > 0) {
         topics.push({)
           topic,
-          relevance: matches.length / keywords.length
+          relevance: matches.length / keywords.length,
         });
       }
     });

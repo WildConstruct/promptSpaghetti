@@ -190,7 +190,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
       if (!permissionLevel) {
         return {
           granted: false,
-          reason: 'User permission level not found'
+          reason: 'User permission level not found',
         };
       }
       // Check if user has access to this data classification
@@ -207,11 +207,11 @@ export class DataPermissionHierarchyManager extends EventEmitter {
         }
         return {
           granted: false,
-          reason: 'Insufficient classification clearance and no escalation path available'
+          reason: 'Insufficient classification clearance and no escalation path available',
         };
       }
       // Check operation permissions
-      const operationPermission = permissionLevel.operationPermissions.find(;)
+      const operationPermission = permissionLevel.operationPermissions.find(;);
         op => op.operation === request.operation
       );
       if (!operationPermission || !operationPermission.allowed) {
@@ -230,12 +230,12 @@ export class DataPermissionHierarchyManager extends EventEmitter {
           }
           return {
             granted: false,
-            reason: 'Operation not permitted'
+            reason: 'Operation not permitted',
           };
         }
       }
       // Evaluate conditions
-      const conditionResults = await this.evaluateConditions(;)
+      const conditionResults = await this.evaluateConditions(;);
         operationPermission?.conditions || [],
         request
       );
@@ -246,7 +246,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
         };
       }
       // Check time restrictions
-      const timeCheck = await this.evaluateTimeRestrictions(;)
+      const timeCheck = await this.evaluateTimeRestrictions(;);
         permissionLevel.timeRestrictions,
         request.context.timestamp
       );
@@ -278,7 +278,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
         }
         return {
           granted: false,
-          reason: 'Approval required but no escalation path available'
+          reason: 'Approval required but no escalation path available',
         };
       }
       // Generate conditions and limits
@@ -298,7 +298,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
       console.error('Error evaluating permission request:', error);
       return {
         granted: false,
-        reason: 'Permission evaluation failed due to system error'
+        reason: 'Permission evaluation failed due to system error',
       };
     }
   }
@@ -353,7 +353,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
     request: PermissionRequest,
     escalationPathId: string,
   ): Promise<EscalationRequest> {
-    const escalationPath = this.hierarchy.escalationPaths.find(;)
+    const escalationPath = this.hierarchy.escalationPaths.find(;);
       path => path.id === escalationPathId
     );
     if (!escalationPath) {
@@ -374,7 +374,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
         assignedTo: this.resolveApprovers(step),
         approvals: [],
         startedAt: index === 0 ? new Date() : new Date(0),
-        timeoutAt: new Date(Date.now() + step.timeout * 60 * 60 * 1000)
+        timeoutAt: new Date(Date.now() + step.timeout * 60 * 60 * 1000),
       }))
     };
     this.escalationRequests.set(escalationId, escalationRequest);
@@ -418,7 +418,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
       conditions,
       justification,
       status: 'PENDING',
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     this.delegationRequests.set(delegationId, delegationRequest);
     // Auto-approve if within delegation limits
@@ -552,7 +552,7 @@ export class DataPermissionHierarchyManager extends EventEmitter {
         approvalRequired,
         delegatable: level <= 5,
         timeLimit: riskLevel === 'HIGH' ? 8 : undefined,
-        usageLimit: riskLevel === 'HIGH' ? 10 : undefined
+        usageLimit: riskLevel === 'HIGH' ? 10 : undefined,
       };
     });
   }

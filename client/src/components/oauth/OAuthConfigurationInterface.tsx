@@ -7,7 +7,6 @@
  * Task: T-1752989143998-560 - Build OAuth configuration UI
  * Part of Epic 19.5 - OAuth Implementation & Framework
  */
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
@@ -20,14 +19,13 @@ interface OAuthProvider {
   iconUrl: string;
   supportedScopes: string[];
   requiredScopes: string[];
-  endpoints: {
+  endpoints: {,
     authorization: string;
     token: string;
     userInfo: string;
   };
   configuration?: OAuthConfiguration;
 }
-
 interface OAuthConfiguration {
   id: string;
   providerId: string;
@@ -42,7 +40,6 @@ interface OAuthConfiguration {
   createdAt: Date;
   updatedAt: Date;
 }
-
 interface SecuritySettings {
   enablePKCE: boolean;
   enableCertificatePinning: boolean;
@@ -52,7 +49,6 @@ interface SecuritySettings {
   allowedRedirectDomains: string[];
   sessionTimeout: number;
 }
-
 interface ComplianceSettings {
   gdprCompliant: boolean;
   ccpaCompliant: boolean;
@@ -61,7 +57,6 @@ interface ComplianceSettings {
   retentionPeriodDays: number;
   auditLevel: 'basic' | 'standard' | 'enhanced';
 }
-
 interface SecurityAssessment {
   score: number;
   level: 'low' | 'medium' | 'high' | 'maximum';
@@ -69,17 +64,15 @@ interface SecurityAssessment {
   recommendations: string[];
   complianceStatus: ComplianceStatus;
 }
-
 interface SecurityFinding {
   severity: 'info' | 'warning' | 'error' | 'critical';
   category: string;
   message: string;
   recommendation: string;
 }
-
 interface ComplianceStatus {
   overall: boolean;
-  frameworks: {
+  frameworks: {,
     gdpr: boolean;
     ccpa: boolean;
     sox: boolean;
@@ -87,26 +80,22 @@ interface ComplianceStatus {
   };
   issues: ComplianceIssue[];
 }
-
 interface ComplianceIssue {
   framework: string;
   issue: string;
   severity: 'low' | 'medium' | 'high';
   remediation: string;
 }
-
 interface ValidationResult {
   valid: boolean;
   errors: ValidationError[];
   warnings: ValidationWarning[];
 }
-
 interface ValidationError {
   field: string;
   message: string;
   code: string;
 }
-
 interface ValidationWarning {
   field: string;
   message: string;
@@ -128,10 +117,8 @@ export const OAuthConfigurationInterface: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [testing, setTesting] = useState(false);
   const [activeTab, setActiveTab] = useState<'basic' | 'security' | 'compliance' | 'testing'>('basic');
-  
   // Auth store for API calls
   const { authenticatedFetch } = useAuthStore();
-
   // Available OAuth providers
   const availableProviders: OAuthProvider[] = useMemo(() => [
     {
@@ -142,10 +129,10 @@ export const OAuthConfigurationInterface: React.FC = () => {
       iconUrl: '/icons/google.svg',
       supportedScopes: ['openid', 'email', 'profile', 'https://www.googleapis.com/auth/drive.readonly'],
       requiredScopes: ['openid', 'email', 'profile'],
-      endpoints: {
+      endpoints: {,
         authorization: 'https://accounts.google.com/o/oauth2/v2/auth',
         token: 'https://oauth2.googleapis.com/token',
-        userInfo: 'https://www.googleapis.com/oauth2/v2/userinfo'
+        userInfo: 'https://www.googleapis.com/oauth2/v2/userinfo',
       }
     },
     {
@@ -156,10 +143,10 @@ export const OAuthConfigurationInterface: React.FC = () => {
       iconUrl: '/icons/github.svg',
       supportedScopes: ['read:user', 'user:email', 'repo', 'admin:org'],
       requiredScopes: ['read:user', 'user:email'],
-      endpoints: {
+      endpoints: {,
         authorization: 'https://github.com/login/oauth/authorize',
         token: 'https://github.com/login/oauth/access_token',
-        userInfo: 'https://api.github.com/user'
+        userInfo: 'https://api.github.com/user',
       }
     },
     {
@@ -170,19 +157,17 @@ export const OAuthConfigurationInterface: React.FC = () => {
       iconUrl: '/icons/microsoft.svg',
       supportedScopes: ['openid', 'email', 'profile', 'offline_access', 'https://graph.microsoft.com/User.Read'],
       requiredScopes: ['openid', 'email', 'profile'],
-      endpoints: {
+      endpoints: {,
         authorization: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
         token: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-        userInfo: 'https://graph.microsoft.com/v1.0/me'
+        userInfo: 'https://graph.microsoft.com/v1.0/me',
       }
     }
   ], []);
-
   // Load existing configurations on mount
   useEffect(() => {
     loadConfigurations();
   }, [loadConfigurations]);
-
   // Initialize default configuration when provider is selected
   useEffect(() => {
     if (selectedProvider) {
@@ -192,7 +177,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
       }
     }
   }, [selectedProvider, availableProviders]);
-
   // API functions
   const loadConfigurations = useCallback(async () => {
     setLoading(true);
@@ -208,38 +192,36 @@ export const OAuthConfigurationInterface: React.FC = () => {
       setLoading(false);
     }
   }, [authenticatedFetch]);
-
   const initializeConfiguration = (provider: OAuthProvider) => {
     const defaultConfig: Partial<OAuthConfiguration> = {
       providerId: provider.id,
       scopes: provider.requiredScopes,
-      redirectUri: `${window.location.origin}/auth/oauth/callback/${provider.id}`,
+      redirectUri: `${window.location.origin}/auth/oauth/callback/${provider.id}`,}
       additionalParams: {},
-      securitySettings: {
+      securitySettings: {,
         enablePKCE: true,
         enableCertificatePinning: true,
         enableMTLS: false,
         stateParameterLength: 32,
         tokenBindingRequired: false,
         allowedRedirectDomains: [window.location.hostname],
-        sessionTimeout: 3600 // 1 hour
+        sessionTimeout: 3600 // 1 hour,
       },
-      complianceSettings: {
+      complianceSettings: {,
         gdprCompliant: true,
         ccpaCompliant: true,
         soxCompliant: false,
         hipaaCompliant: false,
         retentionPeriodDays: 90,
-        auditLevel: 'standard'
+        auditLevel: 'standard',
       },
-      status: 'draft'
+      status: 'draft',
     };
     setConfiguration(defaultConfig);
   };
-
   const validateConfiguration = async (config: Partial<OAuthConfiguration>): Promise<ValidationResult> => {
     try {
-      const response = await authenticatedFetch('/api/oauth-guidance/validate-configuration', {
+      const response = await authenticatedFetch('/api/oauth-guidance/validate-configuration', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ configuration: config })
@@ -250,14 +232,13 @@ export const OAuthConfigurationInterface: React.FC = () => {
       return {
         valid: false,
         errors: [{ field: 'general', message: 'Validation failed', code: 'VALIDATION_ERROR' }],
-        warnings: []
+        warnings: [],
       };
     }
   };
-
   const runSecurityAssessment = async (config: Partial<OAuthConfiguration>): Promise<SecurityAssessment> => {
     try {
-      const response = await authenticatedFetch('/api/oauth-guidance/security-assessment', {
+      const response = await authenticatedFetch('/api/oauth-guidance/security-assessment', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ configuration: config })
@@ -270,19 +251,18 @@ export const OAuthConfigurationInterface: React.FC = () => {
         level: 'low',
         findings: [{ severity: 'error', category: 'Assessment', message: 'Security assessment failed', recommendation: 'Check configuration and try again' }],
         recommendations: ['Review configuration and try again'],
-        complianceStatus: {
+        complianceStatus: {,
           overall: false,
           frameworks: { gdpr: false, ccpa: false, sox: false, hipaa: false },
-          issues: []
+          issues: [],
         }
       };
     }
   };
-
   const testConfiguration = async (config: Partial<OAuthConfiguration>): Promise<boolean> => {
     setTesting(true);
     try {
-      const response = await authenticatedFetch('/api/oauth-guidance/test-configuration', {
+      const response = await authenticatedFetch('/api/oauth-guidance/test-configuration', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ configuration: config })
@@ -295,43 +275,37 @@ export const OAuthConfigurationInterface: React.FC = () => {
       setTesting(false);
     }
   };
-
   const saveConfiguration = async () => {
     setSaving(true);
     try {
       // Validate before saving
       const validationResult = await validateConfiguration(configuration);
       setValidation(validationResult);
-      
       if (!validationResult.valid) {
         setSaving(false);
         return;
       }
-
       // Run security assessment
       const assessment = await runSecurityAssessment(configuration);
       setSecurityAssessment(assessment);
-
       // Save configuration
       const method = configuration.id ? 'PUT' : 'POST';
-      const url = configuration.id 
-        ? `/api/oauth-guidance/configuration/${configuration.id}`
+      const url = configuration.id ;
+        ? `/api/oauth-guidance/configuration/${configuration.id}`}
         : '/api/oauth-guidance/generate-configuration';
-
-      const response = await authenticatedFetch(url, {
+      const response = await authenticatedFetch(url, {)
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           provider: selectedProvider,
           configuration,
-          requirements: {
+          requirements: {,
             security_level: 'high',
             compliance_frameworks: getSelectedFrameworks(),
-            custom_requirements: []
+            custom_requirements: [],
           }
         })
       });
-
       const data = await response.json();
       if (data.success) {
         await loadConfigurations();
@@ -346,7 +320,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
       setSaving(false);
     }
   };
-
   const getSelectedFrameworks = (): string[] => {
     const frameworks: string[] = [];
     if (configuration.complianceSettings?.gdprCompliant) frameworks.push('GDPR');
@@ -355,26 +328,22 @@ export const OAuthConfigurationInterface: React.FC = () => {
     if (configuration.complianceSettings?.hipaaCompliant) frameworks.push('HIPAA');
     return frameworks;
   };
-
   // Update configuration helper
   const updateConfiguration = (updates: Partial<OAuthConfiguration>) => {
     setConfiguration(prev => ({ ...prev, ...updates }));
   };
-
   const updateSecuritySettings = (updates: Partial<SecuritySettings>) => {
-    setConfiguration(prev => ({
+    setConfiguration(prev => ({)
       ...prev,
       securitySettings: { ...prev.securitySettings!, ...updates }
     }));
   };
-
   const updateComplianceSettings = (updates: Partial<ComplianceSettings>) => {
-    setConfiguration(prev => ({
+    setConfiguration(prev => ({)
       ...prev,
       complianceSettings: { ...prev.complianceSettings!, ...updates }
     }));
   };
-
   // Get security level color
   const getSecurityLevelColor = (level: string): string => {
     switch (level) {
@@ -385,35 +354,31 @@ export const OAuthConfigurationInterface: React.FC = () => {
     default: return 'text-gray-600';
     }
   };
-
   // Get compliance status color
   const getComplianceColor = (compliant: boolean): string => {
     return compliant ? 'text-green-600' : 'text-red-600';
   };
-
   if (loading) {
-    return (
+    return ()
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <span className="ml-2">Loading OAuth configurations...</span>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">OAuth Configuration</h1>
         <p className="text-gray-600">Configure OAuth 2.1 providers with enterprise security and compliance features</p>
       </div>
-
       {/* Provider Selection */}
       <div className="mb-8">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Select OAuth Provider
         </label>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {availableProviders.map((provider) => (
+          {availableProviders.map((provider) => ()
             <div
               key={provider.id}
               className={`border rounded-lg p-4 cursor-pointer transition-all ${
@@ -444,9 +409,8 @@ export const OAuthConfigurationInterface: React.FC = () => {
           ))}
         </div>
       </div>
-
       {/* Configuration Tabs */}
-      {selectedProvider && (
+      {selectedProvider && ()
         <div className="border rounded-lg">
           {/* Tab Navigation */}
           <div className="border-b border-gray-200">
@@ -456,7 +420,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
                 { id: 'security', label: 'Security Settings', icon: '🔒' },
                 { id: 'compliance', label: 'Compliance', icon: '📋' },
                 { id: 'testing', label: 'Test & Deploy', icon: '🧪' }
-              ].map((tab) => (
+              ].map((tab) => ()
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as typeof activeTab)}
@@ -472,10 +436,9 @@ export const OAuthConfigurationInterface: React.FC = () => {
               ))}
             </nav>
           </div>
-
           <div className="p-6">
             {/* Basic Configuration Tab */}
-            {activeTab === 'basic' && (
+            {activeTab === 'basic' && ()
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
@@ -491,7 +454,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                       required
                     />
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Client Secret *
@@ -506,7 +468,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                     />
                   </div>
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Redirect URI *
@@ -520,7 +481,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                     required
                   />
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     OAuth Scopes
@@ -528,14 +488,14 @@ export const OAuthConfigurationInterface: React.FC = () => {
                   <div className="space-y-2">
                     {availableProviders
                       .find(p => p.id === selectedProvider)
-                      ?.supportedScopes.map((scope) => (
+                      ?.supportedScopes.map((scope) => ()
                         <label key={scope} className="flex items-center">
                           <input
                             type="checkbox"
                             checked={configuration.scopes?.includes(scope) || false}
                             onChange={(e) => {
                               const currentScopes = configuration.scopes || [];
-                              const newScopes = e.target.checked
+                              const newScopes = e.target.checked;
                                 ? [...currentScopes, scope]
                                 : currentScopes.filter(s => s !== scope);
                               updateConfiguration({ scopes: newScopes });
@@ -545,7 +505,7 @@ export const OAuthConfigurationInterface: React.FC = () => {
                           <span className="ml-2 text-sm text-gray-700">{scope}</span>
                           {availableProviders
                             .find(p => p.id === selectedProvider)
-                            ?.requiredScopes.includes(scope) && (
+                            ?.requiredScopes.includes(scope) && ()
                             <span className="ml-2 text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
                               Required
                             </span>
@@ -556,9 +516,8 @@ export const OAuthConfigurationInterface: React.FC = () => {
                 </div>
               </div>
             )}
-
             {/* Security Settings Tab */}
-            {activeTab === 'security' && (
+            {activeTab === 'security' && ()
               <div className="space-y-6">
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                   <h3 className="font-semibold text-blue-900 mb-2">🔒 Security Features</h3>
@@ -566,11 +525,9 @@ export const OAuthConfigurationInterface: React.FC = () => {
                     Configure advanced security settings for OAuth 2.1 compliance and enterprise protection.
                   </p>
                 </div>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <h4 className="font-semibold text-gray-900">Authentication Security</h4>
-                    
                     <label className="flex items-center">
                       <input
                         type="checkbox"
@@ -585,7 +542,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                         Recommended
                       </span>
                     </label>
-
                     <label className="flex items-center">
                       <input
                         type="checkbox"
@@ -595,7 +551,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                       />
                       <span className="ml-2 text-sm text-gray-700">Certificate Pinning</span>
                     </label>
-
                     <label className="flex items-center">
                       <input
                         type="checkbox"
@@ -605,7 +560,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                       />
                       <span className="ml-2 text-sm text-gray-700">Mutual TLS (mTLS)</span>
                     </label>
-
                     <label className="flex items-center">
                       <input
                         type="checkbox"
@@ -616,10 +570,8 @@ export const OAuthConfigurationInterface: React.FC = () => {
                       <span className="ml-2 text-sm text-gray-700">Token Binding Required</span>
                     </label>
                   </div>
-
                   <div className="space-y-4">
                     <h4 className="font-semibold text-gray-900">Session & Timeout Settings</h4>
-                    
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         State Parameter Length
@@ -634,7 +586,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                         <option value={64}>64 characters</option>
                       </select>
                     </div>
-
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Session Timeout (seconds)
@@ -650,7 +601,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Allowed Redirect Domains
@@ -667,20 +617,19 @@ export const OAuthConfigurationInterface: React.FC = () => {
                   />
                   <p className="text-xs text-gray-500 mt-1">One domain per line</p>
                 </div>
-
                 {/* Security Assessment Display */}
-                {securityAssessment && (
+                {securityAssessment && ()
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                     <h4 className="font-semibold text-gray-900 mb-3">Security Assessment</h4>
                     <div className="flex items-center mb-3">
                       <span className="text-2xl font-bold mr-2">{securityAssessment.score}</span>
-                      <span className={`font-medium ${getSecurityLevelColor(securityAssessment.level)}`}>
+                      <span className={`font-medium ${getSecurityLevelColor(securityAssessment.level)}`}>}
                         {securityAssessment.level.toUpperCase()} SECURITY
                       </span>
                     </div>
-                    {securityAssessment.findings.length > 0 && (
+                    {securityAssessment.findings.length > 0 && ()
                       <div className="space-y-2">
-                        {securityAssessment.findings.map((finding, index) => (
+                        {securityAssessment.findings.map((finding, index) => ()
                           <div key={index} className={`p-2 rounded text-sm ${
                             finding.severity === 'critical' ? 'bg-red-100 text-red-800' :
                               finding.severity === 'error' ? 'bg-orange-100 text-orange-800' :
@@ -697,9 +646,8 @@ export const OAuthConfigurationInterface: React.FC = () => {
                 )}
               </div>
             )}
-
             {/* Compliance Tab */}
-            {activeTab === 'compliance' && (
+            {activeTab === 'compliance' && ()
               <div className="space-y-6">
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
                   <h3 className="font-semibold text-green-900 mb-2">📋 Compliance Frameworks</h3>
@@ -707,11 +655,9 @@ export const OAuthConfigurationInterface: React.FC = () => {
                     Configure compliance settings for regulatory requirements and data protection.
                   </p>
                 </div>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <h4 className="font-semibold text-gray-900">Regulatory Compliance</h4>
-                    
                     <label className="flex items-center">
                       <input
                         type="checkbox"
@@ -722,7 +668,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                       <span className="ml-2 text-sm text-gray-700">GDPR Compliant</span>
                       <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">EU</span>
                     </label>
-
                     <label className="flex items-center">
                       <input
                         type="checkbox"
@@ -733,7 +678,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                       <span className="ml-2 text-sm text-gray-700">CCPA Compliant</span>
                       <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">CA</span>
                     </label>
-
                     <label className="flex items-center">
                       <input
                         type="checkbox"
@@ -744,7 +688,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                       <span className="ml-2 text-sm text-gray-700">SOX Compliant</span>
                       <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Financial</span>
                     </label>
-
                     <label className="flex items-center">
                       <input
                         type="checkbox"
@@ -756,10 +699,8 @@ export const OAuthConfigurationInterface: React.FC = () => {
                       <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Healthcare</span>
                     </label>
                   </div>
-
                   <div className="space-y-4">
                     <h4 className="font-semibold text-gray-900">Data Management</h4>
-                    
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Data Retention Period (days)
@@ -777,7 +718,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                         <option value={2555}>7 years</option>
                       </select>
                     </div>
-
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Audit Level
@@ -794,30 +734,29 @@ export const OAuthConfigurationInterface: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
                 {/* Compliance Status Display */}
-                {securityAssessment?.complianceStatus && (
+                {securityAssessment?.complianceStatus && ()
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                     <h4 className="font-semibold text-gray-900 mb-3">Compliance Status</h4>
-                    <div className={`mb-3 ${getComplianceColor(securityAssessment.complianceStatus.overall)}`}>
+                    <div className={`mb-3 ${getComplianceColor(securityAssessment.complianceStatus.overall)}`}>}
                       <span className="font-medium">
                         Overall Compliance: {securityAssessment.complianceStatus.overall ? 'COMPLIANT' : 'NON-COMPLIANT'}
                       </span>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {Object.entries(securityAssessment.complianceStatus.frameworks).map(([framework, compliant]) => (
+                      {Object.entries(securityAssessment.complianceStatus.frameworks).map(([framework, compliant]) => ()
                         <div key={framework} className="text-center">
-                          <div className={`text-lg font-bold ${getComplianceColor(compliant)}`}>
+                          <div className={`text-lg font-bold ${getComplianceColor(compliant)}`}>}
                             {compliant ? '✓' : '✗'}
                           </div>
                           <div className="text-xs text-gray-600">{framework.toUpperCase()}</div>
                         </div>
                       ))}
                     </div>
-                    {securityAssessment.complianceStatus.issues.length > 0 && (
+                    {securityAssessment.complianceStatus.issues.length > 0 && ()
                       <div className="mt-4 space-y-2">
                         <h5 className="font-medium text-gray-900">Compliance Issues:</h5>
-                        {securityAssessment.complianceStatus.issues.map((issue, index) => (
+                        {securityAssessment.complianceStatus.issues.map((issue, index) => ()
                           <div key={index} className={`p-2 rounded text-sm ${
                             issue.severity === 'high' ? 'bg-red-100 text-red-800' :
                               issue.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
@@ -833,9 +772,8 @@ export const OAuthConfigurationInterface: React.FC = () => {
                 )}
               </div>
             )}
-
             {/* Testing & Deployment Tab */}
-            {activeTab === 'testing' && (
+            {activeTab === 'testing' && ()
               <div className="space-y-6">
                 <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-6">
                   <h3 className="font-semibold text-purple-900 mb-2">🧪 Test & Deploy</h3>
@@ -843,21 +781,19 @@ export const OAuthConfigurationInterface: React.FC = () => {
                     Test your OAuth configuration and deploy it to production.
                   </p>
                 </div>
-
                 {/* Validation Results */}
-                {validation && (
+                {validation && ()
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                     <h4 className="font-semibold text-gray-900 mb-3">Configuration Validation</h4>
-                    <div className={`mb-3 ${validation.valid ? 'text-green-600' : 'text-red-600'}`}>
+                    <div className={`mb-3 ${validation.valid ? 'text-green-600' : 'text-red-600'}`}>}
                       <span className="font-medium">
                         Status: {validation.valid ? 'VALID' : 'INVALID'}
                       </span>
                     </div>
-                    
-                    {validation.errors.length > 0 && (
+                    {validation.errors.length > 0 && ()
                       <div className="space-y-2 mb-4">
                         <h5 className="font-medium text-red-900">Errors:</h5>
-                        {validation.errors.map((error, index) => (
+                        {validation.errors.map((error, index) => ()
                           <div key={index} className="bg-red-100 text-red-800 p-2 rounded text-sm">
                             <div className="font-medium">{error.field}: {error.message}</div>
                             <div className="text-xs">Code: {error.code}</div>
@@ -865,11 +801,10 @@ export const OAuthConfigurationInterface: React.FC = () => {
                         ))}
                       </div>
                     )}
-
-                    {validation.warnings.length > 0 && (
+                    {validation.warnings.length > 0 && ()
                       <div className="space-y-2">
                         <h5 className="font-medium text-yellow-900">Warnings:</h5>
-                        {validation.warnings.map((warning, index) => (
+                        {validation.warnings.map((warning, index) => ()
                           <div key={index} className="bg-yellow-100 text-yellow-800 p-2 rounded text-sm">
                             <div className="font-medium">{warning.field}: {warning.message}</div>
                             <div className="text-xs">{warning.recommendation}</div>
@@ -879,7 +814,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                     )}
                   </div>
                 )}
-
                 {/* Test Configuration */}
                 <div className="bg-white border border-gray-200 rounded-lg p-4">
                   <h4 className="font-semibold text-gray-900 mb-3">Test OAuth Flow</h4>
@@ -895,7 +829,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                     {testing ? 'Testing...' : 'Test Configuration'}
                   </button>
                 </div>
-
                 {/* Deploy Configuration */}
                 <div className="bg-white border border-gray-200 rounded-lg p-4">
                   <h4 className="font-semibold text-gray-900 mb-3">Deploy Configuration</h4>
@@ -928,7 +861,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
               </div>
             )}
           </div>
-
           {/* Action Buttons */}
           <div className="border-t border-gray-200 px-6 py-4 flex justify-between">
             <div className="flex space-x-3">
@@ -940,7 +872,6 @@ export const OAuthConfigurationInterface: React.FC = () => {
                 {saving && <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>}
                 {saving ? 'Saving...' : 'Save Configuration'}
               </button>
-              
               <button
                 onClick={() => {
                   setSelectedProvider('');
@@ -953,9 +884,8 @@ export const OAuthConfigurationInterface: React.FC = () => {
                 Reset
               </button>
             </div>
-
             <div className="text-sm text-gray-500">
-              {configuration.status && (
+              {configuration.status && ()
                 <span className={`px-2 py-1 rounded text-xs font-medium ${
                   configuration.status === 'active' ? 'bg-green-100 text-green-800' :
                     configuration.status === 'testing' ? 'bg-blue-100 text-blue-800' :

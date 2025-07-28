@@ -161,19 +161,17 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({)
       'ID,Type,Label,Data',
       ...nodes.map(node => )
         `"${node.id}","${node.type}","${node.data?.label || ''}","${JSON.stringify(node.data || {}).replace(/"/g, '""')}"`}
-      )
     ].join('\n');
     const edgeCSV = [;
       '\n\nEDGES:',
       'ID,Source,Target,Type',
       ...edges.map(edge => )
         `"${edge.id}","${edge.source}","${edge.target}","${edge.type || 'default'}"`}
-      )
     ].join('\n');
     return `NODES:\n${nodeCSV}${edgeCSV}`;}
   };
-  const handleInputChange = (field: keyof ExportOptions) => (;)
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  const handleInputChange = (field: keyof ExportOptions) => (;);
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const value = e.target.type === 'checkbox' ;
       ? (e.target as HTMLInputElement).checked 
@@ -280,7 +278,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({)
     }
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 0,

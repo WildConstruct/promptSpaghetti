@@ -254,7 +254,7 @@ export const SecurityPresets = {
   development: {,
     hsts: {,
       enabled: false, // HSTS only works over HTTPS
-      maxAge: 300     // Short max-age for testing
+      maxAge: 300     // Short max-age for testing,
     },
     csp: {,
       enabled: true,
@@ -273,7 +273,7 @@ export const SecurityPresets = {
       }
     },
     xssProtection: {,
-      enabled: false // Modern browsers don't need this and it can interfere with debugging
+      enabled: false // Modern browsers don't need this and it can interfere with debugging,
     }
   } as Partial<SecurityConfig>,
   /**
@@ -357,7 +357,7 @@ export function createCSPReportHandler() {
           blockedUri: violation['blocked-uri'],
           referrer: violation.referrer,
           userAgent: req.get('User-Agent'),
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
         // In production, you might want to:
         // - Send to a monitoring service (e.g., Sentry, DataDog)
@@ -379,7 +379,6 @@ export class SecurityHeaderValidator {
     valid: boolean;
     warnings: string[];
     score: number;
-  } {
     const warnings: string[] = [];
     let score = 100;
     // Check HSTS
@@ -431,7 +430,7 @@ export const securityMiddleware = {
   development: () => createSecurityMiddleware(SecurityPresets.development),
   production: () => createSecurityMiddleware(SecurityPresets.production),
   mfa: () => createSecurityMiddleware(SecurityPresets.mfa),
-  custom: (config: Partial<SecurityConfig>) => createSecurityMiddleware(config)
+  custom: (config: Partial<SecurityConfig>) => createSecurityMiddleware(config),
 };
 
 export default createSecurityMiddleware;

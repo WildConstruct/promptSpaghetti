@@ -110,7 +110,7 @@ function analyzeGraph(nodes: Node[], edges: Edge[]): GraphAnalysisResult {
       type: 'caching',
       severity: 'medium',
       description: 'Enable result caching for repeated executions',
-      estimatedImprovement: '50-90% faster on repeat runs'
+      estimatedImprovement: '50-90% faster on repeat runs',
     });
   }
   if (complexity === 'high') {
@@ -118,7 +118,7 @@ function analyzeGraph(nodes: Node[], edges: Edge[]): GraphAnalysisResult {
       type: 'memory',
       severity: 'high',
       description: 'Large graph detected - enable memory optimization',
-      estimatedImprovement: '30-60% less memory usage'
+      estimatedImprovement: '30-60% less memory usage',
     });
   }
   return {
@@ -156,7 +156,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({)
     }
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 0,
@@ -375,7 +375,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({)
               if (score >= 60) return '#ffc107';
               return '#dc3545';
             };
-            return ()
+            return ();
               <>
                 <div style={{
                   fontSize: '48px',

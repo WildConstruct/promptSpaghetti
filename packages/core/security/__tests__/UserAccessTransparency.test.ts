@@ -119,9 +119,9 @@ describe('UserAccessTransparencyService', () => {
       const userId = 'user-123';
       const timeRange = {
         start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
-        end: new Date()
+        end: new Date(),
       };
-      const activities = await transparencyService.getUserAccessActivity(;)
+      const activities = await transparencyService.getUserAccessActivity(;);
         userId,
         timeRange,
         50
@@ -143,9 +143,9 @@ describe('UserAccessTransparencyService', () => {
       const userId = 'user-123';
       const timeRange = {
         start: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
-        end: new Date()
+        end: new Date(),
       };
-      const activities = await transparencyService.getUserAccessActivity(;)
+      const activities = await transparencyService.getUserAccessActivity(;);
         userId,
         timeRange,
         100
@@ -158,7 +158,7 @@ describe('UserAccessTransparencyService', () => {
     test('should limit number of activities returned', async () => {
       const userId = 'user-123';
       const limit = 10;
-      const activities = await transparencyService.getUserAccessActivity(;)
+      const activities = await transparencyService.getUserAccessActivity(;);
         userId,
         undefined,
         limit
@@ -189,9 +189,9 @@ describe('UserAccessTransparencyService', () => {
         reason: 'I want to see what data you have about me',
         identityVerified: true,
         urgency: 'STANDARD' as const,
-        preferredFormat: 'JSON' as const
+        preferredFormat: 'JSON' as const,
       };
-      const dsarRequest = await transparencyService.submitDSAR(;)
+      const dsarRequest = await transparencyService.submitDSAR(;);
         userId,
         requestType,
         details
@@ -212,16 +212,16 @@ describe('UserAccessTransparencyService', () => {
       const requestType = 'ACCESS';
       const details = {
         identityVerified: true,
-        urgency: 'STANDARD' as const
+        urgency: 'STANDARD' as const,
       };
-      const dsarRequest = await transparencyService.submitDSAR(;)
+      const dsarRequest = await transparencyService.submitDSAR(;);
         userId,
         requestType,
         details
       );
       const deadline = dsarRequest.completionDeadline;
       const requestTime = dsarRequest.requestedAt;
-      const daysDifference = Math.ceil(;)
+      const daysDifference = Math.ceil(;);
         (deadline.getTime() - requestTime.getTime()) / (1000 * 60 * 60 * 24)
       );
       // Standard GDPR deadline is 30 days
@@ -234,16 +234,16 @@ describe('UserAccessTransparencyService', () => {
       const details = {
         identityVerified: true,
         urgency: 'URGENT' as const,
-        reason: 'Data protection violation'
+        reason: 'Data protection violation',
       };
-      const dsarRequest = await transparencyService.submitDSAR(;)
+      const dsarRequest = await transparencyService.submitDSAR(;);
         userId,
         requestType,
         details
       );
       const deadline = dsarRequest.completionDeadline;
       const requestTime = dsarRequest.requestedAt;
-      const daysDifference = Math.ceil(;)
+      const daysDifference = Math.ceil(;);
         (deadline.getTime() - requestTime.getTime()) / (1000 * 60 * 60 * 24)
       );
       // Urgent requests should have shorter deadline
@@ -268,7 +268,7 @@ describe('UserAccessTransparencyService', () => {
       const userId = 'user-123';
       const requestTypes = ['ACCESS', 'RECTIFICATION', 'ERASURE', 'PORTABILITY', 'RESTRICTION', 'OBJECTION'];
       for (const requestType of requestTypes) {
-        const dsarRequest = await transparencyService.submitDSAR(;)
+        const dsarRequest = await transparencyService.submitDSAR(;);
           userId,
           requestType as any,
           { identityVerified: true, urgency: 'STANDARD' }
@@ -342,7 +342,7 @@ describe('UserAccessTransparencyService', () => {
           thirdPartyDataSharingOptOut: true,
         }
       };
-      const updatedSettings = await transparencyService.updateTransparencySettings(;)
+      const updatedSettings = await transparencyService.updateTransparencySettings(;);
         userId,
         settingsUpdate
       );
@@ -386,7 +386,7 @@ describe('UserAccessTransparencyService', () => {
       const userId = 'user-123';
       const invalidSettings = {
         notificationPreferences: {,
-          frequency: 'INVALID_FREQUENCY' // Invalid value
+          frequency: 'INVALID_FREQUENCY' // Invalid value,
         }
       };
       // Should handle validation gracefully
@@ -469,7 +469,7 @@ describe('UserAccessTransparencyService', () => {
     test('should export user data in JSON format', async () => {
       const userId = 'user-123';
       const format = 'JSON';
-      const exportResponse = await transparencyService.exportUserData(;)
+      const exportResponse = await transparencyService.exportUserData(;);
         userId,
         format
       );
@@ -507,7 +507,7 @@ describe('UserAccessTransparencyService', () => {
       const userId = 'user-123';
       const formats = ['JSON', 'XML', 'CSV', 'PDF'];
       for (const format of formats) {
-        const exportResponse = await transparencyService.exportUserData(;)
+        const exportResponse = await transparencyService.exportUserData(;);
           userId,
           format as any
         );
@@ -517,7 +517,7 @@ describe('UserAccessTransparencyService', () => {
     test('should filter by categories when specified', async () => {
       const userId = 'user-123';
       const categories = ['personal_info', 'contact_details'];
-      const exportResponse = await transparencyService.exportUserData(;)
+      const exportResponse = await transparencyService.exportUserData(;);
         userId,
         'JSON',
         categories
@@ -635,7 +635,7 @@ describe('UserAccessTransparencyService', () => {
         channels: [],
       }));
       // Send notifications concurrently
-      const promises = notifications.map(notification =>;)
+      const promises = notifications.map(notification =>;);
         transparencyService.sendTransparencyNotification(notification)
       );
       await Promise.all(promises);

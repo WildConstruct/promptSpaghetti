@@ -45,7 +45,7 @@ const mockPluginManifest = {
     node: '>=14.0.0',
   },
   permissions: ['read', 'write'],
-  author: 'Test Author'
+  author: 'Test Author',
 };
 const mockPluginCode = `;
 module.exports = {
@@ -72,7 +72,7 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
     mockFs.readdir.mockResolvedValue(['plugin1', 'plugin2'] as any as unknown as unknown);
     mockFs.stat.mockResolvedValue({ )
       isDirectory: ( as unknown as unknown) => true, 
-      isFile: () => false 
+      isFile: () => false ,
     } as any);
     mockFs.mkdir.mockResolvedValue(undefined as unknown as unknown);
     mockFs.writeFile.mockResolvedValue(undefined as unknown as unknown);
@@ -323,7 +323,7 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
       const incompatiblePlugin = {
         ...mockPluginManifest,
         engines: {,
-          node: '>=20.0.0' // Incompatible version
+          node: '>=20.0.0' // Incompatible version,
         }
       };
       pluginLoader.validatePlugin.mockReturnValueOnce(false);
@@ -396,7 +396,7 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
         await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
         return { ...mockPluginManifest, id: path.basename(source) };
       });
-      const loadPromises = pluginIds.map(id => ;)
+      const loadPromises = pluginIds.map(id => ;);
         pluginLoader.loadPlugin(`/plugins/${id}`)}
       );
       const results = await Promise.all(loadPromises);

@@ -43,14 +43,14 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({)
     setLocalOptions(options);
   }, [options]);
   const handleWeightChange = (optionId: string, newWeight: number) => {
-    const updatedOptions = localOptions.map(option =>;)
+    const updatedOptions = localOptions.map(option =>;);
       option.id === optionId ? { ...option, weight: Math.max(0, newWeight) } : option
     );
     setLocalOptions(updatedOptions);
     onOptionsChange(updatedOptions);
   };
   const handleTextChange = (optionId: string, newText: string) => {
-    const updatedOptions = localOptions.map(option =>;)
+    const updatedOptions = localOptions.map(option =>;);
       option.id === optionId ? { ...option, text: newText } : option
     );
     setLocalOptions(updatedOptions);
@@ -66,7 +66,7 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({)
   const handleApplyPreset = (newWeights: number[]) => {
     const updatedOptions = localOptions.map((option, index) => ({)
       ...option,
-      weight: newWeights[index] || 0
+      weight: newWeights[index] || 0,
     }));
     setLocalOptions(updatedOptions);
     onOptionsChange(updatedOptions);
@@ -76,7 +76,7 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({)
     }
   };
   if (localOptions.length === 0) {
-    return ()
+    return ();
       <div className={`weight-control-slider ${className}`} style={{}
         padding: 16,
         background: '#2d3748',
@@ -88,7 +88,7 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`weight-control-slider ${className}`} style={{}
       padding: 16,
       background: '#2d3748',
@@ -181,7 +181,7 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({)
                 borderRadius: 3,
                 background: '#4a5568',
                 outline: 'none',
-                opacity: option.locked ? 0.5 : 1
+                opacity: option.locked ? 0.5 : 1,
               }}
             />
           </div>

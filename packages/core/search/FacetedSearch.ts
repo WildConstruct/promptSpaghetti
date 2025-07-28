@@ -362,7 +362,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
         performance: {,
           enableCaching: true,
           cacheSize: 1000,
-          cacheTtl: 300000 // 5 minutes
+          cacheTtl: 300000 // 5 minutes,
         }
       },
       query: {,
@@ -660,7 +660,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
   async getSuggestions()
     indexName: string, 
     query: string, 
-    type: 'all' | 'completion' | 'correction' = 'all'
+    type: 'all' | 'completion' | 'correction' = 'all',
   ): Promise<SearchSuggestion[]> {
     const index = this.indexes.get(indexName);
     if (!index) {
@@ -684,7 +684,6 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
     popularFacets: Array<{ facetId: string; selectionCount: number }>;
     cacheHitRate: number;
     errorRate: number;
-  } {
     return this.searchAnalytics.getAnalytics(indexName);
   }
   // Configuration management
@@ -770,7 +769,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
     // Parse and normalize query text
     const parsedText = this.parseQueryText(query.text);
     // Process filters
-    const processedFilters = query.filters.map(filter => ;)
+    const processedFilters = query.filters.map(filter => ;);
       this.processFilter(filter)
     );
     return {
@@ -1007,7 +1006,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
         const start = Math.max(0, index - 50);
         const end = Math.min(text.length, index + token.length + 50);
         const snippet = text.substring(start, end);
-        const highlightedSnippet = snippet.replace(;)
+        const highlightedSnippet = snippet.replace(;);
           new RegExp(token, 'gi'),
           '<mark>$&</mark>'
         );
@@ -1040,13 +1039,13 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
           field: 'text_match',
           weight: 1.0,
           contribution: score * 0.8,
-          explanation: 'Text search contribution'
+          explanation: 'Text search contribution',
         },
         {
           field: 'field_boost',
           weight: 1.0,
           contribution: score * 0.2,
-          explanation: 'Field boost contribution'
+          explanation: 'Field boost contribution',
         }
       ]
     };
@@ -1100,7 +1099,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
         value,
         label: String(value),
         count,
-        selected: facet.options?.find(opt => opt.value === value)?.selected || false
+        selected: facet.options?.find(opt => opt.value === value)?.selected || false,
       }))
       .sort((a, b) => {
         if (facet.config.sortBy === 'count') {
@@ -1118,7 +1117,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
       metadata: {,
         totalOptions: valueCounts.size,
         selectedOptions: options.filter(opt => opt.selected).length,
-        hasMore: valueCounts.size > facet.config.displayLimit
+        hasMore: valueCounts.size > facet.config.displayLimit,
       }
     };
   }
@@ -1193,7 +1192,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
     return {
       ...pagination,
       total,
-      offset: (pagination.page - 1) * pagination.size
+      offset: (pagination.page - 1) * pagination.size,
     };
   }
   private analyzeQuery(query: SearchQuery): QueryAnalysis {
@@ -1320,7 +1319,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
     const hierarchy: FacetHierarchy = {
       levels: [],
       separator: '/',
-      expandedLevels: new Set()
+      expandedLevels: new Set(),
     };
     // Build hierarchy from document values
     for (const doc of index.documents.values()) {

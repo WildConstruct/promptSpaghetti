@@ -210,14 +210,13 @@ export class ConversionAnalyticsInfrastructure {
   private metricsCalculator: ConversionMetricsCalculator;
   private dataWarehouse: ConversionDataWarehouse;
   private analyticsAPI: ConversionAnalyticsAPI;
-  constructor()
+  constructor();
     private epic1Analytics: AnalyticsInfrastructure,
     private config: {
       dataWarehouse: DataWarehouseConfig;
       api: AnalyticsAPIConfig;
       processing: ProcessingConfig;
     }
-  ) {
     this.processingPipeline = new ConversionProcessingPipeline()
       this.epic1Analytics,
       this.config.processing
@@ -264,7 +263,7 @@ export class ConversionAnalyticsInfrastructure {
    */
   public async getRealTimeMetrics()
     funnelId: string,
-    timeWindow: number = 3600000 // 1 hour default
+    timeWindow: number = 3600000 // 1 hour default,
   ): Promise<RealTimeMetrics> {
     return await this.analyticsAPI.getRealTimeMetrics(funnelId, timeWindow);
   }
@@ -284,7 +283,7 @@ export class ConversionAnalyticsInfrastructure {
       processing: await this.processingPipeline.getHealthStatus(),
       metrics: await this.metricsCalculator.getHealthStatus(),
       dataWarehouse: await this.dataWarehouse.getHealthStatus(),
-      api: await this.analyticsAPI.getHealthStatus()
+      api: await this.analyticsAPI.getHealthStatus(),
     };
   }
 }
@@ -293,10 +292,9 @@ export class ConversionAnalyticsInfrastructure {
  */
 export class ConversionProcessingPipeline {
   private stages: ProcessingStage[] = [];
-  constructor()
+  constructor();
     private epic1Analytics: AnalyticsInfrastructure,
     private config: ProcessingConfig
-  ) {
     this.initializeStages();
   }
   private initializeStages(): void {
@@ -424,10 +422,10 @@ export class ConversionProcessingPipeline {
     return chunks;
   }
   public async getHealthStatus(): Promise<ComponentHealthStatus> {
-    const stageHealth = await Promise.all(;)
+    const stageHealth = await Promise.all(;);
       this.stages.map(async stage => ({)
         name: stage.getName(),
-        status: await stage.getHealthStatus()
+        status: await stage.getHealthStatus(),
       }))
     );
     const allHealthy = stageHealth.every(s => s.status.healthy);
@@ -456,7 +454,7 @@ export class ConversionMetricsCalculator {
     const results: ConversionMetricResult[] = [];
     for (const metricType of query.metrics) {
       try {
-        const result = await this.calculateSingleMetric(;)
+        const result = await this.calculateSingleMetric(;);
           metricType,
           query,
           events
@@ -506,7 +504,7 @@ export class ConversionMetricsCalculator {
       attribution_value: new AttributionValueCalculator(),
       cohort_performance: new CohortPerformanceCalculator(),
       segment_growth: new SegmentGrowthCalculator(),
-      custom: new CustomMetricCalculator()
+      custom: new CustomMetricCalculator(),
     };
     return calculators[metricType];
   }
@@ -613,7 +611,7 @@ export class ConversionMetricsCalculator {
           dimension,
           value: groupValue,
           metricValue,
-          percentage: (groupEvents.length / events.length) * 100
+          percentage: (groupEvents.length / events.length) * 100,
         });
       }
     }
@@ -885,17 +883,17 @@ class ValidationStage implements ProcessingStage {
   getName(): string { return 'validation'; }
   async process(event: FlexibleConversionEvent): Promise<StageProcessingResult> {
     // Simplified validation
-    const hasRequiredFields = this.config.requiredFields.every(field => ;)
+    const hasRequiredFields = this.config.requiredFields.every(field => ;);
       this.getFieldValue(event, field) !== undefined
     );
     return {
       success: hasRequiredFields,
       transformedEvent: event,
-      errors: hasRequiredFields ? [] : [{
+      errors: hasRequiredFields ? [] : [{,
         eventId: event.id,
         stage: 'validation',
         error: 'Missing required fields',
-        severity: 'error' as const
+        severity: 'error' as const,
       }]
     };
   }
@@ -992,7 +990,7 @@ class ConversionDataWarehouse {
   }
 }
 class ConversionAnalyticsAPI {
-  constructor()
+  constructor();
     private metricsCalculator: ConversionMetricsCalculator,
     private dataWarehouse: ConversionDataWarehouse,
     private config: AnalyticsAPIConfig

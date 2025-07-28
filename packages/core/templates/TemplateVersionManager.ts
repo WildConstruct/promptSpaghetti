@@ -169,7 +169,7 @@ export interface TemplateDiff {
 export class TemplateVersionManager {
   private versions = new Map<string, TemplateVersion>();
   private branches = new Map<string, Branch>();
-  constructor()
+  constructor();
     private apiClient: any,
     private templateId: string,
     private userId: string
@@ -219,7 +219,7 @@ export class TemplateVersionManager {
     try {
       const response = await this.apiClient.put(`/api/template-versions/${versionId}/publish`, {)}
         release_notes: options.release_notes,
-        visibility: options.visibility || 'public'
+        visibility: options.visibility || 'public',
       });
       const version = response.data;
       this.versions.set(versionId, version);
@@ -270,7 +270,7 @@ export class TemplateVersionManager {
   }
   async compareVersions(fromVersionId: string, toVersionId: string): Promise<VersionComparisonResult> {
     try {
-      const response = await this.apiClient.get(;)
+      const response = await this.apiClient.get(;);
         `/api/template-versions/${fromVersionId}/compare/${toVersionId}`}
       );
       return response.data;
@@ -378,7 +378,7 @@ export class TemplateVersionManager {
         options
       };
       const response = await this.apiClient.post('/api/template-versions/export', exportData, {)
-        responseType: options.format === 'template_bundle' ? 'blob' : 'json'
+        responseType: options.format === 'template_bundle' ? 'blob' : 'json',
       });
       if (options.format === 'template_bundle') {
         // Return file data for client-side download
@@ -386,7 +386,7 @@ export class TemplateVersionManager {
           file_data: response.data,
           filename: options.filename || `template-${versionId}.bundle`,}
           size: response.data.byteLength,
-          checksum: await this.calculateChecksum(response.data)
+          checksum: await this.calculateChecksum(response.data),
         };
       } else {
         // Return download URL for server-hosted file
@@ -468,7 +468,7 @@ export class TemplateVersionManager {
     }>;
   }> {
     try {
-      const response = await this.apiClient.get(;)
+      const response = await this.apiClient.get(;);
         `/api/template-versions/${fromVersionId}/migration/${toVersionId}`}
       );
       return response.data;

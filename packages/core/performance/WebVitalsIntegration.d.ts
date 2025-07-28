@@ -138,9 +138,9 @@ export declare class WebVitalsIntegration extends EventEmitter {
     /**
      * Create a performance observer for custom metrics
      */
-    createPerformanceObserver()
+    createPerformanceObserver();
       entryTypes: string[],
-      callback: (entries: PerformanceEntry[])
+      callback: (entries: PerformanceEntry[]),
     ) => void): PerformanceObserver | null;
     /**
      * Get Web Vitals configuration

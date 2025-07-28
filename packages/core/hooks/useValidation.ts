@@ -20,10 +20,10 @@ export const useValidation = ({)
   nodes,
   highlightNodeIds = new Set(),
   highlightEdgeIds = new Set(),
-  validateConnection: customValidateConnection = validateConnection
+  validateConnection: customValidateConnection = validateConnection,
 }: UseValidationProps): UseValidationReturn => {
   const [errors, setErrors] = useState<ValidationError[]>([]);
-  const runValidation = useCallback(;)
+  const runValidation = useCallback(;);
     (edgesToValidate: Edge[], nodesToValidate: Node[]) => {
       const errs = customValidateConnection(edgesToValidate, nodesToValidate);
       setErrors(errs);

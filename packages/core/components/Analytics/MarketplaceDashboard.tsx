@@ -75,7 +75,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
   const renderOverviewMetrics = () => {
     if (!dashboardData) return null;
     const { overview, trends } = dashboardData;
-    return ()
+    return ();
       <div className="overview-metrics">
         <div className="metrics-grid">
           <Card className="metric-card revenue">
@@ -175,7 +175,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
   };
   const renderTopCategories = () => {
     if (!dashboardData?.trends.topCategories) return null;
-    return ()
+    return ();
       <Card className="top-categories-card">
         <CardHeader>
           <CardTitle>Top Performing Categories</CardTitle>
@@ -204,7 +204,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
     );
   };
   const renderTopTemplates = () => {
-    return ()
+    return ();
       <Card className="top-templates-card">
         <CardHeader>
           <div className="templates-header">
@@ -256,7 +256,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
   };
   const renderSearchAnalytics = () => {
     if (!searchData) return null;
-    return ()
+    return ();
       <div className="search-analytics">
         <Card className="search-overview">
           <CardHeader>
@@ -303,7 +303,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
     );
   };
   const renderInsights = () => {
-    return ()
+    return ();
       <Card className="insights-card">
         <CardHeader>
           <CardTitle>Marketplace Insights</CardTitle>
@@ -337,14 +337,14 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
     );
   };
   if (isLoading) {
-    return ()
+    return ();
       <div className="marketplace-dashboard loading">
         <div className="loading-spinner"></div>
         <p>Loading marketplace analytics...</p>
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`marketplace-dashboard ${className}`}>}
       <div className="dashboard-header">
         <h2>Marketplace Analytics</h2>

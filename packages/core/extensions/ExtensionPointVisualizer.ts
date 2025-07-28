@@ -206,7 +206,7 @@ export class ExtensionPointVisualizer {
               source: ep.id,
               target: dep,
               type: 'dependency',
-              label: 'depends on'
+              label: 'depends on',
             });
           });
         }

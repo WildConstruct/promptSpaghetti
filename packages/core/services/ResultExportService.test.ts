@@ -49,7 +49,7 @@ const mockResults: PreviewResultWithPath[] = [
           timestamp: Date.now() - 400,
           executionTimeMs: 100,
           inputs: [{ value: 'choice1', inputIndex: 0 }],
-          output: 'First test result output'
+          output: 'First test result output',
         }
       ],
       finalOutput: 'First test result output',
@@ -120,7 +120,7 @@ const mockResults: PreviewResultWithPath[] = [
           timestamp: Date.now() - 300,
           executionTimeMs: 120,
           inputs: [{ value: 'choice2', inputIndex: 0 }],
-          output: 'Second test result output'
+          output: 'Second test result output',
         }
       ],
       finalOutput: 'Second test result output',
@@ -164,7 +164,7 @@ describe('ResultExportService', () => {
         includeExecutionPaths: false,
         includeDebugInfo: false,
       };
-      const result = await exportService.exportIndividualResult(;)
+      const result = await exportService.exportIndividualResult(;);
         mockResults[0],
         0,
         mockResults.length,
@@ -260,7 +260,7 @@ describe('ResultExportService', () => {
           varianceAnalysis: true,
         }
       };
-      const result = await exportService.exportBatchResults(;)
+      const result = await exportService.exportBatchResults(;);
         mockResults,
         selectedIndices,
         options
@@ -341,7 +341,7 @@ describe('ResultExportService', () => {
           comparisonMatrix: true,
         }
       };
-      const result = await exportService.exportComparison(;)
+      const result = await exportService.exportComparison(;);
         mockResults,
         options
       );
@@ -413,7 +413,7 @@ describe('ResultExportService', () => {
       expect(errors[0]).toContain('VFX formats require execution paths or ControlNet compatibility');
     });
     it('should estimate export size accurately', () => {
-      const estimate = exportService.estimateExportSize(;)
+      const estimate = exportService.estimateExportSize(;);
         [mockResults[0]],
         'json-complete',
         {
@@ -434,9 +434,9 @@ describe('ResultExportService', () => {
       const largeResults = Array(100).fill(mockResults[0]).map((result, index) => ({)
         ...result,
         seed: index,
-        output: 'A'.repeat(1000) // Large output
+        output: 'A'.repeat(1000) // Large output,
       }));
-      const estimate = exportService.estimateExportSize(;)
+      const estimate = exportService.estimateExportSize(;);
         largeResults,
         'json-complete',
         {
@@ -462,7 +462,7 @@ describe('ResultExportService', () => {
         includeExecutionPaths: false,
         includeDebugInfo: false,
       };
-      const result = await exportService.exportIndividualResult(;)
+      const result = await exportService.exportIndividualResult(;);
         mockResults[0],
         0,
         mockResults.length,
@@ -481,7 +481,7 @@ describe('ResultExportService', () => {
         includeExecutionPaths: true,
         includeDebugInfo: false,
       };
-      const result = await exportService.exportIndividualResult(;)
+      const result = await exportService.exportIndividualResult(;);
         mockResults[0],
         0,
         mockResults.length,
@@ -501,7 +501,7 @@ describe('ResultExportService', () => {
         randomChoice: {,
           type: 'weighted',
           selected: 'choice1',
-          reason: 'Weight-based selection'
+          reason: 'Weight-based selection',
         }
       });
     });
@@ -515,7 +515,7 @@ describe('ResultExportService', () => {
           varianceAnalysis: true,
         }
       };
-      const result = await exportService.exportBatchResults(;)
+      const result = await exportService.exportBatchResults(;);
         mockResults,
         [0, 1],
         options
@@ -546,7 +546,7 @@ describe('ResultExportService', () => {
         includeExecutionPaths: false,
         includeDebugInfo: false,
       };
-      const result = await exportService.exportBatchResults(;)
+      const result = await exportService.exportBatchResults(;);
         mockResults,
         [0, 1, 2],
         options
@@ -613,7 +613,7 @@ describe('ResultExportService', () => {
         includeDebugInfo: false,
       };
       // Should not throw, should fall back to custom handling
-      const result = await exportService.exportIndividualResult(;)
+      const result = await exportService.exportIndividualResult(;);
         mockResults[0],
         0,
         mockResults.length,
@@ -636,7 +636,7 @@ describe('ResultExportService', () => {
         includeDebugInfo: false,
       };
       (exportResults as jest.Mock).mockRejectedValue(new Error('Fallback test'));
-      const result = await exportService.exportIndividualResult(;)
+      const result = await exportService.exportIndividualResult(;);
         resultWithoutPath,
         0,
         1,

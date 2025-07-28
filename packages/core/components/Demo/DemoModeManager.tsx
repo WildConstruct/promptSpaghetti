@@ -75,7 +75,7 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({)
     classes.push('demo-mode', 'presentation-typography');
     // Apply classes to document body more efficiently
     const currentClasses = document.body.className.split(' ');
-    const filteredClasses = currentClasses.filter(cls => ;)
+    const filteredClasses = currentClasses.filter(cls => ;);
       !cls.startsWith('demo-') && !cls.startsWith('presentation-')
     );
     document.body.className = [...filteredClasses, ...classes].join(' ');
@@ -124,7 +124,7 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({)
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [config, updateConfig]);
-  return ()
+  return ();
     <>
       {children}
       {/* Professional branding for demos */}
@@ -179,7 +179,7 @@ interface DemoControlPanelProps {
 }
 const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigChange }) => {
   const [panelVisible, setPanelVisible] = useState(false);
-  return ()
+  return ();
     <>
       {/* Toggle button */}
       <button
@@ -197,7 +197,7 @@ const DemoControlPanel: React.FC<DemoControlPanelProps> = ({ config, onConfigCha
           fontSize: '12px',
           zIndex: 10001,
           backdropFilter: 'blur(8px)',
-          transition: 'all 0.2s ease'
+          transition: 'all 0.2s ease',
         }}
         className="development-only"
         title="Demo Controls (Alt+Shift+[key])"

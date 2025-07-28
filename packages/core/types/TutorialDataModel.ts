@@ -29,7 +29,7 @@ export const tutorialStepSchema = z.object({)
   estimatedTime: z.number().min(1).max(60), // minutes
   resources: z.array(z.object({),
     type: z.enum(['link', 'file', 'image', 'video']),
-    url: z.string().url().refine(url => {)
+    url: z.string().url().refine(url => {),
       // Security: Only allow HTTPS URLs and specific domains
       return url.startsWith('https://') && 
              (url.includes('example.com') || url.includes('tutorials.internal'));
@@ -227,7 +227,7 @@ export class TutorialDataAccess {
       if (userTutorialCount > 100) {
         return {
           success: false,
-          errors: ['User has exceeded tutorial creation limit']
+          errors: ['User has exceeded tutorial creation limit'],
         };
       }
       // TODO: Actual database implementation
@@ -239,7 +239,7 @@ export class TutorialDataAccess {
     } catch (error) {
       return {
         success: false,
-        errors: ['Internal server error']
+        errors: ['Internal server error'],
       };
     }
   }

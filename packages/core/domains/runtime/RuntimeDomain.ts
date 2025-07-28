@@ -323,14 +323,14 @@ export interface IRuntimeDomain {
   };
   // React Hooks
   hooks: {,
-    useRuntime: () => {
+    useRuntime: () => {,
       state: RuntimeDomainState;
       executeGraph: (graph: Graph, seeds: number[], options?: ExecutionOptions) => Promise<ExecutionRecord[]>;
       queueExecution: (graph: Graph, seeds: number[]) => Promise<string>;
       cancelExecution: (taskId: string) => Promise<void>;
       getMetrics: () => Promise<RuntimeMetrics>;
     };
-    useExecutionQueue: () => {
+    useExecutionQueue: () => {,
       queue: ExecutionTask[];
       running: ExecutionInstance[];
       completed: ExecutionRecord[];
@@ -339,14 +339,14 @@ export interface IRuntimeDomain {
       pauseQueue: () => Promise<void>;
       resumeQueue: () => Promise<void>;
     };
-    useNodeRegistry: () => {
+    useNodeRegistry: () => {,
       nodes: NodeDefinition[];
       loading: boolean;
       registerNode: (definition: NodeDefinition) => Promise<void>;
       getNode: (nodeType: string) => NodeDefinition | null;
       searchNodes: (query: string) => NodeDefinition[];
     };
-    usePerformanceMetrics: () => {
+    usePerformanceMetrics: () => {,
       metrics: RuntimeMetrics | null;
       nodeMetrics: Map<string, NodeMetrics>;
       loading: boolean;
@@ -354,7 +354,7 @@ export interface IRuntimeDomain {
       startProfiling: (executionId: string) => Promise<void>;
       stopProfiling: (executionId: string) => Promise<ProfileResult>;
     };
-    useValidation: () => {
+    useValidation: () => {,
       validateGraph: (graph: Graph) => Promise<ValidationResult>;
       validateNode: (node: any, definition: NodeDefinition) => Promise<ValidationResult>;
       getValidationRules: (nodeType: string) => Promise<any[]>;
@@ -370,7 +370,7 @@ export interface IRuntimeDomain {
     security: ISecurityService;
   };
   // Event System
-  events: RuntimeDomainEvents & {
+  events: RuntimeDomainEvents & {,
     subscribe: (event: keyof RuntimeDomainEvents, callback: Function) => () => void;
     emit: (event: keyof RuntimeDomainEvents, ...args: any[]) => void;
   };

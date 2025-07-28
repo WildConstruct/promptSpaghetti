@@ -4,12 +4,10 @@
  * 
  * Provides consistent structure, navigation, and header for admin interfaces
  */
-
 import React from 'react';
 import { SidebarNavigation } from './SidebarNavigation';
 import { AdminHeader } from './AdminHeader';
 import './AdminLayout.css';
-
 interface AdminLayoutProps {
   children: React.ReactNode;
   title?: string;
@@ -22,7 +20,7 @@ interface AdminLayoutProps {
   className?: string;
 }
 
-export const AdminLayout: React.FC<AdminLayoutProps> = ({
+export const AdminLayout: React.FC<AdminLayoutProps> = ({)
   children,
   title,
   subtitle,
@@ -33,8 +31,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   onSidebarToggle,
   className = ''
 }) => {
-  return (
-    <div className={`admin-layout ${className} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+  return ()
+    <div className={`admin-layout ${className} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>}
       {/* Admin Header */}
       <AdminHeader
         title={title}
@@ -45,16 +43,14 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
         sidebarCollapsed={sidebarCollapsed}
         onSidebarToggle={onSidebarToggle}
       />
-
       <div className="admin-layout-body">
         {/* Sidebar Navigation */}
-        {showSidebar && (
+        {showSidebar && ()
           <SidebarNavigation 
             collapsed={sidebarCollapsed}
             onToggle={onSidebarToggle}
           />
         )}
-
         {/* Main Content Area */}
         <main className="admin-main-content">
           <div className="admin-content-wrapper">

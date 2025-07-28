@@ -322,7 +322,7 @@ export class DataClassificationHelpers {
     const allFrameworks = new Set([...sourceFrameworks, ...targetFrameworks]);
     complianceImpact.push(...Array.from(allFrameworks));
     // Determine risk level
-    const riskLevel = DataSensitivityUtils.getRiskLevel(;)
+    const riskLevel = DataSensitivityUtils.getRiskLevel(;);
       DataSensitivityUtils.getHigherSensitivityLevel(sourceLevel, targetLevel)
     );
     return {
@@ -355,7 +355,6 @@ export class DataClassificationHelpers {
       riskScore: number;
     }>;
     recommendations: string[];
-  } {
     const summary = {
       totalElements: elements.length,
       compliantElements: 0,
@@ -384,7 +383,7 @@ export class DataClassificationHelpers {
         encrypted: currentPolicies.encryption || false,
         accessControl: currentPolicies.accessControl || [],
         monitoring: currentPolicies.monitoring || 'none',
-        retention: currentPolicies.retention || 'indefinite'
+        retention: currentPolicies.retention || 'indefinite',
       });
       if (policyResult.compliant) {
         summary.compliantElements++;
@@ -421,7 +420,6 @@ export class DataClassificationHelpers {
     valid: boolean;
     errors: string[];
     sanitizedValue?: any;
-  } {
     const errors: string[] = [];
     let sanitizedValue = value;
     // Apply security validation based on sensitivity level
@@ -469,7 +467,6 @@ export class DataClassifierIntegration {
     sensitivityLevel: DataSensitivityLevel;
     handlingRequirements: DataHandlingRequirements;
     securityMarkings: ReturnType<typeof DataSensitivityUtils.generateSecurityMarkings>;
-  } {
     const sensitivityLevel = DataClassificationHelpers.convertClassificationResult(result);
     const handlingRequirements = DataSensitivityUtils.getHandlingRequirements(sensitivityLevel);
     const securityMarkings = DataSensitivityUtils.generateSecurityMarkings(sensitivityLevel);
@@ -488,7 +485,7 @@ export class DataClassifierIntegration {
     fieldName: string,
     value: any,
     sensitivityLevel: DataSensitivityLevel,
-    source: string = 'unknown'
+    source: string = 'unknown',
   ): EnhancedDataElement {
     const baseElement: DataElement = {
       id,
@@ -497,10 +494,10 @@ export class DataClassifierIntegration {
       dataType: typeof value,
       context: {,
         sensitivityLevel,
-        detectedAt: new Date().toISOString()
+        detectedAt: new Date().toISOString(),
       },
       source,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
     return DataClassificationHelpers.enhanceDataElement(baseElement, sensitivityLevel);
   }

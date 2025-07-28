@@ -239,7 +239,7 @@ export class WorkspaceStateSync extends EventEmitter {
       await this.applyResolution({)
         conflictId: conflict.id,
         selectedChange: latestChange,
-        reason: 'Automatic resolution: most recent change'
+        reason: 'Automatic resolution: most recent change',
       });
     }
   }
@@ -250,7 +250,7 @@ export class WorkspaceStateSync extends EventEmitter {
       await this.applyResolution({)
         conflictId: conflict.id,
         selectedChange: lastChange,
-        reason: 'Last writer wins strategy'
+        reason: 'Last writer wins strategy',
       });
     }
   }

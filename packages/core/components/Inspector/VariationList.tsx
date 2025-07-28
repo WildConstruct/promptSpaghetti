@@ -114,7 +114,7 @@ export const VariationList: React.FC<VariationListProps> = ({)
     setDraggedIndex(null);
     setDragOverIndex(null);
   };
-  return ()
+  return ();
     <div style={{ marginBottom: 16 }}>
       <div style={{ 
         display: 'flex', 
@@ -181,7 +181,7 @@ export const VariationList: React.FC<VariationListProps> = ({)
                 borderRadius: 4,
                 padding: '6px 12px',
                 fontSize: 12,
-                cursor: quickEntryText.trim() ? 'pointer' : 'not-allowed'
+                cursor: quickEntryText.trim() ? 'pointer' : 'not-allowed',
               }}
             >
               Add All
@@ -246,7 +246,7 @@ export const VariationList: React.FC<VariationListProps> = ({)
                 borderRadius: 6,
                 padding: '8px 16px',
                 fontSize: 14,
-                cursor: newVariation.trim() && variations.length < maxVariations ? 'pointer' : 'not-allowed'
+                cursor: newVariation.trim() && variations.length < maxVariations ? 'pointer' : 'not-allowed',
               }}
             >
               Add

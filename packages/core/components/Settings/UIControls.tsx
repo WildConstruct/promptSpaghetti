@@ -152,11 +152,11 @@ export const UIControls: React.FC<UIControlsProps> = ({)
     const option = themeOptions.find(opt => opt.value === theme);
     return {
       Icon: option?.icon || FiMonitor,
-      color: theme === 'light' ? '#f59e0b' : theme === 'dark' ? '#6366f1' : uiColors.accent.primary
+      color: theme === 'light' ? '#f59e0b' : theme === 'dark' ? '#6366f1' : uiColors.accent.primary,
     };
   };
   const currentThemeInfo = getThemeInfo(settings.theme);
-  return ()
+  return ();
     <div style={{ marginBottom: '24px' }}>
       {/* Section Header */}
       <div style={{
@@ -220,7 +220,7 @@ export const UIControls: React.FC<UIControlsProps> = ({)
       {/* UI Settings Sections */}
       {uiSections.map((section) => {
         const SectionIcon = section.icon;
-        return ()
+        return ();
           <div key={section.id} style={{ marginBottom: '24px' }}>
             {/* Section Title */}
             <div style={{
@@ -250,7 +250,7 @@ export const UIControls: React.FC<UIControlsProps> = ({)
                 {themeOptions.map((option) => {
                   const Icon = option.icon;
                   const isSelected = settings.theme === option.value;
-                  return ()
+                  return ();
                     <button
                       key={option.value}
                       onClick={() => handleThemeChange(option.value)}
@@ -316,7 +316,7 @@ export const UIControls: React.FC<UIControlsProps> = ({)
               }}>
                 {section.settings.map((setting) => {
                   const SettingIcon = setting.icon;
-                  return ()
+                  return ();
                     <div key={setting.key} style={{
                       display: 'flex',
                       alignItems: 'flex-start',

@@ -192,7 +192,7 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
   // API simulation helpers (replace with actual API calls)
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
   // Enhanced operation executor with retry handling
-  const executeWithRetry = useCallback(async <T>(;)
+  const executeWithRetry = useCallback(async <T>(;);
     operation: MFAOperation,
     operationFn: () => Promise<T>,
     context: any = {}
@@ -237,7 +237,7 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
         onSecurityEvent?.('mfa_operation_retry', {)
           operation: data.operation,
           attempt: data.context.attempt,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     };
@@ -252,7 +252,7 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
         onSecurityEvent?.('mfa_circuit_breaker_opened', {)
           operation: data.operation,
           failureCount: data.failureCount,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     };
@@ -350,7 +350,7 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
         loadBackupCodes(),
         loadTrustedDevices(),
         loadSecurityEvents(),
-        loadSettings()
+        loadSettings();
       ]);
       if (isMountedRef.current) {
         setMFAMethods(methods);
@@ -384,7 +384,6 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
           method.id === methodId 
             ? { ...method, enabled: true }
             : method
-        )
       );
       // Log security event
       const event: SecurityEvent = {
@@ -420,7 +419,6 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
           method.id === methodId 
             ? { ...method, enabled: false, primary: false }
             : method
-        )
       );
       const event: SecurityEvent = {
         id: `event-${Date.now()}`,}
@@ -442,7 +440,7 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
   const setupTOTP = useCallback(async (userId: string): Promise<{ secret: string; qrCode: string }> => {
     try {
       setLoading(true);
-      const result = await executeWithRetry(;)
+      const result = await executeWithRetry(;);
         MFAOperation.METHOD_SETUP,
         async () => {
           await delay(300);
@@ -520,7 +518,7 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
       setMFAMethods(prev => )
         prev.map(method => ({)
           ...method,
-          primary: method.id === methodId
+          primary: method.id === methodId,
         }))
       );
     } catch (err) {
@@ -570,7 +568,6 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
           code.id === codeId 
             ? { ...code, used: true, usedAt: new Date() }
             : code
-        )
       );
     } catch (err) {
       handleError(err instanceof Error ? err : new Error('Failed to mark backup code as used'));
@@ -584,7 +581,7 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
       const newDevice: TrustedDevice = {
         ...device,
         id: `device-${Date.now()}`,}
-        addedAt: new Date()
+        addedAt: new Date(),
       };
       setTrustedDevices(prev => [...prev, newDevice]);
     } catch (err) {
@@ -612,7 +609,6 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
           device.id === deviceId 
             ? { ...device, lastAccess: new Date() }
             : device
-        )
       );
     } catch (err) {
       handleError(err instanceof Error ? err : new Error('Failed to refresh device access'));
@@ -677,7 +673,7 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
       const operation = methodType === 'totp' ? MFAOperation.TOTP_VERIFICATION :;
                        methodType === 'sms' ? MFAOperation.SMS_VERIFICATION :
                        MFAOperation.EMAIL_VERIFICATION;
-      const result = await executeWithRetry(;)
+      const result = await executeWithRetry(;);
         operation,
         async () => {
           await delay(300);
@@ -724,7 +720,7 @@ export const useMFAManagement = (options: UseMFAManagementOptions): UseMFAManage
         trustedDevices,
         securityEvents,
         settings,
-        exportedAt: new Date().toISOString()
+        exportedAt: new Date().toISOString(),
       };
       return new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     } catch (err) {

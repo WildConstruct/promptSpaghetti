@@ -120,7 +120,7 @@ export const DependencyVisualizationDashboard: React.FC<DashboardProps> = ({)
       filteredEdges = filteredEdges.filter(edge =>)
         filters.dependencyTypes.includes(edge.type)
       );
-      const connectedNodeIds = new Set([;)
+      const connectedNodeIds = new Set([;);
         ...filteredEdges.map(e => e.source),
         ...filteredEdges.map(e => e.target)
       ]);
@@ -152,9 +152,9 @@ export const DependencyVisualizationDashboard: React.FC<DashboardProps> = ({)
       critical: 'bg-red-500 text-white',
       error: 'bg-red-400 text-white',
       warning: 'bg-yellow-400 text-gray-800',
-      low: 'bg-gray-400 text-white'
+      low: 'bg-gray-400 text-white',
     };
-    return ()
+    return ();
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[severity] || colors.low}`}>}
         {severity.toUpperCase()}
       </span>
@@ -170,14 +170,14 @@ export const DependencyVisualizationDashboard: React.FC<DashboardProps> = ({)
       [DependencyType.FOLLOWS]: 'bg-yellow-100 text-yellow-800',
       [DependencyType.PRECEDES]: 'bg-indigo-100 text-indigo-800'
     };
-    return ()
+    return ();
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[type]}`}>}
         {type.replace('_', ' ').toUpperCase()}
       </span>
     );
   };
   if (loading) {
-    return ()
+    return ();
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -187,7 +187,7 @@ export const DependencyVisualizationDashboard: React.FC<DashboardProps> = ({)
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <div className="flex-shrink-0">
@@ -209,7 +209,7 @@ export const DependencyVisualizationDashboard: React.FC<DashboardProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="dependency-dashboard h-full flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -409,13 +409,13 @@ const GraphVisualization: React.FC<GraphVisualizationProps> = ({)
   onNodeClick
 }) => {
   if (!graph) {
-    return ()
+    return ();
       <div className="flex-1 flex items-center justify-center">
         <div className="text-gray-500">No dependency data available</div>
       </div>
     );
   }
-  return ()
+  return ();
     <div className="flex-1 p-6 bg-gray-50">
       <div className="bg-white rounded-lg border border-gray-200 h-full p-4">
         <div className="flex items-center justify-between mb-4">
@@ -444,7 +444,7 @@ interface AnalysisViewProps {
   onConflictResolve?: (conflictId: string, resolution: string) => void;
 }
 const AnalysisView: React.FC<AnalysisViewProps> = ({ analysis }) => {
-  return ()
+  return ();
     <div className="flex-1 p-6 bg-gray-50 overflow-y-auto">
       <div className="space-y-6">
         {/* Violations */}

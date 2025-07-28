@@ -275,7 +275,7 @@ describe('Sequential Node', () => {
       expect(result.warnings.length).toBeGreaterThan(0);
     });
     test('should validate weighted pattern configuration', () => {
-      const validWeightedNode = createSequentialNode(;)
+      const validWeightedNode = createSequentialNode(;);
         'valid-weighted', 
         ['a', 'b'], 
         'weighted', 

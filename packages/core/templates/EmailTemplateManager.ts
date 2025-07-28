@@ -268,7 +268,7 @@ export class EmailTemplateManager {
   /**
    * Render an email template
    */
-  renderTemplate()
+  renderTemplate();
     templateName: string, 
     variables: TemplateVariables, 
     format: 'html' | 'text' = 'html',
@@ -307,7 +307,6 @@ export class EmailTemplateManager {
     valid: boolean;
     errors: string[];
     warnings: string[];
-  } {
     const template = this.getTemplate(templateName);
     const errors: string[] = [];
     const warnings: string[] = [];

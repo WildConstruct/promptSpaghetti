@@ -40,7 +40,7 @@ const mockExecutionPath: ExecutionPath = {
       timestamp: Date.now() - 400,
       executionTimeMs: 30,
       inputs: [{ value: 'choice1', inputIndex: 0 }],
-      output: 'Final output with choice1'
+      output: 'Final output with choice1',
     }
   ],
   finalOutput: 'Final output with choice1',
@@ -85,7 +85,7 @@ const mockPreviewResults: PreviewResultWithPath[] = [
       seed: 67890,
       totalExecutionTime: 300,
       finalOutput: 'Another output',
-      randomizationPoints: mockExecutionPath.randomizationPoints // Ensure it has same randomization points
+      randomizationPoints: mockExecutionPath.randomizationPoints // Ensure it has same randomization points,
     },
     debugInfo: {,
       nodeExecutionOrder: ['node1', 'node2'],
@@ -100,7 +100,7 @@ const mockPreviewResults: PreviewResultWithPath[] = [
 describe('ExecutionPathVisualization', () => {
   describe('Basic Rendering', () => {
     it('should render component with execution path data', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
         />
@@ -119,7 +119,7 @@ describe('ExecutionPathVisualization', () => {
           usedEdgeIds: [],
         }
       ];
-      render()
+      render();
         <ExecutionPathVisualization 
           results={resultsWithoutPaths}
         />
@@ -127,7 +127,7 @@ describe('ExecutionPathVisualization', () => {
       expect(screen.getByText('No execution path data available')).toBeInTheDocument();
     });
     it('should render path headers for each result', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
         />
@@ -138,7 +138,7 @@ describe('ExecutionPathVisualization', () => {
       expect(screen.getByText('300ms • 2 steps')).toBeInTheDocument();
     });
     it('should show randomization indicators', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
         />
@@ -149,7 +149,7 @@ describe('ExecutionPathVisualization', () => {
   });
   describe('Path Expansion', () => {
     it('should expand path details when clicked', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
           config={{ 
@@ -168,7 +168,7 @@ describe('ExecutionPathVisualization', () => {
       expect(screen.getByText('Randomization Points')).toBeInTheDocument();
     });
     it('should show execution order when expanded', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
           config={{ showExecutionOrder: true }}
@@ -181,7 +181,7 @@ describe('ExecutionPathVisualization', () => {
       expect(screen.getByText('2. node2...')).toBeInTheDocument();
     });
     it('should show randomization points when expanded', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
           config={{ showRandomChoices: true }}
@@ -195,7 +195,7 @@ describe('ExecutionPathVisualization', () => {
       expect(screen.getByText('Probability: 60.0%')).toBeInTheDocument();
     });
     it('should show performance breakdown when enabled and available', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
           config={{ 
@@ -221,7 +221,7 @@ describe('ExecutionPathVisualization', () => {
       mockOnNodeHighlight.mockClear();
     });
     it('should call onNodeHighlight when path is selected', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
           onNodeHighlight={mockOnNodeHighlight}
@@ -233,7 +233,7 @@ describe('ExecutionPathVisualization', () => {
       expect(mockOnNodeHighlight).toHaveBeenCalledWith(['node1', 'node2']);
     });
     it('should deselect path when clicked again', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
           onNodeHighlight={mockOnNodeHighlight}
@@ -248,7 +248,7 @@ describe('ExecutionPathVisualization', () => {
       expect(mockOnNodeHighlight).toHaveBeenLastCalledWith([]);
     });
     it('should visually indicate selected path', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
         />
@@ -264,7 +264,7 @@ describe('ExecutionPathVisualization', () => {
   });
   describe('Configuration Options', () => {
     it('should respect showExecutionOrder config', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
           config={{ showExecutionOrder: false }}
@@ -276,7 +276,7 @@ describe('ExecutionPathVisualization', () => {
       expect(screen.queryByText('Execution Order')).not.toBeInTheDocument();
     });
     it('should respect showRandomChoices config', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
           config={{ showRandomChoices: false }}
@@ -288,7 +288,7 @@ describe('ExecutionPathVisualization', () => {
       expect(screen.queryByText('Randomization Points')).not.toBeInTheDocument();
     });
     it('should respect showPerformanceMetrics config', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
           config={{ showPerformanceMetrics: false }}
@@ -302,7 +302,7 @@ describe('ExecutionPathVisualization', () => {
   });
   describe('Accessibility', () => {
     it('should have proper ARIA attributes', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
         />
@@ -311,7 +311,7 @@ describe('ExecutionPathVisualization', () => {
       expect(visualization).toHaveClass('execution-path-visualization');
     });
     it('should support keyboard navigation', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
         />
@@ -323,7 +323,7 @@ describe('ExecutionPathVisualization', () => {
   });
   describe('Edge Cases', () => {
     it('should handle empty results array', () => {
-      render()
+      render();
         <ExecutionPathVisualization 
           results={[]}
         />
@@ -344,7 +344,7 @@ describe('ExecutionPathVisualization', () => {
           }
         }
       ];
-      render()
+      render();
         <ExecutionPathVisualization 
           results={resultsWithoutRandomization}
         />
@@ -364,7 +364,7 @@ describe('ExecutionPathVisualization', () => {
           // No debugInfo
         }
       ];
-      render()
+      render();
         <ExecutionPathVisualization 
           results={resultsWithoutDebugInfo}
           config={{ showPerformanceMetrics: true }}

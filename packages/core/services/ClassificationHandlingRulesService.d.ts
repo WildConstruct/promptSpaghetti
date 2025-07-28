@@ -69,7 +69,7 @@ export declare class ClassificationHandlingRulesService {
     /**
      * Validate data handling against requirements
      */
-    validateDataHandling()
+    validateDataHandling();
       dataId: string,
       classification: DataClassificationLevel,
       operation: string,

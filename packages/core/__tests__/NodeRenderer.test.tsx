@@ -46,14 +46,14 @@ describe('NodeRenderer', () => {
     render(<NodeRenderer {...defaultProps} selected={true} />);
     const nodeElement = screen.getByTestId('node-node-1');
     expect(nodeElement).toHaveStyle({)
-      border: '2px solid #3182ce'
+      border: '2px solid #3182ce',
     });
   });
   it('displays node with unselected state styling', () => {
     render(<NodeRenderer {...defaultProps} selected={false} />);
     const nodeElement = screen.getByTestId('node-node-1');
     expect(nodeElement).toHaveStyle({)
-      border: '1px solid #4a5568'
+      border: '1px solid #4a5568',
     });
   });
   it('calls onSelect when clicked', async () => {
@@ -100,7 +100,7 @@ describe('NodeRenderer', () => {
         property1: 'value1',
         property2: 'value2',
         property3: 'value3',
-        property4: 'value4' // Should be filtered out
+        property4: 'value4' // Should be filtered out,
       }
     };
     render(<NodeRenderer {...propsWithProperties} />);
@@ -186,12 +186,12 @@ describe('NodeRenderer', () => {
     // Mouse enter should apply hover effect
     fireEvent.mouseEnter(nodeElement);
     expect(nodeElement).toHaveStyle({)
-      transform: 'translateY(-2px) translateZ(0)'
+      transform: 'translateY(-2px) translateZ(0)',
     });
     // Mouse leave should remove hover effect
     fireEvent.mouseLeave(nodeElement);
     expect(nodeElement).toHaveStyle({)
-      transform: 'translateY(0) translateZ(0)'
+      transform: 'translateY(0) translateZ(0)',
     });
   });
   it('does not apply hover effects when selected', () => {
@@ -223,7 +223,7 @@ describe('NodeRenderer', () => {
   });
   it('stops event propagation on click', async () => {
     const parentClickHandler = jest.fn();
-    render()
+    render();
       <div onClick={parentClickHandler}>
         <NodeRenderer {...defaultProps} />
       </div>

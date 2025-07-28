@@ -17,35 +17,35 @@ const mockNodes: NodeMeta[] = [
     label: 'Random Selection',
     icon: '🎲',
     category: 'flow',
-    tooltip: 'Choose randomly from multiple options with different likelihood'
+    tooltip: 'Choose randomly from multiple options with different likelihood',
   },
   {
     id: 'Conditional',
     label: 'If/Then',
     icon: '🔀',
     category: 'advanced',
-    tooltip: 'Choose different creative paths based on conditions'
+    tooltip: 'Choose different creative paths based on conditions',
   },
   {
     id: 'Output',
     label: 'Result',
     icon: '📝',
     category: 'output',
-    tooltip: 'Final generated content ready for use'
+    tooltip: 'Final generated content ready for use',
   },
   {
     id: 'SetVariable',
     label: 'Store Value',
     icon: '💾',
     category: 'memory',
-    tooltip: 'Save a value to use later in your workflow'
+    tooltip: 'Save a value to use later in your workflow',
   },
   {
     id: 'PythonTransform',
     label: 'Custom Script',
     icon: '🐍',
     category: 'process',
-    tooltip: 'Apply custom processing logic to transform content'
+    tooltip: 'Apply custom processing logic to transform content',
   }
 ];
 describe('PaletteSearch', () => {
@@ -201,7 +201,7 @@ describe('PaletteSearch', () => {
     test('should handle multiple category filter', () => {
       const results = searchEngine.searchInCategories('content', ['content', 'output']);
       results.forEach(result => {)
-        expect()
+        expect();
           result.categories.includes('content') || result.categories.includes('output')
         ).toBe(true);
       });
@@ -260,7 +260,7 @@ describe('PaletteSearch', () => {
           label: 'New Test Node',
           icon: '🆕',
           category: 'test',
-          tooltip: 'A new node for testing'
+          tooltip: 'A new node for testing',
         }
       ];
       searchEngine.updateNodes(newNodes);
@@ -275,7 +275,7 @@ describe('PaletteSearch', () => {
           label: 'Only Node',
           icon: '📱',
           category: 'test',
-          tooltip: 'The only node'
+          tooltip: 'The only node',
         }
       ];
       searchEngine.updateNodes(newNodes);
@@ -313,7 +313,7 @@ describe('PaletteSearch', () => {
           label: 'Café ñoño 中文',
           icon: '🌍',
           category: 'test',
-          tooltip: 'Unicode test node'
+          tooltip: 'Unicode test node',
         }
       ];
       const unicodeEngine = new PaletteSearch(unicodeNodes);

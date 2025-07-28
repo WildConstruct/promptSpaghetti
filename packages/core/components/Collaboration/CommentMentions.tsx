@@ -110,7 +110,7 @@ const CommentMentions: React.FC<CommentMentionsProps> = ({ )
     }
   };
   if (loading) {
-    return ()
+    return ();
       <div className="bg-white border border-gray-200 rounded-md shadow-lg p-3">
         <div className="flex items-center space-x-2 text-sm text-gray-500">
           <div className="w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
@@ -120,7 +120,7 @@ const CommentMentions: React.FC<CommentMentionsProps> = ({ )
     );
   }
   if (users.length === 0) {
-    return ()
+    return ();
       <div className="bg-white border border-gray-200 rounded-md shadow-lg p-3">
         <div className="text-sm text-gray-500">
           {query.trim() ? `No users found matching "${query}"` : 'Start typing to search users...'}
@@ -128,7 +128,7 @@ const CommentMentions: React.FC<CommentMentionsProps> = ({ )
       </div>
     );
   }
-  return ()
+  return ();
     <div className="bg-white border border-gray-200 rounded-md shadow-lg max-h-64 overflow-y-auto">
       {users.map((user, index) => ()
         <button

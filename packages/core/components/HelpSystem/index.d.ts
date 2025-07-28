@@ -33,13 +33,13 @@ export declare     getAnalytics: () => {
             helpful: number;
         }>;
     };
-    getHelpEffectivenessReport: () => {
+    getHelpEffectivenessReport: () => {,
         helpId: string;
         views: number;
         helpful: number;
         effectivenessRate: number;
     }[];
-    getStruggleReport: () => {
+    getStruggleReport: () => {,
         type: string;
         count: number;
     }[];

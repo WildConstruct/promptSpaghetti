@@ -191,7 +191,7 @@ describe('Conditional Node', () => {
       const customConfig: ConditionalConfig = {
         customFunctions: {,
           isEven: (n: number) => n % 2 === 0,
-          capitalize: (str: string) => str.charAt(0).toUpperCase() + str.slice(1)
+          capitalize: (str: string) => str.charAt(0).toUpperCase() + str.slice(1),
         }
       };
       const branches: ConditionalBranch[] = [

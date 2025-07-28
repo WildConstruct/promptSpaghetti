@@ -92,7 +92,7 @@ export class DALLEAdapter extends BaseAIModel {
         tokensPerMinute: 1000,
       },
       tags: ['image-generation', 'creative', 'artistic'],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     const capabilities: ModelCapabilities = {
       inputTypes: ['text'],
@@ -105,7 +105,7 @@ export class DALLEAdapter extends BaseAIModel {
       customParameters: {,
         size: { ,
           type: 'enum', 
-          values: modelName === 'dall-e-3' 
+          values: modelName === 'dall-e-3' ,
             ? ['1024x1024', '1792x1024', '1024x1792'] 
             : ['256x256', '512x512', '1024x1024'],
           default: '1024x1024' ,
@@ -114,13 +114,13 @@ export class DALLEAdapter extends BaseAIModel {
           type: 'enum', 
           values: ['standard', 'hd'], 
           default: 'standard',
-          available: modelName === 'dall-e-3'
+          available: modelName === 'dall-e-3',
         },
         style: { ,
           type: 'enum', 
           values: ['vivid', 'natural'], 
           default: 'vivid',
-          available: modelName === 'dall-e-3'
+          available: modelName === 'dall-e-3',
         },
         n: { ,
           type: 'number', 
@@ -305,7 +305,7 @@ export class DALLEAdapter extends BaseAIModel {
             ...(this.config.organization && { 'OpenAI-Organization': this.config.organization })
           },
           body: JSON.stringify(payload),
-          signal: AbortSignal.timeout(this.config.timeout || 120000) // 2 minutes default
+          signal: AbortSignal.timeout(this.config.timeout || 120000) // 2 minutes default,
         });
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
@@ -389,7 +389,7 @@ export class DALLEAdapter extends BaseAIModel {
       optimizedPrompt: optimization.optimizedPrompt,
       usage: {,
         promptTokens,
-        totalCost: (this._metadata.costPerRequest || 0) * images.length
+        totalCost: (this._metadata.costPerRequest || 0) * images.length,
       },
       generationTime
     };
@@ -446,7 +446,7 @@ class PromptOptimizer {
   private _enhanceForVividStyle(prompt: string): string {
     // Add vivid descriptors if not present
     const vividKeywords = ['vibrant', 'bold', 'dramatic', 'intense', 'striking'];
-    const hasVividKeywords = vividKeywords.some(keyword => ;)
+    const hasVividKeywords = vividKeywords.some(keyword => ;);
       prompt.toLowerCase().includes(keyword)
     );
     if (!hasVividKeywords) {
@@ -457,7 +457,7 @@ class PromptOptimizer {
   private _enhanceForNaturalStyle(prompt: string): string {
     // Add natural descriptors if not present
     const naturalKeywords = ['realistic', 'natural', 'subtle', 'soft', 'organic'];
-    const hasNaturalKeywords = naturalKeywords.some(keyword => ;)
+    const hasNaturalKeywords = naturalKeywords.some(keyword => ;);
       prompt.toLowerCase().includes(keyword)
     );
     if (!hasNaturalKeywords) {
@@ -468,7 +468,7 @@ class PromptOptimizer {
   private _enhanceForHD(prompt: string): string {
     // Add quality descriptors for HD
     const qualityKeywords = ['high detail', 'sharp', 'crisp', 'high resolution'];
-    const hasQualityKeywords = qualityKeywords.some(keyword => ;)
+    const hasQualityKeywords = qualityKeywords.some(keyword => ;);
       prompt.toLowerCase().includes(keyword)
     );
     if (!hasQualityKeywords) {

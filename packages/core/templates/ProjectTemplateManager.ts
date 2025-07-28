@@ -115,7 +115,7 @@ export class ProjectTemplateManager {
     const updatedTemplate = {
       ...template,
       ...updates,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
     this.validateTemplate(updatedTemplate);
     this.templates.set(id, updatedTemplate);

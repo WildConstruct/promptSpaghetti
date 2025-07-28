@@ -621,7 +621,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
         check: { id: 'system', name: 'System Health Check' } as HealthCheckConfig,
         success: false,
         responseTime: Date.now() - startTime,
-        error: error instanceof Error ? error.message : String(error)
+        error: error instanceof Error ? error.message : String(error),
       });
     }
   }
@@ -691,7 +691,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
         check: healthCheck,
         success: false,
         responseTime,
-        error: error instanceof Error ? error.message : String(error)
+        error: error instanceof Error ? error.message : String(error),
       };
     }
   }
@@ -878,7 +878,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
       network_out_bps: Math.random() * 5000000 + 500000, // 500KB-5MB/s
       load_average_1m: Math.random() * 4 + 0.5, // 0.5-4.5
       load_average_5m: Math.random() * 3 + 0.5, // 0.5-3.5
-      load_average_15m: Math.random() * 2 + 0.5 // 0.5-2.5
+      load_average_15m: Math.random() * 2 + 0.5 // 0.5-2.5,
     };
   }
   private async collectApplicationMetrics(component: InfrastructureComponent): Promise<InfrastructureMetrics['application']> {
@@ -891,7 +891,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
       queue_size: Math.floor(Math.random() * 100), // 0-100
       thread_count: Math.floor(Math.random() * 200 + 10), // 10-210 threads
       heap_usage_mb: Math.random() * 1000 + 100, // 100-1100MB
-      gc_time_ms: Math.random() * 100 + 5 // 5-105ms
+      gc_time_ms: Math.random() * 100 + 5 // 5-105ms,
     };
   }
   private async collectDatabaseMetrics(component: InfrastructureComponent): Promise<InfrastructureMetrics['database']> {
@@ -904,7 +904,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
       lock_wait_time_ms: Math.random() * 100, // 0-100ms
       replication_lag_ms: Math.random() * 1000, // 0-1000ms
       table_size_mb: Math.random() * 10000 + 1000, // 1GB-11GB
-      index_hit_ratio: 0.85 + Math.random() * 0.14 // 85-99%
+      index_hit_ratio: 0.85 + Math.random() * 0.14 // 85-99%,
     };
   }
   private async collectCustomMetric(component: InfrastructureComponent, config: CustomMetricConfig): Promise<number> {
@@ -943,7 +943,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
       context: {,
         failure_count: failedChecks.length,
         affected_services: [component.name],
-        impact_assessment: severity === 'critical' ? 'high' : severity === 'warning' ? 'medium' : 'low'
+        impact_assessment: severity === 'critical' ? 'high' : severity === 'warning' ? 'medium' : 'low',
       }
     });
     if (failedChecks.length > 0) {
@@ -970,7 +970,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
         measurement_unit: 'milliseconds',
         affected_services: [component.name],
         root_cause_analysis: result.error,
-        impact_assessment: result.check.weight > 0.7 ? 'high' : 'medium'
+        impact_assessment: result.check.weight > 0.7 ? 'high' : 'medium',
       }
     });
   }
@@ -993,7 +993,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
             threshold_value: threshold.condition.value,
             measurement_unit: this.getMetricUnit(threshold.metric_name),
             affected_services: [component.name],
-            impact_assessment: threshold.severity === 'critical' ? 'high' : threshold.severity === 'warning' ? 'medium' : 'low'
+            impact_assessment: threshold.severity === 'critical' ? 'high' : threshold.severity === 'warning' ? 'medium' : 'low',
           }
         });
       }
@@ -1009,7 +1009,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     let shouldAlert = false;
     let severity: InfrastructureAlert['severity'] = 'info';
     let thresholdValue = 0;
-    if ()
+    if ();
       config.thresholds.critical_threshold && this.compareValues(value,)
       config.thresholds.critical_threshold,
       config.thresholds.comparison_operator
@@ -1038,7 +1038,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
           threshold_value: thresholdValue,
           measurement_unit: config.unit,
           affected_services: [component.name],
-          impact_assessment: severity === 'critical' ? 'high' : 'medium'
+          impact_assessment: severity === 'critical' ? 'high' : 'medium',
         }
       });
     }
@@ -1165,7 +1165,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     }
     // Check component filter
     if (channel.routing.component_filter.length > 0) {
-      const matches = channel.routing.component_filter.some(pattern => ;)
+      const matches = channel.routing.component_filter.some(pattern => ;);
         alert.component_id.includes(pattern) || 
         pattern === '*'
       );
@@ -1299,14 +1299,14 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
   private matchesSuppressionRule(alert: InfrastructureAlert, rule: SuppressionRule): boolean {
     // Check component patterns
     if (rule.conditions.component_patterns.length > 0) {
-      const matches = rule.conditions.component_patterns.some(pattern => ;)
+      const matches = rule.conditions.component_patterns.some(pattern => ;);
         alert.component_id.includes(pattern) || pattern === '*'
       );
       if (!matches) return false;
     }
     // Check alert patterns
     if (rule.conditions.alert_patterns.length > 0) {
-      const matches = rule.conditions.alert_patterns.some(pattern => ;)
+      const matches = rule.conditions.alert_patterns.some(pattern => ;);
         alert.title.includes(pattern) || alert.description.includes(pattern)
       );
       if (!matches) return false;
@@ -1478,7 +1478,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     const alertRetentionMs = 7 * 24 * 60 * 60 * 1000;
     const alertCutoffTime = now - alertRetentionMs;
     for (const [componentId, componentAlerts] of this.alerts.entries()) {
-      const filteredAlerts = componentAlerts.filter(a => ;)
+      const filteredAlerts = componentAlerts.filter(a => ;);
         a.detected_at > alertCutoffTime || !a.resolution.resolved
       );
       this.alerts.set(componentId, filteredAlerts);
@@ -1659,7 +1659,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
           issue_type: Array.from(data.types).join(', '),
           occurrence_count: data.count,
           impact_score: data.count * (component?.status.health_status === 'critical' ? 3 : component?.status.health_status === 'warning' ? 2 : 1),
-          recommended_action: data.count > 5 ? 'Investigate recurring issues' : 'Monitor for patterns'
+          recommended_action: data.count > 5 ? 'Investigate recurring issues' : 'Monitor for patterns',
         };
       })
       .sort((a, b) => b.impact_score - a.impact_score)
@@ -1678,7 +1678,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
         warning_components: warningComponents,
         critical_components: criticalComponents,
         overall_health_score: Math.round(overallHealthScore),
-        availability_percentage: Math.round(avgAvailability * 100) / 100
+        availability_percentage: Math.round(avgAvailability * 100) / 100,
       },
       performance_summary: {,
         avg_response_time_ms: Math.round(avgResponseTime),
@@ -1687,7 +1687,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
         avg_cpu_usage_percent: Math.round(avgCpuUsage * 100) / 100,
         avg_memory_usage_percent: Math.round(avgMemoryUsage * 100) / 100,
         avg_disk_usage_percent: Math.round(avgDiskUsage * 100) / 100,
-        network_throughput_mbps: Math.round(avgNetworkThroughput * 100) / 100
+        network_throughput_mbps: Math.round(avgNetworkThroughput * 100) / 100,
       },
       alert_summary: {,
         total_alerts: allAlerts.length,
@@ -1696,7 +1696,7 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
         info_alerts: infoAlerts,
         resolved_alerts: resolvedAlerts,
         avg_resolution_time_minutes: Math.round(avgResolutionTime * 100) / 100,
-        false_positive_rate_percent: 5 // Estimated
+        false_positive_rate_percent: 5 // Estimated,
       },
       top_issues: topIssues,
       trends: {,
@@ -1735,7 +1735,6 @@ export class SecurityInfrastructureMonitor extends EventEmitter {
     critical_components: number;
     active_alerts: number;
     overall_health_score: number;
-  } {
     const components = Array.from(this.components.values());
     const healthyComponents = components.filter(c => c.status.health_status === 'healthy').length;
     const warningComponents = components.filter(c => c.status.health_status === 'warning').length;

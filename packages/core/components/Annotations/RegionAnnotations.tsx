@@ -135,42 +135,42 @@ const REGION_TYPES = {
     label: 'Selection',
     color: '#3b82f6',
     fillOpacity: 0.1,
-    description: 'Basic node selection area'
+    description: 'Basic node selection area',
   },
   highlight: {,
     icon: <Target className="w-4 h-4" />,
     label: 'Highlight',
     color: '#f59e0b',
     fillOpacity: 0.2,
-    description: 'Important area highlighting'
+    description: 'Important area highlighting',
   },
   problem_area: {,
     icon: <AlertTriangle className="w-4 h-4" />,
     label: 'Problem Area',
     color: '#ef4444',
     fillOpacity: 0.15,
-    description: 'Issues or problems requiring attention'
+    description: 'Issues or problems requiring attention',
   },
   optimization_zone: {,
     icon: <Zap className="w-4 h-4" />,
     label: 'Optimization Zone',
     color: '#10b981',
     fillOpacity: 0.12,
-    description: 'Areas for performance optimization'
+    description: 'Areas for performance optimization',
   },
   mars_zone: {,
     icon: <Camera className="w-4 h-4" />,
     label: 'MARS Zone',
     color: '#8b5cf6',
     fillOpacity: 0.18,
-    description: 'MARS methodology zone annotation'
+    description: 'MARS methodology zone annotation',
   },
   performance_area: {,
     icon: <Clock className="w-4 h-4" />,
     label: 'Performance Area',
     color: '#06b6d4',
     fillOpacity: 0.14,
-    description: 'Performance monitoring region'
+    description: 'Performance monitoring region',
   }
 };
 
@@ -242,7 +242,7 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({)
     const scaleY = canvas.height / rect.height;
     return {
       x: (event.clientX - rect.left) * scaleX / zoom - pan.x,
-      y: (event.clientY - rect.top) * scaleY / zoom - pan.y
+      y: (event.clientY - rect.top) * scaleY / zoom - pan.y,
     };
   }, [zoom, pan]);
   // Check if point is inside region
@@ -281,7 +281,7 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({)
       .filter(node => {)
         const nodeCenter = {
           x: node.x + node.width / 2,
-          y: node.y + node.height / 2
+          y: node.y + node.height / 2,
         };
         return isPointInRegion(nodeCenter, region);
       })
@@ -372,7 +372,7 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({)
         x: region.area.bounds.x - 5,
         y: region.area.bounds.y - 5,
         width: region.area.bounds.width + 10,
-        height: region.area.bounds.height + 10
+        height: region.area.bounds.height + 10,
       };
       ctx.strokeRect(selectionBounds.x, selectionBounds.y, selectionBounds.width, selectionBounds.height);
       // Draw corner handles
@@ -505,7 +505,7 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({)
           x: Math.min(...creationPoints.map(p => p.x)),
           y: Math.min(...creationPoints.map(p => p.y)),
           width: Math.max(...creationPoints.map(p => p.x)) - Math.min(...creationPoints.map(p => p.x)),
-          height: Math.max(...creationPoints.map(p => p.y)) - Math.min(...creationPoints.map(p => p.y))
+          height: Math.max(...creationPoints.map(p => p.y)) - Math.min(...creationPoints.map(p => p.y)),
         },
         points: creationPoints,
       };
@@ -535,7 +535,7 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({)
       nodeIds: getNodesInRegion({ ...newRegion, area } as RegionAnnotation),
       tags: [],
       metadata: {,
-        nodeCount: 0 // Will be updated after creation
+        nodeCount: 0 // Will be updated after creation,
       }
     };
     // Update node count
@@ -579,7 +579,7 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({)
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isCreating, creationPoints, completeRegionCreation]);
-  return ()
+  return ();
     <div className={`region-annotation-system ${className}`}>}
       <Card>
         <CardHeader>
@@ -826,7 +826,7 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({)
                   <div className="space-y-2 max-h-64 overflow-y-auto">
                     {filteredRegions.map(region => {)
                       const typeConfig = REGION_TYPES[region.type];
-                      return ()
+                      return ();
                         <div
                           key={region.id}
                           className={`p-3 border rounded cursor-pointer transition-colors ${
@@ -852,7 +852,7 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({)
                               <Switch
                                 checked={region.visible}
                                 onCheckedChange={(checked) => {
-                                  const updatedRegions = regions.map(r =>;)
+                                  const updatedRegions = regions.map(r =>;);
                                     r.id === region.id ? { ...r, visible: checked } : r
                                   );
                                   onRegionsChange(updatedRegions);

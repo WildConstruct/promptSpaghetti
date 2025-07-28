@@ -62,7 +62,7 @@ describe('SessionTimeoutController', () => {
     test('should calculate remaining time correctly', () => {
       const sessionId = 'session-time';
       const state = controller.initializeSession(sessionId, {)
-        idleTimeout: 20 * 60 * 1000 // 20 minutes
+        idleTimeout: 20 * 60 * 1000 // 20 minutes,
       });
       expect(state.remainingTime).toBe(20 * 60 * 1000);
       expect(state.currentTimeout.getTime()).toBeGreaterThan(Date.now());
@@ -133,7 +133,7 @@ describe('SessionTimeoutController', () => {
     test('should extend session manually', () => {
       const sessionId = 'session-extend';
       controller.initializeSession(sessionId, {)
-        extensionDuration: 10 * 60 * 1000 // 10 minutes
+        extensionDuration: 10 * 60 * 1000 // 10 minutes,
       });
       const originalExtensions = 0;
       const success = controller.extendSession(sessionId, 'manual');
@@ -179,7 +179,7 @@ describe('SessionTimeoutController', () => {
     test('should start critical operation', () => {
       const sessionId = 'session-critical';
       controller.initializeSession(sessionId, {)
-        criticalOperationGrace: 5 * 60 * 1000 // 5 minutes
+        criticalOperationGrace: 5 * 60 * 1000 // 5 minutes,
       });
       const success = controller.startCriticalOperation(sessionId, 'payment');
       expect(success).toBe(true);

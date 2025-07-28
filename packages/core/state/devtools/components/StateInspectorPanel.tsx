@@ -36,7 +36,7 @@ export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
     setSelectedSnapshot(snapshot);
     // Validate the selected state
     if (snapshot.metadata?.domain) {
-      const validation = devTools.validateStateIntegrity(;)
+      const validation = devTools.validateStateIntegrity(;);
         snapshot.state,
         snapshot.metadata.domain,
         {
@@ -78,7 +78,7 @@ export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
     }
     if (Array.isArray(value)) {
       const isExpanded = expandedPaths.has(path);
-      return ()
+      return ();
         <div className="array-container">
           <span
             className="array-header clickable"
@@ -102,7 +102,7 @@ export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
     if (type === 'object') {
       const keys = Object.keys(value);
       const isExpanded = expandedPaths.has(path);
-      return ()
+      return ();
         <div className="object-container">
           <span
             className="object-header clickable"
@@ -118,7 +118,7 @@ export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
                   key.toLowerCase().includes(searchFilter.toLowerCase()) ||
                   JSON.stringify(value[key]).toLowerCase().includes(searchFilter.toLowerCase());
                 if (!shouldShow) return null;
-                return ()
+                return ();
                   <div key={key} className="object-property">
                     <span className="property-key">{key}:</span>
                     {renderValue(value[key], propertyPath, depth + 1)}
@@ -144,7 +144,7 @@ export const StateInspectorPanel: React.FC<StateInspectorPanelProps> = ({)
       default: return '#95a5a6';
     }
   };
-  return ()
+  return ();
     <div className="inspector-panel">
       {/* Header */}
       <div className="inspector-header">

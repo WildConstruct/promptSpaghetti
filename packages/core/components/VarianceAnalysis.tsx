@@ -28,7 +28,7 @@ export }, [results]);
     return varianceAnalysisService.getVarianceLevelInfo(analysis.overallVariance);
   }, [analysis.overallVariance]);
   if (results.length < 2) {
-    return ()
+    return ();
       <div style={{
         padding: 12,
         background: '#f8fafc',
@@ -45,7 +45,7 @@ export }, [results]);
   if (compact) {
     return <CompactVarianceDisplay analysis={analysis} varianceInfo={varianceInfo} />;
   }
-  return ()
+  return ();
     <div style={{
       background: '#fff',
       border: '1px solid #e5e7eb',
@@ -100,7 +100,7 @@ export }, [results]);
                 width: `${analysis.varianceScore * 100}%`,}
                 height: '100%',
                 background: varianceInfo.color,
-                transition: 'width 0.3s ease'
+                transition: 'width 0.3s ease',
               }} />
             </div>
           </div>
@@ -138,7 +138,7 @@ export }, [results]);
       <div style={{
         padding: 16,
         background: '#f8fafc',
-        borderTop: '1px solid #e5e7eb'
+        borderTop: '1px solid #e5e7eb',
       }}>
         <h4 style={{
           margin: '0 0 12px 0',
@@ -199,7 +199,7 @@ export }, [results]);
           gap: 16,
           marginTop: 12,
           paddingTop: 12,
-          borderTop: '1px solid #e5e7eb'
+          borderTop: '1px solid #e5e7eb',
         }}>
           <div style={{ flex: 1 }}>
             <div style={{
@@ -212,7 +212,7 @@ export }, [results]);
             <div style={{
               fontSize: 12,
               fontWeight: 500,
-              color: analysis.creativeRange.repetitionRate > 0.7 ? '#ef4444' : '#10b981'
+              color: analysis.creativeRange.repetitionRate > 0.7 ? '#ef4444' : '#10b981',
             }}>
               {(analysis.creativeRange.repetitionRate * 100).toFixed(1)}%
             </div>
@@ -239,7 +239,7 @@ export }, [results]);
       {analysis.suggestions.length > 0 && ()
         <div style={{
           padding: 16,
-          borderTop: '1px solid #e5e7eb'
+          borderTop: '1px solid #e5e7eb',
         }}>
           <h4 style={{
             margin: '0 0 12px 0',
@@ -343,7 +343,7 @@ const DiversityMetricCard: React.FC<{ indicator: DiversityIndicator }> = ({ indi
         width: `${indicator.value * 100}%`,}
         height: '100%',
         background: indicator.color,
-        transition: 'width 0.3s ease'
+        transition: 'width 0.3s ease',
       }} />
     </div>
     <div style={{
@@ -370,7 +370,7 @@ const SuggestionCard: React.FC<{
     high: '🔴',
   };
   const colors = typeColors[suggestion.type];
-  return ()
+  return ();
     <div
       onClick={suggestion.actionable ? onClick : undefined}
       style={{
@@ -380,7 +380,7 @@ const SuggestionCard: React.FC<{
         borderRadius: 4,
         cursor: suggestion.actionable ? 'pointer' : 'default',
         transition: 'all 0.2s',
-        opacity: suggestion.actionable ? 1 : 0.7
+        opacity: suggestion.actionable ? 1 : 0.7,
       }}
     >
       <div style={{

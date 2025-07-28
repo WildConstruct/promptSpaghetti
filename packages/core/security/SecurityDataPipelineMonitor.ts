@@ -647,7 +647,7 @@ export class SecurityDataPipelineMonitor extends EventEmitter {
       performance_metrics: {,
         processing_rate: 0,
         memory_usage_mb: Math.random() * 100,
-        cpu_usage_percent: Math.random() * 50
+        cpu_usage_percent: Math.random() * 50,
       },
       quality_metrics: {,
         validation_pass_rate: 0,
@@ -710,7 +710,7 @@ export class SecurityDataPipelineMonitor extends EventEmitter {
             .map(record => ({)
               ...record,
               aggregated: true,
-              aggregation_count: Math.floor(1 / aggregationFactor)
+              aggregation_count: Math.floor(1 / aggregationFactor),
             }));
           break;
         default:
@@ -807,7 +807,7 @@ export class SecurityDataPipelineMonitor extends EventEmitter {
     const performanceWeight = 0.3;
     const reliabilityWeight = 0.3;
     const qualityScore = execution.data_quality_score;
-    const performanceScore = Math.min(100, ;)
+    const performanceScore = Math.min(100, ;);
       (pipeline.performance.target_throughput_records_per_second > 0 )
         ? (execution.throughput_records_per_second / pipeline.performance.target_throughput_records_per_second) * 100 
         : 100)
@@ -840,7 +840,7 @@ export class SecurityDataPipelineMonitor extends EventEmitter {
     const pipeline = this.pipelines.get(pipelineId);
     if (!pipeline) return;
     const executions = this.executions.get(pipelineId) || [];
-    const recentExecutions = executions.filter(e => ;)
+    const recentExecutions = executions.filter(e => ;);
       Date.now() - e.execution_start < 3600000 // Last hour
     );
     if (recentExecutions.length === 0) return;
@@ -1112,7 +1112,7 @@ export class SecurityDataPipelineMonitor extends EventEmitter {
         throw new Error(`Pipeline ${pipelineId} not found`);}
       }
       const executions = this.executions.get(pipelineId) || [];
-      const recentExecutions = executions.filter(e => ;)
+      const recentExecutions = executions.filter(e => ;);
         Date.now() - e.execution_start < 24 * 60 * 60 * 1000 // Last 24 hours
       );
       return {
@@ -1121,10 +1121,10 @@ export class SecurityDataPipelineMonitor extends EventEmitter {
         type: pipeline.type,
         status: pipeline.status,
         recent_executions: recentExecutions.length,
-        avg_quality_score_24h: recentExecutions.length > 0 
+        avg_quality_score_24h: recentExecutions.length > 0 ,
           ? recentExecutions.reduce((sum, e) => sum + e.data_quality_score, 0) / recentExecutions.length 
           : 0,
-        avg_throughput_24h: recentExecutions.length > 0 
+        avg_throughput_24h: recentExecutions.length > 0 ,
           ? recentExecutions.reduce((sum, e) => sum + e.throughput_records_per_second, 0) / recentExecutions.length 
           : 0
       };
@@ -1138,11 +1138,11 @@ export class SecurityDataPipelineMonitor extends EventEmitter {
         total_pipelines: allPipelines.length,
         running_pipelines: runningPipelines,
         healthy_pipelines: healthyPipelines,
-        avg_health_score: allPipelines.length > 0 
+        avg_health_score: allPipelines.length > 0 ,
           ? allPipelines.reduce((sum, p) => sum + p.status.health_score, 0) / allPipelines.length 
           : 0
       },
-      pipelines: allPipelines.map(p => ({)
+      pipelines: allPipelines.map(p => ({),
         pipeline_id: p.id,
         name: p.name,
         type: p.type,
@@ -1263,7 +1263,7 @@ export class SecurityDataPipelineMonitor extends EventEmitter {
     }
     // Clean up resolved alerts
     for (const [pipelineId, alerts] of this.alerts.entries()) {
-      const filteredAlerts = alerts.filter(a => ;)
+      const filteredAlerts = alerts.filter(a => ;);
         a.detected_at > cutoffTime || !a.resolution.resolved
       );
       this.alerts.set(pipelineId, filteredAlerts);

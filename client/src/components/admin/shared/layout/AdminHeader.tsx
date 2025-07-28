@@ -4,10 +4,8 @@
  * 
  * Provides title, breadcrumbs, user info, and page actions
  */
-
 import React from 'react';
 import { Menu, User, Settings, LogOut, ChevronRight } from 'lucide-react';
-
 interface AdminHeaderProps {
   title?: string;
   subtitle?: string;
@@ -18,7 +16,7 @@ interface AdminHeaderProps {
   onSidebarToggle?: () => void;
 }
 
-export const AdminHeader: React.FC<AdminHeaderProps> = ({
+export const AdminHeader: React.FC<AdminHeaderProps> = ({)
   title,
   subtitle,
   breadcrumbs = [],
@@ -27,11 +25,11 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
   sidebarCollapsed = false,
   onSidebarToggle
 }) => {
-  return (
+  return ()
     <header className="admin-header">
       <div className="admin-header-left">
         {/* Sidebar Toggle */}
-        {showSidebarToggle && (
+        {showSidebarToggle && ()
           <button
             className="sidebar-toggle"
             onClick={onSidebarToggle}
@@ -40,22 +38,21 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
             <Menu size={20} />
           </button>
         )}
-
         {/* Page Title & Breadcrumbs */}
         <div className="header-content">
-          {breadcrumbs.length > 0 && (
+          {breadcrumbs.length > 0 && ()
             <nav className="breadcrumbs" aria-label="Breadcrumb">
               <ol className="breadcrumb-list">
-                {breadcrumbs.map((crumb, index) => (
+                {breadcrumbs.map((crumb, index) => ()
                   <li key={index} className="breadcrumb-item">
-                    {crumb.href ? (
+                    {crumb.href ? ()
                       <a href={crumb.href} className="breadcrumb-link">
                         {crumb.label}
                       </a>
-                    ) : (
+                    ) : ()
                       <span className="breadcrumb-current">{crumb.label}</span>
                     )}
-                    {index < breadcrumbs.length - 1 && (
+                    {index < breadcrumbs.length - 1 && ()
                       <ChevronRight size={14} className="breadcrumb-separator" />
                     )}
                   </li>
@@ -63,8 +60,7 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
               </ol>
             </nav>
           )}
-
-          {title && (
+          {title && ()
             <div className="header-title-section">
               <h1 className="admin-page-title">{title}</h1>
               {subtitle && <p className="admin-page-subtitle">{subtitle}</p>}
@@ -72,15 +68,13 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
           )}
         </div>
       </div>
-
       <div className="admin-header-right">
         {/* Page Actions */}
-        {actions && (
+        {actions && ()
           <div className="header-actions">
             {actions}
           </div>
         )}
-
         {/* User Menu */}
         <div className="user-menu">
           <button className="user-menu-trigger">
@@ -89,7 +83,6 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
             </div>
             <span className="user-name">Admin User</span>
           </button>
-          
           <div className="user-menu-dropdown">
             <a href="/admin/profile" className="menu-item">
               <User size={16} />

@@ -20,6 +20,5 @@ export const Progress = React.forwardRef<HTMLDivElement, ProgressProps>()
         style={{ width: `${(value / max) * 100}%` }}
       />
     </div>
-  )
 );
 Progress.displayName = 'Progress';

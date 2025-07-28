@@ -10,32 +10,32 @@ const NOTIFICATION_TYPES: { type: NotificationType; label: string; description: 
   {
     type: 'comment',
     label: 'Comments',
-    description: 'When someone comments on your work'
+    description: 'When someone comments on your work',
   },
   {
     type: 'mention',
     label: 'Mentions',
-    description: 'When you are mentioned in comments or discussions'
+    description: 'When you are mentioned in comments or discussions',
   },
   {
     type: 'approval',
     label: 'Approvals',
-    description: 'When approval is requested or granted'
+    description: 'When approval is requested or granted',
   },
   {
     type: 'workflow',
     label: 'Workflow',
-    description: 'When workflow states change'
+    description: 'When workflow states change',
   },
   {
     type: 'collaboration',
     label: 'Collaboration',
-    description: 'When others join or edit shared projects'
+    description: 'When others join or edit shared projects',
   },
   {
     type: 'system',
     label: 'System',
-    description: 'System maintenance and important updates'
+    description: 'System maintenance and important updates',
   }
 ];
 const DELIVERY_METHODS = [;
@@ -135,13 +135,13 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     }));
   };
   if (loading) {
-    return ()
+    return ();
       <div className="p-4 text-center">
         <div className="animate-pulse">Loading preferences...</div>
       </div>
     );
   }
-  return ()
+  return ();
     <div className="p-4 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">

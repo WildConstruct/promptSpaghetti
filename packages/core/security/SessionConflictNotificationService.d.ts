@@ -198,7 +198,7 @@ export declare class SessionConflictNotificationService extends EventEmitter {
     /**
      * Send session eviction notification
      */
-    sendEvictionNotification()
+    sendEvictionNotification();
       sessionId: string,
       userId: string,
       reason: string,
@@ -207,7 +207,7 @@ export declare class SessionConflictNotificationService extends EventEmitter {
     /**
      * Send emergency override notification
      */
-    sendEmergencyOverrideNotification()
+    sendEmergencyOverrideNotification();
       adminUserId: string,
       targetUserId: string,
       evictedSessions: string[],
@@ -215,7 +215,7 @@ export declare class SessionConflictNotificationService extends EventEmitter {
     /**
      * Prompt user for conflict resolution choice
      */
-    promptUserChoice()
+    promptUserChoice();
       conflict: SessionConflict,
       userId: string,
       timeoutMinutes?: number
@@ -251,7 +251,7 @@ export declare class SessionConflictNotificationService extends EventEmitter {
     /**
      * Handle notification action click
      */
-    handleNotificationAction()
+    handleNotificationAction();
       notificationId: string,
       actionId: string,
       userId: string,

@@ -218,7 +218,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
     return `${Math.round(count / 100000) / 10}M`;}
   }, []);
   if (!visible) return null;
-  return ()
+  return ();
     <div
       className={`template-collaboration-panel ${className}`}
       style={{
@@ -302,7 +302,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                 cursor: 'pointer',
                 fontSize: '14px',
                 fontWeight: activeTab === tab.key ? '600' : 'normal',
-                transition: 'all 0.2s ease'
+                transition: 'all 0.2s ease',
               }}
               title={tab.desc}
             >
@@ -462,9 +462,9 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                         <span
                           style={{
                             padding: '4px 8px',
-                            background: collaborator.role === 'owner' ? '#dbeafe' : 
+                            background: collaborator.role === 'owner' ? '#dbeafe' : ,
                                        collaborator.role === 'editor' ? '#ecfdf5' : '#f3f4f6',
-                            color: collaborator.role === 'owner' ? '#1e40af' :
+                            color: collaborator.role === 'owner' ? '#1e40af' :,
                                    collaborator.role === 'editor' ? '#166534' : '#374151',
                             borderRadius: '4px',
                             fontSize: '11px',
@@ -550,7 +550,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
                         width: '8px',
                         height: '8px',
                         borderRadius: '50%',
-                        background: activity.action === 'created' ? '#10b981' :
+                        background: activity.action === 'created' ? '#10b981' :,
                                    activity.action === 'updated' ? '#f59e0b' :
                                    activity.action === 'shared' ? '#06b6d4' :
                                    activity.action === 'forked' ? '#8b5cf6' :
@@ -811,7 +811,7 @@ export const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProp
               cursor: loading ? 'not-allowed' : 'pointer',
               fontSize: '14px',
               color: '#374151',
-              opacity: loading ? 0.6 : 1
+              opacity: loading ? 0.6 : 1,
             }}
           >
             🍴 Fork Template

@@ -344,7 +344,7 @@ export const DropoffHeatmap: React.FC<DropoffHeatmapProps> = ({)
         aggregation: { interval: 'hour' }
       };
       const results = await analyticsInfrastructure.queryMetrics(query);
-      const processedData = await processDropoffAnalysisData(;)
+      const processedData = await processDropoffAnalysisData(;);
         funnelDefinition,
         results,
         segments,
@@ -413,7 +413,7 @@ export const DropoffHeatmap: React.FC<DropoffHeatmapProps> = ({)
       },
       recommendations: {,
         quick: analysisData.recoveryOpportunities.flatMap(r => r.quickWins),
-        strategic: analysisData.recoveryOpportunities.flatMap(r => r.strategicInitiatives)
+        strategic: analysisData.recoveryOpportunities.flatMap(r => r.strategicInitiatives),
       },
       metadata: {,
         exportedAt: Date.now(),
@@ -427,14 +427,14 @@ export const DropoffHeatmap: React.FC<DropoffHeatmapProps> = ({)
     return <DropoffAnalysisLoadingState />;
   }
   if (error || !analysisData) {
-    return ()
+    return ();
       <DropoffAnalysisErrorState 
         error={error || 'No data available'} 
         onRetry={loadAnalysisData} 
       />
     );
   }
-  return ()
+  return ();
     <div className="dropoff-heatmap" ref={heatmapRef}>
       <DropoffHeatmapHeader
         funnelDefinition={funnelDefinition}
@@ -496,7 +496,7 @@ const DropoffHeatmapHeader: React.FC<DropoffHeatmapHeaderProps> = ({)
 }) => {
   const criticalDropoffs = analysisData.stepAnalysis.filter(s => s.dropOffSeverity === 'critical').length;
   const totalRecoveryValue = analysisData.recoveryOpportunities.reduce((sum, r) => sum + r.recoveryValue, 0);
-  return ()
+  return ();
     <div className="dropoff-heatmap-header">
       <div className="header-info">
         <h3>Drop-off Analysis: {funnelDefinition.name}</h3>
@@ -546,7 +546,7 @@ const HeatmapVisualization: React.FC<HeatmapVisualizationProps> = ({)
   onStepClick
 }) => {
   const metrics = ['Drop-off Rate', 'Recovery Potential', 'Severity', 'Impact'];
-  return ()
+  return ();
     <div className="heatmap-visualization">
       <div className="heatmap-grid">
         <div className="grid-header">
@@ -622,7 +622,7 @@ const HeatmapLegend: React.FC<HeatmapLegendProps> = ({ heatmapMode, colorScale }
     { offset: '50%', color: '#f59e0b' }, // Yellow (medium drop-off)
     { offset: '100%', color: '#ef4444' } // Red (high drop-off)
   ];
-  return ()
+  return ();
     <div className="heatmap-legend">
       <div className="legend-title">
         {heatmapMode.replace('_', ' ').toUpperCase()} Scale
@@ -660,7 +660,7 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({ stepId, analysisData,
   const rootCause = analysisData.rootCauseAnalysis.find(r => r.stepId === stepId);
   const recovery = analysisData.recoveryOpportunities.find(r => r.stepId === stepId);
   if (!stepAnalysis || !rootCause || !recovery) return null;
-  return ()
+  return ();
     <div className="step-detail-panel">
       <div className="panel-header">
         <h4>{stepAnalysis.stepName} - Detailed Analysis</h4>
@@ -756,7 +756,7 @@ interface RecoveryOpportunityPanelProps {
 const RecoveryOpportunityPanel: React.FC<RecoveryOpportunityPanelProps> = ({ opportunities }) => {
   const totalRecoveryValue = opportunities.reduce((sum, opp) => sum + opp.recoveryValue, 0);
   const highConfidenceOpportunities = opportunities.filter(opp => opp.confidenceLevel > 0.7);
-  return ()
+  return ();
     <div className="recovery-opportunity-panel">
       <h4>Recovery Opportunities</h4>
       <div className="recovery-summary">
@@ -820,7 +820,7 @@ interface DropoffInsightsPanelProps {
 }
 const DropoffInsightsPanel: React.FC<DropoffInsightsPanelProps> = ({ insights, rootCauses }) => {
   const criticalInsights = insights.filter(i => i.severity === 'critical' || i.severity === 'high');
-  return ()
+  return ();
     <div className="dropoff-insights-panel">
       <h4>Key Insights</h4>
       <div className="insights-list">
@@ -861,7 +861,7 @@ interface TemporalPatternsPanelProps {
   patterns: TemporalDropoffPattern[];
 }
 const TemporalPatternsPanel: React.FC<TemporalPatternsPanelProps> = ({ patterns }) => {
-  return ()
+  return ();
     <div className="temporal-patterns-panel">
       <h4>Temporal Drop-off Patterns</h4>
       <div className="patterns-grid">
@@ -933,7 +933,7 @@ function getSeverityClass(severity: string): string {
 function getHeatmapColor()
   value: number, 
   colorScale: { min: number; max: number; range: number } | null, 
-  type: 'dropoff' | 'recovery'
+  type: 'dropoff' | 'recovery',
 ): string {
   if (!colorScale) return '#f3f4f6';
   const normalized = colorScale.range > 0 ? (value - colorScale.min) / colorScale.range : 0;
@@ -968,7 +968,7 @@ async function processDropoffAnalysisData()
       topPerformers: 10 + (Math.random() * 8),
       yourPerformance: 15 + (index * 5) + (Math.random() * 10),
       percentile: 40 + (Math.random() * 40),
-      improvementPotential: 5 + (Math.random() * 15)
+      improvementPotential: 5 + (Math.random() * 15),
     },
     userBehaviorAnalysis: {,
       averageTimeOnStep: 60000 + (index * 30000),
@@ -977,7 +977,7 @@ async function processDropoffAnalysisData()
           pattern: 'Multiple form attempts',
           frequency: 45,
           conversionImpact: -12,
-          description: 'Users attempt to fill form multiple times before abandoning'
+          description: 'Users attempt to fill form multiple times before abandoning',
         }
       ],
       exitBehaviors: [,
@@ -1003,7 +1003,7 @@ async function processDropoffAnalysisData()
           fixComplexity: 'low',
         }
       ],
-      mobileCompatibility: 85 + (Math.random() * 10)
+      mobileCompatibility: 85 + (Math.random() * 10),
     },
     contentAnalysis: {,
       clarityScore: 60 + (Math.random() * 30),
@@ -1020,7 +1020,7 @@ async function processDropoffAnalysisData()
         'Improve error messaging'
       ]
     },
-    recoveryPotential: 60 + (Math.random() * 30)
+    recoveryPotential: 60 + (Math.random() * 30),
   }));
   const rootCauseAnalysis: RootCauseAnalysis[] = stepAnalysis.map(step => ({)
     stepId: step.stepId,
@@ -1038,7 +1038,7 @@ async function processDropoffAnalysisData()
             description: '23% of exit surveys mention form difficulty',
             strength: 'strong',
             source: 'Exit survey analysis',
-            timestamp: Date.now() - 86400000
+            timestamp: Date.now() - 86400000,
           }
         ],
         mitigationComplexity: 'medium',

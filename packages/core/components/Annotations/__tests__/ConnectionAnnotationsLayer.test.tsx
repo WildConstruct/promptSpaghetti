@@ -12,15 +12,15 @@ import { useGraphStore } from '../../../graphStore';
 // Mock React Flow
 jest.mock('reactflow', () => ({)
   ...jest.requireActual('reactflow'),
-  useReactFlow: () => ({)
-    getNode: jest.fn((id) => ({)
+  useReactFlow: () => ({),
+    getNode: jest.fn((id) => ({),
       id,
       position: { x: 100, y: 100 },
       width: 150,
       height: 40,
     }))
   }),
-  useEdges: () => [
+  useEdges: () => [,
     {
       id: 'edge-1',
       source: 'node-1',
@@ -117,7 +117,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
   });
   describe('Rendering', () => {
     test('renders layer container when visible', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -129,7 +129,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(screen.getByTestId('connection-annotations-layer')).toBeInTheDocument();
     });
     test('does not render when not visible', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -141,7 +141,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(screen.queryByTestId('connection-annotations-layer')).not.toBeInTheDocument();
     });
     test('renders connection labels', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -154,7 +154,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(screen.getByText('Test Label')).toBeInTheDocument();
     });
     test('renders SVG overlay for enhanced connections', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -180,7 +180,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
         }
       };
       mockUseGraphStore.mockReturnValue(emptyStore as any as unknown);
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -193,7 +193,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(screen.getByText(/Right-click on connections/)).toBeInTheDocument();
     });
     test('hides instructions when labels exist', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -207,7 +207,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
   });
   describe('Label Management', () => {
     test('creates new label through action', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -223,7 +223,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(mockGraphStore.addConnectionLabel).toBeDefined();
     });
     test('updates existing label', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -235,7 +235,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(mockGraphStore.updateConnectionLabel).toBeDefined();
     });
     test('removes label', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -249,7 +249,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
   });
   describe('Context Menu', () => {
     test('shows context menu on right-click', async () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -264,7 +264,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(layer).toBeInTheDocument();
     });
     test('hides context menu on outside click', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -280,7 +280,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
   });
   describe('Connection Path Calculations', () => {
     test('calculates label positions along connection paths', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -316,7 +316,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
         }
       };
       mockUseGraphStore.mockReturnValue(storeWithDifferentPositions as any as unknown);
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -331,7 +331,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
   });
   describe('Visual Enhancements', () => {
     test('applies visual styles to connections', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -360,7 +360,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
         }
       };
       mockUseGraphStore.mockReturnValue(storeWithArrows as any as unknown);
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -373,7 +373,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(svg).toBeInTheDocument();
     });
     test('applies highlight effects', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -389,7 +389,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
   });
   describe('Keyboard Shortcuts', () => {
     test('handles Ctrl+L for adding labels', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -405,7 +405,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(screen.getByTestId('connection-annotations-layer')).toBeInTheDocument();
     });
     test('handles Escape key to clear selection', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -419,7 +419,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(screen.getByTestId('connection-annotations-layer')).toBeInTheDocument();
     });
     test('ignores shortcuts when canEdit is false', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={false}
@@ -435,7 +435,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
   });
   describe('Props Handling', () => {
     test('passes canEdit prop to child components', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={false}
@@ -451,7 +451,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(screen.queryByTitle('Remove label')).not.toBeInTheDocument();
     });
     test('passes showTooltips prop to child components', () => {
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -465,7 +465,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
     });
     test('calls onSelectionChange when provided', () => {
       const mockOnSelectionChange = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}
@@ -496,7 +496,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       };
       mockUseGraphStore.mockReturnValue(storeWithInvalidConnections as any as unknown);
       expect(() => {
-        render()
+        render();
           <TestWrapper>
             <ConnectionAnnotationsLayer
               canEdit={true}
@@ -518,7 +518,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       };
       mockUseGraphStore.mockReturnValue(emptyStore as any as unknown);
       expect(() => {
-        render()
+        render();
           <TestWrapper>
             <ConnectionAnnotationsLayer
               canEdit={true}
@@ -537,7 +537,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       };
       mockUseGraphStore.mockReturnValue(malformedStore as any as unknown);
       expect(() => {
-        render()
+        render();
           <TestWrapper>
             <ConnectionAnnotationsLayer
               canEdit={true}
@@ -554,7 +554,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       const renderSpy = jest.fn<unknown[], unknown>();
       const TestComponent = (props: unknown) => {
         renderSpy();
-        return ()
+        return ();
           <TestWrapper>
             <ConnectionAnnotationsLayer {...props} />
           </TestWrapper>
@@ -569,7 +569,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       );
       expect(renderSpy).toHaveBeenCalledTimes(1);
       // Re-render with same props
-      rerender()
+      rerender();
         <TestComponent
           canEdit={true}
           showTooltips={true}
@@ -578,7 +578,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       );
       expect(renderSpy).toHaveBeenCalledTimes(2);
       // Re-render with different props
-      rerender()
+      rerender();
         <TestComponent
           canEdit={false}
           showTooltips={true}
@@ -610,7 +610,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       };
       mockUseGraphStore.mockReturnValue(storeWithManyLabels as any as unknown);
       const startTime = performance.now();
-      render()
+      render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
             canEdit={true}

@@ -124,7 +124,7 @@ const GenerationWizard: React.FC<GenerationWizardProps> = ({)
     return themes[theme];
   };
   const styles = getThemeStyles();
-  return ()
+  return ();
     <div
       style={{
         width: '700px',
@@ -176,7 +176,7 @@ const GenerationWizard: React.FC<GenerationWizardProps> = ({)
               width: `${((currentStep + 1) / flow.steps.length) * 100}%`,}
               height: '100%',
               background: styles.accent,
-              transition: 'width 0.3s ease'
+              transition: 'width 0.3s ease',
             }}
           />
         </div>
@@ -563,7 +563,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
               id: 'characters-present',
               label: 'Characters Present',
               type: 'text',
-              placeholder: 'List characters in this scene (comma-separated)'
+              placeholder: 'List characters in this scene (comma-separated)',
             },
             {
               id: 'scene-tone',
@@ -595,7 +595,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
         icon: flow.icon,
         shortcut: flow.id === 'character-development' ? '⌘G' : undefined,
         keywords: [flow.name.toLowerCase(), flow.category.toLowerCase(), 'generate', 'create'],
-        action: () => startGenerationFlow(flow)
+        action: () => startGenerationFlow(flow),
       })),
       // Node creation commands
       {
@@ -606,7 +606,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
         icon: '🎲',
         shortcut: '⌘N',
         keywords: ['weighted', 'choice', 'random', 'probability'],
-        action: () => createNodeAtCenter('WeightedChoice')
+        action: () => createNodeAtCenter('WeightedChoice'),
       },
       {
         id: 'create-output',
@@ -615,7 +615,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
         category: 'editing',
         icon: '📤',
         keywords: ['output', 'result', 'final'],
-        action: () => createNodeAtCenter('Output')
+        action: () => createNodeAtCenter('Output'),
       },
       {
         id: 'create-concat',
@@ -624,7 +624,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
         category: 'editing',
         icon: '🔗',
         keywords: ['concat', 'combine', 'join', 'merge'],
-        action: () => createNodeAtCenter('Concat')
+        action: () => createNodeAtCenter('Concat'),
       },
       // Template commands
       {
@@ -634,7 +634,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
         category: 'templates',
         icon: '🎭',
         keywords: ['template', 'character', 'preset'],
-        action: () => onTemplateApply('character-basic')
+        action: () => onTemplateApply('character-basic'),
       },
       {
         id: 'apply-story-template',
@@ -643,7 +643,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
         category: 'templates',
         icon: '📖',
         keywords: ['template', 'story', 'structure'],
-        action: () => onTemplateApply('story-structure')
+        action: () => onTemplateApply('story-structure'),
       },
       // Export commands
       {
@@ -654,7 +654,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
         icon: '💾',
         shortcut: '⌘E',
         keywords: ['export', 'save', 'json', 'file'],
-        action: () => onExport('json')
+        action: () => onExport('json'),
       },
       {
         id: 'export-image',
@@ -663,7 +663,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
         category: 'export',
         icon: '🖼️',
         keywords: ['export', 'image', 'png', 'visual'],
-        action: () => onExport('png')
+        action: () => onExport('png'),
       },
       // Navigation commands
       {
@@ -698,7 +698,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
         keywords: ['delete', 'remove', 'selected'],
         action: () => onNodeDelete(selectedNodes.map(n => n.id)),
         requiresSelection: true,
-        disabled: selectedNodes.length === 0
+        disabled: selectedNodes.length === 0,
       },
       {
         id: 'duplicate-selected',
@@ -710,7 +710,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
         keywords: ['duplicate', 'copy', 'clone'],
         action: () => duplicateSelectedNodes(),
         requiresSelection: true,
-        disabled: selectedNodes.length === 0
+        disabled: selectedNodes.length === 0,
       },
       // Add custom actions
       ...customActions
@@ -724,7 +724,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
     }
     const query = searchQuery.toLowerCase();
     return commandActions.filter(action => {)
-      return ()
+      return ();
         action.title.toLowerCase().includes(query) ||
         action.description.toLowerCase().includes(query) ||
         action.keywords.some(keyword => keyword.includes(query)) ||
@@ -791,7 +791,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
     const viewport = reactFlowInstance?.getViewport();
     const center = {
       x: viewport ? -viewport.x + 400 : 400,
-      y: viewport ? -viewport.y + 300 : 300
+      y: viewport ? -viewport.y + 300 : 300,
     };
     onNodeCreate(nodeType, center);
     onClose();
@@ -870,7 +870,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
   };
   const styles = getThemeStyles();
   if (!isOpen && !showGenerationWizard) return null;
-  return ()
+  return ();
     <>
       {/* Overlay */}
       <div
@@ -951,7 +951,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
                   {actions.map((action, actionIndex) => {
                     const globalIndex = filteredActions.indexOf(action);
                     const isSelected = globalIndex === selectedIndex;
-                    return ()
+                    return ();
                       <div
                         key={action.id}
                         onClick={() => executeAction(action)}
@@ -966,7 +966,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({)
                           display: 'flex',
                           alignItems: 'center',
                           gap: '12px',
-                          transition: 'all 0.15s ease'
+                          transition: 'all 0.15s ease',
                         }}
                       >
                         <span style={{ fontSize: '20px' }}>{action.icon}</span>

@@ -5,7 +5,6 @@ import { PriceDisplay } from './PriceDisplay';
 import { Badge } from '../common/Badge';
 import { PreviewModal } from './PreviewModal';
 import './TemplateCard.css';
-
 interface Template {
   id: string;
   title: string;
@@ -26,7 +25,6 @@ interface Template {
   is_ai_generated?: boolean;
   claude_compat: string[];
 }
-
 interface TemplateCardProps {
   template: Template;
   onClick: () => void;
@@ -35,7 +33,7 @@ interface TemplateCardProps {
   className?: string;
 }
 
-export const TemplateCard: React.FC<TemplateCardProps> = ({
+export const TemplateCard: React.FC<TemplateCardProps> = ({)
   template,
   onClick,
   variant = 'grid',
@@ -43,7 +41,6 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
   className = ''
 }) => {
   const [showPreview, setShowPreview] = useState(false);
-  
   const {
     title,
     description,
@@ -58,30 +55,25 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
     is_ai_generated,
     claude_compat
   } = template;
-
-  const truncatedDescription = description && description.length > 120 
+  const truncatedDescription = description && description.length > 120 ;
     ? description.substring(0, 120) + '...' 
     : description;
-
   const handleCardClick = (e: React.MouseEvent) => {
     e.preventDefault();
     onClick();
   };
-
   const handlePreviewClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setShowPreview(true);
   };
-
   const handleOwnerClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     // Navigate to creator profile
     if (owner?.id) {
-      window.location.href = `/creators/${owner.id}`;
+      window.location.href = `/creators/${owner.id}`;}
     }
   };
-
-  return (
+  return ()
     <div 
       className={`template-card ${variant} ${className}`}
       onClick={handleCardClick}
@@ -101,7 +93,6 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
           {price_cents === 0 && <Badge variant="free">Free</Badge>}
           {is_ai_generated && <Badge variant="ai">AI Generated</Badge>}
         </div>
-        
         <button
           onClick={handlePreviewClick}
           className="preview-button"
@@ -126,56 +117,50 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
           </svg>
         </button>
       </div>
-
       {/* Card Content */}
       <div className="card-content">
         <h3 className="template-title">{title}</h3>
-        
-        {truncatedDescription && (
+        {truncatedDescription && ()
           <p className="template-description">{truncatedDescription}</p>
         )}
-
         {/* Template Tags */}
-        {tags.length > 0 && (
+        {tags.length > 0 && ()
           <div className="template-tags">
-            {tags.slice(0, 3).map((tag) => (
+            {tags.slice(0, 3).map((tag) => ()
               <span key={tag} className="tag">
                 {tag}
               </span>
             ))}
-            {tags.length > 3 && (
+            {tags.length > 3 && ()
               <span className="tag more">+{tags.length - 3}</span>
             )}
           </div>
         )}
-
         {/* Categories */}
-        {categories && categories.length > 0 && (
+        {categories && categories.length > 0 && ()
           <div className="template-categories">
-            {categories.slice(0, 2).map((category) => (
+            {categories.slice(0, 2).map((category) => ()
               <span key={category} className="category">
                 {category}
               </span>
             ))}
           </div>
         )}
-
         {/* Claude Compatibility */}
         <div className="claude-compat">
           <span className="compat-label">Compatible with:</span>
           <div className="compat-models">
-            {claude_compat.slice(0, 2).map((model) => (
+            {claude_compat.slice(0, 2).map((model) => ()
               <span key={model} className="compat-model">
                 {model.replace('claude-', '')}
               </span>
             ))}
-            {claude_compat.length > 2 && (
+            {claude_compat.length > 2 && ()
               <span className="compat-model more">+{claude_compat.length - 2}</span>
             )}
           </div>
         </div>
       </div>
-
       {/* Card Footer */}
       <div className="card-footer">
         <div className="footer-top">
@@ -186,24 +171,22 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
               {avg_rating.toFixed(1)} ({total_reviews})
             </span>
           </div>
-
           {/* Price */}
           <PriceDisplay 
             priceCents={price_cents} 
             size="medium"
           />
         </div>
-
         <div className="footer-bottom">
           {/* Creator Info */}
-          {owner && (
+          {owner && ()
             <button
               onClick={handleOwnerClick}
               className="creator-info"
               aria-label={`View ${owner.name}'s profile`}
             >
               <span className="creator-name">{owner.name}</span>
-              {owner.verified && (
+              {owner.verified && ()
                 <svg 
                   width="14" 
                   height="14" 
@@ -224,9 +207,8 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
               )}
             </button>
           )}
-
           {/* Stats */}
-          {showStats && (
+          {showStats && ()
             <div className="template-stats">
               <span className="stat">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -241,9 +223,8 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
           )}
         </div>
       </div>
-      
       {/* Preview Modal */}
-      {showPreview && (
+      {showPreview && ()
         <PreviewModal
           templateId={template.id}
           onClose={() => setShowPreview(false)}

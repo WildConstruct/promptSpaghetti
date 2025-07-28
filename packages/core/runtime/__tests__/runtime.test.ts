@@ -22,7 +22,7 @@ describe('Runtime Node Implementation Tests', () => {
     it('should return the first choice when random value is less than weight', () => {
       const seedrandom = require('seedrandom');
       seedrandom.mockReturnValue(() => 0.2);
-      const node = new WeightedChoiceNode('node1', [;)
+      const node = new WeightedChoiceNode('node1', [;);
         { weight: 0.3, value: 'first' },
         { weight: 0.7, value: 'second' }
       ]);
@@ -31,7 +31,7 @@ describe('Runtime Node Implementation Tests', () => {
     it('should return the second choice when random value is greater than first weight', () => {
       const seedrandom = require('seedrandom');
       seedrandom.mockReturnValue(() => 0.4);
-      const node = new WeightedChoiceNode('node2', [;)
+      const node = new WeightedChoiceNode('node2', [;);
         { weight: 0.3, value: 'first' },
         { weight: 0.7, value: 'second' }
       ]);
@@ -40,7 +40,7 @@ describe('Runtime Node Implementation Tests', () => {
     it('should handle edge case with zero weights', () => {
       const seedrandom = require('seedrandom');
       seedrandom.mockReturnValue(() => 0.5);
-      const node = new WeightedChoiceNode('node3', [;)
+      const node = new WeightedChoiceNode('node3', [;);
         { weight: 0, value: 'first' },
         { weight: 0, value: 'second' }
       ]);
@@ -51,7 +51,7 @@ describe('Runtime Node Implementation Tests', () => {
       // This tests the fallback case on line 36
       const seedrandom = require('seedrandom');
       seedrandom.mockReturnValue(() => 0.9);
-      const node = new WeightedChoiceNode('node4', [;)
+      const node = new WeightedChoiceNode('node4', [;);
         { weight: 0.3, value: 'first' },
         { weight: 0.3, value: 'second' },
         { weight: 0.3, value: 'third' }
@@ -118,7 +118,7 @@ describe('Runtime Node Implementation Tests', () => {
         variables: {},
         seed: 42,
       };
-      const node = new WeightedChoiceNode('weighted1', [;)
+      const node = new WeightedChoiceNode('weighted1', [;);
         { weight: 0.5, value: 'A' },
         { weight: 0.5, value: 'B' }
       ]);
@@ -148,7 +148,7 @@ describe('Runtime Node Implementation Tests', () => {
         variables: {},
         seed: 'hello',
       };
-      const node = new WeightedChoiceNode('weighted2', [;)
+      const node = new WeightedChoiceNode('weighted2', [;);
         { weight: 0.5, value: 'A' },
         { weight: 0.5, value: 'B' }
       ]);

@@ -4,7 +4,6 @@
  * Provides utilities for monitoring React component performance, API calls,
  * and user interactions with minimal overhead.
  */
-
 interface PerformanceMetric {
   name: string;
   duration: number;
@@ -12,20 +11,17 @@ interface PerformanceMetric {
   type: 'component' | 'api' | 'user_interaction' | 'custom';
   metadata?: Record<string, unknown>;
 }
-
 interface PerformanceConfig {
   enableLogging: boolean;
   sampleRate: number; // 0-1, percentage of operations to monitor
   bufferSize: number;
   flushInterval: number; // ms
 }
-
 class PerformanceMonitor {
   private metrics: PerformanceMetric[] = [];
   private config: PerformanceConfig;
   private flushTimer?: number;
   private observers: Map<string, PerformanceObserver> = new Map();
-
   constructor(config: Partial<PerformanceConfig> = {}) {
     this.config = {
       enableLogging: process.env.NODE_ENV === 'development',
@@ -34,11 +30,9 @@ class PerformanceMonitor {
       flushInterval: 30000, // 30 seconds
       ...config
     };
-
     this.initializeObservers();
     this.startPeriodicFlush();
   }
-
   /**
    * Initialize native Performance API observers
    */
@@ -47,20 +41,19 @@ class PerformanceMonitor {
       console.warn('PerformanceObserver not supported in this browser');
       return;
     }
-
     // Monitor navigation timing
     try {
       const navObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         entries.forEach((entry) => {
-          this.addMetric({
+          this.addMetric({)
             name: 'page_load',
             duration: entry.duration,
             timestamp: entry.startTime,
             type: 'custom',
-            metadata: {
+            metadata: {,
               entryType: entry.entryType,
-              name: entry.name
+              name: entry.name,
             }
           });
         });
@@ -70,22 +63,21 @@ class PerformanceMonitor {
     } catch (error) {
       console.warn('Failed to initialize navigation observer:', error);
     }
-
     // Monitor resource loading
     try {
       const resourceObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         entries.forEach((entry) => {
           if (entry.duration > 100) { // Only track slow resources
-            this.addMetric({
+            this.addMetric({)
               name: 'resource_load',
               duration: entry.duration,
               timestamp: entry.startTime,
               type: 'custom',
-              metadata: {
+              metadata: {,
                 name: entry.name,
                 transferSize: (entry as PerformanceResourceTiming).transferSize,
-                type: (entry as PerformanceResourceTiming).initiatorType
+                type: (entry as PerformanceResourceTiming).initiatorType,
               }
             });
           }
@@ -97,11 +89,10 @@ class PerformanceMonitor {
       console.warn('Failed to initialize resource observer:', error);
     }
   }
-
   /**
    * Measure execution time of a function
    */
-  measureExecution<T>(
+  measureExecution<T>()
     name: string,
     fn: () => T | Promise<T>,
     type: PerformanceMetric['type'] = 'custom',
@@ -110,12 +101,9 @@ class PerformanceMonitor {
     if (!this.shouldSample()) {
       return fn();
     }
-
     const startTime = performance.now();
-    
     try {
       const result = fn();
-      
       // Handle both sync and async functions
       if (result instanceof Promise) {
         return result.finally(() => {
@@ -129,8 +117,8 @@ class PerformanceMonitor {
       }
     } catch (error) {
       const duration = performance.now() - startTime;
-      this.addMetric({
-        name: `${name}_error`,
+      this.addMetric({)
+        name: `${name}_error`,}
         duration,
         timestamp: startTime,
         type,
@@ -139,7 +127,6 @@ class PerformanceMonitor {
       throw error;
     }
   }
-
   /**
    * Start timing an operation
    */
@@ -147,12 +134,10 @@ class PerformanceMonitor {
     if (!this.shouldSample()) {
       return () => {}; // No-op function
     }
-
     const startTime = performance.now();
-    
     return (metadata?: Record<string, unknown>) => {
       const duration = performance.now() - startTime;
-      this.addMetric({
+      this.addMetric({)
         name,
         duration,
         timestamp: startTime,
@@ -161,39 +146,36 @@ class PerformanceMonitor {
       });
     };
   }
-
   /**
    * Track API call performance
    */
-  trackApiCall<T>(
+  trackApiCall<T>()
     url: string,
     method: string,
-    apiCall: () => Promise<T>
+    apiCall: () => Promise<T>,
   ): Promise<T> {
-    return this.measureExecution(
+    return this.measureExecution()
       'api_call',
       apiCall,
       'api',
       { url, method }
     ) as Promise<T>;
   }
-
   /**
    * Track user interaction performance
    */
-  trackInteraction<T>(
+  trackInteraction<T>()
     action: string,
     handler: () => T | Promise<T>,
     metadata?: Record<string, unknown>
   ): T | Promise<T> {
-    return this.measureExecution(
-      `interaction_${action}`,
+    return this.measureExecution()
+      `interaction_${action}`,}
       handler,
       'user_interaction',
       metadata
     );
   }
-
   /**
    * Add a custom metric
    */
@@ -201,24 +183,19 @@ class PerformanceMonitor {
     if (!this.shouldSample()) {
       return;
     }
-
     const fullMetric: PerformanceMetric = {
       ...metric,
-      timestamp: metric.timestamp ?? performance.now()
+      timestamp: metric.timestamp ?? performance.now(),
     };
-
     this.metrics.push(fullMetric);
-
     if (this.config.enableLogging && fullMetric.duration > 100) {
-      console.log(`[Performance] ${fullMetric.name}: ${fullMetric.duration.toFixed(2)}ms`, fullMetric.metadata);
+      console.log(`[Performance] ${fullMetric.name}: ${fullMetric.duration.toFixed(2)}ms`, fullMetric.metadata);}
     }
-
     // Auto-flush if buffer is full
     if (this.metrics.length >= this.config.bufferSize) {
       this.flush();
     }
   }
-
   /**
    * Get performance statistics
    */
@@ -227,28 +204,22 @@ class PerformanceMonitor {
     byType: Record<string, number>;
     averages: Record<string, number>;
     slowest: PerformanceMetric[];
-  } {
     const byType: Record<string, number> = {};
     const durations: Record<string, number[]> = {};
-
-    this.metrics.forEach(metric => {
+    this.metrics.forEach(metric => {)
       byType[metric.type] = (byType[metric.type] || 0) + 1;
-      
       if (!durations[metric.name]) {
         durations[metric.name] = [];
       }
       durations[metric.name].push(metric.duration);
     });
-
     const averages: Record<string, number> = {};
     Object.entries(durations).forEach(([name, values]) => {
       averages[name] = values.reduce((sum, val) => sum + val, 0) / values.length;
     });
-
-    const slowest = [...this.metrics]
+    const slowest = [...this.metrics];
       .sort((a, b) => b.duration - a.duration)
       .slice(0, 10);
-
     return {
       total: this.metrics.length,
       byType,
@@ -256,7 +227,6 @@ class PerformanceMonitor {
       slowest
     };
   }
-
   /**
    * Flush metrics to storage or analytics service
    */
@@ -264,21 +234,17 @@ class PerformanceMonitor {
     if (this.metrics.length === 0) {
       return;
     }
-
     const metricsToFlush = [...this.metrics];
     this.metrics = [];
-
     if (this.config.enableLogging) {
       console.log('[Performance] Flushing metrics:', metricsToFlush.length);
     }
-
     // In a real implementation, you would send these to an analytics service
     // For now, we'll store them in sessionStorage as a fallback
     try {
       const existingMetrics = sessionStorage.getItem('performance_metrics');
       const allMetrics = existingMetrics ? JSON.parse(existingMetrics) : [];
       allMetrics.push(...metricsToFlush);
-      
       // Keep only the most recent 5000 metrics
       const recentMetrics = allMetrics.slice(-5000);
       sessionStorage.setItem('performance_metrics', JSON.stringify(recentMetrics));
@@ -286,7 +252,6 @@ class PerformanceMonitor {
       console.warn('Failed to store performance metrics:', error);
     }
   }
-
   /**
    * Start periodic flushing
    */
@@ -295,25 +260,21 @@ class PerformanceMonitor {
       this.flush();
     }, this.config.flushInterval);
   }
-
   /**
    * Determine if this operation should be sampled
    */
   private shouldSample(): boolean {
     return Math.random() < this.config.sampleRate;
   }
-
   /**
    * Clean up observers and timers
    */
   destroy(): void {
     this.observers.forEach(observer => observer.disconnect());
     this.observers.clear();
-    
     if (this.flushTimer) {
       clearInterval(this.flushTimer);
     }
-    
     this.flush(); // Final flush
   }
 }
@@ -324,50 +285,43 @@ export const performanceMonitor = new PerformanceMonitor();
 // React Hook for component performance monitoring
 export function usePerformanceTracking(componentName: string, dependencies: unknown[] = []): void {
   const renderStart = performance.now();
-  
   React.useEffect(() => {
     const renderEnd = performance.now();
     const renderDuration = renderEnd - renderStart;
-    
-    performanceMonitor.addMetric({
-      name: `${componentName}_render`,
+    performanceMonitor.addMetric({)
+      name: `${componentName}_render`,}
       duration: renderDuration,
       timestamp: renderStart,
       type: 'component',
-      metadata: {
+      metadata: {,
         componentName,
-        dependencyCount: dependencies.length
+        dependencyCount: dependencies.length,
       }
     });
   });
 }
 
 // Higher-order component for performance tracking
-export function withPerformanceTracking<P extends object>(
+export function withPerformanceTracking<P extends object>()
   WrappedComponent: React.ComponentType<P>,
   componentName?: string
 ): React.ComponentType<P> {
   const displayName = componentName || WrappedComponent.displayName || WrappedComponent.name || 'Component';
-  
   const MemoizedComponent = React.memo(WrappedComponent);
-  
   const WithPerformanceTracking: React.FC<P> = (props) => {
     usePerformanceTracking(displayName);
     return React.createElement(MemoizedComponent, props);
   };
-  
-  WithPerformanceTracking.displayName = `withPerformanceTracking(${displayName})`;
-  
+  WithPerformanceTracking.displayName = `withPerformanceTracking(${displayName})`;}
   return WithPerformanceTracking;
 }
 
 // Utility functions
-export     
+export 
     return (...args: Parameters<T>) => {
       clearTimeout(timeoutId);
-      
       timeoutId = window.setTimeout(() => {
-        performanceMonitor.measureExecution(
+        performanceMonitor.measureExecution()
           name || 'debounced_function',
           () => func(...args),
           'custom'
@@ -375,23 +329,20 @@ export
       }, delay);
     };
   },
-
   /**
    * Throttle function with performance tracking
    */
-  throttle<T extends (...args: unknown[]) => unknown>(
+  throttle<T extends (...args: unknown[]) => unknown>()
     func: T,
     delay: number,
     name?: string
   ): (...args: Parameters<T>) => void {
     let lastCall = 0;
-    
     return (...args: Parameters<T>) => {
       const now = Date.now();
-      
       if (now - lastCall >= delay) {
         lastCall = now;
-        performanceMonitor.measureExecution(
+        performanceMonitor.measureExecution()
           name || 'throttled_function',
           () => func(...args),
           'custom'

@@ -43,7 +43,7 @@ export declare const usePolicyManagement: (config?: PolicyManagementHookConfig) 
     violations: PolicyViolation[];
     isLoading: boolean;
     error: string | null;
-    loadPolicies: (filters?: {)
+    loadPolicies: (filters?: {),
         domain?: PolicyDomain;
         type?: PolicyType;
         status?: PolicyStatus;
@@ -74,7 +74,7 @@ export declare const usePolicyManagement: (config?: PolicyManagementHookConfig) 
         actions: string[];
     }>;
     generateComplianceReport: (framework: ComplianceFramework) => Promise<any>;
-    getPolicyStatistics: () => {
+    getPolicyStatistics: () => {,
         totalPolicies: number;
         activePolicies: number;
         byDomain: Record<string, number>;
@@ -86,14 +86,14 @@ export declare const usePolicyManagement: (config?: PolicyManagementHookConfig) 
             averageEvaluationTime: number;
         };
     };
-    getFilteredPolicies: (filters: {)
+    getFilteredPolicies: (filters: {),
         domain?: PolicyDomain;
         type?: PolicyType;
         status?: PolicyStatus;
         search?: string;
     }) => UnifiedPolicy[];
     getRecentEvaluations: (limit?: number) => PolicyEvaluationResult[];
-    getPolicyViolations: (filters?: {)
+    getPolicyViolations: (filters?: {),
         severity?: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
         resolved?: boolean;
         entityType?: "USER" | "TEMPLATE" | "PROJECT" | "TRANSACTION" | "CONTENT";

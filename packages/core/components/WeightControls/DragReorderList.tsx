@@ -58,7 +58,7 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
       ...prev,
       dragOffset: {,
         x: event.clientX - rect.left,
-        y: event.clientY - rect.top
+        y: event.clientY - rect.top,
       }
     }));
   }, [disabled]);
@@ -75,7 +75,7 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
         draggedIndex: dragStartRef.current!.index,
         ghostPosition: {,
           x: event.clientX - prev.dragOffset.x,
-          y: event.clientY - prev.dragOffset.y
+          y: event.clientY - prev.dragOffset.y,
         }
       }));
       document.body.style.cursor = 'grabbing';
@@ -91,7 +91,7 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
       ...prev,
       ghostPosition: {,
         x: event.clientX - prev.dragOffset.x,
-        y: event.clientY - prev.dragOffset.y
+        y: event.clientY - prev.dragOffset.y,
       }
     }));
     // Find drop target
@@ -173,7 +173,7 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
       ...prev,
       dragOffset: {,
         x: touch.clientX - rect.left,
-        y: touch.clientY - rect.top
+        y: touch.clientY - rect.top,
       }
     }));
   }, [disabled]);
@@ -191,7 +191,7 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
           draggedIndex: dragStartRef.current!.index,
           ghostPosition: {,
             x: touch.clientX - prev.dragOffset.x,
-            y: touch.clientY - prev.dragOffset.y
+            y: touch.clientY - prev.dragOffset.y,
           }
         }));
       }
@@ -214,19 +214,19 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
       };
     }
   }, [handleTouchMove, handleTouchEnd, dragState.isDragging]);
-  return ()
+  return ();
     <div
       ref={listRef}
       className={`drag-reorder-list ${className}`}
       style={{
         position: 'relative',
-        userSelect: dragState.isDragging ? 'none' : 'auto'
+        userSelect: dragState.isDragging ? 'none' : 'auto',
       }}
     >
       {options.map((option, index) => {
         const isDragged = dragState.draggedIndex === index;
         const showDropZone = dragState.dragOverIndex === index && !isDragged;
-        return ()
+        return ();
           <React.Fragment key={option.id}>
             {/* Drop zone indicator */}
             {showDropZone && ()
@@ -299,7 +299,7 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
                   color: '#e2e8f0',
                   fontSize: 14,
                   outline: 'none',
-                  cursor: disabled ? 'default' : 'text'
+                  cursor: disabled ? 'default' : 'text',
                 }}
                 onMouseDown={(e) => e.stopPropagation()} // Prevent drag when editing text
               />
@@ -316,7 +316,7 @@ export const DragReorderList: React.FC<DragReorderListProps> = ({)
                     style={{
                       width: 60,
                       marginRight: 8,
-                      cursor: disabled || option.locked ? 'default' : 'pointer'
+                      cursor: disabled || option.locked ? 'default' : 'pointer',
                     }}
                     onMouseDown={(e) => e.stopPropagation()} // Prevent drag when adjusting weight
                   />

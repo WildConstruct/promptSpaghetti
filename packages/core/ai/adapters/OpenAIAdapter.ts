@@ -84,7 +84,7 @@ export class OpenAIAdapter extends BaseAIModel {
         tokensPerMinute: 90000,
       },
       tags: ['chat', 'completion', 'text-generation'],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     const capabilities: ModelCapabilities = {
       inputTypes: ['text', 'json'],
@@ -290,7 +290,7 @@ export class OpenAIAdapter extends BaseAIModel {
   }
   private _estimateTokenCount(messages: ChatMessage[]): number {
     // Rough estimation: 4 characters per token
-    const totalText = messages.map(msg => ;)
+    const totalText = messages.map(msg => ;);
       (msg.content || '') + (msg.role || '') + (msg.name || '')
     ).join(' ');
     return Math.ceil(totalText.length / 4);

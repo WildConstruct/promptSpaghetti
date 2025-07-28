@@ -185,7 +185,7 @@ describe('TrustedDeviceManager', () => {
       riskScore: 10,
       factors: [],
       recommendations: [],
-      timestamp: new Date( as unknown as unknown)
+      timestamp: new Date( as unknown as unknown),
     });
     manager = new TrustedDeviceManager(mockFingerprintService, {)
       maxDevicesPerUser: 5,
@@ -411,7 +411,7 @@ describe('TrustedDeviceManager', () => {
         riskScore: 85,
         factors: [],
         recommendations: [],
-        timestamp: new Date( as unknown as unknown)
+        timestamp: new Date( as unknown as unknown),
       });
       // Register and verify a device
       const request: DeviceVerificationRequest = {
@@ -562,7 +562,7 @@ describe('TrustedDeviceManager', () => {
             id: device.id,
             trustStatus: TrustStatus.REVOKED,
           }),
-          reason: 'Test revocation'
+          reason: 'Test revocation',
         })
       );
     });
@@ -654,7 +654,7 @@ describe('TrustedDeviceManager', () => {
         expect.objectContaining({)
           operation: 'checkDeviceTrust',
           userId: testUserId,
-          error: 'Service error'
+          error: 'Service error',
         })
       );
     });

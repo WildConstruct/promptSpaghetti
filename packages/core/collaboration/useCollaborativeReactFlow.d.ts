@@ -15,7 +15,7 @@ export declare function useCollaborativeReactFlow(): {
     onEdgesChange: (changes: EdgeChange[]) => void;
     onConnect: (connection: Connection) => void;
     onNodeDrag: (event: React.MouseEvent, node: FlowNode) => void;
-    onSelectionChange: (params: {)
+    onSelectionChange: (params: {),
         nodes: FlowNode[];
         edges: FlowEdge[];
     }) => void;
@@ -30,7 +30,7 @@ export declare function useCollaborativeReactFlow(): {
     collaborationEnabled: boolean;
     connectionStatus: "error" | "disconnected" | "connecting" | "connected";
     connectedUsers: Map<string, UserPresence>;
-    getUserCursors: () => {
+    getUserCursors: () => {,
         userId: string;
         user: UserPresence;
         position: {,

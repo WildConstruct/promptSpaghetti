@@ -116,11 +116,11 @@ export const Chart: React.FC<ChartProps> = ({)
   const getSeriesColor = (seriesIndex: number, series: ChartSeries): string => {
     return series.color || colors[seriesIndex % colors.length];
   };
-  const handleDataPointInteraction = (;)
+  const handleDataPointInteraction = (;);
     point: ChartDataPoint,
     series: ChartSeries,
     event: React.MouseEvent,
-    action: 'click' | 'hover'
+    action: 'click' | 'hover',
   ) => {
     if (!interactive) return;
     if (action === 'click' && onDataPointClick) {
@@ -133,7 +133,7 @@ export const Chart: React.FC<ChartProps> = ({)
           point,
           series,
           x: event.clientX - rect.left,
-          y: event.clientY - rect.top
+          y: event.clientY - rect.top,
         });
       }
       onDataPointHover?.(point, series);
@@ -150,14 +150,14 @@ export const Chart: React.FC<ChartProps> = ({)
     const padding = { top: 20, right: 20, bottom: 40, left: 60 };
     const plotWidth = chartWidth - padding.left - padding.right;
     const plotHeight = chartHeight - padding.top - padding.bottom;
-    return ()
+    return ();
       <svg width={chartWidth} height={chartHeight} className="chart-svg">
         {/* Grid */}
         {showGrid && ()
           <g className="chart-grid">
             {Array.from({ length: 6 }, (_, i) => {
               const y = padding.top + (plotHeight / 5) * i;
-              return ()
+              return ();
                 <line
                   key={`grid-${i}`}
                   x1={padding.left}
@@ -182,7 +182,7 @@ export const Chart: React.FC<ChartProps> = ({)
           const pathData = points;
             .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`)}
             .join(' ');
-          return ()
+          return ();
             <g key={`series-${seriesIndex}`} className="chart-series">}
               {/* Line */}
               <path
@@ -231,7 +231,7 @@ export const Chart: React.FC<ChartProps> = ({)
             {Array.from({ length: 6 }, (_, i) => {
               const value = chartData.minValue + (chartData.range / 5) * (5 - i);
               const y = padding.top + (plotHeight / 5) * i;
-              return ()
+              return ();
                 <text
                   key={`y-label-${i}`}
                   x={padding.left - 10}
@@ -246,7 +246,7 @@ export const Chart: React.FC<ChartProps> = ({)
             {/* X-axis labels */}
             {series[0]?.data.map((point, i) => {
               const x = padding.left + (plotWidth / (series[0].data.length - 1)) * i;
-              return ()
+              return ();
                 <text
                   key={`x-label-${i}`}
                   x={x}
@@ -272,14 +272,14 @@ export const Chart: React.FC<ChartProps> = ({)
     const plotHeight = chartHeight - padding.top - padding.bottom;
     const barWidth = plotWidth / series[0].data.length * 0.8;
     const barSpacing = plotWidth / series[0].data.length * 0.2;
-    return ()
+    return ();
       <svg width={chartWidth} height={chartHeight} className="chart-svg">
         {/* Grid */}
         {showGrid && ()
           <g className="chart-grid">
             {Array.from({ length: 6 }, (_, i) => {
               const y = padding.top + (plotHeight / 5) * i;
-              return ()
+              return ();
                 <line
                   key={`grid-${i}`}
                   x1={padding.left}
@@ -298,7 +298,7 @@ export const Chart: React.FC<ChartProps> = ({)
           const x = padding.left + (plotWidth / series[0].data.length) * index + barSpacing / 2;
           const y = padding.top + plotHeight - barHeight;
           const color = point.color || getSeriesColor(0, series[0]);
-          return ()
+          return ();
             <rect
               key={`bar-${index}`}
               x={x}
@@ -320,7 +320,7 @@ export const Chart: React.FC<ChartProps> = ({)
             {Array.from({ length: 6 }, (_, i) => {
               const value = chartData.minValue + (chartData.range / 5) * (5 - i);
               const y = padding.top + (plotHeight / 5) * i;
-              return ()
+              return ();
                 <text key={`y-label-${i}`} x={padding.left - 10} y={y + 4} className="axis-label" textAnchor="end">}
                   {valueFormatter(value)}
                 </text>
@@ -328,7 +328,7 @@ export const Chart: React.FC<ChartProps> = ({)
             })}
             {series[0].data.map((point, i) => {
               const x = padding.left + (plotWidth / series[0].data.length) * i + barWidth / 2 + barSpacing / 2;
-              return ()
+              return ();
                 <text key={`x-label-${i}`} x={x} y={padding.top + plotHeight + 20} className="axis-label" textAnchor="middle">}
                   {point.label}
                 </text>
@@ -347,7 +347,7 @@ export const Chart: React.FC<ChartProps> = ({)
     const centerY = chartSize / 2;
     const total = series[0].data.reduce((sum, point) => sum + point.value, 0);
     let currentAngle = -90; // Start from top;
-    return ()
+    return ();
       <svg width={chartSize} height={chartSize} className="chart-svg">
         {series[0].data.map((point, index) => {
           const angle = (point.value / total) * 360;
@@ -363,7 +363,7 @@ export const Chart: React.FC<ChartProps> = ({)
             'Z'
           ].join(' ');
           const color = point.color || getSeriesColor(index, series[0]);
-          const result = (;)
+          const result = (;);
             <path
               key={`slice-${index}`}
               d={pathData}
@@ -393,7 +393,7 @@ export const Chart: React.FC<ChartProps> = ({)
     }
   };
   if (loading) {
-    return ()
+    return ();
       <div className={`chart chart-loading ${className}`} style={{ height, width }}>}
         <div className="chart-loading-content">
           <div className="loading-shimmer" />
@@ -403,7 +403,7 @@ export const Chart: React.FC<ChartProps> = ({)
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className={`chart chart-error ${className}`} style={{ height, width }}>}
         <div className="chart-error-content">
           <div className="error-icon">⚠️</div>
@@ -413,7 +413,7 @@ export const Chart: React.FC<ChartProps> = ({)
     );
   }
   if (!series.length || !chartData) {
-    return ()
+    return ();
       <div className={`chart chart-empty ${className}`} style={{ height, width }}>}
         <div className="chart-empty-content">
           <div className="empty-icon">📊</div>
@@ -422,7 +422,7 @@ export const Chart: React.FC<ChartProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div 
       ref={chartRef}
       className={`chart chart-${type} chart-${variant} ${className}`}
@@ -438,7 +438,7 @@ export const Chart: React.FC<ChartProps> = ({)
             className="chart-tooltip"
             style={{
               left: hoveredPoint.x,
-              top: hoveredPoint.y - 10
+              top: hoveredPoint.y - 10,
             }}
           >
             <div className="tooltip-series">{hoveredPoint.series.name}</div>

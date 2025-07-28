@@ -42,11 +42,10 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
     if (policyData.max_duration_minutes && policyData.max_duration_minutes < 1) {
       errors.max_duration_minutes = 'Must be at least 1 minute';
     }
-    if ()
+    if ();
       policyData.default_duration_minutes &&
       policyData.max_duration_minutes &&
       policyData.default_duration_minutes > policyData.max_duration_minutes
-    ) {
       errors.default_duration_minutes = 'Cannot exceed maximum duration';
     }
     return errors;
@@ -84,7 +83,7 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
     setValidationErrors({});
   };
   if (isLoading) {
-    return ()
+    return ();
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <span className="ml-2 text-gray-600">Loading policy...</span>
@@ -92,7 +91,7 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
     );
   }
   if (!editingPolicy) {
-    return ()
+    return ();
       <div className="text-center py-8">
         <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No Policy Found</h3>
@@ -102,7 +101,7 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">

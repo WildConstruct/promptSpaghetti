@@ -80,7 +80,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
     }
     handlePronounsChange([...new Set(generated)]);
   };
-  return ()
+  return ();
     <div className="subject-editor">
       {/* BASIC LEVEL: Essential subject configuration */}
       <ProgressiveDisclosureSection
@@ -276,7 +276,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeD
                 border: 'none',
                 borderRadius: 2,
                 color: 'white',
-                cursor: allowPronouns ? 'pointer' : 'not-allowed'
+                cursor: allowPronouns ? 'pointer' : 'not-allowed',
               }}
             >
               Auto-Generate

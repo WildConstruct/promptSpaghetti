@@ -1,5 +1,4 @@
 // Epic 17.1.5 - Execution History Component
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Dialog,
@@ -40,7 +39,6 @@ import {
   Timeline as TimelineIcon,
   History as HistoryIcon
 } from '@mui/icons-material';
-
 interface ExecutionRecord {
   id: string;
   scheduleId: string;
@@ -48,7 +46,7 @@ interface ExecutionRecord {
   executionTime: Date;
   status: 'scheduled' | 'running' | 'success' | 'failed' | 'skipped' | 'retrying';
   triggeredBy: 'scheduler' | 'manual' | 'retry';
-  executionContext: {
+  executionContext: {,
     timezone: string;
     originalTime: Date;
     actualTime: Date;
@@ -67,13 +65,11 @@ interface ExecutionRecord {
   metadata?: Record<string, unknown>;
   createdAt: Date;
 }
-
 interface ExecutionHistoryProps {
   open: boolean;
   onClose: () => void;
   scheduleId: string | null;
 }
-
 const STATUS_CONFIG = {
   scheduled: { color: 'info', icon: PendingIcon, label: 'Scheduled' },
   running: { color: 'warning', icon: PendingIcon, label: 'Running' },
@@ -83,13 +79,11 @@ const STATUS_CONFIG = {
   retrying: { color: 'warning', icon: ReplayIcon, label: 'Retrying' }
 };
 
-export   const [page, setPage] = useState(0);
+export const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedExecution, setSelectedExecution] = useState<ExecutionRecord | null>(null);
-
   const loadExecutions = useCallback(async () => {
     if (!scheduleId) return;
-    
     setLoading(true);
     try {
       // Simulate API call
@@ -101,21 +95,21 @@ export   const [page, setPage] = useState(0);
           executionTime: new Date(Date.now() - 60 * 60 * 1000),
           status: 'success',
           triggeredBy: 'scheduler',
-          executionContext: {
+          executionContext: {,
             timezone: 'America/New_York',
             originalTime: new Date(Date.now() - 60 * 60 * 1000),
             actualTime: new Date(Date.now() - 60 * 60 * 1000 + 500),
-            delay: 500
+            delay: 500,
           },
           beforeValue: { enabled: false },
           afterValue: { enabled: true },
           affectedUsers: 1250,
           duration: 2500,
-          metadata: {
+          metadata: {,
             action: 'enable',
-            executor: 'scheduler-v1.2'
+            executor: 'scheduler-v1.2',
           },
-          createdAt: new Date(Date.now() - 60 * 60 * 1000)
+          createdAt: new Date(Date.now() - 60 * 60 * 1000),
         },
         {
           id: 'exec_2',
@@ -124,24 +118,24 @@ export   const [page, setPage] = useState(0);
           executionTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
           status: 'failed',
           triggeredBy: 'scheduler',
-          executionContext: {
+          executionContext: {,
             timezone: 'America/New_York',
             originalTime: new Date(Date.now() - 2 * 60 * 60 * 1000),
             actualTime: new Date(Date.now() - 2 * 60 * 60 * 1000 + 15000),
-            delay: 15000
+            delay: 15000,
           },
-          error: {
+          error: {,
             code: 'TOGGLE_NOT_FOUND',
             message: 'Feature toggle not found or has been deleted',
-            retryable: false
+            retryable: false,
           },
           duration: 1200,
-          metadata: {
+          metadata: {,
             action: 'enable',
             executor: 'scheduler-v1.2',
-            retryAttempt: 1
+            retryAttempt: 1,
           },
-          createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000)
+          createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
         },
         {
           id: 'exec_3',
@@ -150,25 +144,24 @@ export   const [page, setPage] = useState(0);
           executionTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
           status: 'success',
           triggeredBy: 'manual',
-          executionContext: {
+          executionContext: {,
             timezone: 'America/New_York',
             originalTime: new Date(Date.now() - 3 * 60 * 60 * 1000),
             actualTime: new Date(Date.now() - 3 * 60 * 60 * 1000 + 200),
-            delay: 200
+            delay: 200,
           },
           beforeValue: { percentage: 25 },
           afterValue: { percentage: 50 },
           affectedUsers: 875,
           duration: 1800,
-          metadata: {
+          metadata: {,
             action: 'modify_percentage',
             executor: 'manual-admin',
-            requestedBy: 'admin@example.com'
+            requestedBy: 'admin@example.com',
           },
-          createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000)
+          createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
         }
       ];
-      
       setExecutions(mockExecutions);
     } catch (error) {
       console.error('Failed to load execution history:', error);
@@ -176,38 +169,31 @@ export   const [page, setPage] = useState(0);
       setLoading(false);
     }
   }, [scheduleId]);
-
   useEffect(() => {
     if (open && scheduleId) {
       loadExecutions();
     }
   }, [open, scheduleId, loadExecutions]);
-
   const getExecutionStats = () => {
     const total = executions.length;
     const successful = executions.filter(e => e.status === 'success').length;
     const failed = executions.filter(e => e.status === 'failed').length;
     const avgDuration = executions.reduce((acc, e) => acc + e.duration, 0) / total || 0;
     const successRate = total > 0 ? (successful / total) * 100 : 0;
-    
     return { total, successful, failed, avgDuration, successRate };
   };
-
   const formatDuration = (milliseconds: number): string => {
-    if (milliseconds < 1000) return `${milliseconds}ms`;
-    if (milliseconds < 60000) return `${(milliseconds / 1000).toFixed(1)}s`;
-    return `${(milliseconds / 60000).toFixed(1)}m`;
+    if (milliseconds < 1000) return `${milliseconds}ms`;}
+    if (milliseconds < 60000) return `${(milliseconds / 1000).toFixed(1)}s`;}
+    return `${(milliseconds / 60000).toFixed(1)}m`;}
   };
-
   const formatDelay = (delay?: number): string => {
     if (!delay) return 'On time';
-    if (delay < 0) return `${Math.abs(delay)}ms early`;
-    return `${delay}ms late`;
+    if (delay < 0) return `${Math.abs(delay)}ms early`;}
+    return `${delay}ms late`;}
   };
-
   const stats = getExecutionStats();
-
-  const renderStatsCards = () => (
+  const renderStatsCards = () => (;)
     <Grid container spacing={2} sx={{ mb: 3 }}>
       <Grid item xs={12} sm={6} md={3}>
         <Card>
@@ -226,7 +212,6 @@ export   const [page, setPage] = useState(0);
           </CardContent>
         </Card>
       </Grid>
-      
       <Grid item xs={12} sm={6} md={3}>
         <Card>
           <CardContent>
@@ -244,7 +229,6 @@ export   const [page, setPage] = useState(0);
           </CardContent>
         </Card>
       </Grid>
-      
       <Grid item xs={12} sm={6} md={3}>
         <Card>
           <CardContent>
@@ -262,7 +246,6 @@ export   const [page, setPage] = useState(0);
           </CardContent>
         </Card>
       </Grid>
-      
       <Grid item xs={12} sm={6} md={3}>
         <Card>
           <CardContent>
@@ -282,8 +265,7 @@ export   const [page, setPage] = useState(0);
       </Grid>
     </Grid>
   );
-
-  const renderExecutionDetails = (execution: ExecutionRecord) => (
+  const renderExecutionDetails = (execution: ExecutionRecord) => (;)
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography variant="subtitle2">
@@ -299,21 +281,16 @@ export   const [page, setPage] = useState(0);
             <Box component="dl" sx={{ '& dt': { fontWeight: 'bold' }, '& dd': { ml: 0, mb: 1 } }}>
               <dt>Scheduled Time:</dt>
               <dd>{execution.executionContext.originalTime.toLocaleString()}</dd>
-              
               <dt>Actual Time:</dt>
               <dd>{execution.executionContext.actualTime.toLocaleString()}</dd>
-              
               <dt>Delay:</dt>
               <dd>{formatDelay(execution.executionContext.delay)}</dd>
-              
               <dt>Duration:</dt>
               <dd>{formatDuration(execution.duration)}</dd>
-              
               <dt>Timezone:</dt>
               <dd>{execution.executionContext.timezone}</dd>
             </Box>
           </Grid>
-          
           <Grid item xs={12} md={6}>
             <Typography variant="subtitle2" gutterBottom>
               Execution Context
@@ -321,7 +298,6 @@ export   const [page, setPage] = useState(0);
             <Box component="dl" sx={{ '& dt': { fontWeight: 'bold' }, '& dd': { ml: 0, mb: 1 } }}>
               <dt>Triggered By:</dt>
               <dd>{execution.triggeredBy}</dd>
-              
               <dt>Status:</dt>
               <dd>
                 <Chip
@@ -330,8 +306,7 @@ export   const [page, setPage] = useState(0);
                   label={STATUS_CONFIG[execution.status].label}
                 />
               </dd>
-              
-              {execution.affectedUsers && (
+              {execution.affectedUsers && ()
                 <>
                   <dt>Affected Users:</dt>
                   <dd>{execution.affectedUsers.toLocaleString()}</dd>
@@ -339,8 +314,7 @@ export   const [page, setPage] = useState(0);
               )}
             </Box>
           </Grid>
-
-          {execution.beforeValue && (
+          {execution.beforeValue && ()
             <Grid item xs={12} md={6}>
               <Typography variant="subtitle2" gutterBottom>
                 Before Value
@@ -352,8 +326,7 @@ export   const [page, setPage] = useState(0);
               </Paper>
             </Grid>
           )}
-
-          {execution.afterValue && (
+          {execution.afterValue && ()
             <Grid item xs={12} md={6}>
               <Typography variant="subtitle2" gutterBottom>
                 After Value
@@ -365,8 +338,7 @@ export   const [page, setPage] = useState(0);
               </Paper>
             </Grid>
           )}
-
-          {execution.error && (
+          {execution.error && ()
             <Grid item xs={12}>
               <Alert severity="error">
                 <Typography variant="subtitle2" gutterBottom>
@@ -381,7 +353,7 @@ export   const [page, setPage] = useState(0);
                 <Typography variant="body2">
                   <strong>Retryable:</strong> {execution.error.retryable ? 'Yes' : 'No'}
                 </Typography>
-                {execution.error.stack && (
+                {execution.error.stack && ()
                   <details style={{ marginTop: 8 }}>
                     <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>
                       Stack Trace
@@ -394,8 +366,7 @@ export   const [page, setPage] = useState(0);
               </Alert>
             </Grid>
           )}
-
-          {execution.metadata && Object.keys(execution.metadata).length > 0 && (
+          {execution.metadata && Object.keys(execution.metadata).length > 0 && ()
             <Grid item xs={12}>
               <Typography variant="subtitle2" gutterBottom>
                 Metadata
@@ -411,8 +382,7 @@ export   const [page, setPage] = useState(0);
       </AccordionDetails>
     </Accordion>
   );
-
-  return (
+  return ()
     <Dialog
       open={open}
       onClose={onClose}
@@ -433,13 +403,10 @@ export   const [page, setPage] = useState(0);
           </IconButton>
         </Box>
       </DialogTitle>
-
       <DialogContent>
         {loading && <LinearProgress sx={{ mb: 2 }} />}
-        
         {executions.length > 0 && renderStatsCards()}
-
-        {executions.length === 0 && !loading ? (
+        {executions.length === 0 && !loading ? ()
           <Box 
             display="flex" 
             justifyContent="center" 
@@ -457,7 +424,7 @@ export   const [page, setPage] = useState(0);
               </Typography>
             </Box>
           </Box>
-        ) : (
+        ) : ()
           <Paper elevation={1}>
             <TableContainer>
               <Table>
@@ -478,8 +445,7 @@ export   const [page, setPage] = useState(0);
                     .map((execution) => {
                       const statusConfig = STATUS_CONFIG[execution.status];
                       const StatusIcon = statusConfig.icon;
-                      
-                      return (
+                      return ()
                         <TableRow key={execution.id}>
                           <TableCell>
                             <Box>
@@ -528,7 +494,7 @@ export   const [page, setPage] = useState(0);
                             <Tooltip title="View Details">
                               <IconButton
                                 size="small"
-                                onClick={() => setSelectedExecution(
+                                onClick={() => setSelectedExecution()
                                   selectedExecution?.id === execution.id ? null : execution
                                 )}
                               >
@@ -542,7 +508,6 @@ export   const [page, setPage] = useState(0);
                 </TableBody>
               </Table>
             </TableContainer>
-
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
@@ -557,15 +522,13 @@ export   const [page, setPage] = useState(0);
             />
           </Paper>
         )}
-
         {/* Execution Details */}
-        {selectedExecution && (
+        {selectedExecution && ()
           <Box mt={2}>
             {renderExecutionDetails(selectedExecution)}
           </Box>
         )}
       </DialogContent>
-
       <DialogActions>
         <Button onClick={onClose}>Close</Button>
       </DialogActions>

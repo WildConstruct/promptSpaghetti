@@ -196,7 +196,7 @@ export class AlertSystem {
     this.validateRule(rule);
     this.rules.set(rule.id, {)
       ...rule,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
     // Emit rule registered event
     this.emitSystemEvent('rule_registered', { ruleId: rule.id, ruleName: rule.name });
@@ -383,7 +383,7 @@ export class AlertSystem {
     const now = new Date();
     // Calculate resolution times for resolved alerts
     const resolvedAlerts = alerts.filter(a => a.status === 'resolved' && a.resolvedAt);
-    const resolutionTimes = resolvedAlerts.map(a => ;)
+    const resolutionTimes = resolvedAlerts.map(a => ;);
       ((a.resolvedAt!.getTime() - a.triggeredAt.getTime()) / (1000 * 60)) // minutes
     );
     const averageResolutionTime = resolutionTimes.length > 0 ;
@@ -716,7 +716,7 @@ export class AlertSystem {
             id: 'timeout_condition',
             field: 'execution_time',
             operator: 'gt',
-            value: 10000 // 10 seconds
+            value: 10000 // 10 seconds,
           }
         ],
         actions: [,
@@ -750,7 +750,7 @@ export class AlertSystem {
             id: 'error_rate_condition',
             field: 'error_rate',
             operator: 'gt',
-            value: 0.1 // 10% error rate
+            value: 0.1 // 10% error rate,
           }
         ],
         actions: [,
@@ -872,7 +872,7 @@ export class AlertSystem {
         },
         body: JSON.stringify({),
           alert,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         })
       });
       if (!response.ok) {

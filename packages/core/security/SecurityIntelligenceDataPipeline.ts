@@ -441,7 +441,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         ...record,
         __executionId: executionId,
         __sourceId: sourceId,
-        __ingestedAt: new Date()
+        __ingestedAt: new Date(),
       })));
       this.emit('dataIngested', { )
         sourceId, 
@@ -564,7 +564,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
   }
   public getPipelineMetrics(): PipelineMetrics {
     const executions = Array.from(this.executionHistory.values());
-    const recentExecutions = executions.filter(e => ;)
+    const recentExecutions = executions.filter(e => ;);
       Date.now() - e.startTime.getTime() < 24 * 60 * 60 * 1000 // Last 24 hours
     );
     return {
@@ -990,7 +990,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     return data.map(record => ({)
       ...record,
       enriched_at: new Date(),
-      enrichment_source: transformation.parameters.service || 'default'
+      enrichment_source: transformation.parameters.service || 'default',
     }));
   }
   private async classifyRecords(data: any[], transformation: DataTransformation): Promise<any[]> {
@@ -1001,7 +1001,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       classification: {,
         category: 'security_event',
         confidence: 0.85,
-        model: transformation.parameters.model || 'default'
+        model: transformation.parameters.model || 'default',
       }
     }));
   }
@@ -1010,7 +1010,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
     return data.map(record => ({)
       ...record,
       enriched: true,
-      enrichment_timestamp: new Date()
+      enrichment_timestamp: new Date(),
     }));
   }
   private async analyzeData(data: any[], configuration: Record<string, unknown>): Promise<any[]> {
@@ -1127,7 +1127,7 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       peakMemoryUsage: 0, // Placeholder - implement memory tracking  
       totalCpuTime: 0, // Placeholder - implement CPU tracking
       networkBytesTransferred: 0, // Placeholder
-      diskBytesWritten: 0 // Placeholder
+      diskBytesWritten: 0 // Placeholder,
     };
   }
   private calculateAverageExecutionTime(executions: PipelineExecution[]): number {

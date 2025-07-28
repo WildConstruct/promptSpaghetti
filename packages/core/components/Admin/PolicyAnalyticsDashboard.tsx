@@ -126,7 +126,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
     default: return 'bg-gray-500';
     }
   };
-  const renderKPIMetrics = () => (;)
+  const renderKPIMetrics = () => (;);
     <div className="kpi-metrics">
       <div className="metrics-grid">
         <Card className="metric-card">
@@ -197,7 +197,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
       </div>
     </div>
   );
-  const renderViolationBreakdown = () => (;)
+  const renderViolationBreakdown = () => (;);
     <Card className="violation-breakdown">
       <CardHeader>
         <CardTitle>Violation Breakdown by Category</CardTitle>
@@ -228,7 +228,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
       </CardContent>
     </Card>
   );
-  const renderEnforcementEffectiveness = () => (;)
+  const renderEnforcementEffectiveness = () => (;);
     <Card className="enforcement-effectiveness">
       <CardHeader>
         <CardTitle>Enforcement Action Effectiveness</CardTitle>
@@ -254,7 +254,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
                       className="rate-fill"
                       style={{ 
                         width: `${action.successRate}%`,}
-                        backgroundColor: action.successRate >= 90 ? '#10b981' : 
+                        backgroundColor: action.successRate >= 90 ? '#10b981' : ,
                           action.successRate >= 75 ? '#f59e0b' : '#ef4444'
                       }}
                     ></div>
@@ -274,7 +274,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
       </CardContent>
     </Card>
   );
-  const renderTimeSeriesChart = () => (;)
+  const renderTimeSeriesChart = () => (;);
     <Card className="time-series-chart">
       <CardHeader>
         <div className="chart-header">
@@ -311,10 +311,10 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
         <div className="chart-container">
           <div className="chart-grid">
             {analyticsData.timeSeriesData.map((dataPoint, index) => {
-              const maxValue = Math.max(;)
+              const maxValue = Math.max(;);
                 ...analyticsData.timeSeriesData.map(d => Math.max(d.violations, d.enforcements, d.preventions))
               );
-              return ()
+              return ();
                 <div key={dataPoint.date} className="chart-column">
                   <div className="data-bars">
                     <div 
@@ -347,7 +347,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
       </CardContent>
     </Card>
   );
-  const renderInsightsPanel = () => (;)
+  const renderInsightsPanel = () => (;);
     <Card className="insights-panel">
       <CardHeader>
         <CardTitle>Policy Insights & Recommendations</CardTitle>
@@ -386,7 +386,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
       </CardContent>
     </Card>
   );
-  return ()
+  return ();
     <div className={`policy-analytics-dashboard ${className}`}>}
       <div className="analytics-header">
         <div className="header-info">

@@ -139,7 +139,7 @@ def transform(input_data):
         code: 'invalid code',
         pythonConfig: { ,
           fallbackBehavior: 'default',
-          defaultOutput: 'Default output'
+          defaultOutput: 'Default output',
         }
       });
       // Mock execution failure
@@ -339,13 +339,13 @@ def transform(input_data):
       expect(consoleWarnSpy).toHaveBeenCalledWith()
         expect.stringContaining('Python warning in node test-node:'),
         expect.objectContaining({)
-          warning: 'Warning 1'
+          warning: 'Warning 1',
         })
       );
       expect(consoleWarnSpy).toHaveBeenCalledWith()
         expect.stringContaining('Python warning in node test-node:'),
         expect.objectContaining({)
-          warning: 'Warning 2'
+          warning: 'Warning 2',
         })
       );
       // Restore console.warn
@@ -446,7 +446,7 @@ def transform(input_data):
       mockClient.validate.mockResolvedValue({)
         valid: false,
         errors: ['Syntax error', 'Missing function'],
-        warnings: ['Performance warning']
+        warnings: ['Performance warning'],
       });
       // Validate code
       const result = await node.validateCode();
@@ -454,7 +454,7 @@ def transform(input_data):
       expect(result).toEqual({)
         valid: false,
         errors: ['Syntax error', 'Missing function'],
-        warnings: ['Performance warning']
+        warnings: ['Performance warning'],
       });
     });
     it('should handle empty code validation', async () => {

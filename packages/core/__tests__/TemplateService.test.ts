@@ -18,10 +18,10 @@ describe('TemplateService', () => {
     setItem: jest.fn((key: string, value: string) => {
       mockLocalStorage.store[key] = value;
     }),
-    removeItem: jest.fn((key: string) => {
+    removeItem: jest.fn((key: string) => {,
       delete mockLocalStorage.store[key];
     }),
-    clear: jest.fn(() => {
+    clear: jest.fn(() => {,
       mockLocalStorage.store = {};
     })
   };
@@ -75,7 +75,7 @@ describe('TemplateService', () => {
       includeAnnotations: true,
     };
     it('should create template from graph data', async () => {
-      const template = await service.createFromGraph(;)
+      const template = await service.createFromGraph(;);
         sampleNodes,
         sampleEdges,
         sampleSaveData,
@@ -95,7 +95,7 @@ describe('TemplateService', () => {
     });
     it('should calculate complexity correctly', async () => {
       // Simple graph (2 nodes, 1 edge = 3 total elements)
-      const simpleTemplate = await service.createFromGraph(;)
+      const simpleTemplate = await service.createFromGraph(;);
         sampleNodes,
         sampleEdges,
         sampleSaveData,
@@ -115,7 +115,7 @@ describe('TemplateService', () => {
         target: `node-${i + 1}`,}
         type: 'step',
       }));
-      const mediumTemplate = await service.createFromGraph(;)
+      const mediumTemplate = await service.createFromGraph(;);
         mediumNodes,
         mediumEdges,
         sampleSaveData,
@@ -135,7 +135,7 @@ describe('TemplateService', () => {
         target: `node-${i + 1}`,}
         type: 'step',
       }));
-      const complexTemplate = await service.createFromGraph(;)
+      const complexTemplate = await service.createFromGraph(;);
         complexNodes,
         complexEdges,
         { ...sampleSaveData, name: 'Complex Template' },
@@ -146,7 +146,7 @@ describe('TemplateService', () => {
     it('should validate template before saving', async () => {
       const invalidSaveData = {
         ...sampleSaveData,
-        name: '' // Invalid name
+        name: '' // Invalid name,
       };
       await expect()
         service.createFromGraph(sampleNodes, sampleEdges, invalidSaveData, 'test-author')
@@ -166,10 +166,10 @@ describe('TemplateService', () => {
       const edgesWithLabels: Edge[] = [
         {
           ...sampleEdges[0],
-          label: 'Connection Label'
+          label: 'Connection Label',
         }
       ];
-      const template = await service.createFromGraph(;)
+      const template = await service.createFromGraph(;);
         nodesWithLabels,
         edgesWithLabels,
         sampleSaveData,
@@ -216,7 +216,6 @@ describe('TemplateService', () => {
             includeAnnotations: true,
           },
           'author2'
-        )
       ];
       // Manually set ratings for testing
       await storage.update(templates[0].id, { rating: 4.5 });
@@ -321,7 +320,7 @@ describe('TemplateService', () => {
         mergeWithCurrent: false,
         customizationValues: {,
           [template.graph.nodes[0].id]: {
-            customProperty: 'customized value'
+            customProperty: 'customized value',
           }
         }
       };
@@ -570,7 +569,7 @@ describe('TemplateService', () => {
       const template2: Template = {
         ...template1,
         id: 'id-2',
-        description: 'Second template'
+        description: 'Second template',
       };
       await storage.save(template1);
       await expect(storage.save(template2)).rejects.toThrow()
@@ -581,13 +580,13 @@ describe('TemplateService', () => {
   describe('getPopularTemplates', () => {
     beforeEach(async () => {
       // Create templates with different ratings
-      const template1 = await service.createFromGraph(;)
+      const template1 = await service.createFromGraph(;);
         [{ id: 'n1', type: 'Output', position: { x: 0, y: 0 }, data: {} }],
         [],
         { name: 'Template 1', description: 'Test', category: 'general', tags: [], isPublic: true, includeAnnotations: true },
         'author'
       );
-      const template2 = await service.createFromGraph(;)
+      const template2 = await service.createFromGraph(;);
         [{ id: 'n1', type: 'Output', position: { x: 0, y: 0 }, data: {} }],
         [],
         { name: 'Template 2', description: 'Test', category: 'general', tags: [], isPublic: true, includeAnnotations: true },
@@ -610,14 +609,14 @@ describe('TemplateService', () => {
   describe('getRecentTemplates', () => {
     it('should return templates sorted by creation date', async () => {
       // Create templates with delays to ensure different timestamps
-      const template1 = await service.createFromGraph(;)
+      const template1 = await service.createFromGraph(;);
         [{ id: 'n1', type: 'Output', position: { x: 0, y: 0 }, data: {} }],
         [],
         { name: 'Old Template', description: 'Test', category: 'general', tags: [], isPublic: true, includeAnnotations: true },
         'author'
       );
       await new Promise(resolve => setTimeout(resolve, 10));
-      const template2 = await service.createFromGraph(;)
+      const template2 = await service.createFromGraph(;);
         [{ id: 'n1', type: 'Output', position: { x: 0, y: 0 }, data: {} }],
         [],
         { name: 'New Template', description: 'Test', category: 'general', tags: [], isPublic: true, includeAnnotations: true },

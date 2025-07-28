@@ -34,11 +34,11 @@ describe('Image Generation System', () => {
         if (urlString.includes('/images/generations')) {
           return Promise.resolve({)
             ok: true,
-            json: () => Promise.resolve({)
+            json: () => Promise.resolve({),
               created: Date.now(),
               data: [{,
                 url: 'https://example.com/generated-image.png',
-                revised_prompt: 'A beautiful landscape with mountains'
+                revised_prompt: 'A beautiful landscape with mountains',
               }]
             })
           } as Response);
@@ -109,7 +109,7 @@ describe('Image Generation System', () => {
         if (urlString.includes('/generate')) {
           return Promise.resolve({)
             ok: true,
-            json: () => Promise.resolve({)
+            json: () => Promise.resolve({),
               success: true,
               jobId: 'job-123',
               status: 'submitted',
@@ -119,12 +119,12 @@ describe('Image Generation System', () => {
         if (urlString.includes('/job/job-123/status')) {
           return Promise.resolve({)
             ok: true,
-            json: () => Promise.resolve({)
+            json: () => Promise.resolve({),
               jobId: 'job-123',
               status: 'completed',
               progress: 100,
               imageUrl: 'https://cdn.midjourney.com/generated.png',
-              prompt: 'A cyberpunk cityscape --ar 16:9 --v 6'
+              prompt: 'A cyberpunk cityscape --ar 16:9 --v 6',
             })
           } as Response);
         }
@@ -187,7 +187,7 @@ describe('Image Generation System', () => {
         if (urlString.includes('/sdapi/v1/sd-models')) {
           return Promise.resolve({)
             ok: true,
-            json: () => Promise.resolve([)
+            json: () => Promise.resolve([),
               { title: 'Stable Diffusion v1.5', filename: 'v1-5-pruned.ckpt' },
               { title: 'Stable Diffusion XL', filename: 'sdxl-base.ckpt' }
             ])
@@ -196,7 +196,7 @@ describe('Image Generation System', () => {
         if (urlString.includes('/sdapi/v1/samplers')) {
           return Promise.resolve({)
             ok: true,
-            json: () => Promise.resolve([)
+            json: () => Promise.resolve([),
               { name: 'Euler a' },
               { name: 'DPM++ 2M Karras' },
               { name: 'DDIM' }
@@ -206,7 +206,7 @@ describe('Image Generation System', () => {
         if (urlString.includes('/sdapi/v1/txt2img')) {
           return Promise.resolve({)
             ok: true,
-            json: () => Promise.resolve({)
+            json: () => Promise.resolve({),
               images: ['iVBORw0KGgoAAAANS...'], // Base64 image data
               parameters: {,
                 prompt: 'A serene lake at sunset',
@@ -244,7 +244,7 @@ describe('Image Generation System', () => {
         height: 512,
         steps: 20,
         cfg_scale: 7,
-        sampler_name: 'Euler a'
+        sampler_name: 'Euler a',
       });
       expect(result.images).toHaveLength(1);
       expect(result.images[0].base64).toBe('iVBORw0KGgoAAAANS...');
@@ -254,7 +254,7 @@ describe('Image Generation System', () => {
     });
     test('should support img2img generation', async () => {
       await stableDiffusionAdapter.initialize();
-      const result = await stableDiffusionAdapter.img2img(;)
+      const result = await stableDiffusionAdapter.img2img(;);
         'data:image/png;base64,iVBORw0KGgo...',
         'Transform this into a cyberpunk scene',
         {
@@ -275,7 +275,7 @@ describe('Image Generation System', () => {
         getContext: jest.fn().mockReturnValue({),
           drawImage: jest.fn(),
           getImageData: jest.fn().mockReturnValue({),
-            data: new Uint8ClampedArray(64 * 64 * 4).fill(128)
+            data: new Uint8ClampedArray(64 * 64 * 4).fill(128),
           }),
           putImageData: jest.fn(),
           clearRect: jest.fn(),
@@ -432,7 +432,7 @@ describe('Image Generation System', () => {
         prompt: '', // Empty prompt
         width: 5000, // Too large
         height: -100, // Negative
-        seed: -1 // Negative seed
+        seed: -1 // Negative seed,
       };
       const validErrors = await node.validateInputs(validInputs);
       const invalidErrors = await node.validateInputs(invalidInputs);
@@ -450,7 +450,7 @@ describe('Image Generation System', () => {
         getString: jest.fn().mockImplementation((key, defaultValue) => {
           const values: Record<string, string> = {
             source_image: 'https://example.com/source.png',
-            variation_prompt: 'Make it more colorful'
+            variation_prompt: 'Make it more colorful',
           };
           return values[key] || defaultValue || '';
         }),
@@ -494,7 +494,7 @@ describe('Image Generation System', () => {
     test('should handle network timeouts gracefully', async () => {
       const adapter = new DALLEAdapter('timeout-test', {)
         apiKey: 'test-key',
-        timeout: 100 // Very short timeout
+        timeout: 100 // Very short timeout,
       });
       mockFetch.mockImplementation(() => 
         new Promise((resolve) => {

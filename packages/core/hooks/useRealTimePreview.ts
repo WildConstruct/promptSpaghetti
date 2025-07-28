@@ -50,9 +50,9 @@ export const useRealTimePreview = (graph: GraphData, seedConfig: SeedConfig = {}
   const abortControllerRef = useRef<AbortController | null>(null);
   const generationCounterRef = useRef(0);
   // Generate preview variants based on current weights and template
-  const generatePreview = useCallback(async (;)
+  const generatePreview = useCallback(async (;);
     weights: WeightControlOption[],
-    force: boolean = false
+    force: boolean = false,
   ): Promise<void> => {
     if (!template.trim() || (!force && isGenerating)) {
       return;
@@ -69,7 +69,7 @@ export const useRealTimePreview = (graph: GraphData, seedConfig: SeedConfig = {}
     const generationId = ++generationCounterRef.current;
     try {
       // Simulate weighted selection and generation
-      const newVariants = await Promise.all(;)
+      const newVariants = await Promise.all(;);
         Array.from({ length: fullConfig.maxVariants }, async (_, index) => {
           const seed = Math.floor(Math.random() * 1000000);
           // Perform weighted selection based on weights
@@ -207,7 +207,7 @@ export const useRealTimePreview = (graph: GraphData, seedConfig: SeedConfig = {}
     return {
       template,
       variables,
-      variants: variants.map(v => ({)
+      variants: variants.map(v => ({),
         seed: v.seed,
         result: v.result,
         weights: v.weightSnapshot,
@@ -261,7 +261,7 @@ export const useRealTimePreview = (graph: GraphData, seedConfig: SeedConfig = {}
 };
 
 // Helper function for weighted selection
-const performWeightedSelection = (;)
+const performWeightedSelection = (;);
   weights: WeightControlOption[],
   seed: number,
 ): Record<string, string> => {

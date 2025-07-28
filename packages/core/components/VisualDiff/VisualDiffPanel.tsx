@@ -96,14 +96,14 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
     const targetEdges = prepareEdges(comparison.target_data.edges, comparison.edge_matches, 'target');
     return { sourceNodes, sourceEdges, targetNodes, targetEdges };
   }, [comparison, highlightMode, showUnchanged]);
-  const prepareNodes = useCallback((;)
+  const prepareNodes = useCallback((;);
     nodes: unknown[],
     nodeMatches: unknown[],
-    side: 'source' | 'target'
+    side: 'source' | 'target',
   ): Node[] => {
     if (!comparison) return [];
     return nodes.map(node => {)
-      const match = nodeMatches.find(m => ;)
+      const match = nodeMatches.find(m => ;);
         side === 'source' ? m.source_node_id === node.id : m.target_node_id === node.id
       );
       let diffState = 'unchanged';
@@ -159,14 +159,14 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
       };
     }).filter(Boolean) as Node[];
   }, [comparison, highlightMode, showUnchanged, showMetadata]);
-  const prepareEdges = useCallback((;)
+  const prepareEdges = useCallback((;);
     edges: unknown[],
     edgeMatches: unknown[],
-    side: 'source' | 'target'
+    side: 'source' | 'target',
   ): Edge[] => {
     if (!comparison) return [];
     return edges.map(edge => {)
-      const match = edgeMatches.find(m => ;)
+      const match = edgeMatches.find(m => ;);
         side === 'source' ? m.source_edge_id === edge.id : m.target_edge_id === edge.id
       );
       let diffState = 'unchanged';
@@ -227,7 +227,7 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
     const baseStyle = {
       border: '2px solid',
       borderRadius: '6px',
-      transition: 'all 0.2s ease'
+      transition: 'all 0.2s ease',
     };
     switch (diffState) {
     case 'added':
@@ -244,7 +244,7 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
   const getDiffEdgeStyle = (diffState: string, __highlightMode: HighlightMode) => {
     const baseStyle = {
       strokeWidth: 2,
-      transition: 'all 0.2s ease'
+      transition: 'all 0.2s ease',
     };
     switch (diffState) {
     case 'added':
@@ -259,7 +259,7 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
   };
   // Render loading state
   if (versionsLoading || sessionLoading) {
-    return ()
+    return ();
       <div className={`visual-diff-panel ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
@@ -270,7 +270,7 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
   }
   // Render error state
   if (sessionError) {
-    return ()
+    return ();
       <div className={`visual-diff-panel ${className}`}>}
         <div className="bg-red-50 border border-red-200 rounded-md p-4">
           <div className="flex">
@@ -297,7 +297,7 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
   const edgeTypes = {
     diffEdge: DiffEdgeRenderer,
   };
-  return ()
+  return ();
     <div className={`visual-diff-panel ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 bg-white px-4 py-3">

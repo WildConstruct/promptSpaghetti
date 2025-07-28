@@ -91,7 +91,7 @@ export class WildConstructVFXExporter implements VFXExporter {
         compatibilityLevel: '1.2.0',
         backwardsCompatible: ['1.0.0', '1.1.0'], // Versions this export can work with
         minimumVersion: '1.0.0', // Minimum version required to import
-        breaking_changes: [] // List of breaking changes from base version
+        breaking_changes: [] // List of breaking changes from base version,
       },
       compatibility: {,
         controlNet: true,
@@ -136,7 +136,6 @@ export class WildConstructVFXExporter implements VFXExporter {
   private buildPromptData()
     graph: { nodes: Node[]; edges: Edge[] },
     executionResults?: Record<string, unknown>
-  ) {
     const finalPrompt = executionResults?.finalPrompt || 'No prompt generated';
     const variables = executionResults?.variables || {};
     return {
@@ -206,7 +205,6 @@ export class WildConstructVFXExporter implements VFXExporter {
   private buildGraphStructure()
     graph: { nodes: Node[]; edges: Edge[] },
     executionResults?: any
-  ) {
     const vfxNodes: VFXGraphNode[] = graph.nodes.map((node, index) => {
       // Deep copy node configuration to preserve all settings
       const fullConfiguration = this.preserveNodeConfiguration(node);
@@ -236,14 +234,14 @@ export class WildConstructVFXExporter implements VFXExporter {
       id: edge.id,
       source: {,
         nodeId: edge.source,
-        port: edge.sourceHandle || undefined
+        port: edge.sourceHandle || undefined,
       },
       target: {,
         nodeId: edge.target,
-        port: edge.targetHandle || undefined
+        port: edge.targetHandle || undefined,
       },
       dataType: 'text', // Default - would be inferred from node types
-      label: edge.label as string | undefined
+      label: edge.label as string | undefined,
     }));
     return {
       nodes: vfxNodes,
@@ -321,7 +319,7 @@ export class WildConstructVFXExporter implements VFXExporter {
   }
   private calculateVariabilityScore(nodes: VFXGraphNode[]): number {
     // Calculate how much the output can vary based on randomization nodes
-    const randomizationNodes = nodes.filter(n => ;)
+    const randomizationNodes = nodes.filter(n => ;);
       n.type.includes('Weighted') || 
       n.type.includes('Random') || 
       n.type.includes('Conditional')
@@ -347,7 +345,7 @@ export class WildConstructVFXExporter implements VFXExporter {
     const masterSeed = executionResults?.seed || Math.floor(Math.random() * 1000000);
     const nodeSeeds = executionResults?.nodeSeeds || {};
     // Create reproducible RNG state capture
-    const reproducibilityData = this.buildReproducibilityData(;)
+    const reproducibilityData = this.buildReproducibilityData(;);
       masterSeed, 
       nodeSeeds, 
       executionResults,
@@ -365,7 +363,7 @@ export class WildConstructVFXExporter implements VFXExporter {
       performance: {,
         totalTime: executionResults?.executionTime || 0,
         nodePerformance: this.buildNodePerformance(executionResults),
-        memoryUsage: options?.includePerformanceData ? 1024 * 1024 * 10 : undefined // 10MB placeholder
+        memoryUsage: options?.includePerformanceData ? 1024 * 1024 * 10 : undefined // 10MB placeholder,
       },
       history: {,
         iterations: executionResults?.iterations || [],
@@ -389,7 +387,7 @@ export class WildConstructVFXExporter implements VFXExporter {
         performance[nodeId] = {
           executionTime: time,
           cacheHits: Math.floor(Math.random() * 10), // Placeholder
-          cacheMisses: Math.floor(Math.random() * 3) // Placeholder
+          cacheMisses: Math.floor(Math.random() * 3) // Placeholder,
         };
       }
     }
@@ -402,7 +400,7 @@ export class WildConstructVFXExporter implements VFXExporter {
       pose: {,
         enabled: false,
         strength: 0.8,
-        poseDescription: 'Natural standing pose'
+        poseDescription: 'Natural standing pose',
       },
       depth: {,
         enabled: false,
@@ -506,17 +504,17 @@ export class WildConstructVFXExporter implements VFXExporter {
       warnings.push('Missing reproducibility hash - exact reproduction may not be possible');
     }
     // Validate node configuration preservation
-    const nodesWithoutConfig = exportData.graph?.nodes?.filter(node => ;)
+    const nodesWithoutConfig = exportData.graph?.nodes?.filter(node => ;);
       !node.configuration || Object.keys(node.configuration).length === 0
     ) || [];
     if (nodesWithoutConfig.length > 0) {
       warnings.push(`${nodesWithoutConfig.length} nodes missing configuration data`);}
     }
     // Validate weight preservation for WeightedChoice nodes
-    const weightedNodes = exportData.graph?.nodes?.filter(node => ;)
+    const weightedNodes = exportData.graph?.nodes?.filter(node => ;);
       node.type === 'WeightedChoice'
     ) || [];
-    const nodesWithoutWeights = weightedNodes.filter(node => ;)
+    const nodesWithoutWeights = weightedNodes.filter(node => ;);
       !node.configuration?.weightedChoiceData?.weights ||
       (node.configuration.weightedChoiceData.weights as any[]).length === 0
     );
@@ -543,7 +541,7 @@ export class WildConstructVFXExporter implements VFXExporter {
         exact: !!(randomization?.rngState && randomization?.reproducibilityHash),
         approximate: !!(randomization?.masterSeed || randomization?.masterSeed === 0),
         configPreserved: nodesWithoutConfig.length === 0,
-        weightsPreserved: nodesWithoutWeights.length === 0
+        weightsPreserved: nodesWithoutWeights.length === 0,
       }
     };
     // Performance warnings
@@ -625,7 +623,6 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
     nodeSeeds: Record<string, number>,
     executionResults?: any,
     options?: VFXExportOptions
-  ) {
     // Create seeded random number generator for state capture
     const masterRng = seedrandom(masterSeed.toString());
     // Capture node-specific RNG states
@@ -658,7 +655,7 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
       masterSeed,
       nodeSeeds,
       executionSequence,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
     const hash = this.generateHash(JSON.stringify(hashData));
     // Build complete serialized state
@@ -673,7 +670,7 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
       },
       dependencies: {,
         seedrandomVersion: '3.0.5', // Would be from package.json
-        runtimeVersion: process.env.npm_package_version || '1.0.0'
+        runtimeVersion: process.env.npm_package_version || '1.0.0',
       },
       executionMetadata: {,
         totalNodes: Object.keys(nodeSeeds).length,
@@ -685,7 +682,7 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
       hash,
       nodeStates,
       executionSequence,
-      serializedState: serializedState ? JSON.stringify(serializedState) : undefined
+      serializedState: serializedState ? JSON.stringify(serializedState) : undefined,
     };
   }
   /**
@@ -729,7 +726,6 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
     confidence: 'exact' | 'approximate' | 'uncertain';
     issues: string[];
     requirements: string[];
-  } {
     const issues: string[] = [];
     const requirements: string[] = [];
     // Check for required reproducibility data
@@ -803,7 +799,7 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
       // Extract reproduction data
       const randomization = exportData.execution.randomization;
       const originalPrompt = exportData.prompt.finalPrompt;
-      const originalVariables = Object.fromEntries(;)
+      const originalVariables = Object.fromEntries(;);
         Object.entries(exportData.prompt.variables).map(([k, v]) => [k, v.value])
       );
       // Simulate reproduction (in real implementation would re-run the graph)
@@ -816,7 +812,7 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
         finalPrompt: originalPrompt, // In real implementation, would re-execute graph
         variables: { ...originalVariables },
         executionTime: Date.now() - startTime,
-        matchesOriginal: true // Would be calculated by comparing outputs
+        matchesOriginal: true // Would be calculated by comparing outputs,
       };
       return {
         success: true,
@@ -825,7 +821,7 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown reproduction error'
+        error: error instanceof Error ? error.message : 'Unknown reproduction error',
       };
     }
   }
@@ -858,7 +854,7 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
         weights: config.weights || [],
         weightDistribution: this.calculateWeightDistribution(config.weights as number[] || []),
         totalWeight: (config.weights as number[] || []).reduce((sum, w) => sum + w, 0),
-        normalizedWeights: this.normalizeWeights(config.weights as number[] || [])
+        normalizedWeights: this.normalizeWeights(config.weights as number[] || []),
       };
     }
     // Special handling for Conditional nodes
@@ -889,7 +885,6 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
     percentages: number[];
     entropy: number;
     uniformity: number;
-  } {
     if (weights.length === 0) {
       return { percentages: [], entropy: 0, uniformity: 1 };
     }

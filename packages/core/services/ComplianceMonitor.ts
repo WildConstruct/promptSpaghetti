@@ -290,7 +290,7 @@ export class ComplianceMonitor {
     const defaultContext: ComplianceContext = {
       timestamp: new Date(),
       systemComponent: 'compliance_monitor',
-      environment: (process.env.NODE_ENV as 'development' | 'staging' | 'production') || 'development'
+      environment: (process.env.NODE_ENV as 'development' | 'staging' | 'production') || 'development',
     };
     const checkContext = { ...defaultContext, ...context };
     try {
@@ -313,7 +313,7 @@ export class ComplianceMonitor {
         status: 'error',
         score: 0,
         message: `Check execution failed: ${error instanceof Error ? error.message : String(error)}`,}
-        timestamp: new Date()
+        timestamp: new Date(),
       };
       this.results.push(errorResult);
       return errorResult;
@@ -342,7 +342,7 @@ export class ComplianceMonitor {
    * Get current compliance dashboard
    */
   public generateComplianceDashboard(): ComplianceDashboard {
-    const recentResults = this.results.filter(r => ;)
+    const recentResults = this.results.filter(r => ;);
       Date.now() - r.timestamp.getTime() < 24 * 60 * 60 * 1000 // Last 24 hours
     );
     // Calculate overall score
@@ -509,7 +509,7 @@ export class ComplianceMonitor {
         type: 'configuration',
         source: 'database',
         content: `Database encryption: ${dbEncrypted ? 'enabled' : 'disabled'}`,}
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     } catch {
       score -= 50;
@@ -533,10 +533,10 @@ export class ComplianceMonitor {
       checkId: 'gdpr_data_encryption',
       status,
       score,
-      message: issues.length === 0 ? 'All data encryption requirements met' : 
+      message: issues.length === 0 ? 'All data encryption requirements met' : ,
         `Data encryption issues found: ${issues.join(', ')}`,}
       evidence,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
   /**
@@ -557,7 +557,7 @@ export class ComplianceMonitor {
         type: 'data',
         source: 'consent_database',
         content: `User ${context.userId} consent status: ${hasValidConsent ? 'valid' : 'invalid'}`,}
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
     // Check consent recording mechanism
@@ -571,10 +571,10 @@ export class ComplianceMonitor {
       checkId: 'gdpr_consent_management',
       status,
       score,
-      message: issues.length === 0 ? 'Consent management compliant' : 
+      message: issues.length === 0 ? 'Consent management compliant' : ,
         `Consent issues: ${issues.join(', ')}`,}
       evidence,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
   /**
@@ -595,7 +595,7 @@ export class ComplianceMonitor {
         automated: true,
         priority: 'medium',
         estimatedTime: '30 minutes',
-        execute: async () => {
+        execute: async () => {,
           // Implementation would actually purge expired data
           console.log(`Purging ${expiredDataCount} expired records...`);}
         }
@@ -606,10 +606,10 @@ export class ComplianceMonitor {
       checkId: 'gdpr_data_retention',
       status,
       score,
-      message: issues.length === 0 ? 'Data retention compliant' : 
+      message: issues.length === 0 ? 'Data retention compliant' : ,
         `Data retention issues: ${issues.join(', ')}`,}
       remediation: remediation.length > 0 ? remediation : undefined,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
   /**
@@ -637,9 +637,9 @@ export class ComplianceMonitor {
       checkId: 'gdpr_data_portability',
       status,
       score,
-      message: issues.length === 0 ? 'Data portability requirements met' : 
+      message: issues.length === 0 ? 'Data portability requirements met' : ,
         `Data portability issues: ${issues.join(', ')}`,}
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
   /**
@@ -671,17 +671,17 @@ export class ComplianceMonitor {
       type: 'configuration',
       source: 'auth_service',
       content: `MFA: ${mfaEnabled}, Session timeout: ${sessionTimeout}min, Strong passwords: ${strongPasswordPolicy}`,}
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     const status = score >= 85 ? 'compliant' : score >= 70 ? 'warning' : 'non_compliant';
     return {
       checkId: 'soc2_access_controls',
       status,
       score,
-      message: issues.length === 0 ? 'Access controls compliant' : 
+      message: issues.length === 0 ? 'Access controls compliant' : ,
         `Access control issues: ${issues.join(', ')}`,}
       evidence,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
   /**
@@ -713,9 +713,9 @@ export class ComplianceMonitor {
       checkId: 'soc2_audit_logging',
       status,
       score,
-      message: issues.length === 0 ? 'Audit logging compliant' : 
+      message: issues.length === 0 ? 'Audit logging compliant' : ,
         `Audit logging issues: ${issues.join(', ')}`,}
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
   /**
@@ -748,9 +748,9 @@ export class ComplianceMonitor {
       checkId: 'soc2_encryption_standards',
       status,
       score,
-      message: issues.length === 0 ? 'Encryption standards met' : 
+      message: issues.length === 0 ? 'Encryption standards met' : ,
         `Encryption issues: ${issues.join(', ')}`,}
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
   /**
@@ -780,9 +780,9 @@ export class ComplianceMonitor {
       checkId: 'mpa_content_encryption',
       status,
       score,
-      message: issues.length === 0 ? 'Content encryption compliant' : 
+      message: issues.length === 0 ? 'Content encryption compliant' : ,
         `Content encryption issues: ${issues.join(', ')}`,}
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
   /**
@@ -808,9 +808,9 @@ export class ComplianceMonitor {
       checkId: 'mpa_access_tracking',
       status,
       score,
-      message: issues.length === 0 ? 'Content access tracking compliant' : 
+      message: issues.length === 0 ? 'Content access tracking compliant' : ,
         `Access tracking issues: ${issues.join(', ')}`,}
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
   /**
@@ -840,7 +840,7 @@ export class ComplianceMonitor {
           automated: true,
           priority: 'high',
           estimatedTime: '10 minutes',
-          execute: async () => {
+          execute: async () => {,
             console.log(`Renewing certificate for ${cert.domain}...`);}
             // Implementation would trigger certificate renewal
           }
@@ -852,10 +852,10 @@ export class ComplianceMonitor {
       checkId: 'internal_ssl_certificates',
       status,
       score,
-      message: issues.length === 0 ? 'All SSL certificates valid' : 
+      message: issues.length === 0 ? 'All SSL certificates valid' : ,
         `SSL certificate issues: ${issues.join(', ')}`,}
       remediation: remediation.length > 0 ? remediation : undefined,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
   /**
@@ -889,7 +889,7 @@ export class ComplianceMonitor {
         automated: true,
         priority: 'medium',
         estimatedTime: '5 minutes',
-        execute: async () => {
+        execute: async () => {,
           console.log('Adding missing security headers...');
           // Implementation would update server configuration
         }
@@ -900,10 +900,10 @@ export class ComplianceMonitor {
       checkId: 'internal_security_headers',
       status,
       score,
-      message: issues.length === 0 ? 'All required security headers present' : 
+      message: issues.length === 0 ? 'All required security headers present' : ,
         `Security header issues: ${issues.join(', ')}`,}
       remediation: remediation.length > 0 ? remediation : undefined,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
   /**
@@ -936,9 +936,9 @@ export class ComplianceMonitor {
       checkId: 'internal_rate_limiting',
       status,
       score,
-      message: issues.length === 0 ? 'Rate limiting properly configured' : 
+      message: issues.length === 0 ? 'Rate limiting properly configured' : ,
         `Rate limiting issues: ${issues.join(', ')}`,}
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
 }
@@ -1054,14 +1054,13 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
       };
       // Generate historical trends
       const frameworks = ['GDPR', 'SOC2', 'MPA', 'INTERNAL'];
-      const trendReports = await Promise.all(;)
+      const trendReports = await Promise.all(;);
         frameworks.map(framework => )
           this.historicalAnalyzer.generateTrendReport()
             framework,
             new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last 7 days
             new Date()
           ).catch(() => null)
-        )
       );
       const validReports = trendReports.filter(report => report !== null);
       const allMetrics = validReports.flatMap(report => report.metrics);
@@ -1069,7 +1068,7 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
         improvingMetrics: allMetrics.filter(m => m.trendDirection === 'up').length,
         decliningMetrics: allMetrics.filter(m => m.trendDirection === 'down').length,
         stableMetrics: allMetrics.filter(m => m.trendDirection === 'stable').length,
-        forecastAlerts: await this.generateForecastAlerts()
+        forecastAlerts: await this.generateForecastAlerts(),
       };
       // Calculate audit readiness
       const auditReadiness = await this.calculateAuditReadiness(baselineDashboard);
@@ -1116,7 +1115,7 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
     try {
       // Find matching baseline
       const baselines = this.baselineTracker.getActiveBaselines();
-      const matchingBaseline = baselines.find(b => ;)
+      const matchingBaseline = baselines.find(b => ;);
         b.framework === framework && b.name.toLowerCase().includes(metricName.toLowerCase())
       );
       if (matchingBaseline) {
@@ -1151,7 +1150,7 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
       const baselines = this.baselineTracker.getActiveBaselines();
       const alerts: EnhancedComplianceDashboard['historicalTrends']['forecastAlerts'] = [];
       // Generate forecasts for critical baselines
-      const criticalBaselines = baselines.filter(b => ;)
+      const criticalBaselines = baselines.filter(b => ;);
         b.framework === 'GDPR' || b.framework === 'SOC2' || b.framework === 'MPA'
       ).slice(0, 3); // Limit to prevent too many forecasts
       for (const baseline of criticalBaselines) {

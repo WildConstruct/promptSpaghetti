@@ -75,7 +75,7 @@ export class SecurityDashboardDataService {
       return cached;
     }
     try {
-      const response = await this.apiRequest<SecurityMetrics>(;)
+      const response = await this.apiRequest<SecurityMetrics>(;);
         `/security/metrics/${this.workspaceId}`}
       );
       if (response.success && response.data) {
@@ -116,7 +116,7 @@ export class SecurityDashboardDataService {
           }
         });
       }
-      const response = await this.apiRequest<SecurityAlert[]>(;)
+      const response = await this.apiRequest<SecurityAlert[]>(;);
         `/security/alerts/${this.workspaceId}?${queryParams.toString()}`}
       );
       if (response.success && response.data) {
@@ -124,9 +124,9 @@ export class SecurityDashboardDataService {
         const alerts = response.data.map(alert => ({)
           ...alert,
           timestamp: new Date(alert.timestamp),
-          responseActions: alert.responseActions.map(action => ({)
+          responseActions: alert.responseActions.map(action => ({),
             ...action,
-            timestamp: action.timestamp ? new Date(action.timestamp) : undefined
+            timestamp: action.timestamp ? new Date(action.timestamp) : undefined,
           }))
         }));
         this.setCache(cacheKey, alerts, 15); // Cache for 15 seconds
@@ -150,7 +150,7 @@ export class SecurityDashboardDataService {
       return cached;
     }
     try {
-      const response = await this.apiRequest<ComplianceStatus[]>(;)
+      const response = await this.apiRequest<ComplianceStatus[]>(;);
         `/security/compliance/${this.workspaceId}`}
       );
       if (response.success && response.data) {
@@ -158,9 +158,9 @@ export class SecurityDashboardDataService {
         const complianceData = response.data.map(status => ({)
           ...status,
           lastAssessment: new Date(status.lastAssessment),
-          violations: status.violations.map(violation => ({)
+          violations: status.violations.map(violation => ({),
             ...violation,
-            dueDate: new Date(violation.dueDate)
+            dueDate: new Date(violation.dueDate),
           }))
         }));
         this.setCache(cacheKey, complianceData, this.config.cacheTimeout * 2); // Cache longer
@@ -183,9 +183,9 @@ export class SecurityDashboardDataService {
         type: actionType,
         payload,
         timestamp: new Date(),
-        executedBy: 'current-user' // Would get from auth context
+        executedBy: 'current-user' // Would get from auth context,
       };
-      const response = await this.apiRequest(;)
+      const response = await this.apiRequest(;);
         `/security/actions/${this.workspaceId}`,}
         {
           method: 'POST',
@@ -207,7 +207,7 @@ export class SecurityDashboardDataService {
    */
   async updateAlert(alertId: string, updates: Partial<SecurityAlert>): Promise<SecurityAlert> {
     try {
-      const response = await this.apiRequest<SecurityAlert>(;)
+      const response = await this.apiRequest<SecurityAlert>(;);
         `/security/alerts/${this.workspaceId}/${alertId}`,}
         {
           method: 'PATCH',
@@ -319,21 +319,21 @@ export class SecurityDashboardDataService {
       this.invalidateCache(`security-alerts-${this.workspaceId}`);}
       this.emit('security_alert', {)
         ...data.payload,
-        timestamp: new Date(data.payload.timestamp)
+        timestamp: new Date(data.payload.timestamp),
       });
       break;
     case 'alert_status_change':
       this.invalidateCache(`security-alerts-${this.workspaceId}`);}
       this.emit('alert_update', {)
         ...data.payload,
-        timestamp: new Date(data.payload.timestamp)
+        timestamp: new Date(data.payload.timestamp),
       });
       break;
     case 'compliance_status_update':
       this.invalidateCache(`compliance-status-${this.workspaceId}`);}
       this.emit('compliance_update', {)
         ...data.payload,
-        lastAssessment: new Date(data.payload.lastAssessment)
+        lastAssessment: new Date(data.payload.lastAssessment),
       });
       break;
     default:
@@ -368,13 +368,13 @@ export class SecurityDashboardDataService {
           return {
             success: true,
             data: data,
-            timestamp: new Date()
+            timestamp: new Date(),
           };
         } else {
           return {
             success: false,
             error: data.error || `HTTP ${response.status}: ${response.statusText}`,}
-            timestamp: new Date()
+            timestamp: new Date(),
           };
         }
       } catch (error) {
@@ -383,7 +383,7 @@ export class SecurityDashboardDataService {
           return {
             success: false,
             error: error instanceof Error ? error.message : 'Unknown error',
-            timestamp: new Date()
+            timestamp: new Date(),
           };
         }
         // Wait before retrying (exponential backoff)
@@ -393,7 +393,7 @@ export class SecurityDashboardDataService {
     return {
       success: false,
       error: 'Max retry attempts exceeded',
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
   /**
@@ -402,7 +402,7 @@ export class SecurityDashboardDataService {
   private setCache(key: string, data: Record<string, unknown>, ttlSeconds: number): void {
     this.cache.set(key, {)
       data,
-      expires: Date.now() + (ttlSeconds * 1000)
+      expires: Date.now() + (ttlSeconds * 1000),
     });
   }
   private getFromCache(key: string): any | null {
@@ -433,7 +433,7 @@ export class SecurityDashboardDataService {
       activeThreats: 3,
       blockedThreats: 47,
       riskLevel: 'medium',
-      lastScanTime: new Date(Date.now() - 30 * 60 * 1000) // 30 minutes ago
+      lastScanTime: new Date(Date.now() - 30 * 60 * 1000) // 30 minutes ago,
     };
   }
   private getFallbackSecurityAlerts(): SecurityAlert[] {
@@ -471,7 +471,7 @@ export class SecurityDashboardDataService {
             automated: false,
             status: 'in_progress',
             performer: 'analyst-1',
-            timestamp: new Date(Date.now() - 30 * 60 * 1000)
+            timestamp: new Date(Date.now() - 30 * 60 * 1000),
           }
         ]
       }
@@ -484,7 +484,7 @@ export class SecurityDashboardDataService {
         status: 'compliant',
         score: 92,
         violations: [],
-        lastAssessment: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // 7 days ago
+        lastAssessment: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // 7 days ago,
       },
       {
         framework: 'SOX',
@@ -497,10 +497,10 @@ export class SecurityDashboardDataService {
             description: 'Insufficient separation of duties in financial systems',
             severity: 'medium',
             remediation: 'Implement role-based access controls',
-            dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000) // 14 days from now
+            dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000) // 14 days from now,
           }
         ],
-        lastAssessment: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000) // 14 days ago
+        lastAssessment: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000) // 14 days ago,
       }
     ];
   }

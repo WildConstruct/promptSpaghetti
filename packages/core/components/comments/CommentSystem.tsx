@@ -94,7 +94,7 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({)
         ...comment.metadata,
         resolved,
         resolved_by: resolved ? userId : undefined,
-        resolved_at: resolved ? new Date().toISOString() : undefined
+        resolved_at: resolved ? new Date().toISOString() : undefined,
       }
     };
     try {
@@ -107,7 +107,7 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({)
     return total + 1 + (comment.reply_count || 0);
   }, 0);
   if (loading && comments.length === 0) {
-    return ()
+    return ();
       <div className={`comment-system comment-system--loading ${className}`}>}
         <div className="comment-system__skeleton">
           <div className="skeleton-line skeleton-line--title"></div>
@@ -117,7 +117,7 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`comment-system ${compact ? 'comment-system--compact' : ''} ${className}`}>}
       <div className="comment-system__header">
         <div className="comment-system__title">

@@ -144,7 +144,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
         border: `1px solid ${selectedFile?.id === file.id ? styles.accent : 'transparent'}`,}
         borderRadius: '6px',
         cursor: 'pointer',
-        transition: 'all 0.15s ease'
+        transition: 'all 0.15s ease',
       }}
       onMouseOver={(e) => {
         if (selectedFile?.id !== file.id) {
@@ -226,7 +226,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
       </div>
     </div>
   );
-  return ()
+  return ();
     <div style={{
       backgroundColor: styles.background,
       color: styles.text,
@@ -349,7 +349,7 @@ export const RecentFilesPanel: React.FC<RecentFilesPanelProps> = ({)
               display: viewMode === 'grid' ? 'grid' : 'flex',
               gridTemplateColumns: viewMode === 'grid' ? 'repeat(auto-fill, minmax(200px, 1fr))' : undefined,
               flexDirection: viewMode === 'list' ? 'column' : undefined,
-              gap: viewMode === 'grid' ? '12px' : '4px'
+              gap: viewMode === 'grid' ? '12px' : '4px',
             }}>
               {recentFiles.map(file => ()
                 <FileItem key={file.id} file={file} compact={viewMode === 'list'} />

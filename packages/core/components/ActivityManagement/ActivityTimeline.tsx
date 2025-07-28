@@ -58,52 +58,52 @@ const ACTIVITY_TYPE_CONFIG = {
   user_interaction: {,
     icon: User,
     color: 'text-blue-600 bg-blue-50 border-blue-200',
-    badgeColor: 'bg-blue-100 text-blue-800'
+    badgeColor: 'bg-blue-100 text-blue-800',
   },
   system_event: {,
     icon: Settings,
     color: 'text-gray-600 bg-gray-50 border-gray-200',
-    badgeColor: 'bg-gray-100 text-gray-800'
+    badgeColor: 'bg-gray-100 text-gray-800',
   },
   graph_operation: {,
     icon: GitBranch,
     color: 'text-green-600 bg-green-50 border-green-200',
-    badgeColor: 'bg-green-100 text-green-800'
+    badgeColor: 'bg-green-100 text-green-800',
   },
   file_operation: {,
     icon: FileText,
     color: 'text-purple-600 bg-purple-50 border-purple-200',
-    badgeColor: 'bg-purple-100 text-purple-800'
+    badgeColor: 'bg-purple-100 text-purple-800',
   },
   collaboration: {,
     icon: Users,
     color: 'text-orange-600 bg-orange-50 border-orange-200',
-    badgeColor: 'bg-orange-100 text-orange-800'
+    badgeColor: 'bg-orange-100 text-orange-800',
   },
   performance: {,
     icon: Zap,
     color: 'text-yellow-600 bg-yellow-50 border-yellow-200',
-    badgeColor: 'bg-yellow-100 text-yellow-800'
+    badgeColor: 'bg-yellow-100 text-yellow-800',
   },
   error: {,
     icon: AlertTriangle,
     color: 'text-red-600 bg-red-50 border-red-200',
-    badgeColor: 'bg-red-100 text-red-800'
+    badgeColor: 'bg-red-100 text-red-800',
   },
   authentication: {,
     icon: User,
     color: 'text-indigo-600 bg-indigo-50 border-indigo-200',
-    badgeColor: 'bg-indigo-100 text-indigo-800'
+    badgeColor: 'bg-indigo-100 text-indigo-800',
   },
   admin: {,
     icon: Settings,
     color: 'text-gray-700 bg-gray-100 border-gray-300',
-    badgeColor: 'bg-gray-200 text-gray-900'
+    badgeColor: 'bg-gray-200 text-gray-900',
   },
   integration: {,
     icon: Globe,
     color: 'text-teal-600 bg-teal-50 border-teal-200',
-    badgeColor: 'bg-teal-100 text-teal-800'
+    badgeColor: 'bg-teal-100 text-teal-800',
   }
 };
 /**
@@ -166,7 +166,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
       const updatedFilter = {
         ...filter,
         dateRange: dateRange !== 'all' ? { start: startDate, end: now } : undefined,
-        searchQuery: searchQuery || undefined
+        searchQuery: searchQuery || undefined,
       };
       setActivities(activityTimeline.getActivities(updatedFilter));
       if (showStats) {
@@ -209,7 +209,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
     setSearchQuery('');
     setDateRange('week');
   };
-  return ()
+  return ();
     <div className={`activity-timeline space-y-6 ${className}`}>}
       {/* Header */}
       <div className="flex justify-between items-center">
@@ -319,7 +319,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
                 value={filter.types?.[0] || 'all'}
                 onValueChange={(value) => 
                   updateFilter({ )
-                    types: value === 'all' ? undefined : [value as ActivityType] 
+                    types: value === 'all' ? undefined : [value as ActivityType] ,
                   })
                 }
               >
@@ -335,7 +335,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
                 value={filter.impactLevels?.[0] || 'all'}
                 onValueChange={(value) => 
                   updateFilter({ )
-                    impactLevels: value === 'all' ? undefined : [value as ActivityImpact] 
+                    impactLevels: value === 'all' ? undefined : [value as ActivityImpact] ,
                   })
                 }
               >
@@ -437,7 +437,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({)
     new Date(b).getTime() - new Date(a).getTime()
   );
   if (dates.length === 0) {
-    return ()
+    return ();
       <div className="text-center py-8">
         <ActivityIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No activities found</h3>
@@ -445,7 +445,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="space-y-8">
       {dates.map(dateKey => ()
         <div key={dateKey}>
@@ -494,7 +494,7 @@ const ListView: React.FC<ListViewProps> = ({)
   compact
 }) => {
   if (activities.length === 0) {
-    return ()
+    return ();
       <div className="text-center py-8">
         <ActivityIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No activities found</h3>
@@ -502,7 +502,7 @@ const ListView: React.FC<ListViewProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="space-y-2">
       {activities.map(activity => ()
         <ActivityCard
@@ -525,7 +525,7 @@ interface AnalyticsViewProps {
 }
 const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => {
   if (!stats) return null;
-  return ()
+  return ();
     <div className="space-y-6">
       {/* Activity Distribution */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -633,7 +633,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({)
   const typeConfig = ACTIVITY_TYPE_CONFIG[activity.type];
   const impactConfig = IMPACT_CONFIG[activity.impact];
   const TypeIcon = typeConfig?.icon || ActivityIcon;
-  return ()
+  return ();
     <div
       className={`border rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer ${
         compact ? 'bg-white' : typeConfig?.color || 'bg-gray-50'
@@ -709,7 +709,7 @@ const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({)
 }) => {
   const typeConfig = ACTIVITY_TYPE_CONFIG[activity.type];
   const TypeIcon = typeConfig?.icon || ActivityIcon;
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-auto">
         <div className="p-6">

@@ -30,7 +30,7 @@ describe('ConnectionLabel Component', () => {
   });
   describe('Rendering', () => {
     test('renders label with correct content and position', () => {
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -47,7 +47,7 @@ describe('ConnectionLabel Component', () => {
     });
     test('applies correct styling based on style prop', () => {
       const badgeLabel = { ...mockLabel, style: 'badge' as const };
-      render()
+      render();
         <ConnectionLabel
           label={badgeLabel}
           onAction={mockOnAction}
@@ -62,7 +62,7 @@ describe('ConnectionLabel Component', () => {
       });
     });
     test('shows delete button when canEdit is true', () => {
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -72,7 +72,7 @@ describe('ConnectionLabel Component', () => {
       expect(screen.getByTitle('Remove label')).toBeInTheDocument();
     });
     test('hides delete button when canEdit is false', () => {
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -83,7 +83,7 @@ describe('ConnectionLabel Component', () => {
     });
     test('does not render when not visible', () => {
       const hiddenLabel = { ...mockLabel, visible: false };
-      render()
+      render();
         <ConnectionLabel
           label={hiddenLabel}
           onAction={mockOnAction}
@@ -97,7 +97,7 @@ describe('ConnectionLabel Component', () => {
         showIcon: true, 
         icon: '📝' ,
       };
-      render()
+      render();
         <ConnectionLabel
           label={iconLabel}
           onAction={mockOnAction}
@@ -106,7 +106,7 @@ describe('ConnectionLabel Component', () => {
       expect(screen.getByText('📝')).toBeInTheDocument();
     });
     test('shows edit indicator when canEdit is true', () => {
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -119,7 +119,7 @@ describe('ConnectionLabel Component', () => {
   describe('Inline Editing', () => {
     test('starts editing on double-click', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -137,7 +137,7 @@ describe('ConnectionLabel Component', () => {
     });
     test('prevents editing when canEdit is false', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -152,7 +152,7 @@ describe('ConnectionLabel Component', () => {
     test('saves changes on Enter key', async () => {
       const user = userEvent.setup();
       const editingLabel = { ...mockLabel, isEditing: true };
-      render()
+      render();
         <ConnectionLabel
           label={editingLabel}
           onAction={mockOnAction}
@@ -177,7 +177,7 @@ describe('ConnectionLabel Component', () => {
     test('cancels editing on Escape key', async () => {
       const user = userEvent.setup();
       const editingLabel = { ...mockLabel, isEditing: true };
-      render()
+      render();
         <ConnectionLabel
           label={editingLabel}
           onAction={mockOnAction}
@@ -196,7 +196,7 @@ describe('ConnectionLabel Component', () => {
     test('saves changes on blur', async () => {
       const user = userEvent.setup();
       const editingLabel = { ...mockLabel, isEditing: true };
-      render()
+      render();
         <ConnectionLabel
           label={editingLabel}
           onAction={mockOnAction}
@@ -222,7 +222,7 @@ describe('ConnectionLabel Component', () => {
     test('handles empty content gracefully', async () => {
       const user = userEvent.setup();
       const editingLabel = { ...mockLabel, isEditing: true };
-      render()
+      render();
         <ConnectionLabel
           label={editingLabel}
           onAction={mockOnAction}
@@ -247,7 +247,7 @@ describe('ConnectionLabel Component', () => {
     test('enforces maximum length constraint', async () => {
       const user = userEvent.setup();
       const editingLabel = { ...mockLabel, isEditing: true };
-      render()
+      render();
         <ConnectionLabel
           label={editingLabel}
           onAction={mockOnAction}
@@ -263,7 +263,7 @@ describe('ConnectionLabel Component', () => {
   });
   describe('Drag and Move', () => {
     test('handles drag start', () => {
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -279,7 +279,7 @@ describe('ConnectionLabel Component', () => {
     });
     test('prevents dragging during editing', () => {
       const editingLabel = { ...mockLabel, isEditing: true };
-      render()
+      render();
         <ConnectionLabel
           label={editingLabel}
           onAction={mockOnAction}
@@ -293,7 +293,7 @@ describe('ConnectionLabel Component', () => {
       });
     });
     test('prevents dragging when canEdit is false', () => {
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -307,7 +307,7 @@ describe('ConnectionLabel Component', () => {
       });
     });
     test('calls move action during drag', () => {
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -330,7 +330,7 @@ describe('ConnectionLabel Component', () => {
   describe('Delete Functionality', () => {
     test('handles delete button click', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -348,7 +348,7 @@ describe('ConnectionLabel Component', () => {
     test('prevents event propagation on delete', async () => {
       const user = userEvent.setup();
       const mockStopPropagation = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -365,7 +365,7 @@ describe('ConnectionLabel Component', () => {
   });
   describe('Visual Effects', () => {
     test('applies highlighted styling when isHighlighted is true', () => {
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -380,7 +380,7 @@ describe('ConnectionLabel Component', () => {
     });
     test('shows arrow pointer for arrow style', () => {
       const arrowLabel = { ...mockLabel, style: 'arrow' as const };
-      render()
+      render();
         <ConnectionLabel
           label={arrowLabel}
           onAction={mockOnAction}
@@ -392,7 +392,7 @@ describe('ConnectionLabel Component', () => {
     });
     test('shows glow effect for highlight style', () => {
       const highlightLabel = { ...mockLabel, style: 'highlight' as const };
-      render()
+      render();
         <ConnectionLabel
           label={highlightLabel}
           onAction={mockOnAction}
@@ -408,7 +408,7 @@ describe('ConnectionLabel Component', () => {
         color: '#ff0000',
         backgroundColor: '#00ff00',
       };
-      render()
+      render();
         <ConnectionLabel
           label={customLabel}
           onAction={mockOnAction}
@@ -423,7 +423,7 @@ describe('ConnectionLabel Component', () => {
   });
   describe('Tooltips', () => {
     test('shows tooltip when showTooltip is true', () => {
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -434,7 +434,7 @@ describe('ConnectionLabel Component', () => {
       expect(labelElement).toHaveAttribute('title', 'Test Label');
     });
     test('hides tooltip when showTooltip is false', () => {
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -447,7 +447,7 @@ describe('ConnectionLabel Component', () => {
   });
   describe('Accessibility', () => {
     test('has proper test id', () => {
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -457,7 +457,7 @@ describe('ConnectionLabel Component', () => {
     });
     test('input has proper placeholder text', () => {
       const editingLabel = { ...mockLabel, isEditing: true };
-      render()
+      render();
         <ConnectionLabel
           label={editingLabel}
           onAction={mockOnAction}
@@ -468,7 +468,7 @@ describe('ConnectionLabel Component', () => {
       expect(input).toBeInTheDocument();
     });
     test('delete button has proper aria label', () => {
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}
@@ -482,7 +482,7 @@ describe('ConnectionLabel Component', () => {
     test('handles missing style configuration gracefully', () => {
       const invalidStyleLabel = { ...mockLabel, style: 'invalid' as any };
       expect(() => {
-        render()
+        render();
           <ConnectionLabel
             label={invalidStyleLabel}
             onAction={mockOnAction}
@@ -496,7 +496,7 @@ describe('ConnectionLabel Component', () => {
         position: { x: NaN, y: Infinity } 
       };
       expect(() => {
-        render()
+        render();
           <ConnectionLabel
             label={invalidPositionLabel}
             onAction={mockOnAction}
@@ -506,7 +506,7 @@ describe('ConnectionLabel Component', () => {
     });
     test('handles empty content string', () => {
       const emptyLabel = { ...mockLabel, content: '' };
-      render()
+      render();
         <ConnectionLabel
           label={emptyLabel}
           onAction={mockOnAction}
@@ -520,7 +520,7 @@ describe('ConnectionLabel Component', () => {
       const renderSpy = jest.fn<unknown[], unknown>();
       const TestWrapper = ({ label }: { label: ConnectionLabelType }) => {
         renderSpy();
-        return ()
+        return ();
           <ConnectionLabel
             label={label}
             onAction={mockOnAction}
@@ -538,7 +538,7 @@ describe('ConnectionLabel Component', () => {
       expect(renderSpy).toHaveBeenCalledTimes(3);
     });
     test('handles rapid mouse events efficiently', () => {
-      render()
+      render();
         <ConnectionLabel
           label={mockLabel}
           onAction={mockOnAction}

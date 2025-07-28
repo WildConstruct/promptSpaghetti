@@ -18,25 +18,25 @@ import { HelpProvider } from '../components/Help/HelpContentManager';
 
 // Mock the UI settings store
 jest.mock('../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({)
+  useUISettingsStore: () => ({),
     complexityLevel: 'basic',
     debugMode: false,
-    shouldShowTechnicalFields: () => false
+    shouldShowTechnicalFields: () => false,
   })
 }));
 
 // Also need to mock this for all files that use it
 jest.mock('../../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({)
+  useUISettingsStore: () => ({),
     complexityLevel: 'basic',
     debugMode: false,
-    shouldShowTechnicalFields: () => false
+    shouldShowTechnicalFields: () => false,
   })
 }));
 
 // Mock the graph store
 jest.mock('../graphStore', () => ({)
-  useGraphStore: () => ({)
+  useGraphStore: () => ({),
     nodes: [],
     edges: [],
   })
@@ -65,7 +65,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
   });
   describe('ConcatEditor Integration', () => {
     it('renders with progressive disclosure sections', () => {
-      render()
+      render();
         <TestWrapper>
           <ConcatEditor
             nodeData={createMockNodeData('concat')}
@@ -79,7 +79,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       expect(screen.getByText('Text Wrapping')).toBeInTheDocument();
     });
     it('shows contextual help for name field', async () => {
-      render()
+      render();
         <TestWrapper>
           <ConcatEditor
             nodeData={createMockNodeData('concat')}
@@ -95,7 +95,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       });
     });
     it('integrates help system with template editor', async () => {
-      render()
+      render();
         <TestWrapper>
           <ConcatEditor
             nodeData={createMockNodeData('concat')}
@@ -115,7 +115,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
   });
   describe('OutputEditor Integration', () => {
     it('renders with progressive disclosure sections', () => {
-      render()
+      render();
         <TestWrapper>
           <OutputEditor
             nodeData={createMockNodeData('output')}
@@ -129,7 +129,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       expect(screen.getByText('Post-Processing Transformations')).toBeInTheDocument();
     });
     it('shows contextual help for output name field', async () => {
-      render()
+      render();
         <TestWrapper>
           <OutputEditor
             nodeData={createMockNodeData('output')}
@@ -147,7 +147,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
   });
   describe('ConditionalEditor Integration', () => {
     it('renders with progressive disclosure sections', () => {
-      render()
+      render();
         <TestWrapper>
           <ConditionalEditor
             nodeId="test-conditional"
@@ -162,7 +162,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       expect(screen.getByText('Technical Settings & Preview')).toBeInTheDocument();
     });
     it('shows contextual help for decision name field', async () => {
-      render()
+      render();
         <TestWrapper>
           <ConditionalEditor
             nodeId="test-conditional"
@@ -181,7 +181,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
   });
   describe('SequentialEditor Integration', () => {
     it('renders with progressive disclosure sections', () => {
-      render()
+      render();
         <TestWrapper>
           <SequentialEditor
             nodeData={createMockNodeData('sequential')}
@@ -195,7 +195,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       expect(screen.getByText('Technical Details & Preview')).toBeInTheDocument();
     });
     it('shows contextual help for sequence name field', async () => {
-      render()
+      render();
         <TestWrapper>
           <SequentialEditor
             nodeData={createMockNodeData('sequential')}
@@ -213,7 +213,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
   });
   describe('VariableEditor Integration', () => {
     it('renders SetVariable with progressive disclosure sections', () => {
-      render()
+      render();
         <TestWrapper>
           <VariableEditor
             nodeType="SetVariable"
@@ -227,7 +227,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       expect(screen.getByText('Store As')).toBeInTheDocument();
     });
     it('renders GetVariable with progressive disclosure sections', () => {
-      render()
+      render();
         <TestWrapper>
           <VariableEditor
             nodeType="GetVariable"
@@ -241,7 +241,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       expect(screen.getByText('Retrieve Variable')).toBeInTheDocument();
     });
     it('shows contextual help for variable name field', async () => {
-      render()
+      render();
         <TestWrapper>
           <VariableEditor
             nodeType="SetVariable"
@@ -260,7 +260,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
   });
   describe('WeightedChoiceEditor Integration', () => {
     it('maintains existing contextual help integration', async () => {
-      render()
+      render();
         <TestWrapper>
           <WeightedChoiceEditor
             nodeData={createMockNodeData('weightedChoice')}
@@ -290,7 +290,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
     ];
     editors.forEach(({ name, component: Component, props }) => {
       it(`${name} has consistent disclosure level structure`, () => {}
-        render()
+        render();
           <TestWrapper>
             <Component
               nodeData={createMockNodeData('test')}
@@ -348,7 +348,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
       // Help should not appear when disabled
       expect(screen.queryByText('Concatenation Name')).not.toBeInTheDocument();
       // Re-render with help enabled
-      rerender()
+      rerender();
         <HelpProvider enableHelpHints={true}>
           <ConcatEditor
             nodeData={createMockNodeData('concat')}

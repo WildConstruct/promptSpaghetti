@@ -319,7 +319,7 @@ export const MARS_FRAMEWORK_TAGS: MarsTag[] = [
     syntax: '[SET:MEDIEVAL]',
     examples: ['[SET:MEDIEVAL] stone castle with banners', '[SET:MEDIEVAL] village market square'],
     priority: 8,
-    requires: ['appropriate time period elements']
+    requires: ['appropriate time period elements'],
   },
   {
     tag: 'SET:SCIFI',
@@ -379,7 +379,7 @@ export class AdvancedPromptingMethodology {
    * Generate Zada-style screenplay template based on selected components
    */
   generateZadaTemplate(components: string[]): string {
-    const selectedComponents = ZADA_SCREENPLAY_TEMPLATES.filter(comp => ;)
+    const selectedComponents = ZADA_SCREENPLAY_TEMPLATES.filter(comp => ;);
       components.includes(comp.name)
     );
     // Sort by dependency order (foundation first)
@@ -393,7 +393,6 @@ export class AdvancedPromptingMethodology {
     tags: MarsTag[];
     conflicts: string[];
     suggestions: string[];
-  } {
     const foundTags: MarsTag[] = [];
     const conflicts: string[] = [];
     const suggestions: string[] = [];
@@ -436,7 +435,6 @@ export class AdvancedPromptingMethodology {
     hybrid: string;
     structure: any;
     variables: string[];
-  } {
     // Parse existing template for variables
     const parseResult = templateParser.parseTemplate(naturalTemplate);
     const variables = parseResult.variables.map(v => v.name);
@@ -444,7 +442,7 @@ export class AdvancedPromptingMethodology {
     const structure: any = {
       naturalLanguage: naturalTemplate,
       extractedVariables: variables,
-      marsFramework: marsFramework ? this.parseMarsFramework(naturalTemplate) : null
+      marsFramework: marsFramework ? this.parseMarsFramework(naturalTemplate) : null,
     };
     // If MARS framework is enabled, enhance with structured tags
     if (marsFramework) {
@@ -474,7 +472,7 @@ export class AdvancedPromptingMethodology {
         category: 'custom',
         description: `${tag.category.toUpperCase()}: ${tag.description}`,}
         examples: tag.examples,
-        priority: tag.priority || 5
+        priority: tag.priority || 5,
       });
     }
     return suggestions.sort((a, b) => (b.priority || 0) - (a.priority || 0));
@@ -486,7 +484,6 @@ export class AdvancedPromptingMethodology {
     zada: ZadaTemplateComponent[];
     mars: MarsTag[];
     hybridExamples: string[];
-  } {
     const hybridExamples = [;
       // Zada + MARS hybrid examples
       '[CAM:WIDE] In {era} during {time_of_day}, !FOCAL:PRIMARY {character} {action_verb} {action_target} [FX:MAGIC] while [MOOD:EPIC] atmosphere fills the scene',
@@ -506,7 +503,7 @@ export class AdvancedPromptingMethodology {
     const sorted: ZadaTemplateComponent[] = [];
     const remaining = [...components];
     while (remaining.length > 0) {
-      const nextComponent = remaining.find(comp => ;)
+      const nextComponent = remaining.find(comp => ;);
         !comp.dependencies || 
         comp.dependencies.every(dep => sorted.some(s => s.name === dep))
       );

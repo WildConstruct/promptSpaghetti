@@ -105,16 +105,15 @@ export class KPIDashboard extends EventEmitter {
   private reports: DashboardReport[] = [];
   private config: PerformanceTargetConfig;
   private refreshIntervals: Map<string, NodeJS.Timer> = new Map();
-  constructor()
+  constructor();
     monitoringService: KPIMonitoringService,
     baseline: PerformanceBaseline,
-    config: PerformanceTargetConfig = {
+    config: PerformanceTargetConfig = {,
       environment: 'production',
       userSegment: 'general',
       deviceProfile: 'mid-range',
       networkProfile: 'average',
     }
-  ) {
     super();
     this.monitoringService = monitoringService;
     this.baseline = baseline;
@@ -349,14 +348,14 @@ export class KPIDashboard extends EventEmitter {
       averageScore: this.calculateAverageScore(kpiStatus),
       trendsImproving: kpiStatus.filter(k => k.trend === 'improving').length,
       trendsStable: kpiStatus.filter(k => k.trend === 'stable').length,
-      trendsDegrading: kpiStatus.filter(k => k.trend === 'degrading').length
+      trendsDegrading: kpiStatus.filter(k => k.trend === 'degrading').length,
     };
     // Calculate category metrics
     const categories: Record<string, any> = {};
     const categoryNames = ['runtime', 'api', 'bundle', 'memory', 'network', 'build', 'user-experience'];
     for (const category of categoryNames) {
       const categoryKPIs = getKPIsByCategory(category);
-      const categoryStatus = kpiStatus.filter(k => ;)
+      const categoryStatus = kpiStatus.filter(k => ;);
         categoryKPIs.some(kpi => kpi.id === k.kpiId)
       );
       categories[category] = {
@@ -374,14 +373,14 @@ export class KPIDashboard extends EventEmitter {
       high: activeAlerts.filter(a => a.severity === 'high').length,
       medium: activeAlerts.filter(a => a.severity === 'medium').length,
       low: activeAlerts.filter(a => a.severity === 'low').length,
-      acknowledged: 0 // Active alerts are by definition unacknowledged
+      acknowledged: 0 // Active alerts are by definition unacknowledged,
     };
     // Get trend analyses
     const trendAnalyses = kpiStatus.map(k => this.monitoringService.getKPITrend(k.kpiId));
     const trends = {
       improving: trendAnalyses.filter(t => t.trend === 'improving'),
       degrading: trendAnalyses.filter(t => t.trend === 'degrading'),
-      stable: trendAnalyses.filter(t => t.trend === 'stable')
+      stable: trendAnalyses.filter(t => t.trend === 'stable'),
     };
     return {
       overview,
@@ -393,9 +392,9 @@ export class KPIDashboard extends EventEmitter {
   /**
    * Generate comprehensive dashboard report
    */
-  generateDashboardReport()
+  generateDashboardReport();
     type: DashboardReport['type'] = 'summary',
-    periodHours: number = 24
+    periodHours: number = 24,
   ): DashboardReport {
     const now = Date.now();
     const start = now - (periodHours * 60 * 60 * 1000);
@@ -487,7 +486,7 @@ export class KPIDashboard extends EventEmitter {
    */
   private generateChartData(startTime: number, endTime: number): DashboardReport['charts'] {
     const baselineHistory = this.baseline.getBaselineHistory();
-    const periodBaselines = baselineHistory.filter(b => ;)
+    const periodBaselines = baselineHistory.filter(b => ;);
       b.timestamp >= startTime && b.timestamp <= endTime
     );
     // Performance score over time
@@ -525,7 +524,7 @@ export class KPIDashboard extends EventEmitter {
    * Calculate score for a baseline
    */
   private calculateBaselineScore(baseline: BaselineSnapshot): number {
-    const scores = baseline.kpiSnapshots.map(snapshot => ;)
+    const scores = baseline.kpiSnapshots.map(snapshot => ;);
       this.statusToScore(snapshot.status)
     );
     return scores.length > 0 ? 
@@ -621,7 +620,7 @@ export class KPIDashboard extends EventEmitter {
         min: 0,
         max: 100,
         thresholds: [50, 70, 90],
-        status: metrics.overview.averageScore >= 90 ? 'excellent' : 
+        status: metrics.overview.averageScore >= 90 ? 'excellent' : ,
           metrics.overview.averageScore >= 70 ? 'good' :
             metrics.overview.averageScore >= 50 ? 'warning' : 'critical'
       };
@@ -645,7 +644,7 @@ export class KPIDashboard extends EventEmitter {
         value: metrics.alerts.critical,
         format: 'number',
         color: metrics.alerts.critical > 0 ? 'red' : 'green',
-        change: 0 // Would calculate from historical data
+        change: 0 // Would calculate from historical data,
       };
     default:
       return { value: 0 };
@@ -656,7 +655,7 @@ export class KPIDashboard extends EventEmitter {
     return {
       labels: [],
       datasets: [],
-      type: widget.config.chartType || 'line'
+      type: widget.config.chartType || 'line',
     };
   }
   private generateTableData(widget: DashboardWidget): any {
@@ -665,7 +664,7 @@ export class KPIDashboard extends EventEmitter {
       const kpiStatus = this.monitoringService.getCurrentKPIStatus();
       return {
         headers: ['KPI', 'Category', 'Status', 'Value', 'Trend'],
-        rows: kpiStatus.map(k => {)
+        rows: kpiStatus.map(k => {),
           const kpi = corePerformanceKPIs.find(kpi => kpi.id === k.kpiId);
           return [
             kpi?.name || k.kpiId,
@@ -685,7 +684,7 @@ export class KPIDashboard extends EventEmitter {
         .slice(0, 5);
       return {
         headers: ['Issue', 'Severity', 'KPI', 'Value', 'Target'],
-        rows: alerts.map(alert => [)
+        rows: alerts.map(alert => [),
           alert.message,
           alert.severity,
           alert.kpiName,
@@ -705,7 +704,7 @@ export class KPIDashboard extends EventEmitter {
         critical: activeAlerts.filter(a => a.severity === 'critical'),
         high: activeAlerts.filter(a => a.severity === 'high'),
         medium: activeAlerts.filter(a => a.severity === 'medium'),
-        low: activeAlerts.filter(a => a.severity === 'low')
+        low: activeAlerts.filter(a => a.severity === 'low'),
       }
     };
   }
@@ -716,7 +715,7 @@ export class KPIDashboard extends EventEmitter {
       improving: trends.filter(t => t.trend === 'improving'),
       stable: trends.filter(t => t.trend === 'stable'),
       degrading: trends.filter(t => t.trend === 'degrading'),
-      projections: trends.filter(t => t.significance !== 'minor')
+      projections: trends.filter(t => t.significance !== 'minor'),
     };
   }
   /**

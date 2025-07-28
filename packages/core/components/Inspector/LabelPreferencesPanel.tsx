@@ -46,7 +46,7 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({)
     { value: 'colorful', label: 'Colorful', description: 'Yellow theme with bold styling' },
     { value: 'outline', label: 'Outline', description: 'Transparent with colored border' }
   ];
-  return ()
+  return ();
     <div
       style={{
         background: 'var(--bg-primary)',
@@ -66,7 +66,7 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({)
           justifyContent: 'space-between',
           marginBottom: 'var(--space-4)',
           paddingBottom: 'var(--space-3)',
-          borderBottom: '1px solid var(--border)'
+          borderBottom: '1px solid var(--border)',
         }}
       >
         <h3
@@ -90,7 +90,7 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({)
               color: 'var(--text-secondary)',
               padding: '4px',
               borderRadius: '4px',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'var(--bg-secondary)';
@@ -119,7 +119,7 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({)
         <select
           value={preferences.defaultDisplayMode}
           onChange={(e) => handlePreferenceChange({ )
-            defaultDisplayMode: e.target.value as NodeLabelDisplayMode 
+            defaultDisplayMode: e.target.value as NodeLabelDisplayMode ,
           })}
           style={{
             width: '100%',
@@ -174,19 +174,19 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({)
               onClick={() => handlePreferenceChange({ defaultPosition: option.value })}
               style={{
                 padding: 'var(--space-2)',
-                border: preferences.defaultPosition === option.value 
+                border: preferences.defaultPosition === option.value ,
                   ? '2px solid var(--accent-orange)' 
                   : '1px solid var(--border)',
                 borderRadius: 'var(--radius-md)',
-                background: preferences.defaultPosition === option.value 
+                background: preferences.defaultPosition === option.value ,
                   ? 'var(--accent-orange)10' 
                   : 'var(--bg-secondary)',
-                color: preferences.defaultPosition === option.value 
+                color: preferences.defaultPosition === option.value ,
                   ? 'var(--accent-orange)' 
                   : 'var(--text-primary)',
                 fontSize: 'var(--font-size-xs)',
                 cursor: 'pointer',
-                transition: 'all 0.2s ease'
+                transition: 'all 0.2s ease',
               }}
             >
               {option.label}
@@ -210,7 +210,7 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({)
         <select
           value={preferences.defaultStyle}
           onChange={(e) => handlePreferenceChange({ )
-            defaultStyle: e.target.value as NodeLabelStyle 
+            defaultStyle: e.target.value as NodeLabelStyle ,
           })}
           style={{
             width: '100%',
@@ -352,7 +352,7 @@ export const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps> = ({)
           padding: 'var(--space-3)',
           background: 'var(--bg-secondary)',
           borderRadius: 'var(--radius-md)',
-          border: '1px solid var(--border)'
+          border: '1px solid var(--border)',
         }}
       >
         <h4

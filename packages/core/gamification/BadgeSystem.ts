@@ -219,7 +219,7 @@ export class BadgeSystem {
         icon: '💎',
         criteria: { ,
           type: 'composite',
-          customLogic: (user) => {
+          customLogic: (user) => {,
             return user.statistics.templatesCreated >= 100 && 
                    user.statistics.ratingsReceived >= 4.5;
           }
@@ -436,7 +436,7 @@ export class BadgeSystem {
           firstCollaboration: user.progress.collaborations > 0,
           firstSale: user.badges.includes('first-sale'),
           expertRating: user.progress.ratingsReceived >= 4.5,
-          communityLeader: user.progress.helpfulVotes > 50
+          communityLeader: user.progress.helpfulVotes > 50,
         }
       };
       // Add badges
@@ -470,7 +470,7 @@ export class BadgeSystem {
       if (userProgress.badges.has(badgeId)) continue;
       // Check prerequisites
       if (badge.prerequisites) {
-        const hasPrerequisites = badge.prerequisites.every(prereq => ;)
+        const hasPrerequisites = badge.prerequisites.every(prereq => ;);
           userProgress.badges.has(prereq)
         );
         if (!hasPrerequisites) continue;
@@ -702,7 +702,6 @@ export class BadgeSystem {
     mostPopularBadge: string;
     rarest: string;
     averageBadgesPerUser: number;
-    } {
     const totalBadges = this.badges.size;
     const totalUsers = this.userProgress.size;
     // Count badge unlocks

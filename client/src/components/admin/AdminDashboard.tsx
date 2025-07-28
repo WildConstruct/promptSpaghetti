@@ -1,5 +1,4 @@
 // Epic 17.1.2 - Main Admin Dashboard Component
-
 import React, { useState } from 'react';
 import AdminLayout from './AdminLayout';
 import { FeatureToggleDashboard } from './FeatureToggleDashboard';
@@ -11,29 +10,25 @@ import DataProtectionDashboard from './DataProtectionDashboard';
 import './AdminLayout.css';
 
 // Placeholder components for other sections
-const UserManagementDashboard: React.FC = () => (
+const UserManagementDashboard: React.FC = () => ()
   <div style={{ padding: '24px', textAlign: 'center' }}>
     <h2>User Management</h2>
     <p>User management functionality will be implemented in Epic 17.3</p>
   </div>
 );
-
-const ContentManagementDashboard: React.FC = () => (
+const ContentManagementDashboard: React.FC = () => ()
   <ModerationAdminDashboard />
 );
-
-const MarketplaceAdminDashboard: React.FC = () => (
+const MarketplaceAdminDashboard: React.FC = () => ()
   <div style={{ padding: '24px', textAlign: 'center' }}>
     <h2>Marketplace Administration</h2>
     <p>Marketplace administration functionality will be implemented in Epic 17.5</p>
   </div>
 );
-
-const AnalyticsMonitoringDashboard: React.FC = () => (
+const AnalyticsMonitoringDashboard: React.FC = () => ()
   <LogVisualizationDashboard />
 );
-
-const SystemConfigurationDashboard: React.FC = () => (
+const SystemConfigurationDashboard: React.FC = () => ()
   <div style={{ padding: '24px', textAlign: 'center' }}>
     <h2>System Configuration</h2>
     <p>System configuration functionality will be implemented in Epic 17.4</p>
@@ -65,8 +60,7 @@ export
       return <FeatureToggleDashboard />;
     }
   };
-
-  return (
+  return ()
     <AdminLayout 
       currentSection={currentSection}
       onSectionChange={setCurrentSection}

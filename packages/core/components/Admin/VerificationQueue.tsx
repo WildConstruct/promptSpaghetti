@@ -119,7 +119,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
   };
   const renderRequestDetails = () => {
     const Icon = getVerificationTypeIcon(request.type);
-    return ()
+    return ();
       <Card className="request-details">
         <CardHeader>
           <div className="details-header">
@@ -168,7 +168,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
       </Card>
     );
   };
-  const renderUserProfile = () => (;)
+  const renderUserProfile = () => (;);
     <Card className="user-profile">
       <CardHeader>
         <CardTitle>User Profile Information</CardTitle>
@@ -222,7 +222,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
   const renderGovernmentIdData = () => {
     const govId = request.data.governmentId;
     if (!govId) return null;
-    return ()
+    return ();
       <Card className="verification-data">
         <CardHeader>
           <CardTitle>Government ID Verification</CardTitle>
@@ -270,7 +270,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
   const renderProfessionalCredentialsData = () => {
     const credentials = request.data.professionalCredentials;
     if (!credentials) return null;
-    return ()
+    return ();
       <Card className="verification-data">
         <CardHeader>
           <CardTitle>Professional Credentials</CardTitle>
@@ -334,7 +334,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
   const renderSocialMediaData = () => {
     const profiles = request.data.socialMediaProfiles;
     if (!profiles) return null;
-    return ()
+    return ();
       <Card className="verification-data">
         <CardHeader>
           <CardTitle>Social Media Verification</CardTitle>
@@ -363,7 +363,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
       </Card>
     );
   };
-  const renderGenericVerificationData = () => (;)
+  const renderGenericVerificationData = () => (;);
     <Card className="verification-data">
       <CardHeader>
         <CardTitle>Verification Data</CardTitle>
@@ -376,7 +376,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
       </CardContent>
     </Card>
   );
-  const renderMetadata = () => (;)
+  const renderMetadata = () => (;);
     <Card className="metadata">
       <CardHeader>
         <CardTitle>Request Metadata</CardTitle>
@@ -402,7 +402,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
       </CardContent>
     </Card>
   );
-  const renderReviewSection = () => (;)
+  const renderReviewSection = () => (;);
     <Card className="review-section">
       <CardHeader>
         <CardTitle>Review Decision</CardTitle>
@@ -415,7 +415,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
               value={reviewDecision.status || 'pending'}
               onChange={(e) => setReviewDecision(prev => ({ )
                 ...prev, 
-                status: e.target.value as ValidationStatus 
+                status: e.target.value as ValidationStatus ,
               }))}
               className="form-select"
             >
@@ -485,7 +485,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
       </CardContent>
     </Card>
   );
-  return ()
+  return ();
     <div className={`verification-queue ${className}`}>}
       <div className="queue-header">
         <Button onClick={onBack} variant="outline">

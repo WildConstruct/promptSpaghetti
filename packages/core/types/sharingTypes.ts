@@ -101,7 +101,7 @@ export const ShareLinkSchema = z.object({)
       image: z.string().url().optional(),
       url: z.string().url(),
       type: z.string().default('website'),
-      siteName: z.string().default('Prompt Spaghetti')
+      siteName: z.string().default('Prompt Spaghetti'),
     }),
     twitter: z.object({),
       card: z.enum(['summary', 'summary_large_image']).default('summary_large_image'),

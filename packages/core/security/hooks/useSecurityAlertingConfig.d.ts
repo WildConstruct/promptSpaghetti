@@ -73,7 +73,7 @@ export interface UseSecurityAlertingConfigReturn {
     };
     utils: {,
         getConfigDiff: () => Partial<SecurityAlertingConfig>;
-        getValidationSummary: () => {
+        getValidationSummary: () => {,
             hasErrors: boolean;
             hasWarnings: boolean;
             errorCount: number;

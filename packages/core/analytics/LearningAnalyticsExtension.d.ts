@@ -369,13 +369,13 @@ export interface LearningAnalyticsService {
     trackTutorialEvent(event: TutorialAnalyticsEvent): Promise<void>;
     trackKnowledgeBaseEvent(event: KnowledgeBaseAnalyticsEvent): Promise<void>;
     trackCommunityEvent(event: CommunityAnalyticsEvent): Promise<void>;
-    generateLearningEffectivenessMetrics()
+    generateLearningEffectivenessMetrics();
       contentId: string,
       timeRange: TimeRange,
     ): Promise<LearningEffectivenessMetrics>;
     generateUserLearningAnalytics(userId: string, timeRange: TimeRange): Promise<UserLearningAnalytics>;
     generateCommunityKnowledgeMetrics(communityId: string, timeRange: TimeRange): Promise<CommunityKnowledgeMetrics>;
-    generateKnowledgeBaseUsageMetrics()
+    generateKnowledgeBaseUsageMetrics();
       knowledgeBaseId: string,
       timeRange: TimeRange,
     ): Promise<KnowledgeBaseUsageMetrics>;

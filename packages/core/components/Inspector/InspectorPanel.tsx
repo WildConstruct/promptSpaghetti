@@ -100,7 +100,7 @@ export const InspectorPanel = ({ )
     };
   }, [isResizing, handleMouseMove, handleMouseUp]);
   if (!node || !schema) {
-    return ()
+    return ();
       <aside
         className={`inspector-panel ${collapsed ? 'collapsed' : 'expanded'} animate-inspector-resize`}
         style={{
@@ -220,7 +220,7 @@ export const InspectorPanel = ({ )
       </aside>
     );
   }
-  return ()
+  return ();
     <aside
       className={`inspector-panel ${collapsed ? 'collapsed' : 'expanded'} animate-inspector-resize`}
       style={{
@@ -290,7 +290,7 @@ export const InspectorPanel = ({ )
                   color: '#a0aec0',
                   fontWeight: 500,
                   padding: '1px 4px',
-                  background: 
+                  background: ,
                     complexityLevel === 'basic' ? '#22543d' : 
                       complexityLevel === 'advanced' ? '#2a4365' : '#553c9a',
                   borderRadius: 2,

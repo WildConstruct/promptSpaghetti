@@ -236,7 +236,7 @@ export class MFARetryHandler extends EventEmitter {
       circuitBreaker.halfOpenAttempts = 0;
       this.emit('circuitBreakerReset', {)
         operation,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -353,7 +353,7 @@ export class MFARetryHandler extends EventEmitter {
       const timeoutId = setTimeout(() => {
         reject(new Error(`Operation timeout after ${timeoutMs}ms`));}
       }, timeoutMs);
-      operationFn()
+      operationFn();
         .then((result) => {
           clearTimeout(timeoutId);
           resolve(result);
@@ -438,14 +438,14 @@ export class MFARetryHandler extends EventEmitter {
         this.emit('circuitBreakerClosed', {)
           operation,
           context,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     }
     this.emit('operationSuccess', {)
       operation,
       context,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   private handleFailure(operation: MFAOperation, context: OperationContext, error: Error): void {
@@ -468,7 +468,7 @@ export class MFARetryHandler extends EventEmitter {
           operation,
           context,
           failureCount: circuitBreaker.failureCount,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     }
@@ -476,7 +476,7 @@ export class MFARetryHandler extends EventEmitter {
       operation,
       context,
       error,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   private updateMetrics()
@@ -519,7 +519,7 @@ export class MFARetryHandler extends EventEmitter {
         level: 'info',
         message,
         data,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -621,7 +621,7 @@ export class MFARetryHandler extends EventEmitter {
       },
       globalTimeoutMs: config.globalTimeoutMs || 60000,
       enableMetrics: config.enableMetrics !== false,
-      enableLogging: config.enableLogging !== false
+      enableLogging: config.enableLogging !== false,
     };
   }
   private initializeMetrics(): RetryMetrics {

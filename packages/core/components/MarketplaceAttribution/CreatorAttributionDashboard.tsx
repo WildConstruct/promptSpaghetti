@@ -111,7 +111,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
             purchases: template.performance.purchases,
             revenue: template.revenue.total,
             rating: template.performance.rating,
-            trend: template.performance.purchases > 10 ? 'up' : 'stable' as const
+            trend: template.performance.purchases > 10 ? 'up' : 'stable' as const,
           }))
           .sort((a: TemplatePerformance, b: TemplatePerformance) => b.revenue - a.revenue)
           .slice(0, 5);
@@ -164,7 +164,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
         color: 'orange',
       }
     ];
-    return ()
+    return ();
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {statCards.map((card, index) => ()
           <div key={index} className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
@@ -185,7 +185,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   };
   const renderTemplatesList = () => {
     if (!dashboard?.templates) return null;
-    return ()
+    return ();
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900">Your Templates</h3>
@@ -286,7 +286,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   };
   const renderCollaborationsList = () => {
     if (!dashboard?.collaborations) return null;
-    return ()
+    return ();
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900">Active Collaborations</h3>
@@ -341,7 +341,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   };
   const renderTopPerformers = () => {
     if (topPerformers.length === 0) return null;
-    return ()
+    return ();
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900">Top Performing Templates</h3>
@@ -386,7 +386,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   };
   const renderProfile = () => {
     if (!dashboard?.profile) return null;
-    return ()
+    return ();
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
           <div>
@@ -449,7 +449,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   // Main Render
   // =============================================================================
   if (loading) {
-    return ()
+    return ();
       <div className={`creator-attribution-dashboard ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -459,7 +459,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className={`creator-attribution-dashboard ${className}`}>}
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
           <div className="flex items-center">
@@ -477,7 +477,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`creator-attribution-dashboard ${className}`}>}
       {/* Header */}
       <div className="mb-8">

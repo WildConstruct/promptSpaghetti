@@ -12,7 +12,6 @@
  * - Bulk policy operations
  * - Real-time policy monitoring
  */
-
 import React, { useState, useEffect } from 'react';
 import {
   Database,
@@ -31,7 +30,6 @@ import {
   Zap,
   BarChart3
 } from 'lucide-react';
-
 interface RetentionPolicy {
   id: string;
   name: string;
@@ -43,25 +41,21 @@ interface RetentionPolicy {
   autoDelete: boolean;
   status: 'active' | 'inactive' | 'expired' | 'draft';
   complianceFrameworks: string[];
-  
   // Scheduling
   scheduleType: 'immediate' | 'daily' | 'weekly' | 'monthly' | 'custom';
   cronExpression?: string;
   nextExecution: string;
   lastExecution?: string;
-  
   // Metrics
   affectedRecords: number;
   totalSizeBytes: number;
   deletedRecords: number;
   executionCount: number;
-  
   // Metadata
   createdAt: string;
   updatedAt: string;
   createdBy: string;
   tags: string[];
-  
   // Configuration
   notifyBeforeExpiry: boolean;
   notificationDays: number;
@@ -69,7 +63,6 @@ interface RetentionPolicy {
   cascadeDelete: boolean;
   backupBeforeDelete: boolean;
 }
-
 interface PolicyTemplate {
   id: string;
   name: string;
@@ -81,7 +74,6 @@ interface PolicyTemplate {
   recommended: boolean;
   config: Partial<RetentionPolicy>;
 }
-
 interface PolicyExecutionResult {
   id: string;
   policyId: string;
@@ -94,14 +86,12 @@ interface PolicyExecutionResult {
   errors: string[];
   warnings: string[];
 }
-
 const DataRetentionManager: React.FC = () => {
   const [policies, setPolicies] = useState<RetentionPolicy[]>([]);
   const [, setTemplates] = useState<PolicyTemplate[]>([]);
   const [, setExecutionResults] = useState<PolicyExecutionResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
   // View and filter states
   const [view, setView] = useState<'list' | 'cards' | 'calendar'>('cards');
   const [searchTerm, setSearchTerm] = useState('');
@@ -109,7 +99,6 @@ const DataRetentionManager: React.FC = () => {
   const [frameworkFilter, setFrameworkFilter] = useState<string>('all');
   const [sortBy] = useState<'name' | 'created' | 'execution' | 'affected'>('name');
   const [sortOrder] = useState<'asc' | 'desc'>('asc');
-  
   // Modal states
   const [, setShowCreateModal] = useState(false);
   const [, setShowTemplateModal] = useState(false);
@@ -117,9 +106,8 @@ const DataRetentionManager: React.FC = () => {
   const [,] = useState<PolicyTemplate | null>(null);
   const [,] = useState(false);
   const [,] = useState<Set<string>>(new Set());
-
   // Form state for policy creation/editing
-  const [, ] = useState<Partial<RetentionPolicy>>({
+  const [, ] = useState<Partial<RetentionPolicy>>({)
     name: '',
     description: '',
     dataType: '',
@@ -135,69 +123,58 @@ const DataRetentionManager: React.FC = () => {
     exemptionRules: [],
     cascadeDelete: false,
     backupBeforeDelete: true,
-    tags: []
+    tags: [],
   });
-
   // Load data
   useEffect(() => {
     loadRetentionData();
   }, []);
-
   const loadRetentionData = async () => {
     try {
       setLoading(true);
-      const [policiesRes, templatesRes, executionsRes] = await Promise.all([
-        fetch('/api/data-retention/policies', {
+      const [policiesRes, templatesRes, executionsRes] = await Promise.all([)
+        fetch('/api/data-retention/policies', {)
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/data-retention/templates', {
+        fetch('/api/data-retention/templates', {)
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/data-retention/executions', {
+        fetch('/api/data-retention/executions', {)
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         })
       ]);
-
       if (policiesRes.ok) {
         const policiesData = await policiesRes.json();
         setPolicies(policiesData.policies || []);
       }
-
       if (templatesRes.ok) {
         const templatesData = await templatesRes.json();
         setTemplates(templatesData.templates || []);
       }
-
       if (executionsRes.ok) {
         const executionsData = await executionsRes.json();
         setExecutionResults(executionsData.executions || []);
       }
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load retention data');
     } finally {
       setLoading(false);
     }
   };
-
   // Helper functions
   const formatBytes = (bytes: number): string => {
     const units = ['B', 'KB', 'MB', 'GB', 'TB'];
     let size = bytes;
     let unitIndex = 0;
-    
     while (size >= 1024 && unitIndex < units.length - 1) {
       size /= 1024;
       unitIndex++;
     }
-    
-    return `${size.toFixed(1)} ${units[unitIndex]}`;
+    return `${size.toFixed(1)} ${units[unitIndex]}`;}
   };
-
   const formatRetentionPeriod = (period: number, unit: string): string => {
-    return `${period} ${unit}${period !== 1 ? '' : ''}`;
+    return `${period} ${unit}${period !== 1 ? '' : ''}`;}
   };
-
   const getStatusBadgeClass = (status: string): string => {
     switch (status) {
     case 'active': return 'bg-green-100 text-green-800';
@@ -207,7 +184,6 @@ const DataRetentionManager: React.FC = () => {
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getCategoryIcon = (category: string) => {
     switch (category) {
     case 'user_data': return <Shield className="w-4 h-4" />;
@@ -218,9 +194,8 @@ const DataRetentionManager: React.FC = () => {
     default: return <Database className="w-4 h-4" />;
     }
   };
-
-  const filteredPolicies = policies
-    .filter(policy => {
+  const filteredPolicies = policies;
+    .filter(policy => {)
       if (searchTerm && !policy.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
           !policy.description.toLowerCase().includes(searchTerm.toLowerCase())) {
         return false;
@@ -255,14 +230,12 @@ const DataRetentionManager: React.FC = () => {
       default:
         return 0;
       }
-      
       if (sortOrder === 'asc') {
         return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
       } else {
         return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
       }
     });
-
   // TODO: Connect this function to the create policy modal
   // 
   //     if (response.ok) {
@@ -283,18 +256,15 @@ const DataRetentionManager: React.FC = () => {
   //     setError(err instanceof Error ? err.message : 'Failed to create policy');
   //   }
   // };
-
   const handleDeletePolicy = async (policyId: string) => {
     if (!confirm('Are you sure you want to delete this retention policy?')) {
       return;
     }
-
     try {
-      const response = await fetch(`/api/data-retention/policies/${policyId}`, {
+      const response = await fetch(`/api/data-retention/policies/${policyId}`, {)}
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
-
       if (response.ok) {
         await loadRetentionData();
       }
@@ -302,20 +272,17 @@ const DataRetentionManager: React.FC = () => {
       setError(err instanceof Error ? err.message : 'Failed to delete policy');
     }
   };
-
   const handleTogglePolicy = async (policyId: string, currentStatus: string) => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-    
     try {
-      const response = await fetch(`/api/data-retention/policies/${policyId}/status`, {
+      const response = await fetch(`/api/data-retention/policies/${policyId}/status`, {)}
         method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,}
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ status: newStatus })
       });
-
       if (response.ok) {
         await loadRetentionData();
       }
@@ -323,14 +290,12 @@ const DataRetentionManager: React.FC = () => {
       setError(err instanceof Error ? err.message : 'Failed to update policy status');
     }
   };
-
   const handleExecutePolicy = async (policyId: string) => {
     try {
-      const response = await fetch(`/api/data-retention/policies/${policyId}/execute`, {
+      const response = await fetch(`/api/data-retention/policies/${policyId}/execute`, {)}
         method: 'POST',
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
-
       if (response.ok) {
         await loadRetentionData();
       }
@@ -338,9 +303,8 @@ const DataRetentionManager: React.FC = () => {
       setError(err instanceof Error ? err.message : 'Failed to execute policy');
     }
   };
-
   if (loading) {
-    return (
+    return ()
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
@@ -349,8 +313,7 @@ const DataRetentionManager: React.FC = () => {
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="data-retention-manager space-y-6">
       {/* Header and Controls */}
       <div className="flex items-center justify-between">
@@ -363,7 +326,6 @@ const DataRetentionManager: React.FC = () => {
             Manage automated data retention and deletion policies
           </p>
         </div>
-
         <div className="flex items-center space-x-3">
           <button
             onClick={() => setShowTemplateModal(true)}
@@ -381,7 +343,6 @@ const DataRetentionManager: React.FC = () => {
           </button>
         </div>
       </div>
-
       {/* Filters and View Controls */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
         <div className="flex items-center justify-between flex-wrap gap-4">
@@ -396,7 +357,6 @@ const DataRetentionManager: React.FC = () => {
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -408,7 +368,6 @@ const DataRetentionManager: React.FC = () => {
               <option value="draft">Draft</option>
               <option value="expired">Expired</option>
             </select>
-
             <select
               value={frameworkFilter}
               onChange={(e) => setFrameworkFilter(e.target.value)}
@@ -421,7 +380,6 @@ const DataRetentionManager: React.FC = () => {
               <option value="CCPA">CCPA</option>
             </select>
           </div>
-
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setView('cards')}
@@ -444,11 +402,10 @@ const DataRetentionManager: React.FC = () => {
           </div>
         </div>
       </div>
-
       {/* Policy Cards View */}
-      {view === 'cards' && (
+      {view === 'cards' && ()
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredPolicies.map(policy => (
+          {filteredPolicies.map(policy => ()
             <div key={policy.id} className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
@@ -461,41 +418,35 @@ const DataRetentionManager: React.FC = () => {
                       <p className="text-sm text-gray-600 capitalize">{policy.dataCategory.replace('_', ' ')}</p>
                     </div>
                   </div>
-                  
                   <div className="relative">
                     <button className="text-gray-400 hover:text-gray-600">
                       <MoreVertical className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
-
                 <p className="text-sm text-gray-600 mb-4 line-clamp-2">{policy.description}</p>
-
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Retention Period</span>
-                    <span className="font-medium">{formatRetentionPeriod(
+                    <span className="font-medium">{formatRetentionPeriod()
                       policy.retentionPeriod,
                       policy.retentionUnit
                     )}</span>
                   </div>
-
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Affected Records</span>
                     <span className="font-medium">{policy.affectedRecords.toLocaleString()}</span>
                   </div>
-
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Data Size</span>
                     <span className="font-medium">{formatBytes(policy.totalSizeBytes)}</span>
                   </div>
-
                   <div className="flex items-center justify-between">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadgeClass(policy.status)}`}>
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadgeClass(policy.status)}`}>}
                       {policy.status}
                     </span>
                     <div className="flex items-center space-x-1">
-                      {policy.complianceFrameworks.map(framework => (
+                      {policy.complianceFrameworks.map(framework => ()
                         <span key={framework} className="px-1.5 py-0.5 text-xs bg-purple-100 text-purple-700 rounded">
                           {framework}
                         </span>
@@ -503,7 +454,6 @@ const DataRetentionManager: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
                 <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
                   <div className="flex items-center space-x-2">
                     <button
@@ -528,7 +478,6 @@ const DataRetentionManager: React.FC = () => {
                       <Edit className="w-4 h-4" />
                     </button>
                   </div>
-                  
                   <button
                     onClick={() => handleDeletePolicy(policy.id)}
                     className="p-1 rounded text-red-600 hover:bg-red-50"
@@ -542,9 +491,8 @@ const DataRetentionManager: React.FC = () => {
           ))}
         </div>
       )}
-
       {/* Empty State */}
-      {filteredPolicies.length === 0 && (
+      {filteredPolicies.length === 0 && ()
         <div className="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-200">
           <Database className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 mb-2">No Retention Policies Found</h3>
@@ -562,8 +510,7 @@ const DataRetentionManager: React.FC = () => {
           </button>
         </div>
       )}
-
-      {error && (
+      {error && ()
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center space-x-2">
           <AlertTriangle className="w-5 h-5 text-red-600" />
           <span className="text-red-800">{error}</span>

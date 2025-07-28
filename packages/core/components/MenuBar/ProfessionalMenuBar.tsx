@@ -105,7 +105,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ )
   const [showSubmenu, setShowSubmenu] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
   if (divider) {
-    return ()
+    return ();
       <div style={{
         height: '1px',
         backgroundColor: professionalColors.ui.border,
@@ -128,7 +128,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ )
       setShowSubmenu(false);
     }
   }, [submenu]);
-  return ()
+  return ();
     <div
       ref={itemRef}
       style={{
@@ -213,7 +213,7 @@ const Menu: React.FC<MenuProps> = ({ label, items, isOpen, onToggle, onClose }) 
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [isOpen, onClose]);
-  return ()
+  return ();
     <div ref={menuRef} style={{ position: 'relative' }}>
       <button
         onClick={onToggle}
@@ -347,7 +347,7 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({)
         submenu: [,
           ...recentFiles.slice(0, 10).map((file, index) => ({)
             label: `${index + 1}. ${file.metadata.title || file.name.replace('.psg', '')}`,}
-            onClick: () => onRecentFileLoad?.(file)
+            onClick: () => onRecentFileLoad?.(file),
           })),
           ...(recentFiles.length > 0 ? [)
             { divider: true },
@@ -429,7 +429,7 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({)
     { divider: true },
     { label: 'About', onClick: onAbout },
   ];
-  return ()
+  return ();
     <div style={{
       display: 'flex',
       alignItems: 'center',

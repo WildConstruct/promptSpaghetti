@@ -199,7 +199,7 @@ export class WebSocketEventAdapter {
         ...(message.data && typeof message.data === 'object' ? message.data : {}),
         // Preserve message metadata
         messageId: (message as any).id,
-        clientId: (message as any).clientId
+        clientId: (message as any).clientId,
       }
     };
   }
@@ -237,7 +237,7 @@ export class WebSocketEventAdapter {
     sessionId?: string
   ): void {
     // Create event for Event Bus
-    const event = EventFactory.createWorkflowEvent(;)
+    const event = EventFactory.createWorkflowEvent(;);
       type === CollaborationEventType.SESSION_CREATED ? 'task_created' :
       type === CollaborationEventType.USER_JOINED ? 'task_assigned' :
       type === CollaborationEventType.DOCUMENT_EDITED ? 'task_started' : 'task_completed',
@@ -269,7 +269,6 @@ export class WebSocketEventAdapter {
     subscribedEventTypes: number;
     hasCollaborationService: boolean;
     eventBusStats: any;
-  } {
     return {
       subscribedEventTypes: this.subscribedEventTypes.size,
       hasCollaborationService: !!this.collaborationService,
@@ -298,7 +297,7 @@ export const webSocketUtils = {
   /**
    * Get WebSocket message type for event type
    */
-  getWebSocketType: (eventType: string): WSMessageType | null => {
+  getWebSocketType: (eventType: string): WSMessageType | null => {,
     const entry = Object.entries(WS_MESSAGE_TYPE_MAP);
       .find(([wsType, mappedEventType]) => mappedEventType === eventType);
     return entry ? entry[0] as WSMessageType : null;
@@ -306,7 +305,7 @@ export const webSocketUtils = {
   /**
    * Get event type for WebSocket message type
    */
-  getEventType: (wsType: WSMessageType): string => {
+  getEventType: (wsType: WSMessageType): string => {,
     return WS_MESSAGE_TYPE_MAP[wsType] || wsType;
   }
 };

@@ -108,7 +108,7 @@ export class FavoritesManager {
     // Filter to only include actual favorites
     const validFavorites = orderedNodeIds.filter(id => this.favorites.has(id));
     // Add any favorites that weren't in the ordered list
-    const missingFavorites = Array.from(this.favorites).filter(id => ;)
+    const missingFavorites = Array.from(this.favorites).filter(id => ;);
       !orderedNodeIds.includes(id)
     );
     this.setFavorites([...validFavorites, ...missingFavorites]);
@@ -151,7 +151,7 @@ export class FavoritesManager {
         return false;
       }
       // Validate node IDs are strings
-      const validNodeIds = data.nodeIds.filter(id => ;)
+      const validNodeIds = data.nodeIds.filter(id => ;);
         typeof id === 'string' && id.length > 0
       );
       this.setFavorites(validNodeIds);

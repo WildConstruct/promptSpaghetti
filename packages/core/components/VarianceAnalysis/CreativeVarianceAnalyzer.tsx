@@ -62,7 +62,7 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
       return sentences.map(s => s.trim().split(/\s+/).length);
     });
     const avgSentenceLength = sentenceLengths.reduce((sum, len) => sum + len, 0) / sentenceLengths.length;
-    const sentenceLengthVariance = sentenceLengths.reduce(;)
+    const sentenceLengthVariance = sentenceLengths.reduce(;);
       (sum, len) => sum + Math.pow(len - avgSentenceLength, 2), 
       0
     ) / sentenceLengths.length;
@@ -76,7 +76,7 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
       avg: paragraphCounts.reduce((sum, count) => sum + count, 0) / paragraphCounts.length
     };
     // Vocabulary richness (unique words / total words)
-    const allWords = validResults.flatMap(r => ;)
+    const allWords = validResults.flatMap(r => ;);
       r.output?.toLowerCase().split(/\s+/).filter(w => w.length > 2) || []
     );
     const uniqueWords = new Set(allWords);
@@ -104,7 +104,7 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
     const semanticCoherence = varianceAnalysis?.averageSimilarity ? ;
       varianceAnalysis.averageSimilarity * 100 : 0;
     // Idea density (unique concepts per 100 words)
-    const conceptWords = allWords.filter(word => ;)
+    const conceptWords = allWords.filter(word => ;);
       word.length > 4 && !['that', 'with', 'have', 'this', 'will', 'your', 'from', 'they', 'know', 'want', 'been', 'good', 'much', 'some', 'time', 'very', 'when', 'come', 'here', 'just', 'like', 'long', 'make', 'many', 'over', 'such', 'take', 'than', 'them', 'well'].includes(word)
     );
     const ideaDensity = allWords.length > 0 ? (conceptWords.length / allWords.length) * 100 : 0;
@@ -115,18 +115,18 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
     const narrativeConsistency = varianceAnalysis?.toneVariation ? ;
       Math.max(0, 100 - varianceAnalysis.toneVariation) : 50;
     // Professional metrics
-    const industryReadiness = Math.min(100,;)
+    const industryReadiness = Math.min(100,;);
       (vocabularyRichness * 0.3) +
       (readingComplexity * 0.2) +
       (ideaDensity * 0.3) +
       (semanticCoherence * 0.2)
     );
-    const clientPresentability = Math.min(100,;)
+    const clientPresentability = Math.min(100,;);
       (narrativeConsistency * 0.4) +
       ((100 - repetitionIndex) * 0.3) +
       (industryReadiness * 0.3)
     );
-    const revisionPotential = Math.min(100,;)
+    const revisionPotential = Math.min(100,;);
       (varianceAnalysis?.uniquenessScore || 0) * 0.4 +
       (conceptualLeaps * 0.3) +
       (ideaDensity * 0.3)
@@ -214,7 +214,7 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
     return insights;
   }, [varianceAnalysis, advancedMetrics]);
   if (!varianceAnalysis || results.length < 2) {
-    return ()
+    return ();
       <div className={`creative-variance-analyzer ${className}`} style={{}
         background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
         borderRadius: 12,
@@ -296,12 +296,12 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
           height: '100%',
           background: color,
           width: `${Math.min(100, value)}%`,}
-          transition: 'width 0.3s ease'
+          transition: 'width 0.3s ease',
         }} />
       </div>
     </div>
   );
-  return ()
+  return ();
     <div className={`creative-variance-analyzer ${className}`} style={{}
       background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
       borderRadius: 12,
@@ -357,7 +357,7 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
               fontSize: 13,
               fontWeight: 500,
               cursor: 'pointer',
-              transition: 'all 0.2s'
+              transition: 'all 0.2s',
             }}
           >
             {tab.label}
@@ -382,11 +382,11 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
                 {creativeInsights.slice(0, 3).map((insight, index) => ()
                   <div key={index} style={{
                     padding: 12,
-                    background: insight.type === 'positive' ? '#dcfce7' :
+                    background: insight.type === 'positive' ? '#dcfce7' :,
                       insight.type === 'warning' ? '#fef3c7' :
                         insight.type === 'suggestion' ? '#dbeafe' : '#f3f4f6',
                     borderRadius: 6,
-                    borderLeft: `4px solid ${
+                    borderLeft: `4px solid ${,}
                       insight.type === 'positive' ? '#10b981' :
                         insight.type === 'warning' ? '#f59e0b' :
                           insight.type === 'suggestion' ? '#3b82f6' : '#6b7280'
@@ -602,7 +602,7 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
                     padding: 12,
                     background: 'white',
                     borderRadius: 6,
-                    border: '1px solid #e5e7eb'
+                    border: '1px solid #e5e7eb',
                   }}>
                     <div style={{
                       fontSize: 13,

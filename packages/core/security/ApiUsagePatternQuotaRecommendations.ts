@@ -1188,7 +1188,7 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
           description: ruleResult.description,
           data: ruleResult.data,
           strength: ruleResult.strength,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     }
@@ -1359,7 +1359,7 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
     const requestRates = usageData.map(d => d.requestCount);
     const avgRate = requestRates.reduce((sum, rate) => sum + rate, 0) / requestRates.length;
     const steadyThreshold = avgRate * 0.2; // Within 20% of average;
-    const steadyCount = requestRates.filter(rate => ;)
+    const steadyCount = requestRates.filter(rate => ;);
       Math.abs(rate - avgRate) <= steadyThreshold
     ).length;
     return steadyCount / requestRates.length;
@@ -1421,7 +1421,7 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
   private detectSteadyState(usageData: UsageDataPoint[], threshold: number): boolean {
     const requestRates = usageData.map(d => d.requestCount);
     const avgRate = requestRates.reduce((sum, rate) => sum + rate, 0) / requestRates.length;
-    const steadyCount = requestRates.filter(rate => ;)
+    const steadyCount = requestRates.filter(rate => ;);
       Math.abs(rate - avgRate) / avgRate < (threshold / 100)
     ).length;
     return (steadyCount / requestRates.length) > 0.8; // 80% of data points are steady
@@ -1595,7 +1595,7 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
     const activeThreshold = Date.now() - (24 * 60 * 60 * 1000); // Last 24 hours;
     const activeUsers = new Set<string>();
     for (const [userId, userHistory] of this.usageHistory) {
-      const hasRecentActivity = userHistory.some(dataPoint => ;)
+      const hasRecentActivity = userHistory.some(dataPoint => ;);
         dataPoint.timestamp.getTime() > activeThreshold
       );
       if (hasRecentActivity) {
@@ -1652,31 +1652,31 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         responseTimeChange: quotaChangeRatio > 1 ? -10 : 5, // Better performance with higher quota
         throughputChange: (quotaChangeRatio - 1) * 100,
         errorRateChange: quotaChangeRatio > 1 ? -20 : 10,
-        availabilityChange: quotaChangeRatio > 1 ? 0.1 : -0.05
+        availabilityChange: quotaChangeRatio > 1 ? 0.1 : -0.05,
       },
       businessImpact: {,
         revenueImpact: 0, // Would require business context
         userSatisfactionChange: quotaChangeRatio > 1 ? 10 : -5,
         churnRiskChange: quotaChangeRatio > 1 ? -5 : 2,
-        competitiveAdvantage: quotaChangeRatio > 1 ? 'Improved service reliability' : 'Cost optimization'
+        competitiveAdvantage: quotaChangeRatio > 1 ? 'Improved service reliability' : 'Cost optimization',
       },
       systemImpact: {,
         resourceUtilizationChange: (quotaChangeRatio - 1) * 80,
         capacityRequirementChange: (quotaChangeRatio - 1) * 90,
         scalingImplications: quotaChangeRatio > 1.2 ? ['May require infrastructure scaling'] : [],
-        infrastructureCost: (quotaChangeRatio - 1) * 100 // Dollar amount
+        infrastructureCost: (quotaChangeRatio - 1) * 100 // Dollar amount,
       },
       userExperienceImpact: {,
         satisfactionScore: quotaChangeRatio > 1 ? 85 : 70,
         frustractionEvents: quotaChangeRatio > 1 ? -2 : 1,
         engagementChange: (quotaChangeRatio - 1) * 15,
-        feedbackSentiment: quotaChangeRatio > 1 ? 'positive' : 'neutral'
+        feedbackSentiment: quotaChangeRatio > 1 ? 'positive' : 'neutral',
       },
       costImpact: {,
         operationalCostChange: (quotaChangeRatio - 1) * 50,
         infrastructureCostChange: (quotaChangeRatio - 1) * 75,
         supportCostChange: quotaChangeRatio > 1 ? -20 : 10,
-        totalCostOfOwnership: (quotaChangeRatio - 1) * 100
+        totalCostOfOwnership: (quotaChangeRatio - 1) * 100,
       }
     };
   }
@@ -1738,11 +1738,11 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
     const adjustmentFactor = 1 + fairnessImpact; // Negative impact reduces the adjustment;
     return {
       ...recommended,
-      requestsPerSecond: current.requestsPerSecond + 
+      requestsPerSecond: current.requestsPerSecond + ,
         (recommended.requestsPerSecond - current.requestsPerSecond) * adjustmentFactor,
-      requestsPerMinute: current.requestsPerMinute + 
+      requestsPerMinute: current.requestsPerMinute + ,
         (recommended.requestsPerMinute - current.requestsPerMinute) * adjustmentFactor,
-      requestsPerHour: current.requestsPerHour + 
+      requestsPerHour: current.requestsPerHour + ,
         (recommended.requestsPerHour - current.requestsPerHour) * adjustmentFactor
     };
   }
@@ -1852,7 +1852,7 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
         requestCount: Math.floor(Math.random() * 100),
         errorCount: Math.floor(Math.random() * 5),
         averageResponseTime: 100 + Math.random() * 200,
-        quotaUtilization: Math.random() * 100
+        quotaUtilization: Math.random() * 100,
       };
       userHistory.push(dataPoint);
       // Keep only recent data
@@ -1936,7 +1936,7 @@ export class ApiUsagePatternQuotaRecommendations extends EventEmitter {
       userImpact: Math.random() * 100,
       businessImpact: Math.random() * 1000,
       affectedUsers: Math.floor(Math.random() * 100),
-      resourceConsumption: Math.random() * 100
+      resourceConsumption: Math.random() * 100,
     };
   }
   private async determineResponseActions()

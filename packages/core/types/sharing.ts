@@ -321,11 +321,10 @@ export interface ShareAnalyticsResponse {
 
 // Error types
 export class ShareError extends Error {
-  constructor()
+  constructor();
     message: string,
     public code: ShareErrorCode,
     public details?: any
-  ) {
     super(message);
     this.name = 'ShareError';
   }

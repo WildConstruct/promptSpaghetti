@@ -112,7 +112,7 @@ export const useVariablePortCleanup = (options: VariablePortCleanupOptions = {})
   /**
    * Find edges that can be migrated to new variable ports
    */
-  const findMigratableEdges = useCallback((;)
+  const findMigratableEdges = useCallback((;);
     orphanedEdges: Edge[],
     oldVariablePorts: Map<string, VariablePortInfo[]>,
     newVariablePorts: Map<string, VariablePortInfo[]>
@@ -262,7 +262,7 @@ export const useVariablePortCleanup = (options: VariablePortCleanupOptions = {})
       totalEdges: edges.length,
       orphanedEdges: orphanedEdges.length,
       validHandles: validHandleIds.size,
-      orphanedEdgeIds: orphanedEdges.map(e => e.id)
+      orphanedEdgeIds: orphanedEdges.map(e => e.id),
     };
   }, [getNodes, getEdges, getValidHandleIds]);
   // Cleanup timeout on unmount

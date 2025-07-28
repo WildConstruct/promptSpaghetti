@@ -242,7 +242,7 @@ const DEFAULT_CONFIG: BreachNotificationConfig = {
   compliance: {,
     frameworks: ['GDPR', 'NIST'],
     auditLogging: true,
-    retentionPeriod: '7 years'
+    retentionPeriod: '7 years',
   }
 };
 /**
@@ -414,7 +414,6 @@ export class BreachNotificationService extends EventEmitter {
     timeRemaining: number; // milliseconds
     violations: string[];
     actions: string[];
-  } {
     const incident = this.incidents.get(incidentId);
     if (!incident) {
       throw new Error(`Incident not found: ${incidentId}`);}
@@ -530,7 +529,7 @@ export class BreachNotificationService extends EventEmitter {
   }
   private requiresGDPRNotification(incident: BreachIncident): boolean {
     // GDPR notification required if personal data is involved and risk assessment indicates risk
-    const hasPersonalData = incident.dataTypes.some(type => ;)
+    const hasPersonalData = incident.dataTypes.some(type => ;);
       ['email', 'phone', 'name', 'pii', 'personal_data'].includes(type.toLowerCase())
     );
     const hasSignificantRisk = incident.severity === BreachSeverity.HIGH || ;
@@ -581,7 +580,7 @@ export class BreachNotificationService extends EventEmitter {
         'Enhance monitoring',
         'Review access controls'
       ],
-      residualRisk: 'Monitor for account takeover attempts'
+      residualRisk: 'Monitor for account takeover attempts',
     };
   }
   private generateComplianceRequirements(severity: BreachSeverity): ComplianceRequirement[] {

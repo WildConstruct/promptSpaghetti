@@ -98,7 +98,7 @@ describe('SecurityLogger', () => {
           eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
         };
         const result = logger.queryLogs(query);
-        const logEntry = result.logs.find(log => ;)
+        const logEntry = result.logs.find(log => ;);
           log.details.reason === reason
         );
         expect(logEntry?.level).toBe(expectedLevel);
@@ -123,13 +123,13 @@ describe('SecurityLogger', () => {
       const unlockedLockout = {
         ...mockLockout,
         status: LockoutStatus.UNLOCKED,
-        unlockTime: new Date(mockDate.getTime() + 60 * 60 * 1000)
+        unlockTime: new Date(mockDate.getTime() + 60 * 60 * 1000),
       };
       const context = {
         ipAddress: '10.0.0.1',
         requestId: 'req-unlock-123',
       };
-      const logId = logger.logAccountUnlocked(;)
+      const logId = logger.logAccountUnlocked(;);
         unlockedLockout,
         UnlockMethod.ADMIN_OVERRIDE,
         'admin123',
@@ -150,7 +150,7 @@ describe('SecurityLogger', () => {
       const unlockedLockout = {
         ...mockLockout,
         status: LockoutStatus.UNLOCKED,
-        unlockTime: new Date(mockDate.getTime() + 30 * 60 * 1000)
+        unlockTime: new Date(mockDate.getTime() + 30 * 60 * 1000),
       };
       logger.logAccountUnlocked()
         unlockedLockout,
@@ -274,7 +274,7 @@ describe('SecurityLogger', () => {
         eventTypes: [SecurityEventType.SECURITY_ALERT],
       });
       severityMappings.forEach(({ expectedLevel }, index) => {
-        const logEntry = result.logs.find(log => ;)
+        const logEntry = result.logs.find(log => ;);
           log.details.testIndex === index
         );
         expect(logEntry?.level).toBe(expectedLevel);
@@ -283,7 +283,7 @@ describe('SecurityLogger', () => {
   });
   describe('Audit Trail Creation', () => {
     test('should create audit trail entry', () => {
-      const auditId = logger.createAuditTrail(;)
+      const auditId = logger.createAuditTrail(;);
         'UPDATE',
         'lockout',
         'lockout-123',
@@ -437,7 +437,7 @@ describe('SecurityLogger', () => {
     test('should export logs for SOX compliance in JSON format', () => {
       const startTime = new Date(mockDate.getTime() - 24 * 60 * 60 * 1000);
       const endTime = new Date(mockDate.getTime() + 24 * 60 * 60 * 1000);
-      const exportData = logger.exportLogsForCompliance(;)
+      const exportData = logger.exportLogsForCompliance(;);
         ComplianceFramework.SOX,
         startTime,
         endTime,
@@ -454,7 +454,7 @@ describe('SecurityLogger', () => {
     test('should export logs in CSV format', () => {
       const startTime = new Date(mockDate.getTime() - 24 * 60 * 60 * 1000);
       const endTime = new Date(mockDate.getTime() + 24 * 60 * 60 * 1000);
-      const exportData = logger.exportLogsForCompliance(;)
+      const exportData = logger.exportLogsForCompliance(;);
         ComplianceFramework.GDPR,
         startTime,
         endTime,
@@ -466,7 +466,7 @@ describe('SecurityLogger', () => {
     test('should export logs in XML format', () => {
       const startTime = new Date(mockDate.getTime() - 24 * 60 * 60 * 1000);
       const endTime = new Date(mockDate.getTime() + 24 * 60 * 60 * 1000);
-      const exportData = logger.exportLogsForCompliance(;)
+      const exportData = logger.exportLogsForCompliance(;);
         ComplianceFramework.ISO_27001,
         startTime,
         endTime,
@@ -531,7 +531,7 @@ describe('SecurityLogger', () => {
         const result = logger.queryLogs({)
           eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
         });
-        const logEntry = result.logs.find(log => ;)
+        const logEntry = result.logs.find(log => ;);
           log.details.reason === reason
         );
         expect(logEntry?.compliance.retention).toBe(expectedRetention);

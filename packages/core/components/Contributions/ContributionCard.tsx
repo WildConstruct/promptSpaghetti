@@ -42,7 +42,7 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
         color: '#10b981',
         bgColor: '#ecfdf5',
         icon: '📚',
-        label: 'Knowledge Article'
+        label: 'Knowledge Article',
       },
       tutorial: {,
         color: '#f59e0b',
@@ -54,19 +54,19 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
         color: '#8b5cf6',
         bgColor: '#f3e8ff',
         icon: '📊',
-        label: 'Case Study'
+        label: 'Case Study',
       },
       pattern_library: {,
         color: '#ef4444',
         bgColor: '#fef2f2',
         icon: '🔧',
-        label: 'Pattern Library'
+        label: 'Pattern Library',
       },
       community_post: {,
         color: '#06b6d4',
         bgColor: '#ecfeff',
         icon: '💬',
-        label: 'Community Post'
+        label: 'Community Post',
       },
       documentation: {,
         color: '#6b7280',
@@ -99,12 +99,12 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
       under_review: {,
         color: '#f59e0b',
         bgColor: '#fffbeb',
-        label: 'Under Review'
+        label: 'Under Review',
       },
       revision_requested: {,
         color: '#ef4444',
         bgColor: '#fef2f2',
-        label: 'Needs Revision'
+        label: 'Needs Revision',
       },
       approved: {,
         color: '#10b981',
@@ -156,7 +156,7 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
     }
     onClick?.(contribution);
   };
-  return ()
+  return ();
     <div 
       className={`contribution-card ${variant} ${className}`}
       onClick={handleCardClick}

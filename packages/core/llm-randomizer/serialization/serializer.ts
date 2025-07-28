@@ -4,7 +4,7 @@
 import { Graph, Node } from '../../graphSchema';
 // Use Node.js crypto in Node environment, or web crypto API in browser
 interface HashFunction {
-  update: (data: string) => {
+  update: (data: string) => {,
     digest: (format: string) => string;
   };
 }
@@ -15,8 +15,8 @@ try {
 } catch {
   // Browser environment - use a simple hash alternative
   createHash = () => ({)
-    update: (data: string) => ({)
-      digest: () => {
+    update: (data: string) => ({),
+      digest: () => {,
         // Simple hash fallback for browser testing
         let hash = 0;
         for (let i = 0; i < data.length; i++) {
@@ -310,6 +310,6 @@ export function createDefaultMetadata(): SerializationMetadata {
   return {
     author: 'llm-agent',
     created: new Date().toISOString(),
-    description: 'LLM-generated graph'
+    description: 'LLM-generated graph',
   };
 }

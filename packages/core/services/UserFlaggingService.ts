@@ -148,7 +148,7 @@ export class UserFlaggingService {
         return {
           reportId: duplicateCheck.existingReportId!,
           status: 'duplicate',
-          message: 'This content has already been flagged for the same reason.'
+          message: 'This content has already been flagged for the same reason.',
         };
       }
       // Create flag report
@@ -277,7 +277,7 @@ export class UserFlaggingService {
   ): Promise<FlaggingAnalytics> {
     const range = timeRange || {
       start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
-      end: new Date()
+      end: new Date(),
     };
     try {
       const allReports = Array.from(this.flagReports.values());
@@ -327,7 +327,7 @@ export class UserFlaggingService {
         reviewedAt: new Date(),
         moderatorNote: update.moderatorNote,
         resolution: update.resolution,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
       this.flagReports.set(reportId, updatedReport);
       // Update content summary
@@ -405,7 +405,7 @@ export class UserFlaggingService {
       metadata: {,
         ...submission.metadata,
         userAgent: 'web-interface',
-        ipAddress: 'xxx.xxx.xxx.xxx' // Would be captured in real implementation
+        ipAddress: 'xxx.xxx.xxx.xxx' // Would be captured in real implementation,
       }
     };
     this.flagReports.set(reportId, report);
@@ -499,7 +499,7 @@ export class UserFlaggingService {
       );
   }
   private mapContentStatusToFlaggingStatus()
-    status: 'clean' | 'under_review' | 'violations_found' | 'content_removed'
+    status: 'clean' | 'under_review' | 'violations_found' | 'content_removed',
   ): 'none' | 'pending' | 'reviewed' | 'resolved' | 'dismissed' {
     switch (status) {
     case 'clean': return 'none';
@@ -588,14 +588,14 @@ export class UserFlaggingService {
   private calculateUserAccuracy(userId: string, reports: UserFlagReport[]): number {
     const resolvedReports = reports.filter(r => r.status === 'resolved');
     if (resolvedReports.length === 0) return 0;
-    const accurateReports = resolvedReports.filter(r => ;)
+    const accurateReports = resolvedReports.filter(r => ;);
       r.resolution?.action !== 'no_action'
     );
     return (accurateReports.length / resolvedReports.length) * 100;
   }
   private aggregateByField<T extends Record<string, any>>()
     items: T[],
-    field: keyof T
+    field: keyof T,
   ): Record<string, number> {
     return items.reduce((acc, item) => {
       const key = String(item[field]);
@@ -636,7 +636,7 @@ export class UserFlaggingService {
     return {
       mostFlaggedContentTypes: this.aggregateByField(reports, 'contentType'),
       flagVolumeByHour: Array(24).fill(0), // Would be calculated from actual data
-      flagVolumeByDay: Array(7).fill(0)    // Would be calculated from actual data
+      flagVolumeByDay: Array(7).fill(0)    // Would be calculated from actual data,
     };
   }
   private calculateModerationEfficiency(reports: UserFlagReport[]): any {

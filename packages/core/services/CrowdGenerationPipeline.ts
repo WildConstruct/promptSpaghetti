@@ -149,13 +149,12 @@ export class CrowdGenerationPipeline {
   private clothingGenerator: HistoricalClothingGenerator;
   private behaviorEngine: CrowdBehaviorEngine;
   private vfxExporter: VFXExporter;
-  constructor()
+  constructor();
     historicalDataService: HistoricalDataService,
     constraintValidator: ConstraintValidator,
     clothingGenerator: HistoricalClothingGenerator,
     behaviorEngine: CrowdBehaviorEngine,
     vfxExporter: VFXExporter,
-  ) {
     this.historicalDataService = historicalDataService;
     this.constraintValidator = constraintValidator;
     this.clothingGenerator = clothingGenerator;
@@ -177,14 +176,14 @@ export class CrowdGenerationPipeline {
       // Stage 4: Interaction Generation
       const interactions = await this.generateInteractions(individuals, groups, request);
       // Stage 5: Historical Validation
-      const validation = await this.validateHistoricalAccuracy(;)
+      const validation = await this.validateHistoricalAccuracy(;);
         individuals, 
         groups, 
         interactions, 
         request
       );
       // Stage 6: Metadata Generation
-      const metadata = this.generateMetadata(;)
+      const metadata = this.generateMetadata(;);
         request, 
         validation, 
         Date.now() - startTime
@@ -212,17 +211,17 @@ export class CrowdGenerationPipeline {
       category: 'clothing',
       filters: {,
         occasion: this.mapActivityToOccasion(request.crowd.activity.primary),
-        gender: 'unisex' // Will be filtered per individual
+        gender: 'unisex' // Will be filtered per individual,
       },
       accuracyLevel: request.constraints.historicalAccuracy,
       limit: 1000,
     };
     const clothingData = await this.historicalDataService.query(clothingQuery);
-    const socialStructure = await this.historicalDataService.getSocialStructure(;)
+    const socialStructure = await this.historicalDataService.getSocialStructure(;);
       request.scene.era,
       request.scene.region
     );
-    const culturalRules = await this.historicalDataService.getCulturalRules(;)
+    const culturalRules = await this.historicalDataService.getCulturalRules(;);
       request.scene.era,
       request.scene.region
     );
@@ -231,7 +230,7 @@ export class CrowdGenerationPipeline {
       socialStructure,
       culturalRules,
       validOccupations: await this.getValidOccupations(request),
-      behaviorPatterns: await this.getBehaviorPatterns(request)
+      behaviorPatterns: await this.getBehaviorPatterns(request),
     };
   }
   /**
@@ -245,13 +244,13 @@ export class CrowdGenerationPipeline {
     for (let i = 0; i < request.crowd.size; i++) {
       const demographics = this.generateDemographics(request.crowd.demographics);
       const occupation = this.selectOccupation(demographics, context);
-      const clothing = await this.clothingGenerator.generateClothing(;)
+      const clothing = await this.clothingGenerator.generateClothing(;);
         demographics,
         occupation,
         request.scene,
         context
       );
-      const behavior = this.behaviorEngine.generateBehavior(;)
+      const behavior = this.behaviorEngine.generateBehavior(;);
         demographics,
         occupation,
         request.crowd.activity,
@@ -316,10 +315,10 @@ export class CrowdGenerationPipeline {
     const interactions: CrowdInteraction[] = [];
     // Generate interactions based on activity type
     for (const interactionType of request.crowd.activity.interactions) {
-      const relevantIndividuals = individuals.filter(ind =>;)
+      const relevantIndividuals = individuals.filter(ind =>;);
         interactionType.participants.includes(ind.demographics.socialClass)
       );
-      const interaction = this.createInteraction(;)
+      const interaction = this.createInteraction(;);
         interactionType,
         relevantIndividuals,
         groups
@@ -343,7 +342,7 @@ export class CrowdGenerationPipeline {
     let overallAccuracy = 0;
     // Validate individual historical accuracy
     for (const individual of individuals) {
-      const individualValidation = await this.constraintValidator.validateIndividual(;)
+      const individualValidation = await this.constraintValidator.validateIndividual(;);
         individual,
         request.scene.era,
         request.constraints
@@ -353,7 +352,7 @@ export class CrowdGenerationPipeline {
     }
     // Validate group formations
     for (const group of groups) {
-      const groupValidation = await this.constraintValidator.validateGroup(;)
+      const groupValidation = await this.constraintValidator.validateGroup(;);
         group,
         individuals,
         request.scene.era,
@@ -363,7 +362,7 @@ export class CrowdGenerationPipeline {
     }
     // Validate interactions
     for (const interaction of interactions) {
-      const interactionValidation = await this.constraintValidator.validateInteraction(;)
+      const interactionValidation = await this.constraintValidator.validateInteraction(;);
         interaction,
         individuals,
         request.scene.era,
@@ -406,7 +405,7 @@ export class CrowdGenerationPipeline {
         renderComplexity: this.calculateRenderComplexity(request.crowd.size),
         memoryEstimate: this.estimateMemoryUsage(request.crowd.size),
         polyCount: request.crowd.size * 10000, // Estimated
-        textureSize: request.crowd.size * 2 // MB per individual
+        textureSize: request.crowd.size * 2 // MB per individual,
       }
     };
   }
@@ -434,7 +433,7 @@ export class CrowdGenerationPipeline {
       x: Math.random() * 100,
       y: 0,
       z: Math.random() * 100,
-      facing: Math.random() * 360
+      facing: Math.random() * 360,
     };
   }
   // Additional helper methods would be implemented here...

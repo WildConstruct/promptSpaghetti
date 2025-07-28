@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 interface EpicComponent {
   name: string;
   status: 'complete' | 'in_progress' | 'partial' | 'missing' | 'exists' | 'backend_ready' | 'unknown';
@@ -8,7 +7,6 @@ interface EpicComponent {
   task?: string;
   assignee?: string;
 }
-
 interface EpicData {
   name: string;
   icon: string;
@@ -28,13 +26,13 @@ const EPIC_ANALYSIS: Record<string, EpicData> = {
     businessValue: 'Advanced workflow capabilities for power users',
     overallProgress: 85,
     impact: 'HIGH',
-    components: [
+    components: [,
       { name: 'Runtime Implementation', status: 'complete', progress: 100, location: 'packages/core/runtime/nodes/' },
       { 
         name: 'GraphEditor Integration', 
         status: 'complete', 
         progress: 100, 
-        location: 'packages/core/GraphEditor.tsx:129-164' 
+        location: 'packages/core/GraphEditor.tsx:129-164' ,
       },
       { name: 'Palette Categories', status: 'complete', progress: 100, location: 'packages/core/Palette.tsx:100-109' },
       { name: 'Node Editors', status: 'missing', progress: 0, task: 'Create specialized editors for advanced nodes' },
@@ -48,7 +46,7 @@ const EPIC_ANALYSIS: Record<string, EpicData> = {
     businessValue: 'Users can export graphs for presentations and documentation',
     overallProgress: 75,
     impact: 'MEDIUM-HIGH',
-    components: [
+    components: [,
       { name: 'GeneratorBundle Exporter', status: 'complete', progress: 100, location: 'server/src/exporter.ts' },
       { name: 'Export Handler UI', status: 'complete', progress: 100, location: 'packages/core/GraphEditor.tsx:461-514' },
       { name: 'Server Routes', status: 'complete', progress: 100, location: 'server/src/index.ts:1619-1690' },
@@ -63,7 +61,7 @@ const EPIC_ANALYSIS: Record<string, EpicData> = {
     businessValue: 'Users can run Python transformations in their graphs',
     overallProgress: 80,
     impact: 'MEDIUM',
-    components: [
+    components: [,
       { name: 'PythonTransform Node', status: 'complete', progress: 100, location: 'packages/core/runtime/nodes/PythonTransform.ts' },
       { name: 'GraphEditor Integration', status: 'complete', progress: 100, location: 'packages/core/GraphEditor.tsx:158-164' },
       { name: 'Server Engine Support', status: 'partial', progress: 50, task: 'Enable Python imports in server/src/engine.ts' },
@@ -78,7 +76,7 @@ const EPIC_ANALYSIS: Record<string, EpicData> = {
     businessValue: 'Users can create accounts and access personal features',
     overallProgress: 85,
     impact: 'CRITICAL',
-    components: [
+    components: [,
       { name: 'React Router Setup', status: 'complete', progress: 100, location: 'client/src/App.tsx' },
       { name: 'Auth Pages & Routes', status: 'complete', progress: 100, location: 'LoginPage, RegistrationPage, etc.' },
       { name: 'Protected Routes', status: 'complete', progress: 100, location: 'PrivateRoute component' },
@@ -95,7 +93,7 @@ const EPIC_ANALYSIS: Record<string, EpicData> = {
     businessValue: 'Users can save their work and not lose projects',
     overallProgress: 60,
     impact: 'CRITICAL',
-    components: [
+    components: [,
       { name: 'Project Dialogs UI', status: 'complete', progress: 100, location: 'packages/core/GraphEditor.tsx:647-657' },
       { name: 'Graph Store Management', status: 'complete', progress: 100, location: 'packages/core/graphStore.ts' },
       { name: 'Export Infrastructure', status: 'complete', progress: 100, location: 'server/src/exporter.ts' },
@@ -106,10 +104,8 @@ const EPIC_ANALYSIS: Record<string, EpicData> = {
     ]
   }
 };
-
 const EpicDashboard: React.FC = () => {
   const [showDetails, setShowDetails] = useState(false);
-
   const getStatusIcon = (status: string): string => {
     switch (status) {
     case 'complete': return '✅';
@@ -122,38 +118,34 @@ const EpicDashboard: React.FC = () => {
     default: return '📋';
     }
   };
-
   const getProgressBarColor = (progress: number): string => {
     if (progress >= 80) return '#10b981'; // green
     if (progress >= 60) return '#f59e0b'; // yellow
     return '#ef4444'; // red
   };
-
   const getImpactColor = (impact: string): string => {
     if (impact.includes('CRITICAL')) return '#ef4444';
     if (impact.includes('HIGH')) return '#8b5cf6';
     if (impact.includes('MEDIUM')) return '#f59e0b';
     return '#6b7280';
   };
-
   // Calculate overview metrics
   const epics = Object.values(EPIC_ANALYSIS);
   const averageProgress = Math.round(epics.reduce((sum, epic) => sum + epic.overallProgress, 0) / epics.length);
   const criticalEpics = epics.filter(epic => epic.impact.includes('CRITICAL'));
-  const criticalProgress = criticalEpics.length > 0 ? 
+  const criticalProgress = criticalEpics.length > 0 ? ;
     Math.round(criticalEpics.reduce((sum, epic) => sum + epic.overallProgress, 0) / criticalEpics.length) : 0;
   const quickWinsCount = epics.reduce((count, epic) => {
-    return count + epic.components.filter(component => 
+    return count + epic.components.filter(component => )
       component.status === 'missing' || component.status === 'partial'
     ).length;
   }, 0);
-
-  return (
+  return ()
     <div style={{ 
       padding: '20px', 
       height: '100%', 
       overflow: 'auto',
-      backgroundColor: '#f8f9fa'
+      backgroundColor: '#f8f9fa',
     }}>
       {/* Header */}
       <div style={{ 
@@ -162,18 +154,17 @@ const EpicDashboard: React.FC = () => {
         padding: '30px',
         marginBottom: '20px',
         color: 'white',
-        textAlign: 'center'
+        textAlign: 'center',
       }}>
         <h1 style={{ margin: '0 0 10px 0', fontSize: '2rem' }}>🎯 Epic Integration Status</h1>
         <p style={{ margin: 0, opacity: 0.9 }}>Ready-to-deliver features with massive business value</p>
       </div>
-
       {/* Overview Stats */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
         gap: '15px',
-        marginBottom: '25px'
+        marginBottom: '25px',
       }}>
         <div style={{
           background: 'white',
@@ -181,49 +172,46 @@ const EpicDashboard: React.FC = () => {
           padding: '20px',
           textAlign: 'center',
           boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-          border: '1px solid #e5e7eb'
+          border: '1px solid #e5e7eb',
         }}>
           <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#10b981', marginBottom: '5px' }}>
             {averageProgress}%
           </div>
           <div style={{ color: '#6b7280', fontSize: '0.9rem' }}>Average Epic Completion</div>
         </div>
-        
         <div style={{
           background: 'white',
           borderRadius: '8px',
           padding: '20px',
           textAlign: 'center',
           boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-          border: '1px solid #e5e7eb'
+          border: '1px solid #e5e7eb',
         }}>
           <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#ef4444', marginBottom: '5px' }}>
             {criticalProgress}%
           </div>
           <div style={{ color: '#6b7280', fontSize: '0.9rem' }}>Critical Systems</div>
         </div>
-        
         <div style={{
           background: 'white',
           borderRadius: '8px',
           padding: '20px',
           textAlign: 'center',
           boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-          border: '1px solid #e5e7eb'
+          border: '1px solid #e5e7eb',
         }}>
           <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#f59e0b', marginBottom: '5px' }}>
             {quickWinsCount}
           </div>
           <div style={{ color: '#6b7280', fontSize: '0.9rem' }}>Quick Wins Available</div>
         </div>
-        
         <div style={{
           background: 'white',
           borderRadius: '8px',
           padding: '20px',
           textAlign: 'center',
           boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-          border: '1px solid #e5e7eb'
+          border: '1px solid #e5e7eb',
         }}>
           <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#8b5cf6', marginBottom: '5px' }}>
             6+
@@ -231,7 +219,6 @@ const EpicDashboard: React.FC = () => {
           <div style={{ color: '#6b7280', fontSize: '0.9rem' }}>Months of Work Ready</div>
         </div>
       </div>
-
       {/* Toggle Details Button */}
       <div style={{ textAlign: 'center', marginBottom: '20px' }}>
         <button
@@ -244,24 +231,23 @@ const EpicDashboard: React.FC = () => {
             borderRadius: '6px',
             cursor: 'pointer',
             fontSize: '1rem',
-            fontWeight: '500'
+            fontWeight: '500',
           }}
         >
           {showDetails ? 'Hide Details ▲' : 'Show Details ▼'}
         </button>
       </div>
-
       {/* Epic Details */}
-      {showDetails && (
+      {showDetails && ()
         <>
           {/* Epic Cards Grid */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
             gap: '20px',
-            marginBottom: '30px'
+            marginBottom: '30px',
           }}>
-            {Object.entries(EPIC_ANALYSIS).map(([key, epic]) => (
+            {Object.entries(EPIC_ANALYSIS).map(([key, epic]) => ()
               <div
                 key={key}
                 style={{
@@ -285,27 +271,25 @@ const EpicDashboard: React.FC = () => {
                   display: 'flex', 
                   alignItems: 'center', 
                   gap: '12px', 
-                  marginBottom: '15px' 
+                  marginBottom: '15px' ,
                 }}>
                   <span style={{ fontSize: '1.5rem' }}>{epic.icon}</span>
                   <h3 style={{ margin: 0, color: '#1f2937', fontSize: '1.2rem' }}>{epic.name}</h3>
                 </div>
-                
                 <p style={{ 
                   color: '#6b7280', 
                   fontSize: '0.95rem', 
                   lineHeight: '1.5',
-                  marginBottom: '15px' 
+                  marginBottom: '15px' ,
                 }}>
                   {epic.description}
                 </p>
-                
                 {/* Progress Bar */}
                 <div style={{ marginBottom: '20px' }}>
                   <div style={{ 
                     display: 'flex', 
                     justifyContent: 'space-between',
-                    marginBottom: '8px'
+                    marginBottom: '8px',
                   }}>
                     <span style={{ fontSize: '0.9rem', color: '#4b5563' }}>Progress</span>
                     <span style={{ fontSize: '0.9rem', color: '#4b5563', fontWeight: '600' }}>
@@ -317,20 +301,19 @@ const EpicDashboard: React.FC = () => {
                     height: '8px',
                     backgroundColor: '#e5e7eb',
                     borderRadius: '4px',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
                   }}>
                     <div style={{
-                      width: `${epic.overallProgress}%`,
+                      width: `${epic.overallProgress}%`,}
                       height: '100%',
                       backgroundColor: getProgressBarColor(epic.overallProgress),
-                      transition: 'width 0.5s ease-in-out'
+                      transition: 'width 0.5s ease-in-out',
                     }} />
                   </div>
                 </div>
-
                 {/* Components */}
                 <div style={{ marginBottom: '15px' }}>
-                  {epic.components.map((component, index) => (
+                  {epic.components.map((component, index) => ()
                     <div
                       key={index}
                       style={{
@@ -339,7 +322,7 @@ const EpicDashboard: React.FC = () => {
                         gap: '10px',
                         marginBottom: '8px',
                         fontSize: '0.9rem',
-                        color: '#4b5563'
+                        color: '#4b5563',
                       }}
                     >
                       <span style={{ fontSize: '1rem' }}>
@@ -349,17 +332,15 @@ const EpicDashboard: React.FC = () => {
                     </div>
                   ))}
                 </div>
-
                 {/* Business Value */}
                 <div style={{
                   paddingTop: '15px',
                   borderTop: '1px solid #e5e7eb',
                   fontSize: '0.85rem',
-                  color: '#6b7280'
+                  color: '#6b7280',
                 }}>
                   <strong>Business Value:</strong> {epic.businessValue}
                 </div>
-                
                 {/* Impact Badge */}
                 <div style={{ 
                   marginTop: '10px',
@@ -370,21 +351,20 @@ const EpicDashboard: React.FC = () => {
                   borderRadius: '12px',
                   fontSize: '0.75rem',
                   fontWeight: '600',
-                  border: `1px solid ${getImpactColor(epic.impact)}40`
+                  border: `1px solid ${getImpactColor(epic.impact)}40`}
                 }}>
                   {epic.impact} IMPACT
                 </div>
               </div>
             ))}
           </div>
-
           {/* Quick Actions */}
           <div style={{
             background: 'white',
             borderRadius: '12px',
             padding: '25px',
             boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-            border: '1px solid #e5e7eb'
+            border: '1px solid #e5e7eb',
           }}>
             <h3 style={{ 
               marginTop: 0, 
@@ -392,18 +372,17 @@ const EpicDashboard: React.FC = () => {
               color: '#1f2937',
               display: 'flex',
               alignItems: 'center',
-              gap: '10px'
+              gap: '10px',
             }}>
               ⚡ Immediate Actions
             </h3>
-            
             <div style={{ display: 'grid', gap: '12px' }}>
               {[
                 { icon: '🔐', text: 'Complete auth store: Work on AUTH-985113-F18F', time: 'In Progress', isInProgress: true },
                 { icon: '📁', text: 'Create project API: PROJECT-API-* task available', time: '3-4h' },
                 { icon: '🎨', text: 'Update palette categories: Add advanced/transform', time: '15min' },
                 { icon: '📤', text: 'Enhance export dialog: Format selection', time: '2-3h' }
-              ].map((action, index) => (
+              ].map((action, index) => ()
                 <div
                   key={index}
                   style={{
@@ -414,7 +393,7 @@ const EpicDashboard: React.FC = () => {
                     padding: '15px',
                     backgroundColor: '#f8f9fa',
                     borderRadius: '8px',
-                    border: '1px solid #e5e7eb'
+                    border: '1px solid #e5e7eb',
                   }}
                 >
                   <span style={{ fontSize: '1.2rem', textAlign: 'center' }}>
@@ -429,7 +408,7 @@ const EpicDashboard: React.FC = () => {
                     padding: '4px 8px',
                     borderRadius: '4px',
                     backgroundColor: action.isInProgress ? '#3b82f6' : '#10b981',
-                    color: 'white'
+                    color: 'white',
                   }}>
                     {action.time}
                   </span>
@@ -439,7 +418,6 @@ const EpicDashboard: React.FC = () => {
           </div>
         </>
       )}
-
       {/* Bottom Summary */}
       <div style={{
         marginTop: '30px',
@@ -447,7 +425,7 @@ const EpicDashboard: React.FC = () => {
         padding: '20px',
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         borderRadius: '12px',
-        color: 'white'
+        color: 'white',
       }}>
         <h3 style={{ margin: '0 0 10px 0' }}>🚀 Business Impact Summary</h3>
         <p style={{ margin: 0, fontSize: '1.1rem', opacity: 0.9 }}>

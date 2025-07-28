@@ -173,7 +173,7 @@ export const ExperimentResults: React.FC<ExperimentResultsProps> = ({)
     const [lower, upper] = ci;
     return `[${formatMetricValue(lower, metricType)}, ${formatMetricValue(upper, metricType)}]`;}
   }, [formatMetricValue]);
-  return ()
+  return ();
     <div className={`experiment-results ${className}`}>}
       {/* Header */}
       <div className="results-header">
@@ -393,7 +393,7 @@ export const ExperimentResults: React.FC<ExperimentResultsProps> = ({)
                       const improvement = controlMetricResult && metricResult && variant.variantId !== controlVariant.variantId;
                         ? ((metricResult.value - controlMetricResult.value) / controlMetricResult.value) * 100
                         : null;
-                      return ()
+                      return ();
                         <tr key={variant.variantId} className="border-b">
                           <td className="p-2">
                             <div className="flex items-center space-x-2">

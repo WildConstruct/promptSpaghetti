@@ -11,7 +11,7 @@ jest.mock('../utils/projectSerialization', () => ({)
 
 // Mock the graph store
 const mockUseGraphStore = {
-  getState: jest.fn(() => ({)
+  getState: jest.fn(() => ({),
     setCurrentProject: jest.fn<unknown[], unknown>(),
     updateProjectSettings: jest.fn<unknown[], unknown>(),
     markProjectSaved: jest.fn<unknown[], unknown>()
@@ -153,7 +153,7 @@ describe('Drag and Drop PSG Files', () => {
     };
     const mockFailureResult = {
       success: false,
-      error: 'Invalid JSON format'
+      error: 'Invalid JSON format',
     };
     mockDeserializeProject.mockReturnValue(mockFailureResult as unknown);
     const event = {

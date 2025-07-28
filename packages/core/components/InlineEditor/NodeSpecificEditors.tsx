@@ -42,7 +42,7 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({)
     if (totalWeight === 0) return;
     const normalizedChoices = choices.map(choice => ({)
       ...choice,
-      weight: Math.round((choice.weight / totalWeight) * 100)
+      weight: Math.round((choice.weight / totalWeight) * 100),
     }));
     onChange('choices', normalizedChoices);
   }, [choices, onChange]);
@@ -79,7 +79,7 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({)
     }
   };
   const colors = getThemeColors();
-  return ()
+  return ();
     <div>
       <div style={{ 
         display: 'flex', 
@@ -233,13 +233,13 @@ export const WeightedChoiceEditor: React.FC<NodeEditorProps> = ({)
             {choices.map((choice, index) => {
               const totalWeight = choices.reduce((sum, c) => sum + (c.weight || 0), 0);
               const percentage = totalWeight > 0 ? (choice.weight / totalWeight) * 100 : 0;
-              return ()
+              return ();
                 <div
                   key={index}
                   style={{
                     width: `${percentage}%`,}
                     background: `hsl(${(index * 137.5) % 360}, 70%, 60%)`,}
-                    minWidth: percentage > 0 ? 2 : 0
+                    minWidth: percentage > 0 ? 2 : 0,
                   }}
                   title={`${choice.text}: ${choice.weight} (${percentage.toFixed(1)}%)`}
                 />
@@ -265,7 +265,7 @@ export const ConcatEditor: React.FC<NodeEditorProps> = ({)
   theme = 'cinema'
 }) => {
   const [previewMode, setPreviewMode] = useState<'edit' | 'preview'>('edit');
-  return ()
+  return ();
     <div>
       <div style={{ 
         display: 'flex', 
@@ -346,7 +346,7 @@ export const VariableEditor: React.FC<NodeEditorProps> = ({)
   theme = 'cinema'
 }) => {
   const [variableScope, setVariableScope] = useState<'local' | 'global'>('local');
-  return ()
+  return ();
     <div>
       <div style={{
         display: 'flex',
@@ -466,7 +466,7 @@ export const ConditionalEditor: React.FC<NodeEditorProps> = ({)
     { label: 'Number comparison', value: '{{number}} > 0' },
     { label: 'Multiple conditions', value: '{{var1}} && {{var2}}' }
   ];
-  return ()
+  return ();
     <div>
       <div style={{
         display: 'flex',
@@ -600,7 +600,7 @@ export const OutputEditor: React.FC<NodeEditorProps> = ({)
     { value: 'html', label: 'HTML' },
     { value: 'csv', label: 'CSV' }
   ];
-  return ()
+  return ();
     <div>
       <div style={{ marginBottom: 12 }}>
         <label style={{ 

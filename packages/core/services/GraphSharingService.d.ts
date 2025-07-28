@@ -237,7 +237,7 @@ export declare class GraphSharingService {
     /**
      * Update sharing permissions
      */
-    updateSharingPermissions()
+    updateSharingPermissions();
       exportId: string,
       permissions: SharedGraphFormat['metadata']['sharing']['permissions'],
       collaborators?: SharedGraphFormat['metadata']['sharing']['collaborators']

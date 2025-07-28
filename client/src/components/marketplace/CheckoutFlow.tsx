@@ -16,7 +16,6 @@ import './CheckoutFlow.css';
 
 // Initialize Stripe
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
-
 interface CheckoutFlowProps {
   onBack: () => void;
   onSuccess: (orderId: string) => void;
@@ -24,7 +23,7 @@ interface CheckoutFlowProps {
 
 export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess }) => {
   const [currentStep, setCurrentStep] = useState<'billing' | 'payment' | 'confirmation'>('billing');
-  const [billingAddress, setBillingAddress] = useState<BillingAddress>({
+  const [billingAddress, setBillingAddress] = useState<BillingAddress>({)
     name: '',
     email: '',
     line1: '',
@@ -32,31 +31,27 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess })
     city: '',
     state: '',
     postal_code: '',
-    country: 'US'
+    country: 'US',
   });
   const [paymentIntent, setPaymentIntent] = useState<PaymentIntent | null>(null);
   const [errors] = useState<Record<string, string>>({});
   // const setErrors = useState(...)[1]; // TODO: Implement error handling
   const [processing, setProcessing] = useState(false);
-
   const { cart } = useMarketplace();
-
   const elementsOptions: StripeElementsOptions = {
-    appearance: {
+    appearance: {,
       theme: 'stripe',
-      variables: {
-        colorPrimary: '#3b82f6'
+      variables: {,
+        colorPrimary: '#3b82f6',
       }
     }
   };
-
-  const steps = [
+  const steps = [;
     { id: 'billing', title: 'Billing Address', completed: currentStep !== 'billing' },
     { id: 'payment', title: 'Payment', completed: currentStep === 'confirmation' },
     { id: 'confirmation', title: 'Confirmation', completed: false }
   ];
-
-  return (
+  return ()
     <div className="checkout-flow">
       {/* Header */}
       <div className="checkout-header">
@@ -64,23 +59,20 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess })
           <ArrowLeftIcon className="w-5 h-5" />
           Back to Cart
         </button>
-        
         <h1>Checkout</h1>
-        
         <div className="checkout-security">
           <LockClosedIcon className="w-4 h-4" />
           <span>Secure Checkout</span>
         </div>
       </div>
-
       {/* Progress Steps */}
       <div className="checkout-steps">
-        {steps.map((step, index) => (
-          <div key={step.id} className={`step ${step.completed ? 'completed' : ''} ${currentStep === step.id ? 'active' : ''}`}>
+        {steps.map((step, index) => ()
+          <div key={step.id} className={`step ${step.completed ? 'completed' : ''} ${currentStep === step.id ? 'active' : ''}`}>}
             <div className="step-indicator">
-              {step.completed ? (
+              {step.completed ? ()
                 <CheckCircleIcon className="w-5 h-5" />
-              ) : (
+              ) : ()
                 <span>{index + 1}</span>
               )}
             </div>
@@ -88,11 +80,10 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess })
           </div>
         ))}
       </div>
-
       {/* Content */}
       <div className="checkout-content">
         <div className="checkout-main">
-          {currentStep === 'billing' && (
+          {currentStep === 'billing' && ()
             <BillingAddressForm
               address={billingAddress}
               onChange={setBillingAddress}
@@ -100,8 +91,7 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess })
               onNext={() => setCurrentStep('payment')}
             />
           )}
-          
-          {currentStep === 'payment' && (
+          {currentStep === 'payment' && ()
             <Elements stripe={stripePromise} options={elementsOptions}>
               <PaymentForm
                 billingAddress={billingAddress}
@@ -115,8 +105,7 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess })
               />
             </Elements>
           )}
-          
-          {currentStep === 'confirmation' && (
+          {currentStep === 'confirmation' && ()
             <ConfirmationStep
               paymentIntent={paymentIntent}
               onBack={() => setCurrentStep('payment')}
@@ -124,7 +113,6 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess })
             />
           )}
         </div>
-
         {/* Order Summary Sidebar */}
         <OrderSummary cart={cart} />
       </div>
@@ -141,26 +129,22 @@ interface BillingAddressFormProps {
 }
 
 // eslint-disable-next-line react/prop-types
-const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
+const BillingAddressForm: React.FC<BillingAddressFormProps> = ({)
   address,
   onChange,
   errors: _, // eslint-disable-line @typescript-eslint/no-unused-vars
   onNext
 }) => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-
   const handleChange = (field: keyof BillingAddress, value: string) => {
     onChange({ ...address, [field]: value });
-    
     // Clear error when user starts typing
     if (formErrors[field]) {
       setFormErrors(prev => ({ ...prev, [field]: '' }));
     }
   };
-
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
-
     if (!address.name.trim()) newErrors.name = 'Name is required';
     if (!address.email.trim()) newErrors.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(address.email)) newErrors.email = 'Email is invalid';
@@ -168,25 +152,21 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
     if (!address.city.trim()) newErrors.city = 'City is required';
     if (!address.postal_code.trim()) newErrors.postal_code = 'Postal code is required';
     if (!address.country) newErrors.country = 'Country is required';
-
     setFormErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
       onNext();
     }
   };
-
-  return (
+  return ()
     <div className="billing-form">
       <h2>Billing Address</h2>
       <p className="form-description">
         We&apos;ll use this information for your receipt and tax calculations.
       </p>
-
       <form onSubmit={handleSubmit} className="form">
         <div className="form-row">
           <div className="form-group">
@@ -201,7 +181,6 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
             />
             {formErrors.name && <div className="error-message">{formErrors.name}</div>}
           </div>
-
           <div className="form-group">
             <label htmlFor="email">Email Address *</label>
             <input
@@ -215,7 +194,6 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
             {formErrors.email && <div className="error-message">{formErrors.email}</div>}
           </div>
         </div>
-
         <div className="form-group">
           <label htmlFor="line1">Address Line 1 *</label>
           <input
@@ -228,7 +206,6 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
           />
           {formErrors.line1 && <div className="error-message">{formErrors.line1}</div>}
         </div>
-
         <div className="form-group">
           <label htmlFor="line2">Address Line 2</label>
           <input
@@ -239,7 +216,6 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
             placeholder="Apartment, suite, etc. (optional)"
           />
         </div>
-
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="city">City *</label>
@@ -253,7 +229,6 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
             />
             {formErrors.city && <div className="error-message">{formErrors.city}</div>}
           </div>
-
           <div className="form-group">
             <label htmlFor="state">State/Province</label>
             <input
@@ -264,7 +239,6 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
               placeholder="NY"
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="postal_code">Postal Code *</label>
             <input
@@ -278,7 +252,6 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
             {formErrors.postal_code && <div className="error-message">{formErrors.postal_code}</div>}
           </div>
         </div>
-
         <div className="form-group">
           <label htmlFor="country">Country *</label>
           <select
@@ -298,7 +271,6 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
           </select>
           {formErrors.country && <div className="error-message">{formErrors.country}</div>}
         </div>
-
         <div className="form-group">
           <label htmlFor="tax_id">Tax ID (Optional)</label>
           <input
@@ -309,7 +281,6 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
             placeholder="For business purchases"
           />
         </div>
-
         <button type="submit" className="btn btn-primary">
           Continue to Payment
         </button>
@@ -329,8 +300,7 @@ interface PaymentFormProps {
   processing: boolean;
   setProcessing: (processing: boolean) => void;
 }
-
-const PaymentForm: React.FC<PaymentFormProps> = ({
+const PaymentForm: React.FC<PaymentFormProps> = ({)
   billingAddress,
   paymentIntent,
   onPaymentIntentCreated,
@@ -343,24 +313,20 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   const elements = useElements();
   const [error, setError] = useState<string>('');
   const [savePaymentMethod, setSavePaymentMethod] = useState(false);
-
   const { cart, createPaymentIntent, processPayment } = useMarketplace();
-
   useEffect(() => {
     if (!paymentIntent && cart && billingAddress.email) {
       handleCreatePaymentIntent();
     }
   }, [cart, billingAddress.email, paymentIntent, handleCreatePaymentIntent]);
-
   const handleCreatePaymentIntent = useCallback(async () => {
     if (!cart) return;
-
     try {
       setProcessing(true);
-      const intent = await createPaymentIntent({
+      const intent = await createPaymentIntent({)
         cart_id: cart.id,
         billing_address: billingAddress,
-        save_payment_method: savePaymentMethod
+        save_payment_method: savePaymentMethod,
       });
       onPaymentIntentCreated(intent);
     } catch (err) {
@@ -369,101 +335,88 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
       setProcessing(false);
     }
   }, [cart, createPaymentIntent, billingAddress, savePaymentMethod, onPaymentIntentCreated, setProcessing, setError]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!stripe || !elements || !paymentIntent) {
       setError('Payment system not ready');
       return;
     }
-
     const cardElement = elements.getElement(CardElement);
     if (!cardElement) {
       setError('Card element not found');
       return;
     }
-
     setProcessing(true);
     setError('');
-
     try {
       // Confirm payment with Stripe
-      const { error: stripeError } = await stripe.confirmCardPayment(
+      const { error: stripeError } = await stripe.confirmCardPayment()
         paymentIntent.client_secret!,
         {
-          payment_method: {
+          payment_method: {,
             card: cardElement,
-            billing_details: {
+            billing_details: {,
               name: billingAddress.name,
               email: billingAddress.email,
-              address: {
+              address: {,
                 line1: billingAddress.line1,
                 line2: billingAddress.line2 || undefined,
                 city: billingAddress.city,
                 state: billingAddress.state || undefined,
                 postal_code: billingAddress.postal_code,
-                country: billingAddress.country
+                country: billingAddress.country,
               }
             }
           }
         }
       );
-
       if (stripeError) {
         setError(stripeError.message || 'Payment failed');
         return;
       }
-
       // Process payment on our backend
-      const order = await processPayment({
-        payment_intent_id: paymentIntent.id
+      const order = await processPayment({)
+        payment_intent_id: paymentIntent.id,
       });
-
       onSuccess(order.id);
-
     } catch (err: Error) {
       setError(err.message || 'Payment processing failed');
     } finally {
       setProcessing(false);
     }
   };
-
-  return (
+  return ()
     <div className="payment-form">
       <h2>Payment Information</h2>
       <p className="form-description">
         Your payment is secured with 256-bit SSL encryption.
       </p>
-
-      {error && (
+      {error && ()
         <div className="error-alert">
           <ExclamationTriangleIcon className="w-5 h-5" />
           <span>{error}</span>
         </div>
       )}
-
       <form onSubmit={handleSubmit} className="form">
         <div className="card-element-container">
           <label>Card Information</label>
           <div className="card-element">
             <CardElement
               options={{
-                style: {
-                  base: {
+                style: {,
+                  base: {,
                     fontSize: '16px',
                     color: '#424770',
                     '::placeholder': {
-                      color: '#aab7c4'
+                      color: '#aab7c4',
                     }
                   }
                 },
-                hidePostalCode: true // We collect this separately
+                hidePostalCode: true // We collect this separately,
               }}
             />
           </div>
         </div>
-
         <div className="payment-options">
           <label className="checkbox-label">
             <input
@@ -474,12 +427,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             <span>Save payment method for future purchases</span>
           </label>
         </div>
-
         <div className="form-actions">
           <button type="button" onClick={onBack} className="btn btn-secondary">
             Back
           </button>
-          
           <button 
             type="submit" 
             className="btn btn-primary"
@@ -502,18 +453,17 @@ interface ConfirmationStepProps {
 }
 
 // eslint-disable-next-line react/prop-types
-const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
+const ConfirmationStep: React.FC<ConfirmationStepProps> = ({)
   paymentIntent: _paymentIntent, // eslint-disable-line @typescript-eslint/no-unused-vars
   onBack: _onBack, // eslint-disable-line @typescript-eslint/no-unused-vars
   onSuccess
 }) => {
-  return (
+  return ()
     <div className="confirmation-step">
       <h2>Confirm Your Order</h2>
       <p className="form-description">
         Please review your order details before completing your purchase.
       </p>
-
       {/* This would show order summary and final confirmation */}
       <div className="confirmation-content">
         <div className="success-icon">
@@ -521,7 +471,6 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
         </div>
         <h3>Order Confirmed!</h3>
         <p>Your purchase has been processed successfully.</p>
-        
         <button 
           onClick={() => onSuccess('order-id')} 
           className="btn btn-primary"
@@ -537,22 +486,18 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
 interface OrderSummaryProps {
   cart: unknown; // ShoppingCart type
 }
-
 const OrderSummary: React.FC<OrderSummaryProps> = ({ cart }) => {
   if (!cart || !cart.items || cart.items.length === 0) {
     return null;
   }
-
-  const subtotal = cart.items.reduce((sum: number, item: unknown) => 
+  const subtotal = cart.items.reduce((sum: number, item: unknown) => ;
     sum + (item.unit_price_cents * item.quantity), 0
   );
-
-  return (
+  return ()
     <div className="order-summary">
       <h3>Order Summary</h3>
-      
       <div className="summary-items">
-        {cart.items.map((item: unknown) => (
+        {cart.items.map((item: unknown) => ()
           <div key={item.id} className="summary-item">
             <div className="item-details">
               <div className="item-name">Template {item.template_id.slice(0, 8)}</div>
@@ -564,20 +509,17 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ cart }) => {
           </div>
         ))}
       </div>
-
       <div className="summary-totals">
         <div className="total-row">
           <span>Subtotal:</span>
           <PriceDisplay cents={subtotal} />
         </div>
-        
-        {cart.tax_cents > 0 && (
+        {cart.tax_cents > 0 && ()
           <div className="total-row">
             <span>Tax:</span>
             <PriceDisplay cents={cart.tax_cents} />
           </div>
         )}
-        
         <div className="total-row total-final">
           <span>Total:</span>
           <PriceDisplay cents={cart.total_cents || subtotal} />

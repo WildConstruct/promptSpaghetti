@@ -13,7 +13,7 @@ export type MFAMethodType =
 export const MFAMethodType = {
   TOTP: 'totp' as const,
   EMAIL: 'email' as const,
-  SMS: 'sms' as const
+  SMS: 'sms' as const,
 } as const;
 
 export type MFAMethodStatus = 
@@ -27,7 +27,7 @@ export const MFAMethodStatus = {
   PENDING: 'pending' as const,
   ACTIVE: 'active' as const,
   DISABLED: 'disabled' as const,
-  REVOKED: 'revoked' as const
+  REVOKED: 'revoked' as const,
 } as const;
 
 export type MFAVerificationResult = 
@@ -45,7 +45,7 @@ export const MFAVerificationResult = {
   EXPIRED: 'expired' as const,
   RATE_LIMITED: 'rate_limited' as const,
   METHOD_DISABLED: 'method_disabled' as const,
-  USER_LOCKED: 'user_locked' as const
+  USER_LOCKED: 'user_locked' as const,
 } as const;
 
 // Frontend-specific interfaces
@@ -117,7 +117,7 @@ export interface UserMFAProfile {
     methodType: MFAMethodType;
     timestamp: string;
   };
-  securityMetrics: {
+  securityMetrics: {,
     totalAttempts: number;
     successfulAttempts: number;
     failedAttempts: number;
@@ -125,7 +125,7 @@ export interface UserMFAProfile {
     accountLocked: boolean;
     lockedUntil?: string;
   };
-  preferences: {
+  preferences: {,
     defaultMethod: MFAMethodType;
     backupMethodEnabled: boolean;
     securityNotifications: boolean;

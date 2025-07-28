@@ -176,18 +176,18 @@ export const defaultEpic16Theme: Epic16ComponentTheme = {
   text: {,
     primary: '#1e293b', // slate-800
     secondary: '#64748b', // slate-500
-    disabled: '#94a3b8' // slate-400
+    disabled: '#94a3b8' // slate-400,
   },
   border: {,
     light: '#e2e8f0', // slate-200
     medium: '#cbd5e1', // slate-300
-    dark: '#94a3b8' // slate-400
+    dark: '#94a3b8' // slate-400,
   },
   state: {,
     success: '#10b981', // emerald-500
     warning: '#f59e0b', // amber-500
     error: '#ef4444', // red-500
-    info: '#3b82f6' // blue-500
+    info: '#3b82f6' // blue-500,
   }
 };
 
@@ -205,7 +205,7 @@ export const Epic16DesignTokens = {
     sm: '0.25rem', // 4px
     md: '0.375rem', // 6px
     lg: '0.5rem',   // 8px
-    xl: '0.75rem'  // 12px
+    xl: '0.75rem'  // 12px,
   },
   fontSize: {,
     xs: '0.75rem',   // 12px

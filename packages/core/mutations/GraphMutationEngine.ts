@@ -42,10 +42,9 @@ export class GraphMutationEngine extends EventEmitter {
   private currentState: GraphState;
   private isExecuting = false;
   private operationQueue: GraphOperation[] = [];
-  constructor()
+  constructor();
     private config: MutationEngineConfig,
     initialState?: GraphState
-  ) {
     super();
     this.history = new OperationHistory(config.historyLimit);
     this.validator = new GraphValidator(config.validation);
@@ -90,7 +89,7 @@ export class GraphMutationEngine extends EventEmitter {
         if (conflictResult.hasConflicts) {
           this.emit('conflict_detected', { )
             conflict: conflictResult.conflicts[0],
-            resolutionStrategy: conflictResult.resolutionStrategy || this.config.conflictResolution.strategy
+            resolutionStrategy: conflictResult.resolutionStrategy || this.config.conflictResolution.strategy,
           });
           if (this.config.conflictResolution.autoResolve) {
             const resolvedOperation = await this.handleConflicts(operation, conflictResult);
@@ -188,7 +187,7 @@ export class GraphMutationEngine extends EventEmitter {
               rollbackPerformed: true,
               error: `Batch operation failed at step ${i + 1}: ${result.error}`,}
               successCount: i,
-              failureCount: operations.length - i
+              failureCount: operations.length - i,
             };
           }
         }
@@ -198,7 +197,7 @@ export class GraphMutationEngine extends EventEmitter {
       this.emit('batch_executed', {)
         batchId,
         results,
-        success: failureCount === 0
+        success: failureCount === 0,
       });
       return {
         success: failureCount === 0,
@@ -341,7 +340,7 @@ export class GraphMutationEngine extends EventEmitter {
         success: true,
         operation,
         snapshot,
-        executionTime: Date.now() - operation.timestamp.getTime()
+        executionTime: Date.now() - operation.timestamp.getTime(),
       };
     } catch (error) {
       // Restore previous state on error
@@ -409,10 +408,10 @@ export class GraphMutationEngine extends EventEmitter {
       success: false,
       operation,
       error: errors.join(', '),
-      validationErrors: errors.map(error => ({)
+      validationErrors: errors.map(error => ({),
         type: 'VALIDATION_ERROR',
         message: error,
-        severity: 'error' as const
+        severity: 'error' as const,
       }))
     };
   }
@@ -427,7 +426,7 @@ export class GraphMutationEngine extends EventEmitter {
     return {
       success: false,
       operation,
-      error: 'Operation queued for execution'
+      error: 'Operation queued for execution',
     };
   }
   private createConflictResult()
@@ -438,7 +437,7 @@ export class GraphMutationEngine extends EventEmitter {
       success: false,
       operation,
       error: 'Operation conflicts detected',
-      warnings: conflictResult.conflicts.map(c => c.conflictType)
+      warnings: conflictResult.conflicts.map(c => c.conflictType),
     };
   }
   private setupEventForwarding(): void {

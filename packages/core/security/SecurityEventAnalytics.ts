@@ -214,7 +214,7 @@ export class SecurityEventAnalytics extends EventEmitter {
   public getSecurityInsights()
     category?: ThreatCategory,
     severity?: RiskLevel,
-    limit: number = 50
+    limit: number = 50,
   ): SecurityInsight[] {
     let insights = this.insights;
     if (category) {
@@ -245,14 +245,13 @@ export class SecurityEventAnalytics extends EventEmitter {
     currentRisk: number;
     recentAnomalies: Array<{ type: string; severity: RiskLevel; timestamp: Date }>;
     recommendations: string[];
-  } {
     const baseline = this.baselines.get(userId);
     if (!baseline) {
       return {
         baseline: null,
         currentRisk: 0,
         recentAnomalies: [],
-        recommendations: ['Insufficient data for behavioral analysis']
+        recommendations: ['Insufficient data for behavioral analysis'],
       };
     }
     // Calculate current risk based on recent activity
@@ -278,7 +277,6 @@ export class SecurityEventAnalytics extends EventEmitter {
     recommendations: Array<{ priority: string; action: string; timeline: string }>;
     complianceStatus: Record<ComplianceFramework, string>;
     riskTrend: Array<{ date: Date; riskScore: number }>;
-  } {
     const summary = this.getLatestSecuritySummary();
     const topPatterns = this.getSecurityPatterns().slice(0, 5);
     const criticalInsights = this.getSecurityInsights(undefined, RiskLevel.CRITICAL);
@@ -292,10 +290,10 @@ export class SecurityEventAnalytics extends EventEmitter {
         'Security Posture Score': summary?.systemHealth.securityPosture || 0,
         'Compliance Score': summary?.systemHealth.complianceScore || 0
       },
-      topThreats: topPatterns.map(pattern => ({)
+      topThreats: topPatterns.map(pattern => ({),
         threat: pattern.name,
         impact: this.formatRiskLevel(pattern.riskScore),
-        status: pattern.occurrences > 5 ? 'Active' : 'Monitoring'
+        status: pattern.occurrences > 5 ? 'Active' : 'Monitoring',
       })),
       recommendations: this.generateExecutiveRecommendations(summary, criticalInsights),
       complianceStatus: this.getComplianceStatus(),
@@ -331,7 +329,7 @@ export class SecurityEventAnalytics extends EventEmitter {
     riskScore += patternImpact;
     contributors.push({ factor: 'Detected Threat Patterns', impact: patternImpact });
     // Anomalous user behavior
-    const anomalousUsers = Array.from(this.baselines.values()).filter(;)
+    const anomalousUsers = Array.from(this.baselines.values()).filter(;);
       baseline => baseline.riskProfile.recentDeviations > 3
     ).length;
     const behaviorImpact = anomalousUsers * 3;
@@ -374,7 +372,7 @@ export class SecurityEventAnalytics extends EventEmitter {
   }
   private async analyzeThreatLandscape(logs: SecurityLogEntry[]): Promise<SecurityMetricsSummary['threatLandscape']> {
     const activeThreats = this.patterns.size;
-    const newPatterns = Array.from(this.patterns.values()).filter(;)
+    const newPatterns = Array.from(this.patterns.values()).filter(;);
       pattern => pattern.firstSeen.getTime() > Date.now() - 24 * 60 * 60 * 1000
     ).length;
     // Categorize threats
@@ -447,7 +445,7 @@ export class SecurityEventAnalytics extends EventEmitter {
     // Vulnerability exposure (simplified metric)
     const vulnerabilityExposure = Math.min(100, this.patterns.size * 5);
     // Compliance score
-    const complianceEvents = logs.filter(log => ;)
+    const complianceEvents = logs.filter(log => ;);
       log.compliance.frameworks.length > 0
     ).length;
     const complianceScore = Math.min(100, (complianceEvents / Math.max(1, logs.length)) * 100);
@@ -468,7 +466,7 @@ export class SecurityEventAnalytics extends EventEmitter {
     await this.detectInsiderThreatPatterns(logs);
   }
   private async detectBruteForcePatterns(logs: SecurityLogEntry[]): Promise<void> {
-    const failedLogins = logs.filter(log => ;)
+    const failedLogins = logs.filter(log => ;);
       log.eventType === SecurityEventType.ACCOUNT_LOCKED &&
       log.details.reason === 'EXCESSIVE_FAILED_ATTEMPTS'
     );
@@ -502,7 +500,7 @@ export class SecurityEventAnalytics extends EventEmitter {
   private async detectPrivilegeEscalationPatterns(logs: SecurityLogEntry[]): Promise<void> {
     // Look for admin actions by non-admin users or unusual admin activity
     const adminActions = logs.filter(log => log.actor.type === 'admin');
-    const suspiciousActions = adminActions.filter(log => ;)
+    const suspiciousActions = adminActions.filter(log => ;);
       log.eventType === SecurityEventType.EMERGENCY_UNLOCK ||
       log.eventType === SecurityEventType.ADMIN_OVERRIDE
     );
@@ -535,7 +533,7 @@ export class SecurityEventAnalytics extends EventEmitter {
   }
   private async detectDataExfiltrationPatterns(logs: SecurityLogEntry[]): Promise<void> {
     // Look for patterns indicating potential data exfiltration
-    const dataAccessEvents = logs.filter(log => ;)
+    const dataAccessEvents = logs.filter(log => ;);
       log.eventType === SecurityEventType.AUDIT_LOG_ACCESS ||
       log.context.threatContext?.attackVector === 'data_access'
     );
@@ -630,10 +628,10 @@ export class SecurityEventAnalytics extends EventEmitter {
   }
   private async generateTrendInsights(logs: SecurityLogEntry[]): Promise<void> {
     // Analyze trends in security events
-    const recentLogs = logs.filter(log => ;)
+    const recentLogs = logs.filter(log => ;);
       log.timestamp.getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000
     );
-    const olderLogs = logs.filter(log => ;)
+    const olderLogs = logs.filter(log => ;);
       log.timestamp.getTime() <= Date.now() - 7 * 24 * 60 * 60 * 1000 &&
       log.timestamp.getTime() > Date.now() - 14 * 24 * 60 * 60 * 1000
     );
@@ -652,7 +650,7 @@ export class SecurityEventAnalytics extends EventEmitter {
         impact: percentChange > 50 ? 'high' : 'medium',
         timeframe: {,
           start: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-          end: new Date()
+          end: new Date(),
         },
         evidence: {,
           eventIds: recentLogs.slice(0, 10).map(log => log.id),
@@ -664,13 +662,13 @@ export class SecurityEventAnalytics extends EventEmitter {
           }
         },
         recommendations: {,
-          immediate: percentChange > 0 ? 
+          immediate: percentChange > 0 ? ,
             ['Review recent security events', 'Check for ongoing attacks'] :
             ['Validate security monitoring is functioning', 'Review detection coverage'],
           shortTerm: ['Analyze event patterns', 'Update security baselines'],
           longTerm: ['Implement predictive analytics', 'Enhance threat detection']
         },
-        generatedAt: new Date()
+        generatedAt: new Date(),
       };
       this.insights.push(insight);
     }
@@ -683,7 +681,7 @@ export class SecurityEventAnalytics extends EventEmitter {
       hourlyActivity[hour]++;
     });
     const avgActivity = hourlyActivity.reduce((sum, count) => sum + count, 0) / 24;
-    const stdDev = Math.sqrt(;)
+    const stdDev = Math.sqrt(;);
       hourlyActivity.reduce((sum, count) => sum + Math.pow(count - avgActivity, 2), 0) / 24
     );
     hourlyActivity.forEach((count, hour) => {
@@ -699,7 +697,7 @@ export class SecurityEventAnalytics extends EventEmitter {
           impact: 'medium',
           timeframe: {,
             start: new Date(Date.now() - 24 * 60 * 60 * 1000),
-            end: new Date()
+            end: new Date(),
           },
           evidence: {,
             eventIds: logs.filter(log => log.timestamp.getHours() === hour).slice(0, 5).map(log => log.id),
@@ -707,7 +705,7 @@ export class SecurityEventAnalytics extends EventEmitter {
             metrics: {,
               hourlyCount: count,
               averageCount: avgActivity,
-              deviationLevel: (count - avgActivity) / stdDev
+              deviationLevel: (count - avgActivity) / stdDev,
             }
           },
           recommendations: {,
@@ -715,7 +713,7 @@ export class SecurityEventAnalytics extends EventEmitter {
             shortTerm: ['Review access patterns', 'Update alerting thresholds'],
             longTerm: ['Implement behavioral analytics', 'Enhance anomaly detection']
           },
-          generatedAt: new Date()
+          generatedAt: new Date(),
         };
         this.insights.push(insight);
       }
@@ -724,7 +722,7 @@ export class SecurityEventAnalytics extends EventEmitter {
   private async generatePredictiveInsights(logs: SecurityLogEntry[]): Promise<void> {
     // Generate predictive insights based on patterns
     const patterns = Array.from(this.patterns.values());
-    const growingPatterns = patterns.filter(pattern => ;)
+    const growingPatterns = patterns.filter(pattern => ;);
       pattern.occurrences > 5 && pattern.riskScore > 50
     );
     growingPatterns.forEach(pattern => {)
@@ -739,7 +737,7 @@ export class SecurityEventAnalytics extends EventEmitter {
         impact: pattern.riskScore > 80 ? 'critical' : 'high',
         timeframe: {,
           start: pattern.firstSeen,
-          end: new Date()
+          end: new Date(),
         },
         evidence: {,
           eventIds: pattern.relatedEvents.slice(-5),
@@ -755,7 +753,7 @@ export class SecurityEventAnalytics extends EventEmitter {
           shortTerm: pattern.mitigationStrategies.slice(2),
           longTerm: ['Implement advanced threat detection', 'Enhance security monitoring']
         },
-        generatedAt: new Date()
+        generatedAt: new Date(),
       };
       this.insights.push(insight);
     });
@@ -776,7 +774,7 @@ export class SecurityEventAnalytics extends EventEmitter {
         impact: 'critical',
         timeframe: {,
           start: new Date(Date.now() - 24 * 60 * 60 * 1000),
-          end: new Date()
+          end: new Date(),
         },
         evidence: {,
           eventIds: logs.filter(log => log.severity === 'critical').map(log => log.id),
@@ -800,7 +798,7 @@ export class SecurityEventAnalytics extends EventEmitter {
             'Regular security reviews'
           ]
         },
-        generatedAt: new Date()
+        generatedAt: new Date(),
       };
       this.insights.push(insight);
     }
@@ -898,13 +896,13 @@ export class SecurityEventAnalytics extends EventEmitter {
       recommendations.push({)
         priority: 'High',
         action: 'Improve security posture through enhanced controls',
-        timeline: '30 days'
+        timeline: '30 days',
       });
     }
     recommendations.push({)
       priority: 'Medium',
       action: 'Implement continuous security monitoring enhancements',
-      timeline: '90 days'
+      timeline: '90 days',
     });
     return recommendations;
   }
@@ -962,7 +960,7 @@ export class SecurityEventAnalytics extends EventEmitter {
             recentDeviations: 0,
             trustedScore: 50,
           },
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         };
       }
       // Update patterns based on recent activity
@@ -983,7 +981,7 @@ export class SecurityEventAnalytics extends EventEmitter {
       }
       // Update IP addresses
       if (activity.context.ipAddress) {
-        const existingIp = baseline.normalPatterns.ipAddresses.find(;)
+        const existingIp = baseline.normalPatterns.ipAddresses.find(;);
           ip => ip.ip === activity.context.ipAddress
         );
         if (existingIp) {
@@ -1011,7 +1009,7 @@ export class SecurityEventAnalytics extends EventEmitter {
         deviations++; // Unusual time
       }
       if (activity.context.ipAddress) {
-        const normalIp = baseline.normalPatterns.ipAddresses.find(;)
+        const normalIp = baseline.normalPatterns.ipAddresses.find(;);
           ip => ip.ip === activity.context.ipAddress
         );
         if (!normalIp || normalIp.frequency < 3) {
@@ -1045,7 +1043,7 @@ export class SecurityEventAnalytics extends EventEmitter {
       description: 'Alert when critical security events are detected',
       conditions: {,
         thresholds: { critical_events: 3 },
-        timeWindow: 60 // 1 hour
+        timeWindow: 60 // 1 hour,
       },
       actions: {,
         notify: ['security-team@company.com'],

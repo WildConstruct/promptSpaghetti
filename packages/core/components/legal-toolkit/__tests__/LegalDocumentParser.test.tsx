@@ -16,7 +16,7 @@ import { LegalDocument } from '../types';
 
 // Mock File for testing
 const createMockFile = (name: string, size: number, type: string, content?: string): File => {
-  const file = new File(;)
+  const file = new File(;);
     [content || 'mock file content'],
     name,
     { type }
@@ -31,7 +31,7 @@ describe('LegalDocumentParser Component', () => {
   });
   describe('Initial Rendering', () => {
     it('renders document parser interface', () => {
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract', 'policy', 'agreement']}
@@ -42,7 +42,7 @@ describe('LegalDocumentParser Component', () => {
       expect(screen.getByText(/Drag and drop/i)).toBeInTheDocument();
     });
     it('displays supported file types', () => {
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract', 'policy', 'regulation']}
@@ -54,7 +54,7 @@ describe('LegalDocumentParser Component', () => {
       expect(screen.getByText(/regulation/i)).toBeInTheDocument();
     });
     it('shows file size limits', () => {
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -64,7 +64,7 @@ describe('LegalDocumentParser Component', () => {
       expect(screen.getByText(/Maximum file size: 5 MB/i)).toBeInTheDocument();
     });
     it('shows default file size limit when not specified', () => {
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -76,7 +76,7 @@ describe('LegalDocumentParser Component', () => {
   describe('File Upload Interface', () => {
     it('opens file dialog when upload area is clicked', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract', 'policy']}
@@ -88,7 +88,7 @@ describe('LegalDocumentParser Component', () => {
       expect(screen.getByRole('button', { hidden: true })).toBeInTheDocument();
     });
     it('shows upload button', () => {
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -97,7 +97,7 @@ describe('LegalDocumentParser Component', () => {
       expect(screen.getByText(/Choose File/i)).toBeInTheDocument();
     });
     it('accepts multiple file formats', () => {
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -110,7 +110,7 @@ describe('LegalDocumentParser Component', () => {
   describe('File Upload and Validation', () => {
     it('validates file type before upload', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -124,7 +124,7 @@ describe('LegalDocumentParser Component', () => {
     });
     it('validates file size before upload', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -139,7 +139,7 @@ describe('LegalDocumentParser Component', () => {
     });
     it('accepts valid files', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -153,7 +153,7 @@ describe('LegalDocumentParser Component', () => {
     });
     it('shows upload progress', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -169,7 +169,7 @@ describe('LegalDocumentParser Component', () => {
   describe('Document Parsing Process', () => {
     it('shows parsing progress stages', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -188,7 +188,7 @@ describe('LegalDocumentParser Component', () => {
     });
     it('calls onDocumentParsed when parsing completes', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -220,7 +220,7 @@ describe('LegalDocumentParser Component', () => {
     });
     it('extracts document metadata correctly', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -246,7 +246,7 @@ describe('LegalDocumentParser Component', () => {
   describe('Document Preview', () => {
     it('shows document preview after parsing', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -262,7 +262,7 @@ describe('LegalDocumentParser Component', () => {
     });
     it('displays document metadata in preview', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -280,7 +280,7 @@ describe('LegalDocumentParser Component', () => {
     });
     it('shows extracted content preview', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -296,7 +296,7 @@ describe('LegalDocumentParser Component', () => {
     });
     it('allows editing document metadata', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -317,13 +317,13 @@ describe('LegalDocumentParser Component', () => {
   describe('Document Type Detection', () => {
     it('detects contract documents', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract', 'policy']}
         />
       );
-      const contractFile = createMockFile(;)
+      const contractFile = createMockFile(;);
         'service-contract.pdf', 
         1000, 
         'application/pdf', 
@@ -341,13 +341,13 @@ describe('LegalDocumentParser Component', () => {
     });
     it('detects policy documents', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract', 'policy']}
         />
       );
-      const policyFile = createMockFile(;)
+      const policyFile = createMockFile(;);
         'privacy-policy.pdf', 
         1000, 
         'application/pdf', 
@@ -365,13 +365,13 @@ describe('LegalDocumentParser Component', () => {
     });
     it('falls back to generic type when detection fails', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract', 'policy']}
         />
       );
-      const unknownFile = createMockFile(;)
+      const unknownFile = createMockFile(;);
         'unknown.pdf', 
         1000, 
         'application/pdf', 
@@ -391,7 +391,7 @@ describe('LegalDocumentParser Component', () => {
   describe('Error Handling', () => {
     it('handles parsing errors gracefully', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -408,7 +408,7 @@ describe('LegalDocumentParser Component', () => {
     });
     it('handles unsupported file formats', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -421,7 +421,7 @@ describe('LegalDocumentParser Component', () => {
     });
     it('shows retry option on parsing failure', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -439,7 +439,7 @@ describe('LegalDocumentParser Component', () => {
     });
     it('clears error state when new file is uploaded', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -461,7 +461,7 @@ describe('LegalDocumentParser Component', () => {
   });
   describe('Drag and Drop Support', () => {
     it('handles drag over events', async () => {
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -476,7 +476,7 @@ describe('LegalDocumentParser Component', () => {
       expect(dropZone).toHaveClass('drag-over');
     });
     it('handles file drop events', async () => {
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -494,7 +494,7 @@ describe('LegalDocumentParser Component', () => {
       });
     });
     it('provides visual feedback during drag operations', async () => {
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -509,7 +509,7 @@ describe('LegalDocumentParser Component', () => {
   });
   describe('Accessibility', () => {
     it('provides proper ARIA labels', () => {
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -520,7 +520,7 @@ describe('LegalDocumentParser Component', () => {
     });
     it('supports keyboard navigation', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}
@@ -531,7 +531,7 @@ describe('LegalDocumentParser Component', () => {
     });
     it('announces upload progress to screen readers', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <LegalDocumentParser
           onDocumentParsed={mockOnDocumentParsed}
           supportedTypes={['contract']}

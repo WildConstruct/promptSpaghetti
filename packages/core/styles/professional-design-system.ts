@@ -148,14 +148,14 @@ export const professionalColors: ProfessionalColorPalette = {
     secondary: '#2a2a2a',   // Panel backgrounds
     tertiary: '#353535',    // Elevated surfaces
     elevated: '#404040',    // Modal backgrounds
-    inverse: '#f5f5f5'     // Light surfaces
+    inverse: '#f5f5f5'     // Light surfaces,
   },
   text: {,
     primary: '#e8e8e8',     // Primary text - high contrast
     secondary: '#b8b8b8',   // Secondary text
     tertiary: '#888888',    // Disabled text
     inverse: '#1e1e1e',     // Text on light backgrounds
-    accent: '#ff7c00'      // Cinema 4D orange accent
+    accent: '#ff7c00'      // Cinema 4D orange accent,
   },
   accent: {,
     orange: '#ff7c00',      // Cinema 4D signature orange
@@ -164,7 +164,7 @@ export const professionalColors: ProfessionalColorPalette = {
     purple: '#b45cff',      // Advanced features purple
     green: '#4ade80',       // Success green
     red: '#ef4444',         // Error red
-    yellow: '#fbbf24'      // Warning yellow
+    yellow: '#fbbf24'      // Warning yellow,
   },
   nodes: {,
     text: '#4f46e5',        // Indigo for text nodes
@@ -172,7 +172,7 @@ export const professionalColors: ProfessionalColorPalette = {
     output: '#dc2626',      // Red for outputs
     variable: '#7c3aed',    // Purple for variables
     advanced: '#6366f1',    // Blue-violet for advanced
-    transform: '#f59e0b'   // Amber for transforms
+    transform: '#f59e0b'   // Amber for transforms,
   },
   ui: {,
     border: '#404040',      // Default borders
@@ -180,7 +180,7 @@ export const professionalColors: ProfessionalColorPalette = {
     borderActive: '#ff7c00', // Active borders (Cinema 4D orange)
     focus: '#4a9eff',       // Focus ring color
     selection: '#ff7c0040', // Selection highlight with opacity
-    hover: '#2d2d2d'       // Hover background
+    hover: '#2d2d2d'       // Hover background,
   }
 };
 

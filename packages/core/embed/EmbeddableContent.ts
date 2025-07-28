@@ -678,7 +678,7 @@ export class EmbeddableContent extends EventEmitter {
       this.analytics = new EmbedAnalytics({)
         embedId: config.id,
         trackingEnabled: true,
-        domain: window?.location?.hostname || 'unknown'
+        domain: window?.location?.hostname || 'unknown',
       });
     }
   }

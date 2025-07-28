@@ -122,7 +122,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
       type: activeAnnotationType,
       note: '',
       reviewer: 'current_admin', // Would come from auth context
-      timestamp: new Date()
+      timestamp: new Date(),
     };
     setAnnotations(prev => [...prev, newAnnotation]);
     setActiveAnnotationType(null);
@@ -173,7 +173,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
   };
   const renderDocumentViewer = () => {
     const DocumentIcon = getDocumentTypeIcon(currentDocument.type);
-    return ()
+    return ();
       <div className="document-viewer">
         <div className="viewer-toolbar">
           <div className="toolbar-left">
@@ -255,7 +255,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
       </div>
     );
   };
-  const renderAnnotationTools = () => (;)
+  const renderAnnotationTools = () => (;);
     <Card className="annotation-tools">
       <CardHeader>
         <CardTitle>Annotation Tools</CardTitle>
@@ -314,7 +314,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
       </CardContent>
     </Card>
   );
-  const renderDocumentMetadata = () => (;)
+  const renderDocumentMetadata = () => (;);
     <Card className="document-metadata">
       <CardHeader>
         <CardTitle>Document Information</CardTitle>
@@ -373,7 +373,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
       </CardContent>
     </Card>
   );
-  const renderReviewPanel = () => (;)
+  const renderReviewPanel = () => (;);
     <Card className="review-panel">
       <CardHeader>
         <CardTitle>Document Review</CardTitle>
@@ -433,7 +433,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
       </CardContent>
     </Card>
   );
-  const renderAnnotationsList = () => (;)
+  const renderAnnotationsList = () => (;);
     <Card className="annotations-list">
       <CardHeader>
         <CardTitle>Annotations ({annotations.length})</CardTitle>
@@ -469,7 +469,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
       </CardContent>
     </Card>
   );
-  return ()
+  return ();
     <div className={`document-review-interface ${className}`}>}
       <div className="interface-header">
         <Button onClick={onBack} variant="outline">

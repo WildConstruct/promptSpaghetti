@@ -6,7 +6,6 @@
  * 
  * Task: T-1752989143998-788 - Add report export options
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -60,22 +59,21 @@ interface ExportHistoryItem {
   deliveredAt?: string;
   error?: string;
   downloadUrl?: string;
-  metadata: {
+  metadata: {,
     recordCount: number;
     processingTime: number;
     compressionRatio?: number;
   };
 }
-
 interface ScheduledExport {
   id: string;
   name: string;
   description: string;
-  exportConfig: {
+  exportConfig: {,
     format: string;
     delivery: string;
   };
-  schedule: {
+  schedule: {,
     frequency: string;
     time: string;
     dayOfWeek?: number;
@@ -86,7 +84,6 @@ interface ScheduledExport {
   nextRun?: string;
   createdBy: string;
 }
-
 interface ExportStatistics {
   totalExports: number;
   successfulExports: number;
@@ -105,19 +102,17 @@ export const ExportHistoryPanel: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [formatFilter, setFormatFilter] = useState<string>('all');
   const [deliveryFilter, setDeliveryFilter] = useState<string>('all');
-
   // Load data on component mount
   useEffect(() => {
     loadExportData();
   }, [loadExportData]);
-
   const loadExportData = useCallback(async (): Promise<void> => {
     setIsLoading(true);
     try {
-      await Promise.all([
+      await Promise.all([)
         loadExportHistory(),
         loadScheduledExports(),
-        loadExportStatistics()
+        loadExportStatistics();
       ]);
     } catch (error: unknown) {
       console.error('Failed to load export data:', error);
@@ -125,10 +120,9 @@ export const ExportHistoryPanel: React.FC = () => {
       setIsLoading(false);
     }
   }, [loadExportHistory, loadScheduledExports, loadExportStatistics]);
-
   const loadExportHistory = useCallback(async (): Promise<void> => {
     try {
-      const response = await fetch(`/api/reports/history?limit=100&format=${formatFilter !== 'all' ? formatFilter : ''}&delivery=${deliveryFilter !== 'all' ? deliveryFilter : ''}`);
+      const response = await fetch(`/api/reports/history?limit=100&format=${formatFilter !== 'all' ? formatFilter : ''}&delivery=${deliveryFilter !== 'all' ? deliveryFilter : ''}`);}
       const data = await response.json();
       if (data.success) {
         setExportHistory(data.data);
@@ -137,7 +131,6 @@ export const ExportHistoryPanel: React.FC = () => {
       console.error('Failed to load export history:', error);
     }
   }, [formatFilter, deliveryFilter]);
-
   const loadScheduledExports = useCallback(async (): Promise<void> => {
     try {
       const response = await fetch('/api/reports/schedules');
@@ -149,7 +142,6 @@ export const ExportHistoryPanel: React.FC = () => {
       console.error('Failed to load scheduled exports:', error);
     }
   }, []);
-
   const loadExportStatistics = useCallback(async (): Promise<void> => {
     try {
       const response = await fetch('/api/reports/statistics');
@@ -161,12 +153,10 @@ export const ExportHistoryPanel: React.FC = () => {
       console.error('Failed to load export statistics:', error);
     }
   }, []);
-
   // Handle download
   const handleDownload = (downloadUrl: string) => {
     window.open(downloadUrl, '_blank');
   };
-
   // Handle scheduled export toggle
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const toggleScheduledExport = async (scheduleId: string, enabled: boolean): Promise<void> => {
@@ -178,12 +168,11 @@ export const ExportHistoryPanel: React.FC = () => {
       console.error('Failed to toggle scheduled export:', error);
     }
   };
-
   // Handle scheduled export deletion
   const deleteScheduledExport = async (scheduleId: string): Promise<void> => {
     try {
-      const response = await fetch(`/api/reports/schedules/${scheduleId}`, {
-        method: 'DELETE'
+      const response = await fetch(`/api/reports/schedules/${scheduleId}`, {)}
+        method: 'DELETE',
       });
       if (response.ok) {
         await loadScheduledExports();
@@ -192,22 +181,19 @@ export const ExportHistoryPanel: React.FC = () => {
       console.error('Failed to delete scheduled export:', error);
     }
   };
-
   // Filter export history based on search and filters
-  const filteredHistory = exportHistory.filter(item => {
-    const matchesSearch = item.filename.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredHistory = exportHistory.filter(item => {)
+    const matchesSearch = item.filename.toLowerCase().includes(searchTerm.toLowerCase()) ||;
                          item.id.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFormat = formatFilter === 'all' || item.format === formatFilter;
     const matchesDelivery = deliveryFilter === 'all' || item.delivery === deliveryFilter;
     return matchesSearch && matchesFormat && matchesDelivery;
   });
-
   // Get format icon
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getFormatIcon = (_format: string) => {
     return <FileText className="w-4 h-4" />;
   };
-
   // Get delivery icon
   const getDeliveryIcon = (delivery: string) => {
     switch (delivery) {
@@ -216,7 +202,6 @@ export const ExportHistoryPanel: React.FC = () => {
     default: return <Download className="w-4 h-4" />;
     }
   };
-
   // Get status badge
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getStatusBadge = (success: boolean, _error?: string) => {
@@ -226,7 +211,6 @@ export const ExportHistoryPanel: React.FC = () => {
       return <Badge variant="destructive"><XCircle className="w-3 h-3 mr-1" />Failed</Badge>;
     }
   };
-
   // Format file size
   const formatFileSize = (bytes: number) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -234,22 +218,19 @@ export const ExportHistoryPanel: React.FC = () => {
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
     return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
   };
-
   // Format date
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString() + ' ' + new Date(dateString).toLocaleTimeString();
   };
-
   // Get day name for weekly schedules
   const getDayName = (dayOfWeek: number) => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return days[dayOfWeek];
   };
-
-  return (
+  return ()
     <div className="space-y-6">
       {/* Statistics Overview */}
-      {statistics && (
+      {statistics && ()
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardContent className="p-4">
@@ -262,7 +243,6 @@ export const ExportHistoryPanel: React.FC = () => {
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
@@ -279,7 +259,6 @@ export const ExportHistoryPanel: React.FC = () => {
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
@@ -291,7 +270,6 @@ export const ExportHistoryPanel: React.FC = () => {
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
@@ -305,7 +283,6 @@ export const ExportHistoryPanel: React.FC = () => {
           </Card>
         </div>
       )}
-
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div className="flex items-center justify-between">
           <TabsList>
@@ -318,18 +295,16 @@ export const ExportHistoryPanel: React.FC = () => {
               Scheduled Exports
             </TabsTrigger>
           </TabsList>
-
           <Button
             variant="outline"
             size="sm"
             onClick={loadExportData}
             disabled={isLoading}
           >
-            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />}
             Refresh
           </Button>
         </div>
-
         <TabsContent value="history" className="space-y-4">
           {/* Filters */}
           <div className="flex flex-col sm:flex-row gap-4">
@@ -344,7 +319,6 @@ export const ExportHistoryPanel: React.FC = () => {
                 />
               </div>
             </div>
-            
             <Select value={formatFilter} onValueChange={setFormatFilter}>
               <SelectTrigger className="w-32">
                 <SelectValue placeholder="Format" />
@@ -359,7 +333,6 @@ export const ExportHistoryPanel: React.FC = () => {
                 <SelectItem value="html">HTML</SelectItem>
               </SelectContent>
             </Select>
-
             <Select value={deliveryFilter} onValueChange={setDeliveryFilter}>
               <SelectTrigger className="w-32">
                 <SelectValue placeholder="Delivery" />
@@ -372,7 +345,6 @@ export const ExportHistoryPanel: React.FC = () => {
               </SelectContent>
             </Select>
           </div>
-
           {/* Export History Table */}
           <Card>
             <CardContent className="p-0">
@@ -389,14 +361,14 @@ export const ExportHistoryPanel: React.FC = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredHistory.length === 0 ? (
+                  {filteredHistory.length === 0 ? ()
                     <TableRow>
                       <TableCell colSpan={7} className="text-center py-8">
                         No export history found
                       </TableCell>
                     </TableRow>
-                  ) : (
-                    filteredHistory.map((item) => (
+                  ) : ()
+                    filteredHistory.map((item) => ()
                       <TableRow key={item.id}>
                         <TableCell>
                           {getStatusBadge(item.success, item.error)}
@@ -428,7 +400,7 @@ export const ExportHistoryPanel: React.FC = () => {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              {item.success && item.downloadUrl && (
+                              {item.success && item.downloadUrl && ()
                                 <DropdownMenuItem onClick={() => handleDownload(item.downloadUrl!)}>
                                   <Download className="w-4 h-4 mr-2" />
                                   Download
@@ -449,11 +421,10 @@ export const ExportHistoryPanel: React.FC = () => {
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="scheduled" className="space-y-4">
           {/* Scheduled Exports */}
           <div className="grid gap-4">
-            {scheduledExports.length === 0 ? (
+            {scheduledExports.length === 0 ? ()
               <Card>
                 <CardContent className="p-8 text-center">
                   <Calendar className="w-12 h-12 mx-auto mb-4 text-gray-400" />
@@ -463,8 +434,8 @@ export const ExportHistoryPanel: React.FC = () => {
                   </p>
                 </CardContent>
               </Card>
-            ) : (
-              scheduledExports.map((schedule) => (
+            ) : ()
+              scheduledExports.map((schedule) => ()
                 <Card key={schedule.id}>
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
@@ -486,12 +457,12 @@ export const ExportHistoryPanel: React.FC = () => {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem onClick={() => toggleScheduledExport(schedule.id, !schedule.enabled)}>
-                              {schedule.enabled ? (
+                              {schedule.enabled ? ()
                                 <>
                                   <Pause className="w-4 h-4 mr-2" />
                                   Disable
                                 </>
-                              ) : (
+                              ) : ()
                                 <>
                                   <Play className="w-4 h-4 mr-2" />
                                   Enable
@@ -513,8 +484,8 @@ export const ExportHistoryPanel: React.FC = () => {
                         <p className="font-medium">Schedule</p>
                         <p className="text-muted-foreground">
                           {schedule.schedule.frequency === 'weekly' 
-                            ? `${getDayName(schedule.schedule.dayOfWeek || 1)} at ${schedule.schedule.time}`
-                            : `${schedule.schedule.frequency} at ${schedule.schedule.time}`
+                            ? `${getDayName(schedule.schedule.dayOfWeek || 1)} at ${schedule.schedule.time}`}
+                            : `${schedule.schedule.frequency} at ${schedule.schedule.time}`}
                           }
                         </p>
                       </div>
@@ -539,8 +510,7 @@ export const ExportHistoryPanel: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                    
-                    {schedule.lastRun && (
+                    {schedule.lastRun && ()
                       <div className="mt-3 pt-3 border-t">
                         <p className="text-xs text-muted-foreground">
                           Last run: {formatDate(schedule.lastRun)}

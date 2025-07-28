@@ -272,7 +272,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
     const predictions: ThreatPrediction[] = [];
     // High failure rate with low success rate indicates brute force
     if (features.loginFailures > 10 && features.successRate < 0.1) {
-      const confidence = Math.min(;)
+      const confidence = Math.min(;);
         0.9,
         (features.loginFailures / 20) * (1 - features.successRate) * (features.eventsPerMinute / 10)
       );
@@ -303,7 +303,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
     const predictions: ThreatPrediction[] = [];
     // Successful login from unknown location with high risk score
     if (features.unknownLocationRatio > 0.5 && features.averageRiskScore > 60) {
-      const confidence = Math.min(;)
+      const confidence = Math.min(;);
         0.85,
         features.unknownLocationRatio * (features.averageRiskScore / 100) * (features.uniqueIPs / 5)
       );
@@ -334,7 +334,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
     const predictions: ThreatPrediction[] = [];
     // Multiple IPs with low success rate but consistent patterns
     if (features.uniqueIPs > 5 && features.successRate > 0.05 && features.successRate < 0.3) {
-      const confidence = Math.min(;)
+      const confidence = Math.min(;);
         0.8,
         (features.uniqueIPs / 10) * (features.loginAttempts / 50) * (1 - Math.abs(features.successRate - 0.15))
       );
@@ -365,7 +365,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
     const predictions: ThreatPrediction[] = [];
     // Unusual access patterns from known users
     if (features.uniqueCountries === 1 && features.averageRiskScore > 40 && features.uniqueSessions > 3) {
-      const confidence = Math.min(;)
+      const confidence = Math.min(;);
         0.7,
         (features.averageRiskScore / 100) * (features.uniqueSessions / 10) * 0.8
       );
@@ -494,7 +494,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
   private calculateUnknownLocationRatio(events: SecurityEvent[]): number {
     const totalWithGeolocation = events.filter(e => e.geolocation).length;
     if (totalWithGeolocation === 0) return 0;
-    const unknownLocations = events.filter(e => ;)
+    const unknownLocations = events.filter(e => ;);
       e.geolocation && !e.geolocation.isKnownLocation
     ).length;
     return unknownLocations / totalWithGeolocation;
@@ -657,7 +657,7 @@ export class PredictiveSecurityAnalytics extends EventEmitter {
   }
   public async analyzeHistoricalData(timeframeHours = 24): Promise<ThreatPrediction[]> {
     const cutoff = Date.now() - (timeframeHours * 60 * 60 * 1000);
-    const relevantEvents = this.eventHistory.filter(event =>;)
+    const relevantEvents = this.eventHistory.filter(event =>;);
       event.timestamp.getTime() > cutoff
     );
     return this.generatePredictions(relevantEvents);

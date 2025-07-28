@@ -344,13 +344,13 @@ export namespace NodeExtensionHelpers {
       category: config.category || NodeCategory.CUSTOM,
       description: config.description || 'A custom node',
       version: config.version || '1.0.0',
-      nodeClass: config.nodeClass || class extends RuntimeNode<unknown> {
+      nodeClass: config.nodeClass || class extends RuntimeNode<unknown> {,
         run() { return null; }
       },
       configSchema: config.configSchema || z.object({}),
       ui: config.ui || {},
       runtime: config.runtime || {},
-      metadata: config.metadata || {
+      metadata: config.metadata || {,
         author: 'Unknown',
         license: 'MIT',
       },

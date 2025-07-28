@@ -29,7 +29,7 @@ export const ActivityStats: React.FC<ActivityStatsProps> = ({)
   const formatEventType = (type: string) => {
     return type.replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
-  return ()
+  return ();
     <div className={`activity-stats ${className}`}>}
       <div className="activity-stats__header">
         <h3>Activity Overview</h3>
@@ -120,7 +120,7 @@ export const ActivityStats: React.FC<ActivityStatsProps> = ({)
             <div className="event-type-chart">
               {topEventTypes.map(([type, count]) => {
                 const percentage = (count / stats.total_events) * 100;
-                return ()
+                return ();
                   <div key={type} className="event-type-bar">
                     <div className="event-type-bar__info">
                       <span className="event-type-bar__label">
@@ -155,7 +155,7 @@ export const ActivityStats: React.FC<ActivityStatsProps> = ({)
                 const height = Math.max((day.count / maxDayCount) * 100, 2);
                 const date = new Date(day.date);
                 const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
-                return ()
+                return ();
                   <div key={day.date} className="timeline-bar">
                     <div className="timeline-bar__column">
                       <div 
@@ -185,7 +185,7 @@ export const ActivityStats: React.FC<ActivityStatsProps> = ({)
             <div className="user-activity-list">
               {stats.most_active_users.slice(0, 10).map((user, index) => {
                 const percentage = (user.count / stats.total_events) * 100;
-                return ()
+                return ();
                   <div key={user.user_id} className="user-activity-item">
                     <div className="user-activity-item__rank">
                       #{index + 1}

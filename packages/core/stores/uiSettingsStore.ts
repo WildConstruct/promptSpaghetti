@@ -80,7 +80,7 @@ const DEFAULT_SETTINGS: UISettings = {
 };
 
 export const useUISettingsStore = create<UISettingsState>()()
-  persist()
+  persist();
     (set, get) => ({)
       ...DEFAULT_SETTINGS,
       // Actions
@@ -124,7 +124,7 @@ export const useUISettingsStore = create<UISettingsState>()()
             [nodeType]: {
               ...state.nodeTypePreferences[nodeType],
               disclosureLevel: level,
-              collapsedSections: state.nodeTypePreferences[nodeType]?.collapsedSections || []
+              collapsedSections: state.nodeTypePreferences[nodeType]?.collapsedSections || [],
             }
           }
         }));
@@ -141,10 +141,10 @@ export const useUISettingsStore = create<UISettingsState>()()
           }
         }));
       },
-      setPreferenceInheritance: (inheritance: 'global' | 'nodeType' | 'individual') => {
+      setPreferenceInheritance: (inheritance: 'global' | 'nodeType' | 'individual') => {,
         set({ preferenceInheritance: inheritance });
       },
-      clearNodePreferences: (nodeId?: string) => {
+      clearNodePreferences: (nodeId?: string) => {,
         if (nodeId) {
           set((state) => {
             const { [nodeId]: removed, ...remaining } = state.nodePreferences;
@@ -155,18 +155,18 @@ export const useUISettingsStore = create<UISettingsState>()()
         }
       },
       // Computed getters
-      shouldShowTechnicalFields: () => {
+      shouldShowTechnicalFields: () => {,
         const state = get();
         if (state.hideAllTechnicalUI || state.demoMode) return false;
         return state.debugMode || state.showTechnicalDetails;
       },
-      shouldShowAdvancedFeatures: () => {
+      shouldShowAdvancedFeatures: () => {,
         const state = get();
         if (state.hideAllTechnicalUI || state.demoMode) return false;
         if (state.hideAdvancedFeatures) return false;
         return state.complexityLevel !== 'basic';
       },
-      getEffectiveTheme: () => {
+      getEffectiveTheme: () => {,
         const state = get();
         if (state.professionalUI && state.theme === 'dark') {
           return 'cinema4d'; // Use professional dark theme
@@ -200,11 +200,11 @@ export const useUISettingsStore = create<UISettingsState>()()
         return {
           disclosureLevel,
           useGlobalDefault: state.nodePreferences[nodeId]?.useGlobalDefault ?? true,
-          lastModified: state.nodePreferences[nodeId]?.lastModified ?? Date.now()
+          lastModified: state.nodePreferences[nodeId]?.lastModified ?? Date.now(),
         };
       },
       // Presets
-      applyFilmmakerPreset: () => set({)
+      applyFilmmakerPreset: () => set({),
         professionalUI: true,
         debugMode: false,
         showTechnicalDetails: false,
@@ -220,7 +220,7 @@ export const useUISettingsStore = create<UISettingsState>()()
         demoMode: false,
         hideAllTechnicalUI: true,
       }),
-      applyDeveloperPreset: () => set({)
+      applyDeveloperPreset: () => set({),
         professionalUI: false,
         debugMode: true,
         showTechnicalDetails: true,
@@ -236,7 +236,7 @@ export const useUISettingsStore = create<UISettingsState>()()
         demoMode: false,
         hideAllTechnicalUI: false,
       }),
-      applyDemoPreset: () => set({)
+      applyDemoPreset: () => set({),
         professionalUI: true,
         debugMode: false,
         showTechnicalDetails: false,
@@ -261,7 +261,7 @@ export const useUISettingsStore = create<UISettingsState>()()
           // Migrate from version 1 to 2: add new per-node preference fields
           return {
             ...persistedState,
-            globalDisclosureLevel: persistedState.complexityLevel === 'expert' ? 'debug' : 
+            globalDisclosureLevel: persistedState.complexityLevel === 'expert' ? 'debug' : ,
                                    persistedState.complexityLevel === 'advanced' ? 'advanced' : 'basic',
             nodePreferences: {},
             nodeTypePreferences: {},
@@ -271,7 +271,6 @@ export const useUISettingsStore = create<UISettingsState>()()
         return persistedState;
       }
     }
-  )
 );
 
 // Helper function to check if field should be shown based on current settings

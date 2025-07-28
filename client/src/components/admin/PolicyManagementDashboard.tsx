@@ -6,7 +6,6 @@
  * 
  * Part of Epic 17 - Backstage Admin Controls
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Card,
@@ -45,7 +44,6 @@ import {
   BellOutlined,
   ReloadOutlined
 } from '@ant-design/icons';
-
 const { Title, Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
@@ -61,7 +59,6 @@ interface PolicyStats {
   open_violations: number;
   appeal_rate: number;
 }
-
 interface PolicyDashboardData {
   statistics: PolicyStats;
   recent_activities: unknown[];
@@ -69,7 +66,6 @@ interface PolicyDashboardData {
   enforcement_metrics: unknown;
   trending_violations: unknown[];
 }
-
 interface Policy {
   id: string;
   title: string;
@@ -80,7 +76,6 @@ interface Policy {
   last_modified: string;
   compliance_score: number;
 }
-
 interface Violation {
   id: string;
   type: string;
@@ -103,23 +98,21 @@ export const PolicyManagementDashboard: React.FC = () => {
   const [selectedViolation, setSelectedViolation] = useState<Violation | null>(null);
   const [policyModalVisible, setPolicyModalVisible] = useState(false);
   const [violationDrawerVisible, setViolationDrawerVisible] = useState(false);
-  const [, setFilters] = useState({
+  const [, setFilters] = useState({)
     dateRange: null as { start: Date; end: Date } | null,
     policyType: null as string | null,
-    violationStatus: null as string | null
+    violationStatus: null as string | null,
   });
-
   // Data fetching
   const fetchDashboardData = useCallback(async () => {
     setLoading(true);
     try {
       // Mock API calls - replace with actual API integration
-      const [dashboardResponse, policiesResponse, violationsResponse] = await Promise.all([
+      const [dashboardResponse, policiesResponse, violationsResponse] = await Promise.all([)
         fetch('/admin/policy-management/dashboard').then(r => r.json()),
         fetch('/admin/policy-management/policies').then(r => r.json()),
         fetch('/admin/policy-management/violations').then(r => r.json())
       ]);
-
       setDashboardData(dashboardResponse);
       setPolicies(policiesResponse.data || []);
       setViolations(violationsResponse.data || []);
@@ -130,31 +123,26 @@ export const PolicyManagementDashboard: React.FC = () => {
       setLoading(false);
     }
   }, []);
-
   useEffect(() => {
     fetchDashboardData();
   }, [fetchDashboardData]);
-
   // Event handlers
   const handlePolicyCreate = () => {
     setPolicyModalVisible(true);
     setSelectedPolicy(null);
   };
-
   const handlePolicyEdit = (policy: Policy) => {
     setSelectedPolicy(policy);
     setPolicyModalVisible(true);
   };
-
   const handleViolationView = (violation: Violation) => {
     setSelectedViolation(violation);
     setViolationDrawerVisible(true);
   };
-
   const handlePolicyStatusChange = async (policyId: string, status: string) => {
     try {
       // Mock API call
-      await fetch(`/admin/policy-management/policies/${policyId}/status`, {
+      await fetch(`/admin/policy-management/policies/${policyId}/status`, {)}
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
@@ -165,10 +153,9 @@ export const PolicyManagementDashboard: React.FC = () => {
       message.error('Failed to update policy status');
     }
   };
-
   const handleViolationReview = async (violationId: string, action: string) => {
     try {
-      await fetch(`/admin/policy-management/violations/${violationId}/review`, {
+      await fetch(`/admin/policy-management/violations/${violationId}/review`, {)}
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action })
@@ -180,27 +167,25 @@ export const PolicyManagementDashboard: React.FC = () => {
       message.error('Failed to review violation');
     }
   };
-
   // Column definitions
-  const policyColumns = [
+  const policyColumns = [;
     {
       title: 'Policy Title',
       dataIndex: 'title',
       key: 'title',
-      render: (text: string, record: Policy) => (
+      render: (text: string, record: Policy) => ()
         <Space direction="vertical" size={0}>
           <Text strong>{text}</Text>
           <Text type="secondary" style={{ fontSize: '12px' }}>
             {record.policy_type.replace('_', ' ').toUpperCase()}
           </Text>
         </Space>
-      )
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (status: string) => {
+      render: (status: string) => {,
         const statusConfig = {
           active: { color: 'green', icon: <CheckCircleOutlined /> },
           draft: { color: 'orange', icon: <EditOutlined /> },
@@ -208,7 +193,7 @@ export const PolicyManagementDashboard: React.FC = () => {
           archived: { color: 'gray', icon: <DeleteOutlined /> }
         };
         const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.draft;
-        return (
+        return ()
           <Tag color={config.color} icon={config.icon}>
             {status.replace('_', ' ').toUpperCase()}
           </Tag>
@@ -225,28 +210,27 @@ export const PolicyManagementDashboard: React.FC = () => {
       title: 'Compliance Score',
       dataIndex: 'compliance_score',
       key: 'compliance_score',
-      render: (score: number) => (
+      render: (score: number) => (),
         <Progress 
           percent={score} 
           size="small" 
           status={score > 80 ? 'success' : score > 60 ? 'normal' : 'exception'}
         />
-      )
     },
     {
       title: 'Last Modified',
       dataIndex: 'last_modified',
       key: 'last_modified',
-      render: (date: string) => new Date(date).toLocaleDateString()
+      render: (date: string) => new Date(date).toLocaleDateString(),
     },
     {
       title: 'Actions',
       key: 'actions',
-      render: (record: Policy) => (
+      render: (record: Policy) => (),
         <Space>
           <Button size="small" icon={<EyeOutlined />} onClick={() => handlePolicyEdit(record)} />
           <Button size="small" icon={<EditOutlined />} type="primary" />
-          {record.status === 'draft' && (
+          {record.status === 'draft' && ()
             <Button 
               size="small" 
               type="primary"
@@ -256,26 +240,23 @@ export const PolicyManagementDashboard: React.FC = () => {
             </Button>
           )}
         </Space>
-      )
     }
   ];
-
-  const violationColumns = [
+  const violationColumns = [;
     {
       title: 'Type',
       dataIndex: 'type',
       key: 'type',
-      render: (type: string) => (
+      render: (type: string) => (),
         <Tag color="red">
           {type.replace('_', ' ').toUpperCase()}
         </Tag>
-      )
     },
     {
       title: 'Severity',
       dataIndex: 'severity',
       key: 'severity',
-      render: (severity: string) => {
+      render: (severity: string) => {,
         const colors = { low: 'green', medium: 'orange', high: 'red', critical: 'purple' };
         return <Tag color={colors[severity as keyof typeof colors]}>{severity.toUpperCase()}</Tag>;
       }
@@ -284,7 +265,7 @@ export const PolicyManagementDashboard: React.FC = () => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (status: string) => {
+      render: (status: string) => {,
         const statusConfig = {
           open: { color: 'red', icon: <ExclamationCircleOutlined /> },
           under_review: { color: 'blue', icon: <EyeOutlined /> },
@@ -292,7 +273,7 @@ export const PolicyManagementDashboard: React.FC = () => {
           dismissed: { color: 'gray', icon: <CloseCircleOutlined /> }
         };
         const config = statusConfig[status as keyof typeof statusConfig];
-        return config ? (
+        return config ? ()
           <Tag color={config.color} icon={config.icon}>
             {status.replace('_', ' ').toUpperCase()}
           </Tag>
@@ -303,18 +284,18 @@ export const PolicyManagementDashboard: React.FC = () => {
       title: 'Reported Date',
       dataIndex: 'reported_at',
       key: 'reported_at',
-      render: (date: string) => new Date(date).toLocaleDateString()
+      render: (date: string) => new Date(date).toLocaleDateString(),
     },
     {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
-      ellipsis: true
+      ellipsis: true,
     },
     {
       title: 'Actions',
       key: 'actions',
-      render: (record: Violation) => (
+      render: (record: Violation) => (),
         <Space>
           <Button 
             size="small" 
@@ -324,15 +305,12 @@ export const PolicyManagementDashboard: React.FC = () => {
             Review
           </Button>
         </Space>
-      )
     }
   ];
-
   if (loading) {
     return <div style={{ padding: '50px', textAlign: 'center' }}>Loading...</div>;
   }
-
-  return (
+  return ()
     <div style={{ padding: '24px', background: '#f5f5f5', minHeight: '100vh' }}>
       <div style={{ marginBottom: '24px' }}>
         <Title level={2}>
@@ -343,7 +321,6 @@ export const PolicyManagementDashboard: React.FC = () => {
           Manage marketplace policies, enforcement rules, and violation reviews from a unified admin interface.
         </Paragraph>
       </div>
-
       {/* Statistics Cards */}
       <Row gutter={[16, 16]} style={{ marginBottom: '24px' }}>
         <Col xs={24} sm={12} lg={4}>
@@ -405,7 +382,6 @@ export const PolicyManagementDashboard: React.FC = () => {
           </Card>
         </Col>
       </Row>
-
       {/* Main Content Tabs */}
       <Card>
         <Tabs 
@@ -441,7 +417,7 @@ export const PolicyManagementDashboard: React.FC = () => {
                 <Card title="Recent Activities" style={{ marginBottom: '16px' }}>
                   <List
                     dataSource={dashboardData?.recent_activities?.slice(0, 5) || []}
-                    renderItem={(item: unknown) => (
+                    renderItem={(item: unknown) => ()
                       <List.Item>
                         <List.Item.Meta
                           avatar={<Avatar icon={<BellOutlined />} />}
@@ -468,7 +444,6 @@ export const PolicyManagementDashboard: React.FC = () => {
               </Col>
             </Row>
           </TabPane>
-
           <TabPane tab="Policies" key="policies">
             <div style={{ marginBottom: '16px' }}>
               <Space>
@@ -501,7 +476,6 @@ export const PolicyManagementDashboard: React.FC = () => {
               loading={loading}
             />
           </TabPane>
-
           <TabPane tab="Violations" key="violations">
             <div style={{ marginBottom: '16px' }}>
               <Space>
@@ -532,7 +506,6 @@ export const PolicyManagementDashboard: React.FC = () => {
               loading={loading}
             />
           </TabPane>
-
           <TabPane tab="Analytics" key="analytics">
             <Row gutter={[16, 16]}>
               <Col xs={24} lg={12}>
@@ -563,7 +536,6 @@ export const PolicyManagementDashboard: React.FC = () => {
           </TabPane>
         </Tabs>
       </Card>
-
       {/* Policy Creation/Edit Modal */}
       <Modal
         title={selectedPolicy ? 'Edit Policy' : 'Create New Policy'}
@@ -593,7 +565,6 @@ export const PolicyManagementDashboard: React.FC = () => {
           </Space>
         </Form>
       </Modal>
-
       {/* Violation Review Drawer */}
       <Drawer
         title="Review Violation"
@@ -601,7 +572,7 @@ export const PolicyManagementDashboard: React.FC = () => {
         onClose={() => setViolationDrawerVisible(false)}
         width={600}
       >
-        {selectedViolation && (
+        {selectedViolation && ()
           <div>
             <Space direction="vertical" size="large" style={{ width: '100%' }}>
               <div>
@@ -619,9 +590,7 @@ export const PolicyManagementDashboard: React.FC = () => {
                   <Text strong>Reported:</Text> {new Date(selectedViolation.reported_at).toLocaleString()}
                 </Paragraph>
               </div>
-              
               <Divider />
-              
               <div>
                 <Title level={4}>Resolution Actions</Title>
                 <Space>

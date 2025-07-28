@@ -113,7 +113,7 @@ export class RunwayMLAdapter extends BaseAIModel {
         tokensPerMinute: 5000,
       },
       tags: ['video-generation', 'text-to-video', 'image-to-video', 'ai-video'],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     const capabilities: ModelCapabilities = {
       inputTypes: ['text', 'image', 'video'],
@@ -416,7 +416,7 @@ export class RunwayMLAdapter extends BaseAIModel {
         duration: options.duration || 4,
         resolution: { width, height },
         fps: 24, // Standard FPS for RunwayML
-        size: videoData?.byteLength || 0
+        size: videoData?.byteLength || 0,
       },
       metadata: {,
         model: options.model || 'gen3',
@@ -450,7 +450,7 @@ export class RunwayMLAdapter extends BaseAIModel {
     const options: RequestInit = {
       method,
       headers,
-      signal: AbortSignal.timeout(this.config.timeout || 60000)
+      signal: AbortSignal.timeout(this.config.timeout || 60000),
     };
     if (method === 'POST' && payload) {
       options.body = JSON.stringify(payload);

@@ -47,7 +47,7 @@ export const StickyNotesManager: React.FC<StickyNotesManagerProps> = ({)
   if (disabled) {
     return null;
   }
-  return ()
+  return ();
     <StickyNotesLayer
       notes={stickyNotes}
       onNotesChange={handleNotesChange}

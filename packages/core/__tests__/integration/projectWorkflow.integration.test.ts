@@ -73,7 +73,7 @@ describe('Project Workflow Integration Tests', () => {
           position: { x: 500, y: 100 },
           data: {,
             nodeType: 'output',
-            label: 'Final Output'
+            label: 'Final Output',
           }
         }
       ],
@@ -117,7 +117,7 @@ describe('Project Workflow Integration Tests', () => {
     expect(serializeResult.success).toBe(true);
     expect(serializeResult.data).toBeDefined();
     // 3. Save project to device (simulate file download)
-    const saveResult = await ProjectManager.saveProjectToDevice(;)
+    const saveResult = await ProjectManager.saveProjectToDevice(;);
       sampleGraph,
       {
         name: projectName,
@@ -159,7 +159,7 @@ describe('Project Workflow Integration Tests', () => {
     // 1. Save a project
     const metadata = createDefaultMetadata(projectName, projectAuthor);
     const settings = createDefaultSettings();
-    const saveResult = await ProjectManager.saveProjectToDevice(;)
+    const saveResult = await ProjectManager.saveProjectToDevice(;);
       sampleGraph,
       {
         name: projectName,
@@ -170,7 +170,7 @@ describe('Project Workflow Integration Tests', () => {
     );
     expect(saveResult.success).toBe(true);
     // 2. Simulate adding to recent projects (as would happen in GraphEditor)
-    const thumbnail = RecentProjectsManager.generateThumbnail(;)
+    const thumbnail = RecentProjectsManager.generateThumbnail(;);
       sampleGraph.nodes,
       sampleGraph.edges
     );
@@ -261,7 +261,7 @@ describe('Project Workflow Integration Tests', () => {
       metadata,
       settings,
       graph: sampleGraph,
-      exportedAt: new Date().toISOString()
+      exportedAt: new Date().toISOString(),
     };
     const serializedFuture = JSON.stringify(futureVersionProject);
     const result = deserializeProject(serializedFuture);
@@ -274,7 +274,7 @@ describe('Project Workflow Integration Tests', () => {
   test('file name sanitization in save process', async () => {
     const metadata = createDefaultMetadata('Project/with\\invalid:chars*', projectAuthor);
     const settings = createDefaultSettings();
-    const saveResult = await ProjectManager.saveProjectToDevice(;)
+    const saveResult = await ProjectManager.saveProjectToDevice(;);
       sampleGraph,
       {
         name: 'Project/with\\invalid:chars*',
@@ -309,13 +309,13 @@ describe('Project Workflow Integration Tests', () => {
     const emptyThumbnail = RecentProjectsManager.generateThumbnail([], []);
     expect(emptyThumbnail).toMatch(/^data:image\/svg\+xml;base64,/);
     // Test with nodes but no edges
-    const nodesOnlyThumbnail = RecentProjectsManager.generateThumbnail(;)
+    const nodesOnlyThumbnail = RecentProjectsManager.generateThumbnail(;);
       sampleGraph.nodes,
       []
     );
     expect(nodesOnlyThumbnail).toMatch(/^data:image\/svg\+xml;base64,/);
     // Test with complex graph
-    const complexThumbnail = RecentProjectsManager.generateThumbnail(;)
+    const complexThumbnail = RecentProjectsManager.generateThumbnail(;);
       sampleGraph.nodes,
       sampleGraph.edges
     );
@@ -336,7 +336,6 @@ describe('Project Workflow Integration Tests', () => {
           author: projectAuthor,
         },
         settings
-      )
     );
     const results = await Promise.all(savePromises);
     // All saves should succeed

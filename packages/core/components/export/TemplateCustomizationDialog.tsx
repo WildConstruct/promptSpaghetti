@@ -421,11 +421,11 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
       border: `1px solid ${error ? '#ef4444' : '#e2e8f0'}`,}
       borderRadius: '6px',
       fontSize: '14px',
-      background: error ? '#fef2f2' : 'white'
+      background: error ? '#fef2f2' : 'white',
     };
     switch (param.type) {
       case 'string':
-        return ()
+        return ();
           <input
             type="text"
             value={value || ''}
@@ -435,7 +435,7 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
           />
         );
       case 'number':
-        return ()
+        return ();
           <input
             type="number"
             value={value || ''}
@@ -446,7 +446,7 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
           />
         );
       case 'boolean':
-        return ()
+        return ();
           <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
             <input
               type="checkbox"
@@ -460,7 +460,7 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
           </label>
         );
       case 'select':
-        return ()
+        return ();
           <select
             value={value || ''}
             onChange={(e) => handleParameterChange(param.key, e.target.value)}
@@ -474,7 +474,7 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
           </select>
         );
       case 'color':
-        return ()
+        return ();
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <input
               type="color"
@@ -492,7 +492,7 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
           </div>
         );
       case 'json':
-        return ()
+        return ();
           <textarea
             value={typeof value === 'object' ? JSON.stringify(value, null, 2) : value || ''}
             onChange={(e) => {
@@ -514,7 +514,7 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
           />
         );
       default:
-        return ()
+        return ();
           <input
             type="text"
             value={value || ''}
@@ -525,7 +525,7 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
     }
   }, [customization, handleParameterChange]);
   if (!visible) return null;
-  return ()
+  return ();
     <div
       className={`template-customization-dialog ${className}`}
       style={{
@@ -613,7 +613,7 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
                   cursor: 'pointer',
                   fontSize: '13px',
                   marginBottom: '4px',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.2s ease',
                 }}
               >
                 {category}
@@ -694,7 +694,7 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
               cursor: loading ? 'not-allowed' : 'pointer',
               fontSize: '14px',
               color: '#374151',
-              opacity: loading ? 0.6 : 1
+              opacity: loading ? 0.6 : 1,
             }}
           >
             {loading ? '⏳ Generating...' : '👁️ Preview'}

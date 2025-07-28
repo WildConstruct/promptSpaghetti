@@ -229,7 +229,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
     return new Date(dateString).toLocaleDateString();
   }, []);
   if (!visible) return null;
-  return ()
+  return ();
     <div
       className={`advanced-export-template-manager ${className}`}
       style={{
@@ -313,7 +313,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                 cursor: 'pointer',
                 fontSize: '14px',
                 fontWeight: activeTab === tab.key ? '600' : 'normal',
-                transition: 'all 0.2s ease'
+                transition: 'all 0.2s ease',
               }}
               title={tab.desc}
             >
@@ -483,7 +483,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                   {filteredTemplates.map(template => {)
                     const stats = templateStats.get(template.id);
                     const rating = getTemplateRating(template.id);
-                    return ()
+                    return ();
                       <div
                         key={template.id}
                         style={{
@@ -583,7 +583,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                                 borderRadius: '4px',
                                 cursor: 'pointer',
                                 fontSize: '12px',
-                                color: template.is_public ? '#dc2626' : '#16a34a'
+                                color: template.is_public ? '#dc2626' : '#16a34a',
                               }}
                             >
                               {template.is_public ? '🔒 Make Private' : '🌐 Make Public'}
@@ -720,7 +720,7 @@ export const AdvancedExportTemplateManager: React.FC<AdvancedExportTemplateManag
                     {(() => {
                       const stats = templateStats.get(selectedTemplate.id)!;
                       const rating = getTemplateRating(selectedTemplate.id);
-                      return ()
+                      return ();
                         <>
                           <div>📊 {formatUsageCount(stats.usageCount)} total uses</div>
                           {rating && <div>⭐ {rating.average}/5.0 ({rating.count} ratings)</div>}

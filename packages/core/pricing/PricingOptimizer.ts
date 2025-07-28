@@ -237,7 +237,7 @@ export class PricingOptimizer extends EventEmitter {
       const intervals = {
         hourly: 60 * 60 * 1000,
         daily: 24 * 60 * 60 * 1000,
-        weekly: 7 * 24 * 60 * 60 * 1000
+        weekly: 7 * 24 * 60 * 60 * 1000,
       };
       const interval = intervals[this.config.optimizationFrequency];
       if (interval) {
@@ -315,7 +315,7 @@ export class PricingOptimizer extends EventEmitter {
       } catch (error) {
         this.emit('optimization_error', {)
           modelId: model.id,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     });
@@ -342,7 +342,7 @@ export class PricingOptimizer extends EventEmitter {
       analytics,
       forecastPeriodDays: period,
       seasonalFactors: this.getSeasonalFactors(),
-      industryTrends: await this.getIndustryTrends()
+      industryTrends: await this.getIndustryTrends(),
     });
   }
   /**
@@ -450,7 +450,7 @@ export class PricingOptimizer extends EventEmitter {
         confidenceScore: 0.7,
       },
       createdAt: Date.now(),
-      validUntil: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
+      validUntil: Date.now() + 24 * 60 * 60 * 1000 // 24 hours,
     };
   }
   private async applyAIOptimizations()
@@ -494,7 +494,7 @@ export class PricingOptimizer extends EventEmitter {
         multipliers: [{,
           type: 'complexity',
           factor: complexityAdjustment,
-          description: 'AI-calculated complexity multiplier'
+          description: 'AI-calculated complexity multiplier',
         }]
       });
     }
@@ -504,7 +504,7 @@ export class PricingOptimizer extends EventEmitter {
       aiInsights: {,
         ...baseResult.aiInsights,
         priceOptimality: Math.min(100, Math.max(0, optimality)),
-        demandPrediction: await this.demandPredictor.predictImmediate({)
+        demandPrediction: await this.demandPredictor.predictImmediate({),
           usage: request.usage,
           timeOfDay: new Date().getHours(),
           dayOfWeek: new Date().getDay(),
@@ -526,7 +526,7 @@ export class PricingOptimizer extends EventEmitter {
       seasonalImpact: 0,
       studioTierImpact: 0,
       productionScaleImpact: 0,
-      marketTrends: [] as string[]
+      marketTrends: [] as string[],
     };
     // Studio tier adjustments
     if (request.userTier === 'studio') {
@@ -542,7 +542,7 @@ export class PricingOptimizer extends EventEmitter {
         multipliers: [{,
           type: 'studio_tier',
           factor: multiplier,
-          description: 'Studio-grade service premium'
+          description: 'Studio-grade service premium',
         }]
       });
     }
@@ -658,7 +658,7 @@ export class PricingOptimizer extends EventEmitter {
       modelId,
       period: {,
         start: now,
-        end: now + 30 * 24 * 60 * 60 * 1000 // 30 days
+        end: now + 30 * 24 * 60 * 60 * 1000 // 30 days,
       },
       totalRevenue: 0,
       averageOrderValue: 0,
@@ -803,7 +803,7 @@ export class PricingOptimizer extends EventEmitter {
         priority: 'high',
         impact: 0.2,
         confidence: 0.85,
-        description: 'Align pricing with market leaders for competitive advantage'
+        description: 'Align pricing with market leaders for competitive advantage',
       }
     ];
   }
@@ -868,7 +868,7 @@ class CompetitorAnalyzer {
       averagePrice: params.model.basePrice * 1.1,
       priceRange: {,
         min: params.model.basePrice * 0.8,
-        max: params.model.basePrice * 1.5
+        max: params.model.basePrice * 1.5,
       },
       marketShare: 0.15,
       differentiationFactors: ['AI capabilities', 'Film industry expertise', 'Integration ecosystem']

@@ -35,12 +35,11 @@ export class ExperimentEngine {
   private allocationConfig: AllocationServiceConfig;
   private storage: ExperimentStorage;
   private metrics: ExperimentMetrics;
-  constructor()
+  constructor();
     config: ABTestingConfig,
     allocationConfig: AllocationServiceConfig,
     storage: ExperimentStorage,
     metrics: ExperimentMetrics,
-  ) {
     this.config = config;
     this.allocationConfig = allocationConfig;
     this.storage = storage;
@@ -56,7 +55,7 @@ export class ExperimentEngine {
       ...experiment,
       id: crypto.randomUUID(),
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
     await this.storage.saveExperiment(newExperiment);
     return newExperiment;
@@ -80,7 +79,7 @@ export class ExperimentEngine {
     const updatedExperiment = {
       ...experiment,
       ...updates,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
     this.validateExperiment(updatedExperiment);
     await this.storage.saveExperiment(updatedExperiment);
@@ -107,7 +106,7 @@ export class ExperimentEngine {
       status: 'running' as ExperimentStatus,
       schedule: {,
         ...experiment.schedule,
-        startAt: new Date()
+        startAt: new Date(),
       }
     });
     return updatedExperiment;
@@ -131,7 +130,7 @@ export class ExperimentEngine {
       status: 'completed' as ExperimentStatus,
       schedule: {,
         ...experiment.schedule,
-        endAt: new Date()
+        endAt: new Date(),
       }
     });
     return updatedExperiment;
@@ -142,7 +141,7 @@ export class ExperimentEngine {
   async assignUser(request: AssignmentRequest): Promise<AssignmentResponse> {
     try {
       // Check for existing assignment first
-      const existingAssignment = await this.storage.getUserAssignment(;)
+      const existingAssignment = await this.storage.getUserAssignment(;);
         request.userId,
         request.experimentId
       );
@@ -189,7 +188,7 @@ export class ExperimentEngine {
         variant,
         assigned: true,
         reason: 'new_assignment',
-        debugInfo: request.debugMode ? {
+        debugInfo: request.debugMode ? {,
           hash: this.generateHash(request.userId, request.experimentId),
           bucket: this.getBucket(request.userId, request.experimentId),
           allocation: experiment.trafficAllocation,

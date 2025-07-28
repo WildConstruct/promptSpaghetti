@@ -69,14 +69,13 @@ export const ExtensionSystemUtils = {
     type: string;
     author: string;
     description: string;
-  } {
     return {
       id: extension.id || 'unknown',
       name: extension.name || 'Unknown',
       version: extension.version || '0.0.0',
       type: this.getExtensionType(extension),
       author: extension.author || 'Unknown',
-      description: extension.description || 'No description'
+      description: extension.description || 'No description',
     };
   },
   /**

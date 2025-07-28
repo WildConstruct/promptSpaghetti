@@ -40,14 +40,12 @@ jest.mock('../components/ui/Button', () => ({)
     >
       {children}
     </button>
-  )
 }));
 jest.mock('../components/ui/Badge', () => ({)
   Badge: ({ children, variant, className, style }: unknown) => ()
     <span className={`badge ${variant || ''} ${className || ''}`} style={style}>}
       {children}
     </span>
-  )
 }));
 jest.mock('../components/ui/Tabs', () => ({)
   Tabs: ({ children, value, onValueChange, defaultValue }: unknown) => ()
@@ -63,7 +61,6 @@ jest.mock('../components/ui/Tabs', () => ({)
   ),
   TabsTrigger: ({ children, value, className }: unknown) => ()
     <button className={`tabs-trigger ${className || ''}`} data-value={value}>{children}</button>}
-  )
 }));
 jest.mock('../components/ui/Select', () => ({)
   Select: ({ children, value, onValueChange }: unknown) => ()
@@ -76,7 +73,7 @@ jest.mock('../components/ui/Select', () => ({)
   SelectTrigger: ({ children, className }: unknown) => ()
     <div className={`select-trigger ${className || ''}`}>{children}</div>}
   ),
-  SelectValue: () => <div className="select-value">Selected Value</div>
+  SelectValue: () => <div className="select-value">Selected Value</div>,
 }));
 jest.mock('../components/ui/Switch', () => ({)
   Switch: ({ checked, onCheckedChange, id }: unknown) => ()
@@ -87,7 +84,6 @@ jest.mock('../components/ui/Switch', () => ({)
       id={id}
       className="switch"
     />
-  )
 }));
 jest.mock('../components/ui/Slider', () => ({)
   Slider: ({ value, onValueChange, max, min, step, className }: unknown) => ()
@@ -100,7 +96,6 @@ jest.mock('../components/ui/Slider', () => ({)
       step={step}
       className={`slider ${className || ''}`}
     />
-  )
 }));
 
 // Sample test data
@@ -253,7 +248,7 @@ describe('VFX Checklist System Components', () => {
       jest.clearAllMocks();
     });
     it('should render checklist system with basic information', () => {
-      render()
+      render();
         <VFXChecklistSystem
           checklist={sampleChecklist}
           currentUser={sampleVFXUser}
@@ -270,7 +265,7 @@ describe('VFX Checklist System Components', () => {
       expect(screen.getByText('Add Item')).toBeInTheDocument();
     });
     it('should display statistics correctly', () => {
-      render()
+      render();
         <VFXChecklistSystem
           checklist={sampleChecklist}
           currentUser={sampleVFXUser}
@@ -290,7 +285,7 @@ describe('VFX Checklist System Components', () => {
       expect(screen.getByText('Critical')).toBeInTheDocument();
     });
     it('should show checklist items with details', () => {
-      render()
+      render();
         <VFXChecklistSystem
           checklist={sampleChecklist}
           currentUser={sampleVFXUser}
@@ -309,7 +304,7 @@ describe('VFX Checklist System Components', () => {
       expect(screen.getByText('8h est.')).toBeInTheDocument();
     });
     it('should display subtasks correctly', () => {
-      render()
+      render();
         <VFXChecklistSystem
           checklist={sampleChecklist}
           currentUser={sampleVFXUser}
@@ -326,7 +321,7 @@ describe('VFX Checklist System Components', () => {
     });
     it('should handle item creation', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <VFXChecklistSystem
           checklist={sampleChecklist}
           currentUser={sampleVFXUser}
@@ -354,7 +349,7 @@ describe('VFX Checklist System Components', () => {
     });
     it('should handle status changes', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <VFXChecklistSystem
           checklist={sampleChecklist}
           currentUser={sampleVFXUser}
@@ -378,7 +373,7 @@ describe('VFX Checklist System Components', () => {
     });
     it('should show comments section', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <VFXChecklistSystem
           checklist={sampleChecklist}
           currentUser={sampleVFXUser}
@@ -395,7 +390,7 @@ describe('VFX Checklist System Components', () => {
     });
     it('should handle comment creation', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <VFXChecklistSystem
           checklist={sampleChecklist}
           currentUser={sampleVFXUser}
@@ -422,7 +417,7 @@ describe('VFX Checklist System Components', () => {
     });
     it('should handle filters and search', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <VFXChecklistSystem
           checklist={sampleChecklist}
           currentUser={sampleVFXUser}
@@ -439,7 +434,7 @@ describe('VFX Checklist System Components', () => {
       expect(screen.getByPlaceholderText('Search items...')).toBeInTheDocument();
     });
     it('should render in compact mode', () => {
-      render()
+      render();
         <VFXChecklistSystem
           checklist={sampleChecklist}
           currentUser={sampleVFXUser}
@@ -456,7 +451,7 @@ describe('VFX Checklist System Components', () => {
       expect(screen.queryByText('Progress')).not.toBeInTheDocument();
     });
     it('should handle readonly mode', () => {
-      render()
+      render();
         <VFXChecklistSystem
           checklist={sampleChecklist}
           currentUser={sampleVFXUser}
@@ -471,7 +466,7 @@ describe('VFX Checklist System Components', () => {
       expect(screen.queryByText('Add Item')).not.toBeInTheDocument();
     });
     it('should display quality gates information', () => {
-      render()
+      render();
         <VFXChecklistSystem
           checklist={sampleChecklist}
           currentUser={sampleVFXUser}
@@ -487,7 +482,7 @@ describe('VFX Checklist System Components', () => {
     });
     it('should handle empty checklist state', () => {
       const emptyChecklist = { ...sampleChecklist, items: [] };
-      render()
+      render();
         <VFXChecklistSystem
           checklist={emptyChecklist}
           currentUser={sampleVFXUser}
@@ -512,7 +507,7 @@ describe('VFX Checklist System Components', () => {
       jest.clearAllMocks();
     });
     it('should render templates system', () => {
-      render()
+      render();
         <VFXChecklistTemplates
           currentUser={sampleVFXUser}
           onTemplateSelect={mockOnTemplateSelect}
@@ -526,7 +521,7 @@ describe('VFX Checklist System Components', () => {
       expect(screen.getByText('Create Template')).toBeInTheDocument();
     });
     it('should show built-in templates', () => {
-      render()
+      render();
         <VFXChecklistTemplates
           currentUser={sampleVFXUser}
           onTemplateSelect={mockOnTemplateSelect}
@@ -539,7 +534,7 @@ describe('VFX Checklist System Components', () => {
     });
     it('should handle template filtering', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <VFXChecklistTemplates
           currentUser={sampleVFXUser}
           onTemplateSelect={mockOnTemplateSelect}
@@ -553,7 +548,7 @@ describe('VFX Checklist System Components', () => {
     });
     it('should handle template selection', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <VFXChecklistTemplates
           currentUser={sampleVFXUser}
           onTemplateSelect={mockOnTemplateSelect}
@@ -569,7 +564,7 @@ describe('VFX Checklist System Components', () => {
       }
     });
     it('should handle readonly mode', () => {
-      render()
+      render();
         <VFXChecklistTemplates
           currentUser={sampleVFXUser}
           onTemplateSelect={mockOnTemplateSelect}
@@ -579,7 +574,7 @@ describe('VFX Checklist System Components', () => {
       expect(screen.queryByText('Create Template')).not.toBeInTheDocument();
     });
     it('should show template statistics', () => {
-      render()
+      render();
         <VFXChecklistTemplates
           currentUser={sampleVFXUser}
           onTemplateSelect={mockOnTemplateSelect}
@@ -590,7 +585,7 @@ describe('VFX Checklist System Components', () => {
       expect(screen.getByText(/items/)).toBeInTheDocument();
     });
     it('should handle empty templates state', () => {
-      render()
+      render();
         <VFXChecklistTemplates
           templates={[]}
           currentUser={sampleVFXUser}
@@ -671,7 +666,7 @@ describe('VFX Checklist System Components', () => {
       expect(screen.getByText('Mike VFX Supervisor')).toBeInTheDocument();
     });
     it('should hide components when disabled', () => {
-      render()
+      render();
         <VFXChecklistDemo
           showTemplates={false}
           showAnalytics={false}
@@ -754,7 +749,7 @@ describe('VFX Checklist System Components', () => {
   describe('Error Handling', () => {
     it('should handle missing props gracefully', () => {
       expect(() => {
-        render()
+        render();
           <VFXChecklistSystem
             checklist={sampleChecklist}
             currentUser={sampleVFXUser}
@@ -774,7 +769,7 @@ describe('VFX Checklist System Components', () => {
         metadata: { ...sampleChecklist.metadata, totalItems: 0 }
       };
       expect(() => {
-        render()
+        render();
           <VFXChecklistSystem
             checklist={emptyChecklist}
             currentUser={sampleVFXUser}
@@ -799,7 +794,7 @@ describe('VFX Checklist System Components', () => {
           canViewReports: true,
         }
       };
-      render()
+      render();
         <VFXChecklistDemo initialUser={limitedUser} />
       );
       // Should still render without errors

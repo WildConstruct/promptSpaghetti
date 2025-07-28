@@ -114,7 +114,7 @@ export class AnalyticsClient extends EventEmitter {
     const params = new URLSearchParams({)
       startTime: timeRange.startTime.toString(),
       endTime: timeRange.endTime.toString(),
-      granularity: timeRange.granularity || 'hour'
+      granularity: timeRange.granularity || 'hour',
     });
     return this.makeRequest(`/analytics/timeseries/${metric}?${params}`);}
   }
@@ -132,7 +132,7 @@ export class AnalyticsClient extends EventEmitter {
    * Get usage patterns
    */
   async getUsagePatterns()
-    type: 'hourly' | 'daily' | 'weekly'
+    type: 'hourly' | 'daily' | 'weekly',
   ): Promise<AnalyticsResponse> {
     return this.makeRequest(`/analytics/patterns/${type}`);}
   }
@@ -272,7 +272,7 @@ export class AnalyticsClient extends EventEmitter {
    */
   async exportData()
     timeRange: TimeRange,
-    format: 'json' | 'csv' = 'json'
+    format: 'json' | 'csv' = 'json',
   ): Promise<string> {
     const params = new URLSearchParams({)
       startTime: timeRange.startTime.toString(),
@@ -380,7 +380,7 @@ export class AnalyticsClient extends EventEmitter {
     return {
       success: false,
       error: 'Request failed after retries',
-      details: lastError?.message || 'Unknown error'
+      details: lastError?.message || 'Unknown error',
     };
   }
   /**

@@ -619,7 +619,7 @@ export const [error, setError] = useState<string | null>(null);
       }
       const result = await analyticsInfrastructure.executeQuery(query);
       if (result.success && result.data) {
-        const processedData = await processIntegrationData(;)
+        const processedData = await processIntegrationData(;);
           result.data,
           marketplaceContext,
           userRole
@@ -635,7 +635,7 @@ export const [error, setError] = useState<string | null>(null);
     }
   }, [funnelDefinition, analyticsInfrastructure, marketplaceContext, userRole]);
   // Process integration data
-  const processIntegrationData = async (;)
+  const processIntegrationData = async (;);
     rawData: unknown,
     context: MarketplaceContext,
     role: UserRole,
@@ -741,7 +741,7 @@ export const [error, setError] = useState<string | null>(null);
                 effort: 'low',
                 priority: 'medium',
                 timeline: '1 week',
-                resources: ['Marketing Team']
+                resources: ['Marketing Team'],
               }
             ]
           }
@@ -758,7 +758,7 @@ export const [error, setError] = useState<string | null>(null);
                 description: 'Implement live preview functionality',
                 effort: 'high',
                 timeline: 14,
-                dependencies: ['UI Framework Update']
+                dependencies: ['UI Framework Update'],
               },
               {
                 step: 'Enhance preview content',
@@ -847,7 +847,7 @@ export const [error, setError] = useState<string | null>(null);
                 effort: 'low',
                 timeline: 5,
                 tools: ['Analytics Dashboard', 'Market Research Tools'],
-                success_criteria: ['Identify 3-5 high-opportunity mobile template types']
+                success_criteria: ['Identify 3-5 high-opportunity mobile template types'],
               },
               {
                 action: 'Create mobile template prototypes',
@@ -873,13 +873,13 @@ export const [error, setError] = useState<string | null>(null);
                 factor: 'seasonal_demand_increase',
                 impact: 0.15,
                 controllable: false,
-                recommendation: 'Capitalize on seasonal trends with themed templates'
+                recommendation: 'Capitalize on seasonal trends with themed templates',
               },
               {
                 factor: 'improved_template_quality',
                 impact: 0.08,
                 controllable: true,
-                recommendation: 'Continue focusing on high-quality designs'
+                recommendation: 'Continue focusing on high-quality designs',
               }
             ]
           }
@@ -1027,14 +1027,14 @@ export const [error, setError] = useState<string | null>(null);
               description: 'Reduce form fields and implement progressive registration',
               owner: 'Development Team',
               duration: 7,
-              dependencies: ['Analysis completion']
+              dependencies: ['Analysis completion'],
             },
             {
               step: 'A/B test new registration flow',
               description: 'Test optimized flow against current version',
               owner: 'Product Team',
               duration: 14,
-              dependencies: ['New flow implementation']
+              dependencies: ['New flow implementation'],
             }
           ],
           resources: ['UX Designer', 'Frontend Developer', 'Product Analyst'],
@@ -1113,11 +1113,11 @@ export const [error, setError] = useState<string | null>(null);
               step: 'Analyze traffic sources',
               completedAt: Date.now() - 60 * 60 * 1000,
               completedBy: 'analyst-1',
-              notes: 'No significant changes in traffic patterns'
+              notes: 'No significant changes in traffic patterns',
             },
             {
               step: 'Review recent template additions',
-              notes: 'In progress'
+              notes: 'In progress',
             }
           ]
         }
@@ -1158,7 +1158,7 @@ export const [error, setError] = useState<string | null>(null);
     }
   }, [marketplaceContext, onOptimizationAction]);
   // Handle insight interaction
-  const handleInsightInteraction = useCallback(;)
+  const handleInsightInteraction = useCallback(;);
     (interactionType: string,)
     insightId: string,
     context: Record<string,
@@ -1205,7 +1205,7 @@ export const [error, setError] = useState<string | null>(null);
     onExport(exportData);
   }, [integrationData, marketplaceContext, onExport]);
   if (loading) {
-    return ()
+    return ();
       <div className="marketplace-integration-loading">
         <div className="loading-spinner"></div>
         <p>Loading marketplace integration...</p>
@@ -1213,7 +1213,7 @@ export const [error, setError] = useState<string | null>(null);
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className="marketplace-integration-error">
         <h3>Integration Error</h3>
         <p className="error-message">{error}</p>
@@ -1229,7 +1229,7 @@ export const [error, setError] = useState<string | null>(null);
   // Render based on integration mode
   switch (integrationMode) {
     case 'embedded_widget':
-      return ()
+      return ();
         <div className="marketplace-funnel-integration embedded">
           <div className="integration-header">
             <h3>Funnel Analytics</h3>
@@ -1332,7 +1332,7 @@ export const [error, setError] = useState<string | null>(null);
         </div>
       );
     case 'full_dashboard':
-      return ()
+      return ();
         <div className="marketplace-funnel-integration full-dashboard">
           {/* Full dashboard implementation */}
           <div className="dashboard-header">
@@ -1361,7 +1361,7 @@ export const [error, setError] = useState<string | null>(null);
                 timeRange={{ start: Date.now() - 30 * 24 * 60 * 60 * 1000, end: Date.now() }}
                 currentPerformance={{
                   overallConversionRate: integrationData.funnelSummary.overallConversionRate,
-                  stepPerformance: integrationData.funnelSummary.topPerformingSteps.map(step => ({)
+                  stepPerformance: integrationData.funnelSummary.topPerformingSteps.map(step => ({),
                     stepId: step.stepId,
                     stepName: step.stepName,
                     conversionRate: step.conversionRate,
@@ -1402,7 +1402,7 @@ export const [error, setError] = useState<string | null>(null);
         </div>
       );
     default:
-      return ()
+      return ();
         <div className="marketplace-funnel-integration">
           <p>Integration mode '{integrationMode}' not implemented yet.</p>
         </div>

@@ -138,7 +138,7 @@ export declare class AccountLockoutService extends EventEmitter {
     /**
      * Create a new account lockout
      */
-    createLockout()
+    createLockout();
       userId: string,
       userEmail: string,
       reason: LockoutReason,
@@ -162,7 +162,7 @@ export declare class AccountLockoutService extends EventEmitter {
     /**
      * Approve pending unlock request
      */
-    approveUnlock()
+    approveUnlock();
       lockoutId: string,
       adminActionId: string,
       approverId: string,

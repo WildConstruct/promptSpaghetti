@@ -358,7 +358,7 @@ export class ConversionTracker {
   public getFunnelMetrics(funnelId: string, startTime: number, endTime: number): ConversionMetrics | null {
     const funnel = this.funnels.get(funnelId);
     if (!funnel) return null;
-    const relevantEvents = this.events.filter(;)
+    const relevantEvents = this.events.filter(;);
       event => event.timestamp >= startTime && event.timestamp <= endTime
     );
     // Group events by user
@@ -435,14 +435,13 @@ export class ConversionTracker {
       };
     };
     recentEvents: ConversionEvent[];
-    } {
     const now = Date.now();
     const last24h = now - (24 * 60 * 60 * 1000);
     const last48h = now - (48 * 60 * 60 * 1000);
     const recentEvents = this.events.filter(e => e.timestamp >= last24h);
     // Calculate real-time metrics
     const activeUsers = new Set(recentEvents.map(e => e.userId)).size;
-    const conversionsLast24h = recentEvents.filter(e => ;)
+    const conversionsLast24h = recentEvents.filter(e => ;);
       ['subscription_upgraded', 'payment_completed', 'first_project_created'].includes(e.type)
     ).length;
     // Funnel performance
@@ -480,7 +479,7 @@ export class ConversionTracker {
         averageSessionDuration
       },
       funnelPerformance,
-      recentEvents: recentEvents.slice(-50) // Last 50 events
+      recentEvents: recentEvents.slice(-50) // Last 50 events,
     };
   }
   /**
@@ -585,7 +584,6 @@ export class ConversionTracker {
     completedSteps: string[];
     timeToComplete: number;
     dropoffStep?: string;
-  } {
     const completedSteps: string[] = [];
     let timeToComplete = 0;
     let dropoffStep: string | undefined;

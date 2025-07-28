@@ -127,7 +127,7 @@ export class StateOrchestrator extends EventEmitter {
   }
   private async processEvent(event: DomainEvent): Promise<void> {
     // Find applicable coordination rules
-    const applicableRules = this.coordinationRules.filter(rule => ;)
+    const applicableRules = this.coordinationRules.filter(rule => ;);
       rule.sourceDomain === event.domain &&
       rule.eventTypes.includes(event.type) &&
       (!rule.condition || rule.condition(event))
@@ -181,7 +181,7 @@ export class StateOrchestrator extends EventEmitter {
       status: 'pending',
       changes,
       startTime: Date.now(),
-      timeout: Date.now() + this.transactionTimeout
+      timeout: Date.now() + this.transactionTimeout,
     };
     this.activeTransactions.set(transactionId, transaction);
     try {
@@ -248,7 +248,7 @@ export class StateOrchestrator extends EventEmitter {
         return;
       }
       // Find changes for this domain
-      const domainChanges = crossDomainChange.changes.filter(change => ;)
+      const domainChanges = crossDomainChange.changes.filter(change => ;);
         change.domain === domainName
       );
       // Apply each change
@@ -288,7 +288,7 @@ export class StateOrchestrator extends EventEmitter {
       sourceDomain: 'graph-editor',
       targetDomains: ['admin-dashboard'],
       eventTypes: ['GRAPH_MODIFIED', 'EXECUTION_COMPLETED'],
-      transform: (event) => [{
+      transform: (event) => [{,
         ...event,
         domain: 'admin-dashboard',
         type: 'UPDATE_METRICS',
@@ -309,7 +309,7 @@ export class StateOrchestrator extends EventEmitter {
       sourceDomain: 'security',
       targetDomains: ['graph-editor', 'admin-dashboard', 'runtime'],
       eventTypes: ['ACCESS_REVOKED', 'SECURITY_VIOLATION'],
-      transform: (event) => {
+      transform: (event) => {,
         return ['graph-editor', 'admin-dashboard', 'runtime'].map(domain => ({)
           ...event,
           domain,
@@ -329,7 +329,7 @@ export class StateOrchestrator extends EventEmitter {
       sourceDomain: 'runtime',
       targetDomains: ['graph-editor'],
       eventTypes: ['EXECUTION_COMPLETED', 'VALIDATION_FAILED'],
-      transform: (event) => [{
+      transform: (event) => [{,
         ...event,
         domain: 'graph-editor',
         type: 'UPDATE_EXECUTION_STATE',

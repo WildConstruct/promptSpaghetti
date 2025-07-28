@@ -188,7 +188,7 @@ export abstract class FrameworkNode extends AdvancedRuntimeNode {
         nodeType: this.getType(),
         executionTime: Date.now() - startTime,
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
       throw error;
     }

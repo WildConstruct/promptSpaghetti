@@ -216,9 +216,9 @@ export const UndoRedoManager: React.FC<UndoRedoManagerProps> = ({)
     redo: handleRedo,
     canUndo: () => canUndo,
     canRedo: () => canRedo,
-    clear: () => undoSystem.clear()
+    clear: () => undoSystem.clear(),
   }), [undoSystem, handleUndo, handleRedo, canUndo, canRedo]);
-  return ()
+  return ();
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '8px' }}>
       {/* Undo Button */}
       <button
@@ -323,7 +323,7 @@ export const UndoRedoManager: React.FC<UndoRedoManagerProps> = ({)
             {undoSystem.getHistory().map((state, index) => {
               const isCurrent = index === undoSystem.getCurrentIndex();
               const relativeTime = new Date(state.timestamp).toLocaleTimeString();
-              return ()
+              return ();
                 <div
                   key={state.id}
                   onClick={() => handleHistorySelect(index)}
@@ -333,7 +333,7 @@ export const UndoRedoManager: React.FC<UndoRedoManagerProps> = ({)
                     background: isCurrent ? styles.accent + '20' : 'transparent',
                     borderLeft: isCurrent ? `4px solid ${styles.accent}` : '4px solid transparent',}
                     borderBottom: `1px solid ${styles.border}`,}
-                    transition: 'all var(--transition-fast)'
+                    transition: 'all var(--transition-fast)',
                   }}
                 >
                   <div style={{

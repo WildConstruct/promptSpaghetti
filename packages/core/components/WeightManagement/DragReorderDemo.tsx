@@ -159,13 +159,13 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
     return themes[theme];
   };
   const styles = getThemeStyles();
-  return ()
+  return ();
     <div style={{
       minHeight: '100vh',
       background: `linear-gradient(135deg, ${styles.background}, ${styles.secondary})`,}
       color: styles.text,
       fontFamily: 'Inter, system-ui, sans-serif',
-      padding: '40px 20px'
+      padding: '40px 20px',
     }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         {/* Header */}
@@ -271,7 +271,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
                   margin: '0 0 8px 0',
                   fontSize: '16px',
                   fontWeight: 600,
-                  color: activeScenario === id ? styles.accent : styles.text
+                  color: activeScenario === id ? styles.accent : styles.text,
                 }}>
                   {scenario.title}
                 </h4>
@@ -353,7 +353,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <span style={{ opacity: 0.7 }}>Distribution:</span>
                     <strong style={{ 
-                      color: statistics.evenness > 0.7 ? styles.success : 
+                      color: statistics.evenness > 0.7 ? styles.success : ,
                         statistics.evenness > 0.4 ? styles.warning : styles.accent
                     }}>
                       {statistics.evenness > 0.7 ? 'Even' : 
@@ -415,7 +415,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
                       fontWeight: 600,
                       cursor: isGenerating ? 'not-allowed' : 'pointer',
                       opacity: isGenerating || demoOptions.length === 0 ? 0.5 : 1,
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
                     }}
                   >
                     {isGenerating ? '🔄 Generating...' : '✨ Generate'}
@@ -440,7 +440,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({)
                           fontSize: '14px',
                           opacity: isGenerating && index >= previewResults.length - 1 ? 0.5 : 1,
                           transition: 'opacity 0.3s ease',
-                          animation: isGenerating && index === previewResults.length - 1 ? 'fadeIn 0.3s ease' : 'none'
+                          animation: isGenerating && index === previewResults.length - 1 ? 'fadeIn 0.3s ease' : 'none',
                         }}
                       >
                         <span style={{

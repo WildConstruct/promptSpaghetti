@@ -161,7 +161,7 @@ export class SecurityEventPolicyManager {
       channel_type: 'slack',
       endpoint: 'https://hooks.slack.com/services/security-alerts',
       credentials: {,
-        webhook_token: process.env.SLACK_WEBHOOK_TOKEN || ''
+        webhook_token: process.env.SLACK_WEBHOOK_TOKEN || '',
       },
       enabled: true,
       severity_filter: [SecurityEventSeverity.MEDIUM, SecurityEventSeverity.HIGH, SecurityEventSeverity.CRITICAL],
@@ -177,7 +177,7 @@ export class SecurityEventPolicyManager {
       endpoint: process.env.SIEM_ENDPOINT || 'https://siem.promptscape.internal/api/events',
       credentials: {,
         api_key: process.env.SIEM_API_KEY || '',
-        tenant_id: process.env.SIEM_TENANT_ID || ''
+        tenant_id: process.env.SIEM_TENANT_ID || '',
       },
       enabled: this.config.integration_config.siem_integration_enabled,
       severity_filter: Object.values(SecurityEventSeverity),
@@ -201,7 +201,7 @@ export class SecurityEventPolicyManager {
       endpoint: process.env.SMS_SERVICE_ENDPOINT || '',
       credentials: {,
         api_key: process.env.SMS_API_KEY || '',
-        sender_id: process.env.SMS_SENDER_ID || 'PromptScape'
+        sender_id: process.env.SMS_SENDER_ID || 'PromptScape',
       },
       enabled: true,
       severity_filter: [SecurityEventSeverity.CRITICAL],
@@ -290,7 +290,7 @@ export class SecurityEventPolicyManager {
               success: true,
               details: blockResult.details,
               rollback_available: true,
-              rollback_deadline: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+              rollback_deadline: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours,
             });
           }
           break;
@@ -471,7 +471,7 @@ export class SecurityEventPolicyManager {
           escalations_count: 0,
           compliance_violations: 0,
           effectiveness_score: 100,
-          last_updated: new Date()
+          last_updated: new Date(),
         };
       }
       // Update metrics
@@ -674,7 +674,6 @@ export class SecurityEventPolicyManager {
     compliance_violation_rate: number;
     top_performing_policies: PolicyMetrics[];
     recommendations: string[];
-    } {
     const metrics = Array.from(this.policyMetrics.values());
     const activePolicies = securityEventPolicyEngine.getPolicies().filter(p => p.enabled);
     const totalEventsProcessed = metrics.reduce((sum, m) => sum + m.events_processed, 0);

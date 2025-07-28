@@ -72,7 +72,7 @@ export const DirectorPreviewToolbar: React.FC<DirectorPreviewToolbarProps> = ({)
     if (time < 1000) return '#ff0'; // Yellow - Moderate  
     return '#f00'; // Red - Slow
   };
-  return ()
+  return ();
     <div className={`director-preview-toolbar ${className}`}>}
       {/* Main Toolbar */}
       <div className={`toolbar-main ${compactMode ? 'compact' : 'expanded'}`}>}
@@ -197,7 +197,7 @@ export const DirectorPreviewToolbar: React.FC<DirectorPreviewToolbarProps> = ({)
                   color: '#fff',
                   fontSize: '12px',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.2s ease',
                 }}
                 title="Open Advanced Settings (Alt+S)"
               >

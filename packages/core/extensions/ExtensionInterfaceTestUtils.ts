@@ -429,7 +429,7 @@ export class ExtensionInterfaceTestSuite {
     tests.push(this.runTest('Code Injection Protection', () => {
       const config = extension.getConfiguration();
       const configString = JSON.stringify(config);
-      const dangerousPatterns = ['eval(', 'Function(', 'setTimeout(', 'setInterval('];)
+      const dangerousPatterns = ['eval(', 'Function(', 'setTimeout(', 'setInterval('];);
       const found = dangerousPatterns.find(pattern => configString.includes(pattern));
       if (found) {
         throw new Error(`Potentially dangerous code pattern found: ${found}`);}
@@ -448,14 +448,14 @@ export class ExtensionInterfaceTestSuite {
         name,
         passed: true,
         error: undefined,
-        duration: performance.now() - start
+        duration: performance.now() - start,
       };
     } catch (error) {
       return {
         name,
         passed: false,
         error: error.message,
-        duration: performance.now() - start
+        duration: performance.now() - start,
       };
     }
   }
@@ -470,14 +470,14 @@ export class ExtensionInterfaceTestSuite {
         name,
         passed: true,
         error: undefined,
-        duration: performance.now() - start
+        duration: performance.now() - start,
       };
     } catch (error) {
       return {
         name,
         passed: false,
         error: error.message,
-        duration: performance.now() - start
+        duration: performance.now() - start,
       };
     }
   }
@@ -555,7 +555,7 @@ export class ExtensionInterfaceMockFactory {
       name: `Mock ${type.charAt(0).toUpperCase() + type.slice(1)} Extension`,}
       version: '1.0.0',
       description: `A mock ${type} extension for testing`,}
-      author: 'Test Author'
+      author: 'Test Author',
     });
     // Add type-specific methods
     switch (type) {

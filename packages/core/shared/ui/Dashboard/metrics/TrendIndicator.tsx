@@ -75,7 +75,7 @@ export const TrendIndicator: React.FC<TrendIndicatorProps> = ({)
     large: 16,
   };
   const TrendIcon = getTrendIcon();
-  return ()
+  return ();
     <div className={`trend-indicator ${getTrendClass()} trend-${size} ${className}`}>}
       {showIcon && ()
         <TrendIcon size={iconSizes[size]} className="trend-icon" />

@@ -56,7 +56,7 @@ describe('PricingOptimizer', () => {
         {
           minQuantity: 10000,
           discountPercentage: 10,
-          description: '10% discount for high volume usage'
+          description: '10% discount for high volume usage',
         }
       ],
       aiOptimization: {,
@@ -113,12 +113,12 @@ describe('PricingOptimizer', () => {
           {
             period: 'awards_season',
             multiplier: 1.4,
-            description: 'Awards season premium pricing'
+            description: 'Awards season premium pricing',
           },
           {
             period: 'festival_season',
             multiplier: 1.2,
-            description: 'Film festival season adjustment'
+            description: 'Film festival season adjustment',
           }
         ]
       }
@@ -515,7 +515,7 @@ describe('PricingOptimizer', () => {
       const problematicModel: PricingModel = {
         ...basicModel,
         id: 'problematic-model',
-        basePrice: 0 // This might cause issues
+        basePrice: 0 // This might cause issues,
       };
       optimizer.addPricingModel(problematicModel);
       const errorPromise = new Promise<void>((resolve) => {

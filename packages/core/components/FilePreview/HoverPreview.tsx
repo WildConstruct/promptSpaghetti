@@ -127,7 +127,7 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({)
       }
     };
   }, []);
-  return ()
+  return ();
     <>
       {/* Trigger Element */}
       <div
@@ -155,7 +155,7 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({)
             borderRadius: '8px',
             border: '1px solid #e5e5e5',
             maxWidth: '350px',
-            animation: 'fadeIn 0.15s ease-out'
+            animation: 'fadeIn 0.15s ease-out',
           }}
           onMouseEnter={handlePreviewMouseEnter}
           onMouseLeave={handlePreviewMouseLeave}
@@ -189,7 +189,7 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({)
 
 // Memoized component for performance
 const MemoizedHoverPreview = React.memo(HoverPreview, (prevProps, nextProps) => {
-  return ()
+  return ();
     prevProps.file.id === nextProps.file.id &&
     prevProps.file.lastModified.getTime() === nextProps.file.lastModified.getTime() &&
     prevProps.delay === nextProps.delay &&

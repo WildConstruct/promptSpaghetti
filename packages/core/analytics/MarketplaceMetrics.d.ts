@@ -146,7 +146,7 @@ export declare class MarketplaceMetrics {
     /**
      * Track marketplace event
      */
-    trackEvent()
+    trackEvent();
       type: MarketplaceEventType,
       properties?: Record<string,
       any>,

@@ -159,12 +159,12 @@ export class ExternalDataService {
       const results = await this.queryDataSource(source, testQuery);
       return {
         valid: true,
-        sample_data: results[0] || null
+        sample_data: results[0] || null,
       };
     } catch (error) {
       return {
         valid: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   }
@@ -189,7 +189,7 @@ export class ExternalDataService {
     return {
       total_entries: entries.length,
       total_size: totalSize,
-      hit_rate: 0 // Would need to track hits/misses over time
+      hit_rate: 0 // Would need to track hits/misses over time,
     };
   }
   /**
@@ -220,7 +220,7 @@ export class ExternalDataService {
       const response = await fetch(url, {)
         method: 'GET',
         headers,
-        timeout: 30000 // 30 second timeout
+        timeout: 30000 // 30 second timeout,
       });
       if (!response.ok) {
         throw new Error(`API request failed: ${response.status} ${response.statusText}`);}
@@ -306,7 +306,7 @@ export class ExternalDataService {
           era: this.parseEras(item[fieldMapping.era] || item.period),
           authenticity: parseFloat(item[fieldMapping.authenticity]) || 0.5,
           source: config.source_name || 'external',
-          tags: this.parseTags(item[fieldMapping.tags] || item.keywords || [])
+          tags: this.parseTags(item[fieldMapping.tags] || item.keywords || []),
         },
         relationships: {,
           compatible: [],
@@ -358,7 +358,7 @@ export class ExternalDataService {
     return data.map(item => ({)
       ...item,
       ...config.additional_fields,
-      enriched_at: new Date().toISOString()
+      enriched_at: new Date().toISOString(),
     }));
   }
   /**
@@ -482,17 +482,16 @@ export class ExternalDataService {
       if (query.era) {
         const queryEras = Array.isArray(query.era) ? query.era : [query.era];
         const sourceCoverage = source.metadata.coverage_eras.map(era => era.name.toLowerCase());
-        const hasEraOverlap = queryEras.some(era => ;)
+        const hasEraOverlap = queryEras.some(era => ;);
           sourceCoverage.some(covered => )
             covered.includes(era.toLowerCase()) || era.toLowerCase().includes(covered)
-          )
         );
         if (!hasEraOverlap) return false;
       }
       // Check if source covers the query data types
       if (query.category) {
         const queryTypes = Array.isArray(query.category) ? query.category : [query.category];
-        const hasTypeOverlap = queryTypes.some(type => ;)
+        const hasTypeOverlap = queryTypes.some(type => ;);
           source.metadata.data_types.includes(type)
         );
         if (!hasTypeOverlap) return false;
@@ -536,7 +535,7 @@ export class ExternalDataService {
   private generateCacheKey(query: HistoricalQuery, sourceIds?: string[]): string {
     const keyData = {
       ...query,
-      sources: sourceIds?.sort() || 'all'
+      sources: sourceIds?.sort() || 'all',
     };
     return btoa(JSON.stringify(keyData));
   }
@@ -603,9 +602,9 @@ export class ExternalDataService {
               authenticity: 'accuracy',
               tags: 'categories',
             },
-            source_name: 'Medieval Demo'
+            source_name: 'Medieval Demo',
           },
-          description: 'Map medieval demo fields to UTDG format'
+          description: 'Map medieval demo fields to UTDG format',
         }
       ],
       metadata: {,
@@ -613,7 +612,7 @@ export class ExternalDataService {
         coverage_eras: [require('../types/UTDG').HISTORICAL_ERAS.MEDIEVAL_HIGH],
         data_types: ['garment', 'material', 'accessory'],
         accuracy_level: 'high',
-        last_validated: new Date().toISOString()
+        last_validated: new Date().toISOString(),
       }
     });
   }

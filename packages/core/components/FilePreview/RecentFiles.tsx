@@ -79,7 +79,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
   const filesToDisplay = useMemo(() => {
     return currentView === 'recent' ? recentFiles : favoriteFiles;
   }, [currentView, recentFiles, favoriteFiles]);
-  return ()
+  return ();
     <div className={className} style={style}>
       {/* View Toggle */}
       <div style={{
@@ -87,7 +87,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
         marginBottom: '16px',
         borderRadius: '6px',
         overflow: 'hidden',
-        border: '1px solid #e5e5e5'
+        border: '1px solid #e5e5e5',
       }}>
         <button
           onClick={() => setCurrentView('recent')}
@@ -143,7 +143,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
                 border: '1px solid #e5e5e5',
                 borderRadius: '8px',
                 overflow: 'hidden',
-                transition: 'border-color 0.2s ease'
+                transition: 'border-color 0.2s ease',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = '#3B82F6';
@@ -226,7 +226,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({)
 
 // Memoized component for performance
 const MemoizedRecentFiles = React.memo(RecentFiles, (prevProps, nextProps) => {
-  return ()
+  return ();
     prevProps.limit === nextProps.limit &&
     prevProps.onClick === nextProps.onClick
   );

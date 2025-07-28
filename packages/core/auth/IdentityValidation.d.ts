@@ -152,7 +152,7 @@ export declare class IdentityValidationService {
     /**
      * Submit identity validation request
      */
-    submitValidationRequest()
+    submitValidationRequest();
       userId: string,
       type: IdentityValidationType,
       data: Partial<IdentityValidationData>,

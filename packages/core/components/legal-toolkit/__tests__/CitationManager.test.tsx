@@ -44,7 +44,7 @@ describe('CitationManager Component', () => {
   });
   describe('Initial Rendering', () => {
     it('renders citation manager interface', () => {
-      render()
+      render();
         <CitationManager
           citations={[]}
           onCitationAdd={mockOnCitationAdd}
@@ -57,7 +57,7 @@ describe('CitationManager Component', () => {
       expect(screen.getByText(/Add New Citation/i)).toBeInTheDocument();
     });
     it('displays existing citations', () => {
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -71,7 +71,7 @@ describe('CitationManager Component', () => {
       expect(screen.getByText(/2 Citations/i)).toBeInTheDocument();
     });
     it('shows empty state when no citations exist', () => {
-      render()
+      render();
         <CitationManager
           citations={[]}
           onCitationAdd={mockOnCitationAdd}
@@ -86,7 +86,7 @@ describe('CitationManager Component', () => {
   });
   describe('Citation Display', () => {
     it('displays citation details correctly', () => {
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -112,7 +112,7 @@ describe('CitationManager Component', () => {
         />
       );
       expect(screen.getByText(/Bluebook Style/i)).toBeInTheDocument();
-      rerender()
+      rerender();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -124,7 +124,7 @@ describe('CitationManager Component', () => {
       expect(screen.getByText(/ALWD Style/i)).toBeInTheDocument();
     });
     it('displays URLs when available', () => {
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -141,7 +141,7 @@ describe('CitationManager Component', () => {
   describe('Adding Citations', () => {
     it('opens add citation form when Add New Citation is clicked', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={[]}
           onCitationAdd={mockOnCitationAdd}
@@ -159,7 +159,7 @@ describe('CitationManager Component', () => {
     });
     it('fills and submits add citation form', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={[]}
           onCitationAdd={mockOnCitationAdd}
@@ -191,7 +191,7 @@ describe('CitationManager Component', () => {
     });
     it('validates required fields before submission', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={[]}
           onCitationAdd={mockOnCitationAdd}
@@ -211,7 +211,7 @@ describe('CitationManager Component', () => {
     });
     it('cancels add citation form', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={[]}
           onCitationAdd={mockOnCitationAdd}
@@ -231,7 +231,7 @@ describe('CitationManager Component', () => {
   describe('Editing Citations', () => {
     it('opens edit form when edit button is clicked', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -247,7 +247,7 @@ describe('CitationManager Component', () => {
     });
     it('saves edited citation', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -265,12 +265,12 @@ describe('CitationManager Component', () => {
       const saveButton = screen.getByText(/Save Citation/i);
       await user.click(saveButton);
       expect(mockOnCitationEdit).toHaveBeenCalledWith('1', expect.objectContaining({)
-        shortForm: 'Brown v. Board (Updated)'
+        shortForm: 'Brown v. Board (Updated)',
       }));
     });
     it('cancels edit without saving changes', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -295,7 +295,7 @@ describe('CitationManager Component', () => {
   describe('Deleting Citations', () => {
     it('shows delete confirmation dialog', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -311,7 +311,7 @@ describe('CitationManager Component', () => {
     });
     it('deletes citation when confirmed', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -328,7 +328,7 @@ describe('CitationManager Component', () => {
     });
     it('cancels deletion', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -347,7 +347,7 @@ describe('CitationManager Component', () => {
   });
   describe('Citation Formatting', () => {
     it('formats citations according to selected style', () => {
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -362,9 +362,9 @@ describe('CitationManager Component', () => {
     it('displays pinpoint citations when available', () => {
       const citationWithPinpoint: Citation[] = [{
         ...mockCitations[0],
-        pinpoint: 'at 495'
+        pinpoint: 'at 495',
       }];
-      render()
+      render();
         <CitationManager
           citations={citationWithPinpoint}
           onCitationAdd={mockOnCitationAdd}
@@ -379,7 +379,7 @@ describe('CitationManager Component', () => {
   describe('Search and Filtering', () => {
     it('filters citations by search term', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -395,7 +395,7 @@ describe('CitationManager Component', () => {
     });
     it('shows all citations when search is cleared', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -412,7 +412,7 @@ describe('CitationManager Component', () => {
     });
     it('shows no results message when search yields no matches', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -429,7 +429,7 @@ describe('CitationManager Component', () => {
   describe('Sorting', () => {
     it('sorts citations by date', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -447,7 +447,7 @@ describe('CitationManager Component', () => {
     });
     it('sorts citations alphabetically', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -467,7 +467,7 @@ describe('CitationManager Component', () => {
   describe('Export Functionality', () => {
     it('exports citations in selected format', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -485,7 +485,7 @@ describe('CitationManager Component', () => {
   });
   describe('Accessibility', () => {
     it('provides proper ARIA labels', () => {
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -501,7 +501,7 @@ describe('CitationManager Component', () => {
     });
     it('supports keyboard navigation', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={mockCitations}
           onCitationAdd={mockOnCitationAdd}
@@ -518,7 +518,7 @@ describe('CitationManager Component', () => {
     });
     it('announces changes to screen readers', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={[]}
           onCitationAdd={mockOnCitationAdd}
@@ -540,7 +540,7 @@ describe('CitationManager Component', () => {
         shortForm: '',
         longForm: '',
       } as Citation;
-      render()
+      render();
         <CitationManager
           citations={[invalidCitation]}
           onCitationAdd={mockOnCitationAdd}
@@ -556,7 +556,7 @@ describe('CitationManager Component', () => {
         throw new Error('Callback error');
       });
       const user = userEvent.setup();
-      render()
+      render();
         <CitationManager
           citations={[]}
           onCitationAdd={errorCallback}

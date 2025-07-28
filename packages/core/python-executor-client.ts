@@ -64,12 +64,11 @@ export interface PythonExecutorConfig {
 }
 
 export class PythonExecutorClientError extends Error {
-  constructor()
+  constructor();
     message: string,
     public code: string,
     public statusCode?: number,
     public details?: any
-  ) {
     super(message);
     this.name = 'PythonExecutorClientError';
   }
@@ -101,7 +100,7 @@ export class PythonExecutorClient {
       ...request,
       timeout: request.timeout || this.config.defaultTimeout,
       memory_limit: request.memory_limit || this.config.defaultMemoryLimit,
-      strict_mode: request.strict_mode ?? this.config.defaultStrictMode
+      strict_mode: request.strict_mode ?? this.config.defaultStrictMode,
     };
     try {
       const response = await this.makeRequest('/v1/execute', {)
@@ -125,7 +124,7 @@ export class PythonExecutorClient {
         cache_hit: false,
         security_events: [],
         sandbox_violations: 0,
-        error_message: 'No response data'
+        error_message: 'No response data',
       };
       // Log metrics if enabled
       if (this.config.enableMetrics) {
@@ -144,7 +143,7 @@ export class PythonExecutorClient {
     const requestId = this.generateRequestId();
     const validateRequest: PythonValidationRequest = {
       ...request,
-      strict_mode: request.strict_mode ?? this.config.defaultStrictMode
+      strict_mode: request.strict_mode ?? this.config.defaultStrictMode,
     };
     try {
       const response = await this.makeRequest('/v1/validate', {)
@@ -260,10 +259,9 @@ export class PythonExecutorClient {
       } catch (error) {
         lastError = error as Error;
         // Don't retry on certain errors
-        if ()
+        if ();
           error instanceof PythonExecutorClientError &&
           (error.statusCode === 400 || error.statusCode === 401 || error.statusCode === 403)
-        ) {
           throw error;
         }
         // Don't retry on the last attempt
@@ -326,7 +324,7 @@ export class PythonExecutorClient {
 export const pythonExecutorClient = new PythonExecutorClient({)
   baseUrl: process.env.PYTHON_EXECUTOR_URL || 'http://localhost:8001',
   apiKey: process.env.PYTHON_EXECUTOR_API_KEY,
-  enableMetrics: process.env.NODE_ENV !== 'production'
+  enableMetrics: process.env.NODE_ENV !== 'production',
 });
 /**
  * Factory function for creating configured clients

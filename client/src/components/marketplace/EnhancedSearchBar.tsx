@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useMarketplace } from '../../hooks/useMarketplace';
 import './SearchBar.css';
-
 interface EnhancedSearchBarProps {
   value: string;
   onChange: (value: string) => void;
@@ -11,12 +10,11 @@ interface EnhancedSearchBarProps {
   className?: string;
 }
 
-export   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
+export const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const { getSearchSuggestions } = useMarketplace();
-
   // Suggestion fetching function
   const getSuggestions = useCallback(async (query: string) => {
     if (query.length < 2) {
@@ -24,7 +22,6 @@ export   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
       setShowSuggestions(false);
       return;
     }
-
     setLoading(true);
     try {
       const newSuggestions = await getSearchSuggestions(query);
@@ -38,44 +35,36 @@ export   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
       setLoading(false);
     }
   }, [getSearchSuggestions]);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
+      if ()
         suggestionsRef.current &&
         !suggestionsRef.current.contains(event.target as Node) &&
         !inputRef.current?.contains(event.target as Node)
-      ) {
         setShowSuggestions(false);
         setSelectedSuggestion(-1);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
   // Debounced effect for suggestion fetching
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       getSuggestions(value);
     }, 300);
-
     return () => clearTimeout(timeoutId);
   }, [value, getSuggestions]);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     onChange(newValue);
     setSelectedSuggestion(-1);
   };
-
   const handleInputFocus = () => {
     if (suggestions.length > 0 && value.length >= 2) {
       setShowSuggestions(true);
     }
   };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!showSuggestions) {
       if (e.key === 'Enter') {
@@ -83,17 +72,16 @@ export   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
       }
       return;
     }
-
     switch (e.key) {
     case 'ArrowDown':
       e.preventDefault();
-      setSelectedSuggestion(prev => 
+      setSelectedSuggestion(prev => )
         prev < suggestions.length - 1 ? prev + 1 : 0
       );
       break;
     case 'ArrowUp':
       e.preventDefault();
-      setSelectedSuggestion(prev => 
+      setSelectedSuggestion(prev => )
         prev > 0 ? prev - 1 : suggestions.length - 1
       );
       break;
@@ -112,20 +100,17 @@ export   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
       break;
     }
   };
-
   const handleSuggestionSelect = (suggestion: string) => {
     onChange(suggestion);
     setShowSuggestions(false);
     setSelectedSuggestion(-1);
     handleSubmit();
   };
-
   const handleSubmit = () => {
     onSubmit?.();
     setShowSuggestions(false);
     setSelectedSuggestion(-1);
   };
-
   const handleClearSearch = () => {
     onChange('');
     setShowSuggestions(false);
@@ -133,9 +118,8 @@ export   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
     setSuggestions([]);
     inputRef.current?.focus();
   };
-
-  return (
-    <div className={`search-bar enhanced-search-bar ${className}`}>
+  return ()
+    <div className={`search-bar enhanced-search-bar ${className}`}>}
       <div className="search-input-container">
         <div className="search-icon">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -148,7 +132,6 @@ export   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
             />
           </svg>
         </div>
-
         <input
           ref={inputRef}
           type="text"
@@ -164,8 +147,7 @@ export   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
           aria-haspopup="listbox"
           role="combobox"
         />
-
-        {value && (
+        {value && ()
           <button
             onClick={handleClearSearch}
             className="clear-button"
@@ -183,13 +165,11 @@ export   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
             </svg>
           </button>
         )}
-
-        {loading && (
+        {loading && ()
           <div className="search-loading">
             <div className="spinner"></div>
           </div>
         )}
-
         <button
           onClick={handleSubmit}
           className="search-submit"
@@ -199,15 +179,14 @@ export   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
           Search
         </button>
       </div>
-
       {/* Enhanced Suggestions with Categories */}
-      {showSuggestions && suggestions.length > 0 && (
+      {showSuggestions && suggestions.length > 0 && ()
         <div 
           ref={suggestionsRef} 
           className="search-suggestions enhanced-suggestions"
           role="listbox"
         >
-          {suggestions.map((suggestion, index) => (
+          {suggestions.map((suggestion, index) => ()
             <button
               key={suggestion}
               onClick={() => handleSuggestionSelect(suggestion)}
@@ -239,9 +218,8 @@ export   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
           ))}
         </div>
       )}
-
       {/* Recent Searches (when no active search) */}
-      {!value && !showSuggestions && (
+      {!value && !showSuggestions && ()
         <div className="recent-searches">
           <div className="recent-searches-header">
             <span>Recent searches</span>

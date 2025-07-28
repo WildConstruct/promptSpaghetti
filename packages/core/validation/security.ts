@@ -276,7 +276,7 @@ export const SecureValidation = {
   /**
    * Safe string validation with pattern checking
    */
-  safeString: (maxLength: number = 10000) => 
+  safeString: (maxLength: number = 10000) => ,
     z.string()
       .max(maxLength, `String must be no longer than ${maxLength} characters`)}
       .refine()
@@ -286,7 +286,7 @@ export const SecureValidation = {
   /**
    * Safe expression validation for conditionals
    */
-  safeExpression: (maxLength: number = 500) =>
+  safeExpression: (maxLength: number = 500) =>,
     z.string()
       .max(maxLength, `Expression must be no longer than ${maxLength} characters`)}
       .refine()
@@ -296,7 +296,7 @@ export const SecureValidation = {
   /**
    * Safe property key validation
    */
-  safePropertyKey: (maxLength: number = 64) =>
+  safePropertyKey: (maxLength: number = 64) =>,
     z.string()
       .max(maxLength, `Property key must be no longer than ${maxLength} characters`)}
       .refine()
@@ -307,7 +307,7 @@ export const SecureValidation = {
    * Variable name validation for SetVariable nodes
    * Enforces strict alphanumeric pattern with 64 character limit
    */
-  variableName: () =>
+  variableName: () =>,
     z.string()
       .min(1, 'Variable name cannot be empty')
       .max(VARIABLE_NAME_MAX_LENGTH, `Variable name must be no longer than ${VARIABLE_NAME_MAX_LENGTH} characters`)}
@@ -319,7 +319,7 @@ export const SecureValidation = {
   /**
    * Safe value validation for variables
    */
-  safeValue: () =>
+  safeValue: () =>,
     z.union([)
       z.string().max(10000).refine()
         (val) => SecurityValidation.validateSafeString(val),
@@ -360,11 +360,9 @@ export const SecureValidation = {
       .refine()
         (val) => Object.keys(val).length <= maxKeys,
         { message: `Object must contain no more than ${maxKeys} properties` }
-      )
       .refine()
         (val) => Object.keys(val).every(key => SecurityValidation.validateSafePropertyKey(key)),
         { message: 'Object contains dangerous property keys' }
-      )
 };
 /**
  * Security testing utilities
@@ -395,7 +393,7 @@ export class SecurityTesting {
    */
   static testInjectionProtection()
     validator: (input: string) => boolean,
-    testName: string = 'Unknown'
+    testName: string = 'Unknown',
   ): { passed: number; failed: number; failedPatterns: string[] } {
     let passed = 0;
     let failed = 0;
@@ -420,15 +418,15 @@ export class SecurityTesting {
    */
   static runSecurityTests(): boolean {
     console.log('🔐 Running Security Validation Tests...');
-    const stringTest = this.testInjectionProtection(;)
+    const stringTest = this.testInjectionProtection(;);
       SecurityValidation.validateSafeString,
       'Safe String Validation'
     );
-    const expressionTest = this.testInjectionProtection(;)
+    const expressionTest = this.testInjectionProtection(;);
       SecurityValidation.validateSafeExpression,
       'Safe Expression Validation'
     );
-    const keyTest = this.testInjectionProtection(;)
+    const keyTest = this.testInjectionProtection(;);
       SecurityValidation.validateSafePropertyKey,
       'Safe Property Key Validation'
     );

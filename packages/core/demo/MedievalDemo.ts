@@ -198,7 +198,7 @@ export class MedievalDemo {
         socialStatus: 'any',
         tradingSources: ['Local sheep farms', 'Rural markets'],
         primaryUses: ['peasant clothing', 'blankets', 'everyday wear'],
-        historicalNotes: 'Most common fabric for lower classes'
+        historicalNotes: 'Most common fabric for lower classes',
       },
       {
         id: 'silk_imported',
@@ -210,7 +210,7 @@ export class MedievalDemo {
         socialStatus: 'royal',
         tradingSources: ['Byzantine Empire', 'Silk Road traders'],
         primaryUses: ['royal garments', 'ceremonial dress', 'church vestments'],
-        historicalNotes: 'Symbol of ultimate luxury and status'
+        historicalNotes: 'Symbol of ultimate luxury and status',
       },
       {
         id: 'leather_tanned',
@@ -222,7 +222,7 @@ export class MedievalDemo {
         socialStatus: 'any',
         tradingSources: ['Local tanners', 'Town markets'],
         primaryUses: ['shoes', 'belts', 'armor components', 'bags'],
-        historicalNotes: 'Essential material for practical items'
+        historicalNotes: 'Essential material for practical items',
       },
       {
         id: 'steel_quality',
@@ -257,7 +257,7 @@ export class MedievalDemo {
         timeOfDay: 'any',
         season: 'any',
         geographicalRegion: 'Northern Europe',
-        politicalContext: 'Feudal stronghold'
+        politicalContext: 'Feudal stronghold',
       },
       {
         id: 'village_market',
@@ -270,7 +270,7 @@ export class MedievalDemo {
         timeOfDay: 'morning',
         season: 'any',
         geographicalRegion: 'Rural England',
-        politicalContext: 'Village under manor lord'
+        politicalContext: 'Village under manor lord',
       },
       {
         id: 'monastery_scriptorium',
@@ -283,7 +283,7 @@ export class MedievalDemo {
         timeOfDay: 'morning',
         season: 'any',
         geographicalRegion: 'European monasteries',
-        politicalContext: 'Religious institution'
+        politicalContext: 'Religious institution',
       }
     ];
     locationData.forEach(location => {)
@@ -308,7 +308,7 @@ export class MedievalDemo {
         skills: ['swordsmanship', 'horsemanship', 'military tactics'],
         possessions: ['destrier warhorse', 'sword', 'shield', 'land grant'],
         socialConnections: ['feudal lord', 'fellow knights', 'squire'],
-        historicalContext: 'Serves local baron in territorial disputes'
+        historicalContext: 'Serves local baron in territorial disputes',
       },
       {
         id: 'elena_weaver',
@@ -322,7 +322,7 @@ export class MedievalDemo {
         skills: ['weaving', 'spinning', 'dyeing', 'business'],
         possessions: ['loom', 'spinning wheel', 'dye pots', 'finished textiles'],
         socialConnections: ['guild members', 'merchants', 'apprentices'],
-        historicalContext: 'Prosperous artisan in growing cloth trade'
+        historicalContext: 'Prosperous artisan in growing cloth trade',
       },
       {
         id: 'brother_aldric',
@@ -336,7 +336,7 @@ export class MedievalDemo {
         skills: ['Latin', 'illumination', 'copying', 'theology'],
         possessions: ['quills', 'ink', 'parchment', 'personal psalter'],
         socialConnections: ['abbot', 'fellow monks', 'visiting scholars'],
-        historicalContext: 'Preserves ancient knowledge in monastery'
+        historicalContext: 'Preserves ancient knowledge in monastery',
       }
     ];
     characterData.forEach(character => {)
@@ -359,7 +359,7 @@ export class MedievalDemo {
         timeContext: {,
           season: 'autumn',
           timeOfDay: 'afternoon',
-          weather: 'crisp and clear'
+          weather: 'crisp and clear',
         },
         activities: ['setting tables', 'arranging tapestries', 'preparing entertainment'],
         socialDynamics: ['noble-servant hierarchy', 'guest protocols', 'honor displays'],
@@ -380,7 +380,7 @@ export class MedievalDemo {
         timeContext: {,
           season: 'winter',
           timeOfDay: 'dawn',
-          weather: 'frost on windows'
+          weather: 'frost on windows',
         },
         activities: ['morning prayers', 'manuscript copying', 'contemplation'],
         socialDynamics: ['religious hierarchy', 'scholarly pursuit', 'spiritual discipline'],
@@ -473,7 +473,6 @@ export class MedievalDemo {
     isValid: boolean;
     violations: string[];
     suggestions: string[];
-  } {
     const violations: string[] = [];
     const suggestions: string[] = [];
     // Validate materials for time period
@@ -548,7 +547,6 @@ export class MedievalDemo {
     materials: MedievalMaterial[];
     historicalContext: string;
     promptSuggestions: string[];
-  } {
     const scene = this.generateMedievalScene({ theme }) || Array.from(this.sceneDatabase.values())[0];
     const characters = scene.characters;
     const clothing: MedievalClothing[] = [];
@@ -559,7 +557,7 @@ export class MedievalDemo {
       });
       clothing.push(...charClothing);
     });
-    const materials = Array.from(this.materialDatabase.values()).filter(material => ;)
+    const materials = Array.from(this.materialDatabase.values()).filter(material => ;);
       clothing.some(c => c.materials.includes(material.name))
     );
     const historicalContext = this.generateHistoricalContext(scene);
@@ -639,7 +637,6 @@ manuscript illustrations, and documented practices of the time.
     locations: MedievalLocation[];
     characters: MedievalCharacter[];
     scenes: MedievalScene[];
-  } {
     return {
       clothing: Array.from(this.clothingDatabase.values()),
       materials: Array.from(this.materialDatabase.values()),

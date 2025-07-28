@@ -103,7 +103,7 @@ export class PerformanceMonitoringDashboard extends EventEmitter {
       historyLimit: 200,         // 200 snapshots
       alertThresholds: {,
         violations: 3,           // Alert after 3 violations
-        score: 70               // Alert below score 70
+        score: 70               // Alert below score 70,
       },
       autoOptimize: false,
       reporting: {,
@@ -231,7 +231,7 @@ export class PerformanceMonitoringDashboard extends EventEmitter {
         estimatedImpact: {,
           scoreImprovement: 15,
           sizeReduction: 300, // KB
-          timeReduction: 500  // ms
+          timeReduction: 500  // ms,
         },
         implementation: {,
           effort: 'medium',
@@ -265,7 +265,7 @@ const Settings = React.lazy(() => import('./Settings'));
         description: 'High memory usage detected. Implement memory optimization strategies to prevent performance degradation.',
         estimatedImpact: {,
           scoreImprovement: 10,
-          sizeReduction: 50 // MB
+          sizeReduction: 50 // MB,
         },
         implementation: {,
           effort: 'medium',
@@ -301,7 +301,7 @@ const expensiveValue = useMemo(() => ;
         description: 'Graph execution is taking longer than expected. Implement caching and optimization strategies.',
         estimatedImpact: {,
           scoreImprovement: 20,
-          timeReduction: 400 // ms
+          timeReduction: 400 // ms,
         },
         implementation: {,
           effort: 'high',
@@ -357,7 +357,7 @@ const expensiveValue = useMemo(() => ;
       main: 180,      // KB
       vendor: 420,    // KB
       chunks: [85, 92, 156], // KB
-      total: 933      // KB
+      total: 933      // KB,
     };
   }
   private async getRuntimeMetrics() {
@@ -367,7 +367,7 @@ const expensiveValue = useMemo(() => ;
       lcp: 2100,      // ms
       fid: 80,        // ms
       cls: 0.08,      // score
-      tti: 2800       // ms
+      tti: 2800       // ms,
     };
   }
   private async getApiMetrics() {
@@ -376,7 +376,7 @@ const expensiveValue = useMemo(() => ;
       graphExecution: 650,    // ms
       preview: 320,           // ms
       validation: 45,         // ms
-      authentication: 150     // ms
+      authentication: 150     // ms,
     };
   }
   private getMemoryMetrics() {
@@ -385,7 +385,7 @@ const expensiveValue = useMemo(() => ;
       used: Math.round(usage.heapUsed / 1024 / 1024), // MB
       total: Math.round(usage.heapTotal / 1024 / 1024), // MB
       peak: Math.round(usage.heapUsed / 1024 / 1024 * 1.2), // MB (estimated)
-      gc: 0 // GC count (would need to track separately)
+      gc: 0 // GC count (would need to track separately),
     };
   }
   private async getNetworkMetrics() {

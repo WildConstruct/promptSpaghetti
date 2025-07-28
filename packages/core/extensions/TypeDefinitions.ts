@@ -152,7 +152,6 @@ export class ExtensionTypeChecker {
     valid: boolean;
     type?: string;
     errors: string[];
-  } {
     const errors: string[] = [];
     // Check base extension
     if (!ExtensionTypeGuards.isBaseExtension(extension)) {
@@ -348,12 +347,11 @@ export class ExtensionInterfaceValidator {
     missingMethods: string[];
     invalidMethods: string[];
     extraMethods: string[];
-  } {
     const result = {
       valid: true,
       missingMethods: [] as string[],
       invalidMethods: [] as string[],
-      extraMethods: [] as string[]
+      extraMethods: [] as string[],
     };
     const requiredMethods = this.getRequiredMethods(expectedInterface);
     const actualMethods = this.getActualMethods(extension);

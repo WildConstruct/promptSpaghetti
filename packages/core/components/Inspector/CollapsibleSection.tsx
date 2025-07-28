@@ -13,7 +13,7 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({)
   onToggle,
   children
 }) => {
-  return ()
+  return ();
     <div style={{ borderBottom: '1px solid #4a5568' }}>
       <button
         onClick={onToggle}
@@ -56,7 +56,7 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({)
           style={{
             maxHeight: collapsed ? 0 : '1000px',
             overflow: 'hidden',
-            transition: 'max-height 0.2s ease'
+            transition: 'max-height 0.2s ease',
           }}
         >
           {children}

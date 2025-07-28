@@ -428,11 +428,11 @@ export declare class SecurityOptimizationTools extends EventEmitter {
     private recommendationInterval?;
     private validationInterval?;
     constructor();
-    createOptimizationProfile()
+    createOptimizationProfile();
       profile: Omit<OptimizationProfile,
       'id' | 'created_at' | 'last_updated' | 'last_analyzed' | 'results'>
     ): Promise<string>;
-    createOptimizationJob()
+    createOptimizationJob();
       job: Omit<OptimizationJob,
       'id' | 'created_at' | 'last_updated' | 'execution' | 'results'>
     ): Promise<string>;

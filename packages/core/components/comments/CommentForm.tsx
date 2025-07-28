@@ -84,7 +84,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({)
     }, 0);
   };
   const isExpanded = focused || content.length > 0;
-  return ()
+  return ();
     <div className={`comment-form ${compact ? 'comment-form--compact' : ''} ${isExpanded ? 'comment-form--expanded' : ''}`}>}
       <div className="comment-form__avatar">
         <div className="user-avatar user-avatar--small">

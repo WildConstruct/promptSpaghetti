@@ -102,7 +102,7 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
     setEnforcementLevels(newLevels);
   };
   if (!visible) {
-    return ()
+    return ();
       <div className="constraint-validation-collapsed">
         <button 
           onClick={onToggleVisibility}
@@ -114,7 +114,7 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
       </div>
     );
   }
-  return ()
+  return ();
     <div className="constraint-validation-panel">
       <div className="constraint-panel-header">
         <h3>Historical Constraints</h3>
@@ -275,7 +275,7 @@ const ConstraintItem: React.FC<ConstraintItemProps> = ({)
     if (type === 'warning') return 'severity-medium';
     return 'severity-low';
   };
-  return ()
+  return ();
     <div className={`constraint-item ${type} ${getSeverityClass()}`}>}
       <div className="constraint-item-header">
         {getIcon()}

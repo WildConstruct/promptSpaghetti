@@ -293,7 +293,7 @@ export const CONFLICT_DESCRIPTIONS = {
   node_deleted: 'Node was deleted in one version but modified in another',
   edge_deleted: 'Edge was deleted in one version but modified in another',
   position_conflict: 'Node position differs between versions',
-  property_conflict: 'Property values conflict between versions'
+  property_conflict: 'Property values conflict between versions',
 } as const;
 
 export const RESOLUTION_STRATEGY_DESCRIPTIONS = {
@@ -302,5 +302,5 @@ export const RESOLUTION_STRATEGY_DESCRIPTIONS = {
   keep_current: 'Keep the current value',
   merge: 'Attempt to merge the values intelligently',
   skip: 'Skip this change and leave current value',
-  manual: 'Manually resolve this conflict'
+  manual: 'Manually resolve this conflict',
 } as const;

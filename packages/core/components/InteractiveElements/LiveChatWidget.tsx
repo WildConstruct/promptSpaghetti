@@ -203,7 +203,7 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
           size: file.size,
           type: file.type,
           url: URL.createObjectURL(file), // In real app, upload to server
-          thumbnail: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined
+          thumbnail: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
         };
         const fileMessage: ChatMessage = {
           id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,}
@@ -249,7 +249,7 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
   const renderMessage = useCallback((message: ChatMessage) => {
     const isOwn = message.userId === userId;
     const isSystem = message.userId === 'system';
-    return ()
+    return ();
       <div key={message.id} className={`flex ${isOwn ? 'justify-end' : 'justify-start'} mb-4`}>}
         {!isOwn && !isSystem && ()
           <div className="flex-shrink-0 mr-3">
@@ -341,7 +341,7 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
   // Render typing indicator
   const renderTypingIndicator = () => {
     if (typingUsers.length === 0) return null;
-    return ()
+    return ();
       <div className="flex justify-start mb-4">
         <div className="flex items-center space-x-2 bg-gray-100 rounded-lg px-4 py-2">
           <div className="flex space-x-1">
@@ -357,7 +357,7 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
     );
   };
   if (isMinimized) {
-    return ()
+    return ();
       <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={onMinimize}
@@ -375,7 +375,7 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="fixed bottom-4 right-4 w-96 h-96 bg-white rounded-lg shadow-xl border border-gray-200 flex flex-col z-50">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-blue-600 text-white rounded-t-lg">

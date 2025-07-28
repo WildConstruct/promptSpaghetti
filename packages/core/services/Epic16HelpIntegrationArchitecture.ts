@@ -124,7 +124,7 @@ export class Epic16HelpIntegrationArchitecture {
     const primaryContext = this.determinePrimaryContext(context);
     // 2. Get context-specific help content
     if (context.graphContext && primaryContext === 'graph-editor') {
-      const graphHelp = await this.graphHelpManager.getContextualContent(;)
+      const graphHelp = await this.graphHelpManager.getContextualContent(;);
         context.graphContext.nodes,
         context.graphContext.edges,
         userProfile
@@ -132,7 +132,7 @@ export class Epic16HelpIntegrationArchitecture {
       helpContent.push(...graphHelp);
     }
     if (context.marketplaceContext && primaryContext === 'marketplace') {
-      const marketplaceHelp = await this.getMarketplaceHelpContent(;)
+      const marketplaceHelp = await this.getMarketplaceHelpContent(;);
         context.marketplaceContext,
         userProfile
       );
@@ -140,7 +140,7 @@ export class Epic16HelpIntegrationArchitecture {
     }
     // 3. Add cross-system integration content
     if (context.transitionContext) {
-      const transitionHelp = await this.getTransitionHelpContent(;)
+      const transitionHelp = await this.getTransitionHelpContent(;);
         context.transitionContext,
         userProfile
       );
@@ -156,7 +156,7 @@ export class Epic16HelpIntegrationArchitecture {
     fromContext: 'graph-editor' | 'marketplace',
     toContext: 'graph-editor' | 'marketplace',
     userId: string,
-    preserveHelp: boolean = true
+    preserveHelp: boolean = true,
   ): Promise<TransitionContext> {
     const activeSession = this.activeHelpSessions.get(userId);
     const transitionContext: TransitionContext = {
@@ -164,7 +164,7 @@ export class Epic16HelpIntegrationArchitecture {
       toSystem: toContext,
       transitionReason: this.detectTransitionReason(fromContext, toContext),
       preserveContext: preserveHelp,
-      continuousHelp: activeSession ? true : false
+      continuousHelp: activeSession ? true : false,
     };
     // Update active help session for transition
     if (activeSession && preserveHelp) {
@@ -199,7 +199,7 @@ export class Epic16HelpIntegrationArchitecture {
         systemContext: helpSession.context,
         userProfile: additionalContext?.userProfile,
         escalationLevel: helpSession.escalationLevel + 1,
-        previousInteractions: additionalContext?.previousInteractions || []
+        previousInteractions: additionalContext?.previousInteractions || [],
       } as any
     };
     // Update help session with support ticket reference
@@ -350,7 +350,7 @@ export class Epic16HelpIntegrationArchitecture {
   ): Promise<HelpContent[]> {
     const transitionContent: HelpContent[] = [];
     // Find relevant integration points
-    const relevantIntegration = this.integrationPoints.find(point => ;)
+    const relevantIntegration = this.integrationPoints.find(point => ;);
       point.fromSystem === transitionContext.fromSystem &&
       point.toSystem === transitionContext.toSystem
     );
@@ -405,7 +405,7 @@ export class Epic16HelpIntegrationArchitecture {
   }
   private detectTransitionReason()
     from: 'graph-editor' | 'marketplace',
-    to: 'graph-editor' | 'marketplace'
+    to: 'graph-editor' | 'marketplace',
   ): string {
     if (from === 'marketplace' && to === 'graph-editor') {
       return 'template-import-workflow';

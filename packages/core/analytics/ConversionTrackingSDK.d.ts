@@ -88,7 +88,7 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
     private isOnline;
     private recentEventHashes;
     private trackingMetrics;
-    constructor()
+    constructor();
       config: ConversionTrackingConfig,
       conversionArchitecture: ConversionArchitectureManager,
       sessionManager: SessionTrackingManager,
@@ -100,7 +100,7 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
     /**
      * Track conversion event with enhanced capabilities
      */
-    trackConversionEvent()
+    trackConversionEvent();
       eventType: string,
       properties?: Record<string,
       any>,
@@ -114,7 +114,7 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
     /**
      * Track attribution touchpoint
      */
-    trackTouchpoint()
+    trackTouchpoint();
       channel: string,
       source: string,
       medium: string,

@@ -140,7 +140,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
     return `${window.location.origin}/shared/${share.share_token}`;}
   };
   if (createdShare) {
-    return ()
+    return ();
       <div className={`share-dialog success-state ${className}`}>}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-2">
@@ -226,7 +226,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`share-dialog ${className}`}>}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-2">
@@ -281,7 +281,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
           <div className="grid grid-cols-1 gap-3">
             {ACCESS_LEVELS.map((level) => {
               const Icon = level.icon;
-              return ()
+              return ();
                 <label
                   key={level.value}
                   className={`flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-colors ${
@@ -297,7 +297,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
                     checked={shareData.access_level === level.value}
                     onChange={(e) => setShareData(prev => ({)
                       ...prev,
-                      access_level: e.target.value as ShareAccessLevel
+                      access_level: e.target.value as ShareAccessLevel,
                     }))}
                     className="sr-only"
                   />
@@ -340,7 +340,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
             value={shareData.expires_in_days || ''}
             onChange={(e) => setShareData(prev => ({)
               ...prev,
-              expires_in_days: e.target.value ? parseInt(e.target.value) : null
+              expires_in_days: e.target.value ? parseInt(e.target.value) : null,
             }))}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >
@@ -360,7 +360,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
             value={shareData.max_downloads || ''}
             onChange={(e) => setShareData(prev => ({)
               ...prev,
-              max_downloads: e.target.value ? parseInt(e.target.value) : null
+              max_downloads: e.target.value ? parseInt(e.target.value) : null,
             }))}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >

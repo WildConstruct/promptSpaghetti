@@ -163,7 +163,6 @@ export function parsePSGFile(jsonString: string, options: {)
 } | {
   success: false;
   error: PSGError;
-} {
   const {
     maxFileSize = 10 * 1024 * 1024, // 10MB default limit
     strictValidation = false,
@@ -256,7 +255,7 @@ export function parsePSGFile(jsonString: string, options: {)
         const formattedErrors = zodError.errors.map(err => ({)
           path: err.path.join('.'),
           message: err.message,
-          received: err.code === 'invalid_type' ? (err as any).received : undefined
+          received: err.code === 'invalid_type' ? (err as any).received : undefined,
         }));
         return {
           success: false,
@@ -303,7 +302,7 @@ export function parsePSGFile(jsonString: string, options: {)
     return {
       success: true,
       data: validated,
-      warnings: warnings.length > 0 ? warnings : undefined
+      warnings: warnings.length > 0 ? warnings : undefined,
     };
   } catch (error) {
     return {
@@ -311,7 +310,7 @@ export function parsePSGFile(jsonString: string, options: {)
       error: {,
         type: PSGErrorType.CORRUPTED_DATA,
         message: 'Unexpected error occurred while parsing file',
-        details: error instanceof Error ? {
+        details: error instanceof Error ? {,
           name: error.name,
           message: error.message,
           stack: error.stack,
@@ -352,7 +351,6 @@ export function extractPSGFileSummary(psgFile: PSGFile): {
   nodeCount: number;
   edgeCount: number;
   fileSize: number;
-} {
   const content = JSON.stringify(psgFile);
   return {
     id: generateProjectIdFromMetadata(psgFile.metadata),
@@ -386,7 +384,6 @@ export function checkPSGCompatibility(psgFile: PSGFile, currentVersion: string =
   compatible: boolean;
   warnings: string[];
   requiresUpgrade: boolean;
-} {
   const warnings: string[] = [];
   let compatible = true;
   let requiresUpgrade = false;
@@ -567,7 +564,6 @@ export function serializePSGFile(psgFile: PSGFile, options: {)
 } | {
   success: false;
   error: PSGError;
-} {
   const { pretty = false, validate = true } = options;
   try {
     // Pre-serialization validation
@@ -579,7 +575,7 @@ export function serializePSGFile(psgFile: PSGFile, options: {)
       ...psgFile,
       exportMetadata: {,
         ...psgFile.exportMetadata,
-        exportDate: new Date().toISOString()
+        exportDate: new Date().toISOString(),
       }
     };
     const jsonString = JSON.stringify(updatedFile, null, pretty ? 2 : 0);
@@ -592,7 +588,7 @@ export function serializePSGFile(psgFile: PSGFile, options: {)
     return {
       success: true,
       data: jsonString,
-      warnings: warnings.length > 0 ? warnings : undefined
+      warnings: warnings.length > 0 ? warnings : undefined,
     };
   } catch (error) {
     if (error instanceof z.ZodError) {

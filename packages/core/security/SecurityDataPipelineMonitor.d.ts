@@ -381,7 +381,7 @@ export declare class SecurityDataPipelineMonitor extends EventEmitter {
     getPipelineStatus(pipelineId?: string): any;
     getExecutionHistory(pipelineId: string, limit?: number): PipelineExecution[];
     getActiveAlerts(pipelineId?: string): PipelineAlert[];
-    getOptimizationRecommendations()
+    getOptimizationRecommendations();
       pipelineId: string,
       status?: PipelineOptimizationRecommendation['status']
     ): PipelineOptimizationRecommendation[];

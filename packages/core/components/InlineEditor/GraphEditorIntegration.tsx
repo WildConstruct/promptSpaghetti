@@ -82,7 +82,7 @@ export const GraphEditorWithInlineEditing: React.FC<GraphEditorWithInlineEditing
     height: '100%',
     width: '100%',
   };
-  return ()
+  return ();
     <InlineEditorProvider>
       <div ref={canvasRef} className={`graph-editor-inline ${className}`} style={{ height: '100%', position: 'relative' }}>}
         <ReactFlowProvider>
@@ -112,7 +112,7 @@ export const GraphEditorWithInlineEditing: React.FC<GraphEditorWithInlineEditing
                   button: {,
                     backgroundColor: theme === 'light' ? 'white' : '#2d3748',
                     color: theme === 'light' ? '#2d3748' : 'white',
-                    border: theme === 'light' ? '1px solid #e2e8f0' : '1px solid #4a5568'
+                    border: theme === 'light' ? '1px solid #e2e8f0' : '1px solid #4a5568',
                   }
                 }}
               />
@@ -228,7 +228,6 @@ export const useGraphWithInlineEditing = ()
         node.id === nodeId 
           ? { ...node, data: { ...node.data, ...updates } }
           : node
-      )
     );
   }, []);
   const handleConnect = useCallback((connection: any) => {
@@ -260,7 +259,7 @@ export const createInlineEditingGraph = ()
   edges: Edge[],
 ) => {
   return {
-    nodes: nodes.map(node => ({)
+    nodes: nodes.map(node => ({),
       ...node,
       type: node.type || 'default',
       data: {,

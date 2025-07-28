@@ -58,7 +58,7 @@ interface UseBranchingReturn {
 export const useBranching = (): UseBranchingReturn => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const apiCall = useCallback(async <T>(;)
+  const apiCall = useCallback(async <T>(;);
     url: string,
     options: RequestInit = {}
   ): Promise<T> => {

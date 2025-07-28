@@ -197,9 +197,9 @@ export class ProjectManager {
         tags: ['generated', 'mock'],
         version: '1.0.0',
         created: new Date(Date.now() - Math.random() * 60 * 24 * 60 * 60 * 1000), // Last 60 days
-        author: 'Mock User'
+        author: 'Mock User',
       },
-      isFavorite: Math.random() > 0.7
+      isFavorite: Math.random() > 0.7,
     };
   }
   private loadUserData(): void {
@@ -235,7 +235,7 @@ export class ProjectManager {
   ): Promise<SaveProjectResult> {
     try {
       // Create metadata
-      const metadata = createDefaultMetadata(;)
+      const metadata = createDefaultMetadata(;);
         options.name,
         options.author
       );
@@ -253,7 +253,7 @@ export class ProjectManager {
         compress: false,
         validateOutput: true,
       };
-      const result = serializeProject(;)
+      const result = serializeProject(;);
         graphData,
         metadata,
         settings,
@@ -267,7 +267,7 @@ export class ProjectManager {
         };
       }
       // Create and trigger download
-      const fileName = ProjectManager.sanitizeFileName(;)
+      const fileName = ProjectManager.sanitizeFileName(;);
         options.fileName || `${options.name}.psg`}
       );
       const blob = new Blob([result.data!], { type: 'application/json' });
@@ -287,7 +287,7 @@ export class ProjectManager {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error during save'
+        error: error instanceof Error ? error.message : 'Unknown error during save',
       };
     }
   }
@@ -306,7 +306,7 @@ export class ProjectManager {
             if (!file) {
               resolve({)
                 success: false,
-                error: 'No file selected'
+                error: 'No file selected',
               });
               return;
             }
@@ -333,7 +333,7 @@ export class ProjectManager {
           } catch (error) {
             resolve({)
               success: false,
-              error: error instanceof Error ? error.message : 'Unknown error during load'
+              error: error instanceof Error ? error.message : 'Unknown error during load',
             });
           }
         };
@@ -341,7 +341,7 @@ export class ProjectManager {
       } catch (error) {
         resolve({)
           success: false,
-          error: error instanceof Error ? error.message : 'Unknown error creating file dialog'
+          error: error instanceof Error ? error.message : 'Unknown error creating file dialog',
         });
       }
     });

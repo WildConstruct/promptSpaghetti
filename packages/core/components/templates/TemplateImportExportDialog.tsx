@@ -109,7 +109,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
       setImportOptions(prev => ({)
         ...prev,
         source: file,
-        format: file.name.endsWith('.yaml') || file.name.endsWith('.yml') ? 'yaml' :
+        format: file.name.endsWith('.yaml') || file.name.endsWith('.yml') ? 'yaml' :,
           file.name.endsWith('.zip') ? 'zip' :
             file.name.endsWith('.bundle') ? 'template_bundle' : 'json'
       }));
@@ -136,7 +136,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
       // Validate file type for file imports
       if (importFile) {
         const allowedExtensions = ['.json', '.yaml', '.yml', '.zip', '.bundle'];
-        const hasValidExtension = allowedExtensions.some(ext => ;)
+        const hasValidExtension = allowedExtensions.some(ext => ;);
           importFile.name.toLowerCase().endsWith(ext)
         );
         if (!hasValidExtension) {
@@ -270,7 +270,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
     }
   };
   // Render helpers
-  const renderImportStepIndicator = (): JSX.Element => (;)
+  const renderImportStepIndicator = (): JSX.Element => (;);
     <div className="flex items-center justify-center mb-6 space-x-2">
       {['source', 'options', 'validation', 'preview', 'import', 'complete'].map((step, index) => ()
         <div key={step} className="flex items-center">
@@ -286,7 +286,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
       ))}
     </div>
   );
-  const renderSourceSelection = (): JSX.Element => (;)
+  const renderSourceSelection = (): JSX.Element => (;);
     <div className="space-y-4">
       <h3 className="text-lg font-semibold mb-4">Select Import Source</h3>
       <div className="grid grid-cols-2 gap-4">
@@ -399,7 +399,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
       )}
     </div>
   );
-  const renderImportOptions = (): JSX.Element => (;)
+  const renderImportOptions = (): JSX.Element => (;);
     <div className="space-y-6">
       <h3 className="text-lg font-semibold">Import Options</h3>
       <div className="grid grid-cols-2 gap-6">
@@ -412,7 +412,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               value={importOptions.merge_strategy}
               onChange={(e) => setImportOptions(prev => ({ )
                 ...prev, 
-                merge_strategy: e.target.value as 'replace' | 'merge' | 'keep_both'
+                merge_strategy: e.target.value as 'replace' | 'merge' | 'keep_both',
               }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
             >
@@ -429,7 +429,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               value={importOptions.resolve_conflicts}
               onChange={(e) => setImportOptions(prev => ({ )
                 ...prev, 
-                resolve_conflicts: e.target.value as 'auto' | 'manual' | 'skip'
+                resolve_conflicts: e.target.value as 'auto' | 'manual' | 'skip',
               }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
             >
@@ -446,7 +446,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               value={importOptions.version_bump || 'patch'}
               onChange={(e) => setImportOptions(prev => ({ )
                 ...prev, 
-                version_bump: e.target.value as 'patch' | 'minor' | 'major' | 'custom'
+                version_bump: e.target.value as 'patch' | 'minor' | 'major' | 'custom',
               }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
             >
@@ -528,7 +528,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
       </div>
     </div>
   );
-  const renderValidationResults = (): JSX.Element => (;)
+  const renderValidationResults = (): JSX.Element => (;);
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">Validation Results</h3>
       {validation && ()
@@ -592,7 +592,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
       )}
     </div>
   );
-  const renderExportOptions = (): JSX.Element => (;)
+  const renderExportOptions = (): JSX.Element => (;);
     <div className="space-y-6">
       <h3 className="text-lg font-semibold">Export Configuration</h3>
       <div className="grid grid-cols-2 gap-6">
@@ -605,7 +605,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
               value={exportOptions.format}
               onChange={(e) => setExportOptions(prev => ({ )
                 ...prev, 
-                format: e.target.value as 'json' | 'yaml' | 'zip' | 'template_bundle'
+                format: e.target.value as 'json' | 'yaml' | 'zip' | 'template_bundle',
               }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600"
             >
@@ -703,7 +703,7 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
     </div>
   );
   if (!isOpen) return null;
-  return ()
+  return ();
     <div className={`fixed inset-0 z-50 overflow-y-auto ${className}`}>}
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center">
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={onClose} />

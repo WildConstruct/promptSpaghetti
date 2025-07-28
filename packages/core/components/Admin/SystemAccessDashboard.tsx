@@ -199,7 +199,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
       return true;
     });
   }, [users, searchQuery, statusFilter, accessLevelFilter]);
-  const renderUsersTab = () => (;)
+  const renderUsersTab = () => (;);
     <div className="users-section">
       {/* Header Controls */}
       <div className="users-controls">
@@ -270,7 +270,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
       )}
     </div>
   );
-  const renderAccessRequestsTab = () => (;)
+  const renderAccessRequestsTab = () => (;);
     <div className="requests-section">
       <div className="requests-header">
         <h3 className="text-lg font-semibold">Pending Access Requests</h3>
@@ -299,7 +299,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
   );
   const renderStatsTab = () => {
     if (!stats) return <div>Loading statistics...</div>;
-    return ()
+    return ();
       <div className="stats-section">
         <div className="stats-grid">
           <Card>
@@ -373,7 +373,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
                 {Object.entries(stats.byAccessLevel).map(([level, count]) => {
                   const config = ACCESS_LEVEL_CONFIG[level as SystemAccessLevel];
                   const percentage = (count / stats.totalUsers) * 100;
-                  return ()
+                  return ();
                     <div key={level} className="chart-item">
                       <div className="chart-label">
                         <config.icon className={`w-4 h-4 ${config.color.split(' ')[0]}`} />}
@@ -401,7 +401,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
                 {Object.entries(stats.byStatus).map(([status, count]) => {
                   const config = STATUS_CONFIG[status as UserStatus];
                   const percentage = (count / stats.totalUsers) * 100;
-                  return ()
+                  return ();
                     <div key={status} className="chart-item">
                       <div className="chart-label">
                         <config.icon className={`w-4 h-4 ${config.color.split(' ')[0]}`} />}
@@ -424,7 +424,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
       </div>
     );
   };
-  return ()
+  return ();
     <div className={`system-access-dashboard ${className}`}>}
       <div className="dashboard-header">
         <div className="header-info">
@@ -712,7 +712,7 @@ const UserCard: React.FC<UserCardProps> = ({ )
   const accessConfig = ACCESS_LEVEL_CONFIG[user.systemAccess];
   const StatusIcon = statusConfig.icon;
   const AccessIcon = accessConfig.icon;
-  return ()
+  return ();
     <Card className="user-card">
       <CardContent className="p-4">
         <div className="user-card-header">
@@ -859,7 +859,7 @@ const AccessRequestCard: React.FC<AccessRequestCardProps> = ({)
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-  return ()
+  return ();
     <Card className="request-card">
       <CardContent className="p-4">
         <div className="request-header">
@@ -992,7 +992,7 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({)
   onUpdate,
   currentUserId
 }) => {
-  return ()
+  return ();
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">

@@ -57,13 +57,13 @@ export declare     selectedRegions: string[];
     toggleRegion: (regionCode: string) => void;
     toggleCity: (cityCode: string) => void;
     clearSelection: () => void;
-    getTargetingConfig: () => {
+    getTargetingConfig: () => {,
         countries: string[];
         regions: string[];
         cities: string[];
         excludeMode: boolean;
     };
-    loadFromConfig: (config: {)
+    loadFromConfig: (config: {),
         countries?: string[];
         regions?: string[];
         cities?: string[];

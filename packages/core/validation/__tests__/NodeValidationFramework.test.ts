@@ -69,7 +69,7 @@ describe('NodeValidationFramework', () => {
           stateful: false,
         },
         data: {,
-          condition: 'eval("malicious code")'
+          condition: 'eval("malicious code")',
         }
       };
       const result = validator.validateNode(nodeData);
@@ -90,7 +90,7 @@ describe('NodeValidationFramework', () => {
           stateful: false,
         },
         data: {,
-          choices: ['new Function("return alert(1)")()']
+          choices: ['new Function("return alert(1)")()'],
         }
       };
       const result = validator.validateNode(nodeData);
@@ -107,7 +107,7 @@ describe('NodeValidationFramework', () => {
           stateful: false,
         },
         data: {,
-          choices: ['__proto__.isAdmin = true']
+          choices: ['__proto__.isAdmin = true'],
         }
       };
       const result = validator.validateNode(nodeData);
@@ -158,7 +158,7 @@ describe('NodeValidationFramework', () => {
           stateful: false,
         },
         data: {,
-          code: 'result = input.upper()'
+          code: 'result = input.upper()',
         }
       };
       const result = validator.validateNode(nodeData);
@@ -178,7 +178,7 @@ describe('NodeValidationFramework', () => {
         },
         data: {,
           pattern: 'cyclical',
-          items: [] // Empty items array causes infinite loop
+          items: [] // Empty items array causes infinite loop,
         }
       };
       const result = validator.validateNode(nodeData);
@@ -217,7 +217,7 @@ describe('NodeValidationFramework', () => {
         },
         data: {,
           choices: new Array(1000).fill('Large choice option with lots of text'),
-          weights: new Array(1000).fill(1)
+          weights: new Array(1000).fill(1),
         }
       };
       const result = validator.validateNode(nodeData);
@@ -227,7 +227,7 @@ describe('NodeValidationFramework', () => {
     it('should flag excessive memory usage', () => {
       // Create validator with low memory limit
       const strictValidator = new NodeValidationFramework({)
-        maxMemoryUsage: 1000 // 1KB limit
+        maxMemoryUsage: 1000 // 1KB limit,
       });
       const nodeData: AdvancedNodeData = {
         id: 'memory-heavy-node',
@@ -239,7 +239,7 @@ describe('NodeValidationFramework', () => {
         },
         data: {,
           choices: new Array(1000).fill('Very large choice with lots of data'),
-          weights: new Array(1000).fill(1)
+          weights: new Array(1000).fill(1),
         }
       };
       const result = strictValidator.validateNode(nodeData);
@@ -281,7 +281,7 @@ describe('NodeValidationFramework', () => {
           stateful: false,
         },
         data: {,
-          condition: 'eval("malicious code")'
+          condition: 'eval("malicious code")',
         }
       };
       const result = permissiveValidator.validateNode(nodeData);

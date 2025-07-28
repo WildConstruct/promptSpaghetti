@@ -88,9 +88,9 @@ const generateRecommendationMetrics = (): RecommendationSystemMetrics => {
         trend: {,
           direction: Math.random() > 0.5 ? 'increasing' : 'decreasing',
           strength: Math.random(),
-          duration: Math.floor(Math.random() * 30) + 7
+          duration: Math.floor(Math.random() * 30) + 7,
         },
-        confidence: Math.random() * 0.2 + 0.8
+        confidence: Math.random() * 0.2 + 0.8,
       },
       {
         metricId: 'conversion_rate',
@@ -101,9 +101,9 @@ const generateRecommendationMetrics = (): RecommendationSystemMetrics => {
         trend: {,
           direction: Math.random() > 0.5 ? 'increasing' : 'stable',
           strength: Math.random(),
-          duration: Math.floor(Math.random() * 30) + 7
+          duration: Math.floor(Math.random() * 30) + 7,
         },
-        confidence: Math.random() * 0.2 + 0.8
+        confidence: Math.random() * 0.2 + 0.8,
       },
       {
         metricId: 'ndcg_at_10',
@@ -114,9 +114,9 @@ const generateRecommendationMetrics = (): RecommendationSystemMetrics => {
         trend: {,
           direction: 'increasing',
           strength: Math.random(),
-          duration: Math.floor(Math.random() * 30) + 7
+          duration: Math.floor(Math.random() * 30) + 7,
         },
-        confidence: Math.random() * 0.2 + 0.8
+        confidence: Math.random() * 0.2 + 0.8,
       },
       {
         metricId: 'diversity_score',
@@ -127,9 +127,9 @@ const generateRecommendationMetrics = (): RecommendationSystemMetrics => {
         trend: {,
           direction: 'stable',
           strength: Math.random() * 0.3,
-          duration: Math.floor(Math.random() * 30) + 7
+          duration: Math.floor(Math.random() * 30) + 7,
         },
-        confidence: Math.random() * 0.2 + 0.8
+        confidence: Math.random() * 0.2 + 0.8,
       }
     ],
     contextualMetrics: [],
@@ -139,7 +139,7 @@ const generateRecommendationMetrics = (): RecommendationSystemMetrics => {
       engagementIncrease: Math.random() * 30 + 10,
       retentionImprovement: Math.random() * 20 + 5,
       costEfficiency: Math.random() * 40 + 20,
-      customerSatisfaction: Math.random() + 3.5
+      customerSatisfaction: Math.random() + 3.5,
     },
     userSegmentPerformance: [],
   };
@@ -259,7 +259,7 @@ export const RecommendationEffectivenessTracking: React.FC<RecommendationEffecti
   const selectedAlgorithmData = useMemo(() => {
     return selectedAlgorithm ? algorithmMetrics.find(a => a.algorithmId === selectedAlgorithm) : null;
   }, [selectedAlgorithm, algorithmMetrics]);
-  return ()
+  return ();
     <div className="recommendation-effectiveness-tracking">
       <div className="tracking-header">
         <div className="header-section">

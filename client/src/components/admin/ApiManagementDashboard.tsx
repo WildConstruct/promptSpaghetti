@@ -7,7 +7,6 @@
  * 
  * Task: E17-1753114397216-ADC6B1 - Design management interfaces
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -21,7 +20,7 @@ interface GlobalApiKeyStats {
   keysUsedLast24Hours: number;
   keysUsedLast7Days: number;
   keysUsedLast30Days: number;
-  topScopes: Array<{
+  topScopes: Array<{,
     scope: string;
     count: number;
     percentage: number;
@@ -35,7 +34,6 @@ interface GlobalApiKeyStats {
   errorRate: number;
   rateLimitViolations: number;
 }
-
 interface ApiKeyDetail {
   keyId: string;
   userId: string;
@@ -49,13 +47,13 @@ interface ApiKeyDetail {
   createdAt: Date;
   expiresAt?: Date;
   lastUsedAt?: Date;
-  rateLimits: {
+  rateLimits: {,
     requestsPerMinute: number;
     requestsPerHour: number;
     requestsPerDay: number;
   };
   ipWhitelist?: string[];
-  metadata: {
+  metadata: {,
     createdBy: string;
     environment: string;
     rotationCount: number;
@@ -66,7 +64,7 @@ interface ApiKeyDetail {
     revokedAt?: Date;
     revocationReason?: string;
   };
-  recentActivity: Array<{
+  recentActivity: Array<{,
     timestamp: Date;
     action: 'call' | 'error' | 'rate_limit' | 'creation' | 'rotation' | 'revocation';
     details: string;
@@ -74,7 +72,6 @@ interface ApiKeyDetail {
     endpoint?: string;
   }>;
 }
-
 interface UsageMetrics {
   keyId: string;
   callsLast1Hour: number;
@@ -84,13 +81,12 @@ interface UsageMetrics {
   errorRate: number;
   averageResponseTime: number;
   rateLimitHits: number;
-  topEndpoints: Array<{
+  topEndpoints: Array<{,
     endpoint: string;
     calls: number;
     errorRate: number;
   }>;
 }
-
 interface RateLimitConfiguration {
   keyId: string;
   requestsPerMinute: number;
@@ -105,20 +101,16 @@ export const ApiManagementDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'keys' | 'analytics' | 'monitoring' | 'optimization' | 'configuration'>('overview');
-  
   // State for overview data
   const [globalStats, setGlobalStats] = useState<GlobalApiKeyStats | null>(null);
-  
   // State for keys management
   const [apiKeys, setApiKeys] = useState<ApiKeyDetail[]>([]);
   const [selectedKey, setSelectedKey] = useState<ApiKeyDetail | null>(null);
   const [keyFilter, setKeyFilter] = useState<'all' | 'active' | 'expired' | 'revoked' | 'suspended'>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  
   // State for analytics
   const [usageMetrics, setUsageMetrics] = useState<Record<string, UsageMetrics>>({});
   const [timeRange, setTimeRange] = useState<'1h' | '24h' | '7d' | '30d'>('24h');
-  
   // State for monitoring
   const [realTimeAlerts, setRealTimeAlerts] = useState<Array<{
     id: string;
@@ -129,34 +121,28 @@ export const ApiManagementDashboard: React.FC = () => {
     keyId?: string;
     resolved: boolean;
   }>>([]);
-  
   // State for configuration
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_bulkOperationMode, setBulkOperationMode] = useState<'revoke' | 'suspend' | 'rate_limit' | null>(null);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_rateLimitConfig, _setRateLimitConfig] = useState<RateLimitConfiguration | null>(null);
-
   // State for Epic 31 optimization integration
   const [optimizationInsights, setOptimizationInsights] = useState<unknown>(null);
   const [optimizationLoading, setOptimizationLoading] = useState(false);
   const [optimizationTimeRange, setOptimizationTimeRange] = useState<'7' | '30' | '90'>('30');
-
   // Check if user has admin privileges
   const isAdmin = user?.roles?.includes('admin') || user?.roles?.includes('super_admin');
-
   const fetchGlobalStats = useCallback(async () => {
     try {
-      const response = await fetch('/api/auth/api-keys/admin/statistics', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      const response = await fetch('/api/auth/api-keys/admin/statistics', {)
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
         }
       });
-
       if (!response.ok) {
         throw new Error('Failed to fetch global statistics');
       }
-
       const data = await response.json();
       setGlobalStats(data.globalStatistics);
     } catch (error) {
@@ -164,19 +150,16 @@ export const ApiManagementDashboard: React.FC = () => {
       setError('Failed to load global statistics');
     }
   }, []);
-
   const fetchApiKeys = useCallback(async () => {
     try {
-      const response = await fetch('/api/auth/api-keys/admin/all', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      const response = await fetch('/api/auth/api-keys/admin/all', {)
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
         }
       });
-
       if (!response.ok) {
         throw new Error('Failed to fetch API keys');
       }
-
       const data = await response.json();
       setApiKeys(data.apiKeys);
     } catch (error) {
@@ -186,15 +169,13 @@ export const ApiManagementDashboard: React.FC = () => {
       setLoading(false);
     }
   }, []);
-
   const fetchUsageMetrics = useCallback(async () => {
     try {
-      const response = await fetch(`/api/auth/api-keys/admin/metrics?timeRange=${timeRange}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      const response = await fetch(`/api/auth/api-keys/admin/metrics?timeRange=${timeRange}`, {)}
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
         }
       });
-
       if (response.ok) {
         const data = await response.json();
         setUsageMetrics(data.metrics);
@@ -203,15 +184,13 @@ export const ApiManagementDashboard: React.FC = () => {
       console.error('Error fetching usage metrics:', error);
     }
   }, [timeRange]);
-
   const fetchRealTimeAlerts = useCallback(async () => {
     try {
-      const response = await fetch('/api/auth/api-keys/admin/alerts', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      const response = await fetch('/api/auth/api-keys/admin/alerts', {)
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
         }
       });
-
       if (response.ok) {
         const data = await response.json();
         setRealTimeAlerts(data.alerts);
@@ -220,17 +199,15 @@ export const ApiManagementDashboard: React.FC = () => {
       console.error('Error fetching alerts:', error);
     }
   }, []);
-
   // Epic 31: Fetch API optimization insights
   const fetchOptimizationInsights = useCallback(async () => {
     setOptimizationLoading(true);
     try {
-      const response = await fetch(`/admin/api-optimization/insights?timeWindow=${optimizationTimeRange}&focusAreas=performance,security,cost,reliability&includeBenchmarks=true`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      const response = await fetch(`/admin/api-optimization/insights?timeWindow=${optimizationTimeRange}&focusAreas=performance,security,cost,reliability&includeBenchmarks=true`, {)}
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
         }
       });
-
       if (response.ok) {
         const data = await response.json();
         setOptimizationInsights(data.data);
@@ -243,7 +220,6 @@ export const ApiManagementDashboard: React.FC = () => {
       setOptimizationLoading(false);
     }
   }, [optimizationTimeRange]);
-
   useEffect(() => {
     if (user && isAdmin) {
       fetchGlobalStats();
@@ -251,7 +227,6 @@ export const ApiManagementDashboard: React.FC = () => {
       fetchUsageMetrics();
       fetchRealTimeAlerts();
       fetchOptimizationInsights();
-      
       // Set up real-time updates
       const interval = setInterval(() => {
         fetchGlobalStats();
@@ -261,26 +236,22 @@ export const ApiManagementDashboard: React.FC = () => {
           fetchOptimizationInsights();
         }
       }, 30000); // Update every 30 seconds
-      
       return () => clearInterval(interval);
     }
   }, [user, isAdmin, fetchGlobalStats, fetchApiKeys, fetchUsageMetrics, fetchRealTimeAlerts, fetchOptimizationInsights]);
-
   const adminRevokeKey = async (keyId: string, reason: string) => {
     try {
-      const response = await fetch('/api/auth/api-keys/admin/revoke', {
+      const response = await fetch('/api/auth/api-keys/admin/revoke', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
         },
         body: JSON.stringify({ keyId, reason })
       });
-
       if (!response.ok) {
         throw new Error('Failed to revoke API key');
       }
-
       // Refresh data
       await fetchApiKeys();
       await fetchGlobalStats();
@@ -290,22 +261,19 @@ export const ApiManagementDashboard: React.FC = () => {
       setError('Failed to revoke API key');
     }
   };
-
   const suspendKey = async (keyId: string, reason: string, duration?: string) => {
     try {
-      const response = await fetch('/api/auth/api-keys/admin/suspend', {
+      const response = await fetch('/api/auth/api-keys/admin/suspend', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
         },
         body: JSON.stringify({ keyId, reason, duration })
       });
-
       if (!response.ok) {
         throw new Error('Failed to suspend API key');
       }
-
       await fetchApiKeys();
       await fetchGlobalStats();
     } catch (error) {
@@ -313,68 +281,57 @@ export const ApiManagementDashboard: React.FC = () => {
       setError('Failed to suspend API key');
     }
   };
-
   const handleUpdateRateLimits = async (keyId: string, limits: any) => {
     try {
-      const response = await fetch(`/api/admin/api-keys/${keyId}/rate-limits`, {
+      const response = await fetch(`/api/admin/api-keys/${keyId}/rate-limits`, {)}
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(limits)
+        body: JSON.stringify(limits),
       });
-      
       if (!response.ok) {
         throw new Error('Failed to update rate limits');
       }
-
       await fetchApiKeys();
     } catch (error) {
       console.error('Error updating rate limits:', error);
       setError('Failed to update rate limits');
     }
   };
-
   const handleBulkOperation = async (operation: string, keyIds: string[]) => {
     try {
-      const response = await fetch(`/api/admin/api-keys/bulk/${operation}`, {
+      const response = await fetch(`/api/admin/api-keys/bulk/${operation}`, {)}
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ keyIds })
       });
-        
       if (!response.ok) {
-        throw new Error(`Failed to perform bulk ${operation}`);
+        throw new Error(`Failed to perform bulk ${operation}`);}
       }
-
       await fetchApiKeys();
       await fetchGlobalStats();
       setSelectedKeys([]);
       setBulkOperationMode(null);
     } catch (error) {
-      console.error(`Error performing bulk ${operation}:`, error);
-      setError(`Failed to perform bulk ${operation}`);
+      console.error(`Error performing bulk ${operation}:`, error);}
+      setError(`Failed to perform bulk ${operation}`);}
     }
   };
-
   const filteredKeys = useMemo(() => {
     let filtered = apiKeys;
-    
     if (keyFilter !== 'all') {
       filtered = filtered.filter(key => key.status === keyFilter);
     }
-    
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(key =>
+      filtered = filtered.filter(key =>)
         key.name.toLowerCase().includes(query) ||
         key.userEmail.toLowerCase().includes(query) ||
         key.keyPrefix.toLowerCase().includes(query) ||
         key.scopes.some(scope => scope.toLowerCase().includes(query))
       );
     }
-    
     return filtered;
   }, [apiKeys, keyFilter, searchQuery]);
-
   const getSeverityColor = (severity: string) => {
     switch (severity) {
     case 'critical': return 'bg-red-100 text-red-800 border-red-200';
@@ -383,7 +340,6 @@ export const ApiManagementDashboard: React.FC = () => {
     default: return 'bg-blue-100 text-blue-800 border-blue-200';
     }
   };
-
   const getStatusColor = (status: string) => {
     switch (status) {
     case 'active': return 'bg-green-100 text-green-800';
@@ -393,9 +349,8 @@ export const ApiManagementDashboard: React.FC = () => {
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   if (!isAdmin) {
-    return (
+    return ()
       <div className="flex items-center justify-center p-8">
         <div className="text-center">
           <div className="text-6xl mb-4">🔒</div>
@@ -405,16 +360,14 @@ export const ApiManagementDashboard: React.FC = () => {
       </div>
     );
   }
-
   if (loading) {
-    return (
+    return ()
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
@@ -423,7 +376,7 @@ export const ApiManagementDashboard: React.FC = () => {
           <p className="text-gray-600">Manage API keys, monitor usage, and configure system-wide settings</p>
         </div>
         <div className="flex space-x-3">
-          {selectedKeys.length > 0 && (
+          {selectedKeys.length > 0 && ()
             <div className="flex items-center space-x-2 px-3 py-2 bg-blue-50 rounded-lg">
               <span className="text-sm text-blue-700">{selectedKeys.length} keys selected</span>
               <button
@@ -442,7 +395,6 @@ export const ApiManagementDashboard: React.FC = () => {
           )}
         </div>
       </div>
-
       {/* Tab Navigation */}
       <div className="border-b border-gray-200">
         <nav className="-mb-px flex space-x-8">
@@ -453,7 +405,7 @@ export const ApiManagementDashboard: React.FC = () => {
             { key: 'monitoring', label: 'Monitoring', icon: '👁️' },
             { key: 'optimization', label: 'Optimization', icon: '🚀' },
             { key: 'configuration', label: 'Configuration', icon: '⚙️' }
-          ].map(tab => (
+          ].map(tab => ()
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key as 'overview' | 'keys' | 'analytics' | 'monitoring' | 'optimization' | 'configuration')}
@@ -469,9 +421,8 @@ export const ApiManagementDashboard: React.FC = () => {
           ))}
         </nav>
       </div>
-
       {/* Error Display */}
-      {error && (
+      {error && ()
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex items-center text-red-700">
             <span className="mr-2">❌</span>
@@ -485,9 +436,8 @@ export const ApiManagementDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Tab Content */}
-      {activeTab === 'overview' && globalStats && (
+      {activeTab === 'overview' && globalStats && ()
         <div className="space-y-6">
           {/* Key Performance Indicators */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -503,7 +453,6 @@ export const ApiManagementDashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -516,7 +465,6 @@ export const ApiManagementDashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -529,7 +477,6 @@ export const ApiManagementDashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -543,12 +490,11 @@ export const ApiManagementDashboard: React.FC = () => {
               </div>
             </div>
           </div>
-
           {/* Top Scopes Chart */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Most Used Scopes</h3>
             <div className="space-y-3">
-              {globalStats.topScopes.map((scopeData, index) => (
+              {globalStats.topScopes.map((scopeData, index) => ()
                 <div key={scopeData.scope} className="flex items-center">
                   <div className="w-16 text-sm font-medium text-gray-500">#{index + 1}</div>
                   <div className="flex-1">
@@ -572,7 +518,6 @@ export const ApiManagementDashboard: React.FC = () => {
               ))}
             </div>
           </div>
-
           {/* Status Distribution */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -608,7 +553,6 @@ export const ApiManagementDashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Usage Trends</h3>
               <div className="space-y-3">
@@ -633,8 +577,7 @@ export const ApiManagementDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
-      {activeTab === 'keys' && (
+      {activeTab === 'keys' && ()
         <div className="space-y-6">
           {/* Filters and Search */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
@@ -653,7 +596,6 @@ export const ApiManagementDashboard: React.FC = () => {
                   <option value="suspended">Suspended</option>
                 </select>
               </div>
-              
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
                 <input
@@ -665,12 +607,10 @@ export const ApiManagementDashboard: React.FC = () => {
                 />
               </div>
             </div>
-            
             <div className="text-sm text-gray-600">
               Showing {filteredKeys.length} of {apiKeys.length} keys
             </div>
           </div>
-
           {/* API Keys List */}
           <div className="bg-white rounded-lg border border-gray-200">
             <div className="overflow-x-auto">
@@ -709,7 +649,7 @@ export const ApiManagementDashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredKeys.map((key) => (
+                  {filteredKeys.map((key) => ()
                     <tr key={key.keyId} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <input
@@ -730,7 +670,7 @@ export const ApiManagementDashboard: React.FC = () => {
                           <div className="text-sm font-medium text-gray-900">{key.name}</div>
                           <div className="text-sm text-gray-500 font-mono">{key.keyPrefix}...</div>
                           <div className="flex flex-wrap gap-1 mt-1">
-                            {key.scopes.slice(0, 3).map((scope) => (
+                            {key.scopes.slice(0, 3).map((scope) => ()
                               <span
                                 key={scope}
                                 className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
@@ -738,7 +678,7 @@ export const ApiManagementDashboard: React.FC = () => {
                                 {scope}
                               </span>
                             ))}
-                            {key.scopes.length > 3 && (
+                            {key.scopes.length > 3 && ()
                               <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
                                 +{key.scopes.length - 3}
                               </span>
@@ -753,7 +693,7 @@ export const ApiManagementDashboard: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(key.status)}`}>
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(key.status)}`}>}
                           {key.status.toUpperCase()}
                         </span>
                         <div className="text-xs text-gray-500 mt-1">
@@ -774,7 +714,7 @@ export const ApiManagementDashboard: React.FC = () => {
                           >
                             View
                           </button>
-                          {key.status === 'active' && (
+                          {key.status === 'active' && ()
                             <>
                               <button
                                 onClick={() => suspendKey(key.keyId, 'Admin suspension')}
@@ -800,15 +740,14 @@ export const ApiManagementDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
-      {activeTab === 'analytics' && (
+      {activeTab === 'analytics' && ()
         <div className="space-y-6">
           {/* Time Range Selector */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Usage Analytics</h3>
               <div className="flex space-x-2">
-                {(['1h', '24h', '7d', '30d'] as const).map((range) => (
+                {(['1h', '24h', '7d', '30d'] as const).map((range) => ()
                   <button
                     key={range}
                     onClick={() => setTimeRange(range)}
@@ -823,10 +762,9 @@ export const ApiManagementDashboard: React.FC = () => {
                 ))}
               </div>
             </div>
-            
-            {Object.keys(usageMetrics).length > 0 ? (
+            {Object.keys(usageMetrics).length > 0 ? ()
               <div className="space-y-4">
-                {Object.entries(usageMetrics).map(([keyId, metrics]) => (
+                {Object.entries(usageMetrics).map(([keyId, metrics]) => ()
                   <div key={keyId} className="border-l-4 border-blue-500 pl-4">
                     <div className="text-sm font-medium text-gray-900">{keyId}</div>
                     <div className="text-sm text-gray-600">
@@ -837,7 +775,7 @@ export const ApiManagementDashboard: React.FC = () => {
                   </div>
                 ))}
               </div>
-            ) : (
+            ) : ()
               <div className="text-center py-8 text-gray-500">
                 <div className="text-2xl mb-2">📊</div>
                 <p>No usage metrics available for the selected time range</p>
@@ -846,8 +784,7 @@ export const ApiManagementDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
-      {activeTab === 'monitoring' && (
+      {activeTab === 'monitoring' && ()
         <div className="space-y-6">
           {/* Real-time Alerts */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -863,34 +800,33 @@ export const ApiManagementDashboard: React.FC = () => {
                 {realTimeAlerts.filter(alert => !alert.resolved).length} Active
               </span>
             </div>
-
             <div className="space-y-3 max-h-96 overflow-y-auto">
-              {realTimeAlerts.length === 0 ? (
+              {realTimeAlerts.length === 0 ? ()
                 <div className="text-center py-8">
                   <div className="text-green-500 text-4xl mb-2">✅</div>
                   <div className="text-gray-600">No active security alerts</div>
                   <div className="text-sm text-gray-500">System is operating normally</div>
                 </div>
-              ) : (
+              ) : ()
                 realTimeAlerts
                   .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-                  .map((alert) => (
+                  .map((alert) => ()
                     <div
                       key={alert.id}
-                      className={`border rounded-lg p-4 ${getSeverityColor(alert.severity)} ${
+                      className={`border rounded-lg p-4 ${getSeverityColor(alert.severity)} ${}
                         alert.resolved ? 'opacity-50' : ''
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2">
-                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(alert.severity)}`}>
+                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(alert.severity)}`}>}
                               {alert.severity.toUpperCase()}
                             </span>
                             <span className="text-sm text-gray-600">
                               {alert.timestamp.toLocaleString()}
                             </span>
-                            {alert.resolved && (
+                            {alert.resolved && ()
                               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                                 RESOLVED
                               </span>
@@ -898,20 +834,20 @@ export const ApiManagementDashboard: React.FC = () => {
                           </div>
                           <div className="mt-2">
                             <p className="font-medium text-gray-900">{alert.message}</p>
-                            {alert.keyId && (
+                            {alert.keyId && ()
                               <p className="text-sm text-gray-600">
                                 Related API Key: {alert.keyId}
                               </p>
                             )}
                           </div>
                         </div>
-                        {!alert.resolved && (
+                        {!alert.resolved && ()
                           <div className="flex items-center space-x-2">
                             <button
                               className="px-3 py-1 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200"
                               onClick={() => {
                                 // Mark alert as resolved
-                                setRealTimeAlerts(alerts =>
+                                setRealTimeAlerts(alerts =>)
                                   alerts.map(a => a.id === alert.id ? { ...a, resolved: true } : a)
                                 );
                               }}
@@ -928,8 +864,7 @@ export const ApiManagementDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
-      {activeTab === 'optimization' && (
+      {activeTab === 'optimization' && ()
         <div className="space-y-6">
           {/* Epic 31: API Optimization Insights */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -940,7 +875,7 @@ export const ApiManagementDashboard: React.FC = () => {
               </div>
               <div className="flex items-center space-x-4">
                 <div className="flex space-x-2">
-                  {(['7', '30', '90'] as const).map((days) => (
+                  {(['7', '30', '90'] as const).map((days) => ()
                     <button
                       key={days}
                       onClick={() => {
@@ -966,15 +901,14 @@ export const ApiManagementDashboard: React.FC = () => {
                 </button>
               </div>
             </div>
-
-            {optimizationLoading ? (
+            {optimizationLoading ? ()
               <div className="flex items-center justify-center py-12">
                 <div className="flex items-center space-x-3">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
                   <span className="text-gray-600">Analyzing API performance patterns...</span>
                 </div>
               </div>
-            ) : optimizationInsights ? (
+            ) : optimizationInsights ? ()
               <div className="space-y-6">
                 {/* Executive Summary */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -990,7 +924,6 @@ export const ApiManagementDashboard: React.FC = () => {
                       </div>
                     </div>
                   </div>
-
                   <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4">
                     <div className="flex items-center">
                       <div className="text-2xl">⚡</div>
@@ -1003,7 +936,6 @@ export const ApiManagementDashboard: React.FC = () => {
                       </div>
                     </div>
                   </div>
-
                   <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4">
                     <div className="flex items-center">
                       <div className="text-2xl">🔴</div>
@@ -1017,13 +949,12 @@ export const ApiManagementDashboard: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
                 {/* Recommendations */}
-                {(optimizationInsights as any)?.recommendations && (optimizationInsights as any)?.recommendations?.length > 0 && (
+                {(optimizationInsights as any)?.recommendations && (optimizationInsights as any)?.recommendations?.length > 0 && ()
                   <div>
                     <h4 className="text-lg font-semibold text-gray-900 mb-4">Optimization Recommendations</h4>
                     <div className="space-y-4">
-                      {(optimizationInsights as any)?.recommendations?.slice(0, 10).map((rec: unknown, index: number) => (
+                      {(optimizationInsights as any)?.recommendations?.slice(0, 10).map((rec: unknown, index: number) => ()
                         <div
                           key={(rec as any)?.id || index}
                           className={`border rounded-lg p-4 ${
@@ -1058,19 +989,18 @@ export const ApiManagementDashboard: React.FC = () => {
                               </div>
                               <h5 className="font-medium text-gray-900 mb-1">{(rec as any)?.title}</h5>
                               <p className="text-sm text-gray-600 mb-3">{(rec as any)?.description}</p>
-                              
                               {/* Implementation Steps */}
-                              {(rec as any)?.recommendation?.implementation && (rec as any)?.recommendation?.implementation?.length > 0 && (
+                              {(rec as any)?.recommendation?.implementation && (rec as any)?.recommendation?.implementation?.length > 0 && ()
                                 <div>
                                   <p className="text-sm font-medium text-gray-700 mb-1">Implementation:</p>
                                   <ul className="text-sm text-gray-600 space-y-1">
-                                    {(rec as any)?.recommendation?.implementation?.slice(0, 3).map((step: string, stepIndex: number) => (
+                                    {(rec as any)?.recommendation?.implementation?.slice(0, 3).map((step: string, stepIndex: number) => ()
                                       <li key={stepIndex} className="flex items-start">
                                         <span className="text-blue-500 mr-2">•</span>
                                         <span>{step}</span>
                                       </li>
                                     ))}
-                                    {(rec as any)?.recommendation?.implementation?.length > 3 && (
+                                    {(rec as any)?.recommendation?.implementation?.length > 3 && ()
                                       <li className="text-gray-500 italic">
                                         +{(rec as any)?.recommendation?.implementation?.length - 3} more steps
                                       </li>
@@ -1079,10 +1009,9 @@ export const ApiManagementDashboard: React.FC = () => {
                                 </div>
                               )}
                             </div>
-                            
                             {/* Impact Metrics */}
                             <div className="ml-6 text-right">
-                              {(rec as any)?.impact?.estimatedSavings && (
+                              {(rec as any)?.impact?.estimatedSavings && ()
                                 <div className="text-sm">
                                   <span className="text-gray-500">Savings:</span>
                                   <span className="font-medium text-green-600 ml-1">
@@ -1090,7 +1019,7 @@ export const ApiManagementDashboard: React.FC = () => {
                                   </span>
                                 </div>
                               )}
-                              {(rec as any)?.impact?.performanceImprovement && (
+                              {(rec as any)?.impact?.performanceImprovement && ()
                                 <div className="text-sm">
                                   <span className="text-gray-500">Speed:</span>
                                   <span className="font-medium text-blue-600 ml-1">
@@ -1098,7 +1027,7 @@ export const ApiManagementDashboard: React.FC = () => {
                                   </span>
                                 </div>
                               )}
-                              {(rec as any)?.recommendation?.timeToImplement && (
+                              {(rec as any)?.recommendation?.timeToImplement && ()
                                 <div className="text-sm">
                                   <span className="text-gray-500">Time:</span>
                                   <span className="font-medium text-gray-600 ml-1">
@@ -1113,9 +1042,8 @@ export const ApiManagementDashboard: React.FC = () => {
                     </div>
                   </div>
                 )}
-
                 {/* Performance Trends */}
-                {optimizationInsights.trends && (
+                {optimizationInsights.trends && ()
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-white border border-gray-200 rounded-lg p-4">
                       <h5 className="font-medium text-gray-900 mb-2">Performance Trend</h5>
@@ -1133,7 +1061,6 @@ export const ApiManagementDashboard: React.FC = () => {
                         </span>
                       </div>
                     </div>
-
                     <div className="bg-white border border-gray-200 rounded-lg p-4">
                       <h5 className="font-medium text-gray-900 mb-2">Usage Trend</h5>
                       <div className="flex items-center">
@@ -1150,7 +1077,6 @@ export const ApiManagementDashboard: React.FC = () => {
                         </span>
                       </div>
                     </div>
-
                     <div className="bg-white border border-gray-200 rounded-lg p-4">
                       <h5 className="font-medium text-gray-900 mb-2">Error Trend</h5>
                       <div className="flex items-center">
@@ -1169,9 +1095,8 @@ export const ApiManagementDashboard: React.FC = () => {
                     </div>
                   </div>
                 )}
-
                 {/* Benchmarks */}
-                {optimizationInsights.benchmarks && (
+                {optimizationInsights.benchmarks && ()
                   <div className="bg-white border border-gray-200 rounded-lg p-6">
                     <h4 className="text-lg font-semibold text-gray-900 mb-4">Performance Benchmarks</h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1192,7 +1117,6 @@ export const ApiManagementDashboard: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                      
                       <div>
                         <h5 className="font-medium text-gray-700 mb-2">Error Rate</h5>
                         <div className="space-y-2">
@@ -1210,7 +1134,6 @@ export const ApiManagementDashboard: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                      
                       <div>
                         <h5 className="font-medium text-gray-700 mb-2">Uptime</h5>
                         <div className="space-y-2">
@@ -1232,7 +1155,7 @@ export const ApiManagementDashboard: React.FC = () => {
                   </div>
                 )}
               </div>
-            ) : (
+            ) : ()
               <div className="text-center py-12">
                 <div className="text-4xl mb-4">🚀</div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">No optimization data available</h3>
@@ -1250,9 +1173,8 @@ export const ApiManagementDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Key Detail Modal */}
-      {selectedKey && (
+      {selectedKey && ()
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
           <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white">
             <div className="flex items-center justify-between mb-6">
@@ -1269,7 +1191,6 @@ export const ApiManagementDashboard: React.FC = () => {
                 </svg>
               </button>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Key Information */}
               <div className="space-y-4">
@@ -1286,7 +1207,7 @@ export const ApiManagementDashboard: React.FC = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-500">Status:</span>
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getStatusColor(selectedKey.status)}`}>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getStatusColor(selectedKey.status)}`}>}
                         {selectedKey.status.toUpperCase()}
                       </span>
                     </div>
@@ -1294,7 +1215,7 @@ export const ApiManagementDashboard: React.FC = () => {
                       <span className="text-sm text-gray-500">Created:</span>
                       <span className="text-sm text-gray-900">{selectedKey.createdAt.toLocaleString()}</span>
                     </div>
-                    {selectedKey.expiresAt && (
+                    {selectedKey.expiresAt && ()
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-500">Expires:</span>
                         <span className="text-sm text-gray-900">{selectedKey.expiresAt.toLocaleString()}</span>
@@ -1308,7 +1229,6 @@ export const ApiManagementDashboard: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
                 {/* User Information */}
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">User Information</h4>
@@ -1327,7 +1247,6 @@ export const ApiManagementDashboard: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
                 {/* Rate Limits */}
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">Rate Limits</h4>
@@ -1347,7 +1266,6 @@ export const ApiManagementDashboard: React.FC = () => {
                   </div>
                 </div>
               </div>
-
               {/* Usage and Activity */}
               <div className="space-y-4">
                 <div>
@@ -1371,13 +1289,12 @@ export const ApiManagementDashboard: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
                 {/* Scopes */}
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">Scopes</h4>
                   <div className="bg-gray-50 rounded-lg p-4">
                     <div className="flex flex-wrap gap-2">
-                      {selectedKey.scopes.map((scope) => (
+                      {selectedKey.scopes.map((scope) => ()
                         <span
                           key={scope}
                           className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
@@ -1388,27 +1305,25 @@ export const ApiManagementDashboard: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
                 {/* IP Whitelist */}
-                {selectedKey.ipWhitelist && selectedKey.ipWhitelist.length > 0 && (
+                {selectedKey.ipWhitelist && selectedKey.ipWhitelist.length > 0 && ()
                   <div>
                     <h4 className="font-medium text-gray-900 mb-2">IP Whitelist</h4>
                     <div className="bg-gray-50 rounded-lg p-4">
                       <div className="space-y-1">
-                        {selectedKey.ipWhitelist.map((ip, index) => (
+                        {selectedKey.ipWhitelist.map((ip, index) => ()
                           <div key={index} className="text-sm font-mono text-gray-900">{ip}</div>
                         ))}
                       </div>
                     </div>
                   </div>
                 )}
-
                 {/* Recent Activity */}
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">Recent Activity</h4>
                   <div className="bg-gray-50 rounded-lg p-4 max-h-40 overflow-y-auto">
                     <div className="space-y-2">
-                      {selectedKey.recentActivity.slice(0, 10).map((activity, index) => (
+                      {selectedKey.recentActivity.slice(0, 10).map((activity, index) => ()
                         <div key={index} className="text-xs">
                           <div className="flex justify-between">
                             <span className="text-gray-500">{activity.timestamp.toLocaleString()}</span>
@@ -1421,7 +1336,7 @@ export const ApiManagementDashboard: React.FC = () => {
                             </span>
                           </div>
                           <div className="text-gray-700">{activity.details}</div>
-                          {activity.ipAddress && (
+                          {activity.ipAddress && ()
                             <div className="text-gray-500">IP: {activity.ipAddress}</div>
                           )}
                         </div>
@@ -1431,9 +1346,8 @@ export const ApiManagementDashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-
             {/* Actions */}
-            {selectedKey.status === 'active' && (
+            {selectedKey.status === 'active' && ()
               <div className="mt-6 flex justify-end space-x-3">
                 <button
                   onClick={() => suspendKey(selectedKey.keyId, 'Admin suspension from detail view')}

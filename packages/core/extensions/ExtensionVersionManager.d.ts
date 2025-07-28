@@ -73,7 +73,7 @@ export declare class ExtensionVersionManager {
     /**
      * Check compatibility between extensions
      */
-    checkCompatibility()
+    checkCompatibility();
       extension: ExtensionManifest,
       systemVersion: string,
       availableExtensions: Map<string,

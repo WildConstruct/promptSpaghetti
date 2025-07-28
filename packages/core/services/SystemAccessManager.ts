@@ -607,32 +607,32 @@ export class SystemAccessManager {
       totalUsers: users.length,
       activeUsers: users.filter(u => u.isActive).length,
       pendingRequests: requests.filter(r => r.status === 'pending').length,
-      expiredAccesses: users.filter(u => )
+      expiredAccesses: users.filter(u => ),
         u.roles.some(r => r.expiresAt && r.expiresAt < new Date())
       ).length,
       byStatus: this.groupBy(users, 'status'),
       byAccessLevel: this.groupBy(users, 'systemAccess'),
       bySecurityClearance: this.groupBy(users, 'securityClearance'),
       recentActivity: {,
-        newUsers: users.filter(u => )
+        newUsers: users.filter(u => ),
           u.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
         ).length,
-        accessGranted: this.auditLog.filter(entry => )
+        accessGranted: this.auditLog.filter(entry => ),
           entry.action === 'role_assigned' && 
           entry.timestamp > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
         ).length,
-        accessRevoked: this.auditLog.filter(entry => )
+        accessRevoked: this.auditLog.filter(entry => ),
           entry.action === 'role_revoked' && 
           entry.timestamp > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
         ).length,
         loginAttempts: 0, // Would be populated from auth logs
-        failedLogins: 0   // Would be populated from auth logs
+        failedLogins: 0   // Would be populated from auth logs,
       },
       compliance: {,
         mfaEnabled: users.filter(u => u.mfaEnabled).length,
         termsAccepted: users.filter(u => u.termsAccepted).length,
         overdueCertifications: 0, // Would be calculated based on certification requirements
-        pendingReviews: requests.filter(r => r.status === 'pending').length
+        pendingReviews: requests.filter(r => r.status === 'pending').length,
       }
     };
   }
@@ -821,7 +821,7 @@ export class SystemAccessManager {
     const users = Array.from(this.users.values());
     let cleanedCount = 0;
     users.forEach(user => {)
-      const expiredRoles = user.roles.filter(role => ;)
+      const expiredRoles = user.roles.filter(role => ;);
         role.expiresAt && role.expiresAt < new Date()
       );
       if (expiredRoles.length > 0) {

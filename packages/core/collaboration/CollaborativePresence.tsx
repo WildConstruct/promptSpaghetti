@@ -22,7 +22,7 @@ const UserCursor: React.FC<UserCursorProps> = ({ user, position, nodeId }) => {
     zIndex: 1000,
     transform: 'translate(-2px, -2px)'
   };
-  return ()
+  return ();
     <div style={cursorStyle}>
       {/* Cursor pointer */}
       <svg width="16" height="16" viewBox="0 0 16 16">
@@ -99,7 +99,7 @@ const NodeSelectionOverlay: React.FC<NodeSelectionOverlayProps> = ({)
   };
   const userNames = users.map(u => u.name).join(', ');
   const isMultiple = users.length > 1;
-  return ()
+  return ();
     <div style={overlayStyle}>
       <div style={labelStyle}>
         {isMultiple ? `${users.length} users` : userNames}
@@ -134,10 +134,10 @@ export const CollaborativePresence: React.FC<CollaborativePresenceProps> = ({)
       x: node.position.x,
       y: node.position.y,
       width: node.width || 200, // Default width
-      height: node.height || 100 // Default height
+      height: node.height || 100 // Default height,
     };
   };
-  return ()
+  return ();
     <div 
       className={className}
       style={{
@@ -162,7 +162,7 @@ export const CollaborativePresence: React.FC<CollaborativePresenceProps> = ({)
       {Array.from(remoteSelections.entries()).map(([nodeId, users]) => {
         const nodeRect = getNodeRect(nodeId);
         if (!nodeRect) return null;
-        return ()
+        return ();
           <NodeSelectionOverlay
             key={nodeId}
             nodeId={nodeId}
@@ -220,7 +220,7 @@ export const CollaborationStatus: React.FC<CollaborationStatusProps> = ({)
     borderRadius: '6px',
     fontSize: '12px',
     fontWeight: 500,
-    border: '1px solid #374151'
+    border: '1px solid #374151',
   };
   const dotStyle: React.CSSProperties = {
     width: '8px',
@@ -228,10 +228,10 @@ export const CollaborationStatus: React.FC<CollaborationStatusProps> = ({)
     borderRadius: '50%',
     backgroundColor: getStatusColor(),
     ...(connectionStatus === 'connecting' && {)
-      animation: 'pulse 2s infinite'
+      animation: 'pulse 2s infinite',
     })
   };
-  return ()
+  return ();
     <div className={className} style={statusStyle}>
       <div style={dotStyle} />
       <span>{getStatusText()}</span>
@@ -284,7 +284,7 @@ export const UserAvatars: React.FC<UserAvatarsProps> = ({)
       .toUpperCase()
       .slice(0, 2);
   };
-  return ()
+  return ();
     <div className={className} style={containerStyle}>
       {users.map(user => ()
         <div

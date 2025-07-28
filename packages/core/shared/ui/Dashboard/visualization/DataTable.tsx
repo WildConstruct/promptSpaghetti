@@ -119,7 +119,6 @@ export const DataTable = <T extends Record<string, any>>({)
       filtered = filtered.filter(record =>)
         Object.values(record).some(value =>)
           String(value).toLowerCase().includes(searchTerm.toLowerCase())
-        )
       );
     }
     // Column filters
@@ -186,7 +185,7 @@ export const DataTable = <T extends Record<string, any>>({)
       : selectedRows.filter(key => key !== recordKey);
     setSelectedRows(newSelectedRows);
     if (rowSelection.onChange) {
-      const selectedRecords = data.filter(record => ;)
+      const selectedRecords = data.filter(record => ;);
         newSelectedRows.includes(getRowKey(record, data.indexOf(record)))
       );
       rowSelection.onChange(newSelectedRows, selectedRecords);
@@ -212,7 +211,6 @@ export const DataTable = <T extends Record<string, any>>({)
           const value = col.dataIndex ? record[col.dataIndex] : record[col.key];
           return `"${String(value).replace(/"/g, '""')}"`;}
         }).join(',')
-      )
     ].join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -225,7 +223,7 @@ export const DataTable = <T extends Record<string, any>>({)
   const isAllSelected = paginatedData.length > 0 && ;
     paginatedData.every(record => selectedRows.includes(getRowKey(record, data.indexOf(record))));
   const isIndeterminate = selectedRows.length > 0 && !isAllSelected;
-  return ()
+  return ();
     <div className={`data-table data-table-${size} ${className}`}>}
       {/* Toolbar */}
       {(searchable || exportable) && ()
@@ -342,7 +340,7 @@ export const DataTable = <T extends Record<string, any>>({)
               paginatedData.map((record, index) => {
                 const recordKey = getRowKey(record, index);
                 const isSelected = selectedRows.includes(recordKey);
-                return ()
+                return ();
                   <tr
                     key={recordKey}
                     className={`
@@ -365,7 +363,7 @@ export const DataTable = <T extends Record<string, any>>({)
                     {columns.map(column => {)
                       const value = column.dataIndex ? record[column.dataIndex] : record[column.key];
                       const cellContent = column.render ? column.render(value, record, index) : value;
-                      return ()
+                      return ();
                         <td
                           key={column.key}
                           className={`${column.className || ''} ${column.align ? `text-${column.align}` : ''}`}
@@ -380,7 +378,7 @@ export const DataTable = <T extends Record<string, any>>({)
                           {actions.map(action => {)
                             const Icon = action.icon;
                             const isDisabled = action.disabled?.(record);
-                            return ()
+                            return ();
                               <button
                                 key={action.key}
                                 className={`action-button ${action.variant || 'default'}`}
@@ -435,7 +433,6 @@ export const DataTable = <T extends Record<string, any>>({)
                 page === 1 || 
                 page === totalPages || 
                 Math.abs(page - currentPage) <= 2
-              )
               .map((page, index, visiblePages) => ()
                 <React.Fragment key={page}>
                   {index > 0 && visiblePages[index - 1] < page - 1 && ()

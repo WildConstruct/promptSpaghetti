@@ -255,14 +255,14 @@ const sampleViolations: AccuracyViolation[] = [
     severity: 'low',
     description: 'Glass windows in peasant housing would be uncommon',
     element: 'market-stall-001',
-    suggestion: 'Replace glass with wooden shutters or leave open'
+    suggestion: 'Replace glass with wooden shutters or leave open',
   },
   {
     type: 'cultural',
     severity: 'medium',
     description: 'Silk fabric accessibility for merchant class needs verification',
     element: 'banner-fabric-001',
-    suggestion: 'Consider wool or linen alternatives for historical accuracy'
+    suggestion: 'Consider wool or linen alternatives for historical accuracy',
   }
 ];
 
@@ -375,7 +375,7 @@ export const generateRandomScene = (id: string, name: string, period: string): V
       culture: Math.floor(Math.random() * 15) + 85,
       timeline: Math.floor(Math.random() * 15) + 85,
       expertValidated: Math.random() > 0.3,
-      violations: Math.random() > 0.5 ? [sampleViolations[0]] : []
+      violations: Math.random() > 0.5 ? [sampleViolations[0]] : [],
     }
   };
 };

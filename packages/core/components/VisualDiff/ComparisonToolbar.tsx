@@ -30,7 +30,7 @@ export const ComparisonToolbar: React.FC<ComparisonToolbarProps> = ({)
   onZoomChange,
   className = ''
 }) => {
-  return ()
+  return ();
     <div className={`bg-gray-50 px-4 py-3 ${className}`}>}
       <div className="flex flex-wrap items-center gap-4">
         {/* View Mode */}

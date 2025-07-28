@@ -259,7 +259,7 @@ export class ContributionErrorBoundary extends React.Component<
   }
   render() {
     if (this.state.hasError) {
-      return ()
+      return ();
         <Card className="error-boundary">
           <CardContent className="p-6 text-center">
             <AlertTriangle className="h-12 w-12 text-red-600 mx-auto mb-4" />
@@ -311,7 +311,7 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
     estimatedTime: initialData.estimatedTime || 60,
     prerequisites: initialData.prerequisites || [],
     resources: initialData.resources || [],
-    license: initialData.license || 'cc-by'
+    license: initialData.license || 'cc-by',
   });
   // Error state management
   const [errors, setErrors] = useState<ValidationError[]>([]);
@@ -412,7 +412,7 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
       setSubmitError({)
         type: 'unknown',
         message: 'An unexpected error occurred while submitting',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       });
     } finally {
       setIsSubmitting(false);
@@ -434,7 +434,7 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
       setSubmitError({)
         type: 'unknown',
         message: 'Failed to save draft',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       });
     } finally {
       setIsDraftSaving(false);
@@ -464,14 +464,14 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
   const renderFieldError = (fieldName: string) => {
     const error = getFieldError(fieldName);
     if (!error) return null;
-    return ()
+    return ();
       <div className="field-error text-red-600 text-sm mt-1 flex items-center">
         <AlertTriangle className="h-4 w-4 mr-1" />
         {error.message}
       </div>
     );
   };
-  return ()
+  return ();
     <ContributionErrorBoundary>
       <form onSubmit={handleSubmit} className={`contribution-form ${className}`}>}
         {/* Global error display */}
@@ -780,9 +780,9 @@ export const ContributionList: React.FC<ContributionListProps> = ({)
   className = ''
 }) => {
   const [loadingActions, setLoadingActions] = useState<Set<string>>(new Set());
-  const handleAction = useCallback(async (;)
+  const handleAction = useCallback(async (;);
     contributionId: string,
-    action: () => Promise<void> | void
+    action: () => Promise<void> | void,
   ) => {
     try {
       setLoadingActions(prev => new Set(prev).add(contributionId));
@@ -798,7 +798,7 @@ export const ContributionList: React.FC<ContributionListProps> = ({)
     }
   }, []);
   if (error) {
-    return ()
+    return ();
       <div className="error-state p-6 text-center">
         <XCircle className="h-12 w-12 text-red-600 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -813,7 +813,7 @@ export const ContributionList: React.FC<ContributionListProps> = ({)
     );
   }
   if (isLoading) {
-    return ()
+    return ();
       <div className="loading-state p-6 text-center">
         <RefreshCw className="h-8 w-8 animate-spin text-blue-600 mx-auto mb-4" />
         <p className="text-gray-600">Loading contributions...</p>
@@ -821,7 +821,7 @@ export const ContributionList: React.FC<ContributionListProps> = ({)
     );
   }
   if (contributions.length === 0) {
-    return ()
+    return ();
       <div className="empty-state p-6 text-center">
         <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -831,7 +831,7 @@ export const ContributionList: React.FC<ContributionListProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <ContributionErrorBoundary>
       <div className={`contribution-list ${className}`}>}
         <div className="contributions-grid space-y-4">

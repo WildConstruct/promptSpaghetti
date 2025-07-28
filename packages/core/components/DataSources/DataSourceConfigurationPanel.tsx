@@ -132,7 +132,7 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
     onSave(updatedSources);
   }, [dataSources, selectedSourceId, onSave]);
   const handleToggleSource = useCallback((sourceId: string) => {
-    const updatedSources = dataSources.map(ds =>;)
+    const updatedSources = dataSources.map(ds =>;);
       ds.id === sourceId ? { ...ds, enabled: !ds.enabled } : ds
     );
     setDataSources(updatedSources);
@@ -156,12 +156,12 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
     updateEditingSource({)
       metadata: {,
         ...editingSource.metadata,
-        tags: editingSource.metadata.tags.filter(t => t !== tag)
+        tags: editingSource.metadata.tags.filter(t => t !== tag),
       }
     });
   }, [editingSource, updateEditingSource]);
   if (!visible) return null;
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 0,
@@ -258,7 +258,7 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                     width: 12,
                     height: 12,
                     borderRadius: '50%',
-                    background: source.enabled ? '#48bb78' : '#f56565'
+                    background: source.enabled ? '#48bb78' : '#f56565',
                   }} />
                 </div>
                 <div style={{
@@ -436,7 +436,7 @@ const DataSourceForm: React.FC<{
       setNewTag('');
     }
   }, [newTag, onAddTag]);
-  return ()
+  return ();
     <div style={{ height: '100%', overflowY: 'auto', padding: 24 }}>
       <div style={{ maxWidth: 800 }}>
         {/* Basic Information */}
@@ -599,7 +599,7 @@ const DataSourceForm: React.FC<{
                 borderRadius: 4,
                 color: 'white',
                 fontSize: 12,
-                cursor: newTag.trim() ? 'pointer' : 'not-allowed'
+                cursor: newTag.trim() ? 'pointer' : 'not-allowed',
               }}
             >
               Add
@@ -611,7 +611,7 @@ const DataSourceForm: React.FC<{
           display: 'flex', 
           gap: 12, 
           paddingTop: 16, 
-          borderTop: '1px solid #4a5568' 
+          borderTop: '1px solid #4a5568' ,
         }}>
           <button
             onClick={onSave}
@@ -623,7 +623,7 @@ const DataSourceForm: React.FC<{
               borderRadius: 4,
               color: 'white',
               fontSize: 14,
-              cursor: source.name.trim() ? 'pointer' : 'not-allowed'
+              cursor: source.name.trim() ? 'pointer' : 'not-allowed',
             }}
           >
             Save Data Source
@@ -653,7 +653,7 @@ const DataSourceDetails: React.FC<{
   source: DataSource;
   onEdit: () => void;
 }> = ({ source, onEdit }) => {
-  return ()
+  return ();
     <div style={{ height: '100%', overflowY: 'auto', padding: 24 }}>
       <div style={{ maxWidth: 800 }}>
         <div style={{

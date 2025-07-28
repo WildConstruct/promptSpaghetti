@@ -2,7 +2,6 @@
  * MFA Enrollment Workflow - Epic 19 Implementation
  * Secure, user-friendly multi-step enrollment process for all MFA methods
  */
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -25,16 +24,13 @@ import type {
   TOTPEnrollmentData, 
   MFAEnrollmentResponse 
 } from '../../types/MFATypes';
-
 interface MFAEnrollmentWorkflowProps {
   userId: string;
   onComplete: (methodType: MFAMethodType, configId: string) => void;
   onCancel: () => void;
   existingMethods?: MFAMethodType[];
 }
-
 type EnrollmentStep = 'select' | 'setup' | 'verify' | 'backup' | 'complete';
-
 interface EnrollmentState {
   step: EnrollmentStep;
   selectedMethod: MFAMethodType | null;
@@ -49,7 +45,6 @@ interface EnrollmentState {
   error: string | null;
   timeRemaining: number;
 }
-
 const MFA_METHOD_CONFIG = {
   [MFAMethodType.TOTP]: {
     title: 'Authenticator App',
@@ -67,7 +62,7 @@ const MFA_METHOD_CONFIG = {
     security: 'Medium',
     convenience: 'High',
     recommended: false,
-    requirements: ['Access to email account']
+    requirements: ['Access to email account'],
   },
   [MFAMethodType.SMS]: {
     title: 'SMS Text Message',
@@ -76,17 +71,17 @@ const MFA_METHOD_CONFIG = {
     security: 'Low',
     convenience: 'High',
     recommended: false,
-    requirements: ['Mobile phone number']
+    requirements: ['Mobile phone number'],
   }
 };
 
-export function MFAEnrollmentWorkflow({ 
+export function MFAEnrollmentWorkflow({ )
   userId, 
   onComplete, 
   onCancel, 
   existingMethods = [] 
 }: MFAEnrollmentWorkflowProps) {
-  const [state, setState] = useState<EnrollmentState>({
+  const [state, setState] = useState<EnrollmentState>({)
     step: 'select',
     selectedMethod: null,
     enrollmentData: null,
@@ -98,9 +93,8 @@ export function MFAEnrollmentWorkflow({
     backupCodes: [],
     isLoading: false,
     error: null,
-    timeRemaining: 300 // 5 minutes for enrollment
+    timeRemaining: 300 // 5 minutes for enrollment,
   });
-
   // Countdown timer for enrollment expiry
   useEffect(() => {
     if (state.timeRemaining > 0 && (state.step === 'setup' || state.step === 'verify')) {
@@ -110,35 +104,28 @@ export function MFAEnrollmentWorkflow({
       return () => clearTimeout(timer);
     }
   }, [state.timeRemaining, state.step]);
-
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;}
   };
-
   const getStepProgress = (): number => {
     const stepMap = { select: 20, setup: 40, verify: 60, backup: 80, complete: 100 };
     return stepMap[state.step];
   };
-
-  const availableMethods = Object.keys(MFA_METHOD_CONFIG).filter(
+  const availableMethods = Object.keys(MFA_METHOD_CONFIG).filter(;)
     method => !existingMethods.includes(method as MFAMethodType)
   ) as MFAMethodType[];
-
   const handleMethodSelect = (method: MFAMethodType) => {
-    setState(prev => ({
+    setState(prev => ({)
       ...prev,
       selectedMethod: method,
-      displayName: `${MFA_METHOD_CONFIG[method].title} - ${new Date().toLocaleDateString()}`
+      displayName: `${MFA_METHOD_CONFIG[method].title} - ${new Date().toLocaleDateString()}`}
     }));
   };
-
   const startEnrollment = async () => {
     if (!state.selectedMethod) return;
-
     setState(prev => ({ ...prev, isLoading: true, error: null }));
-
     try {
       const request = {
         methodType: state.selectedMethod,
@@ -146,116 +133,101 @@ export function MFAEnrollmentWorkflow({
         ...(state.selectedMethod === MFAMethodType.EMAIL && { emailAddress: state.emailAddress }),
         ...(state.selectedMethod === MFAMethodType.SMS && { phoneNumber: state.phoneNumber })
       };
-
-      const response = await fetch('/api/mfa/enroll', {
+      const response = await fetch('/api/mfa/enroll', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(request)
+        body: JSON.stringify(request),
       });
-
       if (!response.ok) throw new Error('Enrollment failed');
-
       const enrollmentData: MFAEnrollmentResponse = await response.json();
-      
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
         step: 'setup',
         enrollmentData,
         totpData: enrollmentData.enrollmentData || null,
         isLoading: false,
-        timeRemaining: 300
+        timeRemaining: 300,
       }));
     } catch (error) {
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
         error: error instanceof Error ? error.message : 'Operation failed',
-        isLoading: false
+        isLoading: false,
       }));
     }
   };
-
   const verifyEnrollment = async () => {
     if (!state.enrollmentData || !state.verificationCode) return;
-
     setState(prev => ({ ...prev, isLoading: true, error: null }));
-
     try {
-      const response = await fetch('/api/mfa/verify', {
+      const response = await fetch('/api/mfa/verify', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           configurationId: state.enrollmentData.configurationId,
-          code: state.verificationCode
+          code: state.verificationCode,
         })
       });
-
       if (!response.ok) throw new Error('Verification failed');
-
       const result = await response.json();
-      
       if (result.success) {
         if (state.selectedMethod === MFAMethodType.TOTP && state.totpData?.backupCodes) {
-          setState(prev => ({
+          setState(prev => ({)
             ...prev,
             step: 'backup',
             backupCodes: state.totpData?.backupCodes ?? [],
-            isLoading: false
+            isLoading: false,
           }));
         } else {
           setState(prev => ({ ...prev, step: 'complete', isLoading: false }));
         }
       } else {
-        setState(prev => ({
+        setState(prev => ({)
           ...prev,
           error: result.message || 'Invalid verification code',
-          isLoading: false
+          isLoading: false,
         }));
       }
     } catch (error) {
-      setState(prev => ({
+      setState(prev => ({)
         ...prev,
         error: error instanceof Error ? error.message : 'Operation failed',
-        isLoading: false
+        isLoading: false,
       }));
     }
   };
-
   const downloadBackupCodes = () => {
-    const content = [
+    const content = [;
       'PromptScape MFA Backup Codes',
       '================================',
-      `Generated: ${new Date().toISOString()}`,
-      `User: ${userId}`,
+      `Generated: ${new Date().toISOString()}`,}
+      `User: ${userId}`,}
       '',
       'IMPORTANT: Save these codes in a safe place.',
       'Each code can only be used once.',
       '',
-      ...state.backupCodes.map((code, i) => `${i + 1}. ${code}`)
+      ...state.backupCodes.map((code, i) => `${i + 1}. ${code}`)}
     ].join('\n');
-
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `promptscape-backup-codes-${Date.now()}.txt`;
+    a.download = `promptscape-backup-codes-${Date.now()}.txt`;}
     a.click();
     URL.revokeObjectURL(url);
   };
-
   const copyBackupCodes = async () => {
     const codes = state.backupCodes.join('\n');
     await navigator.clipboard.writeText(codes);
   };
-
   const completeEnrollment = () => {
     if (state.enrollmentData && state.selectedMethod) {
       onComplete(state.selectedMethod, state.enrollmentData.configurationId);
     }
   };
-
   // Step 1: Method Selection
   if (state.step === 'select') {
-    return (
+    return ()
       <Card className="w-full max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -268,13 +240,11 @@ export function MFAEnrollmentWorkflow({
           <div className="text-sm text-gray-600">
             Choose your preferred authentication method. We recommend starting with an authenticator app for the highest security.
           </div>
-
           <div className="space-y-3">
-            {availableMethods.map(method => {
+            {availableMethods.map(method => {)
               const config = MFA_METHOD_CONFIG[method];
               const Icon = config.icon;
-              
-              return (
+              return ()
                 <div
                   key={method}
                   className={`border rounded-lg p-4 cursor-pointer transition-all ${
@@ -289,7 +259,7 @@ export function MFAEnrollmentWorkflow({
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="font-medium">{config.title}</h3>
-                        {config.recommended && (
+                        {config.recommended && ()
                           <Badge variant="default" className="text-xs">Recommended</Badge>
                         )}
                         <Badge variant="outline" className="text-xs">
@@ -306,8 +276,7 @@ export function MFAEnrollmentWorkflow({
               );
             })}
           </div>
-
-          {state.selectedMethod && (
+          {state.selectedMethod && ()
             <div className="space-y-4 border-t pt-4">
               <div>
                 <label className="block text-sm font-medium mb-1">
@@ -321,8 +290,7 @@ export function MFAEnrollmentWorkflow({
                   placeholder="e.g., My iPhone Authenticator"
                 />
               </div>
-
-              {state.selectedMethod === MFAMethodType.EMAIL && (
+              {state.selectedMethod === MFAMethodType.EMAIL && ()
                 <div>
                   <label className="block text-sm font-medium mb-1">
                     Email Address
@@ -336,8 +304,7 @@ export function MFAEnrollmentWorkflow({
                   />
                 </div>
               )}
-
-              {state.selectedMethod === MFAMethodType.SMS && (
+              {state.selectedMethod === MFAMethodType.SMS && ()
                 <div>
                   <label className="block text-sm font-medium mb-1">
                     Phone Number
@@ -353,14 +320,12 @@ export function MFAEnrollmentWorkflow({
               )}
             </div>
           )}
-
-          {state.error && (
+          {state.error && ()
             <Alert variant="destructive">
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>{state.error}</AlertDescription>
             </Alert>
           )}
-
           <div className="flex gap-3">
             <Button 
               variant="outline" 
@@ -381,13 +346,11 @@ export function MFAEnrollmentWorkflow({
       </Card>
     );
   }
-
   // Step 2: Setup Instructions
   if (state.step === 'setup') {
     const method = state.selectedMethod!;
     const config = MFA_METHOD_CONFIG[method];
-    
-    return (
+    return ()
       <Card className="w-full max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -400,7 +363,7 @@ export function MFAEnrollmentWorkflow({
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {method === MFAMethodType.TOTP && state.totpData && (
+          {method === MFAMethodType.TOTP && state.totpData && ()
             <div className="space-y-4">
               <div className="text-center space-y-4">
                 <h3 className="font-medium">Scan QR Code</h3>
@@ -414,7 +377,6 @@ export function MFAEnrollmentWorkflow({
                   </div>
                 </div>
               </div>
-              
               <div className="text-center space-y-2">
                 <p className="text-sm text-gray-600">Or enter this key manually:</p>
                 <div className="bg-gray-50 p-3 rounded-md font-mono text-sm break-all">
@@ -429,7 +391,6 @@ export function MFAEnrollmentWorkflow({
                   Copy Key
                 </Button>
               </div>
-              
               <Alert>
                 <Smartphone className="h-4 w-4" />
                 <AlertDescription>
@@ -444,8 +405,7 @@ export function MFAEnrollmentWorkflow({
               </Alert>
             </div>
           )}
-
-          {method === MFAMethodType.EMAIL && (
+          {method === MFAMethodType.EMAIL && ()
             <Alert>
               <Mail className="h-4 w-4" />
               <AlertDescription>
@@ -454,8 +414,7 @@ export function MFAEnrollmentWorkflow({
               </AlertDescription>
             </Alert>
           )}
-
-          {method === MFAMethodType.SMS && (
+          {method === MFAMethodType.SMS && ()
             <Alert>
               <MessageSquare className="h-4 w-4" />
               <AlertDescription>
@@ -464,7 +423,6 @@ export function MFAEnrollmentWorkflow({
               </AlertDescription>
             </Alert>
           )}
-
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-1">
@@ -473,7 +431,7 @@ export function MFAEnrollmentWorkflow({
               <input
                 type="text"
                 value={state.verificationCode}
-                onChange={(e) => setState(prev => ({ 
+                onChange={(e) => setState(prev => ({ )
                   ...prev, 
                   verificationCode: e.target.value.replace(/\D/g, '').slice(0, 6)
                 }))}
@@ -483,14 +441,12 @@ export function MFAEnrollmentWorkflow({
               />
             </div>
           </div>
-
-          {state.error && (
+          {state.error && ()
             <Alert variant="destructive">
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>{state.error}</AlertDescription>
             </Alert>
           )}
-
           <div className="flex gap-3">
             <Button 
               variant="outline" 
@@ -511,10 +467,9 @@ export function MFAEnrollmentWorkflow({
       </Card>
     );
   }
-
   // Step 3: Backup Codes (TOTP only)
   if (state.step === 'backup') {
-    return (
+    return ()
       <Card className="w-full max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -532,10 +487,9 @@ export function MFAEnrollmentWorkflow({
               Each code can only be used once.
             </AlertDescription>
           </Alert>
-
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="grid grid-cols-2 gap-2 font-mono text-sm">
-              {state.backupCodes.map((code, index) => (
+              {state.backupCodes.map((code, index) => ()
                 <div key={index} className="flex items-center justify-between bg-white p-2 rounded border">
                   <span>{index + 1}.</span>
                   <span className="font-bold">{code}</span>
@@ -543,7 +497,6 @@ export function MFAEnrollmentWorkflow({
               ))}
             </div>
           </div>
-
           <div className="flex gap-3">
             <Button
               variant="outline"
@@ -562,7 +515,6 @@ export function MFAEnrollmentWorkflow({
               Copy
             </Button>
           </div>
-
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"
@@ -581,10 +533,9 @@ export function MFAEnrollmentWorkflow({
       </Card>
     );
   }
-
   // Step 4: Complete
   if (state.step === 'complete') {
-    return (
+    return ()
       <Card className="w-full max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -605,7 +556,6 @@ export function MFAEnrollmentWorkflow({
               </p>
             </div>
           </div>
-
           <Alert>
             <Shield className="h-4 w-4" />
             <AlertDescription>
@@ -613,7 +563,6 @@ export function MFAEnrollmentWorkflow({
               You&apos;ll need to provide a verification code along with your password when signing in.
             </AlertDescription>
           </Alert>
-
           <Button onClick={completeEnrollment} className="w-full">
             Continue to Account Settings
           </Button>
@@ -621,6 +570,5 @@ export function MFAEnrollmentWorkflow({
       </Card>
     );
   }
-
   return null;
 }

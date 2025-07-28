@@ -421,22 +421,22 @@ export const MFA_CONSTANTS = {
     SECRET_LENGTH: 32,        // Bytes
     QR_CODE_EXPIRY: 300,     // 5 minutes
     BACKUP_CODE_COUNT: 10,    // Number of backup codes
-    MAX_CLOCK_SKEW: 90      // Seconds
+    MAX_CLOCK_SKEW: 90      // Seconds,
   },
   EMAIL: {,
     TOKEN_EXPIRY: 600,       // 10 minutes
     MAX_DAILY_SENDS: 5,      // Per user per day
-    RATE_LIMIT_WINDOW: 3600 // 1 hour
+    RATE_LIMIT_WINDOW: 3600 // 1 hour,
   },
   SMS: {,
     CODE_EXPIRY: 300,        // 5 minutes
     MAX_DAILY_SENDS: 3,      // Per user per day
-    CODE_LENGTH: 6          // Digits
+    CODE_LENGTH: 6          // Digits,
   },
   SECURITY: {,
     MAX_FAILED_ATTEMPTS: 5,  // Before account lock
     LOCKOUT_DURATION: 900,   // 15 minutes
-    SESSION_DURATION: 3600  // 1 hour
+    SESSION_DURATION: 3600  // 1 hour,
   }
 } as const;
 

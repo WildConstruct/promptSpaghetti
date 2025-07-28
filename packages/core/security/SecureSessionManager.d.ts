@@ -172,7 +172,7 @@ export declare class SecureSessionManager extends EventEmitter {
     /**
      * Create a new secure session
      */
-    createSession()
+    createSession();
       userId: string,
       context: SessionContext,
       securityLevel?: SessionSecurityLevel,
@@ -196,7 +196,7 @@ export declare class SecureSessionManager extends EventEmitter {
     /**
      * Terminate all sessions for a user
      */
-    terminateAllUserSessions()
+    terminateAllUserSessions();
       userId: string,
       reason: SessionTerminationReason,
       excludeSessionId?: string

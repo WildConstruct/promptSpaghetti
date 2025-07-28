@@ -45,7 +45,7 @@ export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = (
         id: `created-${data.ticket.id}`,}
         type: 'success',
         message: `Ticket ${data.ticket.id} has been created`,}
-        timestamp: new Date()
+        timestamp: new Date(),
       }]);
     };
     const handleTicketStatusChanged = (data: { )
@@ -57,7 +57,7 @@ export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = (
         id: `status-${data.ticket.id}-${Date.now()}`,}
         type: 'info',
         message: `Ticket ${data.ticket.id} status changed from ${data.oldStatus} to ${data.newStatus}`,}
-        timestamp: new Date()
+        timestamp: new Date(),
       }]);
     };
     const handleTicketEscalated = (data: { )
@@ -68,7 +68,7 @@ export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = (
         id: `escalated-${data.ticket.id}`,}
         type: 'warning',
         message: `Ticket ${data.ticket.id} has been escalated: ${data.reason}`,}
-        timestamp: new Date()
+        timestamp: new Date(),
       }]);
     };
     const handleCommentAdded = (data: { )
@@ -78,7 +78,7 @@ export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = (
         id: `comment-${data.ticket.id}-${Date.now()}`,}
         type: 'info',
         message: `New comment added to ticket ${data.ticket.id}`,}
-        timestamp: new Date()
+        timestamp: new Date(),
       }]);
     };
     // Subscribe to events
@@ -117,7 +117,7 @@ export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = (
       setSelectedTicket(null);
     }
   };
-  return ()
+  return ();
     <div className="epic16-ticket-integration h-full flex flex-col relative">
       {/* Navigation Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -212,7 +212,7 @@ const IntegrationSettings: React.FC<IntegrationSettingsProps> = ({)
   ticketService,
   onConfigChange
 }) => {
-  return ()
+  return ();
     <div className="p-6">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Integration Settings</h2>
       <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -301,16 +301,16 @@ interface NotificationSystemProps {
 }
 const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }) => {
   if (notifications.length === 0) return null;
-  return ()
+  return ();
     <div className="fixed top-4 right-4 z-50 space-y-2">
       {notifications.slice(-3).map((notification) => {
         const colors = {
           success: 'bg-green-50 border-green-200 text-green-700',
           error: 'bg-red-50 border-red-200 text-red-700',
           info: 'bg-blue-50 border-blue-200 text-blue-700',
-          warning: 'bg-yellow-50 border-yellow-200 text-yellow-700'
+          warning: 'bg-yellow-50 border-yellow-200 text-yellow-700',
         };
-        return ()
+        return ();
           <div
             key={notification.id}
             className={`max-w-sm w-full border rounded-md p-4 shadow-lg ${colors[notification.type]}`}
@@ -355,7 +355,7 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }
 // Help System Component
 const HelpSystem: React.FC = () => {
   const [showHelp, setShowHelp] = useState(false);
-  return ()
+  return ();
     <>
       <button
         onClick={() => setShowHelp(true)}

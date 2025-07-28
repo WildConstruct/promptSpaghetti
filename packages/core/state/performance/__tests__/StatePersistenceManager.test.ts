@@ -14,16 +14,16 @@ const mockIndexedDB = {
 // Mock CompressionStream/DecompressionStream for testing
 const mockCompressionStream = {
   readable: {,
-    getReader: jest.fn(() => ({)
+    getReader: jest.fn(() => ({),
       read: jest.fn(() => Promise.resolve({ value: new Uint8Array([1, 2, 3]), done: false }))
         .mockReturnValueOnce(Promise.resolve({ value: new Uint8Array([1, 2, 3]), done: false }))
         .mockReturnValueOnce(Promise.resolve({ done: true }))
     }))
   },
   writable: {,
-    getWriter: jest.fn(() => ({)
+    getWriter: jest.fn(() => ({),
       write: jest.fn(() => Promise.resolve()),
-      close: jest.fn(() => Promise.resolve())
+      close: jest.fn(() => Promise.resolve()),
     }))
   }
 };
@@ -106,15 +106,15 @@ describe('StatePersistenceManager', () => {
       const testData = { nodes: [], edges: [], version: 1 };
       // Mock IndexedDB operations
       const mockTransaction = {
-        objectStore: jest.fn(() => ({)
-          put: jest.fn(() => ({)
+        objectStore: jest.fn(() => ({),
+          put: jest.fn(() => ({),
             onsuccess: null,
             onerror: null,
           }))
         }))
       };
       const mockDB = {
-        transaction: jest.fn(() => mockTransaction)
+        transaction: jest.fn(() => mockTransaction),
       };
       mockIndexedDB.open.mockImplementation(() => ({)
         onsuccess: null,

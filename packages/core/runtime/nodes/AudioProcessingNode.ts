@@ -502,7 +502,7 @@ export class AudioConversionNode extends AdvancedRuntimeNode {
         processingTime,
         originalSize: audioFile instanceof ArrayBuffer ? audioFile.byteLength : (audioFile.size || 0),
         convertedSize: convertedAudio.byteLength,
-        compressionRatio: audioFile instanceof ArrayBuffer 
+        compressionRatio: audioFile instanceof ArrayBuffer ,
           ? audioFile.byteLength / convertedAudio.byteLength 
           : (audioFile.size || 0) / convertedAudio.byteLength
       };

@@ -192,7 +192,7 @@ describe('FavoritesManager', () => {
       const savedData = {
         nodeIds: ['node1', 'node2'],
         version: '1.0.0',
-        lastModified: new Date().toISOString()
+        lastModified: new Date().toISOString(),
       };
       localStorageMock.getItem.mockReturnValue(JSON.stringify(savedData as unknown));
       // Reset singleton and create new instance
@@ -240,7 +240,7 @@ describe('FavoritesManager', () => {
       const importData = {
         nodeIds: ['node3', 'node4', 'node5'],
         version: '1.0.0',
-        lastModified: new Date().toISOString()
+        lastModified: new Date().toISOString(),
       };
       const result = favoritesManager.importFavorites(importData);
       expect(result).toBe(true);
@@ -250,7 +250,7 @@ describe('FavoritesManager', () => {
       const invalidData = {
         nodeIds: 'not an array',
         version: '1.0.0',
-        lastModified: new Date().toISOString()
+        lastModified: new Date().toISOString(),
       };
       const result = favoritesManager.importFavorites(invalidData as any);
       expect(result).toBe(false);
@@ -260,7 +260,7 @@ describe('FavoritesManager', () => {
       const importData = {
         nodeIds: ['node1', '', null, 'node2', 123, 'node3'],
         version: '1.0.0',
-        lastModified: new Date().toISOString()
+        lastModified: new Date().toISOString(),
       };
       const result = favoritesManager.importFavorites(importData as any);
       expect(result).toBe(true);

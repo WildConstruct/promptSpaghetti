@@ -68,7 +68,6 @@ export function getStateSystemHealth(): {
   conflictResolver: any;
   domains: string[];
   status: 'healthy' | 'degraded' | 'error';
-} {
   return {
     orchestrator: globalStateOrchestrator.getHealthStatus(),
     conflictResolver: {,

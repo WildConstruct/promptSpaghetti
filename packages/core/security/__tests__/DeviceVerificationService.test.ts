@@ -108,7 +108,7 @@ describe('DeviceVerificationService', () => {
       riskScore: 15,
       factors: [],
       recommendations: [],
-      timestamp: new Date( as unknown as unknown)
+      timestamp: new Date( as unknown as unknown),
     });
     mockVerificationCodeManager.generateCode.mockResolvedValue({)
       code: '123456',
@@ -163,7 +163,7 @@ describe('DeviceVerificationService', () => {
         location: testLocation,
         verificationMethod: VerificationMethod.EMAIL,
         requestedTrustLevel: TrustLevel.FULL,
-        deviceName: 'Test Device'
+        deviceName: 'Test Device',
       };
       const session = await service.startVerification(request);
       expect(session).toBeDefined();
@@ -183,7 +183,7 @@ describe('DeviceVerificationService', () => {
         riskScore: 85,
         factors: [],
         recommendations: [],
-        timestamp: new Date( as unknown as unknown)
+        timestamp: new Date( as unknown as unknown),
       });
       const request: DeviceVerificationRequestData = {
         userId: testUserId,
@@ -243,7 +243,7 @@ describe('DeviceVerificationService', () => {
     });
     test('should submit valid email code challenge', async () => {
       const challenge = session.challenges.find(c => c.type === ChallengeType.EMAIL_CODE)!;
-      const result = await service.submitChallengeResponse(;)
+      const result = await service.submitChallengeResponse(;);
         session.id,
         challenge.id,
         '123456'
@@ -255,7 +255,7 @@ describe('DeviceVerificationService', () => {
     });
     test('should reject invalid challenge response', async () => {
       const challenge = session.challenges.find(c => c.type === ChallengeType.EMAIL_CODE)!;
-      const result = await service.submitChallengeResponse(;)
+      const result = await service.submitChallengeResponse(;);
         session.id,
         challenge.id,
         'wrong-code'
@@ -343,7 +343,7 @@ describe('DeviceVerificationService', () => {
         verificationMethod: VerificationMethod.EMAIL,
         requestedTrustLevel: TrustLevel.FULL,
       }));
-      const sessions = await Promise.all(;)
+      const sessions = await Promise.all(;);
         requests.map(request => service.startVerification(request))
       );
       const userSessions = service.getUserSessions(testUserId);
@@ -377,7 +377,7 @@ describe('DeviceVerificationService', () => {
         expect.objectContaining({)
           sessionId: session.id,
           userId: testUserId,
-          reason: 'Test cancellation'
+          reason: 'Test cancellation',
         })
       );
     });
@@ -425,7 +425,7 @@ describe('DeviceVerificationService', () => {
           userId: testUserId,
           adminUserId: 'admin-123',
           approved: true,
-          reason: 'Manual approval'
+          reason: 'Manual approval',
         })
       );
     });
@@ -457,7 +457,7 @@ describe('DeviceVerificationService', () => {
         verificationMethod: VerificationMethod.EMAIL,
         requestedTrustLevel: TrustLevel.FULL,
       }));
-      const sessions = await Promise.all(;)
+      const sessions = await Promise.all(;);
         requests.map(request => service.startVerification(request))
       );
       // The last session should detect repeated attempts
@@ -496,7 +496,7 @@ describe('DeviceVerificationService', () => {
         riskScore: 98,
         factors: [],
         recommendations: [],
-        timestamp: new Date( as unknown as unknown)
+        timestamp: new Date( as unknown as unknown),
       });
       const request: DeviceVerificationRequestData = {
         userId: testUserId,
@@ -518,7 +518,7 @@ describe('DeviceVerificationService', () => {
         riskScore: 98,
         factors: [],
         recommendations: [],
-        timestamp: new Date( as unknown as unknown)
+        timestamp: new Date( as unknown as unknown),
       });
       const request: DeviceVerificationRequestData = {
         userId: testUserId,
@@ -659,7 +659,7 @@ describe('DeviceVerificationService', () => {
         expect.objectContaining({)
           sessionId: session.id,
           userId: testUserId,
-          error: 'Registration failed'
+          error: 'Registration failed',
         })
       );
     });

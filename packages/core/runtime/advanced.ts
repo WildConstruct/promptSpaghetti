@@ -111,7 +111,7 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
   protected withCache<T>()
     ctx: AdvancedExecutionContext, 
     key: string, 
-    computation: () => T
+    computation: () => T,
   ): T {
     if (!this.config.cacheable) {
       return computation();
@@ -137,7 +137,7 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
   protected measureExecution<T>()
     ctx: AdvancedExecutionContext, 
     operation: string, 
-    fn: () => T
+    fn: () => T,
   ): T {
     const start = performance.now();
     const result = fn();
@@ -188,7 +188,7 @@ export class AdvancedExecutionContextImpl implements AdvancedExecutionContext {
       startTime: performance.now(),
       executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,}
       nodeExecutionOrder: [],
-      performanceMetrics: new Map()
+      performanceMetrics: new Map(),
     };
     this.inputs = {};
     this.outputs = {};
@@ -215,7 +215,7 @@ export class AdvancedExecutionUtils {
         startTime: performance.now(),
         executionId: `exec_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,}
         nodeExecutionOrder: [],
-        performanceMetrics: new Map()
+        performanceMetrics: new Map(),
       }
     };
   }
@@ -245,7 +245,6 @@ export class AdvancedExecutionUtils {
     nodesExecuted: number;
     cacheHits: number;
     statefulness: number;
-  } {
     const totalDuration = performance.now() - ctx.executionMeta.startTime;
     const nodesExecuted = ctx.executionMeta.nodeExecutionOrder.length;
     const cacheHits = ctx.cache.size;
@@ -353,7 +352,7 @@ export class SerializationHelpers {
       data,
       metadata: {,
         version: '1.0.0',
-        created: new Date().toISOString()
+        created: new Date().toISOString(),
       }
     };
   }

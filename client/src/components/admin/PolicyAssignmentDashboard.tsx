@@ -6,7 +6,6 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   PolicyAssignment, 
@@ -21,7 +20,6 @@ import { AssignmentConflictResolver } from './AssignmentConflictResolver';
 import { AssignmentAnalytics } from './AssignmentAnalytics';
 import { InheritanceVisualization } from './InheritanceVisualization';
 import './PolicyAssignmentDashboard.css';
-
 interface DashboardFilters {
   targetType?: AssignmentTargetType;
   targetId?: string;
@@ -29,7 +27,6 @@ interface DashboardFilters {
   status?: AssignmentStatus;
   includeInherited?: boolean;
 }
-
 interface DashboardStats {
   totalAssignments: number;
   activeAssignments: number;
@@ -42,33 +39,30 @@ export const PolicyAssignmentDashboard: React.FC = () => {
   const [assignments, setAssignments] = useState<PolicyAssignment[]>([]);
   const [bulkAssignments, setBulkAssignments] = useState<BulkPolicyAssignment[]>([]);
   const [conflicts, setConflicts] = useState<PolicyConflict[]>([]);
-  const [stats, setStats] = useState<DashboardStats>({
+  const [stats, setStats] = useState<DashboardStats>({)
     totalAssignments: 0,
     activeAssignments: 0,
     pendingApprovals: 0,
     conflicts: 0,
-    inheritanceChains: 0
+    inheritanceChains: 0,
   });
-  
   const [filters, setFilters] = useState<DashboardFilters>({});
   const [selectedAssignments, setSelectedAssignments] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<'assignments' | 'bulk' | 'conflicts' | 'analytics' | 'inheritance'>('assignments');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showBulkWizard, setShowBulkWizard] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   useEffect(() => {
     loadDashboardData();
   }, [filters, loadDashboardData]);
-
   const loadDashboardData = useCallback(async () => {
     setIsLoading(true);
     try {
-      await Promise.all([
+      await Promise.all([)
         loadAssignments(),
         loadBulkAssignments(),
         loadConflicts(),
-        loadStats()
+        loadStats();
       ]);
     } catch (error) {
       console.error('Error loading dashboard data:', error);
@@ -76,12 +70,11 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       setIsLoading(false);
     }
   }, [loadAssignments]);
-
   const loadAssignments = useCallback(async () => {
     try {
-      const response = await fetch('/api/policy-assignments/assignments?' + new URLSearchParams({
+      const response = await fetch('/api/policy-assignments/assignments?' + new URLSearchParams({)
         ...filters,
-        includeInherited: filters.includeInherited?.toString() || 'false'
+        includeInherited: filters.includeInherited?.toString() || 'false',
       }));
       const data = await response.json();
       setAssignments(data.data?.assignments || []);
@@ -89,7 +82,6 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       console.error('Error loading assignments:', error);
     }
   }, [filters, setAssignments]);
-
   const loadBulkAssignments = async () => {
     try {
       const response = await fetch('/api/policy-assignments/assignments/bulk');
@@ -99,7 +91,6 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       console.error('Error loading bulk assignments:', error);
     }
   };
-
   const loadConflicts = async () => {
     try {
       const response = await fetch('/api/policy-assignments/conflicts');
@@ -109,33 +100,30 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       console.error('Error loading conflicts:', error);
     }
   };
-
   const loadStats = async () => {
     try {
       const response = await fetch('/api/policy-assignments/assignments/analytics');
       const data = await response.json();
       if (data.success) {
-        setStats({
+        setStats({)
           totalAssignments: data.data.totalAssignments,
           activeAssignments: data.data.assignmentsByStatus?.ACTIVE || 0,
           pendingApprovals: data.data.assignmentsByStatus?.PENDING_APPROVAL || 0,
           conflicts: data.data.conflictsDetected?.length || 0,
-          inheritanceChains: data.data.inheritanceChains?.length || 0
+          inheritanceChains: data.data.inheritanceChains?.length || 0,
         });
       }
     } catch (error) {
       console.error('Error loading stats:', error);
     }
   };
-
   const handleCreateAssignment = async (assignmentData: Partial<PolicyAssignment>) => {
     try {
-      const response = await fetch('/api/policy-assignments/assignments', {
+      const response = await fetch('/api/policy-assignments/assignments', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(assignmentData)
+        body: JSON.stringify(assignmentData),
       });
-      
       if (response.ok) {
         setShowCreateForm(false);
         await loadDashboardData();
@@ -144,15 +132,13 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       console.error('Error creating assignment:', error);
     }
   };
-
   const handleBulkAssignment = async (bulkData: unknown) => {
     try {
-      const response = await fetch('/api/policy-assignments/assignments/bulk', {
+      const response = await fetch('/api/policy-assignments/assignments/bulk', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bulkData)
+        body: JSON.stringify(bulkData),
       });
-      
       if (response.ok) {
         setShowBulkWizard(false);
         await loadDashboardData();
@@ -161,15 +147,13 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       console.error('Error creating bulk assignment:', error);
     }
   };
-
   const handleRevokeAssignment = async (assignmentId: string, reason: string) => {
     try {
-      const response = await fetch(`/api/policy-assignments/assignments/${assignmentId}`, {
+      const response = await fetch(`/api/policy-assignments/assignments/${assignmentId}`, {)}
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason })
       });
-      
       if (response.ok) {
         await loadDashboardData();
       }
@@ -177,15 +161,12 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       console.error('Error revoking assignment:', error);
     }
   };
-
   const handleBulkRevoke = async () => {
     if (selectedAssignments.length === 0) return;
-    
     const reason = prompt('Enter reason for bulk revocation:');
     if (!reason) return;
-
     try {
-      await Promise.all(
+      await Promise.all()
         selectedAssignments.map(id => handleRevokeAssignment(id, reason))
       );
       setSelectedAssignments([]);
@@ -193,8 +174,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       console.error('Error bulk revoking assignments:', error);
     }
   };
-
-  const renderStatsCards = () => (
+  const renderStatsCards = () => (;)
     <div className="stats-grid">
       <div className="stat-card">
         <div className="stat-value">{stats.totalAssignments}</div>
@@ -218,8 +198,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       </div>
     </div>
   );
-
-  const renderFilters = () => (
+  const renderFilters = () => (;)
     <div className="dashboard-filters">
       <div className="filter-group">
         <label>Target Type:</label>
@@ -238,7 +217,6 @@ export const PolicyAssignmentDashboard: React.FC = () => {
           <option value="SYSTEM">System</option>
         </select>
       </div>
-      
       <div className="filter-group">
         <label>Status:</label>
         <select 
@@ -254,7 +232,6 @@ export const PolicyAssignmentDashboard: React.FC = () => {
           <option value="REVOKED">Revoked</option>
         </select>
       </div>
-      
       <div className="filter-group">
         <label>Target ID:</label>
         <input 
@@ -264,7 +241,6 @@ export const PolicyAssignmentDashboard: React.FC = () => {
           placeholder="Enter target ID"
         />
       </div>
-      
       <div className="filter-group">
         <label>Policy Type:</label>
         <input 
@@ -274,7 +250,6 @@ export const PolicyAssignmentDashboard: React.FC = () => {
           placeholder="Enter policy type"
         />
       </div>
-      
       <div className="filter-group">
         <label>
           <input 
@@ -287,8 +262,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       </div>
     </div>
   );
-
-  const renderAssignmentsList = () => (
+  const renderAssignmentsList = () => (;)
     <div className="assignments-section">
       <div className="section-header">
         <h3>Policy Assignments</h3>
@@ -299,16 +273,14 @@ export const PolicyAssignmentDashboard: React.FC = () => {
           <button onClick={() => setShowBulkWizard(true)} className="btn btn-secondary">
             Bulk Assignment
           </button>
-          {selectedAssignments.length > 0 && (
+          {selectedAssignments.length > 0 && ()
             <button onClick={handleBulkRevoke} className="btn btn-danger">
               Revoke Selected ({selectedAssignments.length})
             </button>
           )}
         </div>
       </div>
-      
       {renderFilters()}
-      
       <div className="assignments-table">
         <table>
           <thead>
@@ -336,7 +308,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {assignments.map(assignment => (
+            {assignments.map(assignment => ()
               <tr key={assignment.assignmentId}>
                 <td>
                   <input 
@@ -364,7 +336,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
                   </div>
                 </td>
                 <td>
-                  <span className={`status-badge status-${assignment.status.toLowerCase()}`}>
+                  <span className={`status-badge status-${assignment.status.toLowerCase()}`}>}
                     {assignment.status}
                   </span>
                 </td>
@@ -372,7 +344,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
                 <td>{assignment.effectiveDate.toLocaleDateString()}</td>
                 <td>{assignment.expirationDate?.toLocaleDateString() || 'Never'}</td>
                 <td>
-                  <span className={`risk-badge risk-${assignment.metadata.riskLevel.toLowerCase()}`}>
+                  <span className={`risk-badge risk-${assignment.metadata.riskLevel.toLowerCase()}`}>}
                     {assignment.metadata.riskLevel}
                   </span>
                 </td>
@@ -393,16 +365,15 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       </div>
     </div>
   );
-
-  const renderBulkAssignments = () => (
+  const renderBulkAssignments = () => (;)
     <div className="bulk-assignments-section">
       <h3>Bulk Assignments</h3>
       <div className="bulk-assignments-list">
-        {bulkAssignments.map(bulk => (
+        {bulkAssignments.map(bulk => ()
           <div key={bulk.bulkAssignmentId} className="bulk-assignment-card">
             <div className="bulk-header">
               <h4>{bulk.title}</h4>
-              <span className={`status-badge status-${bulk.status.toLowerCase()}`}>
+              <span className={`status-badge status-${bulk.status.toLowerCase()}`}>}
                 {bulk.status}
               </span>
             </div>
@@ -412,7 +383,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
                 <div 
                   className="progress-fill" 
                   style={{
-                    width: `${(bulk.progress.processedAssignments / bulk.progress.totalAssignments) * 100}%`
+                    width: `${(bulk.progress.processedAssignments / bulk.progress.totalAssignments) * 100}%`}
                   }}
                 />
               </div>
@@ -430,8 +401,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
       </div>
     </div>
   );
-
-  return (
+  return ()
     <div className="policy-assignment-dashboard">
       <div className="dashboard-header">
         <h1>Policy Assignment Management</h1>
@@ -441,9 +411,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
           </button>
         </div>
       </div>
-
       {renderStatsCards()}
-
       <div className="dashboard-tabs">
         <button 
           className={`tab ${activeTab === 'assignments' ? 'active' : ''}`}
@@ -476,32 +444,29 @@ export const PolicyAssignmentDashboard: React.FC = () => {
           Inheritance
         </button>
       </div>
-
       <div className="dashboard-content">
         {activeTab === 'assignments' && renderAssignmentsList()}
         {activeTab === 'bulk' && renderBulkAssignments()}
-        {activeTab === 'conflicts' && (
+        {activeTab === 'conflicts' && ()
           <AssignmentConflictResolver 
             conflicts={conflicts} 
             onResolve={() => loadDashboardData()}
           />
         )}
-        {activeTab === 'analytics' && (
+        {activeTab === 'analytics' && ()
           <AssignmentAnalytics />
         )}
-        {activeTab === 'inheritance' && (
+        {activeTab === 'inheritance' && ()
           <InheritanceVisualization assignments={assignments} />
         )}
       </div>
-
-      {showCreateForm && (
+      {showCreateForm && ()
         <PolicyAssignmentForm 
           onSubmit={handleCreateAssignment}
           onCancel={() => setShowCreateForm(false)}
         />
       )}
-
-      {showBulkWizard && (
+      {showBulkWizard && ()
         <BulkAssignmentWizard 
           onSubmit={handleBulkAssignment}
           onCancel={() => setShowBulkWizard(false)}

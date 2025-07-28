@@ -98,7 +98,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({)
       const reportData = await analyticsClient.generateReport(reportConfig);
       // Create blob and download
       const blob = new Blob([reportData], {)
-        type: exportConfig.format === 'json' ? 'application/json' :
+        type: exportConfig.format === 'json' ? 'application/json' :,
           exportConfig.format === 'csv' ? 'text/csv' :
             exportConfig.format === 'html' ? 'text/html' :
               'application/pdf'
@@ -127,7 +127,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({)
       setIsExporting(true);
       const data = await analyticsClient.exportData(timeRange, format);
       const blob = new Blob([data], {)
-        type: format === 'json' ? 'application/json' : 'text/csv'
+        type: format === 'json' ? 'application/json' : 'text/csv',
       });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -183,7 +183,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({)
       return '';
     }
   };
-  return ()
+  return ();
     <div className={`export-options ${className}`}>}
       <div className="flex items-center gap-2">
         {/* Quick Export Buttons */}

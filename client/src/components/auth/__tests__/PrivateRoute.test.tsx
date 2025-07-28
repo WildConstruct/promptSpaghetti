@@ -1,7 +1,6 @@
 /**
  * PrivateRoute Tests - Comprehensive testing for route protection
  */
-
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
@@ -15,34 +14,29 @@ const mockUseAuthStore = useAuthStore as jest.MockedFunction<typeof useAuthStore
 // Mock React Router
 const mockSetReturnUrl = jest.fn<unknown[], unknown>();
 const mockCheckAuthStatus = jest.fn<unknown[], unknown>();
-
-jest.mock('react-router-dom', () => ({
+jest.mock('react-router-dom', () => ({)
   ...jest.requireActual('react-router-dom'),
-  Navigate: ({ to, state }: { to: string; state?: unknown }) => (
+  Navigate: ({ to, state }: { to: string; state?: unknown }) => ()
     <div data-testid="navigate" data-to={to} data-state={JSON.stringify(state)}>
       Navigate to {to}
     </div>
   ),
   useLocation: () => ({ pathname: '/test', search: '?param=1' })
 }));
-
 const TestComponent = () => <div data-testid="protected-content">Protected Content</div>;
-
 const renderWithRouter = (component: React.ReactElement) => {
-  return render(
+  return render()
     <BrowserRouter>
       {component}
     </BrowserRouter>
   );
 };
-
 describe('PrivateRoute', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-
   it('shows loading state while checking authentication', () => {
-    mockUseAuthStore.mockReturnValue({
+    mockUseAuthStore.mockReturnValue({)
       isAuthenticated: false,
       isLoading: true,
       checkAuthStatus: mockCheckAuthStatus,
@@ -60,19 +54,16 @@ describe('PrivateRoute', () => {
       clearError: jest.fn<unknown[], unknown>(),
       updateUser: jest.fn<unknown[], unknown>()
     });
-
-    renderWithRouter(
+    renderWithRouter()
       <PrivateRoute>
         <TestComponent />
       </PrivateRoute>
     );
-
     expect(screen.getByText('Loading...')).toBeInTheDocument();
     expect(screen.getByText('Checking authentication status...')).toBeInTheDocument();
   });
-
   it('redirects to login when user is not authenticated', () => {
-    mockUseAuthStore.mockReturnValue({
+    mockUseAuthStore.mockReturnValue({)
       isAuthenticated: false,
       isLoading: false,
       checkAuthStatus: mockCheckAuthStatus,
@@ -90,20 +81,17 @@ describe('PrivateRoute', () => {
       clearError: jest.fn<unknown[], unknown>(),
       updateUser: jest.fn<unknown[], unknown>()
     });
-
-    renderWithRouter(
+    renderWithRouter()
       <PrivateRoute>
         <TestComponent />
       </PrivateRoute>
     );
-
     const navigate = screen.getByTestId('navigate');
     expect(navigate).toHaveAttribute('data-to', '/login');
     expect(mockSetReturnUrl).toHaveBeenCalledWith('/test?param=1');
   });
-
   it('redirects to custom redirect path when specified', () => {
-    mockUseAuthStore.mockReturnValue({
+    mockUseAuthStore.mockReturnValue({)
       isAuthenticated: false,
       isLoading: false,
       checkAuthStatus: mockCheckAuthStatus,
@@ -121,30 +109,27 @@ describe('PrivateRoute', () => {
       clearError: jest.fn<unknown[], unknown>(),
       updateUser: jest.fn<unknown[], unknown>()
     });
-
-    renderWithRouter(
+    renderWithRouter()
       <PrivateRoute redirectTo="/custom-login">
         <TestComponent />
       </PrivateRoute>
     );
-
     const navigate = screen.getByTestId('navigate');
     expect(navigate).toHaveAttribute('data-to', '/custom-login');
   });
-
   it('renders protected content when user is authenticated', () => {
-    mockUseAuthStore.mockReturnValue({
+    mockUseAuthStore.mockReturnValue({)
       isAuthenticated: true,
       isLoading: false,
       checkAuthStatus: mockCheckAuthStatus,
       setReturnUrl: mockSetReturnUrl,
-      user: { 
+      user: { ,
         id: '1', 
         email: 'test@example.com', 
         firstName: 'Test', 
         lastName: 'User',
         isEmailVerified: true,
-        roles: ['user'] 
+        roles: ['user'] ,
       },
       accessToken: 'token',
       refreshToken: 'refresh',
@@ -158,19 +143,16 @@ describe('PrivateRoute', () => {
       clearError: jest.fn<unknown[], unknown>(),
       updateUser: jest.fn<unknown[], unknown>()
     });
-
-    renderWithRouter(
+    renderWithRouter()
       <PrivateRoute>
         <TestComponent />
       </PrivateRoute>
     );
-
     expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     expect(screen.getByText('Protected Content')).toBeInTheDocument();
   });
-
   it('calls checkAuthStatus when not authenticated initially', () => {
-    mockUseAuthStore.mockReturnValue({
+    mockUseAuthStore.mockReturnValue({)
       isAuthenticated: false,
       isLoading: false,
       checkAuthStatus: mockCheckAuthStatus,
@@ -188,29 +170,26 @@ describe('PrivateRoute', () => {
       clearError: jest.fn<unknown[], unknown>(),
       updateUser: jest.fn<unknown[], unknown>()
     });
-
-    renderWithRouter(
+    renderWithRouter()
       <PrivateRoute>
         <TestComponent />
       </PrivateRoute>
     );
-
     expect(mockCheckAuthStatus).toHaveBeenCalled();
   });
-
   it('does not call checkAuthStatus when already authenticated', () => {
-    mockUseAuthStore.mockReturnValue({
+    mockUseAuthStore.mockReturnValue({)
       isAuthenticated: true,
       isLoading: false,
       checkAuthStatus: mockCheckAuthStatus,
       setReturnUrl: mockSetReturnUrl,
-      user: { 
+      user: { ,
         id: '1', 
         email: 'test@example.com', 
         firstName: 'Test', 
         lastName: 'User',
         isEmailVerified: true,
-        roles: ['user'] 
+        roles: ['user'] ,
       },
       accessToken: 'token',
       refreshToken: 'refresh',
@@ -224,13 +203,11 @@ describe('PrivateRoute', () => {
       clearError: jest.fn<unknown[], unknown>(),
       updateUser: jest.fn<unknown[], unknown>()
     });
-
-    renderWithRouter(
+    renderWithRouter()
       <PrivateRoute>
         <TestComponent />
       </PrivateRoute>
     );
-
     expect(mockCheckAuthStatus).not.toHaveBeenCalled();
   });
 });

@@ -165,7 +165,7 @@ export declare class ClassificationAuditLoggingService {
     /**
      * Log an audit entry
      */
-    logAuditEvent()
+    logAuditEvent();
       action: AuditAction,
       classification: DataClassificationLevel,
       dataId: string,
@@ -205,7 +205,7 @@ export declare class ClassificationAuditLoggingService {
     /**
      * Generate audit report
      */
-    generateAuditReport()
+    generateAuditReport();
       name: string,
       description: string,
       query: AuditQuery,

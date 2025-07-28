@@ -118,7 +118,7 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({)
         };
       case 'click':
         return {
-          onClick: (e: React.MouseEvent) => {
+          onClick: (e: React.MouseEvent) => {,
             e.preventDefault();
             if (isVisible) {
               hideTooltip();
@@ -139,7 +139,7 @@ export const ContextualTooltip: React.FC<ContextualTooltipProps> = ({)
       }
     };
   }, []);
-  return ()
+  return ();
     <div
       ref={containerRef}
       className={`contextual-tooltip-container ${className}`}
@@ -300,7 +300,7 @@ interface ProgressiveOnboardingProps {
 
 export 
   if (!currentContent) return null;
-  return ()
+  return ();
     <div
       style={{
         position: 'fixed',
@@ -340,7 +340,7 @@ export
                 width: 8,
                 height: 8,
                 borderRadius: '50%',
-                background: index === currentStep ? '#4299e1' : '#4a5568'
+                background: index === currentStep ? '#4299e1' : '#4a5568',
               }}
             />
           ))}
@@ -485,7 +485,7 @@ function getArrowStyle(position: string): React.CSSProperties {
   const baseStyle = {
     width: 0,
     height: 0,
-    border: '6px solid transparent'
+    border: '6px solid transparent',
   };
   switch (position) {
     case 'top':

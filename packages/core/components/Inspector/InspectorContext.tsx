@@ -58,7 +58,7 @@ export const InspectorProvider: React.FC<InspectorProviderProps> = ({)
     setPanelVisible,
     updateNodeData
   };
-  return ()
+  return ();
     <InspectorContext.Provider value={contextValue}>
       {children}
     </InspectorContext.Provider>

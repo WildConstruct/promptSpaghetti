@@ -454,7 +454,7 @@ describe('PasswordGuidanceService', () => {
           risks: [],
         }
       ];
-      const prioritized = (service as any).prioritizeRecommendations(;)
+      const prioritized = (service as any).prioritizeRecommendations(;);
         recommendations, 
         RiskLevel.HIGH
       );

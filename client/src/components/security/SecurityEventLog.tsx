@@ -1,6 +1,5 @@
 // Epic 19.4 - Security Event Logging Component
 // Task: T-1752989145014 - Create frontend components for Security Monitoring & Incident Response
-
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   Search,
@@ -19,7 +18,6 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { format } from 'date-fns';
-
 interface SecurityEvent {
   id: string;
   timestamp: Date;
@@ -35,7 +33,6 @@ interface SecurityEvent {
   outcome: 'success' | 'failure' | 'blocked';
   metadata?: Record<string, unknown>;
 }
-
 interface SecurityEventLogProps {
   onEventClick?: (event: SecurityEvent) => void;
   initialFilters?: {
@@ -44,8 +41,7 @@ interface SecurityEventLogProps {
     dateRange?: [Date, Date];
   };
 }
-
-const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ 
+const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ )
   onEventClick, 
   initialFilters 
 }) => {
@@ -57,14 +53,11 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
   const [sortField, setSortField] = useState<keyof SecurityEvent>('timestamp');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [showFilters, setShowFilters] = useState(false);
-
   useEffect(() => {
     loadSecurityEvents();
   }, []);
-
   const loadSecurityEvents = async () => {
     setIsLoading(true);
-    
     // Mock data - replace with actual API call
     setTimeout(() => {
       const mockEvents: SecurityEvent[] = [
@@ -79,7 +72,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
           user_email: 'suspicious@domain.com',
           resource: '/auth/login',
           action: 'LOGIN_ATTEMPT',
-          outcome: 'blocked'
+          outcome: 'blocked',
         },
         {
           id: 'evt-002',
@@ -93,7 +86,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
           user_email: 'developer@company.com',
           resource: '/api/templates',
           action: 'GET_TEMPLATES',
-          outcome: 'blocked'
+          outcome: 'blocked',
         },
         {
           id: 'evt-003',
@@ -107,7 +100,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
           user_email: 'testuser@example.com',
           resource: '/admin/users',
           action: 'ACCESS_ADMIN_PANEL',
-          outcome: 'blocked'
+          outcome: 'blocked',
         },
         {
           id: 'evt-004',
@@ -121,7 +114,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
           user_email: 'admin@company.com',
           resource: '/auth/login',
           action: 'LOGIN',
-          outcome: 'success'
+          outcome: 'success',
         },
         {
           id: 'evt-005',
@@ -139,54 +132,43 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
           metadata: { records_exported: 15000, file_size: '2.4MB' }
         }
       ];
-      
       setEvents(mockEvents);
       setIsLoading(false);
     }, 800);
   };
-
   const filteredAndSortedEvents = useMemo(() => {
-    const filtered = events.filter(event => {
-      const matchesSearch = !searchTerm || 
+    const filtered = events.filter(event => {)
+      const matchesSearch = !searchTerm || ;
         event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.event_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.user_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.source_ip?.includes(searchTerm);
-
-      const matchesSeverity = selectedSeverity.length === 0 || 
+      const matchesSeverity = selectedSeverity.length === 0 || ;
         selectedSeverity.includes(event.severity);
-
-      const matchesCategory = selectedCategory.length === 0 || 
+      const matchesCategory = selectedCategory.length === 0 || ;
         selectedCategory.includes(event.category);
-
       return matchesSearch && matchesSeverity && matchesCategory;
     });
-
     // Sort events
     filtered.sort((a, b) => {
       let aValue = a[sortField];
       let bValue = b[sortField];
-      
       if (aValue instanceof Date && bValue instanceof Date) {
         aValue = aValue.getTime();
         bValue = bValue.getTime();
       }
-
       if (typeof aValue === 'string' && typeof bValue === 'string') {
         aValue = aValue.toLowerCase();
         bValue = bValue.toLowerCase();
       }
-
       if (sortDirection === 'asc') {
         return aValue > bValue ? 1 : -1;
       } else {
         return aValue < bValue ? 1 : -1;
       }
     });
-
     return filtered;
   }, [events, searchTerm, selectedSeverity, selectedCategory, sortField, sortDirection]);
-
   const getSeverityIcon = (severity: SecurityEvent['severity']) => {
     switch (severity) {
     case 'critical':
@@ -203,7 +185,6 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
       return <Info className="h-4 w-4 text-gray-600" />;
     }
   };
-
   const getOutcomeColor = (outcome: SecurityEvent['outcome']) => {
     switch (outcome) {
     case 'success':
@@ -216,7 +197,6 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
       return 'text-gray-600 bg-gray-50';
     }
   };
-
   const handleSort = (field: keyof SecurityEvent) => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
@@ -225,16 +205,15 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
       setSortDirection('desc');
     }
   };
-
   const handleExport = () => {
-    const csvContent = [
+    const csvContent = [;
       'Timestamp,Severity,Category,Event Type,Description,Source IP,User Email,Resource,Action,Outcome',
-      ...filteredAndSortedEvents.map(event => [
+      ...filteredAndSortedEvents.map(event => [)
         format(event.timestamp, 'yyyy-MM-dd HH:mm:ss'),
         event.severity,
         event.category,
         event.event_type,
-        `"${event.description}"`,
+        `"${event.description}"`,}
         event.source_ip || '',
         event.user_email || '',
         event.resource,
@@ -242,16 +221,14 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
         event.outcome
       ].join(','))
     ].join('\n');
-
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `security-events-${format(new Date(), 'yyyy-MM-dd')}.csv`;
+    link.download = `security-events-${format(new Date(), 'yyyy-MM-dd')}.csv`;}
     link.click();
   };
-
   if (isLoading) {
-    return (
+    return ()
       <div className="security-event-log loading">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -260,8 +237,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="security-event-log">
       {/* Header */}
       <div className="event-log-header">
@@ -274,7 +250,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
             >
               <Filter className="h-4 w-4" />
               Filters
-              <ChevronDown className={`h-4 w-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`h-4 w-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />}
             </button>
             <button className="btn btn-secondary" onClick={loadSecurityEvents}>
               <RefreshCw className="h-4 w-4" />
@@ -286,7 +262,6 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
             </button>
           </div>
         </div>
-
         {/* Search */}
         <div className="search-bar">
           <Search className="h-4 w-4 text-gray-400" />
@@ -298,14 +273,13 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
             className="search-input"
           />
         </div>
-
         {/* Filters */}
-        {showFilters && (
+        {showFilters && ()
           <div className="filters-panel">
             <div className="filter-group">
               <label>Severity</label>
               <div className="filter-options">
-                {['critical', 'high', 'medium', 'low', 'info'].map(severity => (
+                {['critical', 'high', 'medium', 'low', 'info'].map(severity => ()
                   <label key={severity} className="checkbox-label">
                     <input
                       type="checkbox"
@@ -323,11 +297,10 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
                 ))}
               </div>
             </div>
-
             <div className="filter-group">
               <label>Category</label>
               <div className="filter-options">
-                {['authentication', 'authorization', 'data_access', 'system', 'api', 'network'].map(category => (
+                {['authentication', 'authorization', 'data_access', 'system', 'api', 'network'].map(category => ()
                   <label key={category} className="checkbox-label">
                     <input
                       type="checkbox"
@@ -348,12 +321,10 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
           </div>
         )}
       </div>
-
       {/* Event Count */}
       <div className="event-count">
         <span>Showing {filteredAndSortedEvents.length} of {events.length} events</span>
       </div>
-
       {/* Events Table */}
       <div className="events-table-container">
         <table className="events-table">
@@ -362,19 +333,19 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
               <th onClick={() => handleSort('timestamp')} className="sortable">
                 <Calendar className="h-4 w-4" />
                 Timestamp
-                {sortField === 'timestamp' && (
+                {sortField === 'timestamp' && ()
                   <span className="sort-indicator">{sortDirection === 'asc' ? '↑' : '↓'}</span>
                 )}
               </th>
               <th onClick={() => handleSort('severity')} className="sortable">
                 Severity
-                {sortField === 'severity' && (
+                {sortField === 'severity' && ()
                   <span className="sort-indicator">{sortDirection === 'asc' ? '↑' : '↓'}</span>
                 )}
               </th>
               <th onClick={() => handleSort('category')} className="sortable">
                 Category
-                {sortField === 'category' && (
+                {sortField === 'category' && ()
                   <span className="sort-indicator">{sortDirection === 'asc' ? '↑' : '↓'}</span>
                 )}
               </th>
@@ -386,41 +357,37 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
             </tr>
           </thead>
           <tbody>
-            {filteredAndSortedEvents.map((event) => (
+            {filteredAndSortedEvents.map((event) => ()
               <tr key={event.id} className="event-row">
                 <td className="timestamp-cell">
                   {format(event.timestamp, 'MMM dd, HH:mm:ss')}
                 </td>
-                
                 <td className="severity-cell">
                   <div className="severity-badge">
                     {getSeverityIcon(event.severity)}
                     <span className="capitalize">{event.severity}</span>
                   </div>
                 </td>
-
                 <td className="category-cell">
                   <span className="category-badge">
                     {event.category.replace('_', ' ')}
                   </span>
                 </td>
-
                 <td className="description-cell">
                   <div className="event-description">
                     <span className="event-type">{event.event_type}</span>
                     <span className="event-desc">{event.description}</span>
                   </div>
                 </td>
-
                 <td className="source-cell">
                   <div className="source-info">
-                    {event.user_email && (
+                    {event.user_email && ()
                       <div className="user-info">
                         <User className="h-3 w-3" />
                         <span>{event.user_email}</span>
                       </div>
                     )}
-                    {event.source_ip && (
+                    {event.source_ip && ()
                       <div className="ip-info">
                         <Globe className="h-3 w-3" />
                         <span>{event.source_ip}</span>
@@ -428,17 +395,14 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
                     )}
                   </div>
                 </td>
-
                 <td className="resource-cell">
                   <code className="resource-path">{event.resource}</code>
                 </td>
-
                 <td className="outcome-cell">
-                  <span className={`outcome-badge ${getOutcomeColor(event.outcome)}`}>
+                  <span className={`outcome-badge ${getOutcomeColor(event.outcome)}`}>}
                     {event.outcome}
                   </span>
                 </td>
-
                 <td className="actions-cell">
                   <button 
                     className="btn btn-sm btn-text"
@@ -453,8 +417,7 @@ const SecurityEventLog: React.FC<SecurityEventLogProps> = ({
           </tbody>
         </table>
       </div>
-
-      {filteredAndSortedEvents.length === 0 && (
+      {filteredAndSortedEvents.length === 0 && ()
         <div className="no-events">
           <Shield className="h-12 w-12 text-gray-400" />
           <h3>No security events found</h3>

@@ -29,7 +29,7 @@ describe('AdvancedClassificationEngine', () => {
       source: 'web_form',
     },
     source: 'user_input',
-    timestamp: new Date()
+    timestamp: new Date(),
   };
   const testContext: ClassificationContext = {
     source: 'user_registration_form',
@@ -93,7 +93,7 @@ describe('AdvancedClassificationEngine', () => {
         expect.objectContaining({)
           factor: 'network_exposure_risk',
           impact: expect.any(Number),
-          description: expect.stringContaining('public network')
+          description: expect.stringContaining('public network'),
         })
       );
     });
@@ -169,7 +169,7 @@ describe('AdvancedClassificationEngine', () => {
           data: {,
             ...testDataElement,
             id: 'data-456',
-            value: 'public information'
+            value: 'public information',
           },
           expectedClassification: ClassificationLevel.PUBLIC,
         }
@@ -343,7 +343,7 @@ describe('AdvancedClassificationEngine', () => {
       await engine.classifyWithContext({)
         ...testDataElement,
         id: 'data-456',
-        value: 'public information'
+        value: 'public information',
       }, testContext);
       const analytics = engine.getAnalytics();
       expect(analytics.totalClassifications).toBe(2);
@@ -356,11 +356,11 @@ describe('AdvancedClassificationEngine', () => {
     });
     test('should generate compliance reports', async () => {
       await engine.classifyWithContext(testDataElement, testContext);
-      const report = engine.generateComplianceReport(;)
+      const report = engine.generateComplianceReport(;);
         ComplianceFramework.GDPR,
         {
           start: new Date(Date.now() - 86400000), // 24 hours ago
-          end: new Date()
+          end: new Date(),
         }
       );
       expect(report.framework).toBe(ComplianceFramework.GDPR);
@@ -408,7 +408,7 @@ describe('AdvancedClassificationEngine', () => {
         dataType: 'unknown',
         context: {},
         source: 'test',
-        timestamp: new Date()
+        timestamp: new Date(),
       };
       try {
         await engine.classifyWithContext(invalidData, testContext);
@@ -435,7 +435,7 @@ describe('AdvancedClassificationEngine', () => {
           dataType: 'unknown',
           context: {},
           source: 'test',
-          timestamp: new Date()
+          timestamp: new Date(),
         } as DataElement;
         yield { ...testDataElement, id: 'valid-data-after-error' };
       }

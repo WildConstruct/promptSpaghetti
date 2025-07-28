@@ -13,7 +13,7 @@ const mockPerformance = {
   memory: {,
     usedJSHeapSize: 50 * 1024 * 1024, // 50MB
     totalJSHeapSize: 100 * 1024 * 1024, // 100MB
-    jsHeapSizeLimit: 2 * 1024 * 1024 * 1024 // 2GB
+    jsHeapSizeLimit: 2 * 1024 * 1024 * 1024 // 2GB,
   }
 };
 global.performance = mockPerformance as any;
@@ -199,7 +199,7 @@ describe('StateDevTools', () => {
       const toTime = Date.now() + 10000;
       devTools.replayStateChanges(fromTime, toTime, {)
         stepDelay: 10,
-        speed: 10 // Speed up for testing
+        speed: 10 // Speed up for testing,
       });
       setTimeout(() => {
         expect(replayStartHandler).toHaveBeenCalled();

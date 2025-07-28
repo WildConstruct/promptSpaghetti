@@ -37,7 +37,7 @@ export interface AdvancedCollaborationActions {
   initializeCollaboration: (user: FilmIndustryUser, config?: Partial<AdvancedCollaborationConfig>) => Promise<void>;
   createSession: (),
     title: string,
-    methodology: 'zada' | 'mars' | 'hybrid' | 'custom'
+    methodology: 'zada' | 'mars' | 'hybrid' | 'custom',
   ) => Promise<PromptingMethodologySession>;
   joinSession: (sessionId: string) => Promise<boolean>;
   leaveSession: () => Promise<void>;
@@ -72,7 +72,6 @@ export function useAdvancedPromptingCollaboration()
   getUsersByRole: (role: FilmIndustryRole) => FilmIndustryUser[];
   getSessionParticipants: () => FilmIndustryUser[];
   isUserCompatibleWithMethodology: (methodology: 'zada' | 'mars' | 'hybrid' | 'custom') => boolean;
-} {
   const [state, setState] = useState<AdvancedCollaborationState>({)
     collaborationService: null,
     currentUser: null,
@@ -85,7 +84,7 @@ export function useAdvancedPromptingCollaboration()
   const configRef = useRef<AdvancedCollaborationConfig>(DEFAULT_CONFIG);
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
   // Initialize collaboration service
-  const initializeCollaboration = useCallback(async (;)
+  const initializeCollaboration = useCallback(async (;);
     user: FilmIndustryUser, 
     config: Partial<AdvancedCollaborationConfig> = {}
   ): Promise<void> => {
@@ -100,14 +99,14 @@ export function useAdvancedPromptingCollaboration()
         setState(prev => ({)
           ...prev,
           activeSessions: [...prev.activeSessions, session],
-          lastSync: new Date()
+          lastSync: new Date(),
         }));
       };
       const handleUserJoined = ({ user: joinedUser }: { user: FilmIndustryUser }) => {
         setState(prev => ({)
           ...prev,
           connectedUsers: [...prev.connectedUsers.filter(u => u.id !== joinedUser.id), joinedUser],
-          lastSync: new Date()
+          lastSync: new Date(),
         }));
       };
       const handleMARSRegionCreated = ({ region }: { region: MARSRegionTemplate }) => {
@@ -133,7 +132,7 @@ export function useAdvancedPromptingCollaboration()
         currentUser: user,
         activeSessions: service.getActiveSessions(),
         isConnected: true,
-        lastSync: new Date()
+        lastSync: new Date(),
       }));
       // Start auto-save if enabled
       if (mergedConfig.autoSaveInterval > 0) {
@@ -147,14 +146,14 @@ export function useAdvancedPromptingCollaboration()
     }
   }, []);
   // Session management
-  const createSession = useCallback(async (;)
+  const createSession = useCallback(async (;);
     title: string,
-    methodology: 'zada' | 'mars' | 'hybrid' | 'custom'
+    methodology: 'zada' | 'mars' | 'hybrid' | 'custom',
   ): Promise<PromptingMethodologySession> => {
     if (!state.collaborationService || !state.currentUser) {
       throw new Error('Collaboration service not initialized');
     }
-    const session = await state.collaborationService.createCollaborationSession(;)
+    const session = await state.collaborationService.createCollaborationSession(;);
       title,
       methodology,
       state.currentUser.id
@@ -162,7 +161,7 @@ export function useAdvancedPromptingCollaboration()
     setState(prev => ({)
       ...prev,
       currentSession: session,
-      lastSync: new Date()
+      lastSync: new Date(),
     }));
     return session;
   }, [state.collaborationService, state.currentUser]);
@@ -170,7 +169,7 @@ export function useAdvancedPromptingCollaboration()
     if (!state.collaborationService || !state.currentUser) {
       throw new Error('Collaboration service not initialized');
     }
-    const success = await state.collaborationService.joinCollaborationSession(;)
+    const success = await state.collaborationService.joinCollaborationSession(;);
       sessionId,
       state.currentUser.id
     );
@@ -179,7 +178,7 @@ export function useAdvancedPromptingCollaboration()
       setState(prev => ({)
         ...prev,
         currentSession: session || null,
-        lastSync: new Date()
+        lastSync: new Date(),
       }));
     }
     return success;
@@ -188,17 +187,17 @@ export function useAdvancedPromptingCollaboration()
     setState(prev => ({)
       ...prev,
       currentSession: null,
-      lastSync: new Date()
+      lastSync: new Date(),
     }));
   }, []);
   // MARS region management
-  const createMARSRegion = useCallback(async (;)
+  const createMARSRegion = useCallback(async (;);
     regionData: Partial<MARSRegionTemplate>,
   ): Promise<MARSRegionTemplate> => {
     if (!state.collaborationService || !state.currentUser || !state.currentSession) {
       throw new Error('Collaboration service or session not available');
     }
-    const region = await state.collaborationService.createMARSRegion(;)
+    const region = await state.collaborationService.createMARSRegion(;);
       state.currentSession.sessionId,
       state.currentUser.id,
       regionData
@@ -206,13 +205,13 @@ export function useAdvancedPromptingCollaboration()
     return region;
   }, [state.collaborationService, state.currentUser, state.currentSession]);
   // Zada pattern management
-  const createZadaPattern = useCallback(async (;)
+  const createZadaPattern = useCallback(async (;);
     patternData: Partial<ZadaPromptPattern>,
   ): Promise<ZadaPromptPattern> => {
     if (!state.collaborationService || !state.currentUser || !state.currentSession) {
       throw new Error('Collaboration service or session not available');
     }
-    const pattern = await state.collaborationService.createZadaPattern(;)
+    const pattern = await state.collaborationService.createZadaPattern(;);
       state.currentSession.sessionId,
       state.currentUser.id,
       patternData
@@ -224,14 +223,14 @@ export function useAdvancedPromptingCollaboration()
     if (!state.collaborationService || !state.currentUser || !state.currentSession) {
       throw new Error('Collaboration service or session not available');
     }
-    const vfxExport = await state.collaborationService.generateVFXExport(;)
+    const vfxExport = await state.collaborationService.generateVFXExport(;);
       state.currentSession.sessionId,
       state.currentUser.id
     );
     return vfxExport;
   }, [state.collaborationService, state.currentUser, state.currentSession]);
   // Graph integration methods
-  const applyMARSRegionToGraph = useCallback(async (;)
+  const applyMARSRegionToGraph = useCallback(async (;);
     regionId: string,
     nodeIds: string[],
   ): Promise<void> => {
@@ -297,8 +296,8 @@ export function useAdvancedPromptingCollaboration()
   const getSessionParticipants = useCallback((): FilmIndustryUser[] => {
     return state.currentSession?.participants || [];
   }, [state.currentSession]);
-  const isUserCompatibleWithMethodology = useCallback((;)
-    methodology: 'zada' | 'mars' | 'hybrid' | 'custom'
+  const isUserCompatibleWithMethodology = useCallback((;);
+    methodology: 'zada' | 'mars' | 'hybrid' | 'custom',
   ): boolean => {
     if (!state.currentUser) return false;
     const compatibility = {

@@ -1,5 +1,4 @@
 // Epic 17.1.6 - Audit Log Viewer Component
-
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -92,7 +91,6 @@ interface AuditEvent {
     message: string;
   };
 }
-
 interface AuditFilters {
   startDate?: Date;
   endDate?: Date;
@@ -104,7 +102,6 @@ interface AuditFilters {
   resourceTypes: string[];
   searchTerm: string;
 }
-
 interface AuditStatistics {
   totalEvents: number;
   eventsByCategory: Record<string, number>;
@@ -114,8 +111,7 @@ interface AuditStatistics {
   eventsThisWeek: number;
   securityEvents: number;
 }
-
-const EVENT_CATEGORIES = [
+const EVENT_CATEGORIES = [;
   'authentication',
   'authorization',
   'data_modification',
@@ -125,7 +121,6 @@ const EVENT_CATEGORIES = [
   'performance',
   'error'
 ];
-
 const SEVERITIES = ['low', 'medium', 'high', 'critical'];
 // 
 const SEVERITY_CONFIG = {
@@ -134,41 +129,36 @@ const SEVERITY_CONFIG = {
   high: { color: 'error', icon: ErrorIcon },
   critical: { color: 'error', icon: SecurityIcon }
 };
-
 const OUTCOME_CONFIG = {
   success: { color: 'success', icon: CheckCircleIcon },
   failure: { color: 'error', icon: ErrorIcon },
   partial: { color: 'warning', icon: WarningIcon }
 };
 
-export   const [statistics, setStatistics] = useState<AuditStatistics | null>(null);
+export const [statistics, setStatistics] = useState<AuditStatistics | null>(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [totalEvents, setTotalEvents] = useState(0);
-  
   // Filters
-  const [filters, setFilters] = useState<AuditFilters>({
+  const [filters, setFilters] = useState<AuditFilters>({)
     eventTypes: [],
     categories: [],
     severities: [],
     outcomes: [],
     actorEmails: [],
     resourceTypes: [],
-    searchTerm: ''
+    searchTerm: '',
   });
-
   // UI State
   const [selectedEvent, setSelectedEvent] = useState<AuditEvent | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   // const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
   const [exportMenuAnchor, setExportMenuAnchor] = useState<null | HTMLElement>(null);
-
   useEffect(() => {
     loadAuditEvents();
     loadStatistics();
   }, [page, rowsPerPage, filters]);
-
   const loadAuditEvents = async () => {
     setLoading(true);
     try {
@@ -194,7 +184,7 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
           userAgent: 'Mozilla/5.0...',
           metadata: { toggleType: 'boolean', claudeImpact: 'none' },
           tags: ['feature', 'ui'],
-          timestamp: new Date(Date.now() - 60 * 60 * 1000)
+          timestamp: new Date(Date.now() - 60 * 60 * 1000),
         },
         {
           id: 'audit_2',
@@ -212,9 +202,9 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
           metadata: { loginMethod: 'password', reason: 'invalid_credentials' },
           tags: ['security', 'authentication'],
           timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-          error: {
+          error: {,
             code: 'INVALID_CREDENTIALS',
-            message: 'Invalid email or password'
+            message: 'Invalid email or password',
           }
         },
         {
@@ -232,18 +222,17 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
           beforeValue: { enabled: false },
           afterValue: { enabled: true },
           changedFields: ['enabled'],
-          metadata: { 
+          metadata: { ,
             executionId: 'exec_1', 
             duration: 2500,
             affectedUsers: 1250,
-            triggeredBy: 'scheduler'
+            triggeredBy: 'scheduler',
           },
           tags: ['schedule', 'automation'],
           timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000),
-          duration: 2500
+          duration: 2500,
         }
       ];
-      
       setEvents(mockEvents);
       setTotalEvents(mockEvents.length);
     } catch (error) {
@@ -252,20 +241,19 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
       setLoading(false);
     }
   };
-
   const loadStatistics = async () => {
     try {
       // Mock statistics - replace with actual API
       const mockStats: AuditStatistics = {
         totalEvents: 15423,
-        eventsByCategory: {
+        eventsByCategory: {,
           'data_modification': 5840,
           'authentication': 3210,
           'system_configuration': 2876,
           'security': 1843,
           'authorization': 1654
         },
-        eventsBySeverity: {
+        eventsBySeverity: {,
           'low': 8934,
           'medium': 4521,
           'high': 1756,
@@ -274,60 +262,51 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
         uniqueActors: 156,
         eventsToday: 342,
         eventsThisWeek: 2108,
-        securityEvents: 89
+        securityEvents: 89,
       };
-      
       setStatistics(mockStats);
     } catch (error) {
       console.error('Failed to load statistics:', error);
     }
   };
-
   const handleFilterChange = (field: keyof AuditFilters, value: unknown) => {
     setFilters(prev => ({ ...prev, [field]: value }));
     setPage(0); // Reset to first page when filters change
   };
-
   const handleViewDetails = (event: AuditEvent) => {
     setSelectedEvent(event);
     setDetailsOpen(true);
   };
-
   const handleExport = async (format: 'json' | 'csv' | 'pdf') => {
     try {
       // Mock export - replace with actual API
-      console.log(`Exporting audit logs as ${format}`);
+      console.log(`Exporting audit logs as ${format}`);}
       setExportMenuAnchor(null);
     } catch (error) {
       console.error('Export failed:', error);
     }
   };
-
   const clearFilters = () => {
-    setFilters({
+    setFilters({)
       eventTypes: [],
       categories: [],
       severities: [],
       outcomes: [],
       actorEmails: [],
       resourceTypes: [],
-      searchTerm: ''
+      searchTerm: '',
     });
   };
-
-  //   //   if (ms < 1000) return `${ms}ms`;
-  //   if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
-  //   return `${(ms / 60000).toFixed(1)}m`;
+  //   //   if (ms < 1000) return `${ms}ms`;}
+  //   if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;}
+  //   return `${(ms / 60000).toFixed(1)}m`;}
   // };
-
   const formatTimestamp = (timestamp: Date): string => {
     return timestamp.toLocaleString();
   };
-
   const renderStatisticsCards = () => {
     if (!statistics) return null;
-
-    return (
+    return ()
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid item xs={12} sm={6} md={3}>
           <Card>
@@ -346,7 +325,6 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
             </CardContent>
           </Card>
         </Grid>
-
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
@@ -364,7 +342,6 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
             </CardContent>
           </Card>
         </Grid>
-
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
@@ -382,7 +359,6 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
             </CardContent>
           </Card>
         </Grid>
-
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
@@ -403,8 +379,7 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
       </Grid>
     );
   };
-
-  const renderFilters = () => (
+  const renderFilters = () => (;)
     <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} md={4}>
@@ -419,7 +394,6 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
             size="small"
           />
         </Grid>
-
         <Grid item xs={12} md={2}>
           <FormControl fullWidth size="small">
             <InputLabel>Category</InputLabel>
@@ -428,15 +402,15 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
               value={filters.categories}
               onChange={(e: React.ChangeEvent<{ value: unknown }>) => handleFilterChange('categories', e.target.value)}
               label="Category"
-              renderValue={(selected: unknown) => (
+              renderValue={(selected: unknown) => ()
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {(selected as string[]).map((value) => (
+                  {(selected as string[]).map((value) => ()
                     <Chip key={value} label={value} size="small" />
                   ))}
                 </Box>
               )}
             >
-              {EVENT_CATEGORIES.map(category => (
+              {EVENT_CATEGORIES.map(category => ()
                 <MenuItem key={category} value={category}>
                   {category.replace('_', ' ')}
                 </MenuItem>
@@ -444,7 +418,6 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
             </Select>
           </FormControl>
         </Grid>
-
         <Grid item xs={12} md={2}>
           <FormControl fullWidth size="small">
             <InputLabel>Severity</InputLabel>
@@ -453,15 +426,15 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
               value={filters.severities}
               onChange={(e: React.ChangeEvent<{ value: unknown }>) => handleFilterChange('severities', e.target.value)}
               label="Severity"
-              renderValue={(selected: unknown) => (
+              renderValue={(selected: unknown) => ()
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {(selected as string[]).map((value) => (
+                  {(selected as string[]).map((value) => ()
                     <Chip key={value} label={value} size="small" />
                   ))}
                 </Box>
               )}
             >
-              {SEVERITIES.map(severity => (
+              {SEVERITIES.map(severity => ()
                 <MenuItem key={severity} value={severity}>
                   {severity}
                 </MenuItem>
@@ -469,7 +442,6 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
             </Select>
           </FormControl>
         </Grid>
-
         <Grid item xs={12} md={2}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DateTimePicker
@@ -482,7 +454,6 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
             />
           </LocalizationProvider>
         </Grid>
-
         <Grid item xs={12} md={2}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DateTimePicker
@@ -496,7 +467,6 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
           </LocalizationProvider>
         </Grid>
       </Grid>
-
       <Box mt={2} display="flex" gap={1}>
         <Button
           size="small"
@@ -522,11 +492,9 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
       </Box>
     </Paper>
   );
-
-  const renderEventsTable = () => (
+  const renderEventsTable = () => (;)
     <Paper elevation={1}>
       {loading && <LinearProgress />}
-      
       <TableContainer>
         <Table>
           <TableHead>
@@ -547,8 +515,7 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
               const outcomeConfig = OUTCOME_CONFIG[event.outcome];
               const SeverityIcon = severityConfig.icon;
               const OutcomeIcon = outcomeConfig.icon;
-
-              return (
+              return ()
                 <TableRow key={event.id} hover>
                   <TableCell>
                     <Typography variant="body2">
@@ -567,7 +534,7 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
                       <Typography variant="body2">
                         {event.actorEmail || event.actorId || 'System'}
                       </Typography>
-                      {event.ipAddress && (
+                      {event.ipAddress && ()
                         <Typography variant="caption" color="text.secondary">
                           {event.ipAddress}
                         </Typography>
@@ -593,10 +560,9 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
                     <Box display="flex" alignItems="center" gap={1}>
                       <OutcomeIcon 
                         color={
-                          outcomeConfig.color as (
+                          outcomeConfig.color as ()
                             'inherit' | 'primary' | 'secondary' | 
                             'success' | 'error' | 'info' | 'warning'
-                          )
                         } 
                         fontSize="small" 
                       />
@@ -609,10 +575,9 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
                     <Box display="flex" alignItems="center" gap={1}>
                       <SeverityIcon 
                         color={
-                          severityConfig.color as (
+                          severityConfig.color as ()
                             'inherit' | 'primary' | 'secondary' | 
                             'success' | 'error' | 'info' | 'warning'
-                          )
                         } 
                         fontSize="small" 
                       />
@@ -637,7 +602,6 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
           </TableBody>
         </Table>
       </TableContainer>
-
       <TablePagination
         rowsPerPageOptions={[10, 25, 50, 100]}
         component="div"
@@ -652,8 +616,7 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
       />
     </Paper>
   );
-
-  const renderEventDetails = () => (
+  const renderEventDetails = () => (;)
     <Dialog
       open={detailsOpen}
       onClose={() => setDetailsOpen(false)}
@@ -664,7 +627,7 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
         Audit Event Details
       </DialogTitle>
       <DialogContent>
-        {selectedEvent && (
+        {selectedEvent && ()
           <Box>
             {/* Basic Information */}
             <Accordion defaultExpanded>
@@ -698,7 +661,6 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
                 </Grid>
               </AccordionDetails>
             </Accordion>
-
             {/* Actor Information */}
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -733,16 +695,15 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
                 </Grid>
               </AccordionDetails>
             </Accordion>
-
             {/* Changes */}
-            {(selectedEvent.beforeValue || selectedEvent.afterValue) && (
+            {(selectedEvent.beforeValue || selectedEvent.afterValue) && ()
               <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="h6">Changes</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Grid container spacing={2}>
-                    {selectedEvent.beforeValue && (
+                    {selectedEvent.beforeValue && ()
                       <Grid item xs={6}>
                         <Typography variant="subtitle2">Before</Typography>
                         <Paper variant="outlined" sx={{ p: 1, bgcolor: 'grey.50' }}>
@@ -752,7 +713,7 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
                         </Paper>
                       </Grid>
                     )}
-                    {selectedEvent.afterValue && (
+                    {selectedEvent.afterValue && ()
                       <Grid item xs={6}>
                         <Typography variant="subtitle2">After</Typography>
                         <Paper variant="outlined" sx={{ p: 1, bgcolor: 'grey.50' }}>
@@ -766,9 +727,8 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
                 </AccordionDetails>
               </Accordion>
             )}
-
             {/* Error Information */}
-            {selectedEvent.error && (
+            {selectedEvent.error && ()
               <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="h6">Error Information</Typography>
@@ -785,9 +745,8 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
                 </AccordionDetails>
               </Accordion>
             )}
-
             {/* Metadata */}
-            {Object.keys(selectedEvent.metadata).length > 0 && (
+            {Object.keys(selectedEvent.metadata).length > 0 && ()
               <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="h6">Metadata</Typography>
@@ -809,27 +768,21 @@ export   const [statistics, setStatistics] = useState<AuditStatistics | null>(nu
       </DialogActions>
     </Dialog>
   );
-
-  return (
+  return ()
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box>
         {/* Header */}
         <Typography variant="h4" gutterBottom>
           Audit Log Viewer
         </Typography>
-
         {/* Statistics Cards */}
         {renderStatisticsCards()}
-
         {/* Filters */}
         {renderFilters()}
-
         {/* Events Table */}
         {renderEventsTable()}
-
         {/* Event Details Modal */}
         {renderEventDetails()}
-
         {/* Export Menu */}
         <Menu
           anchorEl={exportMenuAnchor}

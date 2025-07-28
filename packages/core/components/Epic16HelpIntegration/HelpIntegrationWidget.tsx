@@ -142,12 +142,12 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
             templateId,
             userRole,
             systemContext: currentSystem,
-            marketplaceContext: currentSystem === 'marketplace' ? {
+            marketplaceContext: currentSystem === 'marketplace' ? {,
               currentView,
               templateId,
               userRole
             } : undefined,
-            graphContext: currentSystem === 'graph-editor' ? {
+            graphContext: currentSystem === 'graph-editor' ? {,
               isEditing: true,
             } : undefined
           }
@@ -223,7 +223,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
       console.error('Failed to handle system transition:', error);
     }
   }, [currentSession, currentSystem, userId, templateId, currentView, onTransitionToSystem]);
-  const handleContentInteraction = useCallback(async (;)
+  const handleContentInteraction = useCallback(async (;);
     contentId: string, 
     interactionType: 'viewed' | 'completed' | 'skipped' | 'rated',
     data?: Record<string, unknown>
@@ -307,7 +307,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
         // Update session with escalation info
         setCurrentSession(prev => prev ? {)
           ...prev,
-          escalationLevel: prev.escalationLevel + 1
+          escalationLevel: prev.escalationLevel + 1,
         } : null);
         // Notify parent component
         onEscalateToSupport?.(escalationReason, escalationDescription);
@@ -330,7 +330,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   // =============================================================================
   const renderHelpContent = () => {
     if (isLoading) {
-      return ()
+      return ();
         <div className="help-loading">
           <div className="help-spinner" />
           <p>Loading contextual help...</p>
@@ -338,7 +338,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
       );
     }
     if (error) {
-      return ()
+      return ();
         <div className="help-error">
           <AlertCircle size={24} />
           <p>{error}</p>
@@ -349,7 +349,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
       );
     }
     if (helpContent.length === 0) {
-      return ()
+      return ();
         <div className="help-empty">
           <HelpCircle size={24} />
           <p>No help content available for this context.</p>
@@ -359,7 +359,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
         </div>
       );
     }
-    return ()
+    return ();
       <div className="help-content-list">
         {helpContent.map((content, index) => ()
           <HelpContentCard
@@ -383,7 +383,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   };
   const renderTransitionPrompt = () => {
     if (!transitionContext || currentSystem === 'graph-editor') return null;
-    return ()
+    return ();
       <div className="help-transition-prompt">
         <div className="transition-header">
           <ArrowRight size={16} />
@@ -401,7 +401,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   };
   const renderEscalationForm = () => {
     if (!showEscalation) return null;
-    return ()
+    return ();
       <div className="help-escalation-form">
         <div className="escalation-header">
           <MessageCircle size={20} />
@@ -461,7 +461,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   const renderProgressIndicator = () => {
     if (!currentSession || currentSession.totalSteps === 0) return null;
     const progress = (currentSession.currentStep / currentSession.totalSteps) * 100;
-    return ()
+    return ();
       <div className="help-progress">
         <div className="progress-bar">
           <div 
@@ -479,7 +479,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   // Main Render
   // =============================================================================
   if (hidden) return null;
-  return ()
+  return ();
     <div 
       ref={widgetRef}
       className={`help-integration-widget ${theme} ${position} ${minimized ? 'minimized' : ''} ${isOpen ? 'open' : ''}`}
@@ -589,7 +589,7 @@ const HelpContentCard: React.FC<HelpContentCardProps> = ({)
 }) => {
   const [rating, setRating] = useState(0);
   const [_____showActions, _____setShowActions] = useState(false);
-  return ()
+  return ();
     <div 
       className={`help-content-card ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}
       onClick={onView}
@@ -654,7 +654,7 @@ const HelpContentCard: React.FC<HelpContentCardProps> = ({)
 function determineSessionType()
   currentView: string, 
   templateId?: string, 
-  userRole: string = 'buyer'
+  userRole: string = 'buyer',
 ): string {
   if (currentView === 'home' || currentView === 'getting-started') {
     return 'onboarding';

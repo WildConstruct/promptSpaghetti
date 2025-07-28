@@ -125,7 +125,7 @@ describe('StickyNotesLayer Component', () => {
         expect.objectContaining({)
           position: { ,
             x: (400 - (-100)) / 0.8,  // (clientX - offsetX) / zoom 
-            y: (300 - (-50)) / 0.8    // (clientY - offsetY) / zoom
+            y: (300 - (-50)) / 0.8    // (clientY - offsetY) / zoom,
           }
         })
       ]);
@@ -169,7 +169,7 @@ describe('StickyNotesLayer Component', () => {
       const onNotesChange = jest.fn<unknown[], unknown>();
       render(<StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />);
       // Simulate note update action
-      const updatedNotes = mockNotes.map(note =>;)
+      const updatedNotes = mockNotes.map(note =>;);
         note.id === 'note-1' ? { ...note, content: 'Updated content' } : note
       );
       // This would be triggered by a note action
@@ -238,7 +238,7 @@ describe('StickyNotesLayer Component', () => {
         ...mockNotes,
         expect.objectContaining({)
           content: '',
-          author: 'Test Author'
+          author: 'Test Author',
         })
       ]);
     });
@@ -274,7 +274,7 @@ describe('StickyNotesLayer Component', () => {
       render(<StickyNotesLayer {...defaultProps} />);
       const layer = screen.getByTestId('sticky-notes-layer');
       expect(layer).toHaveStyle({)
-        zIndex: '1000' // Above graph elements
+        zIndex: '1000' // Above graph elements,
       });
       const firstNote = screen.getByText('First note').closest('[data-testid="sticky-note"]');
       const secondNote = screen.getByText('Second note').closest('[data-testid="sticky-note"]');

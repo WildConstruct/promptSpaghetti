@@ -220,7 +220,7 @@ export class ReactionService {
           return {
             success: true,
             summary,
-            message: 'Reaction removed'
+            message: 'Reaction removed',
           };
         } else {
           // Different reaction - replace it
@@ -244,7 +244,7 @@ export class ReactionService {
         reactionId,
         previousReaction,
         summary,
-        message: previousReaction ? 'Reaction updated' : 'Reaction added'
+        message: previousReaction ? 'Reaction updated' : 'Reaction added',
       };
     } catch (error) {
       console.error('Failed to add reaction:', error);
@@ -288,7 +288,7 @@ export class ReactionService {
       return {
         success: true,
         summary,
-        message: 'Reaction removed'
+        message: 'Reaction removed',
       };
     } catch (error) {
       console.error('Failed to remove reaction:', error);
@@ -331,7 +331,7 @@ export class ReactionService {
           type,
           emoji: this.getReactionEmoji(type),
           count,
-          percentage: totalReactions > 0 ? (count / totalReactions) * 100 : 0
+          percentage: totalReactions > 0 ? (count / totalReactions) * 100 : 0,
         }))
         .sort((a, b) => b.count - a.count)
         .slice(0, 10);
@@ -365,7 +365,7 @@ export class ReactionService {
   ): Promise<ReactionAnalytics> {
     const range = timeRange || {
       start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
-      end: new Date()
+      end: new Date(),
     };
     try {
       const contentReactions = Array.from(this.reactions.values());
@@ -399,7 +399,7 @@ export class ReactionService {
   ): Promise<ReactionBehaviorInsights> {
     const range = timeRange || {
       start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-      end: new Date()
+      end: new Date(),
     };
     try {
       const userReactions = Array.from(this.reactions.values());
@@ -662,7 +662,7 @@ export class ReactionService {
       breakdown[type] = {
         count,
         percentage: total > 0 ? (count / total) * 100 : 0,
-        trend: 'stable' // Would calculate actual trend
+        trend: 'stable' // Would calculate actual trend,
       };
     });
     return breakdown;
@@ -714,7 +714,7 @@ export class ReactionService {
       reactionRate: 0.15, // 15% of viewers react
       velocityScore: reactions.length / 24, // reactions per hour
       viralityIndicator: 0.8, // 80% virality potential
-      retentionScore: 0.7 // 70% sustained engagement
+      retentionScore: 0.7 // 70% sustained engagement,
     };
   }
   private calculateTemporalPatterns(reactions: ReactionData[]): any {
@@ -769,7 +769,7 @@ export class ReactionService {
         affinity[reaction.contentType] = {
           contentType: reaction.contentType,
           reactionCount: 0,
-          preferredReactions: new Set()
+          preferredReactions: new Set(),
         };
       }
       affinity[reaction.contentType].reactionCount++;
@@ -785,7 +785,7 @@ export class ReactionService {
       reactsQuickly: true, // Would analyze timing
       consideredReactor: false, // Would analyze reaction types
       positivityScore: 0.8, // 80% positive reactions
-      influencer: false // Would analyze if reactions influence others
+      influencer: false // Would analyze if reactions influence others,
     };
   }
   private analyzeEngagementTiming(reactions: ReactionData[]): any {
@@ -800,7 +800,7 @@ export class ReactionService {
     return {
       mostActiveHours,
       averageResponseTime: 15, // 15 minutes average
-      burstyBehavior: false // Would analyze patterns
+      burstyBehavior: false // Would analyze patterns,
     };
   }
 }

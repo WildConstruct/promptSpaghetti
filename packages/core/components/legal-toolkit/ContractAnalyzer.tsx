@@ -67,7 +67,7 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
         complianceChecks,
         recommendations,
         confidence: calculateConfidence(clauses, riskAssessment),
-        processingTime: Date.now() - startTime
+        processingTime: Date.now() - startTime,
       };
       setAnalysis(finalAnalysis);
       onAnalysisComplete(finalAnalysis);
@@ -97,7 +97,7 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
         riskLevel: 'medium',
         standardCompliance: true,
         position: { start: 1250, end: 1580 },
-        suggestions: ['Consider adding termination for cause provisions']
+        suggestions: ['Consider adding termination for cause provisions'],
       },
       {
         id: 'clause_2',
@@ -163,7 +163,7 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
         'Consider adding protective provisions',
         'Negotiate mutual terms where applicable'
       ],
-      score: 72 // Out of 100
+      score: 72 // Out of 100,
     };
   };
   const checkCompliance = async (_____document: unknown, _____clauses: ContractClause[]): Promise<ComplianceCheck[]> => {
@@ -193,7 +193,7 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
       }
     ];
   };
-  const generateRecommendations = (;)
+  const generateRecommendations = (;);
     clauses: ContractClause[], 
     riskAssessment: RiskAssessment,
     complianceChecks: ComplianceCheck[],
@@ -244,7 +244,7 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
     }
   };
   if (isAnalyzing) {
-    return ()
+    return ();
       <div className={`contract-analyzer analyzing ${className}`}>}
         <style>
           {`
@@ -318,7 +318,7 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
     );
   }
   if (!analysis) {
-    return ()
+    return ();
       <div className={`contract-analyzer ${className}`}>}
         <div style={{ textAlign: 'center', padding: '2rem' }}>
           <p>No analysis available. Please upload a contract document.</p>
@@ -326,7 +326,7 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`contract-analyzer ${className}`}>}
       <style>
         {`

@@ -147,7 +147,6 @@ class EntropyCalculator {
     averageTime: number;
     worstCase: number;
     unit: string;
-  } {
     const possibleCombinations = Math.pow(2, entropy);
     const averageAttempts = possibleCombinations / 2;
     const worstCaseAttempts = possibleCombinations;
@@ -235,7 +234,7 @@ class RateLimitService {
     this.limitStates.set(key, state);
     return { 
       allowed: true, 
-      remainingAttempts: limit.maxAttempts - state.attempts 
+      remainingAttempts: limit.maxAttempts - state.attempts ,
     };
   }
   resetRateLimit(key: string): void {
@@ -246,7 +245,6 @@ class RateLimitService {
     maxAttempts: number;
     windowMinutes: number;
     timeUntilReset?: number;
-  } {
     const limit = this.limits[codeType];
     const state = this.limitStates.get(key);
     if (!state) {
@@ -264,7 +262,7 @@ class RateLimitService {
       currentAttempts: state.attempts,
       maxAttempts: limit.maxAttempts,
       windowMinutes: limit.windowMinutes,
-      timeUntilReset: timeUntilReset > 0 ? timeUntilReset : undefined
+      timeUntilReset: timeUntilReset > 0 ? timeUntilReset : undefined,
     };
   }
 }
@@ -354,7 +352,7 @@ export class CodeGenerationService {
             metadata: {,
               validatedAt: new Date(),
               timingAttackSafe: false,
-              processingTimeMs: Date.now() - startTime
+              processingTimeMs: Date.now() - startTime,
             }
           };
         }
@@ -367,7 +365,7 @@ export class CodeGenerationService {
           metadata: {,
             validatedAt: new Date(),
             timingAttackSafe: defaultOptions.constantTimeValidation,
-            processingTimeMs: Date.now() - startTime
+            processingTimeMs: Date.now() - startTime,
           }
         };
       }
@@ -379,7 +377,7 @@ export class CodeGenerationService {
           metadata: {,
             validatedAt: new Date(),
             timingAttackSafe: defaultOptions.constantTimeValidation,
-            processingTimeMs: Date.now() - startTime
+            processingTimeMs: Date.now() - startTime,
           }
         };
       }
@@ -403,7 +401,7 @@ export class CodeGenerationService {
         metadata: {,
           validatedAt: new Date(),
           timingAttackSafe: defaultOptions.constantTimeValidation,
-          processingTimeMs: Date.now() - startTime
+          processingTimeMs: Date.now() - startTime,
         }
       };
     } catch (error) {
@@ -413,7 +411,7 @@ export class CodeGenerationService {
         metadata: {,
           validatedAt: new Date(),
           timingAttackSafe: false,
-          processingTimeMs: Date.now() - startTime
+          processingTimeMs: Date.now() - startTime,
         }
       };
     }
@@ -593,7 +591,6 @@ export class CodeGenerationUtils {
       unit: string;
     };
     recommendations: string[];
-  } {
     const entropy = generatedCode.metadata.entropy;
     const crackTime = EntropyCalculator.calculateCrackTime(entropy);
     let strength: 'weak' | 'moderate' | 'strong' | 'very_strong';

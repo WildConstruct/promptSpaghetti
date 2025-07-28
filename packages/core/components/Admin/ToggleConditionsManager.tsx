@@ -96,7 +96,7 @@ export const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps> = (
       timezone: 'America/Los_Angeles',
       version: '1.0.0',
     },
-    timestamp: new Date()
+    timestamp: new Date(),
   });
   const [testResults, setTestResults] = useState<ToggleEvaluationResult | null>(null);
   const [testing, setTesting] = useState(false);
@@ -214,14 +214,14 @@ export const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps> = (
       [ConditionType.TRAFFIC_SPLIT]: 'bg-cyan-100 text-cyan-800',
       [ConditionType.FEATURE_FLAG]: 'bg-lime-100 text-lime-800'
     };
-    return ()
+    return ();
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[type]}`}>}
         {type.replace('_', ' ').toUpperCase()}
       </span>
     );
   };
   if (loading) {
-    return ()
+    return ();
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -230,7 +230,7 @@ export const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps> = (
       </div>
     );
   }
-  return ()
+  return ();
     <div className="conditions-manager max-h-screen flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -522,7 +522,7 @@ const ConditionDetails: React.FC<ConditionDetailsProps> = ({ condition }) => {
     const params = condition.parameters;
     switch (condition.conditionType) {
     case ConditionType.PERCENTAGE:
-      return ()
+      return ();
         <div className="text-sm">
           <span className="font-medium">Rollout: </span>
           <span>{params.percentage}%</span>
@@ -530,14 +530,14 @@ const ConditionDetails: React.FC<ConditionDetailsProps> = ({ condition }) => {
         </div>
       );
     case ConditionType.USER_SEGMENT:
-      return ()
+      return ();
         <div className="text-sm">
           <span className="font-medium">Segments: </span>
           <span>{params.userSegments?.join(', ') || 'None'}</span>
         </div>
       );
     case ConditionType.TIME_WINDOW:
-      return ()
+      return ();
         <div className="text-sm space-y-1">
           {params.startTime && ()
             <div>
@@ -554,21 +554,21 @@ const ConditionDetails: React.FC<ConditionDetailsProps> = ({ condition }) => {
         </div>
       );
     case ConditionType.CUSTOM_EXPRESSION:
-      return ()
+      return ();
         <div className="text-sm">
           <span className="font-medium">Expression: </span>
           <code className="bg-gray-100 px-2 py-1 rounded text-xs">{condition.expression}</code>
         </div>
       );
     default:
-      return ()
+      return ();
         <div className="text-sm text-gray-500">
             Configuration details for {condition.conditionType}
         </div>
       );
     }
   };
-  return ()
+  return ();
     <div>
       <h4 className="text-sm font-medium text-gray-700 mb-2">Configuration</h4>
       {renderParameters()}
@@ -591,7 +591,7 @@ const ConditionFormModal: React.FC<ConditionFormModalProps> = ({)
   onCancel,
   isEditing
 }) => {
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-screen overflow-y-auto">
         <div className="px-6 py-4 border-b border-gray-200">

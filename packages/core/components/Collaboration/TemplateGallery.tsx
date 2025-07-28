@@ -61,7 +61,7 @@ const TemplateGallery: React.FC<TemplateGalleryProps> = ({ )
     category: categoryFilter === 'all' ? undefined : categoryFilter,
     difficulty: difficultyFilter === 'all' ? undefined : difficultyFilter,
     sortBy,
-    limit: viewMode === 'grid' ? 12 : 20
+    limit: viewMode === 'grid' ? 12 : 20,
   });
   const handleTemplateSelect = useCallback((template: ProjectTemplate) => {
     if (onSelectTemplate) {
@@ -87,7 +87,7 @@ const TemplateGallery: React.FC<TemplateGalleryProps> = ({ )
       console.error('Failed to toggle favorite:', err);
     }
   }, [favoriteTemplate, unfavoriteTemplate]);
-  const renderTemplateGrid = () => (;)
+  const renderTemplateGrid = () => (;);
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {templates.map(template => ()
         <TemplateCard
@@ -100,7 +100,7 @@ const TemplateGallery: React.FC<TemplateGalleryProps> = ({ )
       ))}
     </div>
   );
-  const renderTemplateList = () => (;)
+  const renderTemplateList = () => (;);
     <div className="space-y-4">
       {templates.map(template => ()
         <TemplateCard
@@ -113,7 +113,7 @@ const TemplateGallery: React.FC<TemplateGalleryProps> = ({ )
       ))}
     </div>
   );
-  return ()
+  return ();
     <div className={`bg-white rounded-lg border border-gray-200 ${className}`}>}
       {/* Header */}
       <div className="p-6 border-b border-gray-200">

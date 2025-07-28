@@ -44,7 +44,7 @@ describe('SecureSessionManager', () => {
         geolocation: {,
           country: 'US',
           region: 'California',
-          city: 'San Francisco'
+          city: 'San Francisco',
         },
         securityFlags: {,
           isSuspiciousLocation: false,
@@ -53,7 +53,7 @@ describe('SecureSessionManager', () => {
           hasProxy: false,
         }
       };
-      const result = await manager.createSession(;)
+      const result = await manager.createSession(;);
         'user123',
         context,
         SessionSecurityLevel.MEDIUM,
@@ -103,7 +103,7 @@ describe('SecureSessionManager', () => {
           hasProxy: false,
         }
       };
-      const result = await manager.createSession(;)
+      const result = await manager.createSession(;);
         'user_secure',
         context,
         SessionSecurityLevel.HIGH
@@ -357,7 +357,7 @@ describe('SecureSessionManager', () => {
         }
       };
       const { session } = await manager.createSession('user123', context);
-      const terminated = await manager.terminateSession(;)
+      const terminated = await manager.terminateSession(;);
         session.id,
         SessionTerminationReason.MANUAL_LOGOUT
       );
@@ -404,7 +404,7 @@ describe('SecureSessionManager', () => {
       const session1 = await manager.createSession('user123', context);
       const session2 = await manager.createSession('user123', context);
       const session3 = await manager.createSession('user123', context);
-      const terminated = await manager.terminateAllUserSessions(;)
+      const terminated = await manager.terminateAllUserSessions(;);
         'user123',
         SessionTerminationReason.PASSWORD_CHANGE,
         session1.session.id // Exclude this session
@@ -552,7 +552,7 @@ describe('SecureSessionManager', () => {
           type: 'rapidActivity',
           severity: 'high',
           description: 'Unusually high activity detected',
-          recommendation: 'Monitor for automation'
+          recommendation: 'Monitor for automation',
         });
       });
     });
@@ -619,7 +619,7 @@ describe('SecureSessionManager', () => {
         SessionSecurityLevel.CRITICAL
       );
       // CRITICAL level allows only 1 concurrent session
-      const secondSession = await manager.createSession(;)
+      const secondSession = await manager.createSession(;);
         'user_critical',
         context,
         SessionSecurityLevel.CRITICAL
@@ -711,7 +711,7 @@ describe('SecureSessionManager', () => {
       expect(validation.securityIssues[0].description).toBe('Session not found');
     });
     test('should handle termination of non-existent session', async () => {
-      const terminated = await manager.terminateSession(;)
+      const terminated = await manager.terminateSession(;);
         'non-existent-id',
         SessionTerminationReason.MANUAL_LOGOUT
       );

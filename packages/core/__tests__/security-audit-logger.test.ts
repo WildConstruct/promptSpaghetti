@@ -37,7 +37,7 @@ describe('SecurityAuditLogger', () => {
   });
   describe('Event Logging', () => {
     it('should log basic security event', () => {
-      const eventId = logger.logEvent(;)
+      const eventId = logger.logEvent(;);
         SecuritySeverity.INFO,
         SecurityEventCategory.EXPRESSION_VALIDATION,
         'Test expression validated',
@@ -94,7 +94,7 @@ describe('SecurityAuditLogger', () => {
     it('should generate unique event IDs', () => {
       const ids = new Set<string>();
       for (let i = 0; i < 10; i++) {
-        const id = logger.logEvent(;)
+        const id = logger.logEvent(;);
           SecuritySeverity.INFO,
           SecurityEventCategory.EXPRESSION_VALIDATION,
           `Event ${i}`}
@@ -134,7 +134,7 @@ describe('SecurityAuditLogger', () => {
     });
     it('should log prototype pollution attempts', () => {
       logger.logPrototypePollutionAttempt('__proto__', {)
-        expression: 'obj.__proto__.polluted = true'
+        expression: 'obj.__proto__.polluted = true',
       });
       const event = logger.getEvents()[0];
       expect(event).toMatchObject({)
@@ -326,7 +326,7 @@ describe('SecurityAuditLogger', () => {
       expect(parsed).toHaveLength(2);
       expect(parsed[0]).toMatchObject({)
         severity: SecuritySeverity.INFO,
-        message: 'Test 1'
+        message: 'Test 1',
       });
     });
     it('should export events as CSV', () => {

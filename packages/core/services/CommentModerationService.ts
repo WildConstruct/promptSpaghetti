@@ -303,7 +303,7 @@ export class CommentModerationService {
   ): Promise<CommentModerationStats> {
     const range = timeRange || {
       start: new Date(Date.now() - 24 * 60 * 60 * 1000), // 24 hours ago
-      end: new Date()
+      end: new Date(),
     };
     try {
       // Gather stats from multiple sources
@@ -355,14 +355,14 @@ export class CommentModerationService {
   async subscribeToModerationUpdates()
     subscriberId: string,
     filters: CommentModerationFilters,
-    callback: (update: any) => void
+    callback: (update: any) => void,
   ): Promise<void> {
     try {
       // Set up real-time subscription
       const subscription = {
         filters,
         callback,
-        lastUpdate: new Date()
+        lastUpdate: new Date(),
       };
       this.realtimeSubscriptions.set(subscriberId, subscription);
       console.log(`📡 Real-time subscription created: ${subscriberId}`);}
@@ -417,7 +417,7 @@ export class CommentModerationService {
       for (const comment of pendingComments) {
         try {
           // Analyze comment with ML service
-          const analysis = await this.automatedService.analyzeContent(;)
+          const analysis = await this.automatedService.analyzeContent(;);
             comment.content,
             'comment',
             { resourceId, commentId: comment.id }
@@ -539,7 +539,7 @@ export class CommentModerationService {
       content: 'Mock comment content',
       authorId: 'user123',
       moderationStatus: 'pending',
-      createdAt: new Date()
+      createdAt: new Date(),
     };
   }
   private async executeModerationAction()
@@ -611,7 +611,7 @@ export class CommentModerationService {
       type: 'comment_escalation',
       resourceId: request.commentId,
       escalatedBy: request.moderatorId,
-      reason: request.reason || 'Escalated for review'
+      reason: request.reason || 'Escalated for review',
     });
     return {
       newState: 'escalated',
@@ -645,7 +645,7 @@ export class CommentModerationService {
     request: BulkModerationRequest,
     result: BulkModerationResult,
   ): Promise<void> {
-    const promises = batch.map(commentId =>;)
+    const promises = batch.map(commentId =>;);
       this.moderateComment({)
         commentId,
         action: request.action,
@@ -663,14 +663,14 @@ export class CommentModerationService {
           result.failed++;
           result.errors.push({)
             commentId: batch[index],
-            error: batchResult.value.error || 'Unknown error'
+            error: batchResult.value.error || 'Unknown error',
           });
         }
       } else {
         result.failed++;
         result.errors.push({)
           commentId: batch[index],
-          error: batchResult.reason?.message || 'Promise rejected'
+          error: batchResult.reason?.message || 'Promise rejected',
         });
       }
     });
@@ -695,7 +695,7 @@ export class CommentModerationService {
           result.failed++;
           result.errors.push({)
             commentId,
-            error: moderationResult.error || 'Unknown error'
+            error: moderationResult.error || 'Unknown error',
           });
         }
       } catch (error) {

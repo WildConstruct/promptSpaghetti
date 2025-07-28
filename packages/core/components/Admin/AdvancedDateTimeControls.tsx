@@ -179,7 +179,7 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
         type: 'other',
         description: 'Selected time is in the past',
         severity: 'high',
-        suggestion: 'Please select a future date and time'
+        suggestion: 'Please select a future date and time',
       };
     }
     return { hasConflict: false, type: 'other', description: '', severity: 'low' };
@@ -283,7 +283,7 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
     const query = timezoneSearchQuery.toLowerCase();
     const filtered: typeof TIMEZONE_GROUPS = {};
     Object.entries(TIMEZONE_GROUPS).forEach(([group, timezones]) => {
-      const matchingTimezones = timezones.filter(tz => ;)
+      const matchingTimezones = timezones.filter(tz => ;);
         tz.label.toLowerCase().includes(query) || 
         tz.value.toLowerCase().includes(query)
       );
@@ -293,7 +293,7 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
     });
     return filtered;
   }, [timezoneSearchQuery]);
-  return ()
+  return ();
     <div className={`space-y-4 ${className}`}>}
       <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
         <TabsList className="grid w-full grid-cols-4">
@@ -369,7 +369,7 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                       size="sm"
                       onClick={() => {
                         setSelectedDate(suggestion);
-                        setSelectedTime()
+                        setSelectedTime();
                           `${suggestion.getHours().toString().padStart(2, '0')}:${suggestion.getMinutes().toString().padStart(2, '0')}`}
                         );
                       }}
@@ -616,7 +616,7 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                       hour: '2-digit',
                       minute: '2-digit',
                     }).format(dateTimeInTimezone);
-                    return ()
+                    return ();
                       <div key={tz.value} className="p-2 border rounded text-sm">
                         <p className="font-medium">{tz.value}</p>
                         <p className="text-gray-600">{timeInZone}</p>

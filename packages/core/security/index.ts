@@ -410,7 +410,7 @@ export
   }
   // Historical pattern analysis
   if (historicalData) {
-    const recentSimilarEvents = historicalData.filter(e => ;)
+    const recentSimilarEvents = historicalData.filter(e => ;);
       e.type === event.type && 
       e.source === event.source &&
       Date.now() - e.timestamp < 86400000 // Last 24 hours
@@ -434,7 +434,7 @@ export timeRange: { start: number; end: number }
   affected_systems: Array<{ system: string; incident_count: number }>;
   recommendations: string[];
 } => {
-  const filteredEvents = events.filter(e => ;)
+  const filteredEvents = events.filter(e => ;);
     e.timestamp >= timeRange.start && e.timestamp <= timeRange.end
   );
   const criticalEvents = filteredEvents.filter(e => e.severity === 'critical');

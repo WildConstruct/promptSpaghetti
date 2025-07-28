@@ -7,7 +7,6 @@
  * Task: T-1752989143998-560 - Build OAuth configuration UI
  * Part of Epic 19.5 - OAuth Implementation & Framework
  */
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 
@@ -26,7 +25,6 @@ interface SecurityMetrics {
   complianceScore: number;
   lastUpdated: Date;
 }
-
 interface SecurityEvent {
   id: string;
   timestamp: Date;
@@ -40,7 +38,6 @@ interface SecurityEvent {
   resolvedAt?: Date;
   resolvedBy?: string;
 }
-
 interface ComplianceStatus {
   framework: string;
   status: 'compliant' | 'non_compliant' | 'partial' | 'unknown';
@@ -48,7 +45,6 @@ interface ComplianceStatus {
   issues: ComplianceIssue[];
   lastAssessment: Date;
 }
-
 interface ComplianceIssue {
   id: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -57,7 +53,6 @@ interface ComplianceIssue {
   recommendation: string;
   providerId?: string;
 }
-
 interface ThreatDetection {
   threatId: string;
   timestamp: Date;
@@ -69,13 +64,11 @@ interface ThreatDetection {
   affectedProviders: string[];
   indicators: ThreatIndicator[];
 }
-
 interface ThreatIndicator {
   type: string;
   value: string;
   confidence: number;
 }
-
 interface AuditLogEntry {
   id: string;
   timestamp: Date;
@@ -88,7 +81,6 @@ interface AuditLogEntry {
   ipAddress: string;
   userAgent: string;
 }
-
 enum SecurityEventType {
   LOGIN_FAILURE = 'login_failure',
   TOKEN_EXPIRED = 'token_expired',
@@ -101,14 +93,12 @@ enum SecurityEventType {
   PROVIDER_ADDED = 'provider_added',
   PROVIDER_REMOVED = 'provider_removed'
 }
-
 enum SecurityEventSeverity {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
 }
-
 enum ThreatType {
   BRUTE_FORCE = 'brute_force',
   CREDENTIAL_STUFFING = 'credential_stuffing',
@@ -131,10 +121,8 @@ export const OAuthSecurityDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [autoRefresh, setAutoRefresh] = useState(true);
-
   // Auth store for API calls
   const { authenticatedFetch } = useAuthStore();
-
   // Auto-refresh effect
   useEffect(() => {
     const interval = setInterval(() => {
@@ -142,27 +130,23 @@ export const OAuthSecurityDashboard: React.FC = () => {
         loadDashboardData();
       }
     }, 30000); // Refresh every 30 seconds
-
     return () => clearInterval(interval);
   }, [autoRefresh, loadDashboardData]);
-
   // Load data on mount and time range change
   useEffect(() => {
     loadDashboardData();
   }, [timeRange, loadDashboardData]);
-
   // API functions
   const loadDashboardData = useCallback(async () => {
     if (!loading) setLoading(true);
     setError(null);
-    
     try {
-      await Promise.all([
+      await Promise.all([)
         loadSecurityMetrics(),
         loadSecurityEvents(),
         loadComplianceStatus(),
         loadThreatDetection(),
-        loadAuditLogs()
+        loadAuditLogs();
       ]);
     } catch (err) {
       setError('Failed to load dashboard data');
@@ -171,23 +155,20 @@ export const OAuthSecurityDashboard: React.FC = () => {
       setLoading(false);
     }
   }, [loading, loadAuditLogs, loadComplianceStatus, loadSecurityEvents, loadSecurityMetrics, loadThreatDetection]);
-
   const loadSecurityMetrics = useCallback(async () => {
-    const response = await authenticatedFetch(`/api/oauth-security/metrics?timeRange=${timeRange}`);
+    const response = await authenticatedFetch(`/api/oauth-security/metrics?timeRange=${timeRange}`);}
     const data = await response.json();
     if (data.success) {
       setMetrics(data.data.metrics);
     }
   }, [authenticatedFetch, timeRange]);
-
   const loadSecurityEvents = useCallback(async () => {
-    const response = await authenticatedFetch(`/api/oauth-security/events?timeRange=${timeRange}&limit=50`);
+    const response = await authenticatedFetch(`/api/oauth-security/events?timeRange=${timeRange}&limit=50`);}
     const data = await response.json();
     if (data.success) {
       setSecurityEvents(data.data.events || []);
     }
   }, [authenticatedFetch, timeRange]);
-
   const loadComplianceStatus = useCallback(async () => {
     const response = await authenticatedFetch('/api/oauth-security/compliance');
     const data = await response.json();
@@ -195,40 +176,34 @@ export const OAuthSecurityDashboard: React.FC = () => {
       setComplianceStatus(data.data.compliance || []);
     }
   }, [authenticatedFetch]);
-
   const loadThreatDetection = useCallback(async () => {
-    const response = await authenticatedFetch(`/api/oauth-security/threats?timeRange=${timeRange}&limit=20`);
+    const response = await authenticatedFetch(`/api/oauth-security/threats?timeRange=${timeRange}&limit=20`);}
     const data = await response.json();
     if (data.success) {
       setThreats(data.data.threats || []);
     }
   }, [authenticatedFetch, timeRange]);
-
   const loadAuditLogs = useCallback(async () => {
-    const response = await authenticatedFetch(`/api/oauth-security/audit-logs?timeRange=${timeRange}&limit=100`);
+    const response = await authenticatedFetch(`/api/oauth-security/audit-logs?timeRange=${timeRange}&limit=100`);}
     const data = await response.json();
     if (data.success) {
       setAuditLogs(data.data.logs || []);
     }
   }, [authenticatedFetch, timeRange]);
-
   // Computed values
   const securityScore = useMemo(() => {
     if (!metrics) return 0;
     return Math.round(metrics.securityScore);
   }, [metrics]);
-
   const complianceScore = useMemo(() => {
     if (!metrics) return 0;
     return Math.round(metrics.complianceScore);
   }, [metrics]);
-
   const criticalIssuesCount = useMemo(() => {
     const criticalEvents = securityEvents.filter(e => e.severity === SecurityEventSeverity.CRITICAL && !e.resolved).length;
     const criticalThreats = threats.filter(t => t.severity === 'critical' && t.status === 'active').length;
     return criticalEvents + criticalThreats;
   }, [securityEvents, threats]);
-
   // Utility functions
   const getScoreColor = (score: number): string => {
     if (score >= 90) return 'text-green-600';
@@ -236,7 +211,6 @@ export const OAuthSecurityDashboard: React.FC = () => {
     if (score >= 50) return 'text-yellow-600';
     return 'text-red-600';
   };
-
   const getSeverityColor = (severity: string): string => {
     switch (severity) {
     case 'critical': return 'text-red-600 bg-red-100';
@@ -246,34 +220,29 @@ export const OAuthSecurityDashboard: React.FC = () => {
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-
   const formatDate = (date: Date): string => {
-    return new Intl.DateTimeFormat('en-US', {
+    return new Intl.DateTimeFormat('en-US', {)
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     }).format(date);
   };
-
   const formatNumber = (num: number): string => {
     return new Intl.NumberFormat().format(num);
   };
-
   const formatPercentage = (num: number): string => {
-    return `${num.toFixed(1)}%`;
+    return `${num.toFixed(1)}%`;}
   };
-
   if (loading && !metrics) {
-    return (
+    return ()
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <span className="ml-2">Loading security dashboard...</span>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="max-w-7xl mx-auto p-6">
       {/* Header */}
       <div className="mb-6">
@@ -295,7 +264,6 @@ export const OAuthSecurityDashboard: React.FC = () => {
               />
               <span className="ml-2 text-sm text-gray-700">Auto-refresh</span>
             </label>
-
             {/* Time range selector */}
             <select
               value={timeRange}
@@ -307,16 +275,15 @@ export const OAuthSecurityDashboard: React.FC = () => {
               <option value="7d">Last 7 Days</option>
               <option value="30d">Last 30 Days</option>
             </select>
-
             {/* Refresh button */}
             <button
               onClick={() => loadDashboardData()}
               disabled={loading}
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:bg-gray-300 flex items-center"
             >
-              {loading ? (
+              {loading ? ()
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-              ) : (
+              ) : ()
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
@@ -326,9 +293,8 @@ export const OAuthSecurityDashboard: React.FC = () => {
           </div>
         </div>
       </div>
-
       {/* Error Display */}
-      {error && (
+      {error && ()
         <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex">
             <svg className="w-5 h-5 text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -349,9 +315,8 @@ export const OAuthSecurityDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Critical Alerts */}
-      {criticalIssuesCount > 0 && (
+      {criticalIssuesCount > 0 && ()
         <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex items-center">
             <svg className="w-6 h-6 text-red-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
@@ -368,7 +333,6 @@ export const OAuthSecurityDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* Dashboard Tabs */}
       <div className="border-b border-gray-200 mb-6">
         <nav className="-mb-px flex space-x-8">
@@ -378,7 +342,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
             { id: 'compliance', label: 'Compliance', icon: '📋' },
             { id: 'threats', label: 'Threats', icon: '⚠️' },
             { id: 'audit', label: 'Audit Logs', icon: '📝' }
-          ].map((tab) => (
+          ].map((tab) => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as 'overview' | 'events' | 'compliance' | 'threats' | 'audit')}
@@ -390,12 +354,12 @@ export const OAuthSecurityDashboard: React.FC = () => {
             >
               <span className="mr-2">{tab.icon}</span>
               {tab.label}
-              {tab.id === 'events' && securityEvents.filter(e => !e.resolved).length > 0 && (
+              {tab.id === 'events' && securityEvents.filter(e => !e.resolved).length > 0 && ()
                 <span className="ml-2 bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
                   {securityEvents.filter(e => !e.resolved).length}
                 </span>
               )}
-              {tab.id === 'threats' && threats.filter(t => t.status === 'active').length > 0 && (
+              {tab.id === 'threats' && threats.filter(t => t.status === 'active').length > 0 && ()
                 <span className="ml-2 bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
                   {threats.filter(t => t.status === 'active').length}
                 </span>
@@ -404,9 +368,8 @@ export const OAuthSecurityDashboard: React.FC = () => {
           ))}
         </nav>
       </div>
-
       {/* Tab Content */}
-      {activeTab === 'overview' && metrics && (
+      {activeTab === 'overview' && metrics && ()
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Security Metrics Cards */}
           <div className="lg:col-span-2 space-y-6">
@@ -416,7 +379,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">Security Score</h3>
-                    <div className={`text-3xl font-bold ${getScoreColor(securityScore)}`}>
+                    <div className={`text-3xl font-bold ${getScoreColor(securityScore)}`}>}
                       {securityScore}
                     </div>
                     <p className="text-sm text-gray-600">Overall security posture</p>
@@ -424,12 +387,11 @@ export const OAuthSecurityDashboard: React.FC = () => {
                   <div className="text-4xl">🔒</div>
                 </div>
               </div>
-
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">Compliance Score</h3>
-                    <div className={`text-3xl font-bold ${getScoreColor(complianceScore)}`}>
+                    <div className={`text-3xl font-bold ${getScoreColor(complianceScore)}`}>}
                       {complianceScore}
                     </div>
                     <p className="text-sm text-gray-600">Regulatory compliance</p>
@@ -438,7 +400,6 @@ export const OAuthSecurityDashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-
             {/* Provider Status */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">OAuth Provider Status</h3>
@@ -461,7 +422,6 @@ export const OAuthSecurityDashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-
             {/* Login Statistics */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Login Statistics</h3>
@@ -483,15 +443,14 @@ export const OAuthSecurityDashboard: React.FC = () => {
               </div>
             </div>
           </div>
-
           {/* Recent Events */}
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Security Events</h3>
               <div className="space-y-3">
-                {securityEvents.slice(0, 5).map((event) => (
+                {securityEvents.slice(0, 5).map((event) => ()
                   <div key={event.id} className="flex items-start">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium mr-3 ${getSeverityColor(event.severity)}`}>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium mr-3 ${getSeverityColor(event.severity)}`}>}
                       {event.severity}
                     </span>
                     <div className="flex-1 min-w-0">
@@ -508,15 +467,14 @@ export const OAuthSecurityDashboard: React.FC = () => {
                 View all events →
               </button>
             </div>
-
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Compliance Summary</h3>
               <div className="space-y-3">
-                {complianceStatus.map((compliance) => (
+                {complianceStatus.map((compliance) => ()
                   <div key={compliance.framework} className="flex justify-between items-center">
                     <span className="text-sm text-gray-900">{compliance.framework}</span>
                     <div className="flex items-center">
-                      <span className={`text-sm font-medium ${getScoreColor(compliance.score)}`}>
+                      <span className={`text-sm font-medium ${getScoreColor(compliance.score)}`}>}
                         {compliance.score}
                       </span>
                       <span className={`ml-2 w-2 h-2 rounded-full ${
@@ -538,8 +496,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
-      {activeTab === 'events' && (
+      {activeTab === 'events' && ()
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900">Security Events</h2>
@@ -567,7 +524,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {securityEvents.map((event) => (
+                {securityEvents.map((event) => ()
                   <tr key={event.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {formatDate(event.timestamp)}
@@ -580,7 +537,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
                       {event.providerName}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(event.severity)}`}>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(event.severity)}`}>}
                         {event.severity}
                       </span>
                     </td>
@@ -598,15 +555,14 @@ export const OAuthSecurityDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
-      {activeTab === 'compliance' && (
+      {activeTab === 'compliance' && ()
         <div className="space-y-6">
-          {complianceStatus.map((compliance) => (
+          {complianceStatus.map((compliance) => ()
             <div key={compliance.framework} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">{compliance.framework} Compliance</h3>
                 <div className="flex items-center">
-                  <span className={`text-lg font-bold mr-2 ${getScoreColor(compliance.score)}`}>
+                  <span className={`text-lg font-bold mr-2 ${getScoreColor(compliance.score)}`}>}
                     {compliance.score}
                   </span>
                   <span className={`w-3 h-3 rounded-full ${
@@ -616,16 +572,14 @@ export const OAuthSecurityDashboard: React.FC = () => {
                   }`}></span>
                 </div>
               </div>
-              
               <div className="text-sm text-gray-600 mb-4">
                 Last assessment: {formatDate(compliance.lastAssessment)}
               </div>
-
-              {compliance.issues.length > 0 && (
+              {compliance.issues.length > 0 && ()
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">Issues ({compliance.issues.length})</h4>
                   <div className="space-y-2">
-                    {compliance.issues.map((issue) => (
+                    {compliance.issues.map((issue) => ()
                       <div key={issue.id} className={`p-3 rounded border ${
                         issue.severity === 'critical' ? 'bg-red-50 border-red-200' :
                           issue.severity === 'high' ? 'bg-orange-50 border-orange-200' :
@@ -637,7 +591,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
                             <div className="font-medium text-gray-900">{issue.description}</div>
                             <div className="text-sm text-gray-600 mt-1">{issue.recommendation}</div>
                           </div>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(issue.severity)}`}>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(issue.severity)}`}>}
                             {issue.severity}
                           </span>
                         </div>
@@ -650,15 +604,14 @@ export const OAuthSecurityDashboard: React.FC = () => {
           ))}
         </div>
       )}
-
-      {activeTab === 'threats' && (
+      {activeTab === 'threats' && ()
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900">Threat Detection</h2>
             <p className="text-sm text-gray-600 mt-1">Active threats and security indicators</p>
           </div>
           <div className="p-6">
-            {threats.length === 0 ? (
+            {threats.length === 0 ? ()
               <div className="text-center py-8">
                 <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.414-4.414L19 4.414A2 2 0 0117.586 3H6.414A2 2 0 005 4.414L8.586 8M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -666,9 +619,9 @@ export const OAuthSecurityDashboard: React.FC = () => {
                 <h3 className="text-lg font-medium text-gray-900 mb-2">No Active Threats</h3>
                 <p className="text-gray-600">Your OAuth infrastructure is secure</p>
               </div>
-            ) : (
+            ) : ()
               <div className="space-y-4">
-                {threats.map((threat) => (
+                {threats.map((threat) => ()
                   <div key={threat.threatId} className={`border rounded-lg p-4 ${
                     threat.severity === 'critical' ? 'border-red-300 bg-red-50' :
                       threat.severity === 'high' ? 'border-orange-300 bg-orange-50' :
@@ -676,12 +629,12 @@ export const OAuthSecurityDashboard: React.FC = () => {
                           'border-blue-300 bg-blue-50'
                   }`}>
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-semibold text-gray-900">{threat.threatType.replace(
+                      <h3 className="font-semibold text-gray-900">{threat.threatType.replace()
                         /_/g,
                         ' '
                       ).toUpperCase()}</h3>
                       <div className="flex items-center space-x-2">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(threat.severity)}`}>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(threat.severity)}`}>}
                           {threat.severity}
                         </span>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -693,9 +646,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
                         </span>
                       </div>
                     </div>
-                    
                     <p className="text-gray-700 mb-3">{threat.description}</p>
-                    
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                       <div>
                         <span className="text-gray-500">Source:</span>
@@ -721,8 +672,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
           </div>
         </div>
       )}
-
-      {activeTab === 'audit' && (
+      {activeTab === 'audit' && ()
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900">Audit Logs</h2>
@@ -753,7 +703,7 @@ export const OAuthSecurityDashboard: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {auditLogs.map((log) => (
+                {auditLogs.map((log) => ()
                   <tr key={log.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {formatDate(log.timestamp)}

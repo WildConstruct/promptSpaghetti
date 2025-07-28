@@ -451,7 +451,7 @@ export class ComplianceBaselineTracker {
     const updatedBaseline = {
       ...baseline,
       ...updates,
-      lastUpdatedAt: new Date()
+      lastUpdatedAt: new Date(),
     };
     this.baselines.set(baselineId, updatedBaseline);
     console.log(`📝 Updated baseline ${baseline.name}`);}
@@ -466,7 +466,7 @@ export class ComplianceBaselineTracker {
       ...baseline,
       id: `custom_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,}
       baselineEstablishedAt: new Date(),
-      lastUpdatedAt: new Date()
+      lastUpdatedAt: new Date(),
     };
     this.baselines.set(customBaseline.id, customBaseline);
     console.log(`✅ Created custom baseline: ${customBaseline.name}`);}
@@ -487,7 +487,6 @@ export class ComplianceBaselineTracker {
     baselines: ComplianceBaseline[];
     measurements: ComplianceMeasurement[];
     summary: Record<string, any>;
-  } {
     const baselines = Array.from(this.baselines.values());
       .filter(b => b.isActive && (!framework || b.framework === framework));
     const cutoffDate = new Date(Date.now() - daysPeriod * 24 * 60 * 60 * 1000);
@@ -499,12 +498,12 @@ export class ComplianceBaselineTracker {
     const summary = {
       totalBaselines: baselines.length,
       totalMeasurements: measurements.length,
-      averageCompliance: measurements.length > 0 
+      averageCompliance: measurements.length > 0 ,
         ? measurements.reduce((sum, m) => sum + (100 - Math.abs(m.deviation)), 0) / measurements.length 
         : 0,
       criticalDeviations: measurements.filter(m => m.status === 'critical_deviation').length,
       period: `${daysPeriod} days`,}
-      generatedAt: new Date()
+      generatedAt: new Date(),
     };
     return { baselines, measurements, summary };
   }

@@ -173,7 +173,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
               score: newScore,
               grade: getGradeFromScore(newScore),
               status: getStatusFromScore(newScore),
-              lastUpdated: new Date()
+              lastUpdated: new Date(),
             }
           };
         }
@@ -224,7 +224,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
       (filterType === 'buyers' && user.userType === 'buyer');
     return matchesSearch && matchesFilter;
   });
-  const renderUserList = () => (;)
+  const renderUserList = () => (;);
     <Card className="user-list">
       <CardHeader>
         <div className="list-header">
@@ -308,7 +308,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   );
   const renderUserDetails = () => {
     if (!selectedUser) {
-      return ()
+      return ();
         <Card className="user-details-placeholder">
           <CardContent>
             <div className="placeholder-content">
@@ -319,7 +319,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
         </Card>
       );
     }
-    return ()
+    return ();
       <div className="user-details-panel">
         <Card className="user-profile">
           <CardHeader>
@@ -433,7 +433,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
                     value={adjustmentData.adjustmentType}
                     onChange={(e) => setAdjustmentData(prev => ({ )
                       ...prev, 
-                      adjustmentType: e.target.value as TrustScoreAdjustment['adjustmentType']
+                      adjustmentType: e.target.value as TrustScoreAdjustment['adjustmentType'],
                     }))}
                     className="form-select"
                   >
@@ -452,7 +452,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
                     value={adjustmentData.scoreChange || 0}
                     onChange={(e) => setAdjustmentData(prev => ({ )
                       ...prev, 
-                      scoreChange: parseInt(e.target.value) || 0
+                      scoreChange: parseInt(e.target.value) || 0,
                     }))}
                     className="form-input"
                   />
@@ -536,7 +536,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
       </div>
     );
   };
-  return ()
+  return ();
     <div className={`trust-score-manager ${className}`}>}
       <div className="manager-layout">
         <div className="users-section">

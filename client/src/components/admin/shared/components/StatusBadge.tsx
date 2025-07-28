@@ -4,7 +4,6 @@
  * 
  * Standardized badge component for status indicators across admin interfaces
  */
-
 import React from 'react';
 
 export type StatusType = 
@@ -14,7 +13,6 @@ export type StatusType =
   | 'high' | 'medium' | 'low' | 'critical';
 
 export type StatusSize = 'small' | 'medium' | 'large';
-
 interface StatusBadgeProps {
   status: StatusType | string;
   size?: StatusSize;
@@ -22,55 +20,49 @@ interface StatusBadgeProps {
   children?: React.ReactNode;
   className?: string;
 }
-
 const statusConfigs: Record<string, { color: string; icon?: string; label?: string }> = {
   // Boolean states
   active: { color: '#10b981', icon: '●', label: 'Active' },
   inactive: { color: '#6b7280', icon: '●', label: 'Inactive' },
   enabled: { color: '#10b981', icon: '✓', label: 'Enabled' },
   disabled: { color: '#ef4444', icon: '✕', label: 'Disabled' },
-  
   // Workflow states
   pending: { color: '#f59e0b', icon: '⏳', label: 'Pending' },
   approved: { color: '#10b981', icon: '✓', label: 'Approved' },
   rejected: { color: '#ef4444', icon: '✕', label: 'Rejected' },
   suspended: { color: '#f59e0b', icon: '⏸', label: 'Suspended' },
-  
   // Connection states
   online: { color: '#10b981', icon: '●', label: 'Online' },
   offline: { color: '#6b7280', icon: '●', label: 'Offline' },
-  
   // Result states
   success: { color: '#10b981', icon: '✓', label: 'Success' },
   error: { color: '#ef4444', icon: '✕', label: 'Error' },
   warning: { color: '#f59e0b', icon: '⚠', label: 'Warning' },
-  
   // Priority levels
   critical: { color: '#dc2626', icon: '🔴', label: 'Critical' },
   high: { color: '#f59e0b', icon: '🟡', label: 'High' },
   medium: { color: '#3b82f6', icon: '🔵', label: 'Medium' },
   low: { color: '#6b7280', icon: '⚪', label: 'Low' }
 };
-
 const sizeConfigs = {
-  small: {
+  small: {,
     padding: '2px 6px',
     fontSize: '11px',
-    gap: '4px'
+    gap: '4px',
   },
-  medium: {
+  medium: {,
     padding: '4px 8px',
     fontSize: '12px',
-    gap: '6px'
+    gap: '6px',
   },
-  large: {
+  large: {,
     padding: '6px 12px',
     fontSize: '14px',
-    gap: '8px'
+    gap: '8px',
   }
 };
 
-export const StatusBadge: React.FC<StatusBadgeProps> = ({
+export const StatusBadge: React.FC<StatusBadgeProps> = ({)
   status,
   size = 'medium',
   variant = 'soft',
@@ -79,36 +71,32 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
 }) => {
   const config = statusConfigs[status.toLowerCase()] || statusConfigs.medium;
   const sizeConfig = sizeConfigs[size];
-  
   const getVariantStyles = () => {
     const baseColor = config.color;
-    
     switch (variant) {
       case 'solid':
         return {
           backgroundColor: baseColor,
           color: '#ffffff',
-          border: `1px solid ${baseColor}`
+          border: `1px solid ${baseColor}`}
         };
       case 'outline':
         return {
           backgroundColor: 'transparent',
           color: baseColor,
-          border: `1px solid ${baseColor}`
+          border: `1px solid ${baseColor}`}
         };
       case 'soft':
       default:
         return {
-          backgroundColor: `${baseColor}15`,
+          backgroundColor: `${baseColor}15`,}
           color: baseColor,
-          border: `1px solid ${baseColor}40`
+          border: `1px solid ${baseColor}40`}
         };
     }
   };
-
   const variantStyles = getVariantStyles();
-
-  return (
+  return ()
     <span
       className={`status-badge ${className}`}
       style={{

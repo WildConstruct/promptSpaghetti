@@ -135,7 +135,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
         setContentHeight(newHeight);
         onResize({)
           width: note.size.width,
-          height: newHeight + 60 // Add header height
+          height: newHeight + 60 // Add header height,
         });
       }
     }
@@ -148,7 +148,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
     setIsDragging(true);
     setDragStart({)
       x: e.clientX - note.position.x,
-      y: e.clientY - note.position.y
+      y: e.clientY - note.position.y,
     });
     onBringToFront();
     onSelect(e.ctrlKey || e.metaKey);
@@ -170,7 +170,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
       if (isDragging && dragStart) {
         const newPosition = {
           x: e.clientX - dragStart.x,
-          y: e.clientY - dragStart.y
+          y: e.clientY - dragStart.y,
         };
         onMove(newPosition);
       } else if (isResizing && dragStart && resizeHandle) {
@@ -282,7 +282,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
     fontSize: 12,
     fontWeight: 600,
     height: 32,
-    cursor: note.behavior.draggable ? 'grab' : 'default'
+    cursor: note.behavior.draggable ? 'grab' : 'default',
   };
   const contentStyle: React.CSSProperties = {
     padding: '12px',
@@ -304,7 +304,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
     lineHeight: 1.4,
     fontFamily: 'inherit',
   };
-  return ()
+  return ();
     <div
       ref={noteRef}
       className={`sticky-note ${className}`}

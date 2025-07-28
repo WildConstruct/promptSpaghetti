@@ -187,7 +187,7 @@ export class ClassificationMonitoringService {
         averageProcessingTime: 0,
         violationRate: 0,
         complianceRate: 100,
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       });
     });
   }
@@ -288,7 +288,7 @@ export class ClassificationMonitoringService {
    */
   private detectSuspiciousActivity(activity: UserActivity, event: MonitoringEvent): void {
     // Rapid access to restricted data
-    const recentRestrictedAccess = this.events.filter(e => ;)
+    const recentRestrictedAccess = this.events.filter(e => ;);
       e.userId === event.userId &&
       e.classification === 'RESTRICTED' &&
       e.timestamp.getTime() > Date.now() - 3600000 // Last hour
@@ -297,7 +297,7 @@ export class ClassificationMonitoringService {
       activity.suspiciousActivities.push('Rapid access to restricted data');
     }
     // Multiple violations in short time
-    const recentViolations = this.events.filter(e => ;)
+    const recentViolations = this.events.filter(e => ;);
       e.userId === event.userId &&
       e.result === 'FAILURE' &&
       e.timestamp.getTime() > Date.now() - 900000 // Last 15 minutes
@@ -376,7 +376,7 @@ export class ClassificationMonitoringService {
     case 'complianceScore':
       return event.metrics?.complianceScore ?? null;
     case 'restrictedAccessRate':
-      const recentRestrictedEvents = this.events.filter(e => ;)
+      const recentRestrictedEvents = this.events.filter(e => ;);
         e.classification === 'RESTRICTED' &&
           e.timestamp.getTime() > Date.now() - 3600000 // Last hour
       ).length;
@@ -491,7 +491,7 @@ export class ClassificationMonitoringService {
     for (let i = 23; i >= 0; i--) {
       const hourStart = now - (i + 1) * 3600000;
       const hourEnd = now - i * 3600000;
-      const hourEvents = this.events.filter(e => ;)
+      const hourEvents = this.events.filter(e => ;);
         e.timestamp.getTime() >= hourStart && 
         e.timestamp.getTime() < hourEnd
       );
@@ -503,7 +503,7 @@ export class ClassificationMonitoringService {
         timestamp: new Date(hourEnd),
         eventCount: hourEvents.length,
         violationCount: hourViolations,
-        complianceScore: hourComplianceScores.length > 0
+        complianceScore: hourComplianceScores.length > 0,
           ? hourComplianceScores.reduce((a, b) => a + b, 0) / hourComplianceScores.length
           : 100
       });
@@ -625,14 +625,14 @@ export class ClassificationMonitoringService {
       alerts: this.alerts,
       statistics: Array.from(this.classificationStats.values()),
       userActivities: Array.from(this.userActivities.values()),
-      exportDate: new Date()
+      exportDate: new Date(),
     };
     if (format === 'json') {
       return JSON.stringify(data, null, 2);
     } else {
       // Simple CSV export of events
       const headers = ['timestamp', 'eventType', 'classification', 'userId', 'result', 'operation'];
-      const rows = this.events.map(e => [;)
+      const rows = this.events.map(e => [;);
         e.timestamp.toISOString(),
         e.eventType,
         e.classification,

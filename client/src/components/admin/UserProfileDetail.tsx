@@ -7,7 +7,6 @@
  * Comprehensive user profile detail interface with tabbed sections for profile,
  * permissions, activity, team assignments, settings, and security management.
  */
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
@@ -46,7 +45,6 @@ interface UserProfile {
   sessionCount: number;
   passwordLastChanged?: string;
 }
-
 interface ActivityLog {
   id: string;
   type: 'login' | 'logout' | 'permission_change' | 'profile_update' | 'password_reset';
@@ -56,7 +54,6 @@ interface ActivityLog {
   userAgent?: string;
   location?: string;
 }
-
 interface TeamMembership {
   id: string;
   name: string;
@@ -65,20 +62,17 @@ interface TeamMembership {
   memberCount: number;
   department: string;
 }
-
 const UserProfileDetail: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
-  
   const [activeTab, setActiveTab] = useState<'profile' | 'permissions' | 'activity' | 'team' | 'settings' | 'security'>('profile');
   const [loading, setLoading] = useState(true);
   const [, setEditMode] = useState(false);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [activityLog, setActivityLog] = useState<ActivityLog[]>([]);
   const [teamMemberships, setTeamMemberships] = useState<TeamMembership[]>([]);
-
   // Mock data for demonstration - wrapped in useMemo for proper dependency tracking
-  const mockUser: UserProfile = useMemo(() => ({
+  const mockUser: UserProfile = useMemo(() => ({)
     id: userId || 'user-1',
     name: 'John Smith',
     firstName: 'John',
@@ -103,9 +97,8 @@ const UserProfileDetail: React.FC = () => {
     updatedAt: '2025-07-22T18:30:00Z',
     mfaEnabled: true,
     sessionCount: 1,
-    passwordLastChanged: '2024-12-15T14:20:00Z'
+    passwordLastChanged: '2024-12-15T14:20:00Z',
   }), [userId]); // Depends on userId
-
   const mockActivityLog: ActivityLog[] = useMemo(() => [
     {
       id: '1',
@@ -119,16 +112,15 @@ const UserProfileDetail: React.FC = () => {
       id: '2',
       type: 'profile_update',
       description: 'Modified user profile for maria.davis@company.com',
-      timestamp: '2025-07-22T15:30:00Z'
+      timestamp: '2025-07-22T15:30:00Z',
     },
     {
       id: '3',
       type: 'permission_change',
       description: 'Granted "Project Manager" role to robert.johnson@company.com',
-      timestamp: '2025-07-22T13:30:00Z'
+      timestamp: '2025-07-22T13:30:00Z',
     }
   ], []); // Static mock data
-
   const mockTeamMemberships: TeamMembership[] = useMemo(() => [
     {
       id: '1',
@@ -136,7 +128,7 @@ const UserProfileDetail: React.FC = () => {
       role: 'Team Lead',
       joinedAt: '2022-01-15',
       memberCount: 12,
-      department: 'Engineering'
+      department: 'Engineering',
     },
     {
       id: '2',
@@ -144,7 +136,7 @@ const UserProfileDetail: React.FC = () => {
       role: 'Senior Member',
       joinedAt: '2023-06-05',
       memberCount: 6,
-      department: 'Operations'
+      department: 'Operations',
     },
     {
       id: '3',
@@ -152,10 +144,9 @@ const UserProfileDetail: React.FC = () => {
       role: 'Member',
       joinedAt: '2024-03-01',
       memberCount: 8,
-      department: 'Cross-functional'
+      department: 'Cross-functional',
     }
   ], []); // Static mock data
-
   useEffect(() => {
     const loadUserData = async () => {
       setLoading(true);
@@ -171,12 +162,10 @@ const UserProfileDetail: React.FC = () => {
         setLoading(false);
       }
     };
-
     if (userId) {
       loadUserData();
     }
   }, [userId, mockUser, mockActivityLog, mockTeamMemberships]);
-
   const getStatusColor = (status: string) => {
     switch (status) {
     case 'active': return '#10b981';
@@ -186,7 +175,6 @@ const UserProfileDetail: React.FC = () => {
     default: return '#9ca3af';
     }
   };
-
   const getStatusIcon = (status: string) => {
     switch (status) {
     case 'active': return <CheckCircle size={16} />;
@@ -196,34 +184,31 @@ const UserProfileDetail: React.FC = () => {
     default: return <AlertCircle size={16} />;
     }
   };
-
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('en-US', {)
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
-
   const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
+    return new Date(dateString).toLocaleString('en-US', {)
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
-
   if (loading) {
-    return (
+    return ()
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         height: '400px',
         flexDirection: 'column',
-        gap: '16px'
+        gap: '16px',
       }}>
         <div style={{
           width: '40px',
@@ -231,22 +216,21 @@ const UserProfileDetail: React.FC = () => {
           border: '3px solid #f3f4f6',
           borderTop: '3px solid #3b82f6',
           borderRadius: '50%',
-          animation: 'spin 1s linear infinite'
+          animation: 'spin 1s linear infinite',
         }} />
         <p style={{ color: '#6b7280' }}>Loading user profile...</p>
       </div>
     );
   }
-
   if (!user) {
-    return (
+    return ()
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         height: '400px',
         flexDirection: 'column',
-        gap: '16px'
+        gap: '16px',
       }}>
         <XCircle size={48} style={{ color: '#ef4444' }} />
         <p style={{ color: '#6b7280' }}>User not found</p>
@@ -261,7 +245,7 @@ const UserProfileDetail: React.FC = () => {
             color: '#ffffff',
             border: 'none',
             borderRadius: '6px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           <ArrowLeft size={16} />
@@ -270,12 +254,11 @@ const UserProfileDetail: React.FC = () => {
       </div>
     );
   }
-
-  return (
+  return ()
     <div style={{
       padding: '24px',
       backgroundColor: '#f8f9fa',
-      minHeight: '100vh'
+      minHeight: '100vh',
     }}>
       {/* Header */}
       <div style={{
@@ -299,24 +282,22 @@ const UserProfileDetail: React.FC = () => {
               borderRadius: '6px',
               cursor: 'pointer',
               fontSize: '14px',
-              color: '#374151'
+              color: '#374151',
             }}
           >
             <ArrowLeft size={16} />
             Back to User List
           </button>
-          
           <div style={{ fontSize: '14px', color: '#6b7280' }}>
             🔄 Last updated: 2 minutes ago
           </div>
         </div>
-
         {/* User Header Card */}
         <div style={{
           backgroundColor: '#f9fafb',
           border: '1px solid #e5e7eb',
           borderRadius: '12px',
-          padding: '24px'
+          padding: '24px',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
             {/* Avatar */}
@@ -330,11 +311,10 @@ const UserProfileDetail: React.FC = () => {
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: '28px',
-              fontWeight: '600'
+              fontWeight: '600',
             }}>
               {user.firstName[0]}{user.lastName[0]}
             </div>
-            
             {/* User Info */}
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
@@ -342,11 +322,10 @@ const UserProfileDetail: React.FC = () => {
                   fontSize: '24px',
                   fontWeight: '700',
                   color: '#111827',
-                  margin: 0
+                  margin: 0,
                 }}>
                   {user.name}
                 </h1>
-                
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -355,42 +334,38 @@ const UserProfileDetail: React.FC = () => {
                   borderRadius: '12px',
                   fontSize: '14px',
                   fontWeight: '500',
-                  backgroundColor: `${getStatusColor(user.status)}20`,
-                  color: getStatusColor(user.status)
+                  backgroundColor: `${getStatusColor(user.status)}20`,}
+                  color: getStatusColor(user.status),
                 }}>
                   {getStatusIcon(user.status)}
                   {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
                 </div>
-                
                 <div style={{
                   padding: '4px 12px',
                   borderRadius: '12px',
                   fontSize: '14px',
                   fontWeight: '500',
                   backgroundColor: '#dc262620',
-                  color: '#dc2626'
+                  color: '#dc2626',
                 }}>
                   🔒 Admin
                 </div>
               </div>
-              
               <p style={{
                 fontSize: '16px',
                 color: '#6b7280',
-                margin: '0 0 4px 0'
+                margin: '0 0 4px 0',
               }}>
                 {user.jobTitle}
               </p>
-              
               <p style={{
                 fontSize: '14px',
                 color: '#9ca3af',
-                margin: '0 0 8px 0'
+                margin: '0 0 8px 0',
               }}>
                 {user.email} • Employee ID: {user.employeeId}
               </p>
             </div>
-            
             {/* Actions */}
             <div style={{ display: 'flex', gap: '8px' }}>
               <button
@@ -406,13 +381,12 @@ const UserProfileDetail: React.FC = () => {
                   borderRadius: '6px',
                   cursor: 'pointer',
                   fontSize: '14px',
-                  fontWeight: '500'
+                  fontWeight: '500',
                 }}
               >
                 <Edit size={14} />
                 Edit
               </button>
-              
               <button
                 style={{
                   padding: '8px',
@@ -420,33 +394,32 @@ const UserProfileDetail: React.FC = () => {
                   border: '1px solid #d1d5db',
                   borderRadius: '6px',
                   cursor: 'pointer',
-                  color: '#6b7280'
+                  color: '#6b7280',
                 }}
               >
                 <MoreVertical size={16} />
               </button>
             </div>
           </div>
-          
           {/* Quick Info Grid */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
             gap: '16px',
-            marginBottom: '20px'
+            marginBottom: '20px',
           }}>
             {[
               { icon: <Users size={16} />, label: 'Teams', value: user.teams.join(', ') },
               { icon: <Building size={16} />, label: 'Department', value: user.department },
               { icon: <MapPin size={16} />, label: 'Location', value: user.location },
               { icon: <Calendar size={16} />, label: 'Joined', value: formatDate(user.createdAt) }
-            ].map((info, index) => (
+            ].map((info, index) => ()
               <div key={index} style={{
                 backgroundColor: '#ffffff',
                 padding: '12px',
                 borderRadius: '8px',
                 border: '1px solid #e5e7eb',
-                textAlign: 'center'
+                textAlign: 'center',
               }}>
                 <div style={{ color: '#6b7280', marginBottom: '4px' }}>
                   {info.icon}
@@ -455,21 +428,20 @@ const UserProfileDetail: React.FC = () => {
                   fontSize: '12px', 
                   color: '#9ca3af',
                   fontWeight: '500',
-                  marginBottom: '2px'
+                  marginBottom: '2px',
                 }}>
                   {info.label}
                 </div>
                 <div style={{ 
                   fontSize: '14px', 
                   color: '#374151',
-                  fontWeight: '500'
+                  fontWeight: '500',
                 }}>
                   {info.value}
                 </div>
               </div>
             ))}
           </div>
-          
           {/* Quick Actions */}
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
             {[
@@ -477,7 +449,7 @@ const UserProfileDetail: React.FC = () => {
               { icon: <RefreshCw size={14} />, label: 'Reset Password', color: '#f59e0b' },
               { icon: <Mail size={14} />, label: 'Send Email', color: '#3b82f6' },
               { icon: <Key size={14} />, label: 'Edit Permissions', color: '#8b5cf6' }
-            ].map((action, index) => (
+            ].map((action, index) => ()
               <button
                 key={index}
                 style={{
@@ -485,13 +457,13 @@ const UserProfileDetail: React.FC = () => {
                   alignItems: 'center',
                   gap: '6px',
                   padding: '8px 12px',
-                  backgroundColor: `${action.color}20`,
+                  backgroundColor: `${action.color}20`,}
                   color: action.color,
-                  border: `1px solid ${action.color}40`,
+                  border: `1px solid ${action.color}40`,}
                   borderRadius: '6px',
                   cursor: 'pointer',
                   fontSize: '12px',
-                  fontWeight: '500'
+                  fontWeight: '500',
                 }}
               >
                 {action.icon}
@@ -501,19 +473,18 @@ const UserProfileDetail: React.FC = () => {
           </div>
         </div>
       </div>
-
       {/* Tab Navigation */}
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: '12px',
         border: '1px solid #e5e7eb',
         overflow: 'hidden',
-        marginBottom: '24px'
+        marginBottom: '24px',
       }}>
         <div style={{
           display: 'flex',
           backgroundColor: '#f9fafb',
-          borderBottom: '1px solid #e5e7eb'
+          borderBottom: '1px solid #e5e7eb',
         }}>
           {[
             { id: 'profile', label: 'Profile', icon: <User size={16} /> },
@@ -522,7 +493,7 @@ const UserProfileDetail: React.FC = () => {
             { id: 'team', label: 'Team', icon: <Users size={16} /> },
             { id: 'settings', label: 'Settings', icon: <Settings size={16} /> },
             { id: 'security', label: 'Security', icon: <Lock size={16} /> }
-          ].map((tab) => (
+          ].map((tab) => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as 'profile' | 'permissions' | 'activity' | 'team' | 'settings' | 'security')}
@@ -540,7 +511,7 @@ const UserProfileDetail: React.FC = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                transition: 'all 0.2s'
+                transition: 'all 0.2s',
               }}
             >
               {tab.icon}
@@ -548,29 +519,27 @@ const UserProfileDetail: React.FC = () => {
             </button>
           ))}
         </div>
-
         {/* Tab Content */}
         <div style={{ padding: '24px' }}>
           {/* Profile Tab */}
-          {activeTab === 'profile' && (
+          {activeTab === 'profile' && ()
             <div>
               <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#111827', marginBottom: '20px' }}>
                 📋 Profile Information
               </h2>
-              
               {/* Personal Information */}
               <div style={{
                 backgroundColor: '#f9fafb',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
                 padding: '20px',
-                marginBottom: '20px'
+                marginBottom: '20px',
               }}>
                 <div style={{ 
                   display: 'flex', 
                   justifyContent: 'space-between', 
                   alignItems: 'center',
-                  marginBottom: '16px'
+                  marginBottom: '16px',
                 }}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#111827', margin: 0 }}>
                     Personal Information
@@ -586,18 +555,17 @@ const UserProfileDetail: React.FC = () => {
                       border: 'none',
                       borderRadius: '4px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     <Edit size={12} />
                     Edit Section
                   </button>
                 </div>
-                
                 <div style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                  gap: '16px'
+                  gap: '16px',
                 }}>
                   {[
                     { label: 'Full Name', value: user.name },
@@ -606,14 +574,14 @@ const UserProfileDetail: React.FC = () => {
                     { label: 'Email Address', value: user.email },
                     { label: 'Phone Number', value: user.phone || 'Not set' },
                     { label: 'Time Zone', value: user.timeZone }
-                  ].map((field, index) => (
+                  ].map((field, index) => ()
                     <div key={index}>
                       <label style={{
                         display: 'block',
                         fontSize: '12px',
                         fontWeight: '500',
                         color: '#374151',
-                        marginBottom: '4px'
+                        marginBottom: '4px',
                       }}>
                         {field.label}
                       </label>
@@ -623,7 +591,7 @@ const UserProfileDetail: React.FC = () => {
                         border: '1px solid #d1d5db',
                         borderRadius: '6px',
                         fontSize: '14px',
-                        color: '#111827'
+                        color: '#111827',
                       }}>
                         {field.value}
                       </div>
@@ -631,20 +599,19 @@ const UserProfileDetail: React.FC = () => {
                   ))}
                 </div>
               </div>
-
               {/* Employment Information */}
               <div style={{
                 backgroundColor: '#f9fafb',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
                 padding: '20px',
-                marginBottom: '20px'
+                marginBottom: '20px',
               }}>
                 <div style={{ 
                   display: 'flex', 
                   justifyContent: 'space-between', 
                   alignItems: 'center',
-                  marginBottom: '16px'
+                  marginBottom: '16px',
                 }}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#111827', margin: 0 }}>
                     Employment Information
@@ -660,18 +627,17 @@ const UserProfileDetail: React.FC = () => {
                       border: 'none',
                       borderRadius: '4px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     <Edit size={12} />
                     Edit Section
                   </button>
                 </div>
-                
                 <div style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                  gap: '16px'
+                  gap: '16px',
                 }}>
                   {[
                     { label: 'Job Title', value: user.jobTitle },
@@ -683,14 +649,14 @@ const UserProfileDetail: React.FC = () => {
                     { label: 'Office Location', value: user.location },
                     { label: 'Remote Work', value: '2 days/week' },
                     { label: 'Cost Center', value: 'CC-IT-001' }
-                  ].map((field, index) => (
+                  ].map((field, index) => ()
                     <div key={index}>
                       <label style={{
                         display: 'block',
                         fontSize: '12px',
                         fontWeight: '500',
                         color: '#374151',
-                        marginBottom: '4px'
+                        marginBottom: '4px',
                       }}>
                         {field.label}
                       </label>
@@ -700,7 +666,7 @@ const UserProfileDetail: React.FC = () => {
                         border: '1px solid #d1d5db',
                         borderRadius: '6px',
                         fontSize: '14px',
-                        color: '#111827'
+                        color: '#111827',
                       }}>
                         {field.value}
                       </div>
@@ -708,19 +674,18 @@ const UserProfileDetail: React.FC = () => {
                   ))}
                 </div>
               </div>
-
               {/* Account Status */}
               <div style={{
                 backgroundColor: '#f9fafb',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
-                padding: '20px'
+                padding: '20px',
               }}>
                 <div style={{ 
                   display: 'flex', 
                   justifyContent: 'space-between', 
                   alignItems: 'center',
-                  marginBottom: '16px'
+                  marginBottom: '16px',
                 }}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#111827', margin: 0 }}>
                     Account Status
@@ -736,59 +701,55 @@ const UserProfileDetail: React.FC = () => {
                       border: 'none',
                       borderRadius: '4px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     <Settings size={12} />
                     Manage Status
                   </button>
                 </div>
-                
                 <div style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                  gap: '16px'
+                  gap: '16px',
                 }}>
                   {[
                     { 
                       label: 'Account Status', 
-                      value: (
+                      value: (),
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           {getStatusIcon(user.status)}
                           {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
                         </div>
-                      )
                     },
                     { 
                       label: 'Last Login', 
-                      value: user.lastLogin ? formatDateTime(user.lastLogin) : 'Never' 
+                      value: user.lastLogin ? formatDateTime(user.lastLogin) : 'Never' ,
                     },
                     { 
                       label: 'Password Status', 
-                      value: (
+                      value: (),
                         <div style={{ color: '#10b981' }}>
                           ✅ Strong (Last changed: 30d ago)
                         </div>
-                      )
                     },
                     { 
                       label: 'MFA Status', 
-                      value: (
+                      value: (),
                         <div style={{ color: user.mfaEnabled ? '#10b981' : '#ef4444' }}>
                           {user.mfaEnabled ? '🔒 Enabled (Authenticator App)' : '❌ Disabled'}
                         </div>
-                      )
                     },
                     { label: 'Login Attempts', value: '0 failed (last 24h), 15 successful' },
                     { label: 'Session Info', value: `${user.sessionCount} active session (Desktop - Chrome)` }
-                  ].map((field, index) => (
+                  ].map((field, index) => ()
                     <div key={index}>
                       <label style={{
                         display: 'block',
                         fontSize: '12px',
                         fontWeight: '500',
                         color: '#374151',
-                        marginBottom: '4px'
+                        marginBottom: '4px',
                       }}>
                         {field.label}
                       </label>
@@ -798,7 +759,7 @@ const UserProfileDetail: React.FC = () => {
                         border: '1px solid #d1d5db',
                         borderRadius: '6px',
                         fontSize: '14px',
-                        color: '#111827'
+                        color: '#111827',
                       }}>
                         {field.value}
                       </div>
@@ -808,27 +769,25 @@ const UserProfileDetail: React.FC = () => {
               </div>
             </div>
           )}
-
           {/* Permissions Tab */}
-          {activeTab === 'permissions' && (
+          {activeTab === 'permissions' && ()
             <div>
               <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#111827', marginBottom: '20px' }}>
                 🔑 Permissions & Access Control
               </h2>
-              
               {/* Assigned Roles */}
               <div style={{
                 backgroundColor: '#f9fafb',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
                 padding: '20px',
-                marginBottom: '20px'
+                marginBottom: '20px',
               }}>
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  marginBottom: '16px'
+                  marginBottom: '16px',
                 }}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#111827', margin: 0 }}>
                     Assigned Roles
@@ -844,15 +803,14 @@ const UserProfileDetail: React.FC = () => {
                       border: 'none',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     ➕ Add Role
                   </button>
                 </div>
-                
                 <div style={{ display: 'grid', gap: '12px' }}>
-                  {user.roles.map((role, index) => (
+                  {user.roles.map((role, index) => ()
                     <div key={index} style={{
                       backgroundColor: '#ffffff',
                       border: '1px solid #e5e7eb',
@@ -860,32 +818,31 @@ const UserProfileDetail: React.FC = () => {
                       padding: '16px',
                       display: 'flex',
                       justifyContent: 'space-between',
-                      alignItems: 'center'
+                      alignItems: 'center',
                     }}>
                       <div>
                         <div style={{
                           fontSize: '14px',
                           fontWeight: '600',
                           color: '#111827',
-                          marginBottom: '4px'
+                          marginBottom: '4px',
                         }}>
                           🔒 {role}
                         </div>
                         <div style={{
                           fontSize: '12px',
                           color: '#6b7280',
-                          marginBottom: '2px'
+                          marginBottom: '2px',
                         }}>
                           Full system access, user management, security controls
                         </div>
                         <div style={{
                           fontSize: '11px',
-                          color: '#9ca3af'
+                          color: '#9ca3af',
                         }}>
                           Assigned: Jan 15, 2022 by Sarah Johnson • Expires: Never
                         </div>
                       </div>
-                      
                       <button
                         style={{
                           padding: '4px 8px',
@@ -894,7 +851,7 @@ const UserProfileDetail: React.FC = () => {
                           borderRadius: '4px',
                           cursor: 'pointer',
                           fontSize: '12px',
-                          color: '#6b7280'
+                          color: '#6b7280',
                         }}
                       >
                         ⋯ Actions
@@ -903,13 +860,12 @@ const UserProfileDetail: React.FC = () => {
                   ))}
                 </div>
               </div>
-              
               {/* Direct Permissions Table */}
               <div style={{
                 backgroundColor: '#ffffff',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
-                overflow: 'hidden'
+                overflow: 'hidden',
               }}>
                 <div style={{
                   backgroundColor: '#f9fafb',
@@ -917,7 +873,7 @@ const UserProfileDetail: React.FC = () => {
                   borderBottom: '1px solid #e5e7eb',
                   display: 'flex',
                   justifyContent: 'space-between',
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#111827', margin: 0 }}>
                     Direct Permissions
@@ -933,25 +889,24 @@ const UserProfileDetail: React.FC = () => {
                       border: 'none',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     ➕ Add Permission
                   </button>
                 </div>
-                
                 <div style={{ overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead style={{ backgroundColor: '#f9fafb' }}>
                       <tr>
-                        {['Resource', 'Create', 'Read', 'Update', 'Delete', 'Special'].map(header => (
+                        {['Resource', 'Create', 'Read', 'Update', 'Delete', 'Special'].map(header => ()
                           <th key={header} style={{
                             padding: '12px 16px',
                             textAlign: 'left',
                             fontSize: '12px',
                             fontWeight: '600',
                             color: '#374151',
-                            borderBottom: '1px solid #e5e7eb'
+                            borderBottom: '1px solid #e5e7eb',
                           }}>
                             {header}
                           </th>
@@ -965,28 +920,28 @@ const UserProfileDetail: React.FC = () => {
                         { resource: 'Projects', create: true, read: true, update: true, delete: 'limited', special: 'Archive' },
                         { resource: 'Settings', create: false, read: true, update: 'limited', delete: false, special: '-' },
                         { resource: 'Audit Logs', create: false, read: true, update: false, delete: false, special: 'Export' }
-                      ].map((perm, index) => (
+                      ].map((perm, index) => ()
                         <tr key={index}>
                           <td style={{
                             padding: '12px 16px',
                             fontSize: '14px',
                             color: '#111827',
-                            borderBottom: '1px solid #f3f4f6'
+                            borderBottom: '1px solid #f3f4f6',
                           }}>
                             {perm.resource}
                           </td>
-                          {['create', 'read', 'update', 'delete'].map(action => (
+                          {['create', 'read', 'update', 'delete'].map(action => ()
                             <td key={action} style={{
                               padding: '12px 16px',
-                              borderBottom: '1px solid #f3f4f6'
+                              borderBottom: '1px solid #f3f4f6',
                             }}>
-                              {perm[action as keyof typeof perm] === true && (
+                              {perm[action as keyof typeof perm] === true && ()
                                 <span style={{ color: '#10b981' }}>✅ Yes</span>
                               )}
-                              {perm[action as keyof typeof perm] === false && (
+                              {perm[action as keyof typeof perm] === false && ()
                                 <span style={{ color: '#ef4444' }}>❌ No</span>
                               )}
-                              {perm[action as keyof typeof perm] === 'limited' && (
+                              {perm[action as keyof typeof perm] === 'limited' && ()
                                 <span style={{ color: '#f59e0b' }}>⚠️ Limited</span>
                               )}
                             </td>
@@ -995,7 +950,7 @@ const UserProfileDetail: React.FC = () => {
                             padding: '12px 16px',
                             fontSize: '14px',
                             color: '#6b7280',
-                            borderBottom: '1px solid #f3f4f6'
+                            borderBottom: '1px solid #f3f4f6',
                           }}>
                             {perm.special}
                           </td>
@@ -1007,43 +962,40 @@ const UserProfileDetail: React.FC = () => {
               </div>
             </div>
           )}
-
           {/* Activity Tab */}
-          {activeTab === 'activity' && (
+          {activeTab === 'activity' && ()
             <div>
               <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#111827', marginBottom: '20px' }}>
                 📊 User Activity & Audit Trail
               </h2>
-              
               {/* Activity Summary */}
               <div style={{
                 backgroundColor: '#f9fafb',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
                 padding: '20px',
-                marginBottom: '20px'
+                marginBottom: '20px',
               }}>
                 <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>
                   Activity Summary (Last 30 Days)
                 </h3>
-                
                 <div style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-                  gap: '16px'
+                  gap: '16px',
                 }}>
                   {[
                     { icon: '🔑', label: 'Logins', value: '42', change: '+5 this week' },
                     { icon: '📝', label: 'Actions', value: '234', change: '+12% avg' },
                     { icon: '🏗️', label: 'Projects', value: '8', change: '3 active' },
                     { icon: '⏱️', label: 'Hours', value: '156', change: '39h/week' }
-                  ].map((stat, index) => (
+                  ].map((stat, index) => ()
                     <div key={index} style={{
                       backgroundColor: '#ffffff',
                       padding: '16px',
                       borderRadius: '8px',
                       textAlign: 'center',
-                      border: '1px solid #e5e7eb'
+                      border: '1px solid #e5e7eb',
                     }}>
                       <div style={{ fontSize: '24px', marginBottom: '8px' }}>
                         {stat.icon}
@@ -1052,14 +1004,14 @@ const UserProfileDetail: React.FC = () => {
                         fontSize: '24px', 
                         fontWeight: '700', 
                         color: '#111827',
-                        marginBottom: '4px'
+                        marginBottom: '4px',
                       }}>
                         {stat.value}
                       </div>
                       <div style={{ 
                         fontSize: '12px', 
                         color: '#6b7280',
-                        marginBottom: '4px'
+                        marginBottom: '4px',
                       }}>
                         {stat.label}
                       </div>
@@ -1070,13 +1022,12 @@ const UserProfileDetail: React.FC = () => {
                   ))}
                 </div>
               </div>
-              
               {/* Recent Activity */}
               <div style={{
                 backgroundColor: '#ffffff',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
-                overflow: 'hidden'
+                overflow: 'hidden',
               }}>
                 <div style={{
                   backgroundColor: '#f9fafb',
@@ -1084,7 +1035,7 @@ const UserProfileDetail: React.FC = () => {
                   borderBottom: '1px solid #e5e7eb',
                   display: 'flex',
                   justifyContent: 'space-between',
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#111827', margin: 0 }}>
                     Recent Activity Timeline
@@ -1100,22 +1051,21 @@ const UserProfileDetail: React.FC = () => {
                       border: 'none',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     <Download size={12} />
                     Export Full Log
                   </button>
                 </div>
-                
                 <div style={{ padding: '20px' }}>
-                  {activityLog.map((activity, index) => (
+                  {activityLog.map((activity, index) => ()
                     <div key={activity.id} style={{
                       display: 'flex',
                       gap: '16px',
                       paddingBottom: index < activityLog.length - 1 ? '20px' : '0',
                       marginBottom: index < activityLog.length - 1 ? '20px' : '0',
-                      borderBottom: index < activityLog.length - 1 ? '1px solid #f3f4f6' : 'none'
+                      borderBottom: index < activityLog.length - 1 ? '1px solid #f3f4f6' : 'none',
                     }}>
                       <div style={{
                         width: '32px',
@@ -1127,48 +1077,44 @@ const UserProfileDetail: React.FC = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         fontSize: '14px',
-                        flexShrink: 0
+                        flexShrink: 0,
                       }}>
                         {activity.type === 'login' && '🔑'}
                         {activity.type === 'profile_update' && '👥'}
                         {activity.type === 'permission_change' && '🔒'}
                       </div>
-                      
                       <div style={{ flex: 1 }}>
                         <div style={{
                           fontSize: '14px',
                           fontWeight: '500',
                           color: '#111827',
-                          marginBottom: '4px'
+                          marginBottom: '4px',
                         }}>
-                          {activity.type.split('_').map(word => 
+                          {activity.type.split('_').map(word => )
                             word.charAt(0).toUpperCase() + word.slice(1)
                           ).join(' ')}
                         </div>
-                        
                         <div style={{
                           fontSize: '13px',
                           color: '#6b7280',
-                          marginBottom: '4px'
+                          marginBottom: '4px',
                         }}>
                           {activity.description}
                         </div>
-                        
-                        {activity.location && (
+                        {activity.location && ()
                           <div style={{
                             fontSize: '12px',
-                            color: '#9ca3af'
+                            color: '#9ca3af',
                           }}>
                             {activity.ipAddress && `${activity.ipAddress} • `}
                             {activity.location}
                           </div>
                         )}
                       </div>
-                      
                       <div style={{
                         fontSize: '12px',
                         color: '#9ca3af',
-                        flexShrink: 0
+                        flexShrink: 0,
                       }}>
                         {formatDateTime(activity.timestamp)}
                       </div>
@@ -1178,27 +1124,25 @@ const UserProfileDetail: React.FC = () => {
               </div>
             </div>
           )}
-
           {/* Team Tab */}
-          {activeTab === 'team' && (
+          {activeTab === 'team' && ()
             <div>
               <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#111827', marginBottom: '20px' }}>
                 🏢 Team & Project Associations
               </h2>
-              
               {/* Team Memberships */}
               <div style={{
                 backgroundColor: '#f9fafb',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
                 padding: '20px',
-                marginBottom: '20px'
+                marginBottom: '20px',
               }}>
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  marginBottom: '16px'
+                  marginBottom: '16px',
                 }}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#111827', margin: 0 }}>
                     Team Memberships
@@ -1214,52 +1158,50 @@ const UserProfileDetail: React.FC = () => {
                       border: 'none',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     ➕ Add to Team
                   </button>
                 </div>
-                
                 <div style={{ display: 'grid', gap: '16px' }}>
-                  {teamMemberships.map((team, index) => (
+                  {teamMemberships.map((team, index) => ()
                     <div key={team.id} style={{
                       backgroundColor: '#ffffff',
                       border: '1px solid #e5e7eb',
                       borderRadius: '8px',
-                      padding: '20px'
+                      padding: '20px',
                     }}>
                       <div style={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'start',
-                        marginBottom: '12px'
+                        marginBottom: '12px',
                       }}>
                         <div>
                           <div style={{
                             fontSize: '16px',
                             fontWeight: '600',
                             color: '#111827',
-                            marginBottom: '4px'
+                            marginBottom: '4px',
                           }}>
                             👥 {team.name}
                           </div>
                           <div style={{
                             fontSize: '14px',
                             color: '#6b7280',
-                            marginBottom: '8px'
+                            marginBottom: '8px',
                           }}>
                             Role: {team.role} • Members: {team.memberCount} • Department: {team.department}
                           </div>
                           <div style={{
                             fontSize: '12px',
-                            color: '#9ca3af'
+                            color: '#9ca3af',
                           }}>
                             Joined: {formatDate(team.joinedAt)}
                             {team.role === 'Team Lead' && ' • Direct Reports: 4'}
                           </div>
                         </div>
-                        
                         <button
                           style={{
                             padding: '4px 8px',
@@ -1268,21 +1210,20 @@ const UserProfileDetail: React.FC = () => {
                             borderRadius: '4px',
                             cursor: 'pointer',
                             fontSize: '12px',
-                            color: '#6b7280'
+                            color: '#6b7280',
                           }}
                         >
                           ⋯ Options
                         </button>
                       </div>
-                      
-                      {index === 0 && (
+                      {index === 0 && ()
                         <div style={{
                           padding: '12px',
                           backgroundColor: '#f9fafb',
                           borderRadius: '6px',
                           fontSize: '12px',
                           color: '#6b7280',
-                          borderTop: '1px solid #e5e7eb'
+                          borderTop: '1px solid #e5e7eb',
                         }}>
                           Team Members: Maria D., Robert J., Alex C., Lisa W.
                         </div>
@@ -1291,30 +1232,28 @@ const UserProfileDetail: React.FC = () => {
                   ))}
                 </div>
               </div>
-              
               {/* Organizational Chart Position */}
               <div style={{
                 backgroundColor: '#ffffff',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
-                padding: '20px'
+                padding: '20px',
               }}>
                 <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#111827', marginBottom: '20px' }}>
                   Organizational Chart Position
                 </h3>
-                
                 <div style={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   gap: '16px',
-                  textAlign: 'center'
+                  textAlign: 'center',
                 }}>
                   <div style={{
                     padding: '12px 20px',
                     backgroundColor: '#f3f4f6',
                     borderRadius: '8px',
-                    border: '1px solid #d1d5db'
+                    border: '1px solid #d1d5db',
                   }}>
                     <div style={{ fontWeight: '600', color: '#111827' }}>
                       Sarah Johnson
@@ -1323,14 +1262,12 @@ const UserProfileDetail: React.FC = () => {
                       VP Engineering
                     </div>
                   </div>
-                  
                   <div style={{ width: '2px', height: '20px', backgroundColor: '#d1d5db' }}></div>
-                  
                   <div style={{
                     padding: '12px 20px',
                     backgroundColor: '#dbeafe',
                     borderRadius: '8px',
-                    border: '2px solid #3b82f6'
+                    border: '2px solid #3b82f6',
                   }}>
                     <div style={{ fontWeight: '600', color: '#111827' }}>
                       John Smith
@@ -1339,27 +1276,25 @@ const UserProfileDetail: React.FC = () => {
                       Sr. Administrator
                     </div>
                   </div>
-                  
                   <div style={{ width: '2px', height: '20px', backgroundColor: '#d1d5db' }}></div>
-                  
                   <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
                     gap: '12px',
-                    width: '100%'
+                    width: '100%',
                   }}>
                     {[
                       { name: 'Maria D.', role: 'Dev' },
                       { name: 'Robert J.', role: 'Dev' },
                       { name: 'Alex C.', role: 'QA' },
                       { name: 'Lisa W.', role: 'Designer' }
-                    ].map((person, index) => (
+                    ].map((person, index) => ()
                       <div key={index} style={{
                         padding: '8px 12px',
                         backgroundColor: '#f9fafb',
                         borderRadius: '6px',
                         border: '1px solid #e5e7eb',
-                        textAlign: 'center'
+                        textAlign: 'center',
                       }}>
                         <div style={{ fontSize: '14px', fontWeight: '500', color: '#111827' }}>
                           {person.name}
@@ -1371,12 +1306,11 @@ const UserProfileDetail: React.FC = () => {
                     ))}
                   </div>
                 </div>
-                
                 <div style={{
                   display: 'flex',
                   gap: '12px',
                   justifyContent: 'center',
-                  marginTop: '20px'
+                  marginTop: '20px',
                 }}>
                   <button
                     style={{
@@ -1389,12 +1323,11 @@ const UserProfileDetail: React.FC = () => {
                       border: 'none',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     📊 View Full Org Chart
                   </button>
-                  
                   <button
                     style={{
                       display: 'flex',
@@ -1406,7 +1339,7 @@ const UserProfileDetail: React.FC = () => {
                       border: 'none',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     👥 Manage Direct Reports
@@ -1415,25 +1348,23 @@ const UserProfileDetail: React.FC = () => {
               </div>
             </div>
           )}
-
           {/* Settings Tab */}
-          {activeTab === 'settings' && (
+          {activeTab === 'settings' && ()
             <div>
               <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#111827', marginBottom: '20px' }}>
                 ⚙️ User Settings & Configuration
               </h2>
-              
               <div style={{
                 backgroundColor: '#f9fafb',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
-                padding: '20px'
+                padding: '20px',
               }}>
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  marginBottom: '20px'
+                  marginBottom: '20px',
                 }}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#111827', margin: 0 }}>
                     Account Preferences
@@ -1449,20 +1380,18 @@ const UserProfileDetail: React.FC = () => {
                       border: 'none',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     💾 Save Changes
                   </button>
                 </div>
-                
                 <div style={{ fontSize: '14px', color: '#6b7280', marginBottom: '20px' }}>
                   Settings configured by administrators for this user account.
                 </div>
-                
                 <div style={{
                   display: 'grid',
-                  gap: '20px'
+                  gap: '20px',
                 }}>
                   {/* Notification Settings */}
                   <div>
@@ -1475,14 +1404,14 @@ const UserProfileDetail: React.FC = () => {
                         { label: 'SMS alerts for security events', checked: true },
                         { label: 'Browser push notifications', checked: false },
                         { label: 'Weekly activity summary', checked: true }
-                      ].map((setting, index) => (
+                      ].map((setting, index) => ()
                         <label key={index} style={{
                           display: 'flex',
                           alignItems: 'center',
                           gap: '8px',
                           fontSize: '13px',
                           color: '#374151',
-                          cursor: 'pointer'
+                          cursor: 'pointer',
                         }}>
                           <input
                             type="checkbox"
@@ -1495,7 +1424,6 @@ const UserProfileDetail: React.FC = () => {
                       ))}
                     </div>
                   </div>
-                  
                   {/* Interface Preferences */}
                   <div>
                     <h4 style={{ fontSize: '14px', fontWeight: '600', color: '#111827', marginBottom: '12px' }}>
@@ -1511,14 +1439,13 @@ const UserProfileDetail: React.FC = () => {
                           border: '1px solid #d1d5db',
                           borderRadius: '4px',
                           fontSize: '13px',
-                          backgroundColor: '#ffffff'
+                          backgroundColor: '#ffffff',
                         }}>
                           <option>Dark Mode</option>
                           <option>Light Mode</option>
                           <option>System Default</option>
                         </select>
                       </div>
-                      
                       <div>
                         <label style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px', display: 'block' }}>
                           Language
@@ -1528,7 +1455,7 @@ const UserProfileDetail: React.FC = () => {
                           border: '1px solid #d1d5db',
                           borderRadius: '4px',
                           fontSize: '13px',
-                          backgroundColor: '#ffffff'
+                          backgroundColor: '#ffffff',
                         }}>
                           <option>English (US)</option>
                           <option>Spanish</option>
@@ -1541,27 +1468,25 @@ const UserProfileDetail: React.FC = () => {
               </div>
             </div>
           )}
-
           {/* Security Tab */}
-          {activeTab === 'security' && (
+          {activeTab === 'security' && ()
             <div>
               <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#111827', marginBottom: '20px' }}>
                 🛡️ Security & Compliance
               </h2>
-              
               {/* MFA Settings */}
               <div style={{
                 backgroundColor: '#f9fafb',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
                 padding: '20px',
-                marginBottom: '20px'
+                marginBottom: '20px',
               }}>
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  marginBottom: '16px'
+                  marginBottom: '16px',
                 }}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#111827', margin: 0 }}>
                     Multi-Factor Authentication
@@ -1577,42 +1502,40 @@ const UserProfileDetail: React.FC = () => {
                       border: 'none',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     ⚙️ Configure
                   </button>
                 </div>
-                
                 <div style={{
                   backgroundColor: '#ffffff',
                   border: '1px solid #e5e7eb',
                   borderRadius: '6px',
                   padding: '16px',
-                  marginBottom: '12px'
+                  marginBottom: '12px',
                 }}>
                   <div style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center'
+                    alignItems: 'center',
                   }}>
                     <div>
                       <div style={{ fontSize: '14px', fontWeight: '500', color: '#111827', marginBottom: '2px' }}>
                         Primary Method: Authenticator App
                       </div>
                       <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '2px' }}>
-                        App: Microsoft Authenticator
+                        App: Microsoft Authenticator,
                       </div>
                       <div style={{ fontSize: '11px', color: '#9ca3af' }}>
                         Last Used: 2 hours ago
                       </div>
                     </div>
-                    
                     <div style={{
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
-                      color: '#10b981'
+                      color: '#10b981',
                     }}>
                       <span>🟢 Active</span>
                       <button
@@ -1623,7 +1546,7 @@ const UserProfileDetail: React.FC = () => {
                           borderRadius: '4px',
                           cursor: 'pointer',
                           fontSize: '11px',
-                          color: '#6b7280'
+                          color: '#6b7280',
                         }}
                       >
                         🔄 Reset
@@ -1631,7 +1554,6 @@ const UserProfileDetail: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
                 <div style={{ fontSize: '12px', color: '#6b7280' }}>
                   <strong>Backup Methods:</strong>
                   <ul style={{ margin: '4px 0 0 20px', padding: 0 }}>
@@ -1641,19 +1563,18 @@ const UserProfileDetail: React.FC = () => {
                   </ul>
                 </div>
               </div>
-              
               {/* Compliance Status */}
               <div style={{
                 backgroundColor: '#ffffff',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
-                padding: '20px'
+                padding: '20px',
               }}>
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  marginBottom: '16px'
+                  marginBottom: '16px',
                 }}>
                   <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#111827', margin: 0 }}>
                     Compliance Status
@@ -1669,23 +1590,22 @@ const UserProfileDetail: React.FC = () => {
                       border: 'none',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '12px'
+                      fontSize: '12px',
                     }}
                   >
                     📋 Full Report
                   </button>
                 </div>
-                
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: '12px',
-                  marginBottom: '20px'
+                  marginBottom: '20px',
                 }}>
                   <div style={{
                     fontSize: '32px',
                     fontWeight: '700',
-                    color: '#10b981'
+                    color: '#10b981',
                   }}>
                     92/100
                   </div>
@@ -1698,11 +1618,10 @@ const UserProfileDetail: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
                 <div style={{
                   display: 'grid',
                   gap: '8px',
-                  fontSize: '13px'
+                  fontSize: '13px',
                 }}>
                   {[
                     { label: 'Password Policy Compliance', status: 'pass' },
@@ -1711,16 +1630,16 @@ const UserProfileDetail: React.FC = () => {
                     { label: 'No Suspended Permissions', status: 'pass' },
                     { label: 'API Keys Properly Managed', status: 'pass' },
                     { label: 'Admin privileges (180 days)', status: 'warning' }
-                  ].map((check, index) => (
+                  ].map((check, index) => ()
                     <div key={index} style={{
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
-                      color: check.status === 'pass' ? '#10b981' : '#f59e0b'
+                      color: check.status === 'pass' ? '#10b981' : '#f59e0b',
                     }}>
                       <span>{check.status === 'pass' ? '✅' : '⚠️'}</span>
                       <span>{check.label}</span>
-                      {check.status === 'warning' && (
+                      {check.status === 'warning' && ()
                         <span style={{ fontSize: '11px', color: '#6b7280' }}>
                           - Review Required
                         </span>
@@ -1728,13 +1647,12 @@ const UserProfileDetail: React.FC = () => {
                     </div>
                   ))}
                 </div>
-                
                 <div style={{
                   backgroundColor: '#f0f9ff',
                   border: '1px solid #bae6fd',
                   borderRadius: '6px',
                   padding: '12px',
-                  marginTop: '16px'
+                  marginTop: '16px',
                 }}>
                   <strong style={{ fontSize: '12px', color: '#0369a1' }}>
                     Recommendations:
@@ -1743,7 +1661,7 @@ const UserProfileDetail: React.FC = () => {
                     margin: '4px 0 0 20px', 
                     padding: 0, 
                     fontSize: '11px',
-                    color: '#0369a1'
+                    color: '#0369a1',
                   }}>
                     <li>Schedule quarterly access review</li>
                     <li>Consider hardware token for critical operations</li>
@@ -1754,7 +1672,6 @@ const UserProfileDetail: React.FC = () => {
           )}
         </div>
       </div>
-
       {/* Loading Animation */}
       <style>{`
         @keyframes spin {

@@ -18,35 +18,35 @@ export const DiffLegend: React.FC<DiffLegendProps> = ({)
       label: 'Added',
       color: '#10b981',
       bgColor: '#ecfdf5',
-      visible: highlightMode === 'all' || highlightMode === 'changes' || highlightMode === 'additions'
+      visible: highlightMode === 'all' || highlightMode === 'changes' || highlightMode === 'additions',
     },
     {
       type: 'removed',
       label: 'Removed',
       color: '#ef4444',
       bgColor: '#fef2f2',
-      visible: highlightMode === 'all' || highlightMode === 'changes' || highlightMode === 'deletions'
+      visible: highlightMode === 'all' || highlightMode === 'changes' || highlightMode === 'deletions',
     },
     {
       type: 'modified',
       label: 'Modified',
       color: '#f59e0b',
       bgColor: '#fffbeb',
-      visible: highlightMode === 'all' || highlightMode === 'changes'
+      visible: highlightMode === 'all' || highlightMode === 'changes',
     },
     {
       type: 'unchanged',
       label: 'Unchanged',
       color: '#6b7280',
       bgColor: '#f9fafb',
-      visible: highlightMode === 'all'
+      visible: highlightMode === 'all',
     }
   ];
   const visibleItems = legendItems.filter(item => item.visible);
   if (visibleItems.length === 0) {
     return null;
   }
-  return ()
+  return ();
     <div className={`bg-white rounded-lg shadow-lg border border-gray-200 p-3 ${className}`}>}
       <h4 className="text-sm font-medium text-gray-900 mb-2">Legend</h4>
       <div className="space-y-2">

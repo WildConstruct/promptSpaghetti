@@ -757,7 +757,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
         availability: await this.collectAvailabilityMetrics(profile),
         scalability: await this.collectScalabilityMetrics(profile),
         custom_metrics: await this.collectCustomMetrics(profile),
-        quality_indicators: await this.collectQualityIndicators(profile)
+        quality_indicators: await this.collectQualityIndicators(profile),
       };
       metrics.collection_duration_ms = Date.now() - startTime;
       // Store metrics
@@ -792,7 +792,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
       network_io_in_bps: Math.random() * 1000000000 + 100000000, // Simulated
       network_io_out_bps: Math.random() * 500000000 + 50000000, // Simulated
       gpu_usage_percent: Math.random() * 80 + 10, // Simulated
-      gpu_memory_usage_mb: Math.random() * 8000 + 1000 // Simulated
+      gpu_memory_usage_mb: Math.random() * 8000 + 1000 // Simulated,
     };
   }
   private async collectThroughputMetrics(profile: AnalyticsPerformanceProfile): Promise<PerformanceMetrics['throughput']> {
@@ -804,7 +804,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
       data_volume_gb_per_hour: (Math.random() * 50 + 10) * baseMultiplier,
       concurrent_operations: Math.floor((Math.random() * 100 + 10) * baseMultiplier),
       queue_depth: Math.floor(Math.random() * 1000 + 10),
-      processing_rate: (Math.random() * 1000 + 100) * baseMultiplier
+      processing_rate: (Math.random() * 1000 + 100) * baseMultiplier,
     };
   }
   private async collectLatencyMetrics(profile: AnalyticsPerformanceProfile): Promise<PerformanceMetrics['latency']> {
@@ -822,7 +822,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
       processing_latency_ms: avgLatency * 0.7,
       queue_wait_time_ms: Math.random() * 100,
       network_latency_ms: Math.random() * 20 + 5,
-      database_query_time_ms: Math.random() * 50 + 10
+      database_query_time_ms: Math.random() * 50 + 10,
     };
   }
   private async collectAccuracyMetrics(profile: AnalyticsPerformanceProfile): Promise<PerformanceMetrics['accuracy']> {
@@ -839,7 +839,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
       precision_score: Math.max(0, Math.min(1, (accuracy / 100) * (1 - falsePositiveRate / 100))),
       recall_score: Math.max(0, Math.min(1, (accuracy / 100) * (1 - falseNegativeRate / 100))),
       f1_score: 0, // Will be calculated from precision and recall
-      confidence_score: Math.random() * 0.3 + 0.7 // 0.7-1.0
+      confidence_score: Math.random() * 0.3 + 0.7 // 0.7-1.0,
     };
   }
   private async collectAvailabilityMetrics(profile: AnalyticsPerformanceProfile): Promise<PerformanceMetrics['availability']> {
@@ -848,7 +848,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
       service_availability_percentage: 97 + Math.random() * 3, // 97-100%
       data_freshness_minutes: Math.random() * 30, // 0-30 minutes
       system_responsiveness_score: 85 + Math.random() * 15, // 85-100
-      error_rate_percent: Math.random() * 2 // 0-2%
+      error_rate_percent: Math.random() * 2 // 0-2%,
     };
   }
   private async collectScalabilityMetrics(profile: AnalyticsPerformanceProfile): Promise<PerformanceMetrics['scalability']> {
@@ -857,7 +857,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
       vertical_scale_factor: 1 + Math.random() * 2, // 1-3x
       load_distribution_variance: Math.random() * 0.3, // 0-30% variance
       resource_efficiency_score: 70 + Math.random() * 30, // 70-100
-      bottleneck_indicator: Math.random() > 0.8 ? 'cpu' : Math.random() > 0.6 ? 'memory' : Math.random() > 0.4 ? 'io' : 'none'
+      bottleneck_indicator: Math.random() > 0.8 ? 'cpu' : Math.random() > 0.6 ? 'memory' : Math.random() > 0.4 ? 'io' : 'none',
     };
   }
   private async collectCustomMetrics(profile: AnalyticsPerformanceProfile): Promise<Record<string, number>> {
@@ -895,7 +895,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
       data_quality_score: 85 + Math.random() * 15, // 85-100
       completeness_percentage: 90 + Math.random() * 10, // 90-100%
       consistency_score: 80 + Math.random() * 20, // 80-100
-      timeliness_score: 75 + Math.random() * 25 // 75-100
+      timeliness_score: 75 + Math.random() * 25 // 75-100,
     };
   }
   // Helper methods for metric generation
@@ -943,7 +943,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     const accuracyScore = this.calculateAccuracyScore(profile, metrics.accuracy);
     const availabilityScore = this.calculateAvailabilityScore(profile, metrics.availability);
     // Calculate overall score with weights
-    const overallScore = (;)
+    const overallScore = (;);
       throughputScore * 0.2 +
       latencyScore * 0.25 +
       resourceEfficiencyScore * 0.2 +
@@ -1141,7 +1141,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
       case 'range':
         if (target.range_min !== undefined && target.range_max !== undefined) {
           if (currentValue < target.range_min || currentValue > target.range_max) {
-            const deviation = Math.max(;)
+            const deviation = Math.max(;);
               Math.abs(currentValue - target.range_min),
               Math.abs(currentValue - target.range_max)
             );
@@ -1163,7 +1163,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     profileId: string, 
     target: PerformanceTarget, 
     currentValue: number, 
-    severity: 'warning' | 'critical'
+    severity: 'warning' | 'critical',
   ): Promise<void> {
     const profile = this.profiles.get(profileId);
     if (!profile) return;
@@ -1272,7 +1272,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     const anomalies: Array<{ metric: string; type: string; severity: 'info' | 'warning' | 'critical'; details: any }> = [];
     // Check CPU usage anomaly
     if (baseline['system_resources.cpu_usage_percent']) {
-      const cpuAnomaly = this.detectStatisticalAnomaly(;)
+      const cpuAnomaly = this.detectStatisticalAnomaly(;);
         current.system_resources.cpu_usage_percent,
         baseline['system_resources.cpu_usage_percent'],
         'cpu_usage_percent'
@@ -1281,7 +1281,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     }
     // Check memory usage anomaly
     if (baseline['system_resources.memory_usage_percent']) {
-      const memoryAnomaly = this.detectStatisticalAnomaly(;)
+      const memoryAnomaly = this.detectStatisticalAnomaly(;);
         current.system_resources.memory_usage_percent,
         baseline['system_resources.memory_usage_percent'],
         'memory_usage_percent'
@@ -1290,7 +1290,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     }
     // Check response time anomaly
     if (baseline['latency.avg_response_time_ms']) {
-      const latencyAnomaly = this.detectStatisticalAnomaly(;)
+      const latencyAnomaly = this.detectStatisticalAnomaly(;);
         current.latency.avg_response_time_ms,
         baseline['latency.avg_response_time_ms'],
         'avg_response_time_ms'
@@ -1299,7 +1299,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     }
     // Check throughput anomaly
     if (baseline['throughput.requests_per_second']) {
-      const throughputAnomaly = this.detectStatisticalAnomaly(;)
+      const throughputAnomaly = this.detectStatisticalAnomaly(;);
         current.throughput.requests_per_second,
         baseline['throughput.requests_per_second'],
         'requests_per_second'
@@ -1308,7 +1308,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     }
     // Check accuracy anomaly
     if (baseline['accuracy.detection_accuracy_percent']) {
-      const accuracyAnomaly = this.detectStatisticalAnomaly(;)
+      const accuracyAnomaly = this.detectStatisticalAnomaly(;);
         current.accuracy.detection_accuracy_percent,
         baseline['accuracy.detection_accuracy_percent'],
         'detection_accuracy_percent'
@@ -1353,7 +1353,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
         baseline_avg: baselineStats.avg,
         baseline_std: baselineStats.std,
         standard_deviations: standardDeviations,
-        deviation_direction: currentValue > baselineStats.avg ? 'increase' : 'decrease'
+        deviation_direction: currentValue > baselineStats.avg ? 'increase' : 'decrease',
       }
     };
   }
@@ -1377,7 +1377,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
         expected_value: anomaly.details.baseline_avg,
         deviation_percentage: ((anomaly.details.current_value - anomaly.details.baseline_avg) / anomaly.details.baseline_avg) * 100,
         duration_minutes: 1, // Will be updated if anomaly persists
-        trend_direction: anomaly.details.deviation_direction === 'increase' ? 'increasing' : 'decreasing'
+        trend_direction: anomaly.details.deviation_direction === 'increase' ? 'increasing' : 'decreasing',
       },
       impact: {,
         affected_components: profile.configuration.monitoring_scope.components,
@@ -1755,7 +1755,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
       return severityOrder[b.severity] - severityOrder[a.severity] || b.detected_at - a.detected_at;
     });
   }
-  getOptimizationRecommendations()
+  getOptimizationRecommendations();
     profileId: string,
     status?: PerformanceOptimizationRecommendation['status']
   ): PerformanceOptimizationRecommendation[] {
@@ -1829,7 +1829,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
         performance_trend: profile.current_state.trend_direction,
         key_achievements: this.identifyKeyAchievements(profile, metrics),
         critical_issues: this.identifyCriticalIssues(periodAnomalies),
-        recommendations_count: recommendations.filter(r => r.status === 'pending').length
+        recommendations_count: recommendations.filter(r => r.status === 'pending').length,
       },
       performance_analysis: {,
         throughput_analysis: throughputAnalysis,
@@ -1855,13 +1855,13 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
       recommendations: {,
         high_priority: recommendations.filter(r => r.priority === 'high' || r.priority === 'critical'),
         medium_priority: recommendations.filter(r => r.priority === 'medium'),
-        low_priority: recommendations.filter(r => r.priority === 'low')
+        low_priority: recommendations.filter(r => r.priority === 'low'),
       },
       cost_analysis: {,
         current_operational_cost: 5000, // Estimated
         projected_cost_with_optimizations: 4000, // Estimated
         potential_savings: 1000, // Estimated
-        roi_timeline_months: 6 // Estimated
+        roi_timeline_months: 6 // Estimated,
       }
     };
   }
@@ -1895,7 +1895,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
       throughput_trend: trend,
       bottlenecks_identified: trend === 'decreasing' ? ['Performance degradation detected'] : [],
       capacity_utilization_percent: Math.round((avgThroughput / peakThroughput) * 100),
-      scalability_headroom_percent: Math.round(((peakThroughput - avgThroughput) / peakThroughput) * 100)
+      scalability_headroom_percent: Math.round(((peakThroughput - avgThroughput) / peakThroughput) * 100),
     };
   }
   private analyzeLatencyTrends(metrics: PerformanceMetrics[]): LatencyAnalysis {
@@ -2149,7 +2149,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
   private calculateAverageResolutionTime(anomalies: PerformanceAnomaly[]): number {
     const resolvedAnomalies = anomalies.filter(a => a.resolution.resolved && a.resolution.resolved_at);
     if (resolvedAnomalies.length === 0) return 0;
-    const resolutionTimes = resolvedAnomalies.map(a => ;)
+    const resolutionTimes = resolvedAnomalies.map(a => ;);
       (a.resolution.resolved_at! - a.detected_at) / (1000 * 60) // Convert to minutes
     );
     return Math.round(resolutionTimes.reduce((sum, time) => sum + time, 0) / resolutionTimes.length);
@@ -2170,7 +2170,6 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     overall_performance_score: number;
     active_anomalies: number;
     pending_recommendations: number;
-  } {
     const profiles = Array.from(this.profiles.values());
     const activeProfiles = profiles.filter(p => p.enabled);
     const overallScore = activeProfiles.length > 0 ;
@@ -2204,7 +2203,7 @@ export class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     }
     // Clean up resolved anomalies
     for (const [profileId, anomalies] of this.anomalies.entries()) {
-      const filteredAnomalies = anomalies.filter(a => ;)
+      const filteredAnomalies = anomalies.filter(a => ;);
         a.detected_at > cutoffTime || !a.resolution.resolved
       );
       this.anomalies.set(profileId, filteredAnomalies);

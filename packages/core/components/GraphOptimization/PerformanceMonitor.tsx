@@ -49,7 +49,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({)
         memoryUsage: Math.random() * 1024 * 1024 + 512 * 1024, // 512KB-1.5MB
         nodeCount: Math.floor(Math.random() * 20 + 5), // 5-25 nodes
         cacheHitRate: Math.random() * 100, // 0-100%
-        outputLength: Math.floor(Math.random() * 500 + 100) // 100-600 chars
+        outputLength: Math.floor(Math.random() * 500 + 100) // 100-600 chars,
       };
       metricsHistory.current.push(metric);
       if (metricsHistory.current.length > MAX_METRICS_HISTORY) {
@@ -86,7 +86,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({)
     return { color: '#dc3545', label: 'Needs Optimization' };
   };
   if (!isVisible) {
-    return ()
+    return ();
       <div
         onClick={onToggle}
         style={{
@@ -113,7 +113,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({)
     );
   }
   const performanceStatus = getPerformanceStatus();
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       bottom: '20px',
@@ -178,7 +178,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({)
         padding: '16px',
         textAlign: 'center',
         backgroundColor: `${performanceStatus.color}11`,}
-        borderBottom: '1px solid #e9ecef'
+        borderBottom: '1px solid #e9ecef',
       }}>
         <div style={{
           fontSize: '24px',
@@ -249,7 +249,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({)
             height: '12px',
             backgroundColor: isCollecting ? '#28a745' : '#6c757d',
             borderRadius: '50%',
-            margin: '0 auto'
+            margin: '0 auto',
           }} />
         </div>
       </div>
@@ -257,7 +257,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({)
       {stats.recentMetrics.length > 0 && ()
         <div style={{
           padding: '16px',
-          borderTop: '1px solid #e9ecef'
+          borderTop: '1px solid #e9ecef',
         }}>
           <div style={{
             fontSize: '14px',
@@ -284,14 +284,14 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({)
                   padding: '6px 0',
                   fontSize: '12px',
                   color: '#6c757d',
-                  borderBottom: index < 5 ? '1px solid #f1f3f4' : 'none'
+                  borderBottom: index < 5 ? '1px solid #f1f3f4' : 'none',
                 }}
               >
                 <div>
                   {new Date(metric.timestamp).toLocaleTimeString()}
                 </div>
                 <div style={{
-                  color: metric.duration < 100 ? '#28a745' : 
+                  color: metric.duration < 100 ? '#28a745' : ,
                     metric.duration < 300 ? '#ffc107' : '#dc3545',
                   fontWeight: '500',
                 }}>

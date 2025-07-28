@@ -98,7 +98,7 @@ describe('PasswordResetTokenManager', () => {
         type: TokenType.PASSWORD_RESET,
         ipAddress: '192.168.1.1',
         userAgent: 'Mozilla/5.0',
-        expirationMinutes: 30 // 30 minutes
+        expirationMinutes: 30 // 30 minutes,
       };
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
@@ -146,7 +146,7 @@ describe('PasswordResetTokenManager', () => {
       };
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
-      const validation = await manager.validateToken(;)
+      const validation = await manager.validateToken(;);
         result!.token,
         '192.168.1.1',
         'Mozilla/5.0'
@@ -157,7 +157,7 @@ describe('PasswordResetTokenManager', () => {
       expect(validation.riskScore).toBeDefined();
     });
     test('should reject invalid tokens', async () => {
-      const validation = await manager.validateToken(;)
+      const validation = await manager.validateToken(;);
         'invalid-token-12345',
         '192.168.1.1',
         'Mozilla/5.0'
@@ -182,7 +182,7 @@ describe('PasswordResetTokenManager', () => {
       expect(result).not.toBeNull();
       // Wait for token to expire
       await new Promise(resolve => setTimeout(resolve, 10));
-      const validation = await shortLivedManager.validateToken(;)
+      const validation = await shortLivedManager.validateToken(;);
         result!.token,
         '192.168.1.1',
         'Mozilla/5.0'
@@ -202,13 +202,13 @@ describe('PasswordResetTokenManager', () => {
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
       // Same IP and user agent - low risk
-      const lowRiskValidation = await manager.validateToken(;)
+      const lowRiskValidation = await manager.validateToken(;);
         result!.token,
         '192.168.1.1',
         'Mozilla/5.0'
       );
       // Different IP - higher risk
-      const highRiskValidation = await manager.validateToken(;)
+      const highRiskValidation = await manager.validateToken(;);
         result!.token,
         '192.168.1.100',
         'Different Agent'
@@ -250,7 +250,7 @@ describe('PasswordResetTokenManager', () => {
       };
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
-      const usage = await manager.useToken(;)
+      const usage = await manager.useToken(;);
         result!.token,
         '192.168.1.1',
         'Mozilla/5.0'
@@ -272,14 +272,14 @@ describe('PasswordResetTokenManager', () => {
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
       // Use token first time
-      const firstUsage = await manager.useToken(;)
+      const firstUsage = await manager.useToken(;);
         result!.token,
         '192.168.1.1',
         'Mozilla/5.0'
       );
       expect(firstUsage.success).toBe(true);
       // Try to use token second time
-      const secondUsage = await manager.useToken(;)
+      const secondUsage = await manager.useToken(;);
         result!.token,
         '192.168.1.1',
         'Mozilla/5.0'
@@ -320,7 +320,7 @@ describe('PasswordResetTokenManager', () => {
       };
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
-      const success = await manager.revokeToken(;)
+      const success = await manager.revokeToken(;);
         result!.tokenId,
         'manual_revocation',
         '192.168.1.1',
@@ -351,12 +351,12 @@ describe('PasswordResetTokenManager', () => {
         }
       ];
       // Generate multiple tokens
-      const tokens = await Promise.all(;)
+      const tokens = await Promise.all(;);
         requests.map(request => manager.generateToken(request))
       );
       tokens.forEach(token => expect(token).not.toBeNull());
       // Revoke all password reset tokens for user
-      const revokedCount = await manager.revokeUserTokens(;)
+      const revokedCount = await manager.revokeUserTokens(;);
         userId,
         TokenType.PASSWORD_RESET,
         'user_requested'
@@ -527,7 +527,7 @@ describe('PasswordResetTokenManager', () => {
           securityLevel: SecurityLevel.ENHANCED,
         }
       ];
-      const tokens = await Promise.all(;)
+      const tokens = await Promise.all(;);
         requests.map(request => manager.generateToken(request))
       );
       // Use one token
@@ -676,7 +676,7 @@ describe('PasswordResetTokenManager', () => {
         const expiredThreshold = new Date(now.getTime() - 1); // 1ms ago instead of 24 hours;
         let tokensRemoved = 0;
         for (const [tokenId, token] of this.tokens) {
-          const shouldCleanup = (;)
+          const shouldCleanup = (;);
             token.status === TokenStatus.EXPIRED || 
             token.status === TokenStatus.USED ||
             token.status === TokenStatus.REVOKED
@@ -724,7 +724,7 @@ describe('PasswordResetTokenManager', () => {
       failingManager.destroy();
     });
     test('should handle validation errors gracefully', async () => {
-      const validation = await manager.validateToken(;)
+      const validation = await manager.validateToken(;);
         '', // Empty token
         '192.168.1.1',
         'Mozilla/5.0'
@@ -734,7 +734,7 @@ describe('PasswordResetTokenManager', () => {
       expect(validation.riskScore).toBeGreaterThan(0);
     });
     test('should handle usage of invalid tokens', async () => {
-      const usage = await manager.useToken(;)
+      const usage = await manager.useToken(;);
         'completely-invalid-token',
         '192.168.1.1',
         'Mozilla/5.0'
@@ -743,7 +743,7 @@ describe('PasswordResetTokenManager', () => {
       expect(usage.reason).toBeDefined();
     });
     test('should handle revocation of non-existent tokens', async () => {
-      const success = await manager.revokeToken(;)
+      const success = await manager.revokeToken(;);
         'non-existent-token',
         'test_revocation'
       );

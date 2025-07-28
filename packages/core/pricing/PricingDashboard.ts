@@ -188,7 +188,7 @@ export class PricingDashboard extends EventEmitter {
   }> {
     // Aggregate competitive analysis from all models
     const models = this.getAllModels();
-    const competitiveAnalyses = await Promise.all(;)
+    const competitiveAnalyses = await Promise.all(;);
       models.map(model => this.optimizer.getCompetitiveAnalysis(model.id))
     );
     const avgAdvantage = competitiveAnalyses.reduce((sum, analysis) => ;
@@ -208,7 +208,7 @@ export class PricingDashboard extends EventEmitter {
       competitiveAdvantage: avgAdvantage,
       marketGaps,
       pricingRecommendations,
-      threatLevel: avgAdvantage > 70 ? 'low' : avgAdvantage > 40 ? 'medium' : 'high'
+      threatLevel: avgAdvantage > 70 ? 'low' : avgAdvantage > 40 ? 'medium' : 'high',
     };
   }
   /**
@@ -219,19 +219,18 @@ export class PricingDashboard extends EventEmitter {
     productionTrends: Array<{ type: string; volume: number; avgPrice: number }>;
     seasonalPerformance: Array<{ season: string; multiplier: number; revenue: number }>;
     contentTypeAnalysis: Array<{ type: string; demand: number; pricing: number }>;
-    } {
     return {
       studioSegments: Object.entries(this.metrics.studioTierBreakdown).map(([segment, revenue]) => ({)
         segment,
         revenue,
-        growth: Math.random() * 20 - 5 // Simplified growth calculation
+        growth: Math.random() * 20 - 5 // Simplified growth calculation,
       })),
       productionTrends: Object.entries(this.metrics.productionTypeDistribution).map(([type, volume]) => ({)
         type,
         volume,
-        avgPrice: 500 + Math.random() * 1000 // Simplified pricing
+        avgPrice: 500 + Math.random() * 1000 // Simplified pricing,
       })),
-      seasonalPerformance: this.metrics.seasonalTrends.map(trend => ({)
+      seasonalPerformance: this.metrics.seasonalTrends.map(trend => ({),
         season: trend.period,
         multiplier: 1 + trend.growth / 100,
         revenue: trend.revenue,
@@ -350,7 +349,7 @@ export class PricingDashboard extends EventEmitter {
       this.emit('metrics_updated', this.metrics);
     } catch (error) {
       this.emit('metrics_update_error', {)
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   }
@@ -408,7 +407,7 @@ export class PricingDashboard extends EventEmitter {
             metric: 'Revenue Growth Rate',
             current: this.metrics.revenueGrowthRate,
             previous: 5,
-            change: this.metrics.revenueGrowthRate - 5
+            change: this.metrics.revenueGrowthRate - 5,
           }
         ],
         createdAt: Date.now(),
@@ -434,7 +433,7 @@ export class PricingDashboard extends EventEmitter {
             metric: 'AI Optimization Impact',
             current: this.metrics.aiOptimizationImpact,
             previous: 5,
-            change: this.metrics.aiOptimizationImpact - 5
+            change: this.metrics.aiOptimizationImpact - 5,
           }
         ],
         createdAt: Date.now(),
@@ -509,7 +508,7 @@ export class PricingDashboard extends EventEmitter {
       projectedRevenue,
       confidenceInterval: {,
         lower: projectedRevenue * 0.85,
-        upper: projectedRevenue * 1.15
+        upper: projectedRevenue * 1.15,
       },
       assumptions: [,
         'Current growth rate continues',

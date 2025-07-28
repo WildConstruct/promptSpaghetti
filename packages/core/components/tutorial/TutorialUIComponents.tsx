@@ -332,7 +332,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
     return {
       completed,
       total,
-      percentage: (completed / total) * 100
+      percentage: (completed / total) * 100,
     };
   }, [progress, tutorial.steps.length]);
   const handleStepNavigation = useCallback((direction: 'next' | 'previous', stepIndex?: number) => {
@@ -362,7 +362,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
   const handlePlayPause = useCallback(() => {
     setIsPlaying(!isPlaying);
   }, [isPlaying]);
-  return ()
+  return ();
     <div className={`tutorial-player ${className}`}>}
       <div className="tutorial-header">
         <div className="tutorial-info">
@@ -499,7 +499,7 @@ const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({)
   onStepClick
 }) => {
   const progressPercentage = (current / total) * 100;
-  return ()
+  return ();
     <div className="tutorial-progress-bar">
       <div className="progress-track">
         <div 
@@ -511,7 +511,7 @@ const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({)
         {steps.map((step, index) => {
           const isCompleted = completedSteps.includes(step.id);
           const isCurrent = index === current - 1;
-          return ()
+          return ();
             <div
               key={step.id}
               className={`progress-step ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}
@@ -561,7 +561,7 @@ const TutorialStepContent: React.FC<TutorialStepContentProps> = ({)
     setValidationResult({)
       passed,
       score,
-      feedback: passed ? 'Great job! You completed this step successfully.' : 'Not quite right. Try again!'
+      feedback: passed ? 'Great job! You completed this step successfully.' : 'Not quite right. Try again!',
     });
     if (passed) {
       onComplete(score);
@@ -571,7 +571,7 @@ const TutorialStepContent: React.FC<TutorialStepContentProps> = ({)
     switch (step.content.format) {
     case 'text':
     case 'markdown':
-      return ()
+      return ();
         <div className="step-text-content">
           <h2>{step.title}</h2>
           <p className="step-description">{step.description}</p>
@@ -582,7 +582,7 @@ const TutorialStepContent: React.FC<TutorialStepContentProps> = ({)
         </div>
       );
     case 'video':
-      return ()
+      return ();
         <div className="step-video-content">
           <h2>{step.title}</h2>
           <div className="video-container">
@@ -600,7 +600,7 @@ const TutorialStepContent: React.FC<TutorialStepContentProps> = ({)
         </div>
       );
     case 'interactive':
-      return ()
+      return ();
         <div className="step-interactive-content">
           <h2>{step.title}</h2>
           <p className="step-description">{step.description}</p>
@@ -618,7 +618,7 @@ const TutorialStepContent: React.FC<TutorialStepContentProps> = ({)
         </div>
       );
     default:
-      return ()
+      return ();
         <div className="step-mixed-content">
           <h2>{step.title}</h2>
           <p className="step-description">{step.description}</p>
@@ -632,7 +632,7 @@ const TutorialStepContent: React.FC<TutorialStepContentProps> = ({)
       );
     }
   };
-  return ()
+  return ();
     <div className="tutorial-step-content">
       <div className="step-header">
         <div className="step-meta">
@@ -774,14 +774,14 @@ const TutorialStepList: React.FC<TutorialStepListProps> = ({)
   completedSteps,
   onStepSelect
 }) => {
-  return ()
+  return ();
     <div className="tutorial-step-list">
       <h3>Tutorial Steps</h3>
       <div className="step-list">
         {steps.map((step, index) => {
           const isCompleted = completedSteps.includes(step.id);
           const isCurrent = index === currentStepIndex;
-          return ()
+          return ();
             <div
               key={step.id}
               className={`step-item ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}
@@ -823,7 +823,7 @@ const TutorialResources: React.FC<TutorialResourcesProps> = ({)
   resources,
   onResourceClick
 }) => {
-  return ()
+  return ();
     <div className="tutorial-resources">
       <h3>Resources</h3>
       <div className="resource-list">
@@ -867,7 +867,7 @@ const TutorialSettings: React.FC<TutorialSettingsProps> = ({)
   onSettingsChange,
   onClose
 }) => {
-  return ()
+  return ();
     <div className="tutorial-settings-overlay">
       <Card className="settings-card">
         <CardHeader>
@@ -959,7 +959,7 @@ const InteractiveElement: React.FC<InteractiveElementProps> = ({)
     setIsActive(true);
     onInteraction();
   };
-  return ()
+  return ();
     <div
       className={`interactive-element ${element.type} ${isActive ? 'active' : ''}`}
       style={{
@@ -1013,7 +1013,7 @@ const MediaContentRenderer: React.FC<MediaContentRendererProps> = ({)
   media,
   settings
 }) => {
-  return ()
+  return ();
     <div className="media-content">
       {media.type === 'image' && ()
         <img
@@ -1056,7 +1056,7 @@ const CodeExampleRenderer: React.FC<CodeExampleRendererProps> = ({)
   onExecute
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  return ()
+  return ();
     <div className="code-example">
       <div className="code-header">
         <div className="code-language">
@@ -1152,7 +1152,7 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
         }
       });
   }, [tutorials, searchQuery, selectedCategory, selectedDifficulty, sortBy]);
-  return ()
+  return ();
     <div className={`tutorial-browser ${className}`}>}
       <div className="browser-header">
         <h2>Browse Tutorials</h2>
@@ -1236,7 +1236,7 @@ const TutorialCard: React.FC<TutorialCardProps> = ({)
   tutorial,
   onClick
 }) => {
-  return ()
+  return ();
     <Card className="tutorial-card" onClick={onClick}>
       <CardContent>
         <div className="card-header">

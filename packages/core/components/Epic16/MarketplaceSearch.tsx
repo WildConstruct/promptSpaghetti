@@ -61,7 +61,7 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
   // Filter suggestions based on query
   useEffect(() => {
     if (query.length > 0) {
-      const filtered = searchSuggestions.filter(suggestion =>;)
+      const filtered = searchSuggestions.filter(suggestion =>;);
         suggestion.text.toLowerCase().includes(query.toLowerCase())
       );
       setFilteredSuggestions(filtered.slice(0, 8));
@@ -134,7 +134,7 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
     if (filters.sortBy !== 'relevance') count++;
     return count;
   }, [filters]);
-  return ()
+  return ();
     <div className={`bg-white border-b border-gray-200 ${className}`}>}
       <div className="max-w-7xl mx-auto px-4 py-4">
         {/* Search Bar */}
@@ -353,7 +353,7 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
                             updateFilters({ compatibility: [...filters.compatibility, model] });
                           } else {
                             updateFilters({ )
-                              compatibility: filters.compatibility.filter(m => m !== model) 
+                              compatibility: filters.compatibility.filter(m => m !== model) ,
                             });
                           }
                         }}

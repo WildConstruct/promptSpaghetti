@@ -210,7 +210,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
         message: 'Failed to retrieve configuration',
         details: {,
           configId,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         }
       });
       throw error;
@@ -284,7 +284,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
         message: 'Failed to save configuration',
         details: {,
           configId,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         }
       });
       return false;
@@ -306,7 +306,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
           message: 'Alert retention days must be between 1 and 365',
           severity: 'error',
           code: 'RETENTION_OUT_OF_RANGE',
-          suggestion: 'Set retention period between 30-90 days for optimal balance'
+          suggestion: 'Set retention period between 30-90 days for optimal balance',
         });
         securityScore -= 20;
       }
@@ -337,7 +337,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
           message: 'Real-time analytics disabled - may impact threat detection speed',
           impact: 'high',
           code: 'REALTIME_DISABLED',
-          suggestion: 'Enable real-time analytics for faster threat response'
+          suggestion: 'Enable real-time analytics for faster threat response',
         });
         securityScore -= 15;
       }
@@ -347,7 +347,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
           message: 'Threat intelligence disabled - may reduce detection accuracy',
           impact: 'medium',
           code: 'THREAT_INTEL_DISABLED',
-          suggestion: 'Enable threat intelligence feeds for better threat context'
+          suggestion: 'Enable threat intelligence feeds for better threat context',
         });
         securityScore -= 10;
       }
@@ -357,7 +357,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
           framework: 'SOC2',
           requirement: 'Logging and Monitoring',
           impact: 'minor',
-          description: 'Alert retention period may not meet audit requirements'
+          description: 'Alert retention period may not meet audit requirements',
         });
       }
       // Performance impact assessment
@@ -452,7 +452,7 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
         message: 'Failed to delete configuration',
         details: {,
           configId,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         }
       });
       return false;
@@ -474,7 +474,6 @@ export class SecurityAlertingConfigurationService extends EventEmitter {
             updatedAt: v.updatedAt.toISOString(),
             approvedAt: v.approvedAt?.toISOString(),
           }])
-        )
       };
       const backupJson = JSON.stringify(backup, null, 2);
       // In a real implementation, this would be stored to a backup location

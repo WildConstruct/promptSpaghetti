@@ -74,12 +74,12 @@ export const useConnectionAnnotations = ({)
       : converted;
   }, [edges, state.smartPositioning, autoOptimizePositions]);
   // Add a label to an edge
-  const addLabel = useCallback((;)
+  const addLabel = useCallback((;);
     edgeId: string, 
     label: string, 
     options?: Partial<AnnotatedEdge>
   ) => {
-    const updatedEdges = annotatedEdges.map(edge => ;)
+    const updatedEdges = annotatedEdges.map(edge => ;);
       edge.id === edgeId 
         ? { 
           ...edge, 
@@ -99,7 +99,7 @@ export const useConnectionAnnotations = ({)
   }, [annotatedEdges, onEdgesChange]);
   // Remove label from an edge
   const removeLabel = useCallback((edgeId: string) => {
-    const updatedEdges = annotatedEdges.map(edge =>;)
+    const updatedEdges = annotatedEdges.map(edge =>;);
       edge.id === edgeId 
         ? { ...edge, label: undefined, showLabel: false }
         : edge
@@ -119,7 +119,7 @@ export const useConnectionAnnotations = ({)
   const showAllLabelsToggle = useCallback(() => {
     const newShowAll = !state.showAllLabels;
     setState(prev => ({ ...prev, showAllLabels: newShowAll }));
-    const updatedEdges = annotatedEdges.map(edge => ;)
+    const updatedEdges = annotatedEdges.map(edge => ;);
       edge.label ? { ...edge, showLabel: newShowAll } : edge
     );
     onEdgesChange(updatedEdges);
@@ -127,7 +127,7 @@ export const useConnectionAnnotations = ({)
   // Hide all labels
   const hideAllLabels = useCallback(() => {
     setState(prev => ({ ...prev, showAllLabels: false }));
-    const updatedEdges = annotatedEdges.map(edge => ;)
+    const updatedEdges = annotatedEdges.map(edge => ;);
       edge.label ? { ...edge, showLabel: false } : edge
     );
     onEdgesChange(updatedEdges);
@@ -213,28 +213,28 @@ export const connectionAnnotationPresets = {
     labelStyle: {,
       color: '#4299e1',
       backgroundColor: 'rgba(66, 153, 225, 0.1)',
-      border: '1px solid #4299e1'
+      border: '1px solid #4299e1',
     }
   },
   control: {,
     labelStyle: {,
       color: '#ed8936',
       backgroundColor: 'rgba(237, 137, 54, 0.1)',
-      border: '1px solid #ed8936'
+      border: '1px solid #ed8936',
     }
   },
   dependency: {,
     labelStyle: {,
       color: '#9f7aea',
       backgroundColor: 'rgba(159, 122, 234, 0.1)',
-      border: '1px solid #9f7aea'
+      border: '1px solid #9f7aea',
     }
   },
   error: {,
     labelStyle: {,
       color: '#f56565',
       backgroundColor: 'rgba(245, 101, 101, 0.1)',
-      border: '1px solid #f56565'
+      border: '1px solid #f56565',
     }
   }
 };

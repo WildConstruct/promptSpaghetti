@@ -289,7 +289,7 @@ export class WebVitalsIntegration extends EventEmitter {
     const metric = this.getMetric(name);
     return {
       value: metric?.value || 0,
-      rating: metric?.rating || 'good'
+      rating: metric?.rating || 'good',
     };
   }
   private getDeviceInfo() {

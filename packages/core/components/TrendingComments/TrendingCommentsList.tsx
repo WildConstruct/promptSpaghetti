@@ -135,7 +135,7 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({)
   };
   const renderFilters = () => {
     if (!showFilters) return null;
-    return ()
+    return ();
       <div style={{
         padding: '16px',
         backgroundColor: '#f8fafc',
@@ -213,7 +213,7 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({)
             borderRadius: '6px',
             fontSize: '14px',
             cursor: isLoading ? 'not-allowed' : 'pointer',
-            opacity: isLoading ? 0.7 : 1
+            opacity: isLoading ? 0.7 : 1,
           }}
         >
           🔄 Refresh
@@ -224,13 +224,13 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({)
   const renderAnalytics = () => {
     if (!showAnalytics || !response) return null;
     const summary = response.results.summary;
-    return ()
+    return ();
       <div style={{
         padding: '16px',
         backgroundColor: '#f0f9ff',
         borderRadius: '8px',
         marginBottom: '20px',
-        border: '1px solid #bae6fd'
+        border: '1px solid #bae6fd',
       }}>
         <h4 style={{
           margin: '0 0 12px 0',
@@ -294,7 +294,7 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({)
             <div style={{
               fontSize: '16px',
               fontWeight: '600',
-              color: summary.conversationHealth === 'excellent' ? '#059669' :
+              color: summary.conversationHealth === 'excellent' ? '#059669' :,
                 summary.conversationHealth === 'good' ? '#0891b2' :
                   summary.conversationHealth === 'fair' ? '#d97706' : '#dc2626'
             }}>
@@ -339,14 +339,14 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({)
     );
   };
   if (error) {
-    return ()
+    return ();
       <div style={{
         padding: '40px',
         textAlign: 'center',
         color: '#dc2626',
         backgroundColor: '#fef2f2',
         borderRadius: '8px',
-        border: '1px solid #fecaca'
+        border: '1px solid #fecaca',
       }}>
         <div style={{ fontSize: '18px', marginBottom: '8px' }}>⚠️</div>
         <div>Error loading trending comments: {error}</div>
@@ -367,16 +367,16 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div style={{
       backgroundColor: 'white',
       borderRadius: '12px',
-      border: '1px solid #e5e7eb'
+      border: '1px solid #e5e7eb',
     }}>
       {/* Header */}
       <div style={{
         padding: '20px 24px 16px',
-        borderBottom: '1px solid #e5e7eb'
+        borderBottom: '1px solid #e5e7eb',
       }}>
         <h3 style={{
           margin: '0',
@@ -416,7 +416,7 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({)
               borderTop: '3px solid #3b82f6',
               borderRadius: '50%',
               animation: 'spin 1s linear infinite',
-              margin: '0 auto 16px'
+              margin: '0 auto 16px',
             }}></div>
             Loading trending comments...
           </div>
@@ -456,7 +456,7 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({)
                     borderRadius: '8px',
                     fontSize: '14px',
                     fontWeight: '500',
-                    cursor: isLoading ? 'not-allowed' : 'pointer'
+                    cursor: isLoading ? 'not-allowed' : 'pointer',
                   }}
                 >
                   {isLoading ? 'Loading...' : 'Load More Comments'}

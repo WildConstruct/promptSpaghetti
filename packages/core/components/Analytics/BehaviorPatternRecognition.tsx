@@ -959,7 +959,7 @@ const generateMockSessionBehaviorData = (): SessionBehaviorData => {
           y: Math.random() * 1080,
           width: Math.random() * 200 + 50,
           height: Math.random() * 100 + 20,
-          zIndex: Math.floor(Math.random() * 10)
+          zIndex: Math.floor(Math.random() * 10),
         }
       },
       coordinates: { x: Math.random() * 1920, y: Math.random() * 1080 },
@@ -976,7 +976,7 @@ const generateMockSessionBehaviorData = (): SessionBehaviorData => {
       toUrl: `/page/${Math.floor(Math.random() * 10) + 1}`,}
       timestamp: timestamp + Math.random() * duration,
       method: ['link', 'button', 'form', 'back'][Math.floor(Math.random() * 4)] as NavigationMethod,
-      duration: Math.random() * 3000 + 500
+      duration: Math.random() * 3000 + 500,
     })),
     features: {,
       temporal: {,
@@ -1071,7 +1071,7 @@ const generateMockSessionBehaviorData = (): SessionBehaviorData => {
       user: {,
         userId,
         userType: ['new', 'returning', 'premium'][Math.floor(Math.random() * 3)] as any,
-        sessionHistory: Math.floor(Math.random() * 50)
+        sessionHistory: Math.floor(Math.random() * 50),
       },
       temporal: {,
         dayOfWeek: Math.floor(Math.random() * 7),
@@ -1192,7 +1192,7 @@ export const BehaviorPatternRecognition: React.FC<BehaviorPatternRecognitionProp
       accuracy: '92%',
     };
   }, [mockSessionData, detectedPatterns]);
-  return ()
+  return ();
     <div className="behavior-pattern-recognition">
       <div className="pattern-header">
         <div className="header-section">

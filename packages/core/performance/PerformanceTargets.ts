@@ -362,7 +362,7 @@ export function getAdjustedTargets(config: PerformanceTargetConfig): Record<stri
       ...target,
       target: Math.round(target.target * targetMultiplier),
       warning: Math.round(target.warning * warningMultiplier),
-      critical: Math.round(target.critical * criticalMultiplier)
+      critical: Math.round(target.critical * criticalMultiplier),
     };
   }
   return adjusted;
@@ -387,7 +387,7 @@ export function getTargetsForUserSegment(segment: PerformanceTargetConfig['userS
         ...target,
         target: Math.round(target.target * multiplier),
         warning: Math.round(target.warning * multiplier),
-        critical: Math.round(target.critical * multiplier)
+        critical: Math.round(target.critical * multiplier),
       };
     }
   }
@@ -409,7 +409,6 @@ export function validatePerformanceTargets()
     severity: 'warning' | 'critical';
   }>;
   recommendations: string[];
-} {
   const targets = getAdjustedTargets(config);
   const violations: any[] = [];
   let score = 100;
@@ -482,13 +481,12 @@ export function getPerformanceTargetSummary(): {
   medium: number;
   low: number;
   categories: Record<string, number>;
-  } {
   const targets = Object.values(performanceTargets);
   const businessImpactCounts = {
     critical: targets.filter(t => t.businessImpact.userExperience === 'high' && t.businessImpact.businessValue === 'high').length,
     high: targets.filter(t => t.businessImpact.userExperience === 'high' || t.businessImpact.businessValue === 'high').length,
     medium: targets.filter(t => t.businessImpact.userExperience === 'medium' || t.businessImpact.businessValue === 'medium').length,
-    low: targets.filter(t => t.businessImpact.userExperience === 'low' && t.businessImpact.businessValue === 'low').length
+    low: targets.filter(t => t.businessImpact.userExperience === 'low' && t.businessImpact.businessValue === 'low').length,
   };
   const categories: Record<string, number> = {};
   targets.forEach(target => {)

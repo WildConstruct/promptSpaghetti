@@ -51,7 +51,7 @@ describe('ExemptionManager', () => {
         riskLevel: 'medium',
         mitigations: ['Additional monitoring', 'Time-limited access']
       };
-      const exemptionId = await manager.requestExemption(;)
+      const exemptionId = await manager.requestExemption(;);
         request,
         'admin123',
         'admin@company.com',
@@ -77,9 +77,9 @@ describe('ExemptionManager', () => {
         requestedDuration: 30,
         businessJustification: 'New partner integration',
         riskLevel: 'low',
-        mitigations: ['API monitoring']
+        mitigations: ['API monitoring'],
       };
-      const exemptionId = await manager.requestExemption(;)
+      const exemptionId = await manager.requestExemption(;);
         request,
         'admin123',
         'admin@company.com',
@@ -145,7 +145,7 @@ describe('ExemptionManager', () => {
         requestedDuration: 7,
         businessJustification: 'Critical business function',
         riskLevel: 'medium',
-        mitigations: ['Additional monitoring']
+        mitigations: ['Additional monitoring'],
       };
       exemptionId = await manager.requestExemption()
         request,
@@ -155,7 +155,7 @@ describe('ExemptionManager', () => {
       );
     });
     test('should approve pending exemption', async () => {
-      const approved = await manager.approveExemption(;)
+      const approved = await manager.approveExemption(;);
         exemptionId,
         'approver1',
         'approver@company.com',
@@ -172,7 +172,7 @@ describe('ExemptionManager', () => {
       expect(query.exemptions[0].approvedBy?.comments).toBe('Approved after review');
     });
     test('should deny pending exemption', async () => {
-      const denied = await manager.denyExemption(;)
+      const denied = await manager.denyExemption(;);
         exemptionId,
         'approver1',
         'approver@company.com',
@@ -232,7 +232,7 @@ describe('ExemptionManager', () => {
             maxUsesPerDay: 10,
             maxUsesPerHour: 5,
             currentUsage: 0,
-            resetTime: new Date()
+            resetTime: new Date(),
           }
         }
       };
@@ -256,7 +256,7 @@ describe('ExemptionManager', () => {
         operation: 'api_call',
         requestId: 'req-123',
       };
-      const result = manager.checkExemption(;)
+      const result = manager.checkExemption(;);
         ExemptionType.RATE_LIMITING,
         ExemptionScope.USER,
         'user789',
@@ -270,7 +270,7 @@ describe('ExemptionManager', () => {
         ipAddress: '203.0.113.1', // Not in whitelist
         operation: 'api_call',
       };
-      const result = manager.checkExemption(;)
+      const result = manager.checkExemption(;);
         ExemptionType.RATE_LIMITING,
         ExemptionScope.USER,
         'user789',
@@ -280,7 +280,7 @@ describe('ExemptionManager', () => {
       expect(result.reason).toBe('IP address not in whitelist');
     });
     test('should deny exemption when no active exemption exists', () => {
-      const result = manager.checkExemption(;)
+      const result = manager.checkExemption(;);
         ExemptionType.RATE_LIMITING,
         ExemptionScope.USER,
         'nonexistent-user'
@@ -312,7 +312,7 @@ describe('ExemptionManager', () => {
         manager.checkExemption(ExemptionType.RATE_LIMITING, ExemptionScope.USER, 'user789', context);
       }
       // 11th attempt should be denied
-      const result = manager.checkExemption(;)
+      const result = manager.checkExemption(;);
         ExemptionType.RATE_LIMITING,
         ExemptionScope.USER,
         'user789',
@@ -336,7 +336,7 @@ describe('ExemptionManager', () => {
         mitigations: ['Continuous monitoring'],
         emergencyOverride: true,
       };
-      const exemptionId = await manager.createEmergencyExemption(;)
+      const exemptionId = await manager.createEmergencyExemption(;);
         request,
         'emergency-admin',
         'emergency@company.com',
@@ -420,7 +420,7 @@ describe('ExemptionManager', () => {
       );
     });
     test('should revoke active exemption', () => {
-      const revoked = manager.revokeExemption(;)
+      const revoked = manager.revokeExemption(;);
         activeExemptionId,
         'revoker1',
         'revoker@company.com',

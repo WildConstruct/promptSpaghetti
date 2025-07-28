@@ -47,7 +47,7 @@ export interface MetricCardProps {
   };
   className?: string;
 }
-const formatValue = (;)
+const formatValue = (;);
   value: number | string, 
   format?: string, 
   precision = 0, 
@@ -112,7 +112,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({)
   badge,
   className = ''
 }) => {
-  const formattedValue = formatValue(;)
+  const formattedValue = formatValue(;);
     value.current,
     value.format,
     value.precision,
@@ -135,7 +135,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({)
     error: 'metric-card-error',
     info: 'metric-card-info',
   };
-  return ()
+  return ();
     <div 
       className={`
         metric-card 

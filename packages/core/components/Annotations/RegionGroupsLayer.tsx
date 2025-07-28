@@ -87,7 +87,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
     };
   }, [nodes, groupPreferences.defaultPadding]);
   // Create region group
-  const createRegionGroup = useCallback(;)
+  const createRegionGroup = useCallback(;);
     (bounds: { x: number; y: number; width: number; height: number },)
     nodeIds?: string[]
   ) => {
@@ -117,7 +117,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
       zIndex: regionGroups.length,
       author,
       timestamp: new Date().toISOString(),
-      lastModified: new Date().toISOString()
+      lastModified: new Date().toISOString(),
     };
     onRegionGroupsChange([...regionGroups, newGroup]);
   }, [
@@ -141,7 +141,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
             id: action.groupId || generateGroupId(),
             author,
             timestamp: new Date().toISOString(),
-            lastModified: new Date().toISOString()
+            lastModified: new Date().toISOString(),
           } as RegionGroupType;
           updatedGroups.push(newGroup);
         }
@@ -151,7 +151,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
           updatedGroups[groupIndex] = {
             ...updatedGroups[groupIndex],
             ...action.group,
-            lastModified: new Date().toISOString()
+            lastModified: new Date().toISOString(),
           };
         }
         break;
@@ -169,7 +169,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
               x: action.position.x,
               y: action.position.y,
             },
-            lastModified: new Date().toISOString()
+            lastModified: new Date().toISOString(),
           };
         }
         break;
@@ -178,7 +178,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
           updatedGroups[groupIndex] = {
             ...updatedGroups[groupIndex],
             bounds: action.bounds,
-            lastModified: new Date().toISOString()
+            lastModified: new Date().toISOString(),
           };
         }
         break;
@@ -187,7 +187,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
           updatedGroups[groupIndex] = {
             ...updatedGroups[groupIndex],
             collapsed: true,
-            lastModified: new Date().toISOString()
+            lastModified: new Date().toISOString(),
           };
         }
         break;
@@ -196,7 +196,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
           updatedGroups[groupIndex] = {
             ...updatedGroups[groupIndex],
             collapsed: false,
-            lastModified: new Date().toISOString()
+            lastModified: new Date().toISOString(),
           };
         }
         break;
@@ -208,13 +208,13 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
             ...updatedGroups[groupIndex],
             nodeIds: newNodeIds,
             bounds: calculateGroupBounds(newNodeIds),
-            lastModified: new Date().toISOString()
+            lastModified: new Date().toISOString(),
           };
         }
         break;
       case 'removeNodes':
         if (groupIndex >= 0 && action.nodeIds) {
-          const remainingNodeIds = updatedGroups[groupIndex].nodeIds.filter(;)
+          const remainingNodeIds = updatedGroups[groupIndex].nodeIds.filter(;);
             id => !action.nodeIds!.includes(id)
           );
           if (remainingNodeIds.length === 0) {
@@ -225,7 +225,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
               ...updatedGroups[groupIndex],
               nodeIds: remainingNodeIds,
               bounds: calculateGroupBounds(remainingNodeIds),
-              lastModified: new Date().toISOString()
+              lastModified: new Date().toISOString(),
             };
           }
         }
@@ -286,7 +286,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
     const group = regionGroups.find(g => g.id === groupId);
     return group ? group.nodeIds.length : 0;
   }, [regionGroups]);
-  return ()
+  return ();
     <>
       <div
         ref={layerRef}
@@ -336,7 +336,7 @@ export const RegionGroupsLayer: React.FC<RegionGroupsLayerProps> = ({)
               pointerEvents: 'all',
               zIndex: 2000,
               opacity: 0.7,
-              transition: 'opacity 0.3s ease'
+              transition: 'opacity 0.3s ease',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.opacity = '1';

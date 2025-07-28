@@ -1,6 +1,5 @@
 /**
 import { Activity, TrendingUp } from 'lucide-react';
-
  * Data Protection & Privacy Controls Dashboard (Epic 19)
  * 
  * Comprehensive dashboard for managing data retention automation, deletion workflows,
@@ -14,7 +13,6 @@ import { Activity, TrendingUp } from 'lucide-react';
  * - Real-time status monitoring
  * - GDPR/HIPAA/SOX compliance tracking
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Shield,
@@ -31,28 +29,27 @@ import {
   Activity,
   TrendingUp
 } from 'lucide-react';
-
 interface DataProtectionMetrics {
-  retentionPolicies: {
+  retentionPolicies: {,
     total: number;
     active: number;
     expired: number;
     violations: number;
   };
-  deletionWorkflows: {
+  deletionWorkflows: {,
     total: number;
     running: number;
     completed: number;
     failed: number;
     scheduled: number;
   };
-  dataVolume: {
+  dataVolume: {,
     totalSize: number;
     archivedSize: number;
     pendingDeletion: number;
     recentlyDeleted: number;
   };
-  compliance: {
+  compliance: {,
     gdprScore: number;
     hipaaScore: number;
     soxScore: number;
@@ -61,7 +58,6 @@ interface DataProtectionMetrics {
     lastAudit: string;
   };
 }
-
 interface RetentionPolicy {
   id: string;
   name: string;
@@ -77,7 +73,6 @@ interface RetentionPolicy {
   nextExecution: string;
   affectedRecords: number;
 }
-
 interface DeletionWorkflow {
   id: string;
   name: string;
@@ -92,7 +87,6 @@ interface DeletionWorkflow {
   policyId: string;
   errors: string[];
 }
-
 interface ComplianceViolation {
   id: string;
   type: 'retention_exceeded' | 'deletion_failed' | 'access_violation' | 'audit_failed';
@@ -104,9 +98,7 @@ interface ComplianceViolation {
   framework: string;
   remediation?: string;
 }
-
 type DashboardTab = 'overview' | 'policies' | 'workflows' | 'compliance' | 'analytics' | 'audit';
-
 const DataProtectionDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
   const [metrics, setMetrics] = useState<DataProtectionMetrics | null>(null);
@@ -116,7 +108,6 @@ const DataProtectionDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
-
   // Filters and search
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_searchTerm, _setSearchTerm] = useState('');
@@ -125,11 +116,10 @@ const DataProtectionDashboard: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_frameworkFilter, _setFrameworkFilter] = useState<string>('all');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_dateRange, _setDateRange] = useState<{ start: string; end: string }>({
+  const [_dateRange, _setDateRange] = useState<{ start: string; end: string }>({)
     start: '',
-    end: ''
+    end: '',
   });
-
   // Modal states
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_showCreatePolicy, _setShowCreatePolicy] = useState(false);
@@ -139,74 +129,62 @@ const DataProtectionDashboard: React.FC = () => {
   const [_selectedPolicy, _setSelectedPolicy] = useState<RetentionPolicy | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_selectedWorkflow, _setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
-
   // Fetch dashboard data
   const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
-      const [metricsRes, policiesRes, workflowsRes, violationsRes] = await Promise.all([
-        fetch('/api/data-protection/metrics', {
+      const [metricsRes, policiesRes, workflowsRes, violationsRes] = await Promise.all([)
+        fetch('/api/data-protection/metrics', {)
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/data-protection/policies', {
+        fetch('/api/data-protection/policies', {)
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/data-protection/workflows', {
+        fetch('/api/data-protection/workflows', {)
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('/api/data-protection/violations', {
+        fetch('/api/data-protection/violations', {)
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         })
       ]);
-
       if (!metricsRes.ok || !policiesRes.ok || !workflowsRes.ok || !violationsRes.ok) {
         throw new Error('Failed to fetch dashboard data');
       }
-
-      const [metricsData, policiesData, workflowsData, violationsData] = await Promise.all([
+      const [metricsData, policiesData, workflowsData, violationsData] = await Promise.all([)
         metricsRes.json(),
         policiesRes.json(),
         workflowsRes.json(),
         violationsRes.json()
       ]);
-
       setMetrics(metricsData);
       setRetentionPolicies(policiesData.policies || []);
       setDeletionWorkflows(workflowsData.workflows || []);
       setComplianceViolations(violationsData.violations || []);
       setLastRefresh(new Date());
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
     } finally {
       setLoading(false);
     }
   }, []);
-
   useEffect(() => {
     fetchDashboardData();
-    
     // Set up auto-refresh for real-time updates
-    const interval = setInterval(fetchDashboardData, 30000); // 30 seconds
+    const interval = setInterval(fetchDashboardData, 30000); // 30 seconds;
     return () => clearInterval(interval);
   }, [fetchDashboardData]);
-
   // Helper functions
   const formatBytes = (bytes: number): string => {
     const units = ['B', 'KB', 'MB', 'GB', 'TB'];
     let size = bytes;
     let unitIndex = 0;
-    
     while (size >= 1024 && unitIndex < units.length - 1) {
       size /= 1024;
       unitIndex++;
     }
-    
-    return `${size.toFixed(1)} ${units[unitIndex]}`;
+    return `${size.toFixed(1)} ${units[unitIndex]}`;}
   };
-
   const formatTimeAgo = (dateString: string): string => {
     const date = new Date(dateString);
     const now = new Date();
@@ -214,20 +192,17 @@ const DataProtectionDashboard: React.FC = () => {
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
-
     if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    return `${diffDays}d ago`;
+    if (diffMins < 60) return `${diffMins}m ago`;}
+    if (diffHours < 24) return `${diffHours}h ago`;}
+    return `${diffDays}d ago`;}
   };
-
   const getComplianceScoreColor = (score: number): string => {
     if (score >= 90) return 'text-green-600';
     if (score >= 75) return 'text-yellow-600';
     if (score >= 50) return 'text-orange-600';
     return 'text-red-600';
   };
-
   const getSeverityBadgeClass = (severity: string): string => {
     switch (severity) {
     case 'critical': return 'bg-red-100 text-red-800 border-red-200';
@@ -237,7 +212,6 @@ const DataProtectionDashboard: React.FC = () => {
     default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-
   const getStatusBadgeClass = (status: string): string => {
     switch (status) {
     case 'active':
@@ -256,9 +230,8 @@ const DataProtectionDashboard: React.FC = () => {
       return 'bg-gray-100 text-gray-800';
     }
   };
-
   if (loading && !metrics) {
-    return (
+    return ()
       <div className="flex items-center justify-center min-h-96">
         <div className="flex flex-col items-center space-y-4">
           <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
@@ -267,9 +240,8 @@ const DataProtectionDashboard: React.FC = () => {
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="flex items-center justify-center min-h-96">
         <div className="flex flex-col items-center space-y-4 text-center max-w-md">
           <AlertTriangle className="w-12 h-12 text-red-500" />
@@ -286,8 +258,7 @@ const DataProtectionDashboard: React.FC = () => {
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="data-protection-dashboard space-y-6">
       {/* Dashboard Header */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -303,7 +274,6 @@ const DataProtectionDashboard: React.FC = () => {
               </p>
             </div>
           </div>
-          
           <div className="flex items-center space-x-3">
             <div className="text-right">
               <p className="text-sm text-gray-500">Last Updated</p>
@@ -316,14 +286,13 @@ const DataProtectionDashboard: React.FC = () => {
               disabled={loading}
               className="btn btn-secondary"
             >
-              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />}
               Refresh
             </button>
           </div>
         </div>
-
         {/* Key Metrics Summary */}
-        {metrics && (
+        {metrics && ()
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
             <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
               <div className="flex items-center justify-between">
@@ -335,7 +304,6 @@ const DataProtectionDashboard: React.FC = () => {
                 <Database className="w-8 h-8 text-blue-600" />
               </div>
             </div>
-
             <div className="bg-green-50 rounded-lg p-4 border border-green-100">
               <div className="flex items-center justify-between">
                 <div>
@@ -348,7 +316,6 @@ const DataProtectionDashboard: React.FC = () => {
                 <Activity className="w-8 h-8 text-green-600" />
               </div>
             </div>
-
             <div className="bg-purple-50 rounded-lg p-4 border border-purple-100">
               <div className="flex items-center justify-between">
                 <div>
@@ -363,12 +330,11 @@ const DataProtectionDashboard: React.FC = () => {
                 <BarChart3 className="w-8 h-8 text-purple-600" />
               </div>
             </div>
-
             <div className="bg-orange-50 rounded-lg p-4 border border-orange-100">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-orange-600">Compliance Score</p>
-                  <p className={`text-2xl font-bold ${getComplianceScoreColor(metrics.compliance.overallScore)}`}>
+                  <p className={`text-2xl font-bold ${getComplianceScoreColor(metrics.compliance.overallScore)}`}>}
                     {metrics.compliance.overallScore}%
                   </p>
                   <p className="text-xs text-orange-700">
@@ -381,7 +347,6 @@ const DataProtectionDashboard: React.FC = () => {
           </div>
         )}
       </div>
-
       {/* Tab Navigation */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200">
         <div className="border-b border-gray-200">
@@ -393,7 +358,7 @@ const DataProtectionDashboard: React.FC = () => {
               { key: 'compliance', label: 'Compliance', icon: Shield },
               { key: 'analytics', label: 'Analytics', icon: TrendingUp },
               { key: 'audit', label: 'Audit Trail', icon: FileText }
-            ].map(({ key, label, icon: Icon }) => (
+            ].map(({ key, label, icon: Icon }) => ()
               <button
                 key={key}
                 onClick={() => setActiveTab(key as DashboardTab)}
@@ -409,10 +374,9 @@ const DataProtectionDashboard: React.FC = () => {
             ))}
           </nav>
         </div>
-
         {/* Tab Content */}
         <div className="p-6">
-          {activeTab === 'overview' && (
+          {activeTab === 'overview' && ()
             <div className="space-y-6">
               {/* Recent Activity */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -422,10 +386,10 @@ const DataProtectionDashboard: React.FC = () => {
                     Recent Policy Activities
                   </h3>
                   <div className="space-y-3">
-                    {retentionPolicies.slice(0, 5).map(policy => (
+                    {retentionPolicies.slice(0, 5).map(policy => ()
                       <div key={policy.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div className="flex items-center space-x-3">
-                          <div className={`w-2 h-2 rounded-full ${getStatusBadgeClass(policy.status).includes('green') ? 'bg-green-400' : 'bg-gray-400'}`} />
+                          <div className={`w-2 h-2 rounded-full ${getStatusBadgeClass(policy.status).includes('green') ? 'bg-green-400' : 'bg-gray-400'}`} />}
                           <div>
                             <p className="font-medium text-gray-900">{policy.name}</p>
                             <p className="text-sm text-gray-600">
@@ -433,32 +397,31 @@ const DataProtectionDashboard: React.FC = () => {
                             </p>
                           </div>
                         </div>
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadgeClass(policy.status)}`}>
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadgeClass(policy.status)}`}>}
                           {policy.status}
                         </span>
                       </div>
                     ))}
                   </div>
                 </div>
-
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold text-gray-900 flex items-center">
                     <Activity className="w-5 h-5 mr-2 text-gray-600" />
                     Active Workflows
                   </h3>
                   <div className="space-y-3">
-                    {deletionWorkflows.slice(0, 5).map(workflow => (
+                    {deletionWorkflows.slice(0, 5).map(workflow => ()
                       <div key={workflow.id} className="p-3 bg-gray-50 rounded-lg">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center space-x-3">
-                            <div className={`w-2 h-2 rounded-full ${workflow.status === 'running' ? 'bg-blue-400' : 'bg-gray-400'}`} />
+                            <div className={`w-2 h-2 rounded-full ${workflow.status === 'running' ? 'bg-blue-400' : 'bg-gray-400'}`} />}
                             <p className="font-medium text-gray-900">{workflow.name}</p>
                           </div>
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadgeClass(workflow.status)}`}>
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusBadgeClass(workflow.status)}`}>}
                             {workflow.status}
                           </span>
                         </div>
-                        {workflow.progress > 0 && (
+                        {workflow.progress > 0 && ()
                           <div className="mt-2">
                             <div className="flex justify-between text-xs text-gray-600 mb-1">
                               <span>Progress</span>
@@ -477,9 +440,8 @@ const DataProtectionDashboard: React.FC = () => {
                   </div>
                 </div>
               </div>
-
               {/* Compliance Violations */}
-              {complianceViolations.length > 0 && (
+              {complianceViolations.length > 0 && ()
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 flex items-center mb-4">
                     <AlertTriangle className="w-5 h-5 mr-2 text-red-600" />
@@ -487,11 +449,11 @@ const DataProtectionDashboard: React.FC = () => {
                   </h3>
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                     <div className="space-y-3">
-                      {complianceViolations.slice(0, 3).map(violation => (
+                      {complianceViolations.slice(0, 3).map(violation => ()
                         <div key={violation.id} className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center space-x-2 mb-1">
-                              <span className={`px-2 py-1 text-xs font-medium rounded border ${getSeverityBadgeClass(violation.severity)}`}>
+                              <span className={`px-2 py-1 text-xs font-medium rounded border ${getSeverityBadgeClass(violation.severity)}`}>}
                                 {violation.severity}
                               </span>
                               <span className="text-sm text-gray-600">{violation.framework}</span>
@@ -512,9 +474,8 @@ const DataProtectionDashboard: React.FC = () => {
               )}
             </div>
           )}
-
           {/* Placeholder content for other tabs */}
-          {activeTab !== 'overview' && (
+          {activeTab !== 'overview' && ()
             <div className="text-center py-12">
               <div className="max-w-md mx-auto">
                 <div className="p-4 bg-gray-100 rounded-full w-fit mx-auto mb-4">

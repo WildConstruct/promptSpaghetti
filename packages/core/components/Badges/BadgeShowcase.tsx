@@ -107,7 +107,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
     default: return 'rarity-common';
     }
   };
-  const renderOverview = () => (;)
+  const renderOverview = () => (;);
     <div className="badge-overview">
       <div className="overview-stats">
         <Card className="stat-card level-card">
@@ -192,12 +192,12 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
       )}
     </div>
   );
-  const renderBadgeGrid = (badges: unknown[]) => (;)
+  const renderBadgeGrid = (badges: unknown[]) => (;);
     <div className="badge-grid">
       {badges.map((badge, index) => {
         const isUnlocked = userBadges.some(ub => ub.badgeId === badge.id);
         const progress = getBadgeProgress(badge.id);
-        return ()
+        return ();
           <Card key={badge.id} className={`badge-card ${isUnlocked ? 'unlocked' : 'locked'} ${getTierColor(badge.tier)}`}>}
             <CardContent className="badge-content">
               <div className="badge-header">
@@ -255,7 +255,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
   );
   const renderNotifications = () => {
     if (recentUnlocks.length === 0) return null;
-    return ()
+    return ();
       <Card className="badge-notifications">
         <CardHeader>
           <div className="notifications-header">
@@ -277,7 +277,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
             {recentUnlocks.map((unlock, index) => {
               const badge = availableBadges.find(b => b.id === unlock.badgeId);
               if (!badge) return null;
-              return ()
+              return ();
                 <div key={index} className="notification-item">
                   <div className="notification-content">
                     <div className="notification-badge">
@@ -313,7 +313,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
   const renderNextBadges = () => {
     const nextBadges = getNextBadges(6);
     if (nextBadges.length === 0) return null;
-    return ()
+    return ();
       <Card className="next-badges">
         <CardHeader>
           <CardTitle>
@@ -378,7 +378,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
     return filtered;
   };
   if (isLoading) {
-    return ()
+    return ();
       <div className="badge-showcase loading">
         <div className="loading-spinner"></div>
         <p>Loading badges...</p>
@@ -386,7 +386,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
     );
   }
   if (variant === 'minimal') {
-    return ()
+    return ();
       <div className={`badge-showcase minimal ${className}`}>}
         <div className="minimal-stats">
           <div className="mini-stat">
@@ -406,7 +406,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
     );
   }
   if (variant === 'compact') {
-    return ()
+    return ();
       <div className={`badge-showcase compact ${className}`}>}
         <Card>
           <CardHeader>
@@ -432,7 +432,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
                 {userBadges.slice(0, 5).map(badge => {)
                   const badgeData = availableBadges.find(b => b.id === badge.badgeId);
                   if (!badgeData) return null;
-                  return ()
+                  return ();
                     <div key={badge.badgeId} className="recent-badge-mini">
                       {getBadgeIcon(badgeData.icon)}
                     </div>
@@ -445,7 +445,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`badge-showcase full ${className}`}>}
       <div className="showcase-header">
         <h2>Badges & Achievements</h2>

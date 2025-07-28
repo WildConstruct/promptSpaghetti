@@ -36,7 +36,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({)
     category: initialData.category || 'general',
     tags: initialData.tags || [],
     isPublic: initialData.isPublic || false,
-    includeAnnotations: initialData.includeAnnotations ?? true
+    includeAnnotations: initialData.includeAnnotations ?? true,
   });
   const [tagInput, setTagInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -106,7 +106,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({)
     }
   }, [isLoading, onClose]);
   if (!isOpen) return null;
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 0,
@@ -270,7 +270,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({)
                     borderRadius: '4px',
                     fontSize: '13px',
                     cursor: isLoading || !tagInput.trim() ? 'not-allowed' : 'pointer',
-                    opacity: isLoading || !tagInput.trim() ? 0.5 : 1
+                    opacity: isLoading || !tagInput.trim() ? 0.5 : 1,
                   }}
                 >
                   Add
@@ -364,7 +364,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({)
             justifyContent: 'flex-end',
             gap: '12px',
             paddingTop: '16px',
-            borderTop: '1px solid #e5e7eb'
+            borderTop: '1px solid #e5e7eb',
           }}>
             <button
               type="button"
@@ -378,7 +378,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({)
                 borderRadius: '6px',
                 fontSize: '14px',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
-                opacity: isLoading ? 0.5 : 1
+                opacity: isLoading ? 0.5 : 1,
               }}
             >
               Cancel
@@ -394,9 +394,9 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({)
                 borderRadius: '6px',
                 fontSize: '14px',
                 fontWeight: '500',
-                cursor: (isLoading || !formData.name.trim() || !formData.description.trim()) 
+                cursor: (isLoading || !formData.name.trim() || !formData.description.trim()) ,
                   ? 'not-allowed' : 'pointer',
-                opacity: (isLoading || !formData.name.trim() || !formData.description.trim()) 
+                opacity: (isLoading || !formData.name.trim() || !formData.description.trim()) ,
                   ? 0.5 : 1
               }}
             >

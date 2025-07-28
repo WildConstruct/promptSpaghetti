@@ -72,7 +72,7 @@ describe('Advanced I/O System', () => {
     });
     describe('Input Validation', () => {
       it('should validate valid inputs', () => {
-        const inputs = new Map<string, any>([;)
+        const inputs = new Map<string, any>([;);
           ['title', 'Test Title'],
           ['count', 3],
           ['mode', 'fast']
@@ -82,7 +82,7 @@ describe('Advanced I/O System', () => {
         expect(result.errors).toHaveLength(0);
       });
       it('should detect missing required inputs', () => {
-        const inputs = new Map<string, any>([;)
+        const inputs = new Map<string, any>([;);
           ['count', 3],
           ['mode', 'fast']
           // Missing required 'title'
@@ -92,7 +92,7 @@ describe('Advanced I/O System', () => {
         expect(result.errors).toContain('Required input \'Title\' (title) is missing');
       });
       it('should validate input constraints', () => {
-        const inputs = new Map<string, any>([;)
+        const inputs = new Map<string, any>([;);
           ['title', 'Test Title'],
           ['count', 15], // Exceeds max of 10
           ['mode', 'invalid'] // Not in allowed values
@@ -103,7 +103,7 @@ describe('Advanced I/O System', () => {
         expect(result.errors).toContain('Value \'invalid\' is not in allowed values: fast, slow');
       });
       it('should handle optional inputs with defaults', () => {
-        const inputs = new Map<string, any>([;)
+        const inputs = new Map<string, any>([;);
           ['title', 'Test Title']
           // Missing optional 'count' and 'mode' - should use defaults
         ]);
@@ -113,7 +113,7 @@ describe('Advanced I/O System', () => {
     });
     describe('Input Resolution', () => {
       it('should resolve connected inputs', () => {
-        const connectedInputs = new Map<string, any>([;)
+        const connectedInputs = new Map<string, any>([;);
           ['title', 'Connected Title'],
           ['count', 7],
           ['mode', 'slow']
@@ -128,7 +128,7 @@ describe('Advanced I/O System', () => {
         expect(resolved.metadata.get('mode')?.source).toBe('connection');
       });
       it('should use defaults for missing optional inputs', () => {
-        const connectedInputs = new Map<string, any>([;)
+        const connectedInputs = new Map<string, any>([;);
           ['title', 'Title Only']
           // Missing count and mode
         ]);
@@ -142,7 +142,7 @@ describe('Advanced I/O System', () => {
         expect(resolved.metadata.get('mode')?.source).toBe('default');
       });
       it('should perform type coercion with warnings', () => {
-        const connectedInputs = new Map<string, any>([;)
+        const connectedInputs = new Map<string, any>([;);
           ['title', 'Valid Title'],
           ['count', '8'], // String instead of number
           ['mode', 'fast']
@@ -159,7 +159,7 @@ describe('Advanced I/O System', () => {
     });
     describe('Output Validation', () => {
       it('should validate valid outputs', () => {
-        const outputs = new Map<string, any>([;)
+        const outputs = new Map<string, any>([;);
           ['result', 'Valid Result String']
         ]);
         const result = ioHandler.validateOutputs(outputs);
@@ -167,7 +167,7 @@ describe('Advanced I/O System', () => {
         expect(result.errors).toHaveLength(0);
       });
       it('should detect invalid output types', () => {
-        const outputs = new Map<string, any>([;)
+        const outputs = new Map<string, any>([;);
           ['result', 12345] // Number instead of string
         ]);
         const result = ioHandler.validateOutputs(outputs);
@@ -377,7 +377,7 @@ describe('Advanced I/O System', () => {
       handler = new AdvancedIOHandler(spec);
     });
     it('should validate all data types correctly', () => {
-      const validInputs = new Map<string, any>([;)
+      const validInputs = new Map<string, any>([;);
         ['str', 'hello'],
         ['num', 42],
         ['bool', true],
@@ -392,7 +392,7 @@ describe('Advanced I/O System', () => {
       expect(result.errors).toHaveLength(0);
     });
     it('should detect invalid data types', () => {
-      const invalidInputs = new Map<string, any>([;)
+      const invalidInputs = new Map<string, any>([;);
         ['str', 123], // Number instead of string
         ['num', 'not-a-number'], // String instead of number
         ['bool', 'not-a-boolean'], // String instead of boolean

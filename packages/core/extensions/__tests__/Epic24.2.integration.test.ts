@@ -198,7 +198,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
           await extensionSystem.loader.unloadPlugin('failing-extension');
           extensionSystem.eventSystem.emit('extensionInstallFailed', {)
             extensionId: 'failing-extension',
-            error: (error as Error).message
+            error: (error as Error).message,
           });
           throw error;
         }
@@ -250,7 +250,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       extensionSystem.installMultiple.mockImplementationOnce(async (sources: string[]) => {
         const results: Array<{source: string, success: boolean, error?: string}> = [];
         // Load all extensions first
-        const plugins = await Promise.all(;)
+        const plugins = await Promise.all(;);
           sources.map(async (source, index) => {
             const plugin = mockExtensions[index];
             await extensionSystem.loader.loadPlugin(source);
@@ -271,7 +271,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
             results.push({)
               source: `/plugins/${plugin.id}`,}
               success: false,
-              error: (error as Error).message
+              error: (error as Error).message,
             });
           }
         }
@@ -343,12 +343,12 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
           extensionSystem.eventSystem.emit('dependencyConflict', {)
             conflict: 'shared-lib',
             extensions: ['old-extension', 'new-extension'],
-            error: (error as Error).message
+            error: (error as Error).message,
           });
           return plugins.map(p => ({)
             source: `/plugins/${p.id}`,}
             success: false,
-            error: (error as Error).message
+            error: (error as Error).message,
           }));
         }
       });
@@ -496,7 +496,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
             extensionSystem.eventSystem.emit('installProgress', {)
               completed: i + 1,
               total: extensions.length,
-              percentage: Math.round(((i + 1) / extensions.length) * 100)
+              percentage: Math.round(((i + 1) / extensions.length) * 100),
             });
           }
         }
@@ -537,7 +537,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
           systemHealth.errors++;
           extensionSystem.eventSystem.emit('extensionError', {)
             extensionId: id,
-            error: 'Extension crashed during activation'
+            error: 'Extension crashed during activation',
           });
           throw new Error('Extension crashed during activation');
         }
@@ -546,7 +546,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
         return true;
       });
       // Try to enable all extensions
-      const results = await Promise.allSettled([;)
+      const results = await Promise.allSettled([;);
         ...stableExtensions.map(id => extensionSystem.enableExtension(id)),
         ...faultyExtensions.map(id => extensionSystem.enableExtension(id))
       ]);
@@ -683,7 +683,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       expect(progressEvents.length).toBeGreaterThan(0);
       const verifyEvents = systemEvents.filter(e => e.type === 'verifyingSignature');
       expect(verifyEvents).toHaveLength(2);
-      const installEvents = systemEvents.filter(e => ;)
+      const installEvents = systemEvents.filter(e => ;);
         e.type === 'extensionInstalled' && e.data.source === 'marketplace'
       );
       expect(installEvents).toHaveLength(2);

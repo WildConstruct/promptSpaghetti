@@ -274,12 +274,11 @@ export enum ExtensionErrorType {
 
 // Extension Error
 export class ExtensionError extends Error {
-  constructor()
+  constructor();
     public readonly type: ExtensionErrorType,
     public readonly extensionId: string,
     message: string,
     public readonly cause?: Error
-  ) {
     super(message);
     this.name = 'ExtensionError';
   }

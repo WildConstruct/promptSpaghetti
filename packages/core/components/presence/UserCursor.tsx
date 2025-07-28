@@ -30,7 +30,7 @@ export const UserCursor: React.FC<UserCursorProps> = ({)
   if (!visible) return null;
   const cursorColor = color || getUserColor(userId);
   const displayName = userName || userId;
-  return ()
+  return ();
     <div
       className={`absolute pointer-events-none z-50 transition-all duration-200 ${className}`}
       style={{
@@ -107,7 +107,7 @@ export const UserCursorOverlay: React.FC<UserCursorOverlayProps> = ({)
   showLabels = true,
   className = ''
 }) => {
-  return ()
+  return ();
     <div className={`absolute inset-0 pointer-events-none ${className}`}>}
       {cursors.map(cursor => ()
         <UserCursor
@@ -147,13 +147,13 @@ export const UserSelection: React.FC<UserSelectionProps> = ({)
   showLabel = false
 }) => {
   const selectionColor = color || getUserColor(userId);
-  return ()
+  return ();
     <>
       {nodeIds.map(nodeId => {)
         const nodeElement = document.querySelector(`[data-id="${nodeId}"]`);}
         if (!nodeElement) return null;
         const rect = nodeElement.getBoundingClientRect();
-        return ()
+        return ();
           <div
             key={`${userId}-${nodeId}`}
             className="absolute pointer-events-none border-2 rounded"
@@ -203,7 +203,7 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({)
     : userNames.length === 2
       ? `${userNames[0]} and ${userNames[1]} are typing...`}
       : `${userNames[0]} and ${userNames.length - 1} others are typing...`;}
-  return ()
+  return ();
     <div className={`flex items-center space-x-2 text-sm text-gray-600 ${className}`}>}
       <div className="flex space-x-1">
         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />

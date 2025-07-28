@@ -153,9 +153,9 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       unit: '%',
       trend: securityAnalytics.performanceAnalytics.systemHealth.overallScore > 85 ? 'up' : 'down',
       trendValue: 2.3,
-      status: securityAnalytics.performanceAnalytics.systemHealth.overallScore > 90 ? 'good' : 
+      status: securityAnalytics.performanceAnalytics.systemHealth.overallScore > 90 ? 'good' : ,
              securityAnalytics.performanceAnalytics.systemHealth.overallScore > 75 ? 'warning' : 'critical',
-      description: 'Overall system health and performance score'
+      description: 'Overall system health and performance score',
     });
     // Threat Level Card
     const threatLevelMap = {
@@ -172,7 +172,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       trend: 'stable',
       trendValue: 0,
       status: currentThreat.color as 'good' | 'warning' | 'critical',
-      description: 'Current system threat assessment level'
+      description: 'Current system threat assessment level',
     });
     // Capacity Utilization Card
     cards.push({)
@@ -182,9 +182,9 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       unit: '%',
       trend: securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity > 80 ? 'up' : 'stable',
       trendValue: 5.2,
-      status: securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity > 85 ? 'critical' : 
+      status: securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity > 85 ? 'critical' : ,
              securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity > 70 ? 'warning' : 'good',
-      description: 'Current system capacity utilization'
+      description: 'Current system capacity utilization',
     });
     // Revenue Impact Card
     cards.push({)
@@ -195,7 +195,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       trend: 'up',
       trendValue: 12.8,
       status: securityAnalytics.businessIntelligence.revenueImpact.securityROI > 200 ? 'good' : 'warning',
-      description: 'Return on investment from security measures'
+      description: 'Return on investment from security measures',
     });
     // Attack Patterns Card
     cards.push({)
@@ -204,9 +204,9 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       value: securityAnalytics.threatAnalysis.attackPatterns.length,
       trend: securityAnalytics.threatAnalysis.attackPatterns.length > 2 ? 'up' : 'stable',
       trendValue: securityAnalytics.threatAnalysis.attackPatterns.length,
-      status: securityAnalytics.threatAnalysis.attackPatterns.length > 3 ? 'critical' : 
+      status: securityAnalytics.threatAnalysis.attackPatterns.length > 3 ? 'critical' : ,
              securityAnalytics.threatAnalysis.attackPatterns.length > 1 ? 'warning' : 'good',
-      description: 'Number of detected attack patterns'
+      description: 'Number of detected attack patterns',
     });
     // Response Time SLA Card
     cards.push({)
@@ -216,9 +216,9 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       unit: '%',
       trend: securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance > 95 ? 'up' : 'down',
       trendValue: -1.2,
-      status: securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance > 95 ? 'good' : 
+      status: securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance > 95 ? 'good' : ,
              securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance > 85 ? 'warning' : 'critical',
-      description: 'Response time SLA compliance percentage'
+      description: 'Response time SLA compliance percentage',
     });
     return cards;
   }, [securityAnalytics]);
@@ -310,7 +310,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
   // ========================================
   // Render Helpers
   // ========================================
-  const renderMetricCard = (metric: MetricCard) => (;)
+  const renderMetricCard = (metric: MetricCard) => (;);
     <div
       key={metric.id}
       className={`
@@ -364,7 +364,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       </div>
     </div>
   );
-  const renderAlertPanel = () => (;)
+  const renderAlertPanel = () => (;);
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
       <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
         <h3 className="text-lg font-medium text-gray-900 dark:text-white">
@@ -451,7 +451,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
   );
   const renderThreatAnalysis = () => {
     if (!securityAnalytics) return null;
-    return ()
+    return ();
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Attack Patterns */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
@@ -549,7 +549,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
   };
   const renderPredictiveInsights = () => {
     if (!predictiveInsights || !showAdvancedFeatures) return null;
-    return ()
+    return ();
       <div className="space-y-6">
         {/* Threat Predictions */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
@@ -650,7 +650,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       </div>
     );
   };
-  const renderControls = () => (;)
+  const renderControls = () => (;);
     <div className="flex items-center justify-between mb-6">
       <div className="flex items-center space-x-4">
         {/* View Selector */}
@@ -718,7 +718,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
   // Main Render
   // ========================================
   if (error) {
-    return ()
+    return ();
       <div className={`p-8 ${className}`}>}
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
           <h2 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
@@ -736,7 +736,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
     );
   }
   if (isLoading && !securityAnalytics) {
-    return ()
+    return ();
       <div className={`p-8 ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
@@ -747,7 +747,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`p-6 ${className} ${theme === 'dark' ? 'dark' : ''}`}>}
       <div className="max-w-7xl mx-auto">
         {/* Header */}

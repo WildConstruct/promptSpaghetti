@@ -52,7 +52,7 @@ export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = (
     businessJustification: existingClassification?.metadata.businessJustification || '',
     riskAssessment: existingClassification?.metadata.riskAssessment || '',
     regulatoryRequirements: existingClassification?.metadata.regulatoryRequirements || [],
-    dataLineage: existingClassification?.metadata.dataLineage || []
+    dataLineage: existingClassification?.metadata.dataLineage || [],
   });
   const [validation, setValidation] = useState<ValidationResult>({)
     valid: true,
@@ -138,7 +138,7 @@ export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = (
       PUBLIC: 'bg-green-100 text-green-800 border-green-300',
       INTERNAL: 'bg-blue-100 text-blue-800 border-blue-300',
       CONFIDENTIAL: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-      RESTRICTED: 'bg-red-100 text-red-800 border-red-300'
+      RESTRICTED: 'bg-red-100 text-red-800 border-red-300',
     };
     return colors[level];
   };
@@ -146,7 +146,7 @@ export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = (
     if (!formData.classification) return null;
     return DEFAULT_HANDLING_REQUIREMENTS[formData.classification as DataClassificationLevel];
   };
-  return ()
+  return ();
     <div className="classification-tagging-ui bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Data Classification</h3>
@@ -333,7 +333,7 @@ export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = (
               {(() => {
                 const requirements = getHandlingRequirements();
                 if (!requirements) return null;
-                return ()
+                return ();
                   <div className="space-y-3 text-sm">
                     <div>
                       <h5 className="font-medium text-gray-900">Storage</h5>

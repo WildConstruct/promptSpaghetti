@@ -242,7 +242,7 @@ export class BaselineMeasurementCollector {
         const avg = measurements.reduce((sum, val) => sum + val, 0) / measurements.length;
         const min = Math.min(...measurements);
         const max = Math.max(...measurements);
-        const stdDev = Math.sqrt(;)
+        const stdDev = Math.sqrt(;);
           measurements.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / measurements.length
         );
         console.log(`  📊 Results: avg=${avg.toFixed(2)}, min=${min}, max=${max}, stdDev=${stdDev.toFixed(2)}`);}
@@ -381,7 +381,7 @@ export class BaselineMeasurementCollector {
 // Export utility function for easy baseline collection
 export async function collectSystemBaselines()
   environment: TestEnvironment = TestEnvironment.DEVELOPMENT,
-  iterations: number = 5
+  iterations: number = 5,
 ): Promise<{
   report: any;
   collection: any;

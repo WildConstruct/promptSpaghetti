@@ -261,7 +261,7 @@ export declare class KeyManagementService extends EventEmitter {
     /**
      * Derive a key from a parent key
      */
-    deriveKey()
+    deriveKey();
       parentKeyId: string,
       derivationParams: KeyDerivationParameters,
       requesterId: string,

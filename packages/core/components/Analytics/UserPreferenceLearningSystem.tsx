@@ -130,7 +130,7 @@ const generateUserPreferenceProfile = (): UserPreferenceProfile => ({)
       'content_complexity': Math.random() * 0.3 + 0.7,
       'visual_style': Math.random() * 0.3 + 0.7
     },
-    temporal: Math.random() * 0.2 + 0.8
+    temporal: Math.random() * 0.2 + 0.8,
   },
   lastUpdated: Date.now(),
 });
@@ -142,7 +142,7 @@ const generatePreferenceModel = (): PreferenceModel => ({)
     layers: Math.floor(Math.random() * 5) + 3,
     parameters: Math.floor(Math.random() * 1000000) + 100000,
     inputDimensions: Math.floor(Math.random() * 100) + 50,
-    outputDimensions: Math.floor(Math.random() * 50) + 10
+    outputDimensions: Math.floor(Math.random() * 50) + 10,
   },
   performance: {,
     accuracy: Math.random() * 0.2 + 0.8,
@@ -150,7 +150,7 @@ const generatePreferenceModel = (): PreferenceModel => ({)
     recall: Math.random() * 0.2 + 0.75,
     f1Score: Math.random() * 0.2 + 0.78,
     ndcg: Math.random() * 0.15 + 0.85,
-    auc: Math.random() * 0.1 + 0.9
+    auc: Math.random() * 0.1 + 0.9,
   },
   features: [],
   training: {,
@@ -158,7 +158,7 @@ const generatePreferenceModel = (): PreferenceModel => ({)
     datasetSize: Math.floor(Math.random() * 1000000) + 100000,
     epochs: Math.floor(Math.random() * 100) + 10,
     convergence: Math.random() > 0.8,
-    lastTrained: Date.now() - Math.random() * 86400000 * 7
+    lastTrained: Date.now() - Math.random() * 86400000 * 7,
   }
 });
 
@@ -216,7 +216,7 @@ export const UserPreferenceLearningSystem: React.FC<UserPreferenceLearningSystem
             p
           ) => sum + p.confidenceMetrics.overall, 0) / userProfiles.length,
           bestModel: models.sort((a, b) => b.performance.accuracy - a.performance.accuracy)[0],
-          learningRate: Math.random() * 0.1 + 0.05
+          learningRate: Math.random() * 0.1 + 0.05,
         },
         exportTimestamp: Date.now(),
       };
@@ -236,7 +236,7 @@ export const UserPreferenceLearningSystem: React.FC<UserPreferenceLearningSystem
   const selectedUserProfile = useMemo(() => {
     return selectedUser ? userProfiles.find(p => p.userId === selectedUser) : null;
   }, [selectedUser, userProfiles]);
-  return ()
+  return ();
     <div className="preference-learning-system">
       <div className="system-header">
         <div className="header-section">

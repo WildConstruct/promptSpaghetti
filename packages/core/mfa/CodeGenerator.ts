@@ -99,7 +99,7 @@ export class SecureCodeGenerator extends EventEmitter {
     this.emit('codeGenerated', {)
       length: opts.length,
       format: opts.format,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return code;
   }
@@ -183,7 +183,7 @@ export class SecureCodeGenerator extends EventEmitter {
         return this.createValidationResult(false, storedCode, 'rate_limited');
       }
       // Perform constant-time validation
-      const isValid = await this.constantTimeValidation(;)
+      const isValid = await this.constantTimeValidation(;);
         inputCode,
         storedCode.codeHash,
         Buffer.from(storedCode.salt, 'base64')
@@ -194,7 +194,7 @@ export class SecureCodeGenerator extends EventEmitter {
         attempts: storedCode.attempts + 1,
         used: isValid,
       };
-      const result = this.createValidationResult(;)
+      const result = this.createValidationResult(;);
         isValid,
         updatedCode,
         isValid ? undefined : 'invalid'
@@ -206,7 +206,7 @@ export class SecureCodeGenerator extends EventEmitter {
         purpose: storedCode.purpose,
         valid: isValid,
         attempts: updatedCode.attempts,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return result;
     } finally {
@@ -238,7 +238,7 @@ export class SecureCodeGenerator extends EventEmitter {
     }
     this.emit('recoveryCodesGenerated', {)
       count,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return codes;
   }
@@ -247,7 +247,7 @@ export class SecureCodeGenerator extends EventEmitter {
    */
   public validateCodeFormat()
     code: string,
-    expectedFormat: CodeGenerationOptions['format'] = 'numeric'
+    expectedFormat: CodeGenerationOptions['format'] = 'numeric',
   ): { valid: boolean; reason?: string } {
     if (!code || typeof code !== 'string') {
       return { valid: false, reason: 'Code must be a non-empty string' };
@@ -363,7 +363,7 @@ export class VerificationCodeFactory {
       length: 6,
       format: 'numeric',
     });
-    const data = await this.generator.createVerificationCode(;)
+    const data = await this.generator.createVerificationCode(;);
       code,
       userId,
       'email_verification',
@@ -386,7 +386,7 @@ export class VerificationCodeFactory {
       length: 6,
       format: 'numeric',
     });
-    const data = await this.generator.createVerificationCode(;)
+    const data = await this.generator.createVerificationCode(;);
       code,
       userId,
       'sms_verification',
@@ -409,7 +409,7 @@ export class VerificationCodeFactory {
       length: 8,
       format: 'alphanumeric',
     });
-    const data = await this.generator.createVerificationCode(;)
+    const data = await this.generator.createVerificationCode(;);
       code,
       userId,
       'password_reset',
@@ -431,7 +431,7 @@ export class VerificationCodeFactory {
     const rawCodes = this.generator.generateRecoveryCodes(10);
     const data: VerificationCodeData[] = [];
     for (const code of rawCodes) {
-      const codeData = await this.generator.createVerificationCode(;)
+      const codeData = await this.generator.createVerificationCode(;);
         code,
         userId,
         'totp_backup',

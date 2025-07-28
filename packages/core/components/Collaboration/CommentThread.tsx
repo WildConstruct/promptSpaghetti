@@ -143,7 +143,7 @@ const CommentThread: React.FC<CommentThreadProps> = ({ )
     const canEdit = allowEditing && (comment.author_id === userId || allowModeration);
     const canModerate = allowModeration;
     const isResolved = comment.status === 'resolved';
-    return ()
+    return ();
       <div key={comment.id} className={`${isReply ? 'ml-8 pl-4 border-l-2 border-gray-200' : ''}`}>}
         <div className={`p-4 rounded-lg ${isResolved ? 'bg-green-50 border border-green-200' : 'bg-white border border-gray-200'} ${isReply ? 'bg-gray-50' : ''}`}>}
           {/* Comment Header */}
@@ -293,7 +293,7 @@ const CommentThread: React.FC<CommentThreadProps> = ({ )
   };
   // Group comments by parent
   const rootComments = comments.filter(comment => !comment.parent_id);
-  return ()
+  return ();
     <div className={`bg-white rounded-lg border border-gray-200 ${className}`}>}
       {/* Header */}
       <div className="p-4 border-b border-gray-200">

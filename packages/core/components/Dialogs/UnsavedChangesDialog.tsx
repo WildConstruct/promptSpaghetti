@@ -75,7 +75,7 @@ const UnsavedChangesDialog: React.FC<UnsavedChangesDialogProps> = ({ )
     cursor: 'pointer',
     fontSize: 14,
     fontWeight: 500,
-    transition: 'background-color 0.2s'
+    transition: 'background-color 0.2s',
   };
   const saveButtonStyle: React.CSSProperties = {
     ...buttonBaseStyle,
@@ -91,9 +91,9 @@ const UnsavedChangesDialog: React.FC<UnsavedChangesDialogProps> = ({ )
     ...buttonBaseStyle,
     backgroundColor: '#f3f4f6',
     color: '#374151',
-    border: '1px solid #d1d5db'
+    border: '1px solid #d1d5db',
   };
-  return ()
+  return ();
     <div style={overlayStyle} onClick={onCancel}>
       <div style={dialogStyle} onClick={(e) => e.stopPropagation()}>
         <div style={headerStyle}>

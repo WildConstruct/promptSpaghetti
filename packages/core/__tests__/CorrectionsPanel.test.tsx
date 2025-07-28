@@ -28,7 +28,7 @@ const mockStore = {
   toggleRule: jest.fn<unknown[], unknown>(),
   reorderRules: jest.fn<unknown[], unknown>(),
   clearAllRules: jest.fn<unknown[], unknown>(),
-  applyCorrections: jest.fn((text) => text)
+  applyCorrections: jest.fn((text) => text),
 };
 beforeEach(() => {
   // Reset mock calls but keep the functions
@@ -80,7 +80,7 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
     ];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -98,7 +98,7 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
     ];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -118,7 +118,7 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
     ];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -136,7 +136,7 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
     ];
     // Debug to see if the component is rendering properly
@@ -146,7 +146,7 @@ describe('CorrectionsPanel', () => {
     // Find the checkbox within the rule's container by using the rule name as a landmark
     const ruleSection = screen.getByText('Test Rule').closest('div');
     const checkboxes = screen.getAllByRole('checkbox');
-    const ruleCheckbox = checkboxes.find(checkbox => ;)
+    const ruleCheckbox = checkboxes.find(checkbox => ;);
       ruleSection?.contains(checkbox)
     );
     expect(ruleCheckbox).toBeDefined();
@@ -214,7 +214,7 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
     ];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -235,7 +235,7 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
     ];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -270,7 +270,7 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
     ];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -279,7 +279,7 @@ describe('CorrectionsPanel', () => {
     fireEvent.change(nameInput, { target: { value: 'Updated Rule' } });
     fireEvent.click(screen.getByText('Save'));
     expect(mockStore.updateRule).toHaveBeenCalledWith('1', expect.objectContaining({)
-      name: 'Updated Rule'
+      name: 'Updated Rule',
     }));
   });
   it('should cancel edit modal', () => {
@@ -293,7 +293,7 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
     ];
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);

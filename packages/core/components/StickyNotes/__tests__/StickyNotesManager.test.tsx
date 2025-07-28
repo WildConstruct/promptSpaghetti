@@ -18,7 +18,7 @@ const mockUseGraphStore = useGraphStore as jest.MockedFunction<typeof useGraphSt
 // Mock React Flow hooks
 jest.mock('reactflow', () => ({)
   ...jest.requireActual('reactflow'),
-  useReactFlow: () => ({)
+  useReactFlow: () => ({),
     getViewport: () => ({ x: 0, y: 0, zoom: 1 }),
     setViewport: jest.fn<unknown[], unknown>(),
     fitView: jest.fn<unknown[], unknown>()
@@ -41,7 +41,6 @@ jest.mock('../../Annotations/StickyNotesLayer', () => ({)
         Add Note
       </button>
     </div>
-  )
 }));
 const mockNotes: StickyNote[] = [
   {
@@ -76,7 +75,7 @@ describe('StickyNotesManager Component', () => {
   });
   describe('Rendering', () => {
     test('renders sticky notes layer when not disabled', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager />
         </ReactFlowProvider>
@@ -85,7 +84,7 @@ describe('StickyNotesManager Component', () => {
       expect(screen.getByTestId('notes-count')).toHaveTextContent('2');
     });
     test('does not render when disabled', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager disabled={true} />
         </ReactFlowProvider>
@@ -93,7 +92,7 @@ describe('StickyNotesManager Component', () => {
       expect(screen.queryByTestId('sticky-notes-layer')).not.toBeInTheDocument();
     });
     test('passes default props correctly', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager />
         </ReactFlowProvider>
@@ -102,7 +101,7 @@ describe('StickyNotesManager Component', () => {
       expect(screen.getByTestId('readonly')).toHaveTextContent('false');
     });
     test('passes custom props correctly', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager 
             author="Custom Author"
@@ -116,7 +115,7 @@ describe('StickyNotesManager Component', () => {
   });
   describe('Store Integration', () => {
     test('retrieves notes from graph store', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager />
         </ReactFlowProvider>
@@ -125,7 +124,7 @@ describe('StickyNotesManager Component', () => {
       expect(screen.getByTestId('notes-count')).toHaveTextContent('2');
     });
     test('updates store when notes change', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager />
         </ReactFlowProvider>
@@ -142,7 +141,7 @@ describe('StickyNotesManager Component', () => {
         stickyNotes: [],
         setStickyNotes: jest.fn<unknown[], unknown>( as unknown as unknown)
       } as any);
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager />
         </ReactFlowProvider>
@@ -152,7 +151,7 @@ describe('StickyNotesManager Component', () => {
   });
   describe('React Flow Integration', () => {
     test('provides correct canvas size', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager />
         </ReactFlowProvider>
@@ -165,7 +164,7 @@ describe('StickyNotesManager Component', () => {
       // Mock different viewport
       const mockUseViewport = require('reactflow').useViewport as jest.Mock;
       mockUseViewport.mockReturnValue({ x: -100, y: -50, zoom: 0.8 } as unknown as unknown as unknown);
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager />
         </ReactFlowProvider>
@@ -182,7 +181,7 @@ describe('StickyNotesManager Component', () => {
       });
       // Should not throw error during render
       expect(() => {
-        render()
+        render();
           <ReactFlowProvider>
             <StickyNotesManager />
           </ReactFlowProvider>
@@ -206,7 +205,7 @@ describe('StickyNotesManager Component', () => {
       const renderSpy = jest.fn<unknown[], unknown>();
       const TestWrapper = () => {
         renderSpy();
-        return ()
+        return ();
           <ReactFlowProvider>
             <StickyNotesManager />
           </ReactFlowProvider>
@@ -234,7 +233,7 @@ describe('StickyNotesManager Component', () => {
         setStickyNotes: jest.fn<unknown[], unknown>( as unknown as unknown)
       } as any);
       const startTime = performance.now();
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager />
         </ReactFlowProvider>
@@ -247,7 +246,7 @@ describe('StickyNotesManager Component', () => {
   });
   describe('Props Validation', () => {
     test('handles boolean props correctly', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager 
             disabled={false}
@@ -259,7 +258,7 @@ describe('StickyNotesManager Component', () => {
       expect(screen.getByTestId('readonly')).toHaveTextContent('false');
     });
     test('handles string props correctly', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager author="" />
         </ReactFlowProvider>
@@ -284,7 +283,7 @@ describe('StickyNotesManager Component', () => {
         </ReactFlowProvider>
       );
       expect(screen.getByTestId('author')).toHaveTextContent('Author 1');
-      rerender()
+      rerender();
         <ReactFlowProvider>
           <StickyNotesManager author="Author 2" />
         </ReactFlowProvider>
@@ -295,7 +294,7 @@ describe('StickyNotesManager Component', () => {
   describe('Integration with Graph Editor', () => {
     test('maintains compatibility with existing graph functionality', () => {
       // This test ensures the sticky notes don't break existing graph features
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager />
         </ReactFlowProvider>
@@ -306,7 +305,7 @@ describe('StickyNotesManager Component', () => {
       // This is tested implicitly by the layer implementation
     });
     test('respects canvas boundaries', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesManager />
         </ReactFlowProvider>

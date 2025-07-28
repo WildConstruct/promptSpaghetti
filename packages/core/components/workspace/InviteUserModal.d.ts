@@ -6,7 +6,7 @@ import React from 'react';
 interface InviteUserModalProps {
     workspaceId: string;
     workspaceName: string;
-    onSubmit: (data: {)
+    onSubmit: (data: {),
         userId: string;
         role: string;
     }) => void;

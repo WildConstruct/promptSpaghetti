@@ -75,7 +75,7 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
     setLoading(true);
     setError(null);
     try {
-      const updatedProgress = await learningService.updateProgress(;)
+      const updatedProgress = await learningService.updateProgress(;);
         userId,
         path.id,
         currentModule.id,
@@ -105,7 +105,7 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
     if (completed) return 'completed';
     if (current || (progress && progress.progress > 0)) return 'in_progress';
     // Check if prerequisites are met
-    const prerequisitesMet = module.prerequisites.every(prereqId =>;)
+    const prerequisitesMet = module.prerequisites.every(prereqId =>;);
       enrollment.progress.completedModules.includes(prereqId)
     );
     return prerequisitesMet ? 'available' : 'locked';
@@ -118,7 +118,7 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
     return 'available';
   }, [enrollment, currentModule]);
   // Render module sidebar
-  const renderModuleSidebar = () => (;)
+  const renderModuleSidebar = () => (;);
     <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
       {/* Path header */}
       <div className="p-6 border-b border-gray-200">
@@ -169,7 +169,7 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
             const status = getModuleStatus(module);
             const isActive = currentModule?.id === module.id;
             const progress = enrollment?.progress.moduleProgress[module.id];
-            return ()
+            return ();
               <div
                 key={module.id}
                 className={`rounded-lg border p-4 cursor-pointer transition-all ${
@@ -274,7 +274,7 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
   // Render main content
   const renderMainContent = () => {
     if (!currentModule) {
-      return ()
+      return ();
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
             <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -288,7 +288,7 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
         </div>
       );
     }
-    return ()
+    return ();
       <div className="flex flex-col h-full">
         {/* Module header */}
         <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -361,7 +361,7 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
                 {currentModule.activities.map((activity) => {
                   const status = getActivityStatus(activity);
                   const isActive = currentActivity?.id === activity.id;
-                  return ()
+                  return ();
                     <div
                       key={activity.id}
                       className={`border rounded-md p-3 cursor-pointer transition-all ${
@@ -443,7 +443,7 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
       </div>
     );
   };
-  return ()
+  return ();
     <div className="learning-path-viewer h-full flex">
       {/* Collapsible sidebar */}
       <div className={`${sidebarOpen ? 'block' : 'hidden'} md:block`}>}
@@ -487,7 +487,7 @@ const ActivityViewer: React.FC<ActivityViewerProps> = ({)
     setCompleted(true);
     onComplete();
   };
-  return ()
+  return ();
     <div className="p-6">
       {/* Activity header */}
       <div className="mb-6">

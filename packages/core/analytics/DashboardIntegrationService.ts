@@ -81,14 +81,13 @@ export class DashboardIntegrationService {
   private legacySystems: Map<string, LegacyAnalyticsSystem> = new Map();
   private performanceMetrics: Map<string, WidgetPerformanceMetrics> = new Map();
   private integrationCache: Map<string, { data: unknown; timestamp: number }> = new Map();
-  constructor()
+  constructor();
     eventBus: UnifiedEventBus,
     eventRepository: EventRepository,
     authService: AnalyticsAuthorizationService,
     wsServer: WebSocketStreamingServer,
     adapters: AnalyticsAdapterManager,
     config: Partial<DashboardIntegrationConfig> = {}
-  ) {
     this.eventBus = eventBus;
     this.eventRepository = eventRepository;
     this.authService = authService;
@@ -195,7 +194,7 @@ export class DashboardIntegrationService {
       // Calculate consolidated metrics
       const metrics = await this.calculateConsolidatedMetrics(events, statistics, authorizedFilter);
       // Get time series data
-      const timeSeriesData = await this.eventRepository.getTimeSeriesData(;)
+      const timeSeriesData = await this.eventRepository.getTimeSeriesData(;);
         'count',
         'hour',
         authorizedFilter
@@ -205,7 +204,7 @@ export class DashboardIntegrationService {
       const result = {
         metrics,
         events,
-        timeSeriesData: timeSeriesData.map(point => ({)
+        timeSeriesData: timeSeriesData.map(point => ({),
           timestamp: point.timestamp,
           value: point.value,
           label: 'Events',
@@ -248,7 +247,7 @@ export class DashboardIntegrationService {
       .map(([source, count]) => ({)
         source,
         count: typeof count === 'number' ? count : 0,
-        percentage: totalSourceEvents > 0 ? ((typeof count === 'number' ? count : 0) / totalSourceEvents) * 100 : 0
+        percentage: totalSourceEvents > 0 ? ((typeof count === 'number' ? count : 0) / totalSourceEvents) * 100 : 0,
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
@@ -307,7 +306,7 @@ export class DashboardIntegrationService {
       graphsExecuted,
       totalRevenue: Math.round(totalRevenue * 100) / 100,
       topFeatures,
-      conversionRate: graphsCreated > 0 ? (graphsExecuted / graphsCreated) * 100 : 0
+      conversionRate: graphsCreated > 0 ? (graphsExecuted / graphsCreated) * 100 : 0,
     };
   }
   /**
@@ -403,7 +402,7 @@ export class DashboardIntegrationService {
       sortBy: 'timestamp',
       sortOrder: 'desc',
     });
-    const timeSeriesData = await this.eventRepository.getTimeSeriesData(;)
+    const timeSeriesData = await this.eventRepository.getTimeSeriesData(;);
       'avg',
       'minute',
       { ...filter, categories: [EventCategory.PERFORMANCE] }
@@ -424,7 +423,7 @@ export class DashboardIntegrationService {
     return {
       averageExecutionTime: Math.round(avgExecutionTime * 100) / 100,
       averageMemoryUsage: Math.round(avgMemoryUsage / 1024 / 1024 * 100) / 100, // Convert to MB
-      timeSeriesData: timeSeriesData.map(point => ({)
+      timeSeriesData: timeSeriesData.map(point => ({),
         timestamp: point.timestamp,
         value: point.value,
         label: 'Performance',
@@ -469,17 +468,17 @@ export class DashboardIntegrationService {
       limit: 1000,
     });
     const metrics = await this.calculateBusinessMetrics(businessEvents, filter);
-    const timeSeriesData = await this.eventRepository.getTimeSeriesData(;)
+    const timeSeriesData = await this.eventRepository.getTimeSeriesData(;);
       'count',
       'hour',
       { ...filter, categories: [EventCategory.BUSINESS] }
     );
     return {
       ...metrics,
-      timeSeriesData: timeSeriesData.map(point => ({)
+      timeSeriesData: timeSeriesData.map(point => ({),
         timestamp: point.timestamp,
         value: point.value,
-        label: 'Business Events'
+        label: 'Business Events',
       }))
     };
   }
@@ -508,7 +507,7 @@ export class DashboardIntegrationService {
       events: securityEvents.slice(0, 20), // Show top 20 recent events
       riskDistribution: riskLevels,
       totalSecurityEvents: securityEvents.length,
-      criticalAlerts: securityEvents.filter(e => e.severity === 'critical').length
+      criticalAlerts: securityEvents.filter(e => e.severity === 'critical').length,
     };
   }
   /**
@@ -538,13 +537,13 @@ export class DashboardIntegrationService {
         const statistics = await this.eventRepository.getStatistics(authorizedFilter);
         return { statistics };
       case 'time_series_chart':
-        const timeSeriesData = await this.eventRepository.getTimeSeriesData(;)
+        const timeSeriesData = await this.eventRepository.getTimeSeriesData(;);
           'count',
           'hour',
           authorizedFilter
         );
         return { 
-          timeSeries: timeSeriesData.map(point => ({)
+          timeSeries: timeSeriesData.map(point => ({),
             timestamp: point.timestamp,
             value: point.value,
             label: 'Events',
@@ -666,7 +665,7 @@ export class DashboardIntegrationService {
     widgetType: string,
     loadTime: number,
     isError: boolean,
-    cacheHit: boolean = false
+    cacheHit: boolean = false,
   ): void {
     const existing = this.performanceMetrics.get(widgetId);
     if (existing) {
@@ -735,7 +734,7 @@ export class DashboardIntegrationService {
       totalWidgets: metrics.length,
       averageLoadTime: Math.round(weightedAvgLoadTime),
       overallErrorRate: Math.round(weightedErrorRate * 100) / 100,
-      overallCacheHitRate: Math.round(weightedCacheHitRate * 100) / 100
+      overallCacheHitRate: Math.round(weightedCacheHitRate * 100) / 100,
     };
   }
   /**
@@ -748,7 +747,6 @@ export class DashboardIntegrationService {
     legacySystems: LegacyAnalyticsSystem[];
     performanceMetrics: WidgetPerformanceMetrics[];
     integrationStatus: unknown;
-  } {
     return {
       legacySystems: Array.from(this.legacySystems.values()),
       performanceMetrics: Array.from(this.performanceMetrics.values()),
@@ -775,7 +773,6 @@ export class DashboardIntegrationService {
     totalEntries: number;
     hitRate: number;
     memoryUsage: number;
-  } {
     const totalEntries = this.integrationCache.size;
     const performanceMetrics = Array.from(this.performanceMetrics.values());
     const totalQueries = performanceMetrics.reduce((sum, m) => sum + m.queryCount, 0);

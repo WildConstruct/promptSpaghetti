@@ -1,11 +1,10 @@
 // Epic 16 Marketplace - Advanced Filters Component
 import React, { useState } from 'react';
 import './SearchBar.css';
-
 interface FilterOptions {
   categories: string[];
   tags: string[];
-  priceRange: {
+  priceRange: {,
     min?: number;
     max?: number;
   };
@@ -16,7 +15,6 @@ interface FilterOptions {
   isAiGenerated: boolean | null;
   sortBy: 'relevance' | 'price_asc' | 'price_desc' | 'rating' | 'popularity' | 'newest' | 'oldest';
 }
-
 interface AdvancedFiltersProps {
   filters: FilterOptions;
   onFiltersChange: (filters: FilterOptions) => void;
@@ -25,7 +23,7 @@ interface AdvancedFiltersProps {
   className?: string;
 }
 
-export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
+export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({)
   filters,
   onFiltersChange,
   availableCategories,
@@ -33,37 +31,32 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   className = ''
 }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
-
   const updateFilter = (key: keyof FilterOptions, value: Error) => {
-    onFiltersChange({
+    onFiltersChange({)
       ...filters,
       [key]: value
     });
   };
-
   const toggleCategory = (categoryId: string) => {
-    const newCategories = filters.categories.includes(categoryId)
+    const newCategories = filters.categories.includes(categoryId);
       ? filters.categories.filter(id => id !== categoryId)
       : [...filters.categories, categoryId];
     updateFilter('categories', newCategories);
   };
-
   const toggleTag = (tag: string) => {
-    const newTags = filters.tags.includes(tag)
+    const newTags = filters.tags.includes(tag);
       ? filters.tags.filter(t => t !== tag)
       : [...filters.tags, tag];
     updateFilter('tags', newTags);
   };
-
   const toggleCompatibility = (compat: string) => {
-    const newCompat = filters.compatibility.includes(compat)
+    const newCompat = filters.compatibility.includes(compat);
       ? filters.compatibility.filter(c => c !== compat)
       : [...filters.compatibility, compat];
     updateFilter('compatibility', newCompat);
   };
-
   const clearAllFilters = () => {
-    onFiltersChange({
+    onFiltersChange({)
       categories: [],
       tags: [],
       priceRange: {},
@@ -72,10 +65,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
       compatibility: [],
       isFree: null,
       isAiGenerated: null,
-      sortBy: 'relevance'
+      sortBy: 'relevance',
     });
   };
-
   const hasActiveFilters = () => {
     return filters.categories.length > 0 ||
            filters.tags.length > 0 ||
@@ -88,9 +80,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
            filters.isAiGenerated !== null ||
            filters.sortBy !== 'relevance';
   };
-
-  return (
-    <div className={`advanced-filters-container ${className}`}>
+  return ()
+    <div className={`advanced-filters-container ${className}`}>}
       {/* Filter Toggle */}
       <div className="filter-toggle">
         <button
@@ -106,7 +97,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
             />
           </svg>
           Advanced Filters
-          {hasActiveFilters() && (
+          {hasActiveFilters() && ()
             <span className="filter-count">
               {[
                 filters.categories.length,
@@ -122,22 +113,20 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
             </span>
           )}
         </button>
-
-        {hasActiveFilters() && (
+        {hasActiveFilters() && ()
           <button onClick={clearAllFilters} className="clear-filters">
             Clear All
           </button>
         )}
       </div>
-
       {/* Advanced Filters Panel */}
-      {showAdvanced && (
+      {showAdvanced && ()
         <div className="advanced-filters">
           {/* Categories */}
           <div className="filter-group">
             <label className="filter-label">Categories</label>
             <div className="filter-chips">
-              {availableCategories.map(category => (
+              {availableCategories.map(category => ()
                 <button
                   key={category.id}
                   onClick={() => toggleCategory(category.id)}
@@ -150,12 +139,11 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               ))}
             </div>
           </div>
-
           {/* Tags */}
           <div className="filter-group">
             <label className="filter-label">Popular Tags</label>
             <div className="filter-chips">
-              {availableTags.slice(0, 12).map(tag => (
+              {availableTags.slice(0, 12).map(tag => ()
                 <button
                   key={tag}
                   onClick={() => toggleTag(tag)}
@@ -168,7 +156,6 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               ))}
             </div>
           </div>
-
           {/* Price Range */}
           <div className="filter-group">
             <label className="filter-label">Price Range</label>
@@ -177,9 +164,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 type="number"
                 placeholder="Min ($)"
                 value={filters.priceRange.min || ''}
-                onChange={(e) => updateFilter('priceRange', {
+                onChange={(e) => updateFilter('priceRange', {)
                   ...filters.priceRange,
-                  min: e.target.value ? parseFloat(e.target.value) : undefined
+                  min: e.target.value ? parseFloat(e.target.value) : undefined,
                 })}
                 className="price-input"
               />
@@ -188,20 +175,19 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 type="number"
                 placeholder="Max ($)"
                 value={filters.priceRange.max || ''}
-                onChange={(e) => updateFilter('priceRange', {
+                onChange={(e) => updateFilter('priceRange', {)
                   ...filters.priceRange,
-                  max: e.target.value ? parseFloat(e.target.value) : undefined
+                  max: e.target.value ? parseFloat(e.target.value) : undefined,
                 })}
                 className="price-input"
               />
             </div>
           </div>
-
           {/* Rating */}
           <div className="filter-group">
             <label className="filter-label">Minimum Rating</label>
             <div className="rating-filter">
-              {[1, 2, 3, 4, 5].map(rating => (
+              {[1, 2, 3, 4, 5].map(rating => ()
                 <button
                   key={rating}
                   onClick={() => updateFilter('rating', rating === filters.rating ? 0 : rating)}
@@ -224,7 +210,6 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               </span>
             </div>
           </div>
-
           {/* Complexity */}
           <div className="filter-group">
             <label className="filter-label">Complexity Level</label>
@@ -234,7 +219,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 { value: 'beginner', label: 'Beginner' },
                 { value: 'intermediate', label: 'Intermediate' },
                 { value: 'advanced', label: 'Advanced' }
-              ].map(level => (
+              ].map(level => ()
                 <button
                   key={level.value}
                   onClick={() => updateFilter('complexity', level.value)}
@@ -247,7 +232,6 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               ))}
             </div>
           </div>
-
           {/* Claude Compatibility */}
           <div className="filter-group">
             <label className="filter-label">Claude Compatibility</label>
@@ -257,7 +241,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 'claude-3-sonnet',
                 'claude-3-opus',
                 'claude-3.5-sonnet'
-              ].map(model => (
+              ].map(model => ()
                 <button
                   key={model}
                   onClick={() => toggleCompatibility(model)}
@@ -270,7 +254,6 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               ))}
             </div>
           </div>
-
           {/* Content Type */}
           <div className="filter-group">
             <label className="filter-label">Content Type</label>
@@ -301,7 +284,6 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               </button>
             </div>
           </div>
-
           {/* Sort Options */}
           <div className="filter-group">
             <label className="filter-label">Sort By</label>

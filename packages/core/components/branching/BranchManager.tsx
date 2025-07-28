@@ -135,7 +135,7 @@ const BranchNode: React.FC<BranchNodeProps> = ({ )
     if (days < 30) return `${Math.floor(days / 7)} weeks ago`;}
     return `${Math.floor(days / 30)} months ago`;}
   };
-  const menu = (;)
+  const menu = (;);
     <Menu>
       <Menu.Item key="select" icon={<EyeOutlined />} onClick={() => onSelect(branch.id)}>
         Switch to Branch
@@ -158,7 +158,7 @@ const BranchNode: React.FC<BranchNodeProps> = ({ )
       </Menu.Item>
     </Menu>
   );
-  return ()
+  return ();
     <div 
       style={{ 
         padding: '8px 12px', 
@@ -272,7 +272,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({)
         autoMergeEnabled: values.autoMergeEnabled || false,
         requiresReview: values.requiresReview || false,
         allowForcePush: values.allowForcePush || false,
-        deleteOnMerge: values.deleteOnMerge || false
+        deleteOnMerge: values.deleteOnMerge || false,
       };
       const branch = await createBranch(request);
       setShowCreateModal(false);
@@ -365,7 +365,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({)
       </div>
     ));
   };
-  return ()
+  return ();
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Header */}
       <div style={{ padding: '16px', borderBottom: '1px solid #f0f0f0' }}>

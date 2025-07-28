@@ -482,7 +482,7 @@ export const [error, setError] = useState<string | null>(null);
       };
       const result = await analyticsInfrastructure.executeQuery(query);
       if (result.success && result.data) {
-        const anomalyData = await processAnomalyDetectionData(;)
+        const anomalyData = await processAnomalyDetectionData(;);
           result.data,
           detectionConfig,
           alertConfig
@@ -504,7 +504,7 @@ export const [error, setError] = useState<string | null>(null);
     }
   }, [funnelDefinition, analyticsInfrastructure, timeRange, segments, cohorts, detectionConfig, alertConfig, onAnomalyDetected]);
   // Process anomaly detection data
-  const processAnomalyDetectionData = async (;)
+  const processAnomalyDetectionData = async (;);
     rawData: unknown,
     config: AnomalyDetectionConfig,
     alertCfg: AlertConfiguration,
@@ -582,7 +582,7 @@ export const [error, setError] = useState<string | null>(null);
           { action: 'Rollback payment system changes', priority: 'immediate', effort: 'low', expectedImpact: 'high', timeline: '15 minutes', owner: 'DevOps', dependencies: [] },
           { action: 'Implement payment timeout optimization', priority: 'high', effort: 'medium', expectedImpact: 'medium', timeline: '2 hours', owner: 'Backend Team', dependencies: ['Root cause confirmation'] }
         ],
-        status: type === 'current' ? 'new' : 'resolved'
+        status: type === 'current' ? 'new' : 'resolved',
       },
       {
         id: `anom-${type}-002`,}
@@ -632,7 +632,7 @@ export const [error, setError] = useState<string | null>(null);
           { action: 'Scale infrastructure to handle increased load', priority: 'high', effort: 'medium', expectedImpact: 'high', timeline: '30 minutes', owner: 'DevOps', dependencies: [] },
           { action: 'Prepare follow-up marketing campaigns', priority: 'medium', effort: 'high', expectedImpact: 'medium', timeline: '2 days', owner: 'Marketing', dependencies: ['Traffic analysis'] }
         ],
-        status: type === 'current' ? 'acknowledged' : 'resolved'
+        status: type === 'current' ? 'acknowledged' : 'resolved',
       }
     ];
   };
@@ -720,7 +720,7 @@ export const [error, setError] = useState<string | null>(null);
         strategicValue: 0.25,
         severity: anomaly.severity,
       },
-      affectedUserSegments: segments.map(segment => ({)
+      affectedUserSegments: segments.map(segment => ({),
         segmentId: segment.id,
         segmentName: segment.name,
         impactPercentage: Math.random() * 30,
@@ -756,7 +756,7 @@ export const [error, setError] = useState<string | null>(null);
         message: 'High severity conversion anomaly detected',
         escalationLevel: 0,
         acknowledgedBy: 'ops-engineer',
-        acknowledgedAt: Date.now() - 5 * 60 * 1000
+        acknowledgedAt: Date.now() - 5 * 60 * 1000,
       }
     ];
   };
@@ -782,7 +782,7 @@ export const [error, setError] = useState<string | null>(null);
       f1Score: 0.78 + Math.random() * 0.12,
       avgDetectionTime: 30 + Math.random() * 60,
       resourceUsage: 0.3 + Math.random() * 0.4,
-      confidence: 0.7 + Math.random() * 0.25
+      confidence: 0.7 + Math.random() * 0.25,
     }));
   };
   // Setup real-time monitoring
@@ -850,16 +850,15 @@ export const [error, setError] = useState<string | null>(null);
       if (!prev) return prev;
       return {
         ...prev,
-        currentAnomalies: prev.currentAnomalies.map(anomaly =>)
+        currentAnomalies: prev.currentAnomalies.map(anomaly =>),
           anomaly.id === anomalyId
             ? { ...anomaly, status: 'acknowledged', acknowledgedBy: 'current-user', acknowledgedAt: Date.now() }
             : anomaly
-        )
       };
     });
   }, []);
   if (loading) {
-    return ()
+    return ();
       <div className="funnel-anomaly-detection-loading">
         <div className="loading-spinner"></div>
         <p>Loading anomaly detection data...</p>
@@ -867,7 +866,7 @@ export const [error, setError] = useState<string | null>(null);
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className="funnel-anomaly-detection-error">
         <h3>Error Loading Anomaly Detection</h3>
         <p className="error-message">{error}</p>
@@ -880,7 +879,7 @@ export const [error, setError] = useState<string | null>(null);
   if (!detectionData) {
     return <div className="funnel-anomaly-detection-error">No data available</div>;
   }
-  return ()
+  return ();
     <div className="funnel-anomaly-detection">
       <div className="anomaly-detection-header">
         <div className="detection-info">

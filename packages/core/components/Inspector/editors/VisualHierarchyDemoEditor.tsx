@@ -33,7 +33,7 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
 }) => {
   const { getNodeDisclosureLevel } = useUISettingsStore();
   const currentLevel = getNodeDisclosureLevel(nodeId, nodeType);
-  return ()
+  return ();
     <div 
       style={{ 
         padding: SpacingScale.md,
@@ -277,7 +277,7 @@ export const VisualHierarchyDemoEditor: React.FC<VisualHierarchyDemoEditorProps>
                   opacity: 0.7,
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
-                  marginBottom: SpacingScale.xs / 2
+                  marginBottom: SpacingScale.xs / 2,
                 }}>
                   {stat.label}
                 </div>

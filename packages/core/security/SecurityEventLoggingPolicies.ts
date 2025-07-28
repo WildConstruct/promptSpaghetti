@@ -255,7 +255,7 @@ export class SecurityEventLoggingPolicyEngine {
           { field: 'request_payload', operator: 'contains', value: 'command_injection_pattern', logic: 'or' }
         ],
         time_window: 60000,
-        frequency_threshold: 1 // Single attempt is critical
+        frequency_threshold: 1 // Single attempt is critical,
       },
       response_actions: {,
         immediate_actions: ['block_request', 'block_ip', 'preserve_evidence'],
@@ -273,7 +273,7 @@ export class SecurityEventLoggingPolicyEngine {
         real_time_alerts: true,
         periodic_reports: ['immediate', 'daily'],
         stakeholders: ['ciso', 'security_team', 'development_team'],
-        external_reporting: true // May require breach notification
+        external_reporting: true // May require breach notification,
       }
     });
     // Network Security Policies
@@ -331,7 +331,7 @@ export class SecurityEventLoggingPolicyEngine {
         immediate_actions: ['document_violation', 'notify_compliance', 'preserve_audit_trail'],
         escalation_actions: ['notify_auditors', 'initiate_remediation'],
         notification_channels: ['email', 'compliance_dashboard'],
-        automated_containment: false // Manual review required
+        automated_containment: false // Manual review required,
       },
       compliance_mapping: {,
         frameworks: [ComplianceFramework.SOX],
@@ -379,7 +379,7 @@ export class SecurityEventLoggingPolicyEngine {
         real_time_alerts: false,
         periodic_reports: ['daily', 'monthly'],
         stakeholders: ['dpo', 'privacy_team', 'legal_team'],
-        external_reporting: true // Supervisory authority reporting
+        external_reporting: true // Supervisory authority reporting,
       }
     });
     // Incident Response Policy
@@ -414,7 +414,7 @@ export class SecurityEventLoggingPolicyEngine {
         real_time_alerts: true,
         periodic_reports: ['immediate', 'daily'],
         stakeholders: ['ciso', 'incident_response_team', 'legal_team'],
-        external_reporting: true // May trigger breach notifications
+        external_reporting: true // May trigger breach notifications,
       }
     });
     // DevOps Security Policy
@@ -540,7 +540,6 @@ export class SecurityEventLoggingPolicyEngine {
     notifications_sent: string[];
     compliance_requirements: ComplianceFramework[];
     escalation_required: boolean;
-  } {
     const matchedPolicies: string[] = [];
     const actionsTriggered: string[] = [];
     const notificationsSent: string[] = [];
@@ -663,7 +662,6 @@ export class SecurityEventLoggingPolicyEngine {
     compliance_score: number;
     recommendations: string[];
     events_by_severity: Record<SecurityEventSeverity, number>;
-  } {
     const relevantEvents = this.getEventsForTimeframe(startDate, endDate);
       .filter(event => event.compliance_frameworks.includes(framework));
     const eventsBySeverity = {
@@ -676,7 +674,7 @@ export class SecurityEventLoggingPolicyEngine {
     relevantEvents.forEach(event => {)
       eventsBySeverity[event.severity]++;
     });
-    const policyViolations = relevantEvents.filter(event => ;)
+    const policyViolations = relevantEvents.filter(event => ;);
       event.severity === SecurityEventSeverity.CRITICAL || 
       event.severity === SecurityEventSeverity.HIGH
     ).length;

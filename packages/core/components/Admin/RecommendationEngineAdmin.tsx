@@ -386,7 +386,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
     default: return Cpu;
     }
   };
-  const renderAlgorithmManagement = () => (;)
+  const renderAlgorithmManagement = () => (;);
     <div className="algorithms-section">
       <div className="algorithms-header">
         <h3>Recommendation Algorithms</h3>
@@ -404,7 +404,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
       <div className="algorithms-list">
         {algorithms.map(algorithm => {)
           const IconComponent = getAlgorithmTypeIcon(algorithm.type);
-          return ()
+          return ();
             <Card key={algorithm.id} className="algorithm-card">
               <CardHeader>
                 <div className="algorithm-header">
@@ -482,7 +482,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
       </div>
     </div>
   );
-  const renderFeaturedContentConfig = () => (;)
+  const renderFeaturedContentConfig = () => (;);
     <div className="featured-config-section">
       <div className="config-header">
         <h3>Featured Content Configuration</h3>
@@ -663,7 +663,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
       </div>
     </div>
   );
-  const renderPerformanceMetrics = () => (;)
+  const renderPerformanceMetrics = () => (;);
     <div className="metrics-section">
       <div className="metrics-header">
         <h3>Performance Metrics</h3>
@@ -760,7 +760,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
                 </div>
                 {Object.entries(metrics.algorithm_performance).map(([algId, perf]) => {
                   const algorithm = algorithms.find(a => a.id === algId);
-                  return ()
+                  return ();
                     <div key={algId} className="table-row">
                       <div className="cell algorithm-name">
                         {algorithm?.name || algId}
@@ -826,7 +826,7 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
       </div>
     </div>
   );
-  return ()
+  return ();
     <div className={`recommendation-engine-admin ${className}`}>}
       <div className="admin-header">
         <div className="header-info">

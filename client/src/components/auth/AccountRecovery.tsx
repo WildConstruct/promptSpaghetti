@@ -1,32 +1,27 @@
 // Epic 11 Account Recovery Component
 // Handles account unlock and password reset workflows
-
 import React, { useState, useEffect } from 'react';
 import { z } from 'zod';
 
 // Recovery form validation schemas
-const unlockAccountSchema = z.object({
+const unlockAccountSchema = z.object({)
   email: z.string().email('Please enter a valid email address'),
   unlockToken: z.string().min(1, 'Unlock token is required')
 });
-
-const requestUnlockSchema = z.object({
-  email: z.string().email('Please enter a valid email address')
+const requestUnlockSchema = z.object({)
+  email: z.string().email('Please enter a valid email address'),
 });
-
 type UnlockAccountData = z.infer<typeof unlockAccountSchema>;
 type RequestUnlockData = z.infer<typeof requestUnlockSchema>;
-
 interface AccountRecoveryProps {
   onSuccess?: (message: string) => void;
   onError?: (error: string) => void;
   initialEmail?: string;
   unlockToken?: string;
 }
-
 type RecoveryMode = 'request' | 'unlock' | 'success';
 
-export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
+export const AccountRecovery: React.FC<AccountRecoveryProps> = ({)
   onSuccess,
   onError,
   initialEmail = '',
@@ -35,21 +30,17 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
   const [mode, setMode] = useState<RecoveryMode>(unlockToken ? 'unlock' : 'request');
   const [isLoading, setIsLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
-  
-  const [requestData, setRequestData] = useState<RequestUnlockData>({
-    email: initialEmail
-  });
-  
-  const [unlockData, setUnlockData] = useState<UnlockAccountData>({
+  const [requestData, setRequestData] = useState<RequestUnlockData>({)
     email: initialEmail,
-    unlockToken: unlockToken
   });
-  
+  const [unlockData, setUnlockData] = useState<UnlockAccountData>({)
+    email: initialEmail,
+    unlockToken: unlockToken,
+  });
   const [errors, setErrors] = useState<{
     request?: Partial<Record<keyof RequestUnlockData, string>>;
     unlock?: Partial<Record<keyof UnlockAccountData, string>>;
   }>({});
-
   // Handle countdown for resend button
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -58,7 +49,6 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
     }
     return () => clearTimeout(timer);
   }, [countdown]);
-
   const validateRequestForm = (): boolean => {
     try {
       requestUnlockSchema.parse(requestData);
@@ -67,7 +57,7 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Partial<Record<keyof RequestUnlockData, string>> = {};
-        error.errors.forEach(err => {
+        error.errors.forEach(err => {)
           if (err.path[0]) {
             newErrors[err.path[0] as keyof RequestUnlockData] = err.message;
           }
@@ -77,7 +67,6 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
       return false;
     }
   };
-
   const validateUnlockForm = (): boolean => {
     try {
       unlockAccountSchema.parse(unlockData);
@@ -86,7 +75,7 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: Partial<Record<keyof UnlockAccountData, string>> = {};
-        error.errors.forEach(err => {
+        error.errors.forEach(err => {)
           if (err.path[0]) {
             newErrors[err.path[0] as keyof UnlockAccountData] = err.message;
           }
@@ -96,80 +85,62 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
       return false;
     }
   };
-
   const handleRequestUnlock = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateRequestForm()) {
       return;
     }
-
     setIsLoading(true);
-    
     try {
-      const response = await fetch('/api/auth/request-unlock', {
+      const response = await fetch('/api/auth/request-unlock', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestData)
+        body: JSON.stringify(requestData),
       });
-
       const result = await response.json();
-
       if (!response.ok) {
         throw new Error(result.message || 'Failed to request account unlock');
       }
-
       setCountdown(300); // 5 minutes before allowing resend
       setMode('success');
       onSuccess?.('Account unlock instructions have been sent to your email address.');
-      
     } catch (error: Error) {
       onError?.(error.message || 'Failed to request account unlock');
     } finally {
       setIsLoading(false);
     }
   };
-
   const handleUnlockAccount = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateUnlockForm()) {
       return;
     }
-
     setIsLoading(true);
-    
     try {
-      const response = await fetch('/api/auth/unlock-account', {
+      const response = await fetch('/api/auth/unlock-account', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(unlockData)
+        body: JSON.stringify(unlockData),
       });
-
       const result = await response.json();
-
       if (!response.ok) {
         throw new Error(result.message || 'Failed to unlock account');
       }
-
       setMode('success');
       onSuccess?.('Your account has been successfully unlocked. You can now sign in.');
-      
     } catch (error: Error) {
       onError?.(error.message || 'Failed to unlock account');
     } finally {
       setIsLoading(false);
     }
   };
-
   const formatCountdown = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;}
   };
-
   if (mode === 'success') {
-    return (
+    return ()
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
         <div className="text-center">
           <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
@@ -185,17 +156,15 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
             Check your email and follow the instructions to unlock your account.
             If you don&apos;t see the email, check your spam folder.
           </p>
-          
-          {countdown > 0 && (
+          {countdown > 0 && ()
             <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
               <p className="text-sm text-blue-700">
                 You can request another unlock email in {formatCountdown(countdown)}
               </p>
             </div>
           )}
-          
           <div className="mt-6 space-y-3">
-            {countdown === 0 && (
+            {countdown === 0 && ()
               <button
                 onClick={() => setMode('request')}
                 className="w-full py-2 px-4 border border-blue-300 rounded-md shadow-sm text-sm font-medium text-blue-700 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -203,7 +172,6 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
                 Send Another Email
               </button>
             )}
-            
             <a
               href="/auth/login"
               className="block w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-center"
@@ -215,15 +183,13 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
       </div>
     );
   }
-
   if (mode === 'unlock') {
-    return (
+    return ()
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-gray-900">Unlock Account</h2>
           <p className="text-gray-600 mt-2">Enter your unlock token to restore access</p>
         </div>
-
         <form onSubmit={handleUnlockAccount} className="space-y-4">
           {/* Email Field */}
           <div>
@@ -242,11 +208,10 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
               disabled={isLoading}
               required
             />
-            {errors.unlock?.email && (
+            {errors.unlock?.email && ()
               <p className="mt-1 text-sm text-red-600">{errors.unlock.email}</p>
             )}
           </div>
-
           {/* Unlock Token Field */}
           <div>
             <label htmlFor="unlock-token" className="block text-sm font-medium text-gray-700 mb-1">
@@ -264,11 +229,10 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
               disabled={isLoading}
               required
             />
-            {errors.unlock?.unlockToken && (
+            {errors.unlock?.unlockToken && ()
               <p className="mt-1 text-sm text-red-600">{errors.unlock.unlockToken}</p>
             )}
           </div>
-
           {/* Submit Button */}
           <button
             type="submit"
@@ -279,7 +243,7 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
                 : 'bg-blue-600 hover:bg-blue-700'
             }`}
           >
-            {isLoading ? (
+            {isLoading ? ()
               <div className="flex items-center justify-center">
                 <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -287,12 +251,11 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
                 </svg>
                 Unlocking Account...
               </div>
-            ) : (
+            ) : ()
               'Unlock Account'
             )}
           </button>
         </form>
-
         <div className="mt-6 text-center">
           <button
             onClick={() => setMode('request')}
@@ -304,15 +267,13 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
       </div>
     );
   }
-
   // Request unlock mode
-  return (
+  return ()
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Account Recovery</h2>
         <p className="text-gray-600 mt-2">Request an unlock token for your account</p>
       </div>
-
       <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
         <div className="flex items-start">
           <div className="flex-shrink-0">
@@ -329,7 +290,6 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
           </div>
         </div>
       </div>
-
       <form onSubmit={handleRequestUnlock} className="space-y-4">
         {/* Email Field */}
         <div>
@@ -348,11 +308,10 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
             disabled={isLoading}
             required
           />
-          {errors.request?.email && (
+          {errors.request?.email && ()
             <p className="mt-1 text-sm text-red-600">{errors.request.email}</p>
           )}
         </div>
-
         {/* Submit Button */}
         <button
           type="submit"
@@ -363,7 +322,7 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
               : 'bg-blue-600 hover:bg-blue-700'
           }`}
         >
-          {isLoading ? (
+          {isLoading ? ()
             <div className="flex items-center justify-center">
               <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -371,14 +330,13 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
               </svg>
               Sending Request...
             </div>
-          ) : countdown > 0 ? (
-            `Wait ${formatCountdown(countdown)} to resend`
-          ) : (
+          ) : countdown > 0 ? ()
+            `Wait ${formatCountdown(countdown)} to resend`}
+          ) : ()
             'Send Unlock Instructions'
           )}
         </button>
       </form>
-
       <div className="mt-6 text-center space-y-2">
         <div>
           <a
@@ -388,7 +346,6 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
             Back to Login
           </a>
         </div>
-        
         <div className="text-sm text-gray-600">
           Remember your password?{' '}
           <a
@@ -399,7 +356,6 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
           </a>
         </div>
       </div>
-
       {/* Security Notice */}
       <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-md">
         <p className="text-xs text-gray-600 text-center">

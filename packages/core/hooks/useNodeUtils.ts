@@ -18,7 +18,7 @@ export const useNodeUtils = ({ nodeTypes }: UseNodeUtilsProps): UseNodeUtilsRetu
           label: 'Unknown', 
           icon: '🔧', 
           category: 'unknown',
-          tooltip: 'Unknown node type'
+          tooltip: 'Unknown node type',
         };
       }
       return nodeTypes.find(n => n.id === nodeType) || { 

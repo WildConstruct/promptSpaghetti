@@ -89,7 +89,7 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
     // Remove duplicates and update variations
     handleVariationsChange([...new Set([...variations, ...generated])]);
   };
-  return ()
+  return ();
     <div className="action-editor">
       {/* BASIC LEVEL: Essential action configuration */}
       <ProgressiveDisclosureSection

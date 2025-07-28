@@ -65,7 +65,7 @@ export const RunCountControls: React.FC<RunCountControlsProps> = ({)
         color: '#10b981',
         icon: '🚀',
         description: 'Fast execution',
-        estimatedTime: '< 1 second'
+        estimatedTime: '< 1 second',
       };
     } else if (count <= 10) {
       return {
@@ -73,7 +73,7 @@ export const RunCountControls: React.FC<RunCountControlsProps> = ({)
         color: '#f59e0b',
         icon: '⚡',
         description: 'Moderate execution',
-        estimatedTime: '1-3 seconds'
+        estimatedTime: '1-3 seconds',
       };
     } else if (count <= 20) {
       return {
@@ -81,7 +81,7 @@ export const RunCountControls: React.FC<RunCountControlsProps> = ({)
         color: '#f97316',
         icon: '⏳',
         description: 'Slower execution',
-        estimatedTime: '3-6 seconds'
+        estimatedTime: '3-6 seconds',
       };
     } else {
       return {
@@ -89,12 +89,12 @@ export const RunCountControls: React.FC<RunCountControlsProps> = ({)
         color: '#ef4444',
         icon: '🐌',
         description: 'Very slow execution',
-        estimatedTime: '6+ seconds'
+        estimatedTime: '6+ seconds',
       };
     }
   };
   const perfInfo = getPerformanceInfo(settings.value);
-  return ()
+  return ();
     <div style={{ marginBottom: '24px' }}>
       {/* Section Header */}
       <div style={{
@@ -195,7 +195,7 @@ export const RunCountControls: React.FC<RunCountControlsProps> = ({)
           {settings.presets.map((presetValue, index) => {
             const presetPerf = getPerformanceInfo(presetValue);
             const isSelected = settings.value === presetValue;
-            return ()
+            return ();
               <button
                 key={index}
                 onClick={() => handlePresetSelect(presetValue)}
@@ -237,7 +237,7 @@ export const RunCountControls: React.FC<RunCountControlsProps> = ({)
                 </div>
                 <div style={{
                   fontSize: '10px',
-                  color: isSelected ? presetPerf.color : uiColors.text.secondary
+                  color: isSelected ? presetPerf.color : uiColors.text.secondary,
                 }}>
                   {presetPerf.icon}
                 </div>

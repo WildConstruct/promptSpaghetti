@@ -28,7 +28,7 @@ const FORM_STEPS: FormStep[] = [
   {
     id: 'type',
     title: 'Choose Type',
-    description: 'Select the type of contribution you want to create'
+    description: 'Select the type of contribution you want to create',
   },
   {
     id: 'basic',
@@ -38,12 +38,12 @@ const FORM_STEPS: FormStep[] = [
   {
     id: 'content',
     title: 'Content Details',
-    description: 'Add specific content based on contribution type'
+    description: 'Add specific content based on contribution type',
   },
   {
     id: 'review',
     title: 'Review & Submit',
-    description: 'Review your submission before publishing'
+    description: 'Review your submission before publishing',
   }
 ];
 
@@ -167,7 +167,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
       await onSubmit(submissionData);
     } catch (err) {
       setErrors({ )
-        submit: err instanceof Error ? err.message : 'Failed to submit contribution' 
+        submit: err instanceof Error ? err.message : 'Failed to submit contribution' ,
       });
     } finally {
       setIsSubmitting(false);
@@ -177,7 +177,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
   const renderStepContent = () => {
     switch (currentStep) {
     case 0:
-      return ()
+      return ();
         <div className="step-content">
           <h3>What type of contribution are you creating?</h3>
           <div className="type-grid">
@@ -200,7 +200,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
         </div>
       );
     case 1:
-      return ()
+      return ();
         <div className="step-content">
           <h3>Basic Information</h3>
           <div className="form-group">
@@ -278,7 +278,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
         </div>
       );
     case 2:
-      return ()
+      return ();
         <div className="step-content">
           <h3>Content Details</h3>
           {renderContentFields()}
@@ -286,7 +286,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
         </div>
       );
     case 3:
-      return ()
+      return ();
         <div className="step-content">
           <h3>Review Your Submission</h3>
           <div className="review-section">
@@ -339,7 +339,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
   const renderContentFields = () => {
     switch (formData.type) {
     case 'template':
-      return ()
+      return ();
         <div className="content-fields">
           <div className="form-group">
             <label>Graph JSON *</label>
@@ -385,7 +385,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
                     ...formData.content, 
                     pricing: { ,
                       ...formData.content?.pricing, 
-                      type: e.target.value as 'free' | 'paid' 
+                      type: e.target.value as 'free' | 'paid' ,
                     } 
                   } 
                 })}
@@ -403,7 +403,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
                       ...formData.content, 
                       pricing: { ,
                         ...formData.content?.pricing, 
-                        priceInCents: parseInt(e.target.value) || 0 
+                        priceInCents: parseInt(e.target.value) || 0 ,
                       } 
                     } 
                   })}
@@ -415,7 +415,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
       );
     case 'knowledge_article':
     case 'tutorial':
-      return ()
+      return ();
         <div className="content-fields">
           <div className="form-group">
             <label>Article/Tutorial Content *</label>
@@ -445,7 +445,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
         </div>
       );
     default:
-      return ()
+      return ();
         <div className="content-fields">
           <div className="form-group">
             <label>Content *</label>
@@ -462,7 +462,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
       );
     }
   };
-  return ()
+  return ();
     <div className={`contribution-submission-form ${className}`}>}
       {/* Progress Indicator */}
       <div className="progress-indicator">

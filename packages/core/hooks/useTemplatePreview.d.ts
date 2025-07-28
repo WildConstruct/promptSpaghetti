@@ -41,7 +41,7 @@ export declare const useTemplatePreview: ()
     forcePreview: () => void;
     refreshVariant: (variantId: string) => Promise<void>;
     clearVariants: () => void;
-    getPerformanceInsights: () => {
+    getPerformanceInsights: () => {,
         isPerformanceGood: boolean;
         insights: string[];
     };

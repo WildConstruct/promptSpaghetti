@@ -67,7 +67,6 @@ describe('Project Edge Cases Integration Tests', () => {
             label: `Node ${i}`,}
             variations: Array.from({ length: 50 }, (_, j) => 
               `This is a very long variation text for node ${i}, variation ${j} with lots of content to test serialization performance and memory usage`}
-            )
           }
         })),
         edges: Array.from({ length: 999 }, (_, i) => ({)
@@ -104,7 +103,7 @@ describe('Project Edge Cases Integration Tests', () => {
       // Create nodes with potential circular references
       const nodeData: Record<string, unknown> = {
         nodeType: 'custom',
-        label: 'Circular Test'
+        label: 'Circular Test',
       };
       (nodeData as Record<string, unknown>).self = nodeData; // Circular reference
       const graphWithCircular = {
@@ -176,7 +175,7 @@ describe('Project Edge Cases Integration Tests', () => {
         name: `Concurrent Project ${i}`,}
         metadata: createDefaultMetadata(`Project ${i}`, 'Test User'),}
         thumbnail: RecentProjectsManager.generateThumbnail([], []),
-        fileSize: 1024 * i
+        fileSize: 1024 * i,
       }));
       // Add all projects concurrently
       expect(() => {
@@ -197,7 +196,7 @@ describe('Project Edge Cases Integration Tests', () => {
         metadata: createDefaultMetadata('Test', 'User'),
         settings: createDefaultSettings(),
         graph: { nodes: [], edges: [] },
-        exportedAt: new Date().toISOString()
+        exportedAt: new Date().toISOString(),
       };
       // Test with missing graph property
       const corruptedProject1 = { ...validProject };
@@ -232,7 +231,7 @@ describe('Project Edge Cases Integration Tests', () => {
         metadata: createDefaultMetadata('Test', 'User'),
         settings: createDefaultSettings(),
         graph: { nodes: [], edges: [] },
-        exportedAt: new Date().toISOString()
+        exportedAt: new Date().toISOString(),
       };
       const validJson = JSON.stringify(validProject);
       // Test with truncated JSON
@@ -290,7 +289,7 @@ describe('Project Edge Cases Integration Tests', () => {
       const graph = { nodes: [], edges: [] };
       const metadata = createDefaultMetadata('Test', 'User');
       const settings = createDefaultSettings();
-      const result = await ProjectManager.saveProjectToDevice(;)
+      const result = await ProjectManager.saveProjectToDevice(;);
         graph,
         {
           name: 'Test Project',
@@ -311,7 +310,7 @@ describe('Project Edge Cases Integration Tests', () => {
       const graph = { nodes: [], edges: [] };
       const metadata = createDefaultMetadata('Test', 'User');
       const settings = createDefaultSettings();
-      const result = await ProjectManager.saveProjectToDevice(;)
+      const result = await ProjectManager.saveProjectToDevice(;);
         graph,
         {
           name: 'Test Project',
@@ -332,7 +331,7 @@ describe('Project Edge Cases Integration Tests', () => {
       const graph = { nodes: [], edges: [] };
       const metadata = createDefaultMetadata('Test', 'User');
       const settings = createDefaultSettings();
-      const result = await ProjectManager.saveProjectToDevice(;)
+      const result = await ProjectManager.saveProjectToDevice(;);
         graph,
         {
           name: 'Test Project',
@@ -363,7 +362,7 @@ describe('Project Edge Cases Integration Tests', () => {
         }],
         edges: [],
       };
-      const metadata = createDefaultMetadata(;)
+      const metadata = createDefaultMetadata(;);
         'Unicode Test Project 🌍',
         'Test User 用户'
       );
@@ -379,14 +378,14 @@ describe('Project Edge Cases Integration Tests', () => {
     });
     test('handles very long file names', async () => {
       const veryLongName = 'A'.repeat(300); // Very long name;
-      const result = await ProjectManager.saveProjectToDevice(;)
+      const result = await ProjectManager.saveProjectToDevice(;);
         { nodes: [], edges: [] },
         {
           name: veryLongName,
           fileName: `${veryLongName}.psg`,}
           author: 'User',
         },
-        createDefaultSettings()
+        createDefaultSettings();
       );
       expect(result.success).toBe(true);
       // Verify filename was sanitized to reasonable length
@@ -408,7 +407,6 @@ describe('Project Edge Cases Integration Tests', () => {
             author: 'User',
           },
           settings
-        )
       );
       const results = await Promise.allSettled(savePromises);
       // Most should succeed, but some might fail due to rapid execution

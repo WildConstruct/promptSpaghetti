@@ -548,7 +548,7 @@ const generateMockSession = (): UserSession => ({)
       peak: Math.random() * 100 + 50,
       average: Math.random() * 80 + 40,
       finalUsage: Math.random() * 90 + 45,
-      gcEvents: Math.floor(Math.random() * 10)
+      gcEvents: Math.floor(Math.random() * 10),
     },
     networkRequests: [],
     errors: [],
@@ -622,7 +622,7 @@ export const UserSessionRecording: React.FC<UserSessionRecordingProps> = ({)
           totalSessions: sessions.length,
           dateRange: {,
             start: Math.min(...sessions.map(s => s.startTime)),
-            end: Math.max(...sessions.map(s => s.startTime + s.duration))
+            end: Math.max(...sessions.map(s => s.startTime + s.duration)),
           },
           analysisVersion: '1.0.0',
         }
@@ -639,10 +639,10 @@ export const UserSessionRecording: React.FC<UserSessionRecordingProps> = ({)
       totalSessions,
       averageDuration: Math.round(averageDuration * 10) / 10,
       averagePageViews: Math.round(averagePageViews * 10) / 10,
-      averageInteractions: Math.round(averageInteractions * 10) / 10
+      averageInteractions: Math.round(averageInteractions * 10) / 10,
     };
   }, [sessions]);
-  return ()
+  return ();
     <div className="user-session-recording">
       <div className="session-header">
         <div className="header-section">

@@ -75,7 +75,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
       // Update initial state if it's no longer valid
       initialState: newStates.includes(initialState) ? initialState : (newStates[0] || ''),
       // Clean up termination states
-      terminationStates: terminationStates.filter(state => newStates.includes(state))
+      terminationStates: terminationStates.filter(state => newStates.includes(state)),
     });
   };
   const handleAddState = () => {
@@ -104,7 +104,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
       states: newStates, 
       transitions: updatedTransitions,
       initialState: initialState === oldState ? newValue : initialState,
-      terminationStates: terminationStates.map(state => state === oldState ? newValue : state)
+      terminationStates: terminationStates.map(state => state === oldState ? newValue : state),
     });
   };
   const handleAddTransition = () => {
@@ -164,7 +164,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
     return totals;
   };
   const probabilityTotals = getProbabilityTotals();
-  return ()
+  return ();
     <div className="markov-editor">
       {/* BASIC LEVEL: Essential settings for filmmakers */}
       <ProgressiveDisclosureSection
@@ -460,7 +460,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                 border: 'none',
                 borderRadius: 2,
                 color: '#fff',
-                cursor: states.length < 2 ? 'not-allowed' : 'pointer'
+                cursor: states.length < 2 ? 'not-allowed' : 'pointer',
               }}
             >
               Add Transition
@@ -494,7 +494,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                     border: '1px solid #4a5568',
                     borderRadius: 4,
                     padding: 8,
-                    marginBottom: index < transitionArray.length - 1 ? 8 : 0
+                    marginBottom: index < transitionArray.length - 1 ? 8 : 0,
                   }}
                 >
                   <div style={{
@@ -612,11 +612,11 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
               {states.map(state => {)
                 const total = probabilityTotals[state] || 0;
                 const isValid = Math.abs(total - 1.0) < 0.001;
-                return ()
+                return ();
                   <div key={state} style={{ 
                     display: 'flex', 
                     justifyContent: 'space-between',
-                    color: isValid ? '#68d391' : '#fbb6ce'
+                    color: isValid ? '#68d391' : '#fbb6ce',
                   }}>
                     <span>{state}:</span>
                     <span>{total.toFixed(3)} {isValid ? '✓' : '⚠'}</span>
@@ -739,7 +739,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                     const stateTransitions = transitions[fromState] || {};
                     const hasTransitions = Object.keys(stateTransitions).length > 0;
                     if (!hasTransitions) return null;
-                    return ()
+                    return ();
                       <div key={fromState} style={{
                         marginBottom: 4,
                         padding: '2px 4px',

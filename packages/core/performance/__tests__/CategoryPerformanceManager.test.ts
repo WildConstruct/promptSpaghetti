@@ -41,7 +41,7 @@ describe('CategoryPerformanceManager', () => {
     warnings: [],
     startTime: Date.now(),
     endTime: Date.now() + 150,
-    customMetrics: new Map()
+    customMetrics: new Map(),
   };
   beforeEach(() => {
     // Create mock performance monitor
@@ -193,7 +193,7 @@ describe('CategoryPerformanceManager', () => {
       expect(allMetrics).toHaveProperty('integration');
     });
     test('should update metrics when execution starts', () => {
-      const startHandler = performanceMonitor.on.mock.calls.find(;)
+      const startHandler = performanceMonitor.on.mock.calls.find(;);
         call => call[0] === 'execution_started'
       )?.[1];
       expect(startHandler).toBeDefined();
@@ -204,13 +204,13 @@ describe('CategoryPerformanceManager', () => {
       }
     });
     test('should update metrics when execution completes', () => {
-      const completeHandler = performanceMonitor.on.mock.calls.find(;)
+      const completeHandler = performanceMonitor.on.mock.calls.find(;);
         call => call[0] === 'execution_completed'
       )?.[1];
       expect(completeHandler).toBeDefined();
       if (completeHandler) {
         // First start an execution
-        const startHandler = performanceMonitor.on.mock.calls.find(;)
+        const startHandler = performanceMonitor.on.mock.calls.find(;);
           call => call[0] === 'execution_started'
         )?.[1];
         if (startHandler) {
@@ -230,7 +230,7 @@ describe('CategoryPerformanceManager', () => {
   describe('Optimization Recommendations', () => {
     test('should generate recommendations for categories with issues', () => {
       // Simulate high error rate
-      const completeHandler = performanceMonitor.on.mock.calls.find(;)
+      const completeHandler = performanceMonitor.on.mock.calls.find(;);
         call => call[0] === 'execution_completed'
       )?.[1];
       if (completeHandler) {
@@ -365,7 +365,7 @@ describe('CategoryPerformanceManager', () => {
       await eventPromise;
     });
     test('should emit execution_dequeued event when processing queue', () => {
-      const completeHandler = performanceMonitor.on.mock.calls.find(;)
+      const completeHandler = performanceMonitor.on.mock.calls.find(;);
         call => call[0] === 'execution_completed'
       )?.[1];
       if (completeHandler) {
@@ -430,7 +430,7 @@ describe('CategoryPerformanceManager', () => {
       const startTime = Date.now();
       const updateCount = 1000;
       let completedUpdates = 0;
-      const completeHandler = performanceMonitor.on.mock.calls.find(;)
+      const completeHandler = performanceMonitor.on.mock.calls.find(;);
         call => call[0] === 'execution_completed'
       )?.[1];
       if (completeHandler) {

@@ -97,7 +97,7 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = ()
     { value: 'user_resolution', label: 'Manual Resolution', description: 'Choose specific values' }
   ];
   if (conflicts.length === 0) {
-    return ()
+    return ();
       <div className={`bg-white rounded-lg border p-4 ${className}`}>}
         <div className="text-center text-gray-500">
           <div className="text-2xl mb-2">✅</div>
@@ -107,7 +107,7 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = ()
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`bg-white rounded-lg border ${className}`}>}
       {/* Header */}
       <div className="border-b p-4">

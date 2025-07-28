@@ -10,13 +10,12 @@ import { PreviewModal } from './PreviewModal';
 import { PurchaseModal } from './PurchaseModal';
 import { useMarketplace } from '../../hooks/useMarketplace';
 import './TemplateDetail.css';
-
 interface TemplateDetailProps {
   templateId: string;
   className?: string;
 }
 
-export const TemplateDetail: React.FC<TemplateDetailProps> = ({
+export const TemplateDetail: React.FC<TemplateDetailProps> = ({)
   templateId,
   className = ''
 }) => {
@@ -40,52 +39,42 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
   const [showPreview, setShowPreview] = useState(false);
   const [showPurchase, setShowPurchase] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'reviews' | 'versions'>('overview');
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { getTemplate, _previewTemplate, _purchaseTemplate } = useMarketplace();
-
   useEffect(() => {
     loadTemplateData();
   }, [loadTemplateData]);
-
   const loadTemplateData = useCallback(async () => {
     setLoading(true);
     setError(null);
-    
     try {
       // Load template details
       const templateData = await getTemplate(templateId);
       setTemplate(templateData);
-
       // Load similar templates
-      const similarResponse = await fetch(`/api/marketplace/templates/${templateId}/similar?limit=4`);
+      const similarResponse = await fetch(`/api/marketplace/templates/${templateId}/similar?limit=4`);}
       if (similarResponse.ok) {
         const similarData = await similarResponse.json();
         setSimilarTemplates(similarData.templates || []);
       }
-
       // Load reviews
-      const reviewsResponse = await fetch(`/api/marketplace/templates/${templateId}/reviews`);
+      const reviewsResponse = await fetch(`/api/marketplace/templates/${templateId}/reviews`);}
       if (reviewsResponse.ok) {
         const reviewsData = await reviewsResponse.json();
         setReviews(reviewsData || []);
       }
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load template');
     } finally {
       setLoading(false);
     }
   }, [templateId, getTemplate]);
-
   const handlePreview = () => {
     setShowPreview(true);
   };
-
   const handlePurchase = () => {
     setShowPurchase(true);
   };
-
   const handlePurchaseComplete = (success: boolean) => {
     setShowPurchase(false);
     if (success) {
@@ -93,23 +82,20 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
       loadTemplateData();
     }
   };
-
   const handleSimilarTemplateClick = (id: string) => {
     // Navigate to similar template
-    window.location.href = `/marketplace/templates/${id}`;
+    window.location.href = `/marketplace/templates/${id}`;}
   };
-
   if (loading) {
-    return (
-      <div className={`template-detail loading ${className}`}>
+    return ()
+      <div className={`template-detail loading ${className}`}>}
         <LoadingSpinner size="large" message="Loading template..." />
       </div>
     );
   }
-
   if (error || !template) {
-    return (
-      <div className={`template-detail error ${className}`}>
+    return ()
+      <div className={`template-detail error ${className}`}>}
         <div className="error-message">
           <h2>Template not found</h2>
           <p>{error || 'The requested template could not be found.'}</p>
@@ -120,9 +106,8 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`template-detail ${className}`}>
+  return ()
+    <div className={`template-detail ${className}`}>}
       {/* Header */}
       <header className="template-header">
         <div className="header-content">
@@ -132,13 +117,10 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
               {template.price_cents === 0 && <Badge variant="free">Free</Badge>}
               {template.is_ai_generated && <Badge variant="ai">AI Generated</Badge>}
             </div>
-
             <h1 className="template-title">{template.title}</h1>
-            
-            {template.description && (
+            {template.description && ()
               <p className="template-description">{template.description}</p>
             )}
-
             <div className="template-meta">
               <div className="rating-section">
                 <StarRating rating={template.avg_rating} />
@@ -146,7 +128,6 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
                   {template.avg_rating.toFixed(1)} ({template.total_reviews} reviews)
                 </span>
               </div>
-
               <div className="stats-section">
                 <span className="stat">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -160,7 +141,6 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
                   </svg>
                   {template.total_purchases} purchases
                 </span>
-
                 <span className="stat">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path
@@ -182,23 +162,20 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
                 </span>
               </div>
             </div>
-
             {/* Tags */}
-            {template.tags.length > 0 && (
+            {template.tags.length > 0 && ()
               <div className="template-tags">
-                {template.tags.map((tag: string) => (
+                {template.tags.map((tag: string) => ()
                   <span key={tag} className="tag">{tag}</span>
                 ))}
               </div>
             )}
           </div>
-
           {/* Purchase Section */}
           <div className="purchase-section">
             <div className="price-container">
               <PriceDisplay priceCents={template.price_cents} size="large" />
             </div>
-
             <div className="action-buttons">
               <button 
                 onClick={handlePreview}
@@ -222,7 +199,6 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
                 </svg>
                 Preview
               </button>
-
               <button 
                 onClick={handlePurchase}
                 className="purchase-button"
@@ -230,14 +206,13 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
                 {template.price_cents === 0 ? 'Get Free' : 'Purchase'}
               </button>
             </div>
-
             {/* Creator Info */}
-            {template.owner && (
+            {template.owner && ()
               <div className="creator-info">
                 <h4>Created by</h4>
                 <div className="creator-details">
                   <span className="creator-name">{template.owner.name}</span>
-                  {template.owner.verified && (
+                  {template.owner.verified && ()
                     <svg 
                       width="16" 
                       height="16" 
@@ -258,12 +233,11 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
                 </div>
               </div>
             )}
-
             {/* Claude Compatibility */}
             <div className="compatibility-info">
               <h4>Compatible with</h4>
               <div className="compat-models">
-                {template.claude_compat.map((model: string) => (
+                {template.claude_compat.map((model: string) => ()
                   <span key={model} className="compat-model">
                     {model.replace('claude-', 'Claude ')}
                   </span>
@@ -273,7 +247,6 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
           </div>
         </div>
       </header>
-
       {/* Content Tabs */}
       <div className="content-section">
         <nav className="content-tabs">
@@ -296,27 +269,24 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
             Versions
           </button>
         </nav>
-
         <div className="tab-content">
-          {activeTab === 'overview' && (
+          {activeTab === 'overview' && ()
             <div className="overview-content">
               <div className="main-content">
                 <section className="description-section">
                   <h3>About this template</h3>
                   <p>{template.description || 'No description available.'}</p>
                 </section>
-
-                {template.categories && template.categories.length > 0 && (
+                {template.categories && template.categories.length > 0 && ()
                   <section className="categories-section">
                     <h3>Categories</h3>
                     <div className="categories">
-                      {template.categories.map((category: string) => (
+                      {template.categories.map((category: string) => ()
                         <span key={category} className="category">{category}</span>
                       ))}
                     </div>
                   </section>
                 )}
-
                 <section className="usage-section">
                   <h3>Usage Instructions</h3>
                   <div className="usage-steps">
@@ -344,7 +314,6 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
                   </div>
                 </section>
               </div>
-
               <aside className="sidebar-content">
                 <section className="stats-section">
                   <h3>Statistics</h3>
@@ -367,7 +336,6 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
                     </div>
                   </div>
                 </section>
-
                 <section className="technical-specs">
                   <h3>Technical Details</h3>
                   <div className="specs-list">
@@ -392,8 +360,7 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
               </aside>
             </div>
           )}
-
-          {activeTab === 'reviews' && (
+          {activeTab === 'reviews' && ()
             <div className="reviews-content">
               <ReviewList 
                 reviews={reviews}
@@ -402,21 +369,19 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
               />
             </div>
           )}
-
-          {activeTab === 'versions' && (
+          {activeTab === 'versions' && ()
             <div className="versions-content">
               <p>Version history will be displayed here.</p>
             </div>
           )}
         </div>
       </div>
-
       {/* Similar Templates */}
-      {similarTemplates.length > 0 && (
+      {similarTemplates.length > 0 && ()
         <section className="similar-templates">
           <h2>Similar Templates</h2>
           <div className="similar-grid">
-            {similarTemplates.map((similarTemplate) => (
+            {similarTemplates.map((similarTemplate) => ()
               <TemplateCard
                 key={similarTemplate.id}
                 template={similarTemplate}
@@ -427,17 +392,15 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
           </div>
         </section>
       )}
-
       {/* Modals */}
-      {showPreview && (
+      {showPreview && ()
         <PreviewModal
           templateId={templateId}
           template={template}
           onClose={() => setShowPreview(false)}
         />
       )}
-
-      {showPurchase && (
+      {showPurchase && ()
         <PurchaseModal
           template={template}
           onClose={() => setShowPurchase(false)}

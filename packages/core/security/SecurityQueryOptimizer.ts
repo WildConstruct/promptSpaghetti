@@ -656,7 +656,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
         predicate_pushdown: characteristics.filter_selectivity > 0.5,
         column_pruning: !queryText.includes('SELECT *'),
         join_reordering: characteristics.join_complexity > 1,
-        aggregation_pushdown: characteristics.aggregation_complexity > 1
+        aggregation_pushdown: characteristics.aggregation_complexity > 1,
       }
     };
     return plan;
@@ -713,7 +713,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
         estimated_time_ms: characteristics.aggregation_complexity * 200,
         estimated_rows: (steps[steps.length - 1].estimated_rows || 1000) * 0.1,
         parallelization: 1,
-        dependencies: [stepId - 2]
+        dependencies: [stepId - 2],
       });
     }
     // Sort step (if needed)
@@ -724,7 +724,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
         estimated_time_ms: 100,
         estimated_rows: steps[steps.length - 1].estimated_rows || 1000,
         parallelization: 1,
-        dependencies: [stepId - 2]
+        dependencies: [stepId - 2],
       });
     }
     return steps;
@@ -753,7 +753,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
       cpu_cores: Math.ceil(baseCpu * multiplier * (1 + characteristics.complexity_score / 10)),
       memory_mb: Math.ceil(baseMemory * multiplier * (1 + characteristics.data_volume_estimate / 100)),
       disk_io_mb: Math.ceil(baseDiskIo * (1 + characteristics.data_volume_estimate / 10)),
-      network_mb: Math.ceil(baseNetwork * multiplier * (1 + characteristics.join_complexity / 5))
+      network_mb: Math.ceil(baseNetwork * multiplier * (1 + characteristics.join_complexity / 5)),
     };
   }
   // Query Execution and Caching
@@ -808,14 +808,14 @@ export class SecurityQueryOptimizer extends EventEmitter {
       cache_size_mb: cacheEntry?.size_mb || 0,
       optimizations_applied: this.getAppliedOptimizations(profile),
       execution_plan_used: profile.optimization.execution_plan.id,
-      parallelization_factor: profile.optimization.execution_plan.plan_type === 'distributed' ? 4 : 
+      parallelization_factor: profile.optimization.execution_plan.plan_type === 'distributed' ? 4 : ,
                                profile.optimization.execution_plan.plan_type === 'parallel' ? 2 : 1,
       compute_cost: profile.optimization.cost_estimate * 0.4,
       storage_cost: profile.optimization.cost_estimate * 0.3,
       network_cost: profile.optimization.cost_estimate * 0.2,
       total_cost: profile.optimization.cost_estimate,
       result_accuracy: 0.95 + Math.random() * 0.05,
-      result_completeness: 0.98 + Math.random() * 0.02
+      result_completeness: 0.98 + Math.random() * 0.02,
     };
     this.queryExecutions.set(executionId, execution);
     return execution;
@@ -986,13 +986,13 @@ export class SecurityQueryOptimizer extends EventEmitter {
         before_metrics: {},
         after_metrics: {},
         improvement_percentage: rule.expected_improvement_percentage,
-        cost_impact: -rule.expected_improvement_percentage * 0.01 * profile.optimization.cost_estimate
+        cost_impact: -rule.expected_improvement_percentage * 0.01 * profile.optimization.cost_estimate,
       },
       context: {,
         affected_queries: [profile.id],
         system_state: {},
         resource_utilization: {},
-        user_impact_assessment: 'Positive - improved query performance expected'
+        user_impact_assessment: 'Positive - improved query performance expected',
       },
       response: {,
         acknowledged: false,
@@ -1024,7 +1024,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
     if (rewrite.risk_level === 'low' && !rewrite.validation_required) {
       // Apply the rewrite
       const originalQuery = profile.query_text;
-      const rewrittenQuery = originalQuery.replace(;)
+      const rewrittenQuery = originalQuery.replace(;);
         new RegExp(rewrite.original_pattern, 'gi'),
         rewrite.optimized_pattern
       );
@@ -1056,7 +1056,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
         p95_execution_time_ms: this.calculatePercentile(recentExecutions, 'execution_time_ms', 0.95),
         p99_execution_time_ms: this.calculatePercentile(recentExecutions, 'execution_time_ms', 0.99),
         slow_queries_count: recentExecutions.filter(e => e.execution_time_ms > 5000).length,
-        failed_queries_count: 0 // Simplified for demo
+        failed_queries_count: 0 // Simplified for demo,
       },
       cache_performance: {,
         total_cache_entries: this.cacheEntries.size,
@@ -1065,7 +1065,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
         avg_cache_retrieval_time_ms: this.calculateAverageCacheRetrievalTime(recentExecutions),
         cache_size_total_mb: this.calculateTotalCacheSize(),
         cache_evictions: Math.floor(Math.random() * 5),
-        cache_refreshes: Math.floor(Math.random() * 10)
+        cache_refreshes: Math.floor(Math.random() * 10),
       },
       resource_utilization: {,
         avg_cpu_utilization: 45 + Math.random() * 30,
@@ -1073,7 +1073,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
         avg_memory_utilization: 50 + Math.random() * 25,
         peak_memory_utilization: 75 + Math.random() * 25,
         disk_io_operations_per_second: 100 + Math.random() * 500,
-        network_throughput_mbps: 50 + Math.random() * 200
+        network_throughput_mbps: 50 + Math.random() * 200,
       },
       cost_metrics: {,
         total_compute_cost: this.calculateSum(recentExecutions, 'compute_cost'),
@@ -1091,7 +1091,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
           .filter(rule => rule.success_rate > 0.8).length,
         failed_optimizations: Array.from(this.optimizationRules.values()),
           .filter(rule => rule.success_rate < 0.5).length,
-        user_satisfaction_score: 4.2 + Math.random() * 0.8 // 4.2-5.0 scale
+        user_satisfaction_score: 4.2 + Math.random() * 0.8 // 4.2-5.0 scale,
       },
       collected_at: now,
     };
@@ -1169,7 +1169,6 @@ export class SecurityQueryOptimizer extends EventEmitter {
     avg_query_time_ms: number;
     system_efficiency_score: number;
     recent_events: OptimizationEvent[];
-  } {
     const recentExecutions = Array.from(this.queryExecutions.values());
       .filter(exec => Date.now() - exec.executed_at < 24 * 60 * 60 * 1000)
       .slice(-1000);
@@ -1307,7 +1306,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
         created_at: Date.now(),
         last_applied: 0,
         application_count: 0,
-        success_rate: 0.85 + Math.random() * 0.15 // Simulate 85-100% success rate
+        success_rate: 0.85 + Math.random() * 0.15 // Simulate 85-100% success rate,
       };
       this.optimizationRules.set(id, fullRule);
     });
@@ -1367,7 +1366,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
       expired_entries: expiredEntries,
       size_before_mb: totalSizeBefore,
       size_after_mb: totalSizeAfter,
-      space_freed_mb: totalSizeBefore - totalSizeAfter
+      space_freed_mb: totalSizeBefore - totalSizeAfter,
     });
   }
   private performOptimizationAnalysis(): void {
@@ -1487,7 +1486,7 @@ export class SecurityQueryOptimizer extends EventEmitter {
       this.emit('configuration_imported', {)
         profiles_imported: config.query_profiles?.length || 0,
         rules_imported: config.optimization_rules?.length || 0,
-        cache_entries_imported: config.cache_entries?.filter((e: CacheEntry) => e.expires_at > Date.now()).length || 0
+        cache_entries_imported: config.cache_entries?.filter((e: CacheEntry) => e.expires_at > Date.now()).length || 0,
       });
     } catch (error) {
       throw new Error(`Failed to import configuration: ${error}`);}

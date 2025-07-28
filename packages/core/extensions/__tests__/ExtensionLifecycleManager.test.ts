@@ -182,7 +182,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
     it('should validate extension metadata on registration', () => {
       const invalidExtension = {
         // Missing required fields
-        name: 'Invalid Extension'
+        name: 'Invalid Extension',
       } as Extension;
       lifecycleManager.registerExtension.mockImplementationOnce((ext: Extension) => {
         if (!ext.id || !ext.name || !ext.version) {
@@ -333,7 +333,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
         'extension-b', 
         'extension-c'
       ] as unknown as unknown as unknown);
-      const activationOrder = lifecycleManager.resolveActivationOrder([;)
+      const activationOrder = lifecycleManager.resolveActivationOrder([;);
         'extension-c',
         'extension-a',
         'extension-b'
@@ -406,7 +406,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
         uptime: 60000,
         memoryUsage: 1024 * 1024 * 100, // High memory usage
         errorCount: 5,
-        lastError: 'Runtime exception'
+        lastError: 'Runtime exception',
       };
       lifecycleManager.getExtensionHealth.mockReturnValue(mockHealth as unknown as unknown as unknown);
       const health = lifecycleManager.getExtensionHealth('unhealthy-test');
@@ -487,7 +487,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
       });
       lifecycleManager.disposeExtension.mockResolvedValue(true as unknown as unknown as unknown);
       // Simulate shutdown - dispose all extensions
-      const disposalPromises = extensions.map(ext => ;)
+      const disposalPromises = extensions.map(ext => ;);
         lifecycleManager.disposeExtension(ext.id)
       );
       await Promise.all(disposalPromises);
@@ -542,7 +542,7 @@ describe('Epic 24.2 - Extension Lifecycle Manager Unit Tests', () => {
         await new Promise(resolve => setTimeout(resolve, Math.random() * 50));
         return true;
       });
-      const activationPromises = extensions.map(id => ;)
+      const activationPromises = extensions.map(id => ;);
         lifecycleManager.activateExtension(id)
       );
       const results = await Promise.all(activationPromises);

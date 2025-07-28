@@ -122,7 +122,7 @@ export declare const ZustandEventUtils: {
     /**
      * Create event-driven state updater
      */
-    createEventUpdater: <T>(store: {)
+    createEventUpdater: <T>(store: {),
         getState: () => T;
         setState: (partial: Partial<T>) => void;
     }, eventTypes: string[]) => string;

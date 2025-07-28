@@ -67,7 +67,7 @@ export class SentimentAnalysisService {
             continue;
           }
           // Perform analysis
-          const analysis = await this.performSentimentAnalysis(;)
+          const analysis = await this.performSentimentAnalysis(;);
             textData,
             validatedRequest.options
           );
@@ -308,7 +308,7 @@ export class SentimentAnalysisService {
       score: Math.max(-1, Math.min(1, sentimentScore)),
       confidence: Math.min(0.95, 0.6 + Math.abs(sentimentScore)),
       magnitude: Math.abs(sentimentScore),
-      subjectivity: totalSentimentWords > 0 ? 0.7 : 0.3
+      subjectivity: totalSentimentWords > 0 ? 0.7 : 0.3,
     };
   }
   private async analyzeEmotions(text: string, language: string) {
@@ -341,7 +341,7 @@ export class SentimentAnalysisService {
       primary: maxScore > 0.1 ? primaryEmotion : undefined,
       scores: emotionScores,
       confidence: Math.min(0.9, 0.5 + maxScore),
-      mixed: Object.values(emotionScores).filter(score => score > 0.3).length > 1
+      mixed: Object.values(emotionScores).filter(score => score > 0.3).length > 1,
     };
   }
   private async analyzeToxicity(text: string, language: string) {
@@ -372,7 +372,7 @@ export class SentimentAnalysisService {
         spam: 0,
         inappropriate: Math.min(1, toxicityScore * 0.5)
       },
-      flags: toxicityScore > 0.5 ? ['high_toxicity'] : []
+      flags: toxicityScore > 0.5 ? ['high_toxicity'] : [],
     };
   }
   private async extractTopics(text: string, language: string) {
@@ -553,21 +553,21 @@ export class SentimentAnalysisService {
       positive: {,
         count: sentimentCounts.positive,
         percentage: total > 0 ? (sentimentCounts.positive / total) * 100 : 0,
-        averageScore: sentimentScores.positive.length > 0 
+        averageScore: sentimentScores.positive.length > 0 ,
           ? sentimentScores.positive.reduce((a: number, b: number) => a + b, 0) / sentimentScores.positive.length 
           : 0
       },
       neutral: {,
         count: sentimentCounts.neutral,
         percentage: total > 0 ? (sentimentCounts.neutral / total) * 100 : 0,
-        averageScore: sentimentScores.neutral.length > 0 
+        averageScore: sentimentScores.neutral.length > 0 ,
           ? sentimentScores.neutral.reduce((a: number, b: number) => a + b, 0) / sentimentScores.neutral.length 
           : 0
       },
       negative: {,
         count: sentimentCounts.negative,
         percentage: total > 0 ? (sentimentCounts.negative / total) * 100 : 0,
-        averageScore: sentimentScores.negative.length > 0 
+        averageScore: sentimentScores.negative.length > 0 ,
           ? sentimentScores.negative.reduce((a: number, b: number) => a + b, 0) / sentimentScores.negative.length 
           : 0
       }
@@ -611,7 +611,7 @@ export class SentimentAnalysisService {
             scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0
           ])
         ) as any,
-        mixedEmotionRate: analyses.filter(a => a.emotions.mixed).length / total * 100
+        mixedEmotionRate: analyses.filter(a => a.emotions.mixed).length / total * 100,
       },
       toxicityAnalytics: {,
         overallLevel: this.calculateOverallToxicityLevel(toxicityCounts),
@@ -629,7 +629,7 @@ export class SentimentAnalysisService {
           spam: 3,
           inappropriate: 4,
         },
-        actionRequired: (toxicityCounts.high + toxicityCounts.severe) / total * 100
+        actionRequired: (toxicityCounts.high + toxicityCounts.severe) / total * 100,
       },
       trends: {,
         sentimentTrend: 'stable',
@@ -791,12 +791,12 @@ export class SentimentAnalysisService {
         const sentiment = sentiments[i];
         return {
           type: sentiment,
-          score: sentiment === 'positive' ? 0.3 + Math.random() * 0.7 :
+          score: sentiment === 'positive' ? 0.3 + Math.random() * 0.7 :,
             sentiment === 'negative' ? -0.7 - Math.random() * 0.3 :
               -0.2 + Math.random() * 0.4,
           confidence: 0.6 + Math.random() * 0.4,
           magnitude: 0.3 + Math.random() * 0.7,
-          subjectivity: 0.4 + Math.random() * 0.5
+          subjectivity: 0.4 + Math.random() * 0.5,
         };
       }
     }
@@ -821,7 +821,7 @@ export class SentimentAnalysisService {
       primary: dominantEmotion,
       scores,
       confidence: 0.6 + Math.random() * 0.3,
-      mixed: Math.random() > 0.8
+      mixed: Math.random() > 0.8,
     };
   }
   private generateMockToxicity() {
@@ -843,9 +843,9 @@ export class SentimentAnalysisService {
             profanity: Math.random() * 0.15,
             threats: Math.random() * 0.02,
             spam: Math.random() * 0.08,
-            inappropriate: Math.random() * 0.1
+            inappropriate: Math.random() * 0.1,
           },
-          flags: level !== 'none' && Math.random() > 0.5 ? ['detected_toxicity'] : []
+          flags: level !== 'none' && Math.random() > 0.5 ? ['detected_toxicity'] : [],
         };
       }
     }

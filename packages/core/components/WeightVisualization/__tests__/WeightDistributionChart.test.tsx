@@ -44,7 +44,7 @@ describe('WeightDistributionChart', () => {
   });
   it('handles hover interactions', () => {
     const mockOnHover = jest.fn<unknown[], unknown>();
-    render()
+    render();
       <WeightDistributionChart 
         options={mockOptions} 
         onOptionHover={mockOnHover}
@@ -55,7 +55,7 @@ describe('WeightDistributionChart', () => {
   });
   it('handles click interactions', () => {
     const mockOnClick = jest.fn<unknown[], unknown>();
-    render()
+    render();
       <WeightDistributionChart 
         options={mockOptions} 
         onOptionClick={mockOnClick}
@@ -70,7 +70,7 @@ describe('WeightDistributionChart', () => {
     expect(svg).toBeInTheDocument();
   });
   it('applies custom color schemes', () => {
-    render()
+    render();
       <WeightDistributionChart 
         options={mockOptions} 
         colorScheme="professional"
@@ -80,7 +80,7 @@ describe('WeightDistributionChart', () => {
     expect(svg).toBeInTheDocument();
   });
   it('renders with custom dimensions', () => {
-    render()
+    render();
       <WeightDistributionChart 
         options={mockOptions} 
         width={300}
@@ -129,7 +129,7 @@ describe('WeightDistributionChart', () => {
 });
 describe('WeightDistributionChart Color Schemes', () => {
   it('uses professional color scheme', () => {
-    render()
+    render();
       <WeightDistributionChart 
         options={mockOptions} 
         colorScheme="professional"
@@ -139,7 +139,7 @@ describe('WeightDistributionChart Color Schemes', () => {
     expect(svg).toBeInTheDocument();
   });
   it('uses warm color scheme', () => {
-    render()
+    render();
       <WeightDistributionChart 
         options={mockOptions} 
         colorScheme="warm"
@@ -149,7 +149,7 @@ describe('WeightDistributionChart Color Schemes', () => {
     expect(svg).toBeInTheDocument();
   });
   it('uses cool color scheme', () => {
-    render()
+    render();
       <WeightDistributionChart 
         options={mockOptions} 
         colorScheme="cool"

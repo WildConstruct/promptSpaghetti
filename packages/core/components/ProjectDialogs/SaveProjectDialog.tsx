@@ -23,8 +23,8 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({)
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const handleInputChange = (field: keyof typeof formData) => (;)
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  const handleInputChange = (field: keyof typeof formData) => (;);
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setFormData(prev => ({ ...prev, [field]: e.target.value }));
     if (error) setError(null);
@@ -57,7 +57,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({)
     }
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 0,

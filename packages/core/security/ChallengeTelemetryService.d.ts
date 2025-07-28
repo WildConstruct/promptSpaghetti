@@ -233,7 +233,7 @@ export declare class ChallengeTelemetryService extends EventEmitter {
     /**
      * Start tracking a challenge session
      */
-    startChallengeSession()
+    startChallengeSession();
       sessionId: string,
       challengeType: ChallengeType,
       context: Partial<ChallengeEvent['context']>,
@@ -241,7 +241,7 @@ export declare class ChallengeTelemetryService extends EventEmitter {
     /**
      * Record challenge completion
      */
-    recordChallengeCompletion()
+    recordChallengeCompletion();
       sessionId: string,
       challengeId: string,
       outcome: ChallengeOutcome,

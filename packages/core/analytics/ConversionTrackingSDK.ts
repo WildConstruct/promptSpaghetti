@@ -107,11 +107,10 @@ export class ConversionTrackingSDK extends AnalyticsClient {
     offlineEvents: 0,
     privacyBlockedEvents: 0,
   };
-  constructor()
+  constructor();
     config: ConversionTrackingConfig,
     conversionArchitecture: ConversionArchitectureManager,
     sessionManager: SessionTrackingManager,
-  ) {
     super(config);
     this.conversionConfig = {
       baseUrl: config.baseUrl || '/api',
@@ -126,7 +125,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
       maxOfflineEvents: config.maxOfflineEvents || 1000,
       eventValidationRules: config.eventValidationRules || [],
       deduplicationWindow: config.deduplicationWindow || 60000, // 1 minute
-      enableDebugLogging: config.enableDebugLogging ?? false
+      enableDebugLogging: config.enableDebugLogging ?? false,
     };
     this.conversionArchitecture = conversionArchitecture;
     this.sessionManager = sessionManager;
@@ -215,7 +214,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
     eventType: string,
     properties: Record<string, any> = {},
     value?: number,
-    touchpoints: TouchPoint[] = []
+    touchpoints: TouchPoint[] = [],
   ): Promise<boolean> {
     try {
       // Check privacy compliance
@@ -249,7 +248,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
         }
       };
       // Create enhanced event with attribution
-      const enhancedEvent = this.conversionArchitecture.createEnhancedEvent(;)
+      const enhancedEvent = this.conversionArchitecture.createEnhancedEvent(;);
         baseEvent,
         context.touchpoints,
         context.privacyConsent
@@ -350,12 +349,11 @@ export class ConversionTrackingSDK extends AnalyticsClient {
     queueSize: number;
     offlineBufferSize: number;
     streamingConnected: boolean;
-  } {
     return {
       ...this.trackingMetrics,
       queueSize: this.eventQueue.length,
       offlineBufferSize: this.offlineBuffer.length,
-      streamingConnected: this.streamingConnection?.readyState === WebSocket.OPEN
+      streamingConnected: this.streamingConnection?.readyState === WebSocket.OPEN,
     };
   }
   /**
@@ -456,7 +454,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
       type: event.type,
       timestamp: Math.floor(event.timestamp / 1000), // Round to second
       value: event.value,
-      key: event.properties?.key // Include a key property if present
+      key: event.properties?.key // Include a key property if present,
     };
     return btoa(JSON.stringify(hashData)).substring(0, 16);
   }
@@ -584,23 +582,23 @@ export class ConversionTrackingSDK extends AnalyticsClient {
       {
         field: 'id',
         type: 'required',
-        errorMessage: 'Event ID is required'
+        errorMessage: 'Event ID is required',
       },
       {
         field: 'userId',
         type: 'required',
-        errorMessage: 'User ID is required'
+        errorMessage: 'User ID is required',
       },
       {
         field: 'type',
         type: 'required',
-        errorMessage: 'Event type is required'
+        errorMessage: 'Event type is required',
       },
       {
         field: 'timestamp',
         type: 'range',
         value: { min: Date.now() - 86400000, max: Date.now() + 300000 }, // 24h ago to 5min future
-        errorMessage: 'Event timestamp must be recent'
+        errorMessage: 'Event timestamp must be recent',
       }
     ];
     this.conversionConfig.eventValidationRules.push(...defaultRules);
@@ -677,7 +675,7 @@ export class ConversionTrackingSDK extends AnalyticsClient {
       medium: params.get('utm_medium') || 'none',
       campaign: params.get('utm_campaign') || undefined,
       content: params.get('utm_content') || undefined,
-      term: params.get('utm_term') || undefined
+      term: params.get('utm_term') || undefined,
     };
   }
   private getStoredTouchpoints(): TouchPoint[] {

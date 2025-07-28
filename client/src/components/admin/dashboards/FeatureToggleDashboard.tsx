@@ -4,7 +4,6 @@
  * 
  * Example of migrating to the new shared component architecture
  */
-
 import React, { useState, useEffect } from 'react';
 import { ToggleLeft, Plus, Filter, Download } from 'lucide-react';
 import {
@@ -19,7 +18,6 @@ import {
   PermissionGate,
   PERMISSIONS
 } from '../shared';
-
 interface FeatureToggle {
   id: string;
   key: string;
@@ -38,35 +36,28 @@ export const FeatureToggleDashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'enabled' | 'disabled'>('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
-
   const { getToggles, loading, error } = useAdminFeatureToggleApi();
   const { hasPermission } = usePermissions();
-
   // Load toggles on mount
   useEffect(() => {
     loadToggles();
   }, []);
-
   // Filter toggles when search or filter changes
   useEffect(() => {
     let filtered = toggles;
-
     if (searchTerm) {
-      filtered = filtered.filter(toggle =>
+      filtered = filtered.filter(toggle =>)
         toggle.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         toggle.key.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-
     if (statusFilter !== 'all') {
-      filtered = filtered.filter(toggle =>
+      filtered = filtered.filter(toggle =>)
         statusFilter === 'enabled' ? toggle.enabled : !toggle.enabled
       );
     }
-
     setFilteredToggles(filtered);
   }, [toggles, searchTerm, statusFilter]);
-
   const loadToggles = async () => {
     try {
       const response = await getToggles();
@@ -75,42 +66,39 @@ export const FeatureToggleDashboard: React.FC = () => {
       console.error('Failed to load feature toggles:', err);
     }
   };
-
   // Calculate metrics
-  const metrics = [
+  const metrics = [;
     {
       value: toggles.length,
       label: 'Total Toggles',
-      format: 'number' as const
+      format: 'number' as const,
     },
     {
       value: toggles.filter(t => t.enabled).length,
       label: 'Enabled',
       format: 'number' as const,
-      trend: {
+      trend: {,
         value: 12,
         direction: 'up' as const,
-        label: 'vs last week'
+        label: 'vs last week',
       }
     },
     {
       value: toggles.filter(t => t.claudeImpact !== 'NONE').length,
       label: 'Claude Impact',
-      format: 'number' as const
+      format: 'number' as const,
     },
     {
       value: Math.round((toggles.filter(t => t.enabled).length / Math.max(toggles.length, 1)) * 100),
       label: 'Enabled Rate',
-      format: 'percentage' as const
+      format: 'percentage' as const,
     }
   ];
-
-  const breadcrumbs = [
+  const breadcrumbs = [;
     { label: 'Admin', href: '/admin' },
     { label: 'Feature Toggles' }
   ];
-
-  const headerActions = (
+  const headerActions = (;)
     <div style={{ display: 'flex', gap: '12px' }}>
       <PermissionGate resource="feature_toggles" action="view">
         <button
@@ -124,14 +112,13 @@ export const FeatureToggleDashboard: React.FC = () => {
             border: '1px solid #d1d5db',
             borderRadius: '6px',
             fontSize: '14px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           <Download size={16} />
           Export
         </button>
       </PermissionGate>
-
       <PermissionGate resource="feature_toggles" action="create">
         <button
           onClick={() => setShowCreateModal(true)}
@@ -146,7 +133,7 @@ export const FeatureToggleDashboard: React.FC = () => {
             borderRadius: '6px',
             fontSize: '14px',
             fontWeight: '500',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           <Plus size={16} />
@@ -155,9 +142,8 @@ export const FeatureToggleDashboard: React.FC = () => {
       </PermissionGate>
     </div>
   );
-
   if (loading && toggles.length === 0) {
-    return (
+    return ()
       <AdminLayout
         title="Feature Toggles"
         subtitle="Manage feature flags and toggles"
@@ -167,9 +153,8 @@ export const FeatureToggleDashboard: React.FC = () => {
       </AdminLayout>
     );
   }
-
   if (error && toggles.length === 0) {
-    return (
+    return ()
       <AdminLayout
         title="Feature Toggles"
         subtitle="Manage feature flags and toggles"
@@ -179,8 +164,7 @@ export const FeatureToggleDashboard: React.FC = () => {
       </AdminLayout>
     );
   }
-
-  return (
+  return ()
     <AdminLayout
       title="Feature Toggles"
       subtitle="Manage feature flags and toggles"
@@ -192,7 +176,7 @@ export const FeatureToggleDashboard: React.FC = () => {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
         gap: '20px',
-        marginBottom: '24px'
+        marginBottom: '24px',
       }}>
         <MetricsCard
           title="Toggle Metrics"
@@ -201,7 +185,6 @@ export const FeatureToggleDashboard: React.FC = () => {
           variant="default"
         />
       </div>
-
       {/* Filters */}
       <div style={{
         display: 'flex',
@@ -210,7 +193,7 @@ export const FeatureToggleDashboard: React.FC = () => {
         padding: '16px',
         backgroundColor: '#ffffff',
         borderRadius: '8px',
-        border: '1px solid #e5e7eb'
+        border: '1px solid #e5e7eb',
       }}>
         <div style={{ flex: 1 }}>
           <input
@@ -223,11 +206,10 @@ export const FeatureToggleDashboard: React.FC = () => {
               padding: '8px 12px',
               border: '1px solid #d1d5db',
               borderRadius: '6px',
-              fontSize: '14px'
+              fontSize: '14px',
             }}
           />
         </div>
-
         <div>
           <select
             value={statusFilter}
@@ -237,7 +219,7 @@ export const FeatureToggleDashboard: React.FC = () => {
               border: '1px solid #d1d5db',
               borderRadius: '6px',
               fontSize: '14px',
-              backgroundColor: '#ffffff'
+              backgroundColor: '#ffffff',
             }}
           >
             <option value="all">All Status</option>
@@ -246,32 +228,30 @@ export const FeatureToggleDashboard: React.FC = () => {
           </select>
         </div>
       </div>
-
       {/* Toggles Table */}
       <div style={{
         backgroundColor: '#ffffff',
         borderRadius: '8px',
         border: '1px solid #e5e7eb',
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}>
-        {filteredToggles.length === 0 ? (
-          toggles.length === 0 ? (
+        {filteredToggles.length === 0 ? ()
+          toggles.length === 0 ? ()
             <EmptyState
               icon={ToggleLeft}
               title="No feature toggles"
               description="Get started by creating your first feature toggle."
               action={hasPermission('feature_toggles', 'create') ? {
                 label: 'Create Toggle',
-                onClick: () => setShowCreateModal(true)
+                onClick: () => setShowCreateModal(true),
               } : undefined}
             />
-          ) : (
+          ) : ()
             <EmptyState
               title="No matching toggles"
               description={`No toggles found matching "${searchTerm}"`}
             />
-          )
-        ) : (
+        ) : ()
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead style={{ backgroundColor: '#f9fafb' }}>
               <tr>
@@ -282,7 +262,7 @@ export const FeatureToggleDashboard: React.FC = () => {
                   fontWeight: '500',
                   color: '#6b7280',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
+                  letterSpacing: '0.05em',
                 }}>
                   Toggle
                 </th>
@@ -293,7 +273,7 @@ export const FeatureToggleDashboard: React.FC = () => {
                   fontWeight: '500',
                   color: '#6b7280',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
+                  letterSpacing: '0.05em',
                 }}>
                   Status
                 </th>
@@ -304,7 +284,7 @@ export const FeatureToggleDashboard: React.FC = () => {
                   fontWeight: '500',
                   color: '#6b7280',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
+                  letterSpacing: '0.05em',
                 }}>
                   Type
                 </th>
@@ -315,7 +295,7 @@ export const FeatureToggleDashboard: React.FC = () => {
                   fontWeight: '500',
                   color: '#6b7280',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
+                  letterSpacing: '0.05em',
                 }}>
                   Claude Impact
                 </th>
@@ -326,14 +306,14 @@ export const FeatureToggleDashboard: React.FC = () => {
                   fontWeight: '500',
                   color: '#6b7280',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
+                  letterSpacing: '0.05em',
                 }}>
                   Created
                 </th>
               </tr>
             </thead>
             <tbody>
-              {filteredToggles.map((toggle) => (
+              {filteredToggles.map((toggle) => ()
                 <tr key={toggle.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
                   <td style={{ padding: '12px 16px' }}>
                     <div>
@@ -341,7 +321,7 @@ export const FeatureToggleDashboard: React.FC = () => {
                         fontSize: '14px',
                         fontWeight: '500',
                         color: '#1f2937',
-                        marginBottom: '2px'
+                        marginBottom: '2px',
                       }}>
                         {toggle.name}
                       </div>

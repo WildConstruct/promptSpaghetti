@@ -165,12 +165,12 @@ export class ParameterManager {
   /**
    * Create new preset from parameters
    */
-  createPreset()
+  createPreset();
     name: string,
     description: string,
     category: string,
     parameters: RandomizerParameters,
-    tags: string[] = []
+    tags: string[] = [],
   ): ParameterPreset {
     const preset: ParameterPreset = {
       id: this.generateId(),
@@ -181,7 +181,7 @@ export class ParameterManager {
       tags,
       isDefault: false,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
     this.presets.set(preset.id, preset);
     this.saveToStorage();
@@ -198,7 +198,7 @@ export class ParameterManager {
     const updated = {
       ...preset,
       ...updates,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
     this.presets.set(id, updated);
     this.saveToStorage();
@@ -225,7 +225,7 @@ export class ParameterManager {
   /**
    * Add to history
    */
-  addToHistory()
+  addToHistory();
     parameters: RandomizerParameters,
     success: boolean,
     generationTime?: number,
@@ -264,7 +264,6 @@ export class ParameterManager {
     mostUsedComplexity: string;
     mostUsedProvider: string;
     popularNodeTypes: Array<{ nodeType: string; count: number }>;
-    } {
     if (this.history.length === 0) {
       return {
         totalGenerations: 0,
@@ -344,11 +343,10 @@ export class ParameterManager {
     presets: ParameterPreset[];
     history: ParameterHistory[];
     exported: string;
-    } {
     return {
       presets: Array.from(this.presets.values()),
       history: this.history,
-      exported: new Date().toISOString()
+      exported: new Date().toISOString(),
     };
   }
   /**
@@ -361,7 +359,6 @@ export class ParameterManager {
     presetsImported: number;
     historyImported: number;
     errors: string[];
-  } {
     const result = {
       presetsImported: 0,
       historyImported: 0,
@@ -378,7 +375,7 @@ export class ParameterManager {
               this.presets.set(preset.id, {)
                 ...preset,
                 isDefault: false, // Imported presets are never default
-                updatedAt: new Date().toISOString()
+                updatedAt: new Date().toISOString(),
               });
               result.presetsImported++;
             }

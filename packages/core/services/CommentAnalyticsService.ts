@@ -73,7 +73,7 @@ export class CommentAnalyticsService {
       ...config
     };
     this.db = new Pool({)
-      connectionString: config.databaseUrl || process.env.DATABASE_URL
+      connectionString: config.databaseUrl || process.env.DATABASE_URL,
     });
     this.cache = new Map();
   }
@@ -148,7 +148,7 @@ export class CommentAnalyticsService {
           averageCommentLength: await this.getAverageCommentLength(resourceId, resourceType, startDate, endDate),
           responseTime: await this.getAverageResponseTime(resourceId, resourceType, startDate, endDate),
           qualityScore: await this.getQualityScore(resourceId, resourceType, startDate, endDate),
-          sentimentDistribution: sentimentData ? {
+          sentimentDistribution: sentimentData ? {,
             positive: sentimentData.positive,
             neutral: sentimentData.neutral,
             negative: sentimentData.negative,
@@ -161,7 +161,7 @@ export class CommentAnalyticsService {
           hourlyActivity: timeSeriesData.hourly,
           weeklyActivity: timeSeriesData.weekly,
           monthlyActivity: timeSeriesData.monthly,
-          topicEvolution: topicData.map(t => ({)
+          topicEvolution: topicData.map(t => ({),
             topic: t.topic,
             timeline: [{ date: endDate.toISOString().split('T')[0], count: t.mentionCount }]
           }))
@@ -179,7 +179,7 @@ export class CommentAnalyticsService {
           byTimeOfDay: timeSeriesData.hourly,
           byDayOfWeek: timeSeriesData.weekly,
           byLanguage: await this.getLanguageDistribution(resourceId, resourceType, startDate, endDate),
-          bySentiment: sentimentData ? {
+          bySentiment: sentimentData ? {,
             positive: sentimentData.positive,
             neutral: sentimentData.neutral,
             negative: sentimentData.negative,
@@ -230,7 +230,7 @@ export class CommentAnalyticsService {
   async updateDailyAnalytics()
     resourceId: string,
     resourceType: CommentableResourceType,
-    date: Date = new Date()
+    date: Date = new Date(),
   ): Promise<void> {
     try {
       await this.db.query()
@@ -251,7 +251,7 @@ export class CommentAnalyticsService {
     startDate: Date,
     endDate: Date,
   ): Promise<CommentMetrics> {
-    const result = await this.db.query(;)
+    const result = await this.db.query(;);
       `SELECT 
          COUNT(*) as total_comments,
          COUNT(*) FILTER (WHERE parent_comment_id IS NOT NULL) as total_replies,
@@ -280,7 +280,7 @@ export class CommentAnalyticsService {
     startDate: Date,
     endDate: Date,
   ): Promise<any> {
-    const result = await this.db.query(;)
+    const result = await this.db.query(;);
       `SELECT 
          engagement_type,
          COUNT(*) as count
@@ -323,7 +323,7 @@ export class CommentAnalyticsService {
     endDate: Date,
   ): Promise<any> {
     // Get daily data
-    const dailyResult = await this.db.query(;)
+    const dailyResult = await this.db.query(;);
       `SELECT 
          DATE(created_at) as date,
          COUNT(*) as count
@@ -335,7 +335,7 @@ export class CommentAnalyticsService {
       [resourceId, resourceType, startDate, endDate]
     );
     // Get hourly data (last 24 hours)
-    const hourlyResult = await this.db.query(;)
+    const hourlyResult = await this.db.query(;);
       `SELECT 
          EXTRACT(HOUR FROM created_at) as hour,
          COUNT(*) as count
@@ -353,7 +353,7 @@ export class CommentAnalyticsService {
         return hourData ? parseInt(hourData.count) : 0;
       }),
       weekly: Array(7).fill(0).map((_, i) => Math.floor(Math.random() * 50)), // Placeholder
-      monthly: dailyResult.rows.map(row => parseInt(row.count))
+      monthly: dailyResult.rows.map(row => parseInt(row.count)),
     };
   }
   private async getSentimentAnalysis()
@@ -362,7 +362,7 @@ export class CommentAnalyticsService {
     startDate: Date,
     endDate: Date,
   ): Promise<SentimentAnalysis | null> {
-    const result = await this.db.query(;)
+    const result = await this.db.query(;);
       `SELECT 
          sentiment,
          COUNT(*) as count,
@@ -394,7 +394,7 @@ export class CommentAnalyticsService {
       neutral,
       negative,
       averageScore: (positive - negative) / totalCount,
-      confidence: totalConfidence / totalCount
+      confidence: totalConfidence / totalCount,
     };
   }
   private async getTopicTrends()
@@ -403,7 +403,7 @@ export class CommentAnalyticsService {
     startDate: Date,
     endDate: Date,
   ): Promise<TopicTrend[]> {
-    const result = await this.db.query(;)
+    const result = await this.db.query(;);
       `SELECT 
          topic,
          SUM(mention_count) as total_mentions,
@@ -430,7 +430,7 @@ export class CommentAnalyticsService {
     startDate: Date,
     endDate: Date,
   ): Promise<number> {
-    const result = await this.db.query(;)
+    const result = await this.db.query(;);
       `SELECT COUNT(*) as total
        FROM comment_engagement_events cee
        JOIN feedback f ON cee.comment_id = f.id
@@ -456,7 +456,7 @@ export class CommentAnalyticsService {
   }
   private async calculateTrendingScore(resourceId: string, resourceType: string): Promise<number> {
     // Use the database function to calculate trending score
-    const result = await this.db.query(;)
+    const result = await this.db.query(;);
       `SELECT AVG(calculate_comment_trending_score(f.id)) as avg_score
        FROM feedback f
        WHERE f.target_id = $1 AND f.target_type = $2 AND f.type = 'comment'
@@ -466,7 +466,7 @@ export class CommentAnalyticsService {
     return parseFloat(result.rows[0].avg_score) || 0;
   }
   private async calculateEngagementVelocity(resourceId: string, resourceType: string): Promise<number> {
-    const result = await this.db.query(;)
+    const result = await this.db.query(;);
       `SELECT COUNT(*)::DECIMAL / 24 as velocity
        FROM comment_engagement_events cee
        JOIN feedback f ON cee.comment_id = f.id
@@ -482,7 +482,7 @@ export class CommentAnalyticsService {
     startDate: Date,
     endDate: Date,
   ): Promise<string> {
-    const result = await this.db.query(;)
+    const result = await this.db.query(;);
       `SELECT 
          EXTRACT(HOUR FROM cee.timestamp) as hour,
          COUNT(*) as count
@@ -505,7 +505,7 @@ export class CommentAnalyticsService {
     startDate: Date,
     endDate: Date,
   ): Promise<number> {
-    const result = await this.db.query(;)
+    const result = await this.db.query(;);
       `SELECT AVG(LENGTH(content)) as avg_length
        FROM feedback
        WHERE target_id = $1 AND target_type = $2 AND type = 'comment'
@@ -521,7 +521,7 @@ export class CommentAnalyticsService {
     endDate: Date,
   ): Promise<number> {
     // Calculate average time between thread start and first reply
-    const result = await this.db.query(;)
+    const result = await this.db.query(;);
       `SELECT AVG(EXTRACT(EPOCH FROM (reply.created_at - thread.created_at)) / 60) as avg_minutes
        FROM feedback thread
        JOIN feedback reply ON reply.parent_comment_id = thread.id
@@ -538,7 +538,7 @@ export class CommentAnalyticsService {
     startDate: Date,
     endDate: Date,
   ): Promise<number> {
-    const result = await this.db.query(;)
+    const result = await this.db.query(;);
       `SELECT AVG()
          CASE 
            WHEN csa.sentiment IN ('positive', 'very_positive') AND csa.toxicity_score < 0.3 THEN 85
@@ -588,7 +588,7 @@ export class CommentAnalyticsService {
     startDate: Date,
     endDate: Date,
   ): Promise<UserEngagementData[]> {
-    const result = await this.db.query(;)
+    const result = await this.db.query(;);
       `SELECT 
          f.author_id as user_id,
          COUNT(*) as comments_posted,
@@ -615,7 +615,7 @@ export class CommentAnalyticsService {
       commentsPosted: parseInt(row.comments_posted),
       likesReceived: parseInt(row.likes_received),
       influenceScore: parseFloat(row.influence_score),
-      reputationScore: parseFloat(row.influence_score) * 1.2 // Simple calculation
+      reputationScore: parseFloat(row.influence_score) * 1.2 // Simple calculation,
     }));
   }
   private async getPreviousPeriodComparison()
@@ -631,7 +631,7 @@ export class CommentAnalyticsService {
     return {
       commentsChange: ((currentMetrics.totalComments - previousMetrics.totalComments) / Math.max(previousMetrics.totalComments, 1)) * 100,
       engagementChange: ((currentMetrics.engagementRate - previousMetrics.engagementRate) / Math.max(previousMetrics.engagementRate, 0.01)) * 100,
-      qualityChange: 0 // Placeholder
+      qualityChange: 0 // Placeholder,
     };
   }
   private async getBenchmarkComparison(resourceType: string): Promise<any> {
@@ -662,7 +662,7 @@ export class CommentAnalyticsService {
   private setCachedData(key: string, data: any): void {
     this.cache.set(key, {)
       data,
-      expires: Date.now() + (this.config.cacheTTLSeconds! * 1000)
+      expires: Date.now() + (this.config.cacheTTLSeconds! * 1000),
     });
   }
   private invalidateAnalyticsCache(commentId: string): void {

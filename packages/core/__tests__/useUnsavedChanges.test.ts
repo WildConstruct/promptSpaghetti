@@ -24,14 +24,14 @@ describe('useUnsavedChanges', () => {
   test('sets up beforeunload event listener when hasUnsavedChanges is true', () => {
     renderHook(() => useUnsavedChanges({)
       hasUnsavedChanges: true,
-      projectName: 'Test Project'
+      projectName: 'Test Project',
     }));
     expect(mockAddEventListener).toHaveBeenCalledWith('beforeunload', expect.any(Function));
   });
   test('removes beforeunload event listener on unmount', () => {
     const { unmount } = renderHook(() => useUnsavedChanges({)
       hasUnsavedChanges: true,
-      projectName: 'Test Project'
+      projectName: 'Test Project',
     }));
     unmount();
     expect(mockRemoveEventListener).toHaveBeenCalledWith('beforeunload', expect.any(Function));
@@ -39,7 +39,7 @@ describe('useUnsavedChanges', () => {
   test('beforeunload handler prevents default when hasUnsavedChanges is true', () => {
     renderHook(() => useUnsavedChanges({)
       hasUnsavedChanges: true,
-      projectName: 'Test Project'
+      projectName: 'Test Project',
     }));
     // Get the registered beforeunload handler
     const beforeUnloadHandler = mockAddEventListener.mock.calls;
@@ -59,7 +59,7 @@ describe('useUnsavedChanges', () => {
   test('beforeunload handler does not prevent default when hasUnsavedChanges is false', () => {
     renderHook(() => useUnsavedChanges({)
       hasUnsavedChanges: false,
-      projectName: 'Test Project'
+      projectName: 'Test Project',
     }));
     // Get the registered beforeunload handler
     const beforeUnloadHandler = mockAddEventListener.mock.calls;
@@ -80,7 +80,7 @@ describe('useUnsavedChanges', () => {
     const callback = jest.fn<unknown[], unknown>();
     const { result } = renderHook(() => useUnsavedChanges({)
       hasUnsavedChanges: false,
-      projectName: 'Test Project'
+      projectName: 'Test Project',
     }));
     act(() => {
       result.current.confirmNavigation('test action', callback);
@@ -92,7 +92,7 @@ describe('useUnsavedChanges', () => {
     const callback = jest.fn<unknown[], unknown>();
     const { result } = renderHook(() => useUnsavedChanges({)
       hasUnsavedChanges: true,
-      projectName: 'Test Project'
+      projectName: 'Test Project',
     }));
     act(() => {
       result.current.confirmNavigation('creating a new project', callback);
@@ -168,7 +168,7 @@ describe('useUnsavedChanges', () => {
     const callback = jest.fn<unknown[], unknown>();
     const { result } = renderHook(() => useUnsavedChanges({)
       hasUnsavedChanges: true,
-      projectName: 'Test Project'
+      projectName: 'Test Project',
     }));
     // First show the dialog
     act(() => {
@@ -185,7 +185,7 @@ describe('useUnsavedChanges', () => {
     const callback = jest.fn<unknown[], unknown>();
     const { result } = renderHook(() => useUnsavedChanges({)
       hasUnsavedChanges: true,
-      projectName: 'Test Project'
+      projectName: 'Test Project',
     }));
     // First show the dialog
     act(() => {
@@ -202,7 +202,7 @@ describe('useUnsavedChanges', () => {
     const callback = jest.fn<unknown[], unknown>();
     const { result } = renderHook(() => useUnsavedChanges({)
       hasUnsavedChanges: true,
-      projectName: 'Test Project'
+      projectName: 'Test Project',
     }));
     // First show the dialog
     act(() => {
@@ -220,7 +220,7 @@ describe('useUnsavedChanges', () => {
     const callback2 = jest.fn<unknown[], unknown>();
     const { result } = renderHook(() => useUnsavedChanges({)
       hasUnsavedChanges: true,
-      projectName: 'Test Project'
+      projectName: 'Test Project',
     }));
     // First navigation
     act(() => {
@@ -242,7 +242,7 @@ describe('useUnsavedChanges', () => {
   test('initial state is correct', () => {
     const { result } = renderHook(() => useUnsavedChanges({)
       hasUnsavedChanges: false,
-      projectName: 'Test Project'
+      projectName: 'Test Project',
     }));
     expect(result.current.showUnsavedDialog).toBe(false);
     expect(result.current.dialogAction).toBe('');

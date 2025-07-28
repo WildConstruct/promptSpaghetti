@@ -44,7 +44,7 @@ export const SeedControls: React.FC<SeedControlsProps> = ({)
     onChange({)
       ...settings,
       enabled,
-      value: enabled && !settings.value ? Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) : settings.value
+      value: enabled && !settings.value ? Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) : settings.value,
     });
   }, [settings, onChange]);
   // Handle seed value change
@@ -91,7 +91,7 @@ export const SeedControls: React.FC<SeedControlsProps> = ({)
       autoGenerate
     });
   }, [settings, onChange]);
-  return ()
+  return ();
     <div style={{ marginBottom: '24px' }}>
       {/* Section Header */}
       <div style={{
@@ -296,14 +296,14 @@ export const SeedControls: React.FC<SeedControlsProps> = ({)
                     onClick={() => handleUseHistorySeed(historySeed)}
                     style={{
                       padding: '4px 8px',
-                      backgroundColor: settings.value === historySeed 
+                      backgroundColor: settings.value === historySeed ,
                         ? uiColors.accent.primary + '20'
                         : uiColors.ui.hover,
-                      border: settings.value === historySeed
+                      border: settings.value === historySeed,
                         ? `1px solid ${uiColors.accent.primary}`}
                         : `1px solid ${uiColors.ui.border}`,}
                       borderRadius: '4px',
-                      color: settings.value === historySeed
+                      color: settings.value === historySeed,
                         ? uiColors.accent.primary
                         : uiColors.text.secondary,
                       fontSize: '11px',

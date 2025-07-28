@@ -20,7 +20,7 @@ describe('DragReorderList', () => {
   });
   describe('Basic Rendering', () => {
     it('renders all options with drag handles', () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -48,7 +48,7 @@ describe('DragReorderList', () => {
       expect(colorIndicators.length).toBeGreaterThanOrEqual(4);
     });
     it('displays weight percentages when enabled', () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -61,7 +61,7 @@ describe('DragReorderList', () => {
       expect(screen.getByText('10%')).toBeInTheDocument();
     });
     it('hides weight controls when disabled', () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -72,7 +72,7 @@ describe('DragReorderList', () => {
       expect(screen.queryByText('30%')).not.toBeInTheDocument();
     });
     it('handles empty options array', () => {
-      render()
+      render();
         <DragReorderList
           options={[]}
           onReorder={mockOnReorder}
@@ -85,7 +85,7 @@ describe('DragReorderList', () => {
   });
   describe('Text Editing', () => {
     it('calls onTextChange when option text is modified', () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -97,7 +97,7 @@ describe('DragReorderList', () => {
       expect(mockOnTextChange).toHaveBeenCalledWith('1', 'Fireball Spell');
     });
     it('prevents drag when clicking on text input', () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -113,7 +113,7 @@ describe('DragReorderList', () => {
   });
   describe('Weight Controls', () => {
     it('calls onWeightChange when weight slider is adjusted', () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -126,7 +126,7 @@ describe('DragReorderList', () => {
       expect(mockOnWeightChange).toHaveBeenCalledWith('1', 50);
     });
     it('prevents drag when adjusting weight slider', () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -146,7 +146,7 @@ describe('DragReorderList', () => {
         { id: '1', text: 'Locked Option', weight: 50, locked: true },
         { id: '2', text: 'Normal Option', weight: 50, locked: false }
       ];
-      render()
+      render();
         <DragReorderList
           options={lockedOptions}
           onReorder={mockOnReorder}
@@ -161,7 +161,7 @@ describe('DragReorderList', () => {
   });
   describe('Mouse Drag Operations', () => {
     it('ignores non-left mouse button clicks', () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -174,7 +174,7 @@ describe('DragReorderList', () => {
       expect(mockOnReorder).not.toHaveBeenCalled();
     });
     it('requires minimum drag threshold to start dragging', async () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -188,7 +188,7 @@ describe('DragReorderList', () => {
       expect(document.body.style.cursor).toBe('');
     });
     it('starts drag when threshold is exceeded', async () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -221,7 +221,7 @@ describe('DragReorderList', () => {
       expect(dropZones.length).toBeGreaterThan(0);
     });
     it('completes reorder on mouse up', async () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -240,7 +240,7 @@ describe('DragReorderList', () => {
       expect(document.body.style.cursor).toBe('');
     });
     it('cancels drag on mouse up without valid drop target', async () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -260,7 +260,7 @@ describe('DragReorderList', () => {
   });
   describe('Touch Drag Operations', () => {
     it('handles touch start events', () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -278,7 +278,7 @@ describe('DragReorderList', () => {
       }).not.toThrow();
     });
     it('ignores multi-touch gestures', () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -301,7 +301,7 @@ describe('DragReorderList', () => {
       expect(mockOnReorder).not.toHaveBeenCalled();
     });
     it('completes touch drag on touch end', async () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -324,7 +324,7 @@ describe('DragReorderList', () => {
   });
   describe('Disabled State', () => {
     it('disables all drag operations when disabled', () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -353,7 +353,7 @@ describe('DragReorderList', () => {
       });
     });
     it('disables text and weight inputs when disabled', () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -427,7 +427,7 @@ describe('DragReorderList', () => {
   });
   describe('Accessibility', () => {
     it('maintains keyboard accessibility', () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}
@@ -447,7 +447,7 @@ describe('DragReorderList', () => {
       });
     });
     it('maintains text content accessibility during drag', async () => {
-      render()
+      render();
         <DragReorderList
           options={mockOptions}
           onReorder={mockOnReorder}

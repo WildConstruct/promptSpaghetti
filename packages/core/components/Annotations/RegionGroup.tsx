@@ -48,7 +48,7 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({)
   const groupRef = useRef<HTMLDivElement>(null);
   const labelInputRef = useRef<HTMLInputElement>(null);
   // Get color theme
-  const colorKey = Object.keys(REGION_GROUP_COLORS).find(key => ;)
+  const colorKey = Object.keys(REGION_GROUP_COLORS).find(key => ;);
     REGION_GROUP_COLORS[key as keyof typeof REGION_GROUP_COLORS].primary === group.color
   ) || 'blue';
   const colorTheme = REGION_GROUP_COLORS[colorKey as keyof typeof REGION_GROUP_COLORS];
@@ -80,7 +80,7 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({)
     setIsDragging(true);
     setDragStart({)
       x: e.clientX - group.bounds.x,
-      y: e.clientY - group.bounds.y
+      y: e.clientY - group.bounds.y,
     });
   }, [canMove, isEditingLabel, group.bounds]);
   // Handle resize handle mouse down
@@ -203,7 +203,7 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({)
   if (!shouldShowGroup()) {
     return null;
   }
-  return ()
+  return ();
     <div
       ref={groupRef}
       data-testid={`region-group-${group.id}`}
@@ -262,7 +262,7 @@ export const RegionGroup: React.FC<RegionGroupProps> = ({)
               cursor: 'pointer',
               padding: '2px 4px',
               borderRadius: 2,
-              transition: 'background-color 0.2s ease'
+              transition: 'background-color 0.2s ease',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';

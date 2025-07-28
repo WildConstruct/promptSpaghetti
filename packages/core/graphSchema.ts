@@ -41,7 +41,6 @@ export const WeightedChoiceNodeSchema = BaseNode.extend({)
   type: z.literal('WeightedChoice'),
   choices: z.array(),
     z.object({ value: z.string(), weight: z.number().positive() })
-  )
 });
 
 export const ConcatNodeSchema = BaseNode.extend({)

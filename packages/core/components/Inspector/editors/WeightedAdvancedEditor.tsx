@@ -91,14 +91,14 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
   const randomizeWeights = () => {
     const newChoices = choices.map(choice => ({ )
       ...choice, 
-      weight: Math.random() * 10 + 1 
+      weight: Math.random() * 10 + 1 ,
     }));
     handleChoicesChange(newChoices);
   };
   const setLinearProgression = () => {
     const newChoices = choices.map((choice, index) => ({ )
       ...choice, 
-      weight: index + 1 
+      weight: index + 1 ,
     }));
     handleChoicesChange(newChoices);
   };
@@ -138,7 +138,7 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
     return weights;
   };
   const effectiveWeights = getEffectiveWeights();
-  return ()
+  return ();
     <div className="weighted-advanced-editor">
       {/* BASIC LEVEL: Essential settings for filmmakers */}
       <ProgressiveDisclosureSection
@@ -216,7 +216,7 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                       w
                     ) => sum + w, 0) > 0 ? 100 / effectiveWeights.reduce((sum, w) => sum + w, 0) : 0))
                   : Math.round(100 / choices.length);
-                return ()
+                return ();
                   <div
                     key={index}
                     style={{
@@ -224,7 +224,7 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                       border: '1px solid #4a5568',
                       borderRadius: 4,
                       padding: 8,
-                      marginBottom: index < choices.length - 1 ? 8 : 0
+                      marginBottom: index < choices.length - 1 ? 8 : 0,
                     }}
                   >
                     <div style={{
@@ -575,7 +575,7 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                 const percentage = effectiveWeights.length > 0 && effectiveWeights.reduce((sum, w) => sum + w, 0) > 0;
                   ? Math.round((effectiveWeight / effectiveWeights.reduce((sum, w) => sum + w, 0)) * 100)
                   : Math.round(100 / choices.length);
-                return ()
+                return ();
                   <div key={index} style={{ 
                     display: 'flex', 
                     justifyContent: 'space-between',

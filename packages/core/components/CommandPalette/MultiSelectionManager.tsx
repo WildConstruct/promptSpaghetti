@@ -122,7 +122,7 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({)
       const nodeY = node.position.y;
       const nodeWidth = node.width || 200; // Default width;
       const nodeHeight = node.height || 100; // Default height;
-      return ()
+      return ();
         nodeX >= flowStartX &&
         nodeY >= flowStartY &&
         nodeX + nodeWidth <= flowEndX &&
@@ -146,10 +146,10 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({)
     setLastSelectedNode(null);
   }, [onNodesSelect, onEdgesSelect, onSelectionChange]);
   const handleInvertSelection = useCallback(() => {
-    const unselectedNodes = nodes.filter(node => ;)
+    const unselectedNodes = nodes.filter(node => ;);
       !selectedNodes.some(selected => selected.id === node.id)
     );
-    const unselectedEdges = edges.filter(edge => ;)
+    const unselectedEdges = edges.filter(edge => ;);
       !selectedEdges.some(selected => selected.id === edge.id)
     );
     onNodesSelect(unselectedNodes);
@@ -243,7 +243,7 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({)
       transition: 'none',
     };
   };
-  return ()
+  return ();
     <>
       {/* Selection Overlay */}
       <div
@@ -255,7 +255,7 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({)
           right: 0,
           bottom: 0,
           zIndex: 999,
-          pointerEvents: disabled ? 'none' : 'auto'
+          pointerEvents: disabled ? 'none' : 'auto',
         }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -330,7 +330,7 @@ const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({)
     return themes[theme];
   };
   const styles = getThemeStyles();
-  return ()
+  return ();
     <div
       style={{
         position: 'fixed',
@@ -386,7 +386,7 @@ const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({)
           color: styles.textSecondary,
           fontSize: '12px',
           transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-          transition: 'transform var(--transition-fast)'
+          transition: 'transform var(--transition-fast)',
         }}>
           ▼
         </span>
@@ -412,7 +412,7 @@ const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({)
                 fontSize: '12px',
                 fontWeight: '500',
                 cursor: 'pointer',
-                transition: 'all var(--transition-fast)'
+                transition: 'all var(--transition-fast)',
               }}
               title="Select All (⌘A)"
             >
@@ -429,7 +429,7 @@ const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({)
                 fontSize: '12px',
                 fontWeight: '500',
                 cursor: 'pointer',
-                transition: 'all var(--transition-fast)'
+                transition: 'all var(--transition-fast)',
               }}
               title="Invert Selection (⌘I)"
             >
@@ -446,7 +446,7 @@ const SelectionInfoPanel: React.FC<SelectionInfoPanelProps> = ({)
                 fontSize: '12px',
                 fontWeight: '500',
                 cursor: 'pointer',
-                transition: 'all var(--transition-fast)'
+                transition: 'all var(--transition-fast)',
               }}
               title="Clear Selection (Esc)"
             >

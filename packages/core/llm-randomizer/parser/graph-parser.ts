@@ -108,7 +108,7 @@ export class GraphParser {
    * Parse multiple graphs in batch
    */
   async parseBatch(contents: string[]): Promise<ParserResult[]> {
-    const results = await Promise.all(;)
+    const results = await Promise.all(;);
       contents.map(content => this.parse(content))
     );
     return results;
@@ -177,7 +177,7 @@ export class GraphParser {
         parseTime: totalTime,
         tokenCount: tokens.length,
         nodeCount: ast?.nodes.length || 0,
-        edgeCount: ast?.edges.length || 0
+        edgeCount: ast?.edges.length || 0,
       }
     };
     this.addLexerErrors(result, lexerErrors);

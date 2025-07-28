@@ -27,7 +27,7 @@ describe('MFARetryHandler', () => {
   describe('Basic Operation Execution', () => {
     test('should execute successful operation without retries', async () => {
       const mockOperation = jest.fn<unknown[], unknown>().mockResolvedValue('success' as unknown as unknown as unknown as unknown);
-      const result = await retryHandler.executeWithRetry(;)
+      const result = await retryHandler.executeWithRetry(;);
         MFAOperation.TOTP_VERIFICATION,
         mockOperation,
         { userId: 'test-user' }
@@ -44,7 +44,7 @@ describe('MFARetryHandler', () => {
         .mockRejectedValueOnce(new Error('Network error'))
         .mockRejectedValueOnce(new Error('Network error'))
         .mockResolvedValue('success' as unknown as unknown as unknown as unknown);
-      const resultPromise = retryHandler.executeWithRetry(;)
+      const resultPromise = retryHandler.executeWithRetry(;);
         MFAOperation.SMS_SEND,
         mockOperation,
         { userId: 'test-user' }
@@ -59,7 +59,7 @@ describe('MFARetryHandler', () => {
     });
     test('should fail after max retry attempts', async () => {
       const mockOperation = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Network error'));
-      const resultPromise = retryHandler.executeWithRetry(;)
+      const resultPromise = retryHandler.executeWithRetry(;);
         MFAOperation.EMAIL_SEND,
         mockOperation,
         { userId: 'test-user' }
@@ -94,7 +94,7 @@ describe('MFARetryHandler', () => {
         .mockRejectedValueOnce(new Error('Network error'))
         .mockRejectedValueOnce(new Error('Network error'))
         .mockResolvedValue('success' as unknown as unknown as unknown as unknown);
-      const resultPromise = customHandler.executeWithRetry(;)
+      const resultPromise = customHandler.executeWithRetry(;);
         MFAOperation.TOTP_VERIFICATION,
         mockOperation
       );
@@ -128,7 +128,7 @@ describe('MFARetryHandler', () => {
         .mockRejectedValueOnce(new Error('Network error'))
         .mockRejectedValueOnce(new Error('Network error'))
         .mockResolvedValue('success' as unknown as unknown as unknown as unknown);
-      const resultPromise = customHandler.executeWithRetry(;)
+      const resultPromise = customHandler.executeWithRetry(;);
         MFAOperation.SMS_SEND,
         mockOperation
       );
@@ -146,7 +146,7 @@ describe('MFARetryHandler', () => {
   describe('Error Classification', () => {
     test('should not retry non-retryable errors', async () => {
       const mockOperation = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Invalid code'));
-      const result = await retryHandler.executeWithRetry(;)
+      const result = await retryHandler.executeWithRetry(;);
         MFAOperation.TOTP_VERIFICATION,
         mockOperation,
         { userId: 'test-user' }
@@ -160,7 +160,7 @@ describe('MFARetryHandler', () => {
         .fn()
         .mockRejectedValueOnce(new Error('Network error'))
         .mockResolvedValue('success' as unknown as unknown as unknown as unknown);
-      const resultPromise = retryHandler.executeWithRetry(;)
+      const resultPromise = retryHandler.executeWithRetry(;);
         MFAOperation.SMS_SEND,
         mockOperation,
         { userId: 'test-user' }
@@ -228,7 +228,7 @@ describe('MFARetryHandler', () => {
       const mockOperation = jest.fn<unknown[], unknown>().mockImplementation(() => ;
         new Promise(resolve => setTimeout(resolve, 200)) // Takes longer than timeout
       );
-      const resultPromise = customHandler.executeWithRetry(;)
+      const resultPromise = customHandler.executeWithRetry(;);
         MFAOperation.EMAIL_SEND,
         mockOperation
       );
@@ -247,7 +247,7 @@ describe('MFARetryHandler', () => {
         .fn()
         .mockRejectedValueOnce(new Error('Network error'))
         .mockResolvedValue('success' as unknown as unknown as unknown as unknown);
-      const resultPromise = retryHandler.executeWithRetry(;)
+      const resultPromise = retryHandler.executeWithRetry(;);
         MFAOperation.TOTP_VERIFICATION,
         mockOperation,
         { userId: 'test-user' }
@@ -279,10 +279,10 @@ describe('MFARetryHandler', () => {
   });
   describe('Active Operations Tracking', () => {
     test('should track active operations', async () => {
-      const mockOperation = jest.fn<unknown[], unknown>().mockImplementation(;)
+      const mockOperation = jest.fn<unknown[], unknown>().mockImplementation(;);
         () => new Promise(resolve => setTimeout(resolve, 100))
       );
-      const operationPromise = retryHandler.executeWithRetry(;)
+      const operationPromise = retryHandler.executeWithRetry(;);
         MFAOperation.DEVICE_REGISTRATION,
         mockOperation,
         { userId: 'test-user' }
@@ -384,7 +384,7 @@ describe('MFARetryHandler', () => {
         } as any
       });
       const mockOperation = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Any error'));
-      const result = await customHandler.executeWithRetry(;)
+      const result = await customHandler.executeWithRetry(;);
         MFAOperation.TOTP_VERIFICATION,
         mockOperation
       );
@@ -396,7 +396,7 @@ describe('MFARetryHandler', () => {
   describe('Edge Cases', () => {
     test('should handle immediate success', async () => {
       const mockOperation = jest.fn<unknown[], unknown>().mockResolvedValue('immediate success' as unknown as unknown as unknown as unknown);
-      const result = await retryHandler.executeWithRetry(;)
+      const result = await retryHandler.executeWithRetry(;);
         MFAOperation.TOTP_VERIFICATION,
         mockOperation
       );
@@ -406,7 +406,7 @@ describe('MFARetryHandler', () => {
     });
     test('should handle operation that throws non-Error objects', async () => {
       const mockOperation = jest.fn<unknown[], unknown>().mockRejectedValue('string error');
-      const result = await retryHandler.executeWithRetry(;)
+      const result = await retryHandler.executeWithRetry(;);
         MFAOperation.EMAIL_SEND,
         mockOperation
       );
@@ -416,7 +416,7 @@ describe('MFARetryHandler', () => {
     });
     test('should handle operation with undefined result', async () => {
       const mockOperation = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown as unknown as unknown);
-      const result = await retryHandler.executeWithRetry(;)
+      const result = await retryHandler.executeWithRetry(;);
         MFAOperation.METHOD_DISABLE,
         mockOperation
       );

@@ -101,7 +101,7 @@ describe('LockoutNotificationService', () => {
       const unlockedLockout = {
         ...mockLockout,
         status: LockoutStatus.UNLOCKED,
-        unlockTime: new Date(mockDate.getTime() + 60 * 60 * 1000)
+        unlockTime: new Date(mockDate.getTime() + 60 * 60 * 1000),
       };
       const notificationId = await service.sendUnlockNotification(unlockedLockout, 'Admin User');
       const status = service.getNotificationStatus(notificationId);
@@ -113,7 +113,7 @@ describe('LockoutNotificationService', () => {
       const unlockedLockout = {
         ...mockLockout,
         status: LockoutStatus.UNLOCKED,
-        unlockTime: new Date()
+        unlockTime: new Date(),
       };
       const notificationId = await service.sendUnlockNotification(unlockedLockout);
       const status = service.getNotificationStatus(notificationId);
@@ -125,7 +125,7 @@ describe('LockoutNotificationService', () => {
       const alertDetails = {
         source: 'intrusion_detection',
         severity: 'high',
-        details: 'Multiple failed attempts from suspicious IP'
+        details: 'Multiple failed attempts from suspicious IP',
       };
       const notificationId = await service.sendSecurityAlert(mockLockout, alertDetails);
       const status = service.getNotificationStatus(notificationId);
@@ -139,7 +139,7 @@ describe('LockoutNotificationService', () => {
     test('should send admin notifications to specified roles', async () => {
       const adminRoles = [AdminRole.SECURITY_ADMIN, AdminRole.SUPER_ADMIN];
       const details = { urgency: 'high', context: 'approval_required' };
-      const notificationIds = await service.sendAdminNotification(;)
+      const notificationIds = await service.sendAdminNotification(;);
         NotificationType.ADMIN_ACTION_REQUIRED,
         mockLockout,
         adminRoles,
@@ -297,7 +297,7 @@ describe('LockoutNotificationService', () => {
         securityTips: ['Tip 1', 'Tip 2'],
         nextSteps: ['Step 1', 'Step 2']
       };
-      const notificationId = await service.testNotification(;)
+      const notificationId = await service.testNotification(;);
         'test@example.com',
         NotificationChannel.EMAIL,
         'lockout_en',
@@ -344,7 +344,7 @@ describe('LockoutNotificationService', () => {
       await service.sendLockoutNotification(mockLockout);
       const stats = service.getNotificationStatistics({)
         start: new Date(mockDate.getTime() - 24 * 60 * 60 * 1000),
-        end: new Date(mockDate.getTime() + 24 * 60 * 60 * 1000)
+        end: new Date(mockDate.getTime() + 24 * 60 * 60 * 1000),
       });
       expect(stats.totalNotifications).toBe(1);
     });

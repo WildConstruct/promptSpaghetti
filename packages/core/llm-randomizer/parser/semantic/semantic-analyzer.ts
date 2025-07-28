@@ -448,7 +448,7 @@ export class SemanticAnalyzer {
     }
     return {
       nodes,
-      seed: Date.now() // Default seed
+      seed: Date.now() // Default seed,
     };
   }
   /**

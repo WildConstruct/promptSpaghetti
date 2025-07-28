@@ -136,7 +136,7 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
     setCurrentPage(1);
   };
   const totalPages = Math.ceil(totalCount / pageSize);
-  return ()
+  return ();
     <div className={`case-study-gallery ${currentLayout} ${className}`}>}
       {/* Header */}
       <div className="gallery-header">
@@ -215,7 +215,7 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
               <select
                 value={Array.isArray(filter.type) ? '' : (filter.type || '')}
                 onChange={(e) => handleFilterChange({ )
-                  type: e.target.value ? e.target.value as CaseStudyType : undefined 
+                  type: e.target.value ? e.target.value as CaseStudyType : undefined ,
                 })}
                 className="filter-select"
               >
@@ -232,7 +232,7 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
               <select
                 value={Array.isArray(filter.industry) ? '' : (filter.industry || '')}
                 onChange={(e) => handleFilterChange({ )
-                  industry: e.target.value ? e.target.value as IndustryCategory : undefined 
+                  industry: e.target.value ? e.target.value as IndustryCategory : undefined ,
                 })}
                 className="filter-select"
               >
@@ -255,7 +255,7 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
               <select
                 value={filter.difficulty?.[0] || ''}
                 onChange={(e) => handleFilterChange({ )
-                  difficulty: e.target.value ? [e.target.value as any] : undefined 
+                  difficulty: e.target.value ? [e.target.value as any] : undefined ,
                 })}
                 className="filter-select"
               >
@@ -289,7 +289,7 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
                   const [field, direction] = e.target.value.split('-');
                   handleSortChange({ )
                     field: field as any, 
-                    direction: direction as 'asc' | 'desc' 
+                    direction: direction as 'asc' | 'desc' ,
                   });
                 }}
                 className="sort-select"
@@ -361,7 +361,7 @@ export const CaseStudyGallery: React.FC<CaseStudyGalleryProps> = ({)
             {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
               const page = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
               if (page > totalPages) return null;
-              return ()
+              return ();
                 <button
                   key={page}
                   onClick={() => handlePageChange(page)}

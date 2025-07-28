@@ -152,7 +152,7 @@ export const ThrottlingMode = {
   PROGRESSIVE: 'progressive' as const,
   CIRCUIT_BREAKER: 'circuit_breaker' as const,
   LOAD_SHEDDING: 'load_shedding' as const,
-  BANDWIDTH_SHAPING: 'bandwidth_shaping' as const
+  BANDWIDTH_SHAPING: 'bandwidth_shaping' as const,
 } as const;
 
 export type SystemCondition = 
@@ -168,7 +168,7 @@ export const SystemCondition = {
   ELEVATED: 'elevated' as const,
   HIGH_LOAD: 'high_load' as const,
   OVERLOAD: 'overload' as const,
-  UNDER_ATTACK: 'under_attack' as const
+  UNDER_ATTACK: 'under_attack' as const,
 } as const;
 
 export interface ThrottlingRule {
@@ -309,7 +309,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
   private analyticsInsights: Map<string, ThrottlingAnalyticsInsight[]> = new Map();
   private analyticsEnabled: boolean = false;
   private lastAnalyticsUpdate: Date = new Date();
-  constructor()
+  constructor();
     private rateLimitingService: RateLimitingService, 
     initializeDefaults: boolean = true,
     analyticsConfig?: {
@@ -317,7 +317,6 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
       scalingAnalytics?: ApiScalingAnalyticsIntegration;
       enableAnalytics?: boolean;
     }
-  ) {
     super();
     this.systemMetrics = this.getDefaultSystemMetrics();
     // Initialize Epic 31 analytics integration
@@ -470,7 +469,6 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
     tokenBuckets: Record<string, { tokens: number; capacity: number }>;
     systemCondition: SystemCondition;
     systemMetrics: SystemMetrics;
-    } {
     const circuitBreakers: Record<string, CircuitBreakerState> = {};
     for (const [id, state] of this.circuitBreakerStates) {
       circuitBreakers[id] = state;
@@ -762,7 +760,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
     } catch (error) {
       this.emit('analyticsError', {)
         type: 'pattern_analysis',
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
     }
     return insights;
@@ -805,7 +803,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
     } catch (error) {
       this.emit('analyticsError', {)
         type: 'scaling_analysis',
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
     }
     return insights;
@@ -953,7 +951,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
         {
           type: 'endpoint',
           operator: 'contains',
-          value: data.endpoint || ''
+          value: data.endpoint || '',
         }
       ],
       baseDelay: 1000,
@@ -1000,7 +998,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
       ruleId: emergencyRule.id,
       trigger: 'abuse_detected',
       data,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -1108,7 +1106,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
         throttlingEffectiveness: 75,
         falsePositiveRate: 5,
         adaptationSuccessRate: 80,
-        lastOptimizationDate: new Date()
+        lastOptimizationDate: new Date(),
       };
     }
     // Update effectiveness based on result
@@ -1138,7 +1136,6 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
       averageFalsePositiveRate: number;
       averageAdaptationSuccessRate: number;
     };
-  } {
     const allInsights = Array.from(this.analyticsInsights.values()).flat();
     const insightsByType: Record<string, number> = {};
     const insightsByRule: Record<string, number> = {};
@@ -1171,7 +1168,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
       performanceMetrics: {,
         averageEffectiveness: rulesWithHistory > 0 ? totalEffectiveness / rulesWithHistory : 0,
         averageFalsePositiveRate: rulesWithHistory > 0 ? totalFalsePositiveRate / rulesWithHistory : 0,
-        averageAdaptationSuccessRate: rulesWithHistory > 0 ? totalAdaptationSuccessRate / rulesWithHistory : 0
+        averageAdaptationSuccessRate: rulesWithHistory > 0 ? totalAdaptationSuccessRate / rulesWithHistory : 0,
       }
     };
   }
@@ -1200,7 +1197,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
     const matchingRules: ThrottlingRule[] = [];
     for (const rule of this.rules.values()) {
       if (!rule.enabled) continue;
-      const conditionsMatch = rule.triggerConditions.every(condition =>;)
+      const conditionsMatch = rule.triggerConditions.every(condition =>;);
         this.evaluateCondition(condition, context)
       );
       if (conditionsMatch) {
@@ -1331,7 +1328,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
   }
   private applyProgressiveThrottling(rule: ThrottlingRule, context: ThrottlingContext): ThrottlingResult {
     // Find the appropriate escalation step based on recent failures
-    let currentStep = rule.escalationSteps.find(step => ;)
+    let currentStep = rule.escalationSteps.find(step => ;);
       context.consecutiveFailures >= step.level
     );
     if (!currentStep && rule.escalationSteps.length > 0) {

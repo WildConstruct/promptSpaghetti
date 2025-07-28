@@ -585,9 +585,9 @@ export const DEVELOPMENT_SECURITY_EVENT_CONFIG: SecurityEventConfig = {
   },
   retention: {,
     ...DEFAULT_SECURITY_EVENT_CONFIG.retention,
-    policies: DEFAULT_SECURITY_EVENT_CONFIG.retention.policies.map(policy => ({)
+    policies: DEFAULT_SECURITY_EVENT_CONFIG.retention.policies.map(policy => ({),
       ...policy,
-      retentionPeriod: 30 // 30 days for development
+      retentionPeriod: 30 // 30 days for development,
     }))
   }
 };

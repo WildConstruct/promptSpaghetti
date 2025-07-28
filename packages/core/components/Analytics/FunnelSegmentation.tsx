@@ -299,21 +299,21 @@ export const FunnelSegmentation: React.FC<FunnelSegmentationProps> = ({)
         displayName: 'Lifetime Value',
         dataType: 'number',
         category: 'Value',
-        description: 'Total lifetime value of the user'
+        description: 'Total lifetime value of the user',
       },
       {
         path: 'userContext.segmentIds',
         displayName: 'User Segments',
         dataType: 'array',
         category: 'Segmentation',
-        description: 'Current user segments'
+        description: 'Current user segments',
       },
       {
         path: 'sessionContext.deviceFingerprint',
         displayName: 'Device Type',
         dataType: 'string',
         category: 'Device',
-        description: 'User device type'
+        description: 'User device type',
       },
       {
         path: 'sessionContext.referrerCategory',
@@ -406,7 +406,7 @@ export const FunnelSegmentation: React.FC<FunnelSegmentationProps> = ({)
             startDate: timeRange.start,
             endDate: timeRange.end,
             metrics: ['conversion_rate', 'user_count', 'revenue', 'average_time_to_convert'],
-            filters: filter.conditions.map(condition => ({)
+            filters: filter.conditions.map(condition => ({),
               field: condition.field,
               operator: mapOperatorToQuery(condition.operator),
               value: condition.value,
@@ -439,7 +439,7 @@ export const FunnelSegmentation: React.FC<FunnelSegmentationProps> = ({)
     onFilterChange?.(newFilters);
   }, [activeFilters, onFilterChange]);
   const handleFilterUpdate = useCallback((filterId: string, updates: Partial<SegmentFilter>) => {
-    const newFilters = activeFilters.map(filter =>;)
+    const newFilters = activeFilters.map(filter =>;);
       filter.id === filterId ? { ...filter, ...updates, lastModified: Date.now() } : filter
     );
     setActiveFilters(newFilters);
@@ -453,7 +453,7 @@ export const FunnelSegmentation: React.FC<FunnelSegmentationProps> = ({)
   const handleSegmentCreate = useCallback((segment: UserSegment) => {
     onSegmentCreated?.(segment);
   }, [onSegmentCreated]);
-  return ()
+  return ();
     <div className="funnel-segmentation">
       <SegmentationHeader
         viewMode={viewMode}
@@ -524,7 +524,7 @@ const SegmentationHeader: React.FC<SegmentationHeaderProps> = ({)
   onShowRuleBuilder,
   activeFiltersCount
 }) => {
-  return ()
+  return ();
     <div className="segmentation-header">
       <div className="header-info">
         <h3>Funnel Segmentation</h3>
@@ -596,15 +596,15 @@ const SegmentSelection: React.FC<SegmentSelectionProps> = ({)
       onFilterAdd(newFilter);
     }
   }, [activeFilters, onFilterAdd, onFilterUpdate]);
-  return ()
+  return ();
     <div className="segment-selection">
       <h4>Available Segments</h4>
       <div className="segments-grid">
         {availableSegments.map(segment => {)
-          const isActive = activeFilters.some(f => ;)
+          const isActive = activeFilters.some(f => ;);
             f.name === segment.name && f.isActive
           );
-          return ()
+          return ();
             <div 
               key={segment.id}
               className={`segment-card ${isActive ? 'active' : ''}`}
@@ -680,15 +680,15 @@ const CohortSelection: React.FC<CohortSelectionProps> = ({)
     };
     onFilterAdd(newFilter);
   }, [onFilterAdd]);
-  return ()
+  return ();
     <div className="cohort-selection">
       <h4>Available Cohorts</h4>
       <div className="cohorts-grid">
         {availableCohorts.map(cohort => {)
-          const isActive = activeFilters.some(f => ;)
+          const isActive = activeFilters.some(f => ;);
             f.name === cohort.name && f.isActive
           );
-          return ()
+          return ();
             <div 
               key={cohort.id}
               className={`cohort-card ${isActive ? 'active' : ''}`}
@@ -750,7 +750,7 @@ const CustomSegmentBuilder: React.FC<CustomSegmentBuilderProps> = ({)
     };
     onFilterAdd(newFilter);
   }, [onFilterAdd]);
-  return ()
+  return ();
     <div className="custom-segment-builder">
       <h4>Custom Segment Builder</h4>
       <div className="templates-section">
@@ -801,7 +801,7 @@ const ActiveFiltersPanel: React.FC<ActiveFiltersPanelProps> = ({)
   if (filters.length === 0) {
     return null;
   }
-  return ()
+  return ();
     <div className="active-filters-panel">
       <h4>Active Filters</h4>
       <div className="filters-list">
@@ -856,7 +856,7 @@ const SegmentAnalysisResults: React.FC<SegmentAnalysisResultsProps> = ({)
   selectedSegment,
   onSegmentSelect
 }) => {
-  return ()
+  return ();
     <div className="segment-analysis-results">
       <h4>Segment Analysis Results</h4>
       <div className="analysis-grid">
@@ -885,7 +885,7 @@ const SegmentAnalysisCard: React.FC<SegmentAnalysisCardProps> = ({)
   isSelected,
   onSelect
 }) => {
-  return ()
+  return ();
     <div className={`segment-analysis-card ${isSelected ? 'selected' : ''}`} onClick={onSelect}>}
       <div className="analysis-header">
         <h5>{analysis.segmentName}</h5>

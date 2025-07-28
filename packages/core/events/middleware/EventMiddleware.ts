@@ -169,7 +169,7 @@ export const createRateLimitMiddleware = (options: {)
       hourCount: 0,
       secondReset: now + 1000,
       minuteReset: now + 60000,
-      hourReset: now + 3600000
+      hourReset: now + 3600000,
     };
     // Reset counters if time windows have passed
     if (now >= counts.secondReset) {
@@ -257,7 +257,7 @@ export const createSecurityMiddleware = (options?: {)
     }
     const masked: any = {};
     for (const [key, value] of Object.entries(obj)) {
-      const isSensitive = sensitiveFields.some(field => ;)
+      const isSensitive = sensitiveFields.some(field => ;);
         key.toLowerCase().includes(field.toLowerCase())
       );
       if (isSensitive) {
@@ -324,7 +324,7 @@ export const createPerformanceMiddleware = (options?: {)
         ...(startMemory && trackMemoryUsage && {)
           memoryUsage: {,
             before: startMemory,
-            after: typeof process !== 'undefined' ? process.memoryUsage() : null
+            after: typeof process !== 'undefined' ? process.memoryUsage() : null,
           }
         })
       }
@@ -367,7 +367,7 @@ export const createDeduplicationMiddleware = (options: {)
           current.event.metadata = {
             ...current.event.metadata,
             ...event.metadata,
-            duplicateCount: (current.event.metadata?.duplicateCount || 0) + 1
+            duplicateCount: (current.event.metadata?.duplicateCount || 0) + 1,
           };
           return; // Don't call next(), use existing event
         case 'latest':

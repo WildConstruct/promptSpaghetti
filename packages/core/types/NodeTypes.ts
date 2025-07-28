@@ -259,7 +259,7 @@ export function createNodeData(type: NodeType, id: string, label?: string): Node
     // Fallback for unimplemented types
     return {
       ...createBaseNodeData(id, label || type),
-      type: type as any
+      type: type as any,
     };
   }
 }
@@ -280,7 +280,7 @@ export function serializeForRuntime(nodeData: NodeData): RuntimeNodeData | null 
   }
   const base: RuntimeNodeData = {
     id: nodeData.id,
-    type: nodeData.type as RuntimeNodeType
+    type: nodeData.type as RuntimeNodeType,
   };
   switch (nodeData.type) {
   case 'WeightedChoice':
@@ -288,7 +288,7 @@ export function serializeForRuntime(nodeData: NodeData): RuntimeNodeData | null 
       ...base,
       choices: (nodeData as WeightedChoiceNodeData).choices.map((choice, index) => ({)
         value: choice,
-        weight: (nodeData as WeightedChoiceNodeData).weights[index] || 1
+        weight: (nodeData as WeightedChoiceNodeData).weights[index] || 1,
       }))
     };
   case 'Concat':
@@ -298,18 +298,18 @@ export function serializeForRuntime(nodeData: NodeData): RuntimeNodeData | null 
   case 'Include':
     return {
       ...base,
-      name: (nodeData as IncludeNodeData).name
+      name: (nodeData as IncludeNodeData).name,
     };
   case 'SetVariable':
     return {
       ...base,
       key: (nodeData as SetVariableNodeData).variableName,
-      value: (nodeData as SetVariableNodeData).value
+      value: (nodeData as SetVariableNodeData).value,
     };
   case 'GetVariable':
     return {
       ...base,
-      key: (nodeData as GetVariableNodeData).variableName
+      key: (nodeData as GetVariableNodeData).variableName,
     };
   default:
     return base;
@@ -339,18 +339,18 @@ export function deserializeFromRuntime(runtimeData: RuntimeNodeData): NodeData |
   case 'Include':
     return {
       ...createIncludeNodeData(id),
-      name: runtimeData.name || ''
+      name: runtimeData.name || '',
     };
   case 'SetVariable':
     return {
       ...createSetVariableNodeData(id),
       variableName: runtimeData.key || '',
-      value: runtimeData.value || ''
+      value: runtimeData.value || '',
     };
   case 'GetVariable':
     return {
       ...createGetVariableNodeData(id),
-      variableName: runtimeData.key || ''
+      variableName: runtimeData.key || '',
     };
   default:
     return null;

@@ -83,7 +83,7 @@ export declare const activitySelectors: {
     getGroupedActivities: (state: ActivityStore) => Record<string, Activity[]>;
     getSelectedActivities: (state: ActivityStore) => Activity[];
     hasActiveFilters: (state: ActivityStore) => boolean;
-    getSummaryStats: (state: ActivityStore) => {
+    getSummaryStats: (state: ActivityStore) => {,
         total: number;
         byType: Record<string, number>;
         bySeverity: Record<string, number>;

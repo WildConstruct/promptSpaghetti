@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 interface ModerationItem {
   id: string;
   type: 'content' | 'user' | 'template' | 'comment';
@@ -22,7 +21,6 @@ interface ModerationItem {
 //   moderatorId: string;
 //   timestamp: Date;
 // }
-
 interface ModerationManagementProps {
   items: ModerationItem[];
   onApprove?: (itemId: string, reason: string) => void;
@@ -32,7 +30,7 @@ interface ModerationManagementProps {
   currentModerator: string;
 }
 
-export const ModerationManagement: React.FC<ModerationManagementProps> = ({
+export const ModerationManagement: React.FC<ModerationManagementProps> = ({)
   items,
   onApprove,
   onReject,
@@ -49,24 +47,19 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
     action: 'approve' | 'reject' | 'flag' | 'delete';
     itemId: string;
   } | null>(null);
-
-  const filteredItems = items.filter(item => {
+  const filteredItems = items.filter(item => {)
     if (filterStatus !== 'all' && item.status !== filterStatus) return false;
     if (filterType !== 'all' && item.type !== filterType) return false;
     return true;
   });
-
   const handleAction = (action: 'approve' | 'reject' | 'flag' | 'delete', itemId: string) => {
     setPendingAction({ action, itemId });
     setShowActionDialog(true);
   };
-
   const confirmAction = () => {
     if (!pendingAction || !actionReason.trim()) return;
-
     const { action, itemId } = pendingAction;
     const reason = actionReason.trim();
-
     switch (action) {
     case 'approve':
       onApprove?.(itemId, reason);
@@ -81,15 +74,13 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
       onDelete?.(itemId, reason);
       break;
     }
-
     setActionReason('');
     setPendingAction(null);
     setShowActionDialog(false);
   };
-
   const bulkAction = (action: 'approve' | 'reject') => {
-    selectedItems.forEach(itemId => {
-      const reason = `Bulk ${action} by ${currentModerator}`;
+    selectedItems.forEach(itemId => {)
+      const reason = `Bulk ${action} by ${currentModerator}`;}
       if (action === 'approve') {
         onApprove?.(itemId, reason);
       } else {
@@ -98,7 +89,6 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
     });
     setSelectedItems([]);
   };
-
   const getPriorityColor = (priority: ModerationItem['priority']) => {
     switch (priority) {
     case 'critical': return '#dc3545';
@@ -107,7 +97,6 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
     case 'low': return '#28a745';
     }
   };
-
   const getStatusColor = (status: ModerationItem['status']) => {
     switch (status) {
     case 'pending': return '#ffc107';
@@ -116,8 +105,7 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
     case 'flagged': return '#fd7e14';
     }
   };
-
-  return (
+  return ()
     <div className="moderation-management">
       <div className="moderation-header">
         <h2>Content Moderation</h2>
@@ -130,7 +118,6 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
           </span>
         </div>
       </div>
-
       <div className="moderation-filters">
         <select 
           value={filterStatus} 
@@ -142,7 +129,6 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
           <option value="rejected">Rejected</option>
           <option value="flagged">Flagged</option>
         </select>
-
         <select 
           value={filterType} 
           onChange={(e) => setFilterType(e.target.value)}
@@ -153,8 +139,7 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
           <option value="template">Template</option>
           <option value="comment">Comment</option>
         </select>
-
-        {selectedItems.length > 0 && (
+        {selectedItems.length > 0 && ()
           <div className="bulk-actions">
             <button onClick={() => bulkAction('approve')}>
               Bulk Approve ({selectedItems.length})
@@ -165,9 +150,8 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
           </div>
         )}
       </div>
-
       <div className="moderation-list">
-        {filteredItems.map(item => (
+        {filteredItems.map(item => ()
           <div key={item.id} className="moderation-item">
             <div className="item-header">
               <input
@@ -198,11 +182,10 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
                 {new Date(item.createdAt).toLocaleDateString()}
               </span>
             </div>
-
             <div className="item-content">
               <div className="content-preview">
                 {item.content.length > 200 
-                  ? `${item.content.substring(0, 200)}...`
+                  ? `${item.content.substring(0, 200)}...`}
                   : item.content
                 }
               </div>
@@ -212,8 +195,7 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
                 {item.reason && <span>Reason: {item.reason}</span>}
               </div>
             </div>
-
-            {item.status === 'pending' && (
+            {item.status === 'pending' && ()
               <div className="item-actions">
                 <button 
                   className="approve-btn"
@@ -244,8 +226,7 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
           </div>
         ))}
       </div>
-
-      {showActionDialog && (
+      {showActionDialog && ()
         <div className="action-dialog-overlay">
           <div className="action-dialog">
             <h3>Confirm Action</h3>

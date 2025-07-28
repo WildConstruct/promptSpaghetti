@@ -634,7 +634,7 @@ export class SecurityOptimizationTools extends EventEmitter {
         job_id: jobId,
         execution_time_minutes: (job.execution.completed_at! - job.execution.started_at!) / 60000,
         recommendations_count: job.results.optimization_recommendations.length,
-        performance_improvement: job.results.performance_analysis.system_metrics?.throughput?.trend_percentage || 0
+        performance_improvement: job.results.performance_analysis.system_metrics?.throughput?.trend_percentage || 0,
       });
     } catch (error) {
       console.error(`Optimization job failed: ${error.message}`);}
@@ -644,7 +644,7 @@ export class SecurityOptimizationTools extends EventEmitter {
       this.emit('optimization_job_failed', {)
         job_id: jobId,
         error_message: error.message,
-        execution_time_minutes: (job.execution.completed_at! - job.execution.started_at!) / 60000
+        execution_time_minutes: (job.execution.completed_at! - job.execution.started_at!) / 60000,
       });
     } finally {
       this.activeJobs.delete(jobId);
@@ -654,7 +654,7 @@ export class SecurityOptimizationTools extends EventEmitter {
   private async executeJobPhase()
     job: OptimizationJob,
     phaseName: string,
-    executor: () => Promise<void>
+    executor: () => Promise<void>,
   ): Promise<void> {
     console.log(`🔄 Executing ${phaseName} for job ${job.id}`);}
     job.execution.current_phase = phaseName;
@@ -716,20 +716,20 @@ export class SecurityOptimizationTools extends EventEmitter {
           current_rps: currentMetrics.throughput_rps || 1500,
           peak_rps: (currentMetrics.throughput_rps || 1500) * 1.5,
           average_rps: (currentMetrics.throughput_rps || 1500) * 0.8,
-          trend_percentage: -5 + Math.random() * 20
+          trend_percentage: -5 + Math.random() * 20,
         },
         latency: {,
           p50_ms: (currentMetrics.avg_response_time_ms || 200) * 0.8,
           p95_ms: (currentMetrics.avg_response_time_ms || 200) * 2,
           p99_ms: (currentMetrics.avg_response_time_ms || 200) * 4,
           max_ms: (currentMetrics.avg_response_time_ms || 200) * 8,
-          trend_percentage: -10 + Math.random() * 25
+          trend_percentage: -10 + Math.random() * 25,
         },
         resource_utilization: {,
           cpu_percentage: currentMetrics.cpu_utilization || 60,
           memory_percentage: currentMetrics.memory_utilization || 65,
           disk_io_percentage: 30 + Math.random() * 40,
-          network_percentage: 20 + Math.random() * 30
+          network_percentage: 20 + Math.random() * 30,
         },
         error_rates: {,
           total_errors: Math.floor(Math.random() * 100),
@@ -827,33 +827,33 @@ export class SecurityOptimizationTools extends EventEmitter {
         operational_monthly: monthlyInfrastructure * 0.3,
         personnel_monthly: 15000,
         licensing_monthly: 2000,
-        total_monthly: monthlyInfrastructure * 1.3 + 17000
+        total_monthly: monthlyInfrastructure * 1.3 + 17000,
       },
       optimization_costs: {,
         implementation_one_time: 25000 + Math.random() * 50000,
         additional_infrastructure_monthly: monthlyInfrastructure * 0.1,
         training_and_support: 10000,
         risk_mitigation: 5000,
-        total_investment: 40000 + Math.random() * 50000
+        total_investment: 40000 + Math.random() * 50000,
       },
       expected_benefits: {,
         cost_savings_monthly: monthlyInfrastructure * 0.25, // 25% savings
         productivity_gains_monthly: 5000,
         risk_reduction_value: 2000,
         performance_improvement_value: 3000,
-        total_benefits_monthly: monthlyInfrastructure * 0.25 + 10000
+        total_benefits_monthly: monthlyInfrastructure * 0.25 + 10000,
       },
       financial_metrics: {,
         roi_percentage: 250 + Math.random() * 200,
         payback_period_months: 6 + Math.random() * 12,
         net_present_value: 100000 + Math.random() * 200000,
-        break_even_point_months: 4 + Math.random() * 8
+        break_even_point_months: 4 + Math.random() * 8,
       },
       sensitivity_analysis: {,
         best_case_scenario: { roi: 400, payback_months: 4 },
         worst_case_scenario: { roi: 150, payback_months: 18 },
         most_likely_scenario: { roi: 275, payback_months: 9 },
-        confidence_interval: 85 + Math.random() * 10
+        confidence_interval: 85 + Math.random() * 10,
       }
     };
   }
@@ -1005,7 +1005,7 @@ export class SecurityOptimizationTools extends EventEmitter {
           benchmark_comparisons: {,
             industry_average: 65,
             best_in_class: 45,
-            current_performance: performanceAnalysis.system_metrics?.resource_utilization?.cpu_percentage || 80
+            current_performance: performanceAnalysis.system_metrics?.resource_utilization?.cpu_percentage || 80,
           },
           statistical_confidence: 0.85,
           test_results: [],
@@ -1148,7 +1148,7 @@ export class SecurityOptimizationTools extends EventEmitter {
           execution_time_ms: 500 + Math.random() * 1500,
           result_data: {,
             expected_improvement: recommendation.impact.performance_improvement_percentage,
-            confidence_score: 0.8 + Math.random() * 0.15
+            confidence_score: 0.8 + Math.random() * 0.15,
           },
           executed_at: Date.now(),
         },
@@ -1160,7 +1160,7 @@ export class SecurityOptimizationTools extends EventEmitter {
           execution_time_ms: 300 + Math.random() * 700,
           result_data: {,
             risk_level: recommendation.impact.risk_level,
-            mitigation_coverage: 85 + Math.random() * 15
+            mitigation_coverage: 85 + Math.random() * 15,
           },
           executed_at: Date.now(),
         }
@@ -1189,13 +1189,13 @@ export class SecurityOptimizationTools extends EventEmitter {
         peak_memory_mb: 512 + Math.random() * 1024,
         total_disk_io_mb: 100 + Math.random() * 500,
         network_data_mb: 50 + Math.random() * 200,
-        execution_cost: 5 + Math.random() * 15
+        execution_cost: 5 + Math.random() * 15,
       },
       quality_metrics: {,
         data_completeness_percentage: 95 + Math.random() * 5,
         analysis_accuracy_score: 0.85 + Math.random() * 0.1,
         recommendation_confidence_score: 0.8 + Math.random() * 0.15,
-        user_satisfaction_score: 4.2 + Math.random() * 0.8
+        user_satisfaction_score: 4.2 + Math.random() * 0.8,
       },
       issues: [],
     };
@@ -1275,7 +1275,6 @@ View Details: /optimization-tools/jobs/${job.id}
     avg_performance_improvement: number;
     system_efficiency_score: number;
     recent_events: OptimizationEvent[];
-  } {
     const activeProfiles = Array.from(this.optimizationProfiles.values()).filter(p => p.enabled);
     const runningJobs = this.activeJobs.size;
     const pendingRecommendations = Array.from(this.recommendations.values());
@@ -1425,7 +1424,7 @@ View Details: /optimization-tools/jobs/${job.id}
             threshold_warning: 250,
             threshold_critical: 400,
             measurement_unit: 'milliseconds',
-            measurement_frequency: 'continuous' as const
+            measurement_frequency: 'continuous' as const,
           }],
           constraints: [{,
             constraint_type: 'budget' as const,
@@ -1691,7 +1690,7 @@ View Details: /optimization-tools/jobs/${job.id}
       this.emit('configuration_imported', {)
         profiles_imported: config.optimization_profiles?.length || 0,
         tools_imported: config.optimization_tools?.length || 0,
-        jobs_imported: config.optimization_jobs?.length || 0
+        jobs_imported: config.optimization_jobs?.length || 0,
       });
     } catch (error) {
       throw new Error(`Failed to import configuration: ${error}`);}

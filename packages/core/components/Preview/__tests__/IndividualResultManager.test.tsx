@@ -26,7 +26,7 @@ const mockResults = [;
     output: 'A shorter test output with different content.',
     executionTimeMs: 89,
     locked: true,
-    lockedNote: 'Important baseline result'
+    lockedNote: 'Important baseline result',
   },
   {
     seed: 9012,
@@ -372,7 +372,7 @@ describe('IndividualResultManager Component', () => {
     test('displays error when present', () => {
       const errorStore = {
         ...mockStoreState,
-        error: 'Test error message'
+        error: 'Test error message',
       };
       mockUsePreviewStateStore.mockReturnValue(errorStore as any as unknown);
       render(<IndividualResultManager />);

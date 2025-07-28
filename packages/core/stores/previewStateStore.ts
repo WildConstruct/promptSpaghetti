@@ -111,7 +111,7 @@ export interface PreviewStateStore {
   // Performance monitoring
   updatePerformanceMetrics: (metrics: Partial<PreviewPerformanceMetrics>) => void;
   addPerformanceSnapshot: () => void;
-  getPerformanceInsights: () => {
+  getPerformanceInsights: () => {,
     trend: 'improving' | 'degrading' | 'stable';
     bottlenecks: string[];
     recommendations: string[];
@@ -153,7 +153,7 @@ export // Update last update timestamp
       setAggregateError: (aggregateError) => set({ aggregateError }),
       setPerformanceStats: (performanceStats) => set({ performanceStats }),
       // Real-time sync actions
-      updateGraphHash: (hash) => {
+      updateGraphHash: (hash) => {,
         const state = get();
         if (state.lastGraphHash !== hash) {
           set({)
@@ -165,7 +165,7 @@ export // Update last update timestamp
       enableRealTimeSync: (enabled) => set({ isRealTimeEnabled: enabled }),
       setSyncInterval: (interval) => set({ syncInterval: Math.max(100, interval) }),
       // Cache management
-      getCachedResults: (graphHash) => {
+      getCachedResults: (graphHash) => {,
         const state = get();
         const cached = state.cache.get(graphHash);
         if (!cached) return null;
@@ -206,7 +206,7 @@ export // Update last update timestamp
         set({ cache: newCache });
       },
       clearCache: () => set({ cache: new Map() }),
-      pruneCacheByAge: () => {
+      pruneCacheByAge: () => {,
         const state = get();
         const newCache = new Map();
         const cutoffTime = Date.now() - state.cacheExpirationMs;
@@ -217,7 +217,7 @@ export // Update last update timestamp
         }
         set({ cache: newCache });
       },
-      pruneCacheBySize: () => {
+      pruneCacheBySize: () => {,
         const state = get();
         if (state.cache.size <= state.maxCacheSize) return;
         const entries = Array.from(state.cache.entries());
@@ -242,7 +242,7 @@ export // Update last update timestamp
           lockedResults: [...state.lockedResults, index]
         });
       },
-      unlockResult: (index) => {
+      unlockResult: (index) => {,
         const state = get();
         const updatedResults = [...state.results];
         if (updatedResults[index]) {
@@ -255,7 +255,7 @@ export // Update last update timestamp
         }
         set({)
           results: updatedResults,
-          lockedResults: state.lockedResults.filter(i => i !== index)
+          lockedResults: state.lockedResults.filter(i => i !== index),
         });
       },
       setRegeneratingResult: (index, regenerating) => {
@@ -266,7 +266,7 @@ export // Update last update timestamp
         set({ regeneratingResults: updatedRegenerating });
       },
       // Performance monitoring
-      updatePerformanceMetrics: (newMetrics) => {
+      updatePerformanceMetrics: (newMetrics) => {,
         const state = get();
         set({)
           performanceMetrics: {,
@@ -275,7 +275,7 @@ export // Update last update timestamp
           }
         });
       },
-      addPerformanceSnapshot: () => {
+      addPerformanceSnapshot: () => {,
         const state = get();
         const newHistory = [;
           ...state.performanceHistory,
@@ -286,19 +286,19 @@ export // Update last update timestamp
         ].slice(-state.maxHistoryLength);
         set({ performanceHistory: newHistory });
       },
-      getPerformanceInsights: () => {
+      getPerformanceInsights: () => {,
         const state = get();
         const history = state.performanceHistory;
         if (history.length < 2) {
           return {
             trend: 'stable' as const,
             bottlenecks: [],
-            recommendations: ['Need more data for analysis']
+            recommendations: ['Need more data for analysis'],
           };
         }
         const recent = history.slice(-5);
         const avgRecent = recent.reduce((sum, h) => sum + h.averageExecutionTime, 0) / recent.length;
-        const avgOlder = history.slice(;)
+        const avgOlder = history.slice(;);
           -10,
           -5
         ).reduce((sum, h) => sum + h.averageExecutionTime, 0) / Math.max(1, history.length - 5);
@@ -328,7 +328,7 @@ export // Update last update timestamp
         }
         set(updates);
       },
-      shouldAutoRefresh: (changeSignificance = 0) => {
+      shouldAutoRefresh: (changeSignificance = 0) => {,
         const state = get();
         if (!state.autoRefreshEnabled) return false;
         if (state.isLoading) return false;
@@ -338,7 +338,7 @@ export // Update last update timestamp
         return intervalPassed || significantChange;
       },
       // Utility actions
-      resetState: () => {
+      resetState: () => {,
         set({)
           isLoading: false,
           error: null,
@@ -351,7 +351,7 @@ export // Update last update timestamp
           performanceMetrics: defaultPerformanceMetrics,
         });
       },
-      getStateSnapshot: () => {
+      getStateSnapshot: () => {,
         const state = get();
         return {
           results: state.results,
@@ -362,20 +362,20 @@ export // Update last update timestamp
           performanceMetrics: state.performanceMetrics,
         };
       },
-      restoreFromSnapshot: (snapshot) => {
+      restoreFromSnapshot: (snapshot) => {,
         set({)
           results: snapshot.results || [],
           lockedResults: snapshot.lockedResults || [],
           performanceStats: snapshot.performanceStats || null,
           lastGraphHash: snapshot.lastGraphHash || null,
           lastUpdateTimestamp: snapshot.lastUpdateTimestamp || 0,
-          performanceMetrics: snapshot.performanceMetrics || defaultPerformanceMetrics
+          performanceMetrics: snapshot.performanceMetrics || defaultPerformanceMetrics,
         });
       }
     })),
     {
       name: 'preview-state-store',
-      partialize: (state) => ({)
+      partialize: (state) => ({),
         // Only persist essential state
         isRealTimeEnabled: state.isRealTimeEnabled,
         syncInterval: state.syncInterval,
@@ -385,7 +385,6 @@ export // Update last update timestamp
         cacheExpirationMs: state.cacheExpirationMs,
       })
     }
-  )
 );
 
 // Utility hooks for common state selections

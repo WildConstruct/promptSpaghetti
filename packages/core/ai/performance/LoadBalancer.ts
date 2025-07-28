@@ -103,7 +103,7 @@ export class LoadBalancer {
   async executeRequest<T>()
     input: any,
     options: any = {},
-    priority: 'low' | 'normal' | 'high' = 'normal'
+    priority: 'low' | 'normal' | 'high' = 'normal',
   ): Promise<LoadBalancingResult<T>> {
     const request: LoadBalancingRequest = {
       id: this.generateRequestId(),
@@ -126,7 +126,7 @@ export class LoadBalancer {
       selectedInstance.metrics.activeConnections++;
       selectedInstance.metrics.totalRequests++;
       const startTime = Date.now();
-      const result = await this.executeWithTimeout(;)
+      const result = await this.executeWithTimeout(;);
         selectedInstance.model,
         request.input,
         request.options,
@@ -141,7 +141,7 @@ export class LoadBalancer {
         responseTime,
         retryCount: request.retryCount || 0,
         cached: result.cached || false,
-        cost: result.cost || 0
+        cost: result.cost || 0,
       };
     } catch (error) {
       selectedInstance.metrics.activeConnections = Math.max(0, selectedInstance.metrics.activeConnections - 1);
@@ -157,7 +157,7 @@ export class LoadBalancer {
     }
   }
   private selectInstance(request: LoadBalancingRequest): ModelInstance | null {
-    const healthyInstances = Array.from(this.instances.values()).filter(;)
+    const healthyInstances = Array.from(this.instances.values()).filter(;);
       instance => this.isInstanceAvailable(instance)
     );
     if (healthyInstances.length === 0) {
@@ -235,7 +235,7 @@ export class LoadBalancer {
         return { responseTime: 0.4, connections: 0.2, reliability: 0.3, cost: 0.05, health: 0.05 };
       case 'low':
         return { responseTime: 0.2, connections: 0.1, reliability: 0.2, cost: 0.4, health: 0.1 };
-      default: // normal
+      default: // normal,
         return { responseTime: 0.3, connections: 0.2, reliability: 0.25, cost: 0.15, health: 0.1 };
     }
   }
@@ -285,7 +285,7 @@ export class LoadBalancer {
         resolve({ )
           result, 
           cost,
-          cached: false // Would integrate with cache system
+          cached: false // Would integrate with cache system,
         });
       } catch (error) {
         clearTimeout(timeoutId);
@@ -411,14 +411,13 @@ export class LoadBalancer {
     averageResponseTime: number;
     overallErrorRate: number;
     totalCost: number;
-  } {
     const instances = Array.from(this.instances.values());
     const healthyCount = instances.filter(i => i.healthStatus === 'healthy').length;
     const totals = instances.reduce((acc, instance) => ({)
       requests: acc.requests + instance.metrics.totalRequests,
       responseTime: acc.responseTime + (instance.metrics.averageResponseTime * instance.metrics.totalRequests),
       failures: acc.failures + instance.metrics.failedRequests,
-      cost: acc.cost + (instance.metrics.costPerRequest * instance.metrics.totalRequests)
+      cost: acc.cost + (instance.metrics.costPerRequest * instance.metrics.totalRequests),
     }), { requests: 0, responseTime: 0, failures: 0, cost: 0 });
     return {
       totalInstances: instances.length,

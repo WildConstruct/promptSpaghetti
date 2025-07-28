@@ -61,34 +61,31 @@ export position: { x: number; y: number },
 
 // Error Types for Better Error Handling
 export class MutationEngineError extends Error {
-  constructor()
+  constructor();
     message: string,
     public operation?: any,
     public validationErrors?: any[]
-  ) {
     super(message);
     this.name = 'MutationEngineError';
   }
 }
 
 export class ValidationError extends Error {
-  constructor()
+  constructor();
     message: string,
     public field?: string,
     public nodeId?: string,
     public edgeId?: string
-  ) {
     super(message);
     this.name = 'ValidationError';
   }
 }
 
 export class ConflictError extends Error {
-  constructor()
+  constructor();
     message: string,
     public conflicts: any[],
     public operation?: any
-  ) {
     super(message);
     this.name = 'ConflictError';
   }

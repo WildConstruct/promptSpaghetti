@@ -26,7 +26,7 @@ export const HISTORICAL_ERAS = {
     period: { start: 476, end: 1000 },
     region: ['Europe'],
     accuracy: 'high',
-    description: 'Early medieval period characterized by the fall of Rome and rise of feudalism'
+    description: 'Early medieval period characterized by the fall of Rome and rise of feudalism',
   },
   MEDIEVAL_HIGH: {,
     name: 'High Medieval', 
@@ -40,14 +40,14 @@ export const HISTORICAL_ERAS = {
     period: { start: 1300, end: 1500 },
     region: ['Europe'], 
     accuracy: 'high',
-    description: 'Late medieval period transitioning toward Renaissance'
+    description: 'Late medieval period transitioning toward Renaissance',
   },
   RENAISSANCE: {,
     name: 'Renaissance',
     period: { start: 1400, end: 1600 },
     region: ['Europe'],
     accuracy: 'high',
-    description: 'Renaissance period of cultural and artistic rebirth'
+    description: 'Renaissance period of cultural and artistic rebirth',
   }
 } as const;
 

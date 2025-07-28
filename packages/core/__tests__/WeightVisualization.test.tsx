@@ -14,7 +14,7 @@ describe('WeightVisualization', () => {
   ];
   describe('Pie Chart', () => {
     it('renders pie chart with correct proportions', () => {
-      render()
+      render();
         <WeightVisualization
           options={mockOptions}
           type="pie"
@@ -31,7 +31,7 @@ describe('WeightVisualization', () => {
       expect(svg).toHaveAttribute('height', '200');
     });
     it('handles empty data gracefully', () => {
-      render()
+      render();
         <WeightVisualization
           options={[]}
           type="pie"
@@ -47,7 +47,7 @@ describe('WeightVisualization', () => {
         { id: '1', text: 'Option A', weight: 0 },
         { id: '2', text: 'Option B', weight: 0 }
       ];
-      render()
+      render();
         <WeightVisualization
           options={zeroWeightOptions}
           type="pie"
@@ -60,7 +60,7 @@ describe('WeightVisualization', () => {
       expect(screen.getByText('No Data')).toBeInTheDocument();
     });
     it('shows percentages when enabled', () => {
-      render()
+      render();
         <WeightVisualization
           options={mockOptions}
           type="pie"
@@ -82,7 +82,7 @@ describe('WeightVisualization', () => {
         { id: '2', text: 'Minor Option', weight: 5 },
         { id: '3', text: 'Tiny Option', weight: 1 } // <5%, should not show label
       ];
-      render()
+      render();
         <WeightVisualization
           options={smallSliceOptions}
           type="pie"
@@ -97,7 +97,7 @@ describe('WeightVisualization', () => {
   });
   describe('Bar Graph', () => {
     it('renders bar graph with correct structure', () => {
-      render()
+      render();
         <WeightVisualization
           options={mockOptions}
           type="bar"
@@ -113,7 +113,7 @@ describe('WeightVisualization', () => {
       expect(svg).toHaveAttribute('height', '200');
     });
     it('shows option labels on bars', () => {
-      render()
+      render();
         <WeightVisualization
           options={mockOptions}
           type="bar"
@@ -137,7 +137,7 @@ describe('WeightVisualization', () => {
         { id: '1', text: 'Very Long Option Name That Should Be Truncated', weight: 50 },
         { id: '2', text: 'Short', weight: 50 }
       ];
-      render()
+      render();
         <WeightVisualization
           options={longNameOptions}
           type="bar"
@@ -155,7 +155,7 @@ describe('WeightVisualization', () => {
         { id: '1', text: 'Option A', weight: 0 },
         { id: '2', text: 'Option B', weight: 100 }
       ];
-      render()
+      render();
         <WeightVisualization
           options={zeroWeightOptions}
           type="bar"
@@ -178,7 +178,7 @@ describe('WeightVisualization', () => {
         />
       );
       // Re-render with different type to ensure color consistency
-      rerender()
+      rerender();
         <WeightVisualization
           options={mockOptions}
           type="bar"
@@ -197,7 +197,7 @@ describe('WeightVisualization', () => {
         text: `Option ${i}`,}
         weight: 10,
       }));
-      render()
+      render();
         <WeightVisualization
           options={manyOptions}
           type="pie"
@@ -222,7 +222,7 @@ describe('WeightVisualization', () => {
       let svg = screen.getByRole('img', { hidden: true });
       expect(svg).toHaveAttribute('width', '100');
       expect(svg).toHaveAttribute('height', '100');
-      rerender()
+      rerender();
         <WeightVisualization
           options={mockOptions}
           type="pie"
@@ -235,7 +235,7 @@ describe('WeightVisualization', () => {
       expect(svg).toHaveAttribute('height', '400');
     });
     it('maintains readability at small sizes', () => {
-      render()
+      render();
         <WeightVisualization
           options={mockOptions}
           type="bar"
@@ -281,7 +281,7 @@ describe('WeightLegend', () => {
   it('shows color indicators', () => {
     render(<WeightLegend options={mockOptions} />);
     // Should have color indicators for each option
-    const colorIndicators = screen.getAllByRole('generic').filter(;)
+    const colorIndicators = screen.getAllByRole('generic').filter(;);
       el => el.style.backgroundColor && el.style.width === '12px'
     );
     expect(colorIndicators.length).toBeGreaterThan(0);
@@ -316,7 +316,7 @@ describe('Integration Tests', () => {
     { id: '3', text: 'Lightning Spell', weight: 20 }
   ];
   it('visualization and legend show consistent data', () => {
-    render()
+    render();
       <div>
         <WeightVisualization
           options={mockOptions}
@@ -353,7 +353,7 @@ describe('Integration Tests', () => {
       { id: '2', text: 'Ice Spell', weight: 25 },
       { id: '3', text: 'Lightning Spell', weight: 25 }
     ];
-    rerender()
+    rerender();
       <div>
         <WeightVisualization
           options={updatedOptions}
@@ -369,7 +369,7 @@ describe('Integration Tests', () => {
     expect(screen.getAllByText('25%')).toHaveLength(4); // Two options with 25%
   });
   it('maintains accessibility standards', () => {
-    render()
+    render();
       <div>
         <WeightVisualization
           options={mockOptions}

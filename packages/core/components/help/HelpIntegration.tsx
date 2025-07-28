@@ -10,13 +10,12 @@ import { useUISettingsStore } from '../../stores/uiSettingsStore';
 export function withHelp<P extends object>()
   WrappedComponent: React.ComponentType<P>,
   helpContent: HelpContent,
-) {
   const WithHelpComponent = (props: P) => {
     const { showHelpHints } = useHelpSystem();
     if (!showHelpHints) {
       return <WrappedComponent {...props} />;
     }
-    return ()
+    return ();
       <ContextualTooltip content={helpContent}>
         <WrappedComponent {...props} />
       </ContextualTooltip>
@@ -62,9 +61,9 @@ export const HelpfulInput: React.FC<HelpfulInputProps> = ({)
     showOnDisclosureLevel: [complexityLevel],
     examples: helpExamples,
     shortcut: helpShortcut,
-    priority: helpCategory === 'basic' ? 'high' : 'medium'
+    priority: helpCategory === 'basic' ? 'high' : 'medium',
   });
-  const inputElement = (;)
+  const inputElement = (;);
     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, ...style }}>
       {label && ()
         <label
@@ -119,7 +118,7 @@ export const HelpfulInput: React.FC<HelpfulInputProps> = ({)
   if (!showHelpHints || !helpContent) {
     return inputElement;
   }
-  return ()
+  return ();
     <ContextualTooltip content={helpContent}>
       {inputElement}
     </ContextualTooltip>
@@ -163,7 +162,7 @@ export const HelpfulButton: React.FC<HelpfulButtonProps> = ({)
     showOnDisclosureLevel: [complexityLevel],
     examples: helpExamples,
     shortcut: helpShortcut,
-    priority: helpCategory === 'basic' ? 'high' : 'medium'
+    priority: helpCategory === 'basic' ? 'high' : 'medium',
   });
   const getButtonStyles = () => {
     const sizeStyles = {
@@ -186,7 +185,7 @@ export const HelpfulButton: React.FC<HelpfulButtonProps> = ({)
       ...variantStyles[variant]
     };
   };
-  const buttonElement = (;)
+  const buttonElement = (;);
     <button
       className={`helpful-button ${className}`}
       style={{
@@ -201,7 +200,7 @@ export const HelpfulButton: React.FC<HelpfulButtonProps> = ({)
   if (!showHelpHints || !helpContent) {
     return buttonElement;
   }
-  return ()
+  return ();
     <ContextualTooltip content={helpContent}>
       {buttonElement}
     </ContextualTooltip>
@@ -247,9 +246,9 @@ export const HelpfulSection: React.FC<HelpfulSectionProps> = ({)
     position: 'right',
     showOnDisclosureLevel: [complexityLevel],
     examples: helpExamples,
-    priority: helpCategory === 'basic' ? 'high' : 'medium'
+    priority: helpCategory === 'basic' ? 'high' : 'medium',
   });
-  const headerElement = (;)
+  const headerElement = (;);
     <div
       style={{
         display: 'flex',
@@ -259,7 +258,7 @@ export const HelpfulSection: React.FC<HelpfulSectionProps> = ({)
         background: '#2d3748',
         borderRadius: collapsible ? '4px 4px 0 0' : 4,
         border: '1px solid #4a5568',
-        cursor: collapsible ? 'pointer' : 'default'
+        cursor: collapsible ? 'pointer' : 'default',
       }}
       onClick={collapsible ? () => setIsExpanded(!isExpanded) : undefined}
     >
@@ -287,14 +286,14 @@ export const HelpfulSection: React.FC<HelpfulSectionProps> = ({)
           fontSize: 10,
           color: '#a0aec0',
           transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-          transition: 'transform 0.2s ease'
+          transition: 'transform 0.2s ease',
         }}>
           ▼
         </span>
       )}
     </div>
   );
-  const sectionElement = (;)
+  const sectionElement = (;);
     <div
       className={`helpful-section ${className}`}
       style={style}
@@ -312,7 +311,7 @@ export const HelpfulSection: React.FC<HelpfulSectionProps> = ({)
           background: '#1a202c',
           border: '1px solid #4a5568',
           borderTop: 'none',
-          borderRadius: '0 0 4px 4px'
+          borderRadius: '0 0 4px 4px',
         }}>
           {children}
         </div>
@@ -330,7 +329,7 @@ export const useContextualHelp = (helpContent: HelpContent) => {
   }, [helpContent.id]);
   const wrapWithHelp = (element: React.ReactElement) => {
     if (!showHelpHints) return element;
-    return ()
+    return ();
       <ContextualTooltip content={helpContent}>
         {element}
       </ContextualTooltip>
@@ -345,7 +344,7 @@ export const OnboardingOverlay: React.FC<{
   children: React.ReactNode;
 }> = ({ isActive, children }) => {
   if (!isActive) return <>{children}</>;
-  return ()
+  return ();
     <div style={{ position: 'relative' }}>
       {/* Backdrop */}
       <div
@@ -357,7 +356,7 @@ export const OnboardingOverlay: React.FC<{
           bottom: 0,
           background: 'rgba(0, 0, 0, 0.7)',
           zIndex: 1500,
-          pointerEvents: isActive ? 'all' : 'none'
+          pointerEvents: isActive ? 'all' : 'none',
         }}
       />
       {/* Content */}

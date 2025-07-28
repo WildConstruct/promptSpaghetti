@@ -29,7 +29,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
   ]);
   useEffect(() => {
     if (timeRange && selectedFunnel) {
-      const metrics = conversionTracker.getFunnelMetrics(;)
+      const metrics = conversionTracker.getFunnelMetrics(;);
         selectedFunnel,
         timeRange.startTime,
         timeRange.endTime
@@ -41,7 +41,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
     if (!metrics || !metrics.metrics.dropoffPoints) return null;
     const steps = metrics.metrics.dropoffPoints;
     const maxUsers = Math.max(...steps.map(s => s.users));
-    return ()
+    return ();
       <div className="funnel-visualization">
         <h4>Funnel Flow</h4>
         <div className="funnel-steps">
@@ -50,7 +50,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
             const conversionRate = index > 0 ;
               ? ((step.users / steps[0].users) * 100).toFixed(1)
               : '100.0';
-            return ()
+            return ();
               <div key={step.step} className="funnel-step">
                 <div className="step-info">
                   <div className="step-name">{step.step}</div>
@@ -81,7 +81,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
   };
   const renderSegmentBreakdown = (metrics: unknown) => {
     if (!metrics || !metrics.segmentBreakdown) return null;
-    return ()
+    return ();
       <div className="segment-breakdown">
         <h4>Conversion by Segment</h4>
         <div className="segment-grid">
@@ -101,14 +101,14 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
     );
   };
   if (loading) {
-    return ()
+    return ();
       <div className="conversion-dashboard loading">
         <div className="loading-spinner"></div>
         <p>Loading conversion data...</p>
       </div>
     );
   }
-  return ()
+  return ();
     <div className="conversion-funnel-dashboard">
       <div className="dashboard-header">
         <div className="header-controls">

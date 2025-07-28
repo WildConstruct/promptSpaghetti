@@ -125,7 +125,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({)
     }
   };
   const colors = getThemeColors();
-  return ()
+  return ();
     <div className="rich-text-editor" style={{ position: 'relative' }}>
       {/* Toolbar */}
       {showToolbar && ()
@@ -277,7 +277,7 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = ({ onClick, title, children,
     }
   };
   const colors = getButtonColors();
-  return ()
+  return ();
     <button
       onClick={onClick}
       title={title}
@@ -290,7 +290,7 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = ({ onClick, title, children,
         cursor: 'pointer',
         fontSize: 11,
         fontWeight: 600,
-        transition: 'background 0.2s ease'
+        transition: 'background 0.2s ease',
       }}
       onMouseEnter={(e) => {
         (e.target as HTMLButtonElement).style.background = colors.hover;
@@ -365,7 +365,7 @@ export const NodeSpecificRichEditor: React.FC<{
     }
   };
   const config = getEditorConfig();
-  return ()
+  return ();
     <RichTextEditor
       value={value}
       onChange={(newValue) => onChange(field, newValue)}

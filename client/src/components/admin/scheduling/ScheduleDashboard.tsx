@@ -1,5 +1,4 @@
 // Epic 17.1.5 - Schedule Dashboard Component
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
@@ -58,7 +57,6 @@ import { ScheduleEditor, ScheduleFormData } from './ScheduleEditor';
 import { ScheduleCalendar } from './ScheduleCalendar';
 import { ScheduleTimeline } from './ScheduleTimeline';
 import { ExecutionHistory } from './ExecutionHistory';
-
 interface Schedule {
   id: string;
   toggleId: string;
@@ -81,12 +79,10 @@ interface Schedule {
   createdAt: Date;
   updatedAt: Date;
 }
-
 interface ScheduleDashboardProps {
   toggleId?: string;
   onScheduleChange?: () => void;
 }
-
 const STATUS_CONFIG = {
   pending: { color: 'warning', icon: PendingIcon, label: 'Pending' },
   active: { color: 'success', icon: CheckCircleIcon, label: 'Active' },
@@ -95,28 +91,24 @@ const STATUS_CONFIG = {
   failed: { color: 'error', icon: ErrorIcon, label: 'Failed' },
   paused: { color: 'warning', icon: PauseIcon, label: 'Paused' }
 };
-
-const VIEW_MODES = [
+const VIEW_MODES = [;
   { value: 'table', label: 'Table', icon: ScheduleIcon },
   { value: 'calendar', label: 'Calendar', icon: CalendarIcon },
   { value: 'timeline', label: 'Timeline', icon: TimelineIcon }
 ];
 
-export   const [loading, setLoading] = useState(true);
+export const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'table' | 'calendar' | 'timeline'>('table');
-  
   // Filters
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [dateRangeStart, setDateRangeStart] = useState<Date | null>(null);
   const [dateRangeEnd, setDateRangeEnd] = useState<Date | null>(null);
-  
   // Table state
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [selectedSchedules, setSelectedSchedules] = useState<string[]>([]);
-  
   // Modal states
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
@@ -124,21 +116,17 @@ export   const [loading, setLoading] = useState(true);
   const [historyScheduleId, setHistoryScheduleId] = useState<string | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [scheduleToDelete, setScheduleToDelete] = useState<Schedule | null>(null);
-  
   // Menu state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [menuSchedule, setMenuSchedule] = useState<Schedule | null>(null);
-
   // Load schedules
   useEffect(() => {
     loadSchedules();
   }, [toggleId]);
-
   // Apply filters
   useEffect(() => {
     applyFilters();
   }, [statusFilter, typeFilter, searchTerm, dateRangeStart, dateRangeEnd, applyFilters]);
-
   const loadSchedules = async () => {
     setLoading(true);
     try {
@@ -161,7 +149,7 @@ export   const [loading, setLoading] = useState(true);
           priority: 1,
           createdBy: 'admin@example.com',
           createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
-          updatedAt: new Date(Date.now() - 24 * 60 * 60 * 1000)
+          updatedAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
         },
         {
           id: 'sched_2',
@@ -182,10 +170,9 @@ export   const [loading, setLoading] = useState(true);
           priority: 2,
           createdBy: 'devops@example.com',
           createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          updatedAt: new Date(Date.now() - 60 * 60 * 1000)
+          updatedAt: new Date(Date.now() - 60 * 60 * 1000),
         }
       ];
-      
       setSchedules(mockSchedules);
     } catch (error) {
       console.error('Failed to load schedules:', error);
@@ -193,31 +180,26 @@ export   const [loading, setLoading] = useState(true);
       setLoading(false);
     }
   };
-
   const applyFilters = useCallback(() => {
     let filtered = [...schedules];
-
     // Status filter
     if (statusFilter !== 'all') {
       filtered = filtered.filter(schedule => schedule.status === statusFilter);
     }
-
     // Type filter
     if (typeFilter !== 'all') {
       filtered = filtered.filter(schedule => schedule.type === typeFilter);
     }
-
     // Search filter
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
-      filtered = filtered.filter(schedule =>
+      filtered = filtered.filter(schedule =>)
         schedule.name.toLowerCase().includes(searchLower) ||
         schedule.toggleName.toLowerCase().includes(searchLower) ||
         schedule.description?.toLowerCase().includes(searchLower) ||
         schedule.action.toLowerCase().includes(searchLower)
       );
     }
-
     // Date range filter
     if (dateRangeStart) {
       filtered = filtered.filter(schedule => schedule.startTime >= dateRangeStart);
@@ -225,27 +207,22 @@ export   const [loading, setLoading] = useState(true);
     if (dateRangeEnd) {
       filtered = filtered.filter(schedule => schedule.startTime <= dateRangeEnd);
     }
-
     // Filter by toggleId if provided
     if (toggleId) {
       filtered = filtered.filter(schedule => schedule.toggleId === toggleId);
     }
-
     setFilteredSchedules(filtered);
     setPage(0); // Reset to first page when filters change
   }, [statusFilter, typeFilter, searchTerm, dateRangeStart, dateRangeEnd, toggleId]);
-
   const handleCreateSchedule = () => {
     setEditingSchedule(null);
     setEditorOpen(true);
   };
-
   const handleEditSchedule = (schedule: Schedule) => {
     setEditingSchedule(schedule);
     setEditorOpen(true);
     setAnchorEl(null);
   };
-
   const handleSaveSchedule = async (formData: ScheduleFormData) => {
     try {
       if (editingSchedule) {
@@ -259,7 +236,6 @@ export   const [loading, setLoading] = useState(true);
         // await createSchedule(formData);
         console.log('Creating schedule:', formData);
       }
-      
       await loadSchedules();
       onScheduleChange?.();
     } catch (error) {
@@ -268,16 +244,13 @@ export   const [loading, setLoading] = useState(true);
       throw error;
     }
   };
-
   const handleDeleteSchedule = async (schedule: Schedule) => {
     setScheduleToDelete(schedule);
     setDeleteDialogOpen(true);
     setAnchorEl(null);
   };
-
   const confirmDeleteSchedule = async () => {
     if (!scheduleToDelete) return;
-    
     try {
       // TODO: Replace with actual API call
       // await deleteSchedule(scheduleToDelete.id);
@@ -291,10 +264,8 @@ export   const [loading, setLoading] = useState(true);
       setScheduleToDelete(null);
     }
   };
-
   const handleBulkAction = async (action: string) => {
     if (selectedSchedules.length === 0) return;
-    
     try {
       // TODO: Replace with actual API call
       // await performBulkAction(action, selectedSchedules);
@@ -307,7 +278,6 @@ export   const [loading, setLoading] = useState(true);
       console.error('Failed to perform bulk action:', error);
     }
   };
-
   const handleManualExecution = async (schedule: Schedule) => {
     try {
       // TODO: Replace with actual API call
@@ -321,44 +291,34 @@ export   const [loading, setLoading] = useState(true);
     }
     setAnchorEl(null);
   };
-
   const handleViewHistory = (schedule: Schedule) => {
     setHistoryScheduleId(schedule.id);
     setHistoryOpen(true);
     setAnchorEl(null);
   };
-
   const formatNextExecution = (schedule: Schedule): string => {
     if (!schedule.nextExecution) return 'None';
-    
     const now = new Date();
     const next = schedule.nextExecution;
     const diffMs = next.getTime() - now.getTime();
-    
     if (diffMs < 0) return 'Overdue';
-    
     const diffMinutes = Math.floor(diffMs / (1000 * 60));
     const diffHours = Math.floor(diffMinutes / 60);
     const diffDays = Math.floor(diffHours / 24);
-    
-    if (diffDays > 0) return `In ${diffDays} day${diffDays > 1 ? 's' : ''}`;
-    if (diffHours > 0) return `In ${diffHours} hour${diffHours > 1 ? 's' : ''}`;
-    if (diffMinutes > 0) return `In ${diffMinutes} minute${diffMinutes > 1 ? 's' : ''}`;
+    if (diffDays > 0) return `In ${diffDays} day${diffDays > 1 ? 's' : ''}`;}
+    if (diffHours > 0) return `In ${diffHours} hour${diffHours > 1 ? 's' : ''}`;}
+    if (diffMinutes > 0) return `In ${diffMinutes} minute${diffMinutes > 1 ? 's' : ''}`;}
     return 'Very soon';
   };
-
   const getScheduleStats = () => {
     const total = schedules.length;
     const active = schedules.filter(s => s.status === 'active').length;
     const pending = schedules.filter(s => s.status === 'pending').length;
     const failed = schedules.filter(s => s.status === 'failed').length;
-    
     return { total, active, pending, failed };
   };
-
   const stats = getScheduleStats();
-
-  const renderStatsCards = () => (
+  const renderStatsCards = () => (;)
     <Grid container spacing={2} sx={{ mb: 3 }}>
       <Grid item xs={12} sm={6} md={3}>
         <Card>
@@ -377,7 +337,6 @@ export   const [loading, setLoading] = useState(true);
           </CardContent>
         </Card>
       </Grid>
-      
       <Grid item xs={12} sm={6} md={3}>
         <Card>
           <CardContent>
@@ -395,7 +354,6 @@ export   const [loading, setLoading] = useState(true);
           </CardContent>
         </Card>
       </Grid>
-      
       <Grid item xs={12} sm={6} md={3}>
         <Card>
           <CardContent>
@@ -413,7 +371,6 @@ export   const [loading, setLoading] = useState(true);
           </CardContent>
         </Card>
       </Grid>
-      
       <Grid item xs={12} sm={6} md={3}>
         <Card>
           <CardContent>
@@ -433,8 +390,7 @@ export   const [loading, setLoading] = useState(true);
       </Grid>
     </Grid>
   );
-
-  const renderFilters = () => (
+  const renderFilters = () => (;)
     <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} md={3}>
@@ -446,7 +402,6 @@ export   const [loading, setLoading] = useState(true);
             size="small"
           />
         </Grid>
-        
         <Grid item xs={12} md={2}>
           <FormControl fullWidth size="small">
             <InputLabel>Status</InputLabel>
@@ -465,7 +420,6 @@ export   const [loading, setLoading] = useState(true);
             </Select>
           </FormControl>
         </Grid>
-        
         <Grid item xs={12} md={2}>
           <FormControl fullWidth size="small">
             <InputLabel>Type</InputLabel>
@@ -481,7 +435,6 @@ export   const [loading, setLoading] = useState(true);
             </Select>
           </FormControl>
         </Grid>
-        
         <Grid item xs={12} md={2}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DateTimePicker
@@ -494,7 +447,6 @@ export   const [loading, setLoading] = useState(true);
             />
           </LocalizationProvider>
         </Grid>
-        
         <Grid item xs={12} md={2}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DateTimePicker
@@ -507,7 +459,6 @@ export   const [loading, setLoading] = useState(true);
             />
           </LocalizationProvider>
         </Grid>
-        
         <Grid item xs={12} md={1}>
           <Button
             onClick={() => {
@@ -525,13 +476,12 @@ export   const [loading, setLoading] = useState(true);
       </Grid>
     </Paper>
   );
-
-  const renderTableView = () => (
+  const renderTableView = () => (;)
     <Paper elevation={1}>
       <Box p={2} display="flex" justifyContent="between" alignItems="center">
         <Typography variant="h6">Schedules</Typography>
         <Box display="flex" gap={1}>
-          {selectedSchedules.length > 0 && (
+          {selectedSchedules.length > 0 && ()
             <>
               <Button
                 size="small"
@@ -558,9 +508,7 @@ export   const [loading, setLoading] = useState(true);
           </Button>
         </Box>
       </Box>
-      
       {loading && <LinearProgress />}
-      
       <TableContainer>
         <Table>
           <TableHead>
@@ -594,8 +542,7 @@ export   const [loading, setLoading] = useState(true);
               .map((schedule) => {
                 const statusConfig = STATUS_CONFIG[schedule.status];
                 const StatusIcon = statusConfig.icon;
-                
-                return (
+                return ()
                   <TableRow key={schedule.id}>
                     <TableCell padding="checkbox">
                       <Checkbox
@@ -614,7 +561,7 @@ export   const [loading, setLoading] = useState(true);
                         <Typography variant="body2" fontWeight="medium">
                           {schedule.name}
                         </Typography>
-                        {schedule.description && (
+                        {schedule.description && ()
                           <Typography variant="caption" color="text.secondary">
                             {schedule.description}
                           </Typography>
@@ -636,7 +583,7 @@ export   const [loading, setLoading] = useState(true);
                         <Typography variant="body2">
                           {statusConfig.label}
                         </Typography>
-                        {!schedule.enabled && (
+                        {!schedule.enabled && ()
                           <Chip label="Disabled" size="small" color="default" />
                         )}
                       </Box>
@@ -645,7 +592,7 @@ export   const [loading, setLoading] = useState(true);
                       <Typography variant="body2">
                         {formatNextExecution(schedule)}
                       </Typography>
-                      {schedule.nextExecution && (
+                      {schedule.nextExecution && ()
                         <Typography variant="caption" color="text.secondary">
                           {schedule.nextExecution.toLocaleString()}
                         </Typography>
@@ -656,7 +603,7 @@ export   const [loading, setLoading] = useState(true);
                         <Typography variant="caption" color="text.secondary">
                           Executions: {schedule.executionCount}
                         </Typography>
-                        {schedule.failureCount > 0 && (
+                        {schedule.failureCount > 0 && ()
                           <Typography variant="caption" color="error.main">
                             Failures: {schedule.failureCount}
                           </Typography>
@@ -680,7 +627,6 @@ export   const [loading, setLoading] = useState(true);
           </TableBody>
         </Table>
       </TableContainer>
-      
       <TablePagination
         rowsPerPageOptions={[10, 25, 50, 100]}
         component="div"
@@ -695,8 +641,7 @@ export   const [loading, setLoading] = useState(true);
       />
     </Paper>
   );
-
-  return (
+  return ()
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box>
         {/* Header */}
@@ -705,7 +650,7 @@ export   const [loading, setLoading] = useState(true);
             Schedule Management
           </Typography>
           <Box display="flex" gap={1}>
-            {VIEW_MODES.map((mode) => (
+            {VIEW_MODES.map((mode) => ()
               <Button
                 key={mode.value}
                 variant={viewMode === mode.value ? 'contained' : 'outlined'}
@@ -718,29 +663,25 @@ export   const [loading, setLoading] = useState(true);
             ))}
           </Box>
         </Box>
-
         {/* Stats Cards */}
         {renderStatsCards()}
-
         {/* Filters */}
         {viewMode === 'table' && renderFilters()}
-
         {/* Main Content */}
         {viewMode === 'table' && renderTableView()}
-        {viewMode === 'calendar' && (
+        {viewMode === 'calendar' && ()
           <ScheduleCalendar
             schedules={filteredSchedules}
             onScheduleClick={handleEditSchedule}
             onCreateSchedule={handleCreateSchedule}
           />
         )}
-        {viewMode === 'timeline' && (
+        {viewMode === 'timeline' && ()
           <ScheduleTimeline
             schedules={filteredSchedules}
             onScheduleClick={handleEditSchedule}
           />
         )}
-
         {/* Schedule Editor Modal */}
         <ScheduleEditor
           open={editorOpen}
@@ -759,26 +700,24 @@ export   const [loading, setLoading] = useState(true);
             actionConfig: {},
             priority: editingSchedule.priority,
             conflictResolution: 'skip',
-            enabled: editingSchedule.enabled
+            enabled: editingSchedule.enabled,
           } : undefined}
           toggleId={toggleId || ''}
           toggleName={editingSchedule?.toggleName}
-          existingSchedules={schedules.map(s => ({
+          existingSchedules={schedules.map(s => ({)
             id: s.id,
             name: s.name,
             startTime: s.startTime,
             endTime: s.endTime,
-            action: s.action
+            action: s.action,
           }))}
         />
-
         {/* Execution History Modal */}
         <ExecutionHistory
           open={historyOpen}
           onClose={() => setHistoryOpen(false)}
           scheduleId={historyScheduleId}
         />
-
         {/* Delete Confirmation Dialog */}
         <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
           <DialogTitle>Delete Schedule</DialogTitle>
@@ -793,7 +732,6 @@ export   const [loading, setLoading] = useState(true);
             <Button onClick={confirmDeleteSchedule} color="error">Delete</Button>
           </DialogActions>
         </Dialog>
-
         {/* Action Menu */}
         <Menu
           anchorEl={anchorEl}

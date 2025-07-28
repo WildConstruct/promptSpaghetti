@@ -110,7 +110,7 @@ export class SelectiveStateManager extends EventEmitter {
       nodes: new Map(),
       edges: new Map(),
       rootPaths: new Set(),
-      dependencyMap: new Map()
+      dependencyMap: new Map(),
     };
     this.performanceMetrics = {
       updateLatency: [],
@@ -120,17 +120,17 @@ export class SelectiveStateManager extends EventEmitter {
       memoryUsage: 0,
       cacheHitRate: 0,
       selectorExecutionTime: new Map(),
-      componentUpdateTime: new Map()
+      componentUpdateTime: new Map(),
     };
     this.scheduler = this.createUpdateScheduler();
     this.setupCleanupTimer();
   }
   // Component dependency tracking
-  registerComponentDependency()
+  registerComponentDependency();
     componentId: string,
     path: string,
     selector?: StateSelector<any, any>,
-    priority: ComponentDependency['priority'] = 'normal'
+    priority: ComponentDependency['priority'] = 'normal',
   ): () => void {
     const dependency: ComponentDependency = {
       componentId,
@@ -346,7 +346,7 @@ export class SelectiveStateManager extends EventEmitter {
         dependents: new Set(),
         lastModified: Date.now(),
         accessCount: 0,
-        subscriptions: new Set()
+        subscriptions: new Set(),
       };
       this.stateGraph.nodes.set(path, node);
       // Check if this is a root path
@@ -370,20 +370,20 @@ export class SelectiveStateManager extends EventEmitter {
   // Update scheduler implementation
   private createUpdateScheduler(): UpdateScheduler {
     return {
-      schedule: (batch: StateUpdateBatch) => {
+      schedule: (batch: StateUpdateBatch) => {,
         this.batchQueue.push(batch);
         this.scheduleFlush();
       },
-      flush: async () => {
+      flush: async () => {,
         await this.processBatchQueue();
       },
-      clear: () => {
+      clear: () => {,
         this.batchQueue = [];
       },
-      getQueueSize: () => {
+      getQueueSize: () => {,
         return this.batchQueue.length;
       },
-      getScheduledUpdates: () => {
+      getScheduledUpdates: () => {,
         return [...this.batchQueue];
       }
     };
@@ -477,7 +477,7 @@ export class SelectiveStateManager extends EventEmitter {
       if (dep.selector && dep.lastValue !== undefined) {
         // Would need to compute new value and compare with last value
         // This is a simplified check
-        const hasRelevantUpdates = batches.some(batch =>;)
+        const hasRelevantUpdates = batches.some(batch =>;);
           batch.updates.some(update => this.pathMatches(dep.path, update.path))
         );
         if (hasRelevantUpdates) {
@@ -612,7 +612,7 @@ export class SelectiveStateManager extends EventEmitter {
       ...this.performanceMetrics,
       updateLatency: [...this.performanceMetrics.updateLatency],
       selectorExecutionTime: new Map(this.performanceMetrics.selectorExecutionTime),
-      componentUpdateTime: new Map(this.performanceMetrics.componentUpdateTime)
+      componentUpdateTime: new Map(this.performanceMetrics.componentUpdateTime),
     };
   }
   getStateGraph(): Readonly<StateGraph> {
@@ -620,7 +620,7 @@ export class SelectiveStateManager extends EventEmitter {
       nodes: new Map(this.stateGraph.nodes),
       edges: new Map(this.stateGraph.edges),
       rootPaths: new Set(this.stateGraph.rootPaths),
-      dependencyMap: new Map(this.stateGraph.dependencyMap)
+      dependencyMap: new Map(this.stateGraph.dependencyMap),
     };
   }
   getCacheStats(): {
@@ -629,7 +629,6 @@ export class SelectiveStateManager extends EventEmitter {
     totalHits: number;
     oldestEntry: number;
     newestEntry: number;
-  } {
     const caches = Array.from(this.selectorCache.values());
     const totalHits = caches.reduce((sum, cache) => sum + cache.hitCount, 0);
     const timestamps = caches.map(cache => cache.timestamp);
@@ -638,7 +637,7 @@ export class SelectiveStateManager extends EventEmitter {
       hitRate: this.calculateCacheHitRate(),
       totalHits,
       oldestEntry: timestamps.length > 0 ? Math.min(...timestamps) : 0,
-      newestEntry: timestamps.length > 0 ? Math.max(...timestamps) : 0
+      newestEntry: timestamps.length > 0 ? Math.max(...timestamps) : 0,
     };
   }
   // Debug methods

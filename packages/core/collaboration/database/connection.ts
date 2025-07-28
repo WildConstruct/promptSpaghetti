@@ -23,7 +23,7 @@ export class DatabaseConnection {
       ...config,
       max: config.max || 20,
       idleTimeoutMillis: config.idleTimeoutMillis || 30000,
-      connectionTimeoutMillis: config.connectionTimeoutMillis || 5000
+      connectionTimeoutMillis: config.connectionTimeoutMillis || 5000,
     });
     this.pool.on('error', (err) => {
       console.error('Unexpected error on idle client', err);
@@ -264,7 +264,6 @@ export class MigrationRunner {
         description TEXT NOT NULL,
         applied_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
         rollback_sql TEXT
-      )
     `);
   }
   async getAppliedMigrations(): Promise<string[]> {

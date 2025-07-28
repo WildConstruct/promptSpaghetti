@@ -81,7 +81,7 @@ const MetricCard: React.FC<MetricCardProps> = ({)
       return 'bg-blue-500';
     }
   };
-  return ()
+  return ();
     <Card className={`metric-card ${className}`}>}
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
@@ -151,7 +151,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
   loading
 }) => {
   if (loading) {
-    return ()
+    return ();
       <div className="metrics-overview">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(8)].map((_, i) => ()
@@ -170,7 +170,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
     );
   }
   if (!summary || !dashboardData) {
-    return ()
+    return ();
       <div className="metrics-overview">
         <div className="text-center py-8 text-gray-500">
           No metrics data available
@@ -198,7 +198,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
   const conversionMetrics = conversionData || {};
   const performanceMetrics = performanceData || {};
   const realTimeMetrics = conversionMetrics.realTimeMetrics || {};
-  return ()
+  return ();
     <div className="metrics-overview">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Executions */}
@@ -209,12 +209,12 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           trend={{
             direction: executions.total > 0 ? 'up' : 'stable',
             value: 12.5,
-            label: 'vs last period'
+            label: 'vs last period',
           }}
           progress={{
             value: executions.successful || 0,
             max: executions.total || 1,
-            color: executions.total > 0 && (executions.successful / executions.total) > 0.9 ? 'green' : 'yellow'
+            color: executions.total > 0 && (executions.successful / executions.total) > 0.9 ? 'green' : 'yellow',
           }}
           icon={<CheckCircle className="w-5 h-5" />}
         />
@@ -226,7 +226,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           trend={{
             direction: summary.successRate > 90 ? 'up' : summary.successRate < 80 ? 'down' : 'stable',
             value: 2.3,
-            label: 'vs last period'
+            label: 'vs last period',
           }}
           icon={summary.successRate > 90 ? <CheckCircle className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
         />
@@ -238,7 +238,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           trend={{
             direction: 'up',
             value: 8.2,
-            label: 'vs last period'
+            label: 'vs last period',
           }}
           icon={<Users className="w-5 h-5" />}
         />
@@ -250,7 +250,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           trend={{
             direction: realTimeMetrics.conversionsLast24h > 5 ? 'up' : 'stable',
             value: 15.7,
-            label: 'vs yesterday'
+            label: 'vs yesterday',
           }}
           icon={<CheckCircle className="w-5 h-5" />}
         />
@@ -262,7 +262,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           progress={{
             value: performanceMetrics.overview?.healthScore || 100,
             max: 100,
-            color: (performanceMetrics.overview?.healthScore || 100) > 90 ? 'green' : 
+            color: (performanceMetrics.overview?.healthScore || 100) > 90 ? 'green' : ,
               (performanceMetrics.overview?.healthScore || 100) > 70 ? 'yellow' : 'red'
           }}
           icon={<Activity className="w-5 h-5" />}
@@ -275,7 +275,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           trend={{
             direction: 'down',
             value: -5.1,
-            label: 'vs last period'
+            label: 'vs last period',
           }}
           icon={<Clock className="w-5 h-5" />}
         />
@@ -287,7 +287,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           trend={{
             direction: 'up',
             value: 15.3,
-            label: 'vs last period'
+            label: 'vs last period',
           }}
           icon={<DollarSign className="w-5 h-5" />}
         />
@@ -299,7 +299,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({)
           trend={{
             direction: 'up',
             value: 22.1,
-            label: 'vs last period'
+            label: 'vs last period',
           }}
           icon={<Activity className="w-5 h-5" />}
         />

@@ -142,7 +142,7 @@ export declare class WebSocketStreamingServer extends EventEmitter {
     private stats;
     private heartbeatTimer;
     private metricsTimer;
-    constructor()
+    constructor();
       eventBus: UnifiedEventBus,
       authService: AnalyticsAuthorizationService,
       config?: Partial<WSServerConfig>

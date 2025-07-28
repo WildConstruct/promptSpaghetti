@@ -20,7 +20,7 @@ const mockUseExport = {
   forkTemplate: jest.fn<unknown[], unknown>()
 };
 jest.mock('../hooks/useExport', () => ({)
-  useExport: () => mockUseExport
+  useExport: () => mockUseExport,
 }));
 import { TemplateCollaborationPanel } from '../components/export/TemplateCollaborationPanel';
 

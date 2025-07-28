@@ -66,7 +66,7 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({)
     }
   };
   const selectedRole = ROLES.find(role => role.value === formData.role);
-  return ()
+  return ();
     <div className="modal-overlay">
       <div className="modal modal--medium">
         <div className="modal__header">

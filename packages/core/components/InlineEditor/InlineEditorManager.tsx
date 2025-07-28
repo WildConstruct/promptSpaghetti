@@ -52,18 +52,18 @@ export const InlineEditorManager: React.FC<InlineEditorManagerProps> = ({)
       const canvasRect = canvasRef.current.getBoundingClientRect();
       editorPosition = {
         x: event.clientX - canvasRect.left + 20,
-        y: event.clientY - canvasRect.top + 20
+        y: event.clientY - canvasRect.top + 20,
       };
     } else {
       // Position relative to node center
       const viewport = getViewport();
       const nodeScreenPos = project({)
         x: node.position.x + (node.width || 200) / 2,
-        y: node.position.y + (node.height || 100) / 2
+        y: node.position.y + (node.height || 100) / 2,
       });
       editorPosition = {
         x: nodeScreenPos.x + 20,
-        y: nodeScreenPos.y + 20
+        y: nodeScreenPos.y + 20,
       };
     }
     // Ensure editor stays within viewport bounds
@@ -110,7 +110,7 @@ export const InlineEditorManager: React.FC<InlineEditorManagerProps> = ({)
   }, []);
   // Get active node
   const activeNode = editorState.nodeId ? nodes.find(n => n.id === editorState.nodeId) : null;
-  return ()
+  return ();
     <>
       {/* Render inline editor if active */}
       {editorState.isActive && activeNode && ()
@@ -152,7 +152,7 @@ const NodeClickHandler: React.FC<NodeClickHandlerProps> = ({ )
   const viewport = getViewport();
   const screenPosition = project(node.position);
   if (isEditorActive) return null; // Don't render handler when editor is active
-  return ()
+  return ();
     <div
       style={{
         position: 'absolute',
@@ -206,7 +206,7 @@ export const InlineEditorProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const editorState = useInlineEditor();
-  return ()
+  return ();
     <InlineEditorContext.Provider value={editorState}>
       {children}
     </InlineEditorContext.Provider>

@@ -44,7 +44,7 @@ describe('ContextValidationFramework', () => {
     });
     it('should detect invalid PRNG output', async () => {
       const context = ContextValidationUtils.createTestContext({)
-        prng: () => 2.0 // Invalid range
+        prng: () => 2.0 // Invalid range,
       });
       const result = await framework.validateContext(context);
       expect(result.valid).toBe(false);
@@ -70,7 +70,7 @@ describe('ContextValidationFramework', () => {
     });
     it('should detect excessive evaluation depth', async () => {
       const context = ContextValidationUtils.createTestContext({)
-        evaluationDepth: 10 // Exceeds max depth of 5
+        evaluationDepth: 10 // Exceeds max depth of 5,
       });
       const result = await framework.validateContext(context);
       expect(result.valid).toBe(false);
@@ -164,7 +164,7 @@ describe('ContextValidationFramework', () => {
         description: 'Test rule execution',
         category: 'critical',
         weight: 2.0,
-        validate: () => {
+        validate: () => {,
           ruleExecuted = true;
           return { passed: false, score: 0, message: 'Custom rule failed' };
         }
@@ -198,7 +198,7 @@ describe('ContextValidationFramework', () => {
     it('should track validation statistics', async () => {
       const context1 = ContextValidationUtils.createTestContext();
       const context2 = ContextValidationUtils.createTestContext({)
-        prng: null as any // Create invalid context
+        prng: null as any // Create invalid context,
       });
       await framework.validateContext(context1);
       await framework.validateContext(context2);
@@ -231,7 +231,7 @@ describe('ContextValidationFramework', () => {
         description: 'Rule that throws errors',
         category: 'critical',
         weight: 1.0,
-        validate: () => {
+        validate: () => {,
           throw new Error('Test error');
         }
       };
@@ -291,7 +291,7 @@ describe('ContextValidationUtils', () => {
         nodeStates: new Map(),
         cache: new Map(),
         evaluationDepth: 0,
-        prng: () => 0.5
+        prng: () => 0.5,
         // Missing executionMeta
       };
       expect(ContextValidationUtils.isValidContext(incompleteContext)).toBe(false);
@@ -355,7 +355,7 @@ describe('ContextValidationUtils', () => {
     });
     it('should handle PRNG that throws errors', () => {
       const context = ContextValidationUtils.createTestContext({)
-        prng: () => {
+        prng: () => {,
           throw new Error('PRNG error');
         }
       });

@@ -40,35 +40,35 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({)
       name: 'Featured',
       icon: '⭐',
       description: 'Editor\'s choice and popular extensions',
-      count: Math.floor(extensions.length * 0.3)
+      count: Math.floor(extensions.length * 0.3),
     },
     {
       id: 'node',
       name: 'Node Extensions',
       icon: '🔧',
       description: 'Add new node types and functionality',
-      count: extensions.filter(ext => ext.extension_type === 'node').length
+      count: extensions.filter(ext => ext.extension_type === 'node').length,
     },
     {
       id: 'ui',
       name: 'UI & Themes',
       icon: '🎨',
       description: 'Customize the interface and appearance',
-      count: extensions.filter(ext => ext.extension_type === 'ui').length
+      count: extensions.filter(ext => ext.extension_type === 'ui').length,
     },
     {
       id: 'transform',
       name: 'Data Transforms',
       icon: '⚡',
       description: 'Process and transform your data',
-      count: extensions.filter(ext => ext.extension_type === 'transform').length
+      count: extensions.filter(ext => ext.extension_type === 'transform').length,
     },
     {
       id: 'storage',
       name: 'Storage & Sync',
       icon: '💾',
       description: 'Connect to external storage and services',
-      count: extensions.filter(ext => ext.extension_type === 'storage').length
+      count: extensions.filter(ext => ext.extension_type === 'storage').length,
     }
   ];
   const filteredExtensions = selectedCategory === 'all' ;
@@ -90,13 +90,13 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({)
     if (downloads < 1000000) return `${(downloads / 1000).toFixed(1)}K`;}
     return `${(downloads / 1000000).toFixed(1)}M`;}
   };
-  const renderExtensionGrid = () => (;)
+  const renderExtensionGrid = () => (;);
     <div className="extension-grid">
       {filteredExtensions.map((extension) => {
         const downloads = Math.floor(Math.random() * 50000);
         const rating = (4 + Math.random()).toFixed(1);
         const isSelected = selectedExtension?.id === extension.id;
-        return ()
+        return ();
           <div
             key={extension.id}
             className={`extension-card ${isSelected ? 'selected' : ''}`}
@@ -152,13 +152,13 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({)
       })}
     </div>
   );
-  const renderExtensionList = () => (;)
+  const renderExtensionList = () => (;);
     <div className="extension-list">
       {filteredExtensions.map((extension) => {
         const downloads = Math.floor(Math.random() * 50000);
         const rating = (4 + Math.random()).toFixed(1);
         const isSelected = selectedExtension?.id === extension.id;
-        return ()
+        return ();
           <div
             key={extension.id}
             className={`extension-list-item ${isSelected ? 'selected' : ''}`}
@@ -197,7 +197,7 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({)
     </div>
   );
   if (filteredExtensions.length === 0) {
-    return ()
+    return ();
       <div className="marketplace-empty">
         <div className="empty-icon">🏪</div>
         <h3>No Extensions Found</h3>
@@ -205,7 +205,7 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="extension-marketplace">
       {/* Featured Banner */}
       {selectedCategory === 'all' && ()

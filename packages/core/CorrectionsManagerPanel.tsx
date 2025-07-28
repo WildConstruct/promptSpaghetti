@@ -39,7 +39,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
     isActive: true,
     priority: rules.length,
     category: '',
-    tags: [] as string[]
+    tags: [] as string[],
   });
   // Import/Export state
   const [importContent, setImportContent] = useState('');
@@ -207,7 +207,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
   const panelWidth = isMobile ? '100%' : isCollapsed ? '60px' : '500px';
   // Don't render if panel is closed or corrections are not enabled
   if (!isOpen || !isEnabled) return null;
-  return ()
+  return ();
     <div
       style={{
         position: 'fixed',
@@ -222,7 +222,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        transition: 'width 0.3s ease'
+        transition: 'width 0.3s ease',
       }}
       data-testid="corrections-manager-panel"
     >
@@ -726,7 +726,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                     border: '1px solid #444',
                     borderRadius: '6px',
                     padding: '12px',
-                    transition: 'background 0.2s ease'
+                    transition: 'background 0.2s ease',
                   }}
                 >
                   <div style={{ 
@@ -773,7 +773,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                       )}
                       {rule.status && ()
                         <span style={{ 
-                          background: rule.status === 'draft' ? '#fbb040' : 
+                          background: rule.status === 'draft' ? '#fbb040' : ,
                             rule.status === 'published' ? '#68d391' : 
                               rule.status === 'deprecated' ? '#e53e3e' : '#a0aec0',
                           color: '#1a202c', 
@@ -822,7 +822,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                     <p style={{ 
                       fontSize: '12px', 
                       color: '#a0aec0', 
-                      margin: '4px 0 8px 0' 
+                      margin: '4px 0 8px 0' ,
                     }}>
                       {rule.description}
                     </p>

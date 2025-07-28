@@ -111,7 +111,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
     try {
       const timeframe = getTimeframeRange(state.selectedTimeframe);
       const summary = await analytics.analyzeSecurityEvents(timeframe);
-      let insights = analytics.getSecurityInsights(;)
+      let insights = analytics.getSecurityInsights(;);
         state.selectedCategory === 'all' ? undefined : state.selectedCategory,
         undefined,
         100
@@ -120,7 +120,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
       if (allowedInsights && allowedInsights.length > 0) {
         insights = insights.filter(insight => allowedInsights.includes(insight.category));
       }
-      const patterns = analytics.getSecurityPatterns(;)
+      const patterns = analytics.getSecurityPatterns(;);
         state.selectedCategory === 'all' ? undefined : state.selectedCategory
       );
       // Check for critical alerts
@@ -143,7 +143,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
         insights,
         patterns,
         isLoading: false,
-        lastUpdate: new Date()
+        lastUpdate: new Date(),
       }));
     } catch (error) {
       console.error('Failed to load analytics data:', error);
@@ -181,7 +181,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
     return num.toString();
   }, []);
   if (state.isLoading && !state.summary) {
-    return ()
+    return ();
       <div style={{
         display: 'flex',
         justifyContent: 'center',
@@ -199,14 +199,14 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
             borderTop: `4px solid ${themeStyles.primary}`,}
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
-            margin: '0 auto 16px'
+            margin: '0 auto 16px',
           }} />
           <div>Loading Security Analytics...</div>
         </div>
       </div>
     );
   }
-  return ()
+  return ();
     <div style={{
       background: themeStyles.background,
       color: themeStyles.text,
@@ -299,7 +299,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               fontSize: '14px',
               fontWeight: 600,
               cursor: state.isLoading ? 'not-allowed' : 'pointer',
-              opacity: state.isLoading ? 0.6 : 1
+              opacity: state.isLoading ? 0.6 : 1,
             }}
           >
             {state.isLoading ? '🔄' : '↻'} Refresh
@@ -425,7 +425,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
             <div style={{
               fontSize: executiveMode ? '36px' : '32px',
               fontWeight: 800,
-              color: state.summary.systemHealth.securityPosture >= 80 ? themeStyles.success :
+              color: state.summary.systemHealth.securityPosture >= 80 ? themeStyles.success :,
                 state.summary.systemHealth.securityPosture >= 60 ? themeStyles.warning : themeStyles.danger,
               marginBottom: '8px',
             }}>
@@ -494,7 +494,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
                     borderRadius: '8px',
                     padding: '16px',
                     marginBottom: '12px',
-                    borderLeft: `4px solid ${
+                    borderLeft: `4px solid ${,}
                       pattern.riskScore >= 80 ? themeStyles.critical :
                         pattern.riskScore >= 60 ? themeStyles.danger :
                           pattern.riskScore >= 40 ? themeStyles.warning : themeStyles.success
@@ -525,7 +525,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
                         background: `${pattern.riskScore >= 80 ? themeStyles.critical : }
                           pattern.riskScore >= 60 ? themeStyles.danger :
                             pattern.riskScore >= 40 ? themeStyles.warning : themeStyles.success}20`,
-                        color: pattern.riskScore >= 80 ? themeStyles.critical :
+                        color: pattern.riskScore >= 80 ? themeStyles.critical :,
                           pattern.riskScore >= 60 ? themeStyles.danger :
                             pattern.riskScore >= 40 ? themeStyles.warning : themeStyles.success,
                         padding: '2px 6px',

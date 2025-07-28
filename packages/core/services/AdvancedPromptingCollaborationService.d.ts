@@ -141,18 +141,18 @@ export declare class AdvancedPromptingCollaborationService extends EventEmitter 
     private initializeMARSRegionTemplates;
     private initializeZadaPromptPatterns;
     private initializeWorkflowTemplates;
-    createCollaborationSession()
+    createCollaborationSession();
       title: string,
       methodology: PromptingMethodology,
       creatorId: string,
     ): Promise<PromptingMethodologySession>;
     joinCollaborationSession(sessionId: string, userId: string): Promise<boolean>;
-    createZadaPattern()
+    createZadaPattern();
       sessionId: string,
       userId: string,
       patternData: Partial<ZadaPromptPattern>,
     ): Promise<ZadaPromptPattern>;
-    createMARSRegion()
+    createMARSRegion();
       sessionId: string,
       userId: string,
       regionData: Partial<MARSRegionTemplate>,

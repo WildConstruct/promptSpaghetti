@@ -85,7 +85,7 @@ const exportService = new ResultExportService();
     }
   };
   if (!open) return null;
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 0,
@@ -147,7 +147,7 @@ const exportService = new ResultExportService();
               <div key={index} style={{ 
                 color: '#dc2626', 
                 fontSize: 12,
-                marginBottom: index < validationErrors.length - 1 ? 6 : 0
+                marginBottom: index < validationErrors.length - 1 ? 6 : 0,
               }}>
                 ⚠️ {error}
               </div>
@@ -190,13 +190,13 @@ const exportService = new ResultExportService();
                 onClick={() => handleFormatChange(format.format)}
                 style={{
                   padding: 12,
-                  border: selectedFormat === format.format 
+                  border: selectedFormat === format.format ,
                     ? '2px solid #4d7cff' 
                     : '1px solid #e5e7eb',
                   borderRadius: 6,
                   cursor: 'pointer',
                   background: selectedFormat === format.format ? '#f0f4ff' : '#fff',
-                  transition: 'all 0.2s'
+                  transition: 'all 0.2s',
                 }}
               >
                 <div style={{
@@ -469,7 +469,7 @@ const exportService = new ResultExportService();
                     border: '2px solid transparent',
                     borderTop: '2px solid #fff',
                     borderRadius: '50%',
-                    animation: 'spin 1s linear infinite'
+                    animation: 'spin 1s linear infinite',
                   }} />
                   Exporting...
                 </>

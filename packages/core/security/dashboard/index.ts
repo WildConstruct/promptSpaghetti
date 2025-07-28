@@ -103,7 +103,7 @@ export class SecurityDashboardFactory {
   /**
    * Create a dashboard from template
    */
-  createDashboard()
+  createDashboard();
     templateId: string,
     userId: string,
     overrides?: Partial<DashboardConfig>
@@ -118,7 +118,7 @@ export class SecurityDashboardFactory {
   /**
    * Create a dashboard from preset
    */
-  createDashboardFromPreset()
+  createDashboardFromPreset();
     presetId: string,
     userId: string,
     overrides?: Partial<DashboardConfig>
@@ -133,7 +133,7 @@ export class SecurityDashboardFactory {
   /**
    * Get available dashboards for user
    */
-  getAvailableDashboards()
+  getAvailableDashboards();
     userId: string,
     type?: DashboardType
   ): DashboardConfig[] {
@@ -142,7 +142,7 @@ export class SecurityDashboardFactory {
   /**
    * Get dashboard templates
    */
-  getTemplates()
+  getTemplates();
     type?: DashboardType,
     role?: SecurityRole,
     category?: string
@@ -152,7 +152,7 @@ export class SecurityDashboardFactory {
   /**
    * Get dashboard presets
    */
-  getPresets()
+  getPresets();
     dashboardType?: DashboardType,
     layout?: string
   ): DashboardPreset[] {
@@ -187,7 +187,6 @@ export class SecurityDashboardFactory {
       widgetCount: number;
       categoriesByType: Record<DashboardType, number>;
     };
-    } {
     return {
       framework: {,
         dashboardCount: this.framework['dashboards'].size,

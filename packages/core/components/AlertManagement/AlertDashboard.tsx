@@ -168,7 +168,7 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
   const updateFilter = (updates: Partial<AlertFilter>) => {
     setFilter(prev => ({ ...prev, ...updates }));
   };
-  return ()
+  return ();
     <div className={`alert-dashboard space-y-6 ${className}`}>}
       {/* Header */}
       <div className="flex justify-between items-center">
@@ -281,7 +281,7 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
                 value={filter.severities?.[0] || 'all'}
                 onValueChange={(value) => 
                   updateFilter({ )
-                    severities: value === 'all' ? undefined : [value as AlertSeverity] 
+                    severities: value === 'all' ? undefined : [value as AlertSeverity] ,
                   })
                 }
               >
@@ -296,7 +296,7 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
                 value={filter.statuses?.[0] || 'all'}
                 onValueChange={(value) => 
                   updateFilter({ )
-                    statuses: value === 'all' ? undefined : [value as AlertStatus] 
+                    statuses: value === 'all' ? undefined : [value as AlertStatus] ,
                   })
                 }
               >
@@ -404,7 +404,7 @@ const AlertCard: React.FC<AlertCardProps> = ({)
   const statusConfig = STATUS_CONFIG[alert.status];
   const SeverityIcon = severityConfig.icon;
   const _____StatusIcon = statusConfig.icon;
-  return ()
+  return ();
     <div 
       className={`border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer ${severityConfig.color}`}
       onClick={() => onClick(alert)}
@@ -472,7 +472,7 @@ const AlertList: React.FC<AlertListProps> = ({)
   onSelectAlert
 }) => {
   if (alerts.length === 0) {
-    return ()
+    return ();
       <div className="text-center py-8">
         <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No alerts found</h3>
@@ -480,7 +480,7 @@ const AlertList: React.FC<AlertListProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="space-y-3">
       {alerts.map(alert => ()
         <AlertCard
@@ -514,7 +514,7 @@ const AlertDetailModal: React.FC<AlertDetailModalProps> = ({)
 }) => {
   const severityConfig = SEVERITY_CONFIG[alert.severity];
   const SeverityIcon = severityConfig.icon;
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-auto">
         <div className="p-6">

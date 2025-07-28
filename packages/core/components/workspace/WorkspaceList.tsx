@@ -43,7 +43,7 @@ export const WorkspaceList: React.FC<WorkspaceListProps> = ({)
     return filtered.sort((a, b) => a.name.localeCompare(b.name));
   }, [workspaces, searchTerm, filterBy]);
   if (loading) {
-    return ()
+    return ();
       <div className="workspace-list workspace-list--loading">
         <div className="workspace-list__header">
           <h3>Loading workspaces...</h3>
@@ -62,7 +62,7 @@ export const WorkspaceList: React.FC<WorkspaceListProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="workspace-list">
       <div className="workspace-list__header">
         <h3>Your Workspaces ({workspaces.length})</h3>
@@ -122,7 +122,7 @@ const WorkspaceItem: React.FC<WorkspaceItemProps> = ({)
 }) => {
   const isOwner = workspace.owner_id === workspace.membership?.user_id;
   const memberCount = 1; // TODO: Get actual member count from API;
-  return ()
+  return ();
     <div
       className={`workspace-item ${isSelected ? 'workspace-item--selected' : ''}`}
       onClick={onSelect}

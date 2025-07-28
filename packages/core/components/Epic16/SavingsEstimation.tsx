@@ -239,7 +239,7 @@ export const SavingsEstimation: React.FC<SavingsEstimationProps> = ({)
     }
     return `${hours.toFixed(1)} hrs`;}
   };
-  return ()
+  return ();
     <div className={`bg-white rounded-lg shadow-lg border border-gray-200 ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 px-6 py-4">

@@ -118,7 +118,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
         tokensPerMinute: 5000,
       },
       tags: ['image-generation', 'stable-diffusion', 'customizable', 'open-source'],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     const capabilities: ModelCapabilities = {
       inputTypes: ['text', 'image'],
@@ -250,7 +250,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
   async upscale()
     image: string,
     upscaler: string = 'ESRGAN_4x',
-    scale: number = 2
+    scale: number = 2,
   ): Promise<StableDiffusionGenerationResult> {
     if (this.config.apiType !== 'automatic1111') {
       throw new Error('Upscaling only supported with Automatic1111');
@@ -289,7 +289,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
       generationTime: 0,
       usage: {,
         computeUnits: scale * 10,
-        estimatedCost: 0.01 * scale
+        estimatedCost: 0.01 * scale,
       }
     };
   }
@@ -333,7 +333,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
       }
       const response = await fetch(`${this.config.endpoint}${testEndpoint}`, {)}
         headers: this._buildHeaders(),
-        signal: AbortSignal.timeout(this.config.timeout || 10000)
+        signal: AbortSignal.timeout(this.config.timeout || 10000),
       });
       if (!response.ok && response.status !== 405) { // 405 Method Not Allowed is OK for some endpoints
         throw new Error(`Connection test failed: ${response.status} ${response.statusText}`);}
@@ -360,7 +360,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
     const options: RequestInit = {
       method,
       headers: this._buildHeaders(),
-      signal: AbortSignal.timeout(this.config.timeout || 120000)
+      signal: AbortSignal.timeout(this.config.timeout || 120000),
     };
     if (method === 'POST' && payload) {
       options.body = JSON.stringify(payload);
@@ -445,7 +445,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
       batch_size: 1,
       n_iter: 1,
       sampler_name: this.availableSamplers[0] || 'Euler a',
-      seed: -1 // Random seed
+      seed: -1 // Random seed,
     };
     return { ...defaultOptions, ...options };
   }
@@ -481,7 +481,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
       seed: options.seed,
       restore_faces: options.restore_faces || false,
       tiling: options.tiling || false,
-      enable_hr: options.enable_hr || false
+      enable_hr: options.enable_hr || false,
     };
     if (options.init_image) {
       payload.init_images = [options.init_image];
@@ -515,7 +515,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
       width: options.width,
       samples: options.batch_size,
       steps: options.steps,
-      seed: options.seed && options.seed >= 0 ? options.seed : undefined
+      seed: options.seed && options.seed >= 0 ? options.seed : undefined,
     };
   }
   private _buildGenericPayload(options: StableDiffusionRequestOptions): any {
@@ -556,7 +556,7 @@ export class StableDiffusionAdapter extends BaseAIModel {
       generationTime,
       usage: {,
         computeUnits,
-        estimatedCost: (computeUnits / 100) * (this._metadata.costPerRequest || 0.01)
+        estimatedCost: (computeUnits / 100) * (this._metadata.costPerRequest || 0.01),
       }
     };
   }

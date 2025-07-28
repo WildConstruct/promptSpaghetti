@@ -6,7 +6,6 @@
  * 
  * Task: E18-1753114562561-695DBB - Create quality dashboards
  */
-
 import React, { useState } from 'react';
 import {
   PieChart,
@@ -54,55 +53,49 @@ export interface TestCoverageChartProps {
   className?: string;
 }
 
-export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
+export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({)
   metrics,
   compact = false,
   className = ''
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
-
   // Color scheme for charts
   const chartColors = {
     covered: '#10b981',
     uncovered: '#ef4444',
     partial: '#f59e0b',
-    primary: '#3b82f6'
+    primary: '#3b82f6',
   };
-
   // Prepare pie chart data for overall coverage
-  const overallCoverageData = [
+  const overallCoverageData = [;
     {
       name: 'Covered',
       value: metrics.overall.linesCovered,
-      color: chartColors.covered
+      color: chartColors.covered,
     },
     {
       name: 'Uncovered', 
       value: metrics.overall.linesTotal - metrics.overall.linesCovered,
-      color: chartColors.uncovered
+      color: chartColors.uncovered,
     }
   ];
-
   // Prepare bar chart data for packages
-  const packageData = metrics.byPackage
+  const packageData = metrics.byPackage;
     .sort((a, b) => b.percentage - a.percentage)
     .slice(0, 10);
-
   // Prepare component data with criticality
-  const componentData = metrics.byComponent
-    .map(comp => ({
+  const componentData = metrics.byComponent;
+    .map(comp => ({)
       ...comp,
-      criticalityScore: comp.criticalPaths / (comp.criticalPaths + comp.uncoveredPaths) * 100
+      criticalityScore: comp.criticalPaths / (comp.criticalPaths + comp.uncoveredPaths) * 100,
     }))
     .sort((a, b) => b.criticalityScore - a.criticalityScore)
     .slice(0, 15);
-
   // Prepare trend data
-  const trendData = metrics.trends.last7Days.map((percentage, index) => ({
-    day: `Day ${index + 1}`,
-    percentage: Math.round(percentage)
+  const trendData = metrics.trends.last7Days.map((percentage, index) => ({)
+    day: `Day ${index + 1}`,}
+    percentage: Math.round(percentage),
   }));
-
   // Get coverage status
   const getCoverageStatus = (percentage: number) => {
     if (percentage >= 90) return { status: 'excellent', color: 'text-green-600' };
@@ -111,7 +104,6 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
     if (percentage >= 60) return { status: 'poor', color: 'text-orange-600' };
     return { status: 'critical', color: 'text-red-600' };
   };
-
   // Get component type icon
   const getComponentTypeIcon = (type: string) => {
     switch (type) {
@@ -125,24 +117,22 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
       return '📄';
     }
   };
-
   // Custom tooltip for charts
   interface TooltipEntry {
     name?: string;
     value?: number | string;
     color?: string;
   }
-
-  const CustomTooltip = (
+  const CustomTooltip = (;)
     { active,
     payload,
     label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }
   ) => {
     if (active && payload && payload.length) {
-      return (
+      return ()
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900 mb-2">{label}</p>
-          {payload.map((entry: TooltipEntry, index: number) => (
+          {payload.map((entry: TooltipEntry, index: number) => ()
             <div key={index} className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-2">
                 <div 
@@ -161,10 +151,9 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
     }
     return null;
   };
-
   if (compact) {
-    return (
-      <div className={`test-coverage-chart-compact ${className}`}>
+    return ()
+      <div className={`test-coverage-chart-compact ${className}`}>}
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center justify-between">
@@ -185,9 +174,7 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
                   <div>{metrics.overall.functionsCovered} / {metrics.overall.functionsTotal} functions</div>
                 </div>
               </div>
-              
               <Progress value={metrics.overall.percentage} className="h-2" />
-              
               <div className="h-32">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -200,8 +187,8 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
                       paddingAngle={5}
                       dataKey="value"
                     >
-                      {overallCoverageData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      {overallCoverageData.map((entry, index) => ()
+                        <Cell key={`cell-${index}`} fill={entry.color} />}
                       ))}
                     </Pie>
                     <Tooltip content={<CustomTooltip />} />
@@ -214,9 +201,8 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`test-coverage-chart ${className}`}>
+  return ()
+    <div className={`test-coverage-chart ${className}`}>}
       {/* Header */}
       <div className="mb-6">
         <Card className="bg-gradient-to-r from-green-50 to-blue-50 border-green-200">
@@ -232,9 +218,7 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
                     <p className="text-gray-600">Overall Coverage</p>
                   </div>
                 </div>
-                
                 <div className="h-16 border-l border-gray-300"></div>
-                
                 <div className="grid grid-cols-3 gap-6 text-sm">
                   <div>
                     <div className="font-medium text-gray-700">Lines</div>
@@ -257,13 +241,12 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
                   </div>
                 </div>
               </div>
-              
               {/* Trend Indicator */}
               <div className="text-right">
                 <div className="flex items-center space-x-2">
-                  {metrics.trends.changeFromLastWeek > 0 ? (
+                  {metrics.trends.changeFromLastWeek > 0 ? ()
                     <TrendingUp className="w-5 h-5 text-green-500" />
-                  ) : (
+                  ) : ()
                     <TrendingDown className="w-5 h-5 text-red-500" />
                   )}
                   <span className={`font-medium ${
@@ -278,7 +261,6 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
           </CardContent>
         </Card>
       </div>
-
       {/* Coverage Details Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-4">
@@ -287,7 +269,6 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
           <TabsTrigger value="components">Components</TabsTrigger>
           <TabsTrigger value="hotspots">Critical Paths</TabsTrigger>
         </TabsList>
-
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6 mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -313,8 +294,8 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
                         fill="#8884d8"
                         dataKey="value"
                       >
-                        {overallCoverageData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        {overallCoverageData.map((entry, index) => ()
+                          <Cell key={`cell-${index}`} fill={entry.color} />}
                         ))}
                       </Pie>
                       <Tooltip content={<CustomTooltip />} />
@@ -323,7 +304,6 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
                 </div>
               </CardContent>
             </Card>
-
             {/* Coverage Trend */}
             <Card>
               <CardHeader>
@@ -352,7 +332,6 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
             </Card>
           </div>
         </TabsContent>
-
         {/* Packages Tab */}
         <TabsContent value="packages" className="space-y-6 mt-6">
           <Card>
@@ -374,7 +353,6 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
             </CardContent>
           </Card>
         </TabsContent>
-
         {/* Components Tab */}
         <TabsContent value="components" className="space-y-6 mt-6">
           <Card>
@@ -385,7 +363,7 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
               <div className="space-y-4">
                 {componentData.map((component, index) => {
                   const { status, color } = getCoverageStatus(component.percentage);
-                  return (
+                  return ()
                     <div key={index} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-3">
@@ -400,7 +378,7 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className={`text-2xl font-bold ${color}`}>
+                          <div className={`text-2xl font-bold ${color}`}>}
                             {component.percentage}%
                           </div>
                           <Badge variant={component.percentage >= 80 ? 'default' : 'destructive'} size="sm">
@@ -408,10 +386,8 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
                           </Badge>
                         </div>
                       </div>
-                      
                       <Progress value={component.percentage} className="h-2" />
-                      
-                      {component.uncoveredPaths > 0 && (
+                      {component.uncoveredPaths > 0 && ()
                         <div className="mt-2 flex items-center space-x-2 text-sm text-amber-600">
                           <AlertTriangle className="w-4 h-4" />
                           <span>{component.uncoveredPaths} critical paths need coverage</span>
@@ -424,7 +400,6 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
             </CardContent>
           </Card>
         </TabsContent>
-
         {/* Critical Paths Tab */}
         <TabsContent value="hotspots" className="space-y-6 mt-6">
           <Card>
@@ -436,7 +411,7 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {metrics.coverageHotspots.map((hotspot, index) => (
+                {metrics.coverageHotspots.map((hotspot, index) => ()
                   <div key={index} className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-3">
@@ -457,19 +432,16 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
                         >
                           {hotspot.importance}
                         </Badge>
-                        <div className={`text-xl font-bold ${getCoverageStatus(hotspot.coverage).color}`}>
+                        <div className={`text-xl font-bold ${getCoverageStatus(hotspot.coverage).color}`}>}
                           {hotspot.coverage}%
                         </div>
                       </div>
                     </div>
-                    
                     <Progress value={hotspot.coverage} className="h-2 mb-2" />
-                    
                     <p className="text-sm text-gray-600">{hotspot.reason}</p>
                   </div>
                 ))}
-                
-                {metrics.coverageHotspots.length === 0 && (
+                {metrics.coverageHotspots.length === 0 && ()
                   <div className="text-center py-12">
                     <CheckCircle className="w-16 h-16 mx-auto mb-4 text-green-500" />
                     <h3 className="text-lg font-medium text-gray-900 mb-2">

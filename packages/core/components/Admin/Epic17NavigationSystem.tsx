@@ -460,7 +460,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
         return true;
       }).map(item => ({)
         ...item,
-        children: item.children ? filterItems(item.children) : undefined
+        children: item.children ? filterItems(item.children) : undefined,
       }));
     };
     return filterItems(EPIC17_NAVIGATION);
@@ -591,9 +591,9 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
       yellow: 'bg-yellow-500 text-yellow-900',
       red: 'bg-red-500 text-white',
       purple: 'bg-purple-500 text-white',
-      gray: 'bg-gray-500 text-white'
+      gray: 'bg-gray-500 text-white',
     };
-    return ()
+    return ();
       <span
         className={`
           px-2 py-1 rounded-full text-xs font-medium
@@ -619,7 +619,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
       high: 'text-orange-600',
       critical: 'text-red-600',
     };
-    return ()
+    return ();
       <div key={item.id} className={`nav-item-container ${level > 0 ? 'ml-4' : ''}`}>}
         <div
           className={`
@@ -671,7 +671,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
   // Render breadcrumbs
   const renderBreadcrumbs = () => {
     if (!showBreadcrumbs) return null;
-    return ()
+    return ();
       <div className="breadcrumb-container flex items-center space-x-2 px-4 py-2 bg-gray-50 border-b">
         {navigationContext.breadcrumbs.map((crumb, index) => ()
           <React.Fragment key={index}>
@@ -698,7 +698,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
   // Render search bar
   const renderSearch = () => {
     if (!enableSearch) return null;
-    return ()
+    return ();
       <div className="search-container p-4 border-b">
         <div className="relative">
           <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -716,7 +716,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
   // Render quick actions
   const renderQuickActions = () => {
     if (!showQuickActions || navigationContext.availableActions.length === 0) return null;
-    return ()
+    return ();
       <div className="quick-actions-container p-4 border-b bg-gray-50">
         <h3 className="text-sm font-medium text-gray-700 mb-2">Quick Actions</h3>
         <div className="grid grid-cols-2 gap-2">
@@ -731,7 +731,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
               ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }
-                disabled:opacity-50 disabled:cursor-not-allowed
+                disabled:opacity-50 disabled:cursor-not-allowed,
                 transition-colors duration-200
               `}
             >
@@ -751,7 +751,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
   // Render recent items
   const renderRecentItems = () => {
     if (state.recentItems.length === 0) return null;
-    return ()
+    return ();
       <div className="recent-items-container p-4 border-b">
         <h3 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
           <Clock size={14} className="mr-1" />
@@ -772,7 +772,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
       </div>
     );
   };
-  return ()
+  return ();
     <div className={`epic17-navigation-system ${variant}`}>}
       {/* Mobile Header */}
       {variant === 'mobile' && ()

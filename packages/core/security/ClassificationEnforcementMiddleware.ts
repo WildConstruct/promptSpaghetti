@@ -103,7 +103,7 @@ export function createClassificationEnforcementMiddleware()
       // Extract current security controls
       const currentControls = extractCurrentControls(req, finalConfig);
       // Enforce classification policies
-      const enforcementResult = await enforcer.enforceClassification(;)
+      const enforcementResult = await enforcer.enforceClassification(;);
         classificationLevel,
         operationContext,
         currentControls
@@ -148,7 +148,7 @@ export function createAccessControlMiddleware()
       // Get data ID from request
       const dataId = req.params.id || req.body?.id || 'unknown';
       // Make access decision
-      const decision = await enforcer.makeAccessDecision(;)
+      const decision = await enforcer.makeAccessDecision(;);
         req.user.id,
         dataId,
         classification,
@@ -158,7 +158,7 @@ export function createAccessControlMiddleware()
           purpose: req.headers['x-purpose'] as string || 'unspecified',
           environment: process.env.NODE_ENV || 'production',
           source: req.headers['x-source'] as string || 'api',
-          requestId: req.headers['x-request-id'] as string || generateRequestId()
+          requestId: req.headers['x-request-id'] as string || generateRequestId(),
         }
       );
       // Store decision in request
@@ -208,7 +208,7 @@ export function createOperationValidationMiddleware():
       const operationContext = buildOperationContext(req);
       const dataElement = req.body || { id: req.params.id };
       // Validate operation
-      const validation = await enforcer.validateOperation(;)
+      const validation = await enforcer.validateOperation(;);
         operationContext,
         classification,
         dataElement
@@ -302,7 +302,7 @@ function buildOperationContext(req: ClassificationAwareRequest): OperationContex
     environment: process.env.NODE_ENV || 'production',
     timestamp: new Date(),
     source: (req.headers['x-source'] as string) || 'api',
-    requestId: (req.headers['x-request-id'] as string) || generateRequestId()
+    requestId: (req.headers['x-request-id'] as string) || generateRequestId(),
   };
 }
 /**
@@ -385,7 +385,7 @@ function setupResponseMonitoring()
       allowed: result.allowed,
       riskScore: result.riskScore,
       duration,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
     return originalSend.call(this, data);
   };
@@ -405,7 +405,7 @@ function handleMiddlewareError()
   } else {
     res.status(500).json({)
       error: 'Classification enforcement error',
-      message: config.detailedErrors ? error.message : 'Internal server error'
+      message: config.detailedErrors ? error.message : 'Internal server error',
     });
   }
 }
@@ -437,7 +437,7 @@ async function detectClassificationFromData()
       dataType: 'object',
       context: {},
       source: 'request',
-      timestamp: new Date()
+      timestamp: new Date(),
     };
     const enhanced = DataClassificationHelpers.enhanceDataElement(element);
     if (enhanced.sensitivityLevel) {
@@ -489,7 +489,7 @@ export function enforceClassification()
     // Check required controls
     if (options.requiredControls) {
       const currentControls = extractCurrentControls(req, DEFAULT_CONFIG);
-      const missingControls = options.requiredControls.filter(;)
+      const missingControls = options.requiredControls.filter(;);
         control => !currentControls.includes(control)
       );
       if (missingControls.length > 0) {

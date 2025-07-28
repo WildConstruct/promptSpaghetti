@@ -660,7 +660,7 @@ export class Epic16PrerequisiteSystem extends EventEmitter {
           message: 'Epic 11 auth service endpoint not configured',
           timestamp: new Date(),
           errorCode: 'AUTH_ENDPOINT_MISSING',
-          recommendation: 'Set EPIC11_AUTH_SERVICE_URL environment variable'
+          recommendation: 'Set EPIC11_AUTH_SERVICE_URL environment variable',
         };
       }
       // Simulate service health check
@@ -701,7 +701,7 @@ export class Epic16PrerequisiteSystem extends EventEmitter {
       }
       return {
         passed: missingRoles.length === 0,
-        message: missingRoles.length === 0 
+        message: missingRoles.length === 0 ,
           ? 'All required marketplace roles exist'
           : `Missing roles: ${missingRoles.join(', ')}`,}
         timestamp: new Date(),
@@ -795,7 +795,7 @@ export class Epic16PrerequisiteSystem extends EventEmitter {
       return {
         passed: isAvailable,
         message: isAvailable ? 'Epic 14 A/B testing framework is available' : 'Epic 14 A/B testing framework is unavailable',
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     } catch (error) {
       return {
@@ -1077,7 +1077,7 @@ export class Epic16PrerequisiteSystem extends EventEmitter {
       }
       return {
         passed: missingVars.length === 0,
-        message: missingVars.length === 0 
+        message: missingVars.length === 0 ,
           ? 'All required environment variables are configured'
           : `Missing environment variables: ${missingVars.join(', ')}`,}
         timestamp: new Date(),
@@ -1122,7 +1122,7 @@ export class Epic16PrerequisiteSystem extends EventEmitter {
       const expectedVersion = '1.0.0';
       return {
         passed: missingTables.length === 0 && schemaVersion === expectedVersion,
-        message: missingTables.length === 0 
+        message: missingTables.length === 0 ,
           ? (schemaVersion === expectedVersion ? 'Marketplace database schema is up to date' : `Schema version mismatch: ${schemaVersion} (expected ${expectedVersion})`)}
           : `Missing database tables: ${missingTables.join(', ')}`,}
         timestamp: new Date(),
@@ -1166,7 +1166,7 @@ export class Epic16PrerequisiteSystem extends EventEmitter {
       }
       return {
         passed: invalidCerts.length === 0,
-        message: invalidCerts.length === 0 
+        message: invalidCerts.length === 0 ,
           ? 'All SSL certificates are valid'
           : `Invalid or expiring certificates for: ${invalidCerts.join(', ')}`,}
         timestamp: new Date(),
@@ -1194,7 +1194,7 @@ export class Epic16PrerequisiteSystem extends EventEmitter {
       const configuredHeaders: string[] = requiredHeaders; // Replace with actual check
       return {
         passed: missingHeaders.length === 0,
-        message: missingHeaders.length === 0 
+        message: missingHeaders.length === 0 ,
           ? 'All required security headers are configured'
           : `Missing security headers: ${missingHeaders.join(', ')}`,}
         timestamp: new Date(),

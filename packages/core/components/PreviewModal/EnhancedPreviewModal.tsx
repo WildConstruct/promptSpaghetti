@@ -74,7 +74,7 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
     if (!results.length) return null;
     const validResults = results.filter(r => !r.error);
     const totalWords = validResults.reduce((sum, r) => sum + (r.metadata?.wordCount || 0), 0);
-    const avgReadingTime = validResults.reduce(;)
+    const avgReadingTime = validResults.reduce(;);
       (sum,)
         r
       ) => sum + (r.metadata?.estimatedReadingTime || 0), 0) / validResults.length;
@@ -87,7 +87,7 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
       avgReadingTime: Math.round(avgReadingTime * 10) / 10,
       avgRating: Math.round(avgRating * 10) / 10,
       selectedCount: selectedResults.size,
-      savedCount: results.filter(r => r.saved).length
+      savedCount: results.filter(r => r.saved).length,
     };
   }, [results, selectedResults.size]);
   const handleResultSelect = useCallback((resultId: string, selected: boolean) => {
@@ -144,7 +144,7 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
     return timeMs < 1000 ? `${timeMs}ms` : `${(timeMs / 1000).toFixed(1)}s`;}
   };
   if (!open) return null;
-  return ()
+  return ();
     <div 
       role="dialog" 
       aria-modal="true" 
@@ -246,7 +246,7 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                 flex: 1,
                 padding: '12px 16px',
                 border: 'none',
-                background: activeTab === tab.id 
+                background: activeTab === tab.id ,
                   ? 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)'
                   : 'transparent',
                 color: activeTab === tab.id ? '#ffffff' : '#b0b0b0',
@@ -267,7 +267,7 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                   right: 0,
                   height: 2,
                   background: 'linear-gradient(90deg, #4f46e5, #7c3aed)',
-                  borderRadius: '2px 2px 0 0'
+                  borderRadius: '2px 2px 0 0',
                 }} />
               )}
             </button>
@@ -295,7 +295,7 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                 cursor: 'pointer',
                 fontSize: 13,
                 fontWeight: 500,
-                transition: 'transform 0.2s'
+                transition: 'transform 0.2s',
               }}
             >
               Select All
@@ -312,7 +312,7 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                 cursor: selectedResults.size === 0 ? 'not-allowed' : 'pointer',
                 fontSize: 13,
                 fontWeight: 500,
-                opacity: selectedResults.size === 0 ? 0.5 : 1
+                opacity: selectedResults.size === 0 ? 0.5 : 1,
               }}
             >
               Clear ({selectedResults.size})
@@ -330,7 +330,7 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                   cursor: selectedResults.size === 0 ? 'not-allowed' : 'pointer',
                   fontSize: 13,
                   fontWeight: 500,
-                  opacity: selectedResults.size === 0 ? 0.5 : 1
+                  opacity: selectedResults.size === 0 ? 0.5 : 1,
                 }}
               >
                 📤 Export Selected
@@ -363,7 +363,7 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                     height: '100%',
                     background: 'linear-gradient(90deg, #4f46e5, #7c3aed, #4f46e5)',
                     animation: 'loading 2s linear infinite',
-                    backgroundSize: '200% 100%'
+                    backgroundSize: '200% 100%',
                   }} />
                 </div>
               </div>
@@ -424,7 +424,7 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                             />
                           )}
                           <span style={{
-                            background: result.error ? 
+                            background: result.error ? ,
                               'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)' : 
                               'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
                             color: '#fff',

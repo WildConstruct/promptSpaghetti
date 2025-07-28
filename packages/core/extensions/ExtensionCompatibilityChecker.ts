@@ -178,7 +178,7 @@ export class ExtensionCompatibilityChecker {
           severity: 'error',
           message: `Platform ${context.platform} is not supported. Supported platforms: ${extension.compatibility.platforms.join(', ')}`,}
           currentVersion: context.platform,
-          requiredVersion: extension.compatibility.platforms.join(' | ')
+          requiredVersion: extension.compatibility.platforms.join(' | '),
         });
       }
     }
@@ -264,7 +264,7 @@ export class ExtensionCompatibilityChecker {
         issues.push({)
           type: 'system-version',
           severity: 'error',
-          message: 'Invalid or overly permissive Content Security Policy'
+          message: 'Invalid or overly permissive Content Security Policy',
         });
       }
     }
@@ -296,7 +296,7 @@ export class ExtensionCompatibilityChecker {
   private checkTransitiveDependencies()
     extension: ExtensionManifest,
     context: CompatibilityContext,
-    visited: string[] = []
+    visited: string[] = [],
   ): CompatibilityCheck {
     const issues: CompatibilityIssue[] = [];
     const warnings: string[] = [];
@@ -312,7 +312,7 @@ export class ExtensionCompatibilityChecker {
         continue; // Already handled in main dependency check
       }
       // Recursively check dependencies
-      const transitiveCheck = this.checkTransitiveDependencies(;)
+      const transitiveCheck = this.checkTransitiveDependencies(;);
         depExtension,
         context,
         [...visited, extension.id]
@@ -333,7 +333,7 @@ export class ExtensionCompatibilityChecker {
     extension: ExtensionManifest,
     availableExtensions: Map<string, ExtensionManifest>,
     visited: Set<string> = new Set(),
-    path: string[] = []
+    path: string[] = [],
   ): string[] {
     if (visited.has(extension.id)) {
       const circularStart = path.indexOf(extension.id);
@@ -345,7 +345,7 @@ export class ExtensionCompatibilityChecker {
       for (const depId of Object.keys(extension.dependencies.extensions)) {
         const depExtension = availableExtensions.get(depId);
         if (depExtension) {
-          const circular = this.findCircularDependencies(;)
+          const circular = this.findCircularDependencies(;);
             depExtension,
             availableExtensions,
             new Set(visited),
@@ -459,7 +459,7 @@ export class ExtensionCompatibilityChecker {
       id: 'semver-compatibility',
       name: 'Semantic Versioning Compatibility',
       description: 'Ensures extensions follow semantic versioning',
-      check: (extension: ExtensionManifest) => {
+      check: (extension: ExtensionManifest) => {,
         try {
           new SemanticVersion(extension.version);
           return { compatible: true, issues: [] };
@@ -479,20 +479,20 @@ export class ExtensionCompatibilityChecker {
       id: 'extension-type-consistency',
       name: 'Extension Type Consistency',
       description: 'Ensures extension configuration matches declared type',
-      check: (extension: ExtensionManifest) => {
+      check: (extension: ExtensionManifest) => {,
         const issues: CompatibilityIssue[] = [];
         if (extension.extension_type === 'ui' && !extension.ui) {
           issues.push({)
             type: 'missing-dependency',
             severity: 'error',
-            message: 'UI extension must have ui configuration'
+            message: 'UI extension must have ui configuration',
           });
         }
         if (extension.extension_type === 'node' && !extension.runtime?.node_types) {
           issues.push({)
             type: 'missing-dependency',
             severity: 'error',
-            message: 'Node extension must specify node_types'
+            message: 'Node extension must specify node_types',
           });
         }
         return {
@@ -533,7 +533,7 @@ interface CompatibilityRule {
   id: string;
   name: string;
   description: string;
-  check: (extension: ExtensionManifest) => {
+  check: (extension: ExtensionManifest) => {,
     compatible: boolean;
     issues: CompatibilityIssue[];
   };

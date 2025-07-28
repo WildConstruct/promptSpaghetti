@@ -107,7 +107,7 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
     quotaType: [] as QuotaType[],
     status: [] as ('active' | 'disabled')[],
     severity: [] as ActionSeverity[],
-    timeRange: '24h' as '1h' | '24h' | '7d' | '30d'
+    timeRange: '24h' as '1h' | '24h' | '7d' | '30d',
   });
   // Selected items for bulk operations
   const [selectedQuotas, setSelectedQuotas] = useState<string[]>([]);
@@ -383,7 +383,7 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
     await handleQuotaUpdate(quotaId, { enabled });
   };
   if (loading) {
-    return ()
+    return ();
       <div className={`usage-quota-dashboard loading ${className}`}>}
         <div className="loading-spinner">
           <RefreshCw className="animate-spin" size={24} />
@@ -393,7 +393,7 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
     );
   }
   if (!dashboardState) {
-    return ()
+    return ();
       <div className={`usage-quota-dashboard error ${className}`}>}
         <div className="error-message">
           <AlertCircle size={24} />
@@ -403,7 +403,7 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`usage-quota-dashboard ${className}`}>}
       {/* Dashboard Header */}
       <div className="dashboard-header">
@@ -549,7 +549,7 @@ const OverviewTab: React.FC<{
   violations: QuotaViolation[];
   analytics: UsageAnalytics;
 }> = ({ systemMetrics, quotas, violations, analytics }) => {
-  return ()
+  return ();
     <div className="overview-tab">
       {/* System Health Cards */}
       <div className="metrics-overview">

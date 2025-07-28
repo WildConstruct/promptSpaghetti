@@ -137,7 +137,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({)
   }, []);
   const totalFiles = selectedFiles.length + existingFiles.length;
   const canAddMore = totalFiles < maxFiles;
-  return ()
+  return ();
     <div className="document-upload">
       {/* Upload Area */}
       {canAddMore && ()
@@ -165,7 +165,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({)
               Drag and drop or click to browse files
             </div>
             <div className="upload-info">
-              Accepted: {acceptedTypes.map(type => {)
+              Accepted: {acceptedTypes.map(type => {),
                 const ext = type.split('/')[1].toUpperCase();
                 return ext === 'JPEG' ? 'JPG' : ext;
               }).join(', ')} • Max {maxFileSize}MB each • {maxFiles} files max

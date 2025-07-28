@@ -160,7 +160,7 @@ export declare class DeviceVerificationService extends EventEmitter {
     private config;
     private sessions;
     private challenges;
-    constructor()
+    constructor();
       fingerprintService: DeviceFingerprintingService,
       trustedDeviceManager: TrustedDeviceManager,
       verificationCodeManager: VerificationCodeManager,
@@ -174,7 +174,7 @@ export declare class DeviceVerificationService extends EventEmitter {
     /**
      * Submit challenge response
      */
-    submitChallengeResponse()
+    submitChallengeResponse();
       sessionId: string,
       challengeId: string,
       response: string,

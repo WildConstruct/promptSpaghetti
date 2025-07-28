@@ -92,7 +92,7 @@ export const InlineEditableNode: React.FC<InlineEditableNodeProps> = ({)
         : (isHovered ? '0 4px 12px rgba(0, 0, 0, 0.15)' : '0 2px 4px rgba(0, 0, 0, 0.1)')
     };
   };
-  return ()
+  return ();
     <div
       ref={nodeRef}
       className={`inline-editable-node ${props.type || 'default'}`}
@@ -159,7 +159,7 @@ export const InlineEditableNode: React.FC<InlineEditableNodeProps> = ({)
             padding: '4px 8px',
             borderRadius: 4,
             whiteSpace: 'nowrap',
-            animation: 'fadeIn 0.2s ease-out'
+            animation: 'fadeIn 0.2s ease-out',
           }}>
             Double-click to edit
           </div>
@@ -174,7 +174,7 @@ export const InlineEditableNode: React.FC<InlineEditableNodeProps> = ({)
             height: 16,
             background: '#4299e1',
             borderRadius: '50%',
-            animation: 'pulse 1s infinite'
+            animation: 'pulse 1s infinite',
           }} />
         )}
       </div>
@@ -218,12 +218,12 @@ const NodePreview: React.FC<NodePreviewProps> = ({ type, data, theme }) => {
     fontSize: 12,
     opacity: 0.8,
     marginTop: 4,
-    color: theme === 'light' ? '#718096' : '#a0aec0'
+    color: theme === 'light' ? '#718096' : '#a0aec0',
   };
   switch (type) {
     case 'weightedChoice':
       const choices = data.choices || [];
-      return ()
+      return ();
         <div style={previewStyle}>
           {choices.length > 0 
             ? `${choices.length} choice${choices.length === 1 ? '' : 's'}`}
@@ -232,7 +232,7 @@ const NodePreview: React.FC<NodePreviewProps> = ({ type, data, theme }) => {
         </div>
       );
     case 'concat':
-      return ()
+      return ();
         <div style={previewStyle}>
           {data.template 
             ? `Template: ${data.template.slice(0, 30)}${data.template.length > 30 ? '...' : ''}`}
@@ -241,7 +241,7 @@ const NodePreview: React.FC<NodePreviewProps> = ({ type, data, theme }) => {
         </div>
       );
     case 'variable':
-      return ()
+      return ();
         <div style={previewStyle}>
           {data.variableName 
             ? `Variable: ${data.variableName}`}
@@ -250,13 +250,13 @@ const NodePreview: React.FC<NodePreviewProps> = ({ type, data, theme }) => {
         </div>
       );
     case 'output':
-      return ()
+      return ();
         <div style={previewStyle}>
           Format: {data.format || 'text'}
         </div>
       );
     case 'conditional':
-      return ()
+      return ();
         <div style={previewStyle}>
           {data.condition 
             ? `If: ${data.condition.slice(0, 25)}${data.condition.length > 25 ? '...' : ''}`}
@@ -275,7 +275,7 @@ export const withInlineEditing = <P extends NodeProps<NodeData>>()
 ) => {
   return (props: P & InlineEditableNodeProps) => {
     const { showEditHint, theme, onDoubleClick, ...nodeProps } = props;
-    return ()
+    return ();
       <div style={{ position: 'relative' }}>
         <WrappedComponent {...nodeProps as P} />
         <InlineEditableNode 

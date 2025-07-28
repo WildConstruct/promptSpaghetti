@@ -7,7 +7,6 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  * Task: T-1752989143998-98 - Implement policy preview and staging
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Card,
@@ -58,7 +57,6 @@ import {
   Activity,
   GitBranch
 } from 'lucide-react';
-
 interface PolicyPreview {
   previewId: string;
   policyId: string;
@@ -71,7 +69,6 @@ interface PolicyPreview {
   stagingDeployments: number;
   validationResults: number;
 }
-
 interface StagingDeployment {
   deploymentId: string;
   previewId: string;
@@ -81,7 +78,6 @@ interface StagingDeployment {
   metrics: StagingMetrics;
   issues: StagingIssue[];
 }
-
 interface StagingMetrics {
   userInteractions: number;
   consentRates: number;
@@ -91,7 +87,6 @@ interface StagingMetrics {
   accessibilityScore: number;
   securityScore: number;
 }
-
 interface StagingIssue {
   issueId: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -100,7 +95,6 @@ interface StagingIssue {
   detectedAt: string;
   status: string;
 }
-
 interface ValidationResult {
   validationId: string;
   validationType: string;
@@ -111,7 +105,6 @@ interface ValidationResult {
   warnings: number;
   validatedAt: string;
 }
-
 interface UserFeedback {
   feedbackId: string;
   userId: string;
@@ -120,7 +113,6 @@ interface UserFeedback {
   submittedAt: string;
   actionRequired: boolean;
 }
-
 enum PreviewStatus {
   DRAFT = 'DRAFT',
   VALIDATING = 'VALIDATING',
@@ -130,7 +122,6 @@ enum PreviewStatus {
   REJECTED = 'REJECTED',
   EXPIRED = 'EXPIRED'
 }
-
 enum StagingDeploymentStatus {
   DEPLOYING = 'DEPLOYING',
   ACTIVE = 'ACTIVE',
@@ -141,7 +132,6 @@ enum StagingDeploymentStatus {
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED'
 }
-
 const PolicyPreviewDashboard: React.FC = () => {
   const [previews, setPreviews] = useState<PolicyPreview[]>([]);
   const [deployments, setDeployments] = useState<StagingDeployment[]>([]);
@@ -150,7 +140,6 @@ const PolicyPreviewDashboard: React.FC = () => {
   const [, ] = useState<PolicyPreview | null>(null);
   const [validationResults] = useState<ValidationResult[]>([]);
   const [userFeedback] = useState<UserFeedback[]>([]);
-
   // Fetch data
   const fetchPreviews = useCallback(async () => {
     try {
@@ -164,7 +153,6 @@ const PolicyPreviewDashboard: React.FC = () => {
       setLoading(false);
     }
   }, []);
-
   const fetchDeployments = useCallback(async () => {
     try {
       const response = await fetch('/api/policy-preview/deployments');
@@ -174,12 +162,10 @@ const PolicyPreviewDashboard: React.FC = () => {
       console.error('Failed to fetch deployments:', error);
     }
   }, []);
-
   useEffect(() => {
     fetchPreviews();
     fetchDeployments();
   }, [fetchPreviews, fetchDeployments]);
-
   const getStatusColor = (status: PreviewStatus) => {
     switch (status) {
     case PreviewStatus.DRAFT: return 'bg-gray-100 text-gray-800';
@@ -192,7 +178,6 @@ const PolicyPreviewDashboard: React.FC = () => {
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getDeploymentStatusColor = (status: StagingDeploymentStatus) => {
     switch (status) {
     case StagingDeploymentStatus.DEPLOYING: return 'bg-blue-100 text-blue-800';
@@ -206,7 +191,6 @@ const PolicyPreviewDashboard: React.FC = () => {
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getSeverityColor = (severity: string) => {
     switch (severity) {
     case 'low': return 'text-green-600';
@@ -216,15 +200,13 @@ const PolicyPreviewDashboard: React.FC = () => {
     default: return 'text-gray-600';
     }
   };
-
   const handleDeployToStaging = async (previewId: string, environmentId: string) => {
     try {
-      const response = await fetch(`/api/policy-preview/previews/${previewId}/deploy`, {
+      const response = await fetch(`/api/policy-preview/previews/${previewId}/deploy`, {)}
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ environmentId })
       });
-
       if (response.ok) {
         fetchDeployments();
         fetchPreviews();
@@ -233,15 +215,13 @@ const PolicyPreviewDashboard: React.FC = () => {
       console.error('Failed to deploy to staging:', error);
     }
   };
-
   const handleRollback = async (deploymentId: string, reason: string) => {
     try {
-      const response = await fetch(`/api/policy-preview/deployments/${deploymentId}/rollback`, {
+      const response = await fetch(`/api/policy-preview/deployments/${deploymentId}/rollback`, {)}
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason })
       });
-
       if (response.ok) {
         fetchDeployments();
       }
@@ -249,14 +229,12 @@ const PolicyPreviewDashboard: React.FC = () => {
       console.error('Failed to rollback deployment:', error);
     }
   };
-
   const handlePromoteToProduction = async (previewId: string) => {
     try {
-      const response = await fetch(`/api/policy-preview/previews/${previewId}/promote`, {
+      const response = await fetch(`/api/policy-preview/previews/${previewId}/promote`, {)}
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
-
       if (response.ok) {
         fetchPreviews();
       }
@@ -264,16 +242,14 @@ const PolicyPreviewDashboard: React.FC = () => {
       console.error('Failed to promote to production:', error);
     }
   };
-
   if (loading) {
-    return (
+    return ()
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
@@ -293,7 +269,6 @@ const PolicyPreviewDashboard: React.FC = () => {
           </Button>
         </div>
       </div>
-
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="previews">Previews</TabsTrigger>
@@ -301,7 +276,6 @@ const PolicyPreviewDashboard: React.FC = () => {
           <TabsTrigger value="validation">Validation</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
-
         <TabsContent value="previews" className="space-y-4">
           <Card>
             <CardHeader>
@@ -326,7 +300,7 @@ const PolicyPreviewDashboard: React.FC = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {previews.map((preview) => (
+                  {previews.map((preview) => ()
                     <TableRow key={preview.previewId}>
                       <TableCell>
                         <div>
@@ -357,7 +331,7 @@ const PolicyPreviewDashboard: React.FC = () => {
                             <Eye className="h-4 w-4 mr-1" />
                             View
                           </Button>
-                          {preview.status === PreviewStatus.STAGED && (
+                          {preview.status === PreviewStatus.STAGED && ()
                             <Select onValueChange={(value) => handleDeployToStaging(preview.previewId, value)}>
                               <SelectTrigger className="w-32">
                                 <SelectValue placeholder="Deploy" />
@@ -368,7 +342,7 @@ const PolicyPreviewDashboard: React.FC = () => {
                               </SelectContent>
                             </Select>
                           )}
-                          {preview.status === PreviewStatus.APPROVED && (
+                          {preview.status === PreviewStatus.APPROVED && ()
                             <Button 
                               size="sm" 
                               className="bg-green-600 hover:bg-green-700"
@@ -387,7 +361,6 @@ const PolicyPreviewDashboard: React.FC = () => {
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="staging" className="space-y-4">
           <Card>
             <CardHeader>
@@ -401,7 +374,7 @@ const PolicyPreviewDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {deployments.map((deployment) => (
+                {deployments.map((deployment) => ()
                   <Card key={deployment.deploymentId} className="border-l-4 border-l-blue-500">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-4">
@@ -420,7 +393,6 @@ const PolicyPreviewDashboard: React.FC = () => {
                           </span>
                         </div>
                       </div>
-
                       {/* Metrics */}
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                         <div className="text-center">
@@ -448,13 +420,12 @@ const PolicyPreviewDashboard: React.FC = () => {
                           <div className="text-sm text-muted-foreground">Satisfaction</div>
                         </div>
                       </div>
-
                       {/* Issues */}
-                      {deployment.issues.length > 0 && (
+                      {deployment.issues.length > 0 && ()
                         <div className="mb-4">
                           <h5 className="font-medium mb-2">Issues Detected</h5>
                           <div className="space-y-1">
-                            {deployment.issues.map((issue) => (
+                            {deployment.issues.map((issue) => ()
                               <Alert key={issue.issueId} className="py-2">
                                 <AlertTriangle className="h-4 w-4" />
                                 <AlertDescription className="flex items-center justify-between">
@@ -468,7 +439,6 @@ const PolicyPreviewDashboard: React.FC = () => {
                           </div>
                         </div>
                       )}
-
                       {/* Actions */}
                       <div className="flex items-center space-x-2">
                         <Button size="sm" variant="outline">
@@ -479,7 +449,7 @@ const PolicyPreviewDashboard: React.FC = () => {
                           <MessageSquare className="h-4 w-4 mr-1" />
                           Feedback
                         </Button>
-                        {deployment.status === StagingDeploymentStatus.ACTIVE && (
+                        {deployment.status === StagingDeploymentStatus.ACTIVE && ()
                           <Button 
                             size="sm" 
                             variant="destructive"
@@ -497,7 +467,6 @@ const PolicyPreviewDashboard: React.FC = () => {
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="validation" className="space-y-4">
           <Card>
             <CardHeader>
@@ -511,7 +480,7 @@ const PolicyPreviewDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {validationResults.map((result) => (
+                {validationResults.map((result) => ()
                   <Card key={result.validationId} className="border">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-2">
@@ -527,9 +496,7 @@ const PolicyPreviewDashboard: React.FC = () => {
                           </span>
                         </div>
                       </div>
-                      
                       <Progress value={result.score} className="mb-2" />
-                      
                       <div className="grid grid-cols-3 gap-4 text-sm">
                         <div>
                           <span className="font-medium">Findings: </span>
@@ -551,7 +518,6 @@ const PolicyPreviewDashboard: React.FC = () => {
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="analytics" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Preview Performance */}
@@ -585,7 +551,6 @@ const PolicyPreviewDashboard: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-
             {/* Status Distribution */}
             <Card>
               <CardHeader>
@@ -596,8 +561,7 @@ const PolicyPreviewDashboard: React.FC = () => {
                   {Object.values(PreviewStatus).map((status) => {
                     const count = previews.filter(p => p.status === status).length;
                     const percentage = previews.length > 0 ? (count / previews.length) * 100 : 0;
-                    
-                    return (
+                    return ()
                       <div key={status} className="flex items-center justify-between">
                         <Badge className={getStatusColor(status)} variant="outline">
                           {status}
@@ -612,7 +576,6 @@ const PolicyPreviewDashboard: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-
             {/* User Feedback Summary */}
             <Card>
               <CardHeader>
@@ -640,7 +603,6 @@ const PolicyPreviewDashboard: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-
             {/* Recent Activity */}
             <Card>
               <CardHeader>

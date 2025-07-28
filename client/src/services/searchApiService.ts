@@ -5,7 +5,6 @@
  * Provides type-safe methods for template search, autocomplete, trending queries,
  * and search analytics.
  */
-
 import { SearchQuery, SearchResult, FilterCondition, SortCondition } from '../components/search/SearchContext';
 
 // Backend API types
@@ -26,10 +25,9 @@ interface TemplateSearchQuery {
   page?: number;
   limit?: number;
 }
-
 interface TemplateSearchResponse {
   success: boolean;
-  data: {
+  data: {,
     templates: Template[];
     total: number;
     aggregations?: {
@@ -41,7 +39,6 @@ interface TemplateSearchResponse {
     executionTime?: number;
   };
 }
-
 interface Template {
   id: string;
   title: string;
@@ -60,35 +57,30 @@ interface Template {
   created_at: string;
   updated_at: string;
 }
-
 interface AutocompleteResponse {
   success: boolean;
-  data: {
+  data: {,
     query: string;
     suggestions: string[];
   };
 }
-
 interface TrendingResponse {
   success: boolean;
-  data: {
+  data: {,
     timeframe: string;
     category: string | null;
-    trending: Array<{
+    trending: Array<{,
       query: string;
       count: number;
       growth?: number;
     }>;
   };
 }
-
 class SearchApiService {
   private baseUrl: string;
-
   constructor(baseUrl: string = '/api/search') {
     this.baseUrl = baseUrl;
   }
-
   /**
    * Convert frontend SearchQuery to backend TemplateSearchQuery
    */
@@ -97,14 +89,12 @@ class SearchApiService {
       page,
       limit
     };
-
     // Text search
     if (searchQuery.text?.trim()) {
       backendQuery.q = searchQuery.text.trim();
     }
-
     // Convert filters
-    searchQuery.filters?.forEach(filter => {
+    searchQuery.filters?.forEach(filter => {)
       switch (filter.field) {
         case 'categories':
           if (filter.operator === 'in' && filter.values) {
@@ -113,7 +103,6 @@ class SearchApiService {
             backendQuery.categories = [filter.value as string];
           }
           break;
-
         case 'tags':
           if (filter.operator === 'in' && filter.values) {
             backendQuery.tags = filter.values as string[];
@@ -121,7 +110,6 @@ class SearchApiService {
             backendQuery.tags = [filter.value as string];
           }
           break;
-
         case 'complexity':
           if (filter.operator === 'in' && filter.values) {
             backendQuery.complexity = filter.values as ('beginner' | 'intermediate' | 'advanced')[];
@@ -129,31 +117,26 @@ class SearchApiService {
             backendQuery.complexity = [filter.value as 'beginner' | 'intermediate' | 'advanced'];
           }
           break;
-
         case 'rating':
           if (filter.operator === 'greater' || filter.operator === 'equals') {
             backendQuery.minRating = filter.value as number;
           }
           break;
-
         case 'verified':
           if (filter.operator === 'equals') {
             backendQuery.verified = filter.value as boolean;
           }
           break;
-
         case 'featured':
           if (filter.operator === 'equals') {
             backendQuery.featured = filter.value as boolean;
           }
           break;
-
         case 'author':
           if (filter.operator === 'equals') {
             backendQuery.author = filter.value as string;
           }
           break;
-
         case 'price':
           if (filter.operator === 'between' && filter.values && filter.values.length === 2) {
             backendQuery.priceMin = filter.values[0] as number;
@@ -164,7 +147,6 @@ class SearchApiService {
             backendQuery.priceMax = filter.value as number;
           }
           break;
-
         case 'date':
           if (filter.operator === 'between' && filter.values && filter.values.length === 2) {
             backendQuery.dateStart = (filter.values[0] as Date).toISOString();
@@ -177,7 +159,6 @@ class SearchApiService {
           break;
       }
     });
-
     // Convert sorts
     if (searchQuery.sorts?.length > 0) {
       const primarySort = searchQuery.sorts[0];
@@ -201,10 +182,8 @@ class SearchApiService {
     } else {
       backendQuery.sortBy = 'newest';
     }
-
     return backendQuery;
   }
-
   /**
    * Convert backend response to frontend SearchResult
    */
@@ -212,34 +191,32 @@ class SearchApiService {
     return {
       items: response.data.templates,
       totalCount: response.data.total,
-      facets: response.data.aggregations ? {
+      facets: response.data.aggregations ? {,
         categories: response.data.aggregations.categories,
         tags: response.data.aggregations.tags,
-        ratings: response.data.aggregations.avg_ratings.map(r => ({
+        ratings: response.data.aggregations.avg_ratings.map(r => ({),
           value: r.rating.toString(),
-          count: r.count
+          count: r.count,
         })),
-        price_ranges: response.data.aggregations.price_ranges.map(p => ({
-          value: `${p.min}-${p.max === Infinity ? '∞' : p.max}`,
-          count: p.count
+        price_ranges: response.data.aggregations.price_ranges.map(p => ({),
+          value: `${p.min}-${p.max === Infinity ? '∞' : p.max}`,}
+          count: p.count,
         }))
       } : undefined,
-      executionTime: response.data.executionTime
+      executionTime: response.data.executionTime,
     };
   }
-
   /**
    * Search templates using the backend API
    */
-  async searchTemplates(
+  async searchTemplates()
     searchQuery: SearchQuery,
     page: number = 1,
-    limit: number = 20
+    limit: number = 20,
   ): Promise<SearchResult<Template>> {
     try {
       const backendQuery = this.convertSearchQuery(searchQuery, page, limit);
       const queryParams = new URLSearchParams();
-
       // Add query parameters
       Object.entries(backendQuery).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -250,152 +227,126 @@ class SearchApiService {
           }
         }
       });
-
-      const response = await fetch(`${this.baseUrl}/templates?${queryParams}`);
-      
+      const response = await fetch(`${this.baseUrl}/templates?${queryParams}`);}
       if (!response.ok) {
-        throw new Error(`Search request failed: ${response.status} ${response.statusText}`);
+        throw new Error(`Search request failed: ${response.status} ${response.statusText}`);}
       }
-
       const data: TemplateSearchResponse = await response.json();
-      
       if (!data.success) {
         throw new Error('Search request was unsuccessful');
       }
-
       return this.convertSearchResult(data);
     } catch (error) {
       console.error('Search templates error:', error);
       throw error;
     }
   }
-
   /**
    * Get autocomplete suggestions
    */
   async getAutocompleteSuggestions(query: string, limit: number = 10): Promise<string[]> {
     try {
-      const queryParams = new URLSearchParams({
+      const queryParams = new URLSearchParams({)
         q: query,
-        limit: limit.toString()
+        limit: limit.toString(),
       });
-
-      const response = await fetch(`${this.baseUrl}/suggest?${queryParams}`);
-      
+      const response = await fetch(`${this.baseUrl}/suggest?${queryParams}`);}
       if (!response.ok) {
-        throw new Error(`Autocomplete request failed: ${response.status} ${response.statusText}`);
+        throw new Error(`Autocomplete request failed: ${response.status} ${response.statusText}`);}
       }
-
       const data: AutocompleteResponse = await response.json();
-      
       if (!data.success) {
         throw new Error('Autocomplete request was unsuccessful');
       }
-
       return data.data.suggestions;
     } catch (error) {
       console.error('Autocomplete error:', error);
       return []; // Return empty array on error for graceful degradation
     }
   }
-
   /**
    * Get trending searches
    */
-  async getTrendingSearches(
+  async getTrendingSearches()
     timeframe: '1h' | '24h' | '7d' | '30d' = '24h',
     category?: string,
-    limit: number = 10
+    limit: number = 10,
   ): Promise<Array<{ query: string; count: number; growth?: number }>> {
     try {
-      const queryParams = new URLSearchParams({
+      const queryParams = new URLSearchParams({)
         timeframe,
-        limit: limit.toString()
+        limit: limit.toString(),
       });
-
       if (category) {
         queryParams.append('category', category);
       }
-
-      const response = await fetch(`${this.baseUrl}/trending?${queryParams}`);
-      
+      const response = await fetch(`${this.baseUrl}/trending?${queryParams}`);}
       if (!response.ok) {
-        throw new Error(`Trending searches request failed: ${response.status} ${response.statusText}`);
+        throw new Error(`Trending searches request failed: ${response.status} ${response.statusText}`);}
       }
-
       const data: TrendingResponse = await response.json();
-      
       if (!data.success) {
         throw new Error('Trending searches request was unsuccessful');
       }
-
       return data.data.trending;
     } catch (error) {
       console.error('Trending searches error:', error);
       return []; // Return empty array on error for graceful degradation
     }
   }
-
   /**
    * Track search result click for analytics
    */
   async trackClick(templateId: string, query: string, position: number, searchId?: string): Promise<void> {
     try {
-      const response = await fetch(`${this.baseUrl}/click`, {
+      const response = await fetch(`${this.baseUrl}/click`, {)}
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           templateId,
           query,
           position,
           searchId
         })
       });
-
       if (!response.ok) {
-        console.warn(`Click tracking failed: ${response.status} ${response.statusText}`);
+        console.warn(`Click tracking failed: ${response.status} ${response.statusText}`);}
       }
     } catch (error) {
       console.warn('Click tracking error:', error);
       // Don't throw - click tracking failure shouldn't break the UI
     }
   }
-
   /**
    * Save a search query
    */
   async saveSearch(name: string, searchQuery: SearchQuery): Promise<{ id: string; name: string }> {
     try {
-      const response = await fetch(`${this.baseUrl}/save`, {
+      const response = await fetch(`${this.baseUrl}/save`, {)}
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           name,
           searchQuery
         })
       });
-
       if (!response.ok) {
-        throw new Error(`Save search failed: ${response.status} ${response.statusText}`);
+        throw new Error(`Save search failed: ${response.status} ${response.statusText}`);}
       }
-
       const data = await response.json();
-      
       if (!data.success) {
         throw new Error(data.error || 'Save search was unsuccessful');
       }
-
       return data.data;
     } catch (error) {
       console.error('Save search error:', error);
       throw error;
     }
   }
-
   /**
    * Get user's saved searches
    */
@@ -408,40 +359,32 @@ class SearchApiService {
     useCount: number;
   }>> {
     try {
-      const response = await fetch(`${this.baseUrl}/saved`);
-      
+      const response = await fetch(`${this.baseUrl}/saved`);}
       if (!response.ok) {
-        throw new Error(`Get saved searches failed: ${response.status} ${response.statusText}`);
+        throw new Error(`Get saved searches failed: ${response.status} ${response.statusText}`);}
       }
-
       const data = await response.json();
-      
       if (!data.success) {
         throw new Error('Get saved searches was unsuccessful');
       }
-
       return data.data.savedSearches;
     } catch (error) {
       console.error('Get saved searches error:', error);
       return []; // Return empty array on error
     }
   }
-
   /**
    * Delete a saved search
    */
   async deleteSavedSearch(searchId: string): Promise<void> {
     try {
-      const response = await fetch(`${this.baseUrl}/saved/${searchId}`, {
-        method: 'DELETE'
+      const response = await fetch(`${this.baseUrl}/saved/${searchId}`, {)}
+        method: 'DELETE',
       });
-
       if (!response.ok) {
-        throw new Error(`Delete saved search failed: ${response.status} ${response.statusText}`);
+        throw new Error(`Delete saved search failed: ${response.status} ${response.statusText}`);}
       }
-
       const data = await response.json();
-      
       if (!data.success) {
         throw new Error(data.error || 'Delete saved search was unsuccessful');
       }

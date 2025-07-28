@@ -141,7 +141,7 @@ export declare class RateLimitingService extends EventEmitter {
     /**
      * Check if request should be allowed based on rate limits
      */
-    checkRateLimit()
+    checkRateLimit();
       identifier: string,
       endpoint: string,
       metadata?: Partial<RateLimitAttempt['metadata']>
@@ -149,7 +149,7 @@ export declare class RateLimitingService extends EventEmitter {
     /**
      * Record an authentication attempt
      */
-    recordAttempt()
+    recordAttempt();
       identifier: string,
       endpoint: string,
       success: boolean,

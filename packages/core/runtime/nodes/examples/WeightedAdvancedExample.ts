@@ -73,7 +73,7 @@ function generateResults(node: WeightedAdvancedNode, distributionName: string, s
     .map(([item, count]) => ({)
       item,
       count,
-      percentage: ((count / samples) * 100).toFixed(1)
+      percentage: ((count / samples) * 100).toFixed(1),
     }))
     .sort((a, b) => b.count - a.count);
   return {

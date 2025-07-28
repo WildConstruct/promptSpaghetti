@@ -221,7 +221,7 @@ export class SessionTimeoutController extends EventEmitter {
    */
   public extendSession()
     sessionId: string,
-    reason: 'manual' | 'activity' | 'critical' | 'grace' = 'manual'
+    reason: 'manual' | 'activity' | 'critical' | 'grace' = 'manual',
   ): boolean {
     const state = this.sessionStates.get(sessionId);
     if (!state || !state.isActive) {
@@ -357,7 +357,6 @@ export class SessionTimeoutController extends EventEmitter {
     extensionUsage: number;
     timeoutReasons: Record<TimeoutReason, number>;
     policyDistribution: Record<TimeoutPolicy, number>;
-    } {
     const states = Array.from(this.sessionStates.values());
     const activeStates = states.filter(s => s.isActive);
     const timeoutReasons: Record<TimeoutReason, number> = {

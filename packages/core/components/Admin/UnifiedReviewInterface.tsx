@@ -262,7 +262,7 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
     );
     return Math.round(weightedScore / totalWeight);
   };
-  const renderOverviewTab = () => (;)
+  const renderOverviewTab = () => (;);
     <div className="review-overview">
       <div className="overview-header">
         <div className="item-info">
@@ -377,7 +377,7 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
       )}
     </div>
   );
-  const renderContentTab = () => (;)
+  const renderContentTab = () => (;);
     <div className="content-review">
       {reviewItem.template_data && ()
         <div className="template-content">
@@ -532,7 +532,7 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
       )}
     </div>
   );
-  const renderReviewTab = () => (;)
+  const renderReviewTab = () => (;);
     <div className="review-decision">
       <div className="decision-section">
         <Card>
@@ -590,7 +590,7 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
             <div className="feedback-categories">
               {['content', 'quality', 'compliance', 'usability', 'technical'].map(category => {)
                 const existingFeedback = reviewDecision.feedback?.find(f => f.category === category);
-                return ()
+                return ();
                   <div key={category} className="feedback-category">
                     <div className="category-header">
                       <h4 className="category-title">{category.charAt(0).toUpperCase() + category.slice(1)}</h4>
@@ -688,7 +688,7 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
                       reviewDecision.follow_up_date.toISOString().split('T')[0] : ''}
                     onChange={(e) => setReviewDecision(prev => ({ )
                       ...prev, 
-                      follow_up_date: e.target.value ? new Date(e.target.value) : undefined 
+                      follow_up_date: e.target.value ? new Date(e.target.value) : undefined ,
                     }))}
                     className="follow-up-date"
                   />
@@ -707,7 +707,7 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
       verification_request: 'bg-green-100 text-green-800',
       policy_violation: 'bg-red-100 text-red-800',
       content_appeal: 'bg-purple-100 text-purple-800',
-      marketplace_listing: 'bg-yellow-100 text-yellow-800'
+      marketplace_listing: 'bg-yellow-100 text-yellow-800',
     };
     return colors[type as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
@@ -716,7 +716,7 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
       urgent: 'bg-red-100 text-red-800',
       high: 'bg-orange-100 text-orange-800',
       medium: 'bg-yellow-100 text-yellow-800',
-      low: 'bg-gray-100 text-gray-800'
+      low: 'bg-gray-100 text-gray-800',
     };
     return colors[priority as keyof typeof colors] || colors.medium;
   };
@@ -739,7 +739,7 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;}
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;}
   };
-  return ()
+  return ();
     <div className={`unified-review-interface ${className}`}>}
       <div className="review-header">
         <div className="header-nav">

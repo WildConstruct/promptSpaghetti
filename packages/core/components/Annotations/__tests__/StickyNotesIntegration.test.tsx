@@ -37,7 +37,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
   });
   describe('Non-Interference with Graph Interactions', () => {
     test('sticky notes layer has pointer-events: none to allow graph interactions', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} />
         </ReactFlowProvider>
@@ -48,7 +48,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       });
     });
     test('individual sticky notes have pointer-events: all to receive their own events', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} />
         </ReactFlowProvider>
@@ -59,7 +59,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       });
     });
     test('sticky notes layer has high z-index to appear above graph elements', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} />
         </ReactFlowProvider>
@@ -70,19 +70,19 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       });
     });
     test('individual notes have z-index based on their note.zIndex + base z-index', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} />
         </ReactFlowProvider>
       );
       const note = screen.getByText('Test note').closest('[data-testid="sticky-note"]');
       expect(note).toHaveStyle({)
-        zIndex: '1001' // 1000 (base) + 1 (note.zIndex)
+        zIndex: '1001' // 1000 (base) + 1 (note.zIndex),
       });
     });
     test('mouse events on empty canvas areas do not create notes when clicking on graph elements', () => {
       const onNotesChange = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />
         </ReactFlowProvider>
@@ -93,7 +93,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       expect(onNotesChange).not.toHaveBeenCalled();
     });
     test('notes container properly isolates pointer events', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} />
         </ReactFlowProvider>
@@ -113,7 +113,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
         ...defaultProps,
         canvasOffset: { x: -100, y: -50 }
       };
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...propsWithOffset} />
         </ReactFlowProvider>
@@ -129,7 +129,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
         ...defaultProps,
         zoom: 0.5,
       };
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...propsWithZoom} />
         </ReactFlowProvider>
@@ -146,7 +146,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
         ...defaultProps,
         canvasSize: { width: 5000, height: 3000 }
       };
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...largeCanvasProps} />
         </ReactFlowProvider>
@@ -162,7 +162,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
   describe('Event Handling', () => {
     test('layer prevents default behavior on double-click to avoid graph interference', () => {
       const onNotesChange = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />
         </ReactFlowProvider>
@@ -188,7 +188,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
     });
     test('clicking on existing notes does not interfere with graph selection', () => {
       const onNotesChange = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />
         </ReactFlowProvider>
@@ -207,7 +207,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
   });
   describe('Accessibility and Graph Compatibility', () => {
     test('sticky notes do not interfere with graph keyboard navigation', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} />
         </ReactFlowProvider>
@@ -217,7 +217,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       expect(layer).not.toHaveAttribute('tabIndex');
     });
     test('notes maintain proper ARIA roles without conflicting with graph elements', () => {
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} />
         </ReactFlowProvider>
@@ -242,7 +242,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
         zIndex: i,
       }));
       const startTime = performance.now();
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} notes={manyNotes} />
         </ReactFlowProvider>
@@ -253,7 +253,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
     });
     test('sticky notes layer does not interfere with React Flow instance methods', () => {
       // This test ensures that having sticky notes doesn't break React Flow functionality
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} />
         </ReactFlowProvider>
@@ -268,7 +268,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
   describe('State Management Integration', () => {
     test('notes changes do not interfere with graph state updates', () => {
       const onNotesChange = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />
         </ReactFlowProvider>

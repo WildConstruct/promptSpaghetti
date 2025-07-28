@@ -87,7 +87,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
     period: {,
       start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
       end: new Date(),
-      label: 'Last 30 Days'
+      label: 'Last 30 Days',
     },
     overview: {,
       totalRequests: 1247,
@@ -109,7 +109,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
       requests: Math.floor(Math.random() * 50) + 20,
       approved: Math.floor(Math.random() * 35) + 15,
       rejected: Math.floor(Math.random() * 10) + 2,
-      averageTime: Math.random() * 6 + 2
+      averageTime: Math.random() * 6 + 2,
     })),
     trustScoreDistribution: [,
       { range: '90-100', count: 287, percentage: 23.0 },
@@ -138,7 +138,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
       setIsLoading(false);
     }, 1000);
   };
-  const renderOverviewMetrics = () => (;)
+  const renderOverviewMetrics = () => (;);
     <div className="overview-metrics">
       <div className="metrics-grid">
         <Card className="metric-card">
@@ -289,7 +289,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
       </div>
     </div>
   );
-  const renderRequestTypeAnalysis = () => (;)
+  const renderRequestTypeAnalysis = () => (;);
     <Card className="request-type-analysis">
       <CardHeader>
         <CardTitle>Verification Type Analysis</CardTitle>
@@ -326,7 +326,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
       </CardContent>
     </Card>
   );
-  const renderTrustScoreDistribution = () => (;)
+  const renderTrustScoreDistribution = () => (;);
     <Card className="trust-score-distribution">
       <CardHeader>
         <CardTitle>Trust Score Distribution</CardTitle>
@@ -352,7 +352,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
       </CardContent>
     </Card>
   );
-  const renderRiskAnalysis = () => (;)
+  const renderRiskAnalysis = () => (;);
     <Card className="risk-analysis">
       <CardHeader>
         <CardTitle>Risk & Security Analysis</CardTitle>
@@ -401,7 +401,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({)
       </CardContent>
     </Card>
   );
-  return ()
+  return ();
     <div className={`verification-analytics ${className}`}>}
       <div className="analytics-header">
         <div className="header-info">

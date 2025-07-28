@@ -138,7 +138,7 @@ export class CanvasOptimizer {
   /**
    * Optimize node visibility based on viewport
    */
-  optimizeNodeVisibility()
+  optimizeNodeVisibility();
     nodes: Node[], 
     viewport: Viewport,
     canvasSize: { width: number; height: number }
@@ -167,14 +167,14 @@ export class CanvasOptimizer {
       left: -x / zoom - threshold * canvasSize.width,
       top: -y / zoom - threshold * canvasSize.height,
       right: (-x + canvasSize.width) / zoom + threshold * canvasSize.width,
-      bottom: (-y + canvasSize.height) / zoom + threshold * canvasSize.height
+      bottom: (-y + canvasSize.height) / zoom + threshold * canvasSize.height,
     };
     return nodes.filter(node => {)
       const nodeX = node.position.x;
       const nodeY = node.position.y;
       const nodeWidth = node.width || 200;
       const nodeHeight = node.height || 100;
-      return ()
+      return ();
         nodeX + nodeWidth >= viewportBounds.left &&
         nodeX <= viewportBounds.right &&
         nodeY + nodeHeight >= viewportBounds.top &&
@@ -213,14 +213,14 @@ export class CanvasOptimizer {
   /**
    * Optimize edge rendering
    */
-  optimizeEdges()
+  optimizeEdges();
     edges: Edge[], 
     visibleNodes: Node[],
     viewport: Viewport,
   ): Edge[] {
     const visibleNodeIds = new Set(visibleNodes.map(n => n.id));
     // Only render edges between visible nodes
-    const visibleEdges = edges.filter(edge => ;)
+    const visibleEdges = edges.filter(edge => ;);
       visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)
     );
     // Simplify edge rendering at low zoom levels
@@ -258,7 +258,7 @@ export class CanvasOptimizer {
       // Connection line settings
       connectionLineType: zoom > 0.5 ? 'smoothstep' : 'straight',
       // Quality settings
-      quality: zoom > 0.8 ? 'high' : zoom > 0.4 ? 'medium' : 'low'
+      quality: zoom > 0.8 ? 'high' : zoom > 0.4 ? 'medium' : 'low',
     };
   }
   /**
@@ -266,7 +266,7 @@ export class CanvasOptimizer {
    */
   createThrottledRenderer<T extends (...args: any[]) => void>()
     fn: T,
-    delay: number = this.config.renderDebounce
+    delay: number = this.config.renderDebounce,
   ): T {
     let timeoutId: NodeJS.Timeout;
     let lastArgs: Parameters<T>;
@@ -384,7 +384,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({ optimize
     return () => clearInterval(interval);
   }, [optimizer, visible]);
   if (!visible) return null;
-  return ()
+  return ();
     <div
       style={{
         position: 'fixed',

@@ -116,7 +116,7 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
     rationale: '',
     dataOwner: context?.dataOwner || '',
     processing: false,
-    results: new Map()
+    results: new Map(),
   });
   const [templates] = useState<ClassificationTemplate[]>(DEFAULT_TEMPLATES);
   const [currentUser] = useState('current-user'); // TODO: Get from auth context
@@ -288,7 +288,7 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
           valid: errors.length === 0,
           errors,
           warnings,
-          recommendations: state.operationType === 'ai' ? ['Review AI-generated classifications manually'] : []
+          recommendations: state.operationType === 'ai' ? ['Review AI-generated classifications manually'] : [],
         };
       });
       onValidationResults?.(validationResults);
@@ -311,7 +311,7 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
       .filter(Boolean) as DataElement[];
     return getSuggestedClassifications(selectedElements);
   }, [state.selectedElements, dataElements, templates, classificationRules]);
-  return ()
+  return ();
     <div className="bulk-classification-tools bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Bulk Classification Tools</h3>
@@ -468,7 +468,7 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
           {dataElements.map(element => {)
             const isSelected = state.selectedElements.has(element.id);
             const suggestion = suggestions.get(element.id);
-            return ()
+            return ();
               <div
                 key={element.id}
                 className={`p-3 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 ${

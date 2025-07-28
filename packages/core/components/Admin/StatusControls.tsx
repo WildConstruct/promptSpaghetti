@@ -286,7 +286,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
         service.id === serviceId 
           ? { 
             ...service, 
-            status: action === 'start' ? 'starting' : 
+            status: action === 'start' ? 'starting' : ,
               action === 'stop' ? 'stopping' : 
                 action === 'restart' ? 'starting' : 
                   service.status 
@@ -301,7 +301,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
               ...service, 
               status: action === 'stop' ? 'stopped' : 'running',
               lastRestart: action === 'restart' ? new Date() : service.lastRestart,
-              uptime: action === 'restart' ? 0 : service.uptime
+              uptime: action === 'restart' ? 0 : service.uptime,
             }
             : service
         ));
@@ -322,7 +322,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
     if (!systemOverview) return <div>Loading overview...</div>;
     const statusConfig = SYSTEM_STATUS_CONFIG[systemOverview.overallStatus];
     const StatusIcon = statusConfig.icon;
-    return ()
+    return ();
       <div className="overview-section">
         <div className="system-status-card">
           <Card>
@@ -479,7 +479,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
       </div>
     );
   };
-  const renderServices = () => (;)
+  const renderServices = () => (;);
     <div className="services-section">
       <div className="services-header">
         <h3>System Services</h3>
@@ -508,7 +508,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
       </div>
     </div>
   );
-  const renderProcesses = () => (;)
+  const renderProcesses = () => (;);
     <div className="processes-section">
       <Card>
         <CardHeader>
@@ -581,7 +581,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
       </Card>
     </div>
   );
-  return ()
+  return ();
     <div className={`status-controls ${className}`}>}
       <div className="controls-header">
         <div className="header-info">
@@ -898,7 +898,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ )
     if (hours > 0) return `${hours}h`;}
     return '< 1h';
   };
-  return ()
+  return ();
     <Card className="service-card">
       <CardContent className="p-4">
         <div className="service-header">
@@ -1035,7 +1035,7 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({)
   const statusConfig = SERVICE_STATUS_CONFIG[service.status];
   const StatusIcon = statusConfig.icon;
   const canControl = adminLevel === 'super_admin' || adminLevel === 'admin';
-  return ()
+  return ();
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">

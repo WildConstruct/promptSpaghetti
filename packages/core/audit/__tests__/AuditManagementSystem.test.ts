@@ -387,11 +387,11 @@ describe('AuditManagementSystem', () => {
       gdprEvents.forEach(eventData => auditSystem.createAuditEvent(eventData));
     });
     it('should generate GDPR compliance report', () => {
-      const report = auditSystem.generateComplianceReport(;)
+      const report = auditSystem.generateComplianceReport(;);
         ComplianceFramework.GDPR,
         {
           start: new Date(Date.now() - 24 * 60 * 60 * 1000),
-          end: new Date()
+          end: new Date(),
         }
       );
       expect(report.framework).toBe(ComplianceFramework.GDPR);
@@ -422,11 +422,11 @@ describe('AuditManagementSystem', () => {
         notification_sent: false,
         escalation_level: 3,
       });
-      const report = auditSystem.generateComplianceReport(;)
+      const report = auditSystem.generateComplianceReport(;);
         ComplianceFramework.SOX,
         {
           start: new Date(Date.now() - 24 * 60 * 60 * 1000),
-          end: new Date()
+          end: new Date(),
         }
       );
       expect(report.framework).toBe(ComplianceFramework.SOX);

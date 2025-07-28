@@ -35,7 +35,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({)
     if (errorMessage) return errorMessage;
     return 'An unexpected error occurred while loading the dashboard.';
   };
-  const renderMinimal = () => (;)
+  const renderMinimal = () => (;);
     <div className={`error-state minimal ${className}`}>}
       <div className="error-content">
         <div className="error-header">
@@ -51,7 +51,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({)
       </div>
     </div>
   );
-  const renderDefault = () => (;)
+  const renderDefault = () => (;);
     <div className={`error-state default ${className}`}>}
       <div className="error-content">
         {showIcon && ()
@@ -74,7 +74,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({)
       </div>
     </div>
   );
-  const renderDetailed = () => (;)
+  const renderDetailed = () => (;);
     <div className={`error-state detailed ${className}`}>}
       <div className="error-content">
         {showIcon && ()

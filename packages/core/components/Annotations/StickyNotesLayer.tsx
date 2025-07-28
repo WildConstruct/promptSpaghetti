@@ -52,7 +52,7 @@ export const layerRef = useRef<HTMLDivElement>(null);
       }
       case 'update': {
         if (!noteId || !action.note) break;
-        const updatedNotes = notes.map(note => ;)
+        const updatedNotes = notes.map(note => ;);
           note.id === noteId 
             ? { ...note, ...action.note }
             : note
@@ -71,7 +71,7 @@ export const layerRef = useRef<HTMLDivElement>(null);
       }
       case 'move': {
         if (!noteId || !action.position) break;
-        const updatedNotes = notes.map(note => ;)
+        const updatedNotes = notes.map(note => ;);
           note.id === noteId 
             ? { 
                 ...note, 
@@ -85,7 +85,7 @@ export const layerRef = useRef<HTMLDivElement>(null);
       }
       case 'resize': {
         if (!noteId || !action.size) break;
-        const updatedNotes = notes.map(note => ;)
+        const updatedNotes = notes.map(note => ;);
           note.id === noteId 
             ? { ...note, size: action.size! }
             : note
@@ -97,7 +97,7 @@ export const layerRef = useRef<HTMLDivElement>(null);
         if (!noteId) break;
         const updatedNotes = notes.map(note => ({)
           ...note,
-          isEditing: note.id === noteId
+          isEditing: note.id === noteId,
         }));
         onNotesChange(updatedNotes);
         setSelectedNoteId(noteId);
@@ -105,7 +105,7 @@ export const layerRef = useRef<HTMLDivElement>(null);
       }
       case 'stopEdit': {
         if (!noteId) break;
-        const updatedNotes = notes.map(note => ;)
+        const updatedNotes = notes.map(note => ;);
           note.id === noteId 
             ? { ...note, isEditing: false }
             : note
@@ -128,15 +128,15 @@ export const layerRef = useRef<HTMLDivElement>(null);
       noteId,
       canEdit: !readOnly,
       canDelete: !readOnly,
-      onEdit: () => {
+      onEdit: () => {,
         handleNoteAction({ type: 'startEdit', noteId });
         setContextMenu(null);
       },
-      onDelete: () => {
+      onDelete: () => {,
         handleNoteAction({ type: 'delete', noteId });
         setContextMenu(null);
       },
-      onChangeColor: (color: StickyNoteColor) => {
+      onChangeColor: (color: StickyNoteColor) => {,
         handleNoteAction({ )
           type: 'update', 
           noteId, 
@@ -144,13 +144,13 @@ export const layerRef = useRef<HTMLDivElement>(null);
         });
         setContextMenu(null);
       },
-      onDuplicate: () => {
+      onDuplicate: () => {,
         const duplicatedNote: StickyNoteType = {
           ...note,
           id: generateNoteId(),
           position: {,
             x: note.position.x + 20,
-            y: note.position.y + 20
+            y: note.position.y + 20,
           },
           timestamp: new Date().toISOString(),
           author,
@@ -174,7 +174,7 @@ export const layerRef = useRef<HTMLDivElement>(null);
     if (!rect) return;
     const position = {
       x: (e.clientX - rect.left - canvasOffset.x) / zoom,
-      y: (e.clientY - rect.top - canvasOffset.y) / zoom
+      y: (e.clientY - rect.top - canvasOffset.y) / zoom,
     };
     handleNoteAction({)
       type: 'create',
@@ -222,7 +222,7 @@ export const layerRef = useRef<HTMLDivElement>(null);
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [readOnly, selectedNoteId, notes, handleNoteAction]);
-  return ()
+  return ();
     <>
       <div
         ref={layerRef}

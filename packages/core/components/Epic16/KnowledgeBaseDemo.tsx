@@ -44,7 +44,7 @@ const demoAuthors: ArticleAuthor[] = [
     name: 'Elena Kowalski',
     email: 'elena.k@example.com',
     role: 'contributor',
-    bio: 'Content strategist and template marketplace specialist.'
+    bio: 'Content strategist and template marketplace specialist.',
   }
 ];
 const demoCategories: ArticleCategory[] = [
@@ -101,7 +101,7 @@ const demoArticles: Article[] = [
   {
     id: 'article-1',
     title: 'Getting Started with Prompt Engineering',
-    content: `# Getting Started with Prompt Engineering
+    content: `# Getting Started with Prompt Engineering,
 Prompt engineering is the art and science of crafting effective prompts for AI language models. This comprehensive guide will take you through the fundamentals and help you create your first effective prompts.
 ## What is Prompt Engineering?
 Prompt engineering involves designing inputs that guide AI models to produce desired outputs. It's both creative and technical, requiring understanding of how language models work and what makes prompts effective.
@@ -124,7 +124,7 @@ Let's start with a simple example:
 Write a professional email to a client explaining a project delay.
 Context: Software development project, 2-week delay due to technical challenges
 Tone: Professional, apologetic, solution-focused
-Length: 150-200 words
+Length: 150-200 words,
 \`\`\`
 This prompt is effective because it:
 - Clearly states the task
@@ -169,7 +169,7 @@ Ready to dive deeper? Check out our Template Creation guide next!`,
   {
     id: 'article-2',
     title: 'Advanced Template Optimization Techniques',
-    content: `# Advanced Template Optimization Techniques
+    content: `# Advanced Template Optimization Techniques,
 Take your template creation to the next level with these advanced optimization strategies...`,
     excerpt: 'Discover advanced techniques for optimizing your prompt templates for better performance and reliability.',
     slug: 'advanced-template-optimization',
@@ -202,7 +202,7 @@ Take your template creation to the next level with these advanced optimization s
   {
     id: 'article-3',
     title: 'Marketplace Success Strategies',
-    content: `# Marketplace Success Strategies
+    content: `# Marketplace Success Strategies,
 Learn how to maximize your success selling templates on the marketplace...`,
     excerpt: 'Proven strategies for creating, pricing, and marketing your templates for marketplace success.',
     slug: 'marketplace-success-strategies',
@@ -235,7 +235,7 @@ Learn how to maximize your success selling templates on the marketplace...`,
   {
     id: 'article-4',
     title: 'Building Your First Template',
-    content: `# Building Your First Template
+    content: `# Building Your First Template,
 A step-by-step guide to creating your first reusable prompt template...`,
     excerpt: 'Step-by-step tutorial for creating your first effective and reusable prompt template.',
     slug: 'building-first-template',
@@ -268,7 +268,7 @@ A step-by-step guide to creating your first reusable prompt template...`,
   {
     id: 'article-5',
     title: 'Common Prompt Engineering Mistakes',
-    content: `# Common Prompt Engineering Mistakes
+    content: `# Common Prompt Engineering Mistakes,
 Avoid these common pitfalls when creating prompts...`,
     excerpt: 'Learn about the most common mistakes in prompt engineering and how to avoid them.',
     slug: 'common-prompt-mistakes',
@@ -355,7 +355,7 @@ const demoLearningPaths: LearningPath[] = [
     tags: ['prompt-engineering', 'complete-course', 'beginner-friendly'],
     author: demoAuthors[0],
     createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-20')
+    updatedAt: new Date('2024-01-20'),
   },
   {
     id: 'path-2',
@@ -392,7 +392,7 @@ const demoLearningPaths: LearningPath[] = [
     tags: ['marketplace', 'selling', 'business'],
     author: demoAuthors[2],
     createdAt: new Date('2024-01-05'),
-    updatedAt: new Date('2024-01-18')
+    updatedAt: new Date('2024-01-18'),
   }
 ];
 const demoStats: KnowledgeBaseStats = {
@@ -402,7 +402,7 @@ const demoStats: KnowledgeBaseStats = {
   totalAuthors: demoAuthors.length,
   recentlyUpdated: demoArticles.slice(0, 3),
   popularArticles: [...demoArticles].sort((a, b) => b.viewCount - a.viewCount).slice(0, 3),
-  featuredContent: demoArticles.filter(a => a.featured)
+  featuredContent: demoArticles.filter(a => a.featured),
 };
 
 export interface KnowledgeBaseDemoProps {
@@ -455,7 +455,7 @@ export const KnowledgeBaseDemo: React.FC<KnowledgeBaseDemoProps> = ({)
     const updatedArticle = {
       ...articles.find(a => a.id === id)!,
       ...articleData,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
     setArticles(prev => prev.map(a => a.id === id ? updatedArticle : a));
     return updatedArticle;
@@ -466,7 +466,7 @@ export const KnowledgeBaseDemo: React.FC<KnowledgeBaseDemoProps> = ({)
   const handlePublishArticle = async (id: string): Promise<void> => {
     await handleUpdateArticle(id, { )
       status: 'published', 
-      publishedAt: new Date() 
+      publishedAt: new Date() ,
     });
   };
   const handleArchiveArticle = async (id: string): Promise<void> => {
@@ -536,9 +536,9 @@ export const KnowledgeBaseDemo: React.FC<KnowledgeBaseDemoProps> = ({)
       new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
     ).slice(0, 3),
     popularArticles: [...articles].sort((a, b) => b.viewCount - a.viewCount).slice(0, 3),
-    featuredContent: articles.filter(a => a.featured)
+    featuredContent: articles.filter(a => a.featured),
   }), [articles]);
-  return ()
+  return ();
     <div className={`min-h-screen bg-gray-50 ${className}`}>}
       {/* Mode Toggle */}
       <div className="bg-white border-b border-gray-200 px-4 py-3">

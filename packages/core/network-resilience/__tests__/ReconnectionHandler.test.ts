@@ -14,7 +14,7 @@ describe('ReconnectionHandler', () => {
       enableJitter: false, // Disable for predictable tests
       enableCircuitBreaker: true,
       circuitBreakerThreshold: 2,
-      circuitBreakerResetTime: 100 // Reduced from 2000ms to 100ms for speed
+      circuitBreakerResetTime: 100 // Reduced from 2000ms to 100ms for speed,
     });
     mockConnectionFactory = jest.fn();
     handler.setConnectionFactory(mockConnectionFactory);

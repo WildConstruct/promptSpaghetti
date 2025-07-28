@@ -133,7 +133,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({)
       recommended: false,
     }
   ];
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 0,
@@ -216,7 +216,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({)
                 padding: '16px',
                 border: '1px solid #e9ecef',
                 borderRadius: '8px',
-                backgroundColor: localSettings[feature.key] ? '#f8f9fa' : 'white'
+                backgroundColor: localSettings[feature.key] ? '#f8f9fa' : 'white',
               }}
             >
               <div style={{
@@ -324,7 +324,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({)
               const enabledFeatures = optimizationFeatures.filter(f => localSettings[f.key]);
               const highImpact = enabledFeatures.filter(f => f.impact === 'High').length;
               const mediumImpact = enabledFeatures.filter(f => f.impact === 'Medium').length;
-              return ()
+              return ();
                 <>
                   <div>• {highImpact} high-impact optimization{highImpact !== 1 ? 's' : ''} enabled</div>
                   <div>• {mediumImpact} medium-impact optimization{mediumImpact !== 1 ? 's' : ''} enabled</div>

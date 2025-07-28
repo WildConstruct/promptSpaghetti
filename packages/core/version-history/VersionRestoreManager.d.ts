@@ -85,7 +85,7 @@ export declare class VersionRestoreManager {
     private restoreHistory;
     constructor(apiClient: any, projectId: string, userId: string, versionHistoryManager: any);
     createRestorePreview(snapshotId: string, currentGraphData: any, options?: RestoreOptions): Promise<RestorePreview>;
-    executeRestore()
+    executeRestore();
       snapshotId: string,
       options?: RestoreOptions,
       conflictResolutions?: Record<string,

@@ -76,20 +76,20 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({)
   };
   const quickOptions = getQuickCompareOptions();
   if (versions.length === 0) {
-    return ()
+    return ();
       <div className={`text-center py-4 text-gray-500 ${className}`}>}
         No versions available for comparison
       </div>
     );
   }
   if (versions.length === 1) {
-    return ()
+    return ();
       <div className={`text-center py-4 text-gray-500 ${className}`}>}
         Need at least 2 versions to compare
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`space-y-4 ${className}`}>}
       {/* Version Selectors */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -75,7 +75,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     setHasChanges(false);
   };
   if (loading || !preferences) {
-    return ()
+    return ();
       <div className={`notification-preferences ${className}`}>}
         <div className="flex justify-center items-center py-8">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
@@ -83,7 +83,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`notification-preferences ${className} max-w-4xl mx-auto`}>}
       {/* Header */}
       <div className="mb-8">
@@ -408,7 +408,7 @@ const NotificationTypeSection: React.FC<NotificationTypeSectionProps> = ({)
       : [...preferences.channels, channel];
     onChange({ channels: newChannels });
   };
-  return ()
+  return ();
     <div className="border border-gray-100 rounded-lg p-4">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center space-x-3">

@@ -81,7 +81,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({)
                 suggested: correctedText,
                 start: match.index,
                 end: match.index + match[0].length,
-                confidence: rule.effectivenessScore || 0.8
+                confidence: rule.effectivenessScore || 0.8,
               });
             }
           }
@@ -98,7 +98,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({)
                 suggested: rule.replaceWith,
                 start: match.index,
                 end: match.index + match[0].length,
-                confidence: rule.effectivenessScore || 0.8
+                confidence: rule.effectivenessScore || 0.8,
               });
             }
           }
@@ -134,7 +134,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({)
         addNotification({)
           type: 'success',
           title: 'Corrections Applied',
-          message: 'Text has been automatically corrected.'
+          message: 'Text has been automatically corrected.',
         });
       }
     }
@@ -177,7 +177,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({)
         addNotification({)
           type: 'success',
           title: 'All Corrections Applied',
-          message: 'All available corrections have been applied.'
+          message: 'All available corrections have been applied.',
         });
       }
     }
@@ -213,7 +213,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({)
     transition: 'border-color 0.2s ease',
     resize: autoResize ? 'none' as const : 'vertical' as const,
     minHeight: autoResize ? `${rows * 1.5}em` : undefined,}
-    position: 'relative' as const
+    position: 'relative' as const,
   };
   const labelStyle = {
     display: 'block',
@@ -239,7 +239,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({)
   };
   const wordCount = getWordCount(localValue);
   const charCount = localValue.length;
-  return ()
+  return ();
     <div style={{ marginBottom: 16, position: 'relative' }}>
       <label htmlFor={inputId} style={labelStyle}>
         {label}

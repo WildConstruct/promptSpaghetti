@@ -31,7 +31,7 @@ export declare class StatisticalEngine {
     /**
      * Perform comprehensive statistical analysis of experiment results
      */
-    analyzeExperimentResults()
+    analyzeExperimentResults();
       variants: VariantResults[],
       metrics: ExperimentMetric[],
       controlVariantId: string,
@@ -39,7 +39,7 @@ export declare class StatisticalEngine {
     /**
      * Calculate required sample size for an experiment
      */
-    calculateSampleSize()
+    calculateSampleSize();
       baselineRate: number,
       minimumDetectableEffect: number,
       power?: number,
@@ -53,7 +53,7 @@ export declare class StatisticalEngine {
     /**
      * Perform chi-square test for proportions
      */
-    chiSquareTest()
+    chiSquareTest();
       controlSuccesses: number,
       controlTotal: number,
       treatmentSuccesses: number,
@@ -62,7 +62,7 @@ export declare class StatisticalEngine {
     /**
      * Perform Bayesian analysis for conversion rates
      */
-    bayesianAnalysis()
+    bayesianAnalysis();
       controlSuccesses: number,
       controlTotal: number,
       treatmentSuccesses: number,

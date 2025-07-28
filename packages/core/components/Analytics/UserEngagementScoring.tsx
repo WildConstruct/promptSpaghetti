@@ -1105,13 +1105,13 @@ const generateMockUserEngagementData = (): UserEngagementData => {
           dataSharing: Math.random() > 0.5,
           analytics: Math.random() > 0.5,
           personalization: Math.random() > 0.5,
-          marketing: Math.random() > 0.5
+          marketing: Math.random() > 0.5,
         },
         accessibility: {,
           screenReader: Math.random() > 0.9,
           highContrast: Math.random() > 0.8,
           largeText: Math.random() > 0.7,
-          reducedMotion: Math.random() > 0.6
+          reducedMotion: Math.random() > 0.6,
         }
       },
       deviceInfo: {,
@@ -1134,7 +1134,7 @@ const generateMockUserEngagementData = (): UserEngagementData => {
       scrollDepth: Math.random() * 100,
       bounceRate: Math.random() * 0.5,
       conversionEvents: [],
-      qualityScore: Math.random() * 40 + 60 // 60-100
+      qualityScore: Math.random() * 40 + 60 // 60-100,
     })),
     interactionHistory: {,
       totalInteractions: Math.floor(Math.random() * 1000) + 100,
@@ -1172,7 +1172,7 @@ const generateMockUserEngagementData = (): UserEngagementData => {
         frequency: Math.random() * 100,
         depth: Math.random() * 100,
         quality: Math.random() * 100,
-        recency: Math.random() * 100
+        recency: Math.random() * 100,
       },
       context: {,
         events: [],
@@ -1205,7 +1205,7 @@ const generateMockEngagementScore = (userData: UserEngagementData): EngagementSc
           direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as any,
           strength: Math.random(),
           duration: Math.floor(Math.random() * 30) + 1,
-          changeRate: (Math.random() - 0.5) * 10
+          changeRate: (Math.random() - 0.5) * 10,
         },
         components: [],
       },
@@ -1219,7 +1219,7 @@ const generateMockEngagementScore = (userData: UserEngagementData): EngagementSc
           direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as any,
           strength: Math.random(),
           duration: Math.floor(Math.random() * 30) + 1,
-          changeRate: (Math.random() - 0.5) * 10
+          changeRate: (Math.random() - 0.5) * 10,
         },
         components: [],
       },
@@ -1233,7 +1233,7 @@ const generateMockEngagementScore = (userData: UserEngagementData): EngagementSc
           direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as any,
           strength: Math.random(),
           duration: Math.floor(Math.random() * 30) + 1,
-          changeRate: (Math.random() - 0.5) * 10
+          changeRate: (Math.random() - 0.5) * 10,
         },
         components: [],
       },
@@ -1247,7 +1247,7 @@ const generateMockEngagementScore = (userData: UserEngagementData): EngagementSc
           direction: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as any,
           strength: Math.random(),
           duration: Math.floor(Math.random() * 30) + 1,
-          changeRate: (Math.random() - 0.5) * 10
+          changeRate: (Math.random() - 0.5) * 10,
         },
         components: [],
       }
@@ -1257,7 +1257,7 @@ const generateMockEngagementScore = (userData: UserEngagementData): EngagementSc
       direction: ['increasing', 'decreasing', 'stable', 'volatile'][Math.floor(Math.random() * 4)] as any,
       strength: Math.random(),
       duration: Math.floor(Math.random() * 90) + 1,
-      changeRate: (Math.random() - 0.5) * 5
+      changeRate: (Math.random() - 0.5) * 5,
     },
     factors: [,
       {
@@ -1265,14 +1265,14 @@ const generateMockEngagementScore = (userData: UserEngagementData): EngagementSc
         impact: Math.random() * 20 + 5,
         type: 'positive',
         significance: Math.random(),
-        description: 'User has been more active in recent sessions'
+        description: 'User has been more active in recent sessions',
       },
       {
         factor: 'Content interaction depth',
         impact: Math.random() * 15 + 2,
         type: 'positive',
         significance: Math.random(),
-        description: 'User shows deeper engagement with content'
+        description: 'User shows deeper engagement with content',
       }
     ],
     predictions: [,
@@ -1439,7 +1439,7 @@ export const UserEngagementScoring: React.FC<UserEngagementScoringProps> = ({)
     const segmentData = userSegments.find(s => s.userId === selectedUser);
     return { userData, scoreData, segmentData };
   }, [selectedUser, mockUserData, userScores, userSegments]);
-  return ()
+  return ();
     <div className="user-engagement-scoring">
       <div className="scoring-header">
         <div className="header-section">

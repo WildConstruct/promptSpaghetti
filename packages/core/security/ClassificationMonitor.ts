@@ -226,7 +226,7 @@ export class ClassificationMonitor extends EventEmitter {
     dataId: string,
     framework: ComplianceFramework,
     violation: string,
-    severity: AlertSeverity = AlertSeverity.WARNING
+    severity: AlertSeverity = AlertSeverity.WARNING,
   ): void {
     const event: MonitoringEvent = {
       id: this.generateEventId(),
@@ -264,7 +264,7 @@ export class ClassificationMonitor extends EventEmitter {
         metric,
         value,
         threshold,
-        percentageOver: ((value - threshold) / threshold) * 100
+        percentageOver: ((value - threshold) / threshold) * 100,
       },
       severity: AlertSeverity.WARNING,
       source: 'performance_monitor',
@@ -287,7 +287,7 @@ export class ClassificationMonitor extends EventEmitter {
     }
     // Calculate statistics for specific time range
     const cutoff = new Date(Date.now() - timeRangeMinutes * 60000);
-    const filteredEvents = this.events.filter(;)
+    const filteredEvents = this.events.filter(;);
       event => event.timestamp >= cutoff && 
                event.type === MonitoringEventType.CLASSIFICATION_PERFORMED
     );
@@ -332,7 +332,6 @@ export class ClassificationMonitor extends EventEmitter {
     recentAnomalies: ClassificationAnomaly[];
     alerts: MonitoringEvent[];
     healthStatus: 'healthy' | 'warning' | 'critical';
-    } {
     const healthStatus = this.calculateHealthStatus();
     return {
       performance: this.getPerformanceMetrics(),
@@ -351,7 +350,7 @@ export class ClassificationMonitor extends EventEmitter {
       exportedAt: new Date(),
       timeRange: {,
         start: this.events[0]?.timestamp || new Date(),
-        end: this.events[this.events.length - 1]?.timestamp || new Date()
+        end: this.events[this.events.length - 1]?.timestamp || new Date(),
       },
       events: this.events,
       performance: this.performanceMetrics,
@@ -377,7 +376,7 @@ export class ClassificationMonitor extends EventEmitter {
       errorRate: 0,
       cacheHitRate: 0,
       queueDepth: 0,
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     this.statistics = {
       byLevel: {,
@@ -404,7 +403,7 @@ export class ClassificationMonitor extends EventEmitter {
       uniqueDataElements: 0,
       timeRange: {,
         start: new Date(),
-        end: new Date()
+        end: new Date(),
       }
     };
     this.complianceMetrics = {
@@ -468,7 +467,7 @@ export class ClassificationMonitor extends EventEmitter {
     this.performanceMetrics.p95ResponseTime = sorted[Math.floor(sorted.length * 0.95)] || 0;
     this.performanceMetrics.p99ResponseTime = sorted[Math.floor(sorted.length * 0.99)] || 0;
     // Calculate throughput (classifications per minute)
-    const recentEvents = this.events.filter(;)
+    const recentEvents = this.events.filter(;);
       e => e.timestamp.getTime() > Date.now() - 60000 &&
            e.type === MonitoringEventType.CLASSIFICATION_PERFORMED
     );
@@ -507,7 +506,7 @@ export class ClassificationMonitor extends EventEmitter {
   }
   private checkForAnomalies(event: MonitoringEvent): void {
     // Volume anomaly detection
-    const recentCount = this.events.filter(;)
+    const recentCount = this.events.filter(;);
       e => e.timestamp.getTime() > Date.now() - 300000 && // Last 5 minutes
            e.type === MonitoringEventType.CLASSIFICATION_PERFORMED
     ).length;
@@ -521,7 +520,7 @@ export class ClassificationMonitor extends EventEmitter {
         affectedDataIds: [event.dataId],
         expectedPattern: { rate: this.performanceMetrics.throughput },
         actualPattern: { rate: recentCount },
-        recommendation: 'Investigate source of increased classification requests'
+        recommendation: 'Investigate source of increased classification requests',
       });
     }
     // Pattern anomaly detection
@@ -540,7 +539,7 @@ export class ClassificationMonitor extends EventEmitter {
           affectedDataIds: [event.dataId],
           expectedPattern: { averageCount },
           actualPattern: { count: expectedCount },
-          recommendation: 'Review classification rules and data sources'
+          recommendation: 'Review classification rules and data sources',
         });
       }
     }
@@ -607,11 +606,11 @@ export class ClassificationMonitor extends EventEmitter {
   }
   private aggregateMetrics(): void {
     // Aggregate performance metrics
-    const errors = this.events.filter(;)
+    const errors = this.events.filter(;);
       e => e.type === MonitoringEventType.ERROR_OCCURRED &&
            e.timestamp.getTime() > Date.now() - this.config.aggregationIntervalMinutes * 60000
     );
-    const total = this.events.filter(;)
+    const total = this.events.filter(;);
       e => e.type === MonitoringEventType.CLASSIFICATION_PERFORMED &&
            e.timestamp.getTime() > Date.now() - this.config.aggregationIntervalMinutes * 60000
     );
@@ -679,7 +678,7 @@ export class ClassificationMonitor extends EventEmitter {
     if (events.length > 0) {
       stats.timeRange = {
         start: events[0].timestamp,
-        end: events[events.length - 1].timestamp
+        end: events[events.length - 1].timestamp,
       };
     }
     return stats;
@@ -693,14 +692,14 @@ export class ClassificationMonitor extends EventEmitter {
       dataId: e.dataId,
       severity: e.severity,
       level: e.classification?.level || '',
-      category: e.classification?.category || ''
+      category: e.classification?.category || '',
     }));
     const headers = Object.keys(events[0] || {}).join(',');
     const rows = events.map((e: any) => Object.values(e).join(','));
     return [headers, ...rows].join('\n');
   }
   private cleanupOldData(): void {
-    const cutoff = new Date(;)
+    const cutoff = new Date(;);
       Date.now() - this.config.retentionPeriodDays * 24 * 60 * 60 * 1000
     );
     // Remove old events
@@ -716,7 +715,7 @@ export class ClassificationMonitor extends EventEmitter {
     this.emit('cleanupCompleted', {)
       remainingEvents: this.events.length,
       remainingAnomalies: this.anomalies.size,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   private generateEventId(): string {

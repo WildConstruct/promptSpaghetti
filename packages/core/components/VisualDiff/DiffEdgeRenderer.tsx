@@ -36,7 +36,7 @@ export const DiffEdgeRenderer = memo<EdgeProps<DiffEdgeData>>(({)
   const getEdgeStyle = () => {
     const baseStyle = {
       strokeWidth: 2,
-      transition: 'all 0.2s ease'
+      transition: 'all 0.2s ease',
     };
     const stateStyles = {
       added: {,
@@ -86,7 +86,7 @@ export const DiffEdgeRenderer = memo<EdgeProps<DiffEdgeData>>(({)
     return null;
   };
   const label = getLabel();
-  return ()
+  return ();
     <>
       {/* Define arrow markers */}
       <defs>

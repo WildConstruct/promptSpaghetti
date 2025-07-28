@@ -199,7 +199,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
         completed: true,
         completedAt: new Date(),
         timeSpent,
-        score: Math.round((completedActions.size / getTotalActions()) * 100)
+        score: Math.round((completedActions.size / getTotalActions()) * 100),
       };
       setProgress(completedProgress);
       onComplete?.(tutorial, completedProgress);
@@ -239,7 +239,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
   const renderStepContent = () => {
     switch (currentStep.type) {
     case 'introduction':
-      return ()
+      return ();
         <div className="text-center space-y-4">
           <div className="p-4 bg-blue-50 rounded-lg">
             <Lightbulb className="w-12 h-12 text-blue-600 mx-auto mb-4" />
@@ -250,7 +250,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
         </div>
       );
     case 'demonstration':
-      return ()
+      return ();
         <div className="space-y-4">
           <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
             {currentStep.videoUrl ? ()
@@ -283,7 +283,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
         </div>
       );
     case 'interaction':
-      return ()
+      return ();
         <div className="space-y-4">
           <div className="p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
             <div className="flex items-center gap-2 mb-2">
@@ -329,7 +329,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
         </div>
       );
     case 'practice':
-      return ()
+      return ();
         <div className="space-y-4">
           <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-400">
             <div className="flex items-center gap-2 mb-2">
@@ -355,7 +355,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
         </div>
       );
     case 'completion':
-      return ()
+      return ();
         <div className="text-center space-y-6">
           <div className="p-6 bg-green-50 rounded-lg">
             <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
@@ -398,7 +398,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
         </div>
       );
     default:
-      return ()
+      return ();
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">{currentStep.title}</h3>
           <p className="text-gray-600">{currentStep.description}</p>
@@ -407,7 +407,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
       );
     }
   };
-  const renderStepList = () => (;)
+  const renderStepList = () => (;);
     <div className="space-y-2">
       {tutorial.steps.map((step, index) => ()
         <div
@@ -441,7 +441,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
       ))}
     </div>
   );
-  return ()
+  return ();
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className={`max-w-6xl h-[90vh] flex flex-col ${isFullscreen ? 'max-w-full h-full' : ''} ${className}`}>}
         <DialogHeader className="flex-shrink-0">
@@ -664,7 +664,7 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
     default: return <BookOpen className="w-4 h-4" />;
     }
   };
-  return ()
+  return ();
     <div className={`max-w-6xl mx-auto p-6 ${className}`}>}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Tutorial Library</h1>
@@ -714,7 +714,7 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
           const progress = userProgress[tutorial.id];
           const isCompleted = progress?.completed || false;
           const progressPercentage = progress ? (progress.currentStepIndex / tutorial.steps.length) * 100 : 0;
-          return ()
+          return ();
             <Card key={tutorial.id} className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-3">

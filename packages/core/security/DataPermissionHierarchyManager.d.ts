@@ -150,7 +150,7 @@ export declare class DataPermissionHierarchyManager extends EventEmitter {
     /**
      * Grant permission based on evaluation
      */
-    grantPermission()
+    grantPermission();
       request: PermissionRequest,
       grantedBy: string,
       conditions?: PermissionCondition[],
@@ -164,7 +164,7 @@ export declare class DataPermissionHierarchyManager extends EventEmitter {
     /**
      * Delegate permissions to another user
      */
-    delegatePermissions()
+    delegatePermissions();
       delegatorId: string,
       delegateeId: string,
       permissions: string[],

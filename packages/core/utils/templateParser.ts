@@ -517,7 +517,7 @@ class TemplateParser {
       return {
         isValid: false,
         errorType: 'empty_variable',
-        errorMessage: 'Variable name cannot be empty'
+        errorMessage: 'Variable name cannot be empty',
       };
     }
     // Variable names should be alphanumeric with underscores, hyphens allowed
@@ -678,7 +678,7 @@ class TemplateParser {
         name.includes('lighting') || name.includes('weather') || name.includes('atmosphere') ||
         name.includes('genre') || name.includes('theme') || name.includes('tone')) {
       // Find matching suggestion for more contextual defaults
-      const matchingSuggestion = COMMON_VARIABLES.find(s => ;)
+      const matchingSuggestion = COMMON_VARIABLES.find(s => ;);
         s.name === name || 
         s.name.includes(name) || 
         name.includes(s.name)
@@ -694,7 +694,7 @@ class TemplateParser {
       };
     }
     // Default to string with lower confidence - try to find a good example
-    const genericSuggestion = COMMON_VARIABLES.find(s => ;)
+    const genericSuggestion = COMMON_VARIABLES.find(s => ;);
       s.category === 'descriptive' || s.priority >= 7
     );
     const defaultValue = genericSuggestion ? ;
@@ -736,7 +736,7 @@ class TemplateParser {
     const current = this.userHistory.get(variableName) || { count: 0, lastUsed: new Date() };
     this.userHistory.set(variableName, {)
       count: current.count + 1,
-      lastUsed: new Date()
+      lastUsed: new Date(),
     });
   }
   /**
@@ -785,7 +785,7 @@ class TemplateParser {
     }
     // Related variable context
     if (this.currentVariables.length > 0) {
-      const relatedSuggestions = COMMON_VARIABLES.filter(suggestion => ;)
+      const relatedSuggestions = COMMON_VARIABLES.filter(suggestion => ;);
         suggestion.relatedVariables?.some(related => )
           this.currentVariables.includes(related)
         ) && !this.currentVariables.includes(suggestion.name)
@@ -801,10 +801,10 @@ class TemplateParser {
   /**
    * Get variable suggestions for auto-completion with enhanced contextual support
    */
-  getVariableSuggestions()
+  getVariableSuggestions();
     partialName: string = '',
     context?: string,
-    includeHistory: boolean = true
+    includeHistory: boolean = true,
   ): VariableSuggestion[] {
     const allSuggestions: VariableSuggestion[] = [];
     // Start with contextual suggestions (highest priority)
@@ -825,7 +825,7 @@ class TemplateParser {
     const filtered = uniqueSuggestions.filter(suggestion => {)
       if (!partialName) return true;
       const searchTerm = partialName.toLowerCase();
-      return ()
+      return ();
         suggestion.name.toLowerCase().includes(searchTerm) ||
         suggestion.description.toLowerCase().includes(searchTerm) ||
         suggestion.examples.some(example => example.toLowerCase().includes(searchTerm))
@@ -901,7 +901,7 @@ export const parseTemplate = (template: string): TemplateParseResult =>
 export const getVariableSuggestions = ()
   partialName?: string, 
   context?: string, 
-  includeHistory: boolean = true
+  includeHistory: boolean = true,
 ): VariableSuggestion[] =>
   templateParser.getVariableSuggestions(partialName, context, includeHistory);
 

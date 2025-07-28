@@ -196,7 +196,7 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
     /**
      * Create and process a new security alert
      */
-    createAlert()
+    createAlert();
       source: string,
       severity: AlertSeverity,
       category: ThreatCategory,
@@ -220,7 +220,7 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
     /**
      * Resolve an alert
      */
-    resolveAlert()
+    resolveAlert();
       alertId: string,
       resolvedBy: string,
       solution: string,

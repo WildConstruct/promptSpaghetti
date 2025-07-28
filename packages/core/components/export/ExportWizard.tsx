@@ -159,7 +159,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
       console.error('Failed to create export job:', error);
     }
   };
-  const renderFormatStep = () => (;)
+  const renderFormatStep = () => (;);
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -224,7 +224,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
   );
   const renderOptionsStep = () => {
     const _____currentFormat = formatDefinitions.find(f => f.format_name === exportData.export_format);
-    return ()
+    return ();
       <div className="space-y-6">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -501,7 +501,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
       </div>
     );
   };
-  const renderFiltersStep = () => (;)
+  const renderFiltersStep = () => (;);
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -597,7 +597,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
   );
   const renderReviewStep = () => {
     if (exportData.export_format === 'vfx') {
-      return ()
+      return ();
         <div className="space-y-6">
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -621,7 +621,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
         </div>
       );
     }
-    return ()
+    return ();
       <div className="space-y-6">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -657,7 +657,6 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
                       {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </span>
                   </div>
-                )
               ))}
             </div>
           </div>
@@ -708,7 +707,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
     { id: 'review', label: 'Review' }
   ];
   const currentStepIndex = steps.findIndex(s => s.id === currentStep);
-  return ()
+  return ();
     <div className="export-wizard">
       {/* Header */}
       <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
@@ -736,7 +735,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({)
             const Icon = getStepIcon(step.id as WizardStep);
             const isActive = step.id === currentStep;
             const isCompleted = index < currentStepIndex;
-            return ()
+            return ();
               <div
                 key={step.id}
                 className={`flex items-center ${index < steps.length - 1 ? 'flex-1' : ''}`}

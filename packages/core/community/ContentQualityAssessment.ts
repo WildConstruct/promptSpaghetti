@@ -529,7 +529,7 @@ export class ContentQualityAssessmentService {
   async generateImprovementPlan()
     contentId: string,
     versionId: string,
-    targetGrade: 'A+' | 'A' | 'B+' | 'B'
+    targetGrade: 'A+' | 'A' | 'B+' | 'B',
   ): Promise<{
     current_score: number;
     target_score: number;
@@ -552,7 +552,7 @@ export class ContentQualityAssessmentService {
     contentId: string,
     versionId: string,
     fixTypes: Array<'grammar' | 'formatting' | 'seo' | 'accessibility'>,
-    confidence_threshold: number = 80
+    confidence_threshold: number = 80,
   ): Promise<{
     fixes_applied: number;
     fixes_available: number;

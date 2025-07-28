@@ -132,7 +132,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
         loadBackupCodes(),
         loadTrustedDevices(),
         loadSecurityEvents(),
-        loadSettings()
+        loadSettings();
       ]);
     } catch (error) {
       console.error('Failed to load MFA data:', error);
@@ -152,7 +152,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
         configuredAt: new Date('2024-01-15'),
         lastUsed: new Date('2024-07-19'),
         configuration: {,
-          appName: 'Google Authenticator'
+          appName: 'Google Authenticator',
         }
       },
       {
@@ -163,7 +163,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
         primary: false,
         configuredAt: new Date('2024-02-01'),
         configuration: {,
-          phoneNumber: '+1 (555) 123-4567'
+          phoneNumber: '+1 (555) 123-4567',
         }
       },
       {
@@ -274,7 +274,6 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
           method.id === methodId 
             ? { ...method, enabled }
             : method
-        )
       );
       const hasEnabledMethods = mfaMethods.some(m => m.id !== methodId && m.enabled) || enabled;
       onMFAStatusChange?.(hasEnabledMethods);
@@ -381,7 +380,7 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
       default: return <Monitor className="w-4 h-4" />;
     }
   };
-  return ()
+  return ();
     <div className={`bg-white rounded-lg shadow-lg ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 p-6">

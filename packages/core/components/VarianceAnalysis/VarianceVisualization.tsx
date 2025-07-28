@@ -63,7 +63,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({)
     showValues?: boolean;
   }> = ({ data, title, maxValue, showValues = true }) => {
     const max = maxValue || Math.max(...data.map(d => d.value));
-    return ()
+    return ();
       <div style={{
         background: 'white',
         borderRadius: 8,
@@ -116,7 +116,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({)
                     transform: 'translateY(-50%)',
                     fontSize: 11,
                     fontWeight: 500,
-                    color: item.value / max > 0.7 ? 'white' : '#374151'
+                    color: item.value / max > 0.7 ? 'white' : '#374151',
                   }}>
                     {item.value}
                   </div>
@@ -134,7 +134,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({)
     const centerX = 80;
     const centerY = 80;
     const circumference = 2 * Math.PI * radius;
-    return ()
+    return ();
       <div style={{
         background: 'white',
         borderRadius: 8,
@@ -235,7 +235,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({)
         color: `hsl(${(i * 72) % 360}, 60%, 55%)`}
       };
     });
-    return ()
+    return ();
       <div style={{
         background: 'white',
         borderRadius: 8,
@@ -255,7 +255,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({)
           alignItems: 'end',
           gap: 4,
           height: 120,
-          padding: '10px 0'
+          padding: '10px 0',
         }}>
           {bins.map((bin, index) => ()
             <div key={index} style={{
@@ -277,7 +277,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({)
                 color: 'white',
                 fontSize: 10,
                 fontWeight: 500,
-                transition: 'height 0.5s ease'
+                transition: 'height 0.5s ease',
               }}>
                 {bin.value > 0 ? bin.value : ''}
               </div>
@@ -298,7 +298,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({)
     );
   };
   if (!varianceAnalysis || results.length < 2) {
-    return ()
+    return ();
       <div className={`variance-visualization ${className}`} style={{}
         background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
         borderRadius: 12,
@@ -316,7 +316,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`variance-visualization ${className}`} style={{}
       background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
       borderRadius: 12,
@@ -372,7 +372,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({)
               fontSize: 13,
               fontWeight: 500,
               cursor: 'pointer',
-              transition: 'all 0.2s'
+              transition: 'all 0.2s',
             }}
           >
             {chart.label}
@@ -488,11 +488,11 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({)
               }}>
                 {results.map((result1, i) => ()
                   results.map((result2, j) => {
-                    const similarity = i === j ? 1 : (;)
+                    const similarity = i === j ? 1 : (;);
                       i < j ? Math.random() * 0.6 + 0.2 : // Simulated similarity
                         results.length // Use symmetry from upper triangle
                     );
-                    return ()
+                    return ();
                       <div
                         key={`${i}-${j}`}
                         style={{
@@ -503,7 +503,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({)
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          color: similarity > 0.5 ? 'white' : '#374151'
+                          color: similarity > 0.5 ? 'white' : '#374151',
                         }}
                       >
                         {i === j ? '•' : ''}

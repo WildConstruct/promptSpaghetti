@@ -18,7 +18,7 @@ import {
 // Mock crypto for deterministic testing
 jest.mock('crypto', () => ({)
   randomUUID: jest.fn(() => 'test-uuid-12345'),
-  randomBytes: jest.fn(() => Buffer.from('test-random-bytes'))
+  randomBytes: jest.fn(() => Buffer.from('test-random-bytes')),
 }));
 describe('BreachNotificationService', () => {
   let service: BreachNotificationService;
@@ -100,7 +100,7 @@ describe('BreachNotificationService', () => {
       expect(incident!.complianceRequirements).toContainEqual()
         expect.objectContaining({)
           framework: 'GDPR',
-          requirement: 'Notify supervisory authority within 72 hours'
+          requirement: 'Notify supervisory authority within 72 hours',
         })
       );
     });
@@ -115,7 +115,7 @@ describe('BreachNotificationService', () => {
       await service.updateIncident(incidentId, {)
         status: IncidentStatus.INVESTIGATING,
         assignee: 'security-team@company.com',
-        containmentActions: ['Disabled affected user accounts']
+        containmentActions: ['Disabled affected user accounts'],
       }, 'incident-response-team');
       const incident = service.getIncidents().find(i => i.id === incidentId);
       expect(incident!.status).toBe(IncidentStatus.INVESTIGATING);
@@ -257,7 +257,7 @@ describe('BreachNotificationService', () => {
         affectedSystems: ['auth'],
         estimatedDataSubjects: 1000,
       });
-      const notifications = await service.sendNotification(;)
+      const notifications = await service.sendNotification(;);
         incidentId,
         NotificationType.INTERNAL_ALERT,
         ['security@test.com', 'management@test.com'],
@@ -279,7 +279,7 @@ describe('BreachNotificationService', () => {
         dataTypes: ['logs'],
         affectedSystems: ['system'],
       });
-      const notifications = await service.sendNotification(;)
+      const notifications = await service.sendNotification(;);
         incidentId,
         NotificationType.INTERNAL_ALERT,
         ['failing@test.com']
@@ -296,12 +296,12 @@ describe('BreachNotificationService', () => {
         dataTypes: ['logs'],
         affectedSystems: ['system'],
       });
-      const emailNotifications = await service.sendNotification(;)
+      const emailNotifications = await service.sendNotification(;);
         incidentId,
         NotificationType.INTERNAL_ALERT,
         ['email@test.com']
       );
-      const smsNotifications = await service.sendNotification(;)
+      const smsNotifications = await service.sendNotification(;);
         incidentId,
         NotificationType.INTERNAL_ALERT,
         ['+1234567890']
@@ -397,7 +397,7 @@ describe('BreachNotificationService', () => {
       // Simulate deadline approaching (would normally be timer-based)
       setTimeout(() => {
         service.emit('gdprDeadlineApproaching', {)
-          title: 'GDPR Test Incident'
+          title: 'GDPR Test Incident',
         });
       }, 10);
     });
@@ -472,7 +472,7 @@ describe('BreachNotificationService', () => {
           description: `Test concurrent processing ${i}`,}
           dataTypes: ['test_data'],
           affectedSystems: [`system_${i}`],}
-          estimatedDataSubjects: i * 10
+          estimatedDataSubjects: i * 10,
         })
       );
       const incidentIds = await Promise.all(promises);
@@ -556,11 +556,11 @@ describe('BreachNotificationService', () => {
       }, 'security-analyst');
       await service.updateIncident(incidentId, {)
         status: IncidentStatus.CONTAINED,
-        containmentActions: ['Isolated affected systems']
+        containmentActions: ['Isolated affected systems'],
       }, 'incident-commander');
       await service.updateIncident(incidentId, {)
         status: IncidentStatus.CLOSED,
-        mitigationMeasures: ['Implemented additional monitoring']
+        mitigationMeasures: ['Implemented additional monitoring'],
       }, 'security-manager');
       const incident = service.getIncidents().find(i => i.id === incidentId)!;
       expect(incident.timeline).toHaveLength(4); // Creation + 3 updates

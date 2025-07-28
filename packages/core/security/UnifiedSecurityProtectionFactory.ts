@@ -92,7 +92,6 @@ export class UnifiedSecurityProtectionFactory {
       usagePatterns?: ApiUsagePatternQuotaRecommendations;
       scalingAnalytics?: ApiScalingAnalyticsIntegration;
     };
-  } {
     // Generate configuration based on profile
     const config = this.generateConfiguration(profile, customConfig);
     // Create rate limiting service
@@ -107,7 +106,7 @@ export class UnifiedSecurityProtectionFactory {
       scalingAnalytics = this.createScalingAnalytics(profile);
     }
     // Create adaptive throttling engine with analytics integration
-    const throttlingEngine = new AdaptiveThrottlingRulesEngine(;)
+    const throttlingEngine = new AdaptiveThrottlingRulesEngine(;);
       rateLimitingService,
       config.throttling.defaultRules,
       {
@@ -128,7 +127,7 @@ export class UnifiedSecurityProtectionFactory {
       crossSystemLearning: config.analytics.enableCrossSystemLearning,
     };
     // Create unified integration
-    const integration = new AdaptiveRateLimitingIntegration(;)
+    const integration = new AdaptiveRateLimitingIntegration(;);
       rateLimitingService,
       throttlingEngine,
       integrationConfig
@@ -153,7 +152,7 @@ export class UnifiedSecurityProtectionFactory {
    * Create an adaptive throttling only system
    */
   public static createThrottlingOnly()
-    enableAnalytics: boolean = false
+    enableAnalytics: boolean = false,
   ): AdaptiveThrottlingRulesEngine {
     const rateLimitingService = new RateLimitingService();
     return new AdaptiveThrottlingRulesEngine()
@@ -498,7 +497,7 @@ export class UnifiedSecurityProtectionFactory {
         targetResponseTime: profile === SecurityProfile.HIGH_SECURITY ? 200 : 500,
         targetThroughput: profile === SecurityProfile.HIGH_VOLUME ? 10000 : 1000,
         targetErrorRate: profile === SecurityProfile.HIGH_SECURITY ? 0.1 : 1.0,
-        targetAvailability: profile === SecurityProfile.HIGH_SECURITY ? 99.9 : 99.5
+        targetAvailability: profile === SecurityProfile.HIGH_SECURITY ? 99.9 : 99.5,
       },
       costOptimizationConfig: {,
         enableCostOptimization: profile === SecurityProfile.HIGH_VOLUME,
@@ -632,7 +631,6 @@ export class UnifiedSecurityProtectionFactory {
     isValid: boolean;
     errors: string[];
     warnings: string[];
-  } {
     const errors: string[] = [];
     const warnings: string[] = [];
     // Validate priorities

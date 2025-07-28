@@ -45,7 +45,7 @@ export function useEventSubscription<T extends BaseEvent = BaseEvent>()
       stableHandler,
       {
         priority: options?.priority ?? EventPriority.MEDIUM,
-        once: options?.once ?? false
+        once: options?.once ?? false,
       }
     );
     // Cleanup on unmount or dependency change
@@ -81,7 +81,7 @@ export function useEventPublisher() {
 export function useWorkflowEvents(userId?: string) {
   const publish = useEventPublisher();
   const publishTaskCreated = useCallback((taskId: string, data?: any) => {
-    const event = EventFactory.createWorkflowEvent(;)
+    const event = EventFactory.createWorkflowEvent(;);
       'task_created',
       { taskId, data },
       'workflow-hook',
@@ -90,7 +90,7 @@ export function useWorkflowEvents(userId?: string) {
     return publish(event);
   }, [publish, userId]);
   const publishTaskCompleted = useCallback((taskId: string, data?: any) => {
-    const event = EventFactory.createWorkflowEvent(;)
+    const event = EventFactory.createWorkflowEvent(;);
       'task_completed',
       { taskId, data },
       'workflow-hook',
@@ -99,7 +99,7 @@ export function useWorkflowEvents(userId?: string) {
     return publish(event);
   }, [publish, userId]);
   const publishTemplateUsed = useCallback((templateId: string, data?: any) => {
-    const event = EventFactory.createWorkflowEvent(;)
+    const event = EventFactory.createWorkflowEvent(;);
       'template_used',
       { templateId, data },
       'workflow-hook',
@@ -119,7 +119,7 @@ export function useWorkflowEvents(userId?: string) {
 export function useAnalyticsEvents(userId?: string) {
   const publish = useEventPublisher();
   const trackUserAction = useCallback((action: string, data?: any) => {
-    const event = EventFactory.createAnalyticsEvent(;)
+    const event = EventFactory.createAnalyticsEvent(;);
       'user_action',
       { action, data },
       'analytics-hook',
@@ -128,7 +128,7 @@ export function useAnalyticsEvents(userId?: string) {
     return publish(event);
   }, [publish, userId]);
   const trackFeatureUsage = useCallback((feature: string, duration?: number, data?: any) => {
-    const event = EventFactory.createAnalyticsEvent(;)
+    const event = EventFactory.createAnalyticsEvent(;);
       'feature_used',
       { feature, duration, data },
       'analytics-hook',
@@ -137,7 +137,7 @@ export function useAnalyticsEvents(userId?: string) {
     return publish(event);
   }, [publish, userId]);
   const trackPerformance = useCallback((metric: string, value: number, data?: any) => {
-    const event = EventFactory.createAnalyticsEvent(;)
+    const event = EventFactory.createAnalyticsEvent(;);
       'performance_metric',
       { action: metric, value, data },
       'analytics-hook',
@@ -157,7 +157,7 @@ export function useAnalyticsEvents(userId?: string) {
 export function useUIEvents(componentName: string, userId?: string, sessionId?: string) {
   const publish = useEventPublisher();
   const publishComponentMounted = useCallback((data?: any) => {
-    const event = EventFactory.createUIEvent(;)
+    const event = EventFactory.createUIEvent(;);
       'component_mounted',
       { component: componentName, data },
       'ui-hook',
@@ -167,7 +167,7 @@ export function useUIEvents(componentName: string, userId?: string, sessionId?: 
     return publish(event);
   }, [publish, componentName, userId, sessionId]);
   const publishUserInteraction = useCallback((action: string, data?: any) => {
-    const event = EventFactory.createUIEvent(;)
+    const event = EventFactory.createUIEvent(;);
       'user_interaction',
       { component: componentName, action, data },
       'ui-hook',
@@ -177,7 +177,7 @@ export function useUIEvents(componentName: string, userId?: string, sessionId?: 
     return publish(event);
   }, [publish, componentName, userId, sessionId]);
   const publishStateChange = useCallback((data?: any) => {
-    const event = EventFactory.createUIEvent(;)
+    const event = EventFactory.createUIEvent(;);
       'state_change',
       { component: componentName, data },
       'ui-hook',
@@ -190,7 +190,7 @@ export function useUIEvents(componentName: string, userId?: string, sessionId?: 
   useEffect(() => {
     publishComponentMounted();
     return () => {
-      const event = EventFactory.createUIEvent(;)
+      const event = EventFactory.createUIEvent(;);
         'component_unmounted',
         { component: componentName },
         'ui-hook',
@@ -227,7 +227,7 @@ export function useEventHistory(filter?: EventFilter, limit?: number) {
     refreshHistory();
   }, [refreshHistory]);
   // Subscribe to new events to auto-update history
-  useEventSubscription()
+  useEventSubscription();
     filter || {},
     () => {
       refreshHistory();
@@ -339,7 +339,6 @@ export function useConditionalEventSubscription<T extends BaseEvent = BaseEvent>
     priority?: EventPriority;
     checkInterval?: number;
   }
-) {
   const [enabled, setEnabled] = useState(condition());
   const checkInterval = options?.checkInterval ?? 1000;
   // Periodically check condition
@@ -350,7 +349,7 @@ export function useConditionalEventSubscription<T extends BaseEvent = BaseEvent>
     return () => clearInterval(interval);
   }, [condition, checkInterval]);
   // Subscribe when enabled
-  useEventSubscription()
+  useEventSubscription();
     filter,
     handler,
     {
@@ -369,7 +368,7 @@ export function useEventState<T>()
   updateFn: (currentState: T, event: BaseEvent) => T
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [state, setState] = useState<T>(initialState);
-  useEventSubscription()
+  useEventSubscription();
     filter,
     (event: BaseEvent) => {
       setState(currentState => updateFn(currentState, event));
@@ -394,7 +393,7 @@ export function useEventPerformanceMonitor() {
     let totalProcessingTime = 0;
     const startTime = Date.now();
     // Subscribe to all events
-    const subscriptionId = globalEventBus.subscribe(;)
+    const subscriptionId = globalEventBus.subscribe(;);
       {},
       (event: BaseEvent) => {
         eventCount++;
@@ -406,13 +405,13 @@ export function useEventPerformanceMonitor() {
           totalEvents: eventCount,
           eventsPerSecond: (eventCount / elapsed) * 1000,
           avgProcessingTime: totalProcessingTime / eventCount,
-          errorRate: errorCount / eventCount
+          errorRate: errorCount / eventCount,
         });
       },
       { priority: EventPriority.LOW }
     );
     // Subscribe to error events
-    const errorSubscriptionId = globalEventBus.subscribe(;)
+    const errorSubscriptionId = globalEventBus.subscribe(;);
       { types: ['handler_error', 'system_error'] },
       () => {
         errorCount++;

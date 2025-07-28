@@ -7,7 +7,6 @@
  * Task: E17-1753114397279-AC5DA5 - Create verification steps
  * Epic: 17 - Backstage Admin Controls (Story 17.4.6 - Backup System)
  */
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -41,7 +40,6 @@ import {
 // ==========================================
 // TYPE DEFINITIONS
 // ==========================================
-
 enum VerificationStatus {
   PASSED = 'passed',
   FAILED = 'failed',
@@ -50,7 +48,6 @@ enum VerificationStatus {
   TIMEOUT = 'timeout',
   ERROR = 'error'
 }
-
 enum SessionStatus {
   PENDING = 'pending',
   RUNNING = 'running',
@@ -58,14 +55,12 @@ enum SessionStatus {
   FAILED = 'failed',
   CANCELLED = 'cancelled'
 }
-
 enum RiskLevel {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
 }
-
 enum VerificationStepType {
   INTEGRITY = 'integrity',
   ACCESSIBILITY = 'accessibility',
@@ -75,7 +70,6 @@ enum VerificationStepType {
   METADATA = 'metadata',
   PERFORMANCE = 'performance'
 }
-
 interface BackupVerificationStep {
   stepId: string;
   stepName: string;
@@ -88,7 +82,6 @@ interface BackupVerificationStep {
   configurable: boolean;
   estimatedDuration: number;
 }
-
 interface BackupVerificationResult {
   stepId: string;
   status: VerificationStatus;
@@ -99,7 +92,6 @@ interface BackupVerificationResult {
   warnings?: string[];
   recommendations?: string[];
 }
-
 interface VerificationSession {
   sessionId: string;
   backupId: string;
@@ -111,7 +103,6 @@ interface VerificationSession {
   summary: VerificationSummary;
   configuration: VerificationConfiguration;
 }
-
 interface VerificationSummary {
   totalSteps: number;
   passedSteps: number;
@@ -123,7 +114,6 @@ interface VerificationSummary {
   criticalIssues: string[];
   riskLevel: RiskLevel;
 }
-
 interface VerificationConfiguration {
   stepsEnabled: string[];
   stepsDisabled: string[];
@@ -133,7 +123,6 @@ interface VerificationConfiguration {
   skipOnWarnings: boolean;
   abortOnCriticalFailure: boolean;
 }
-
 interface BackupData {
   backupId: string;
   backupPath: string;
@@ -156,46 +145,39 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
   // Data state
   const [verificationSteps, setVerificationSteps] = useState<BackupVerificationStep[]>([]);
   const [activeSessions, setActiveSessions] = useState<VerificationSession[]>([]);
   const [recentSessions, setRecentSessions] = useState<VerificationSession[]>([]);
   const [backups, setBackups] = useState<BackupData[]>([]);
-  
   // UI state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBackup, setSelectedBackup] = useState<string>('');
   const [filterStatus, setFilterStatus] = useState<string>('');
   const [filterRiskLevel, setFilterRiskLevel] = useState<string>('');
-  
   // Configuration state
-  const [verificationConfig, setVerificationConfig] = useState<Partial<VerificationConfiguration>>({
+  const [verificationConfig, setVerificationConfig] = useState<Partial<VerificationConfiguration>>({)
     stepsEnabled: [],
     stepsDisabled: [],
     timeoutOverrides: {},
     retryOverrides: {},
     customParameters: {},
     skipOnWarnings: false,
-    abortOnCriticalFailure: true
+    abortOnCriticalFailure: true,
   });
-
   // Load dashboard data
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      
-      const [stepsResponse, sessionsResponse, backupsResponse] = await Promise.all([
+      const [stepsResponse, sessionsResponse, backupsResponse] = await Promise.all([)
         fetch('/api/admin/backup-verification/steps'),
         fetch('/api/admin/backup-verification/sessions?limit=20'),
         fetch('/api/admin/backups?limit=50')
       ]);
-
       if (stepsResponse.ok) {
         const stepsResult = await stepsResponse.json();
         setVerificationSteps(stepsResult.data || []);
       }
-
       if (sessionsResponse.ok) {
         const sessionsResult = await sessionsResponse.json();
         const sessions = sessionsResult.data || [];
@@ -206,12 +188,10 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
           [SessionStatus.COMPLETED, SessionStatus.FAILED].includes(s.status)
         ));
       }
-
       if (backupsResponse.ok) {
         const backupsResult = await backupsResponse.json();
         setBackups(backupsResult.data || []);
       }
-
     } catch (err) {
       setError('Failed to load dashboard data');
       console.error('Dashboard loading error:', err);
@@ -219,19 +199,17 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
       setLoading(false);
     }
   };
-
   // Start backup verification
   const startVerification = async (backupId: string, config?: Partial<VerificationConfiguration>) => {
     try {
-      const response = await fetch('/api/admin/backup-verification/verify', {
+      const response = await fetch('/api/admin/backup-verification/verify', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           backupId,
           configuration: { ...verificationConfig, ...config }
         })
       });
-
       if (response.ok) {
         await loadDashboardData();
       } else {
@@ -243,14 +221,12 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
       console.error('Verification start error:', err);
     }
   };
-
   // Cancel verification session
   const cancelVerification = async (sessionId: string) => {
     try {
-      const response = await fetch(`/api/admin/backup-verification/sessions/${sessionId}/cancel`, {
-        method: 'POST'
+      const response = await fetch(`/api/admin/backup-verification/sessions/${sessionId}/cancel`, {)}
+        method: 'POST',
       });
-
       if (response.ok) {
         await loadDashboardData();
       }
@@ -258,22 +234,19 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
       console.error('Error cancelling verification:', err);
     }
   };
-
   useEffect(() => {
     loadDashboardData();
     // Auto-refresh every 30 seconds for active sessions
     const interval = setInterval(loadDashboardData, 30000);
     return () => clearInterval(interval);
   }, []);
-
   // Helper functions
   const formatDuration = (ms: number) => {
     const seconds = Math.floor(ms / 1000);
     const minutes = Math.floor(seconds / 60);
-    if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
-    return `${seconds}s`;
+    if (minutes > 0) return `${minutes}m ${seconds % 60}s`;}
+    return `${seconds}s`;}
   };
-
   const getStatusColor = (status: VerificationStatus | SessionStatus) => {
     switch (status) {
     case 'passed':
@@ -294,7 +267,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
       return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getRiskLevelColor = (level: RiskLevel) => {
     switch (level) {
     case RiskLevel.LOW:
@@ -309,7 +281,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
       return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getStepIcon = (stepType: VerificationStepType) => {
     switch (stepType) {
     case VerificationStepType.INTEGRITY:
@@ -330,9 +301,8 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
       return <Target className="w-4 h-4" />;
     }
   };
-
   if (loading && verificationSteps.length === 0) {
-    return (
+    return ()
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div className="animate-pulse">Loading backup verification dashboard...</div>
@@ -340,15 +310,14 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
       </Card>
     );
   }
-
-  return (
+  return ()
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Shield className="w-5 h-5" />
           Backup Verification Dashboard
           <Badge variant="secondary">Epic 17.4.6</Badge>
-          {error && (
+          {error && ()
             <Badge variant="destructive" className="ml-auto">
               <AlertTriangle className="w-3 h-3 mr-1" />
               Error
@@ -356,7 +325,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
           )}
         </CardTitle>
       </CardHeader>
-
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-5">
@@ -366,7 +334,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
             <TabsTrigger value="configure">Configure</TabsTrigger>
             <TabsTrigger value="steps">Steps</TabsTrigger>
           </TabsList>
-
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-4">
             {/* Summary Stats */}
@@ -380,7 +347,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                   </div>
                 </CardContent>
               </Card>
-
               <Card>
                 <CardContent className="p-4 text-center">
                   <div className="text-2xl font-bold text-green-600">
@@ -392,7 +358,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                   </div>
                 </CardContent>
               </Card>
-
               <Card>
                 <CardContent className="p-4 text-center">
                   <div className="text-2xl font-bold text-red-600">
@@ -404,7 +369,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                   </div>
                 </CardContent>
               </Card>
-
               <Card>
                 <CardContent className="p-4 text-center">
                   <div className="text-2xl font-bold text-purple-600">{verificationSteps.length}</div>
@@ -415,7 +379,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                 </CardContent>
               </Card>
             </div>
-
             {/* Quick Actions */}
             <Card>
               <CardHeader>
@@ -428,7 +391,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                       <SelectValue placeholder="Select backup to verify" />
                     </SelectTrigger>
                     <SelectContent>
-                      {backups.map(backup => (
+                      {backups.map(backup => ()
                         <SelectItem key={backup.backupId} value={backup.backupId}>
                           {backup.backupId} ({backup.backupType})
                         </SelectItem>
@@ -443,7 +406,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                     Start Verification
                   </Button>
                 </div>
-
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                   <Button variant="outline" size="sm">
                     <BarChart3 className="w-4 h-4 mr-1" />
@@ -464,7 +426,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                 </div>
               </CardContent>
             </Card>
-
             {/* Recent Activity Summary */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Card>
@@ -473,7 +434,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {recentSessions.slice(0, 5).map(session => (
+                    {recentSessions.slice(0, 5).map(session => ()
                       <div key={session.sessionId} className="flex items-center justify-between p-2 border rounded">
                         <div className="flex items-center gap-2">
                           <Badge className={getStatusColor(session.status)}>
@@ -492,16 +453,15 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                   </div>
                 </CardContent>
               </Card>
-
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Step Success Rates</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {verificationSteps.slice(0, 5).map(step => {
-                      const successRate = Math.random() * 30 + 70; // Mock success rate
-                      return (
+                    {verificationSteps.slice(0, 5).map(step => {)
+                      const successRate = Math.random() * 30 + 70; // Mock success rate;
+                      return ()
                         <div key={step.stepId}>
                           <div className="flex justify-between text-sm mb-1">
                             <span className="flex items-center gap-1">
@@ -519,7 +479,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
               </Card>
             </div>
           </TabsContent>
-
           {/* Active Sessions Tab */}
           <TabsContent value="active" className="space-y-4">
             <div className="flex justify-between items-center">
@@ -531,9 +490,8 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                 Refresh
               </Button>
             </div>
-
             <div className="space-y-3">
-              {activeSessions.map(session => (
+              {activeSessions.map(session => ()
                 <Card key={session.sessionId} className="border-orange-200 bg-orange-50">
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-3">
@@ -543,7 +501,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                           <Badge className={getStatusColor(session.status)}>
                             {session.status}
                           </Badge>
-                          {session.status === SessionStatus.RUNNING && (
+                          {session.status === SessionStatus.RUNNING && ()
                             <div className="flex items-center gap-1 text-sm text-blue-600">
                               <Activity className="w-3 h-3" />
                               Running...
@@ -559,7 +517,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                           <Eye className="w-4 h-4 mr-1" />
                           View Details
                         </Button>
-                        {session.status === SessionStatus.RUNNING && (
+                        {session.status === SessionStatus.RUNNING && ()
                           <Button 
                             size="sm" 
                             variant="outline"
@@ -571,7 +529,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                         )}
                       </div>
                     </div>
-
                     {/* Progress Information */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
@@ -591,8 +548,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                         <div>{formatDuration(session.summary.totalDuration)}</div>
                       </div>
                     </div>
-
-                    {session.summary.totalSteps > 0 && (
+                    {session.summary.totalSteps > 0 && ()
                       <div className="mt-3">
                         <Progress 
                           value={(session.steps.length / session.summary.totalSteps) * 100} 
@@ -603,8 +559,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                   </CardContent>
                 </Card>
               ))}
-
-              {activeSessions.length === 0 && (
+              {activeSessions.length === 0 && ()
                 <div className="text-center py-8 text-gray-500">
                   <Activity className="w-8 h-8 mx-auto mb-2 opacity-50" />
                   No active verification sessions
@@ -612,7 +567,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
               )}
             </div>
           </TabsContent>
-
           {/* History Tab */}
           <TabsContent value="history" className="space-y-4">
             {/* Search and Filters */}
@@ -657,10 +611,9 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                 </Button>
               </div>
             </div>
-
             {/* History List */}
             <div className="space-y-2">
-              {recentSessions.map(session => (
+              {recentSessions.map(session => ()
                 <Card key={session.sessionId}>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">
@@ -674,7 +627,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                             {session.summary.riskLevel} risk
                           </Badge>
                         </div>
-
                         <div className="grid grid-cols-2 md:grid-cols-6 gap-2 text-sm text-gray-600 mb-2">
                           <div>Backup: {session.backupId}</div>
                           <div>By: {session.initiatedBy}</div>
@@ -682,22 +634,20 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                           <div>Duration: {formatDuration(session.summary.totalDuration)}</div>
                           <div>Steps: {session.summary.passedSteps}/{session.summary.totalSteps}</div>
                           <div>
-                            {session.summary.criticalIssues.length > 0 && (
+                            {session.summary.criticalIssues.length > 0 && ()
                               <span className="text-red-600">
                                 {session.summary.criticalIssues.length} issues
                               </span>
                             )}
                           </div>
                         </div>
-
-                        {session.summary.criticalIssues.length > 0 && (
+                        {session.summary.criticalIssues.length > 0 && ()
                           <div className="text-xs text-red-600 bg-red-50 p-2 rounded">
                             Issues: {session.summary.criticalIssues.slice(0, 2).join(', ')}
                             {session.summary.criticalIssues.length > 2 && '...'}
                           </div>
                         )}
                       </div>
-
                       <div className="flex gap-2 ml-4">
                         <Button size="sm" variant="ghost">
                           <Eye className="w-4 h-4" />
@@ -712,7 +662,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
               ))}
             </div>
           </TabsContent>
-
           {/* Configure Tab */}
           <TabsContent value="configure" className="space-y-4">
             <Card>
@@ -734,7 +683,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                       }
                     />
                   </div>
-
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="font-medium">Abort on Critical Failure</div>
@@ -748,18 +696,17 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                     />
                   </div>
                 </div>
-
                 {/* Step Configuration */}
                 <div>
                   <h4 className="font-medium mb-3">Step Configuration</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {verificationSteps.map(step => (
+                    {verificationSteps.map(step => ()
                       <div key={step.stepId} className="border rounded p-3">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             {getStepIcon(step.stepType)}
                             <span className="font-medium text-sm">{step.stepName}</span>
-                            {step.required && (
+                            {step.required && ()
                               <Badge variant="outline" className="text-xs">Required</Badge>
                             )}
                           </div>
@@ -767,12 +714,12 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                             checked={!verificationConfig.stepsDisabled?.includes(step.stepId)}
                             onCheckedChange={(checked) => {
                               const disabled = verificationConfig.stepsDisabled || [];
-                              const newDisabled = checked 
+                              const newDisabled = checked ;
                                 ? disabled.filter(id => id !== step.stepId)
                                 : [...disabled, step.stepId];
-                              setVerificationConfig(prev => ({ 
+                              setVerificationConfig(prev => ({ )
                                 ...prev, 
-                                stepsDisabled: newDisabled 
+                                stepsDisabled: newDisabled ,
                               }));
                             }}
                             disabled={step.required}
@@ -787,7 +734,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                     ))}
                   </div>
                 </div>
-
                 <div className="flex gap-2">
                   <Button>
                     <Settings className="w-4 h-4 mr-1" />
@@ -800,7 +746,6 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
               </CardContent>
             </Card>
           </TabsContent>
-
           {/* Steps Tab */}
           <TabsContent value="steps" className="space-y-4">
             <Card>
@@ -809,7 +754,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {Object.values(VerificationStepType).map(stepType => (
+                  {Object.values(VerificationStepType).map(stepType => ()
                     <div key={stepType}>
                       <h4 className="font-medium mb-2 flex items-center gap-2 capitalize">
                         {getStepIcon(stepType)}
@@ -818,14 +763,14 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ml-6">
                         {verificationSteps
                           .filter(step => step.stepType === stepType)
-                          .map(step => (
+                          .map(step => ()
                             <div key={step.stepId} className="border rounded p-3">
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="font-medium text-sm">{step.stepName}</span>
-                                {step.required && (
+                                {step.required && ()
                                   <Badge variant="destructive" className="text-xs">Required</Badge>
                                 )}
-                                {step.configurable && (
+                                {step.configurable && ()
                                   <Badge variant="secondary" className="text-xs">Configurable</Badge>
                                 )}
                               </div>
@@ -835,7 +780,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
                                 <span>Est: {step.estimatedDuration}s</span>
                                 <span>Retries: {step.retryAttempts}</span>
                               </div>
-                              {step.dependencies && step.dependencies.length > 0 && (
+                              {step.dependencies && step.dependencies.length > 0 && ()
                                 <div className="text-xs text-blue-600 mt-1">
                                   Depends on: {step.dependencies.join(', ')}
                                 </div>
@@ -850,9 +795,8 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
             </Card>
           </TabsContent>
         </Tabs>
-
         {/* Error Display */}
-        {error && (
+        {error && ()
           <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-800 text-sm">
             <AlertTriangle className="w-4 h-4 inline mr-2" />
             {error}

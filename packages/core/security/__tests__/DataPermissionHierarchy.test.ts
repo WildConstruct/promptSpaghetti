@@ -161,7 +161,7 @@ describe('DataPermissionHierarchy', () => {
       expect(compliancePath.name).toBe('Compliance Exception');
       expect(compliancePath.steps.length).toBeGreaterThanOrEqual(2);
       // Should include compliance officer approval
-      const hasComplianceStep = compliancePath.steps.some(step => ;)
+      const hasComplianceStep = compliancePath.steps.some(step => ;);
         step.name.toLowerCase().includes('compliance')
       );
       expect(hasComplianceStep).toBe(true);

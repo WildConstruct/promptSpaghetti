@@ -163,7 +163,7 @@ export class SessionPriorityManager extends EventEmitter {
     if (conflicts.length > 0 && !this.canAutoResolve(conflicts)) {
       return { 
         allowed: false, 
-        conflicts: conflicts.filter(c => !c.autoResolvable) 
+        conflicts: conflicts.filter(c => !c.autoResolvable) ,
       };
     }
     // Calculate priority score
@@ -204,7 +204,7 @@ export class SessionPriorityManager extends EventEmitter {
     });
     return { 
       allowed: true, 
-      evicted: evictedSessions.length > 0 ? evictedSessions : undefined 
+      evicted: evictedSessions.length > 0 ? evictedSessions : undefined ,
     };
   }
   /**
@@ -410,7 +410,7 @@ export class SessionPriorityManager extends EventEmitter {
       utilizationPercentage: (totalSessions / this.config.maxTotalSessions) * 100,
       topEvictionReasons,
       emergencyOverrides: sessions.filter(s => s.emergencySession).length,
-      gracePeriodUsage: sessions.filter(s => s.gracePeriodEnd).length
+      gracePeriodUsage: sessions.filter(s => s.gracePeriodEnd).length,
     };
   }
   /**

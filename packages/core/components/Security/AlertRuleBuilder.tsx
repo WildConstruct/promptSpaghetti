@@ -137,7 +137,7 @@ export const AlertRuleBuilder: React.FC<{
       actions: [],
       notification_channels: [],
       created_at: new Date(),
-      updated_at: new Date()
+      updated_at: new Date(),
     };
     setEditingRule(newRule);
     setShowCreateDialog(true);
@@ -158,15 +158,14 @@ export const AlertRuleBuilder: React.FC<{
     setShowDeleteDialog(null);
   };
   const handleToggleRule = (ruleId: string) => {
-    onRulesChange()
+    onRulesChange();
       alertRules.map(rule => )
         rule.id === ruleId 
           ? { ...rule, enabled: !rule.enabled, updated_at: new Date() }
           : rule
-      )
     );
   };
-  return ()
+  return ();
     <div className="alert-rule-builder">
       <div className="builder-header">
         <div className="header-content">
@@ -264,7 +263,7 @@ const RuleCard: React.FC<{
   onDelete: () => void;
   onSelect: () => void;
 }> = ({ rule, onEdit, onToggle, onDelete, onSelect }) => {
-  return ()
+  return ();
     <Card className={`rule-card ${!rule.enabled ? 'disabled' : ''}`}>}
       <div className="rule-header">
         <div className="rule-info">
@@ -344,7 +343,7 @@ const RuleEditDialog: React.FC<{
   const updateRule = (updates: Partial<AlertRule>) => {
     setEditedRule(prev => ({ ...prev, ...updates }));
   };
-  return ()
+  return ();
     <Dialog
       open={open}
       onOpenChange={onClose}
@@ -408,7 +407,7 @@ const BasicRuleSettings: React.FC<{
   rule: AlertRule;
   onUpdate: (updates: Partial<AlertRule>) => void;
 }> = ({ rule, onUpdate }) => {
-  return ()
+  return ();
     <div className="basic-settings">
       <div className="form-group">
         <label htmlFor="ruleName">Rule Name</label>
@@ -489,12 +488,12 @@ const ConditionBuilder: React.FC<{
       field: 'threat_level',
       operator: 'gte',
       value: 5,
-      logic_operator: rule.conditions.length > 0 ? 'and' : undefined
+      logic_operator: rule.conditions.length > 0 ? 'and' : undefined,
     };
     onUpdate({ conditions: [...rule.conditions, newCondition] });
   };
   const updateCondition = (id: string, updates: Partial<AlertCondition>) => {
-    const updatedConditions = rule.conditions.map(condition =>;)
+    const updatedConditions = rule.conditions.map(condition =>;);
       condition.id === id ? { ...condition, ...updates } : condition
     );
     onUpdate({ conditions: updatedConditions });
@@ -502,7 +501,7 @@ const ConditionBuilder: React.FC<{
   const removeCondition = (id: string) => {
     onUpdate({ conditions: rule.conditions.filter(c => c.id !== id) });
   };
-  return ()
+  return ();
     <div className="condition-builder">
       <div className="builder-header">
         <p>Define conditions that must be met to trigger this alert rule.</p>
@@ -585,7 +584,7 @@ const ActionBuilder: React.FC<{
     onUpdate({ actions: [...rule.actions, newAction] });
   };
   const updateAction = (id: string, updates: Partial<AlertAction>) => {
-    const updatedActions = rule.actions.map(action =>;)
+    const updatedActions = rule.actions.map(action =>;);
       action.id === id ? { ...action, ...updates } : action
     );
     onUpdate({ actions: updatedActions });
@@ -593,7 +592,7 @@ const ActionBuilder: React.FC<{
   const removeAction = (id: string) => {
     onUpdate({ actions: rule.actions.filter(a => a.id !== id) });
   };
-  return ()
+  return ();
     <div className="action-builder">
       <div className="builder-header">
         <p>Configure actions to take when this alert rule is triggered.</p>
@@ -665,7 +664,7 @@ const ActionConfigForm: React.FC<{
   };
   switch (action.type) {
   case 'notification':
-    return ()
+    return ();
       <div className="config-form">
         <div className="form-group">
           <label>Message Template</label>
@@ -678,7 +677,7 @@ const ActionConfigForm: React.FC<{
       </div>
     );
   case 'containment':
-    return ()
+    return ();
       <div className="config-form">
         <div className="form-group">
           <label>Containment Actions</label>
@@ -709,7 +708,7 @@ const ActionConfigForm: React.FC<{
       </div>
     );
   case 'webhook':
-    return ()
+    return ();
       <div className="config-form">
         <div className="form-group">
           <label>Webhook URL</label>
@@ -743,7 +742,7 @@ const NotificationSettings: React.FC<{
   rule: AlertRule;
   onUpdate: (updates: Partial<AlertRule>) => void;
 }> = ({ rule, onUpdate }) => {
-  return ()
+  return ();
     <div className="notification-settings">
       <p>Configure notification channels for this alert rule.</p>
       <div className="placeholder-content">
@@ -782,7 +781,7 @@ function getOperatorLabel(operator: string): string {
     contains: 'contains',
     regex: 'matches regex',
     in: 'is in',
-    not_in: 'is not in'
+    not_in: 'is not in',
   };
   return labels[operator] || operator;
 }

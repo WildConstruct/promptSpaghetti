@@ -41,7 +41,7 @@ describe('MarkovNode', () => {
     });
     test('should validate transition matrix correctly', () => {
       // Valid matrix
-      const validMatrix = new StandardTransitionMatrix(;)
+      const validMatrix = new StandardTransitionMatrix(;);
         ['A', 'B'],
         { A: { B: 1.0 }, B: { A: 1.0 } }
       );
@@ -62,7 +62,7 @@ describe('MarkovNode', () => {
       }).toThrow();
     });
     test('should handle edge cases in transitions', () => {
-      const matrix = new StandardTransitionMatrix(;)
+      const matrix = new StandardTransitionMatrix(;);
         ['lone'],
         { lone: {} } // No transitions
       );
@@ -73,7 +73,7 @@ describe('MarkovNode', () => {
   });
   describe('MarkovNode Core Functionality', () => {
     test('should initialize with first state', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'markov1',
         ['start', 'end'],
         { start: { end: 1.0 }, end: { end: 1.0 } },
@@ -83,7 +83,7 @@ describe('MarkovNode', () => {
       expect(result).toBe('start'); // Initial execution returns initial state
     });
     test('should transition between states deterministically', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'markov1',
         ['A', 'B'],
         { A: { B: 1.0 }, B: { A: 1.0 } },
@@ -100,7 +100,7 @@ describe('MarkovNode', () => {
       expect(result3).toBe('A');
     });
     test('should maintain state across multiple executions', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'markov1',
         ['first', 'second', 'third'],
         {
@@ -117,7 +117,7 @@ describe('MarkovNode', () => {
       expect(results).toEqual(['first', 'second', 'third', 'third', 'third']);
     });
     test('should handle probabilistic transitions with deterministic seeds', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'markov1',
         ['heads', 'tails'],
         {
@@ -134,9 +134,9 @@ describe('MarkovNode', () => {
       // Reset and run again with same seed - create fresh context
       const ctx2 = AdvancedExecutionUtils.enhanceContext({)
         variables: {},
-        seed: 12345 // Same seed
+        seed: 12345 // Same seed,
       });
-      const node2 = createMarkovNode(;)
+      const node2 = createMarkovNode(;);
         'markov1', // Same node ID
         ['heads', 'tails'],
         {
@@ -152,7 +152,7 @@ describe('MarkovNode', () => {
       expect(results1).toEqual(results2);
     });
     test('should respect termination conditions', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'markov1',
         ['active', 'terminated'],
         {
@@ -176,7 +176,7 @@ describe('MarkovNode', () => {
   });
   describe('MarkovNode Configuration', () => {
     test('should handle maxTransitions configuration', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'markov1',
         ['A', 'B'],
         { A: { B: 1.0 }, B: { A: 1.0 } },
@@ -191,7 +191,7 @@ describe('MarkovNode', () => {
       expect(state?.transitionCount).toBeLessThanOrEqual(2);
     });
     test('should handle termination states', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'markov1',
         ['running', 'stopped', 'error'],
         {
@@ -212,7 +212,7 @@ describe('MarkovNode', () => {
       }
     });
     test('should handle loop detection', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'markov1',
         ['A'],
         { A: { A: 1.0 } },
@@ -230,7 +230,7 @@ describe('MarkovNode', () => {
   });
   describe('MarkovNode State Management', () => {
     test('should track transition history', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'markov1',
         ['X', 'Y', 'Z'],
         { X: { Y: 1.0 }, Y: { Z: 1.0 }, Z: { X: 1.0 } },
@@ -243,7 +243,7 @@ describe('MarkovNode', () => {
       expect(history).toEqual(['X', 'Y', 'Z']);
     });
     test('should reset state correctly', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'markov1',
         ['start', 'middle', 'end'],
         { start: { middle: 1.0 }, middle: { end: 1.0 }, end: { end: 1.0 } },
@@ -261,7 +261,7 @@ describe('MarkovNode', () => {
       expect(state?.history).toEqual([]);
     });
     test('should provide current state inspection', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'markov1',
         ['alpha', 'beta'],
         { alpha: { beta: 1.0 }, beta: { alpha: 1.0 } },
@@ -277,13 +277,13 @@ describe('MarkovNode', () => {
   });
   describe('MarkovNode Validation', () => {
     test('should validate node configuration', () => {
-      const validNode = createMarkovNode(;)
+      const validNode = createMarkovNode(;);
         'markov1',
         ['A', 'B'],
         { A: { B: 1.0 }, B: { A: 1.0 } }
       );
       expect(validNode.validate().valid).toBe(true);
-      const invalidNode = createMarkovNode(;)
+      const invalidNode = createMarkovNode(;);
         'markov1',
         ['A', 'B'],
         { A: { B: 1.0 }, B: { A: 1.0 } },
@@ -293,7 +293,7 @@ describe('MarkovNode', () => {
       expect(invalidNode.validate().valid).toBe(false);
     });
     test('should validate termination states', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'markov1',
         ['valid', 'state'],
         { valid: { state: 1.0 }, state: { valid: 1.0 } },
@@ -307,7 +307,7 @@ describe('MarkovNode', () => {
   });
   describe('MarkovNode Serialization', () => {
     test('should serialize node data correctly', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'markov1',
         ['serialize', 'test'],
         { serialize: { test: 1.0 }, test: { serialize: 1.0 } },
@@ -366,7 +366,7 @@ describe('MarkovNode', () => {
   });
   describe('MarkovNode Performance and Determinism', () => {
     test('should execute within performance expectations', () => {
-      const node = createMarkovNode(;)
+      const node = createMarkovNode(;);
         'perf-test',
         Array.from({length: 100}, (_, i) => `state${i}`),}
         Object.fromEntries(Array.from({length: 100}, (_, i) => [
@@ -382,7 +382,7 @@ describe('MarkovNode', () => {
       expect(duration).toBeLessThan(1000); // Should complete in under 1 second
     });
     test('should produce deterministic results across multiple runs', () => {
-      const createTestNode = () => createMarkovNode(;)
+      const createTestNode = () => createMarkovNode(;);
         'determinism-test',
         ['det1', 'det2', 'det3'],
         {

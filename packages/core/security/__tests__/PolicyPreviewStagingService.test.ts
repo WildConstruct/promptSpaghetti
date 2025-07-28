@@ -82,7 +82,7 @@ describe('PolicyPreviewStagingService', () => {
           requiresConsent: false,
         }
       ];
-      const preview = await service.createPolicyPreview(;)
+      const preview = await service.createPolicyPreview(;);
         policyId,
         baseVersion,
         changes,
@@ -103,7 +103,7 @@ describe('PolicyPreviewStagingService', () => {
       expect(preview.validationResults).toBeInstanceOf(Array);
     });
     test('should run default validations on preview creation', async () => {
-      const preview = await service.createPolicyPreview(;)
+      const preview = await service.createPolicyPreview(;);
         'policy-123',
         'v1.0.0',
         [{
@@ -146,7 +146,7 @@ describe('PolicyPreviewStagingService', () => {
           requiresConsent: true,
         }
       ];
-      const preview = await service.createPolicyPreview(;)
+      const preview = await service.createPolicyPreview(;);
         'policy-123',
         'v1.0.0',
         changes,
@@ -194,7 +194,7 @@ describe('PolicyPreviewStagingService', () => {
     });
     test('should handle custom expiration days', async () => {
       const customExpirationDays = 7;
-      const preview = await service.createPolicyPreview(;)
+      const preview = await service.createPolicyPreview(;);
         'policy-123',
         'v1.0.0',
         [{
@@ -249,7 +249,7 @@ describe('PolicyPreviewStagingService', () => {
     });
     test('should deploy preview to staging environment', async () => {
       const environmentId = 'test-staging';
-      const deployment = await service.deployToStaging(;)
+      const deployment = await service.deployToStaging(;);
         testPreview.previewId,
         environmentId,
         {
@@ -275,8 +275,6 @@ describe('PolicyPreviewStagingService', () => {
         service.deployToStaging()
           testPreview.previewId,
           'non-existent-env',
-          {}
-        )
       ).rejects.toThrow('Staging environment not found');
     });
     test('should fail deployment if preview not found', async () => {
@@ -284,8 +282,6 @@ describe('PolicyPreviewStagingService', () => {
         service.deployToStaging()
           'non-existent-preview',
           'test-staging',
-          {}
-        )
       ).rejects.toThrow('Preview not found');
     });
     test('should respect max active deployments limit', async () => {
@@ -296,7 +292,6 @@ describe('PolicyPreviewStagingService', () => {
         await service.deployToStaging()
           testPreview.previewId,
           environmentId,
-          {}
         );
       }
       // Try to deploy one more - should fail
@@ -304,8 +299,6 @@ describe('PolicyPreviewStagingService', () => {
         service.deployToStaging()
           testPreview.previewId,
           environmentId,
-          {}
-        )
       ).rejects.toThrow('Maximum active deployments reached');
     });
     test('should emit stagingDeploymentCreated event', async () => {
@@ -314,7 +307,6 @@ describe('PolicyPreviewStagingService', () => {
       await service.deployToStaging()
         testPreview.previewId,
         'test-staging',
-        {}
       );
       expect(eventHandler).toHaveBeenCalledWith()
         expect.objectContaining({)
@@ -325,14 +317,13 @@ describe('PolicyPreviewStagingService', () => {
       );
     });
     test('should initialize default rollback triggers', async () => {
-      const deployment = await service.deployToStaging(;)
+      const deployment = await service.deployToStaging(;);
         testPreview.previewId,
         'test-staging',
-        {}
       );
       expect(deployment.rollbackTriggers).toBeInstanceOf(Array);
       expect(deployment.rollbackTriggers.length).toBeGreaterThan(0);
-      const errorRateTrigger = deployment.rollbackTriggers.find(;)
+      const errorRateTrigger = deployment.rollbackTriggers.find(;);
         t => t.triggerType === RollbackTriggerType.ERROR_RATE
       );
       expect(errorRateTrigger).toBeDefined();
@@ -393,7 +384,7 @@ describe('PolicyPreviewStagingService', () => {
       );
     });
     test('should handle validation findings', async () => {
-      const results = await service.runValidations(;)
+      const results = await service.runValidations(;);
         testPreview,
         [ValidationType.LEGAL, ValidationType.COMPLIANCE]
       );
@@ -443,7 +434,7 @@ describe('PolicyPreviewStagingService', () => {
         comments: 'The new terms are much clearer and easier to understand.',
         categories: [FeedbackCategory.POSITIVE, FeedbackCategory.SUGGESTION]
       };
-      const userFeedback = await service.collectUserFeedback(;)
+      const userFeedback = await service.collectUserFeedback(;);
         testPreview.previewId,
         userId,
         feedback
@@ -466,7 +457,7 @@ describe('PolicyPreviewStagingService', () => {
         comments: 'The terms are confusing and hard to understand.',
         categories: [FeedbackCategory.NEGATIVE],
       };
-      const userFeedback = await service.collectUserFeedback(;)
+      const userFeedback = await service.collectUserFeedback(;);
         testPreview.previewId,
         'user-456',
         feedback
@@ -480,7 +471,7 @@ describe('PolicyPreviewStagingService', () => {
         comments: 'Great update, but there seems to be a display issue.',
         categories: [FeedbackCategory.BUG_REPORT],
       };
-      const userFeedback = await service.collectUserFeedback(;)
+      const userFeedback = await service.collectUserFeedback(;);
         testPreview.previewId,
         'user-456',
         feedback
@@ -520,7 +511,6 @@ describe('PolicyPreviewStagingService', () => {
             comments: 'Feedback for non-existent preview',
             categories: [FeedbackCategory.NEUTRAL],
           }
-        )
       ).rejects.toThrow('Preview not found');
     });
   });
@@ -529,7 +519,7 @@ describe('PolicyPreviewStagingService', () => {
       const baseVersion = 'v1.0.0';
       const compareVersion = 'v1.1.0';
       const policyId = 'policy-123';
-      const report = await service.generateComparisonReport(;)
+      const report = await service.generateComparisonReport(;);
         baseVersion,
         compareVersion,
         policyId
@@ -632,7 +622,7 @@ describe('PolicyPreviewStagingService', () => {
         effectiveDate: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow
         rolloutStrategy: 'gradual',
       };
-      const result = await service.promoteToProduction(;)
+      const result = await service.promoteToProduction(;);
         testPreview.previewId,
         options
       );
@@ -648,9 +638,8 @@ describe('PolicyPreviewStagingService', () => {
           testPreview.previewId,
           {
             approvedBy: 'user-admin',
-            effectiveDate: new Date(Date.now() + 24 * 60 * 60 * 1000)
+            effectiveDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
           }
-        )
       ).rejects.toThrow('Preview must be approved before promotion');
     });
     test('should emit previewPromoted event on successful promotion', async () => {
@@ -660,7 +649,7 @@ describe('PolicyPreviewStagingService', () => {
         testPreview.previewId,
         {
           approvedBy: 'user-admin',
-          effectiveDate: new Date(Date.now() + 24 * 60 * 60 * 1000)
+          effectiveDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
         }
       );
       expect(eventHandler).toHaveBeenCalledWith()
@@ -675,7 +664,7 @@ describe('PolicyPreviewStagingService', () => {
   describe('Rollback Functionality', () => {
     let testDeployment: unknown;
     beforeEach(async () => {
-      const testPreview = await service.createPolicyPreview(;)
+      const testPreview = await service.createPolicyPreview(;);
         'policy-123',
         'v1.0.0',
         [{
@@ -699,13 +688,12 @@ describe('PolicyPreviewStagingService', () => {
       testDeployment = await service.deployToStaging()
         testPreview.previewId,
         'test-staging',
-        {}
       );
     });
     test('should rollback staging deployment successfully', async () => {
       const reason = 'High error rate detected';
       const triggeredBy = 'user-admin';
-      const result = await service.rollbackStagingDeployment(;)
+      const result = await service.rollbackStagingDeployment(;);
         testDeployment.deploymentId,
         reason,
         triggeredBy
@@ -736,7 +724,6 @@ describe('PolicyPreviewStagingService', () => {
           'non-existent-deployment',
           'Test reason',
           'user-admin'
-        )
       ).rejects.toThrow('Staging deployment not found');
     });
   });
@@ -747,7 +734,7 @@ describe('PolicyPreviewStagingService', () => {
         previewRetentionDays: 7,
       };
       const customService = new PolicyPreviewStagingService(customConfig);
-      const preview = await customService.createPolicyPreview(;)
+      const preview = await customService.createPolicyPreview(;);
         'policy-123',
         'v1.0.0',
         [{
@@ -798,7 +785,6 @@ describe('PolicyPreviewStagingService', () => {
             description: 'Test description',
             createdBy: 'user-123',
           }
-        )
       ).rejects.toThrow();
     });
     test('should emit error events for monitoring', () => {
@@ -832,7 +818,6 @@ describe('PolicyPreviewStagingService', () => {
               description: `Description ${i}`,}
               createdBy: 'user-123',
             }
-          )
         );
       }
       const results = await Promise.all(operations);

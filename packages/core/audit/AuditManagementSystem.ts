@@ -163,7 +163,7 @@ export class AuditManagementSystem {
       byType: new Map(),
       bySeverity: new Map(),
       byCompliance: new Map(),
-      byTimeRange: new Map()
+      byTimeRange: new Map(),
     };
   }
   /**
@@ -230,7 +230,7 @@ export class AuditManagementSystem {
       total_events: events.length,
       date_range: {,
         start: events.length > 0 ? Math.min(...events.map(e => e.timestamp.getTime())) : null,
-        end: events.length > 0 ? Math.max(...events.map(e => e.timestamp.getTime())) : null
+        end: events.length > 0 ? Math.max(...events.map(e => e.timestamp.getTime())) : null,
       },
       metrics: {}
     };
@@ -266,7 +266,7 @@ export class AuditManagementSystem {
    * Compliance-specific audit report generation
    */
   generateComplianceReport(framework: ComplianceFramework, dateRange: { start: Date; end: Date }): any {
-    const events = Array.from(this.events.values()).filter(event => ;)
+    const events = Array.from(this.events.values()).filter(event => ;);
       event.compliance_frameworks.includes(framework) &&
       event.timestamp >= dateRange.start &&
       event.timestamp <= dateRange.end
@@ -279,7 +279,7 @@ export class AuditManagementSystem {
         total_events: events.length,
         critical_events: events.filter(e => e.severity === AuditSeverity.CRITICAL).length,
         high_risk_events: events.filter(e => e.risk_score >= 7).length,
-        unresolved_events: events.filter(e => e.status !== AuditStatus.RESOLVED).length
+        unresolved_events: events.filter(e => e.status !== AuditStatus.RESOLVED).length,
       },
       event_breakdown: {,
         by_severity: this.calculateSeverityDistribution(events),
@@ -329,7 +329,7 @@ export class AuditManagementSystem {
         severity: 'high',
         description: `${failedLogins.length} failed login attempts in the last hour`,}
         events: failedLogins.map(e => e.id),
-        recommendation: 'Investigate potential brute force attack'
+        recommendation: 'Investigate potential brute force attack',
       });
     }
     // Detect unusual data access patterns
@@ -341,11 +341,11 @@ export class AuditManagementSystem {
         severity: 'medium',
         description: `${highVolumeAccess.length} high-volume data access events detected`,}
         events: highVolumeAccess.map(e => e.id),
-        recommendation: 'Review data access patterns for potential data exfiltration'
+        recommendation: 'Review data access patterns for potential data exfiltration',
       });
     }
     // Detect privilege escalation attempts
-    const privilegeEvents = recentEvents.filter(e => ;)
+    const privilegeEvents = recentEvents.filter(e => ;);
       e.risk_factors.some(factor => factor.includes('privilege') || factor.includes('escalation'))
     );
     if (privilegeEvents.length > 3) {
@@ -354,7 +354,7 @@ export class AuditManagementSystem {
         severity: 'critical',
         description: `${privilegeEvents.length} potential privilege escalation attempts`,}
         events: privilegeEvents.map(e => e.id),
-        recommendation: 'Immediate investigation required - potential security breach'
+        recommendation: 'Immediate investigation required - potential security breach',
       });
     }
     return patterns;
@@ -490,7 +490,7 @@ export class AuditManagementSystem {
       average_risk_score: events.reduce((sum, e) => sum + e.risk_score, 0) / events.length || 0,
       compliance_frameworks: this.calculateComplianceFrameworkDistribution(events),
       recent_activity: events.slice(0, 10),
-      high_risk_events: events.filter(e => e.risk_score >= 7).length
+      high_risk_events: events.filter(e => e.risk_score >= 7).length,
     };
   }
   private calculateEventCountMetrics(events: AuditEvent[], timeframe: string): any {
@@ -513,7 +513,7 @@ export class AuditManagementSystem {
     return {
       average: riskScores.reduce((sum, score) => sum + score, 0) / riskScores.length || 0,
       median: riskScores.sort((a, b) => a - b)[Math.floor(riskScores.length / 2)] || 0,
-      high_risk_count: riskScores.filter(score => score >= 7).length
+      high_risk_count: riskScores.filter(score => score >= 7).length,
     };
   }
   private calculateSeverityDistribution(events: AuditEvent[]): any {
@@ -578,7 +578,7 @@ export class AuditManagementSystem {
     return {
       trend: 'improving', // 'improving', 'stable', 'degrading'
       change_percentage: -5.2, // Example: 5.2% improvement
-      peak_risk_period: new Date() // When risk was highest
+      peak_risk_period: new Date() // When risk was highest,
     };
   }
   private generateFrameworkSpecificReport(framework: ComplianceFramework, events: AuditEvent[]): any {
@@ -587,13 +587,13 @@ export class AuditManagementSystem {
       return {
         data_subject_requests: events.filter(e => e.category.includes('data_subject')).length,
         consent_violations: events.filter(e => e.risk_factors.includes('consent')).length,
-        breach_notifications: events.filter(e => e.event_type === AuditEventType.SECURITY_INCIDENT && e.severity === AuditSeverity.CRITICAL).length
+        breach_notifications: events.filter(e => e.event_type === AuditEventType.SECURITY_INCIDENT && e.severity === AuditSeverity.CRITICAL).length,
       };
     case ComplianceFramework.SOX:
       return {
         financial_control_events: events.filter(e => e.category.includes('financial')).length,
         access_control_violations: events.filter(e => e.risk_factors.includes('access_control')).length,
-        change_management_events: events.filter(e => e.event_type === AuditEventType.CONFIGURATION_CHANGE).length
+        change_management_events: events.filter(e => e.event_type === AuditEventType.CONFIGURATION_CHANGE).length,
       };
     default:
       return {};

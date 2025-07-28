@@ -210,7 +210,7 @@ describe('AuditCalendarSystem', () => {
         page: 1,
         limit: 50,
         start_date: new Date('2025-07-22T00:00:00Z'),
-        end_date: new Date('2025-07-23T23:59:59Z')
+        end_date: new Date('2025-07-23T23:59:59Z'),
       });
       expect(result.schedules).toHaveLength(1);
       expect(result.schedules[0].title).toBe('Daily Security Check');
@@ -256,7 +256,7 @@ describe('AuditCalendarSystem', () => {
       const updates = {
         title: 'Updated Test Schedule',
         priority: SchedulePriority.HIGH,
-        description: 'Updated description'
+        description: 'Updated description',
       };
       const updatedSchedule = calendarSystem.updateSchedule(testSchedule.id, updates);
       expect(updatedSchedule.title).toBe('Updated Test Schedule');
@@ -334,7 +334,7 @@ describe('AuditCalendarSystem', () => {
         display_options: {,
           show_completed: true,
           show_cancelled: false,
-          color_by: 'priority' as const
+          color_by: 'priority' as const,
         }
       };
       const calendarView = calendarSystem.generateCalendarView(config);
@@ -356,7 +356,7 @@ describe('AuditCalendarSystem', () => {
         display_options: {,
           show_completed: true,
           show_cancelled: false,
-          color_by: 'priority' as const
+          color_by: 'priority' as const,
         }
       };
       const calendarView = calendarSystem.generateCalendarView(config);
@@ -369,7 +369,7 @@ describe('AuditCalendarSystem', () => {
         start_date: new Date('2025-07-20T00:00:00Z'),
         end_date: new Date('2025-07-26T23:59:59Z'),
         display_options: {,
-          color_by: 'status' as const
+          color_by: 'status' as const,
         }
       };
       const calendarView = calendarSystem.generateCalendarView(config);
@@ -402,7 +402,7 @@ describe('AuditCalendarSystem', () => {
         created_by: 'admin',
         updated_by: 'admin',
       });
-      const instances = calendarSystem.generateRecurringInstances(;)
+      const instances = calendarSystem.generateRecurringInstances(;);
         recurringSchedule.id,
         new Date('2025-08-21T23:59:59Z')
       );
@@ -410,7 +410,7 @@ describe('AuditCalendarSystem', () => {
       expect(instances.length).toBeLessThanOrEqual(30);
       // Verify instances are properly spaced (daily)
       if (instances.length > 1) {
-        const daysDiff = Math.floor(;)
+        const daysDiff = Math.floor(;);
           (instances[1].scheduled_start.getTime() - instances[0].scheduled_start.getTime()) / (1000 * 60 * 60 * 24)
         );
         expect(daysDiff).toBe(1);
@@ -441,14 +441,14 @@ describe('AuditCalendarSystem', () => {
         created_by: 'admin',
         updated_by: 'admin',
       });
-      const instances = calendarSystem.generateRecurringInstances(;)
+      const instances = calendarSystem.generateRecurringInstances(;);
         recurringSchedule.id,
         new Date('2025-10-25T23:59:59Z')
       );
       expect(instances.length).toBeGreaterThan(0);
       // Verify instances are weekly (7 days apart)
       if (instances.length > 1) {
-        const daysDiff = Math.floor(;)
+        const daysDiff = Math.floor(;);
           (instances[1].scheduled_start.getTime() - instances[0].scheduled_start.getTime()) / (1000 * 60 * 60 * 24)
         );
         expect(daysDiff).toBe(7);
@@ -575,7 +575,7 @@ describe('AuditCalendarSystem', () => {
         if (schedule.title === 'Completed Security Audit') {
           calendarSystem.completeSchedule(created.id, {)
             actual_end: schedule.actual_end,
-            completion_notes: 'Completed successfully'
+            completion_notes: 'Completed successfully',
           });
         } else if (schedule.title === 'In Progress Compliance Review') {
           calendarSystem.updateSchedule(created.id, { status: ScheduleStatus.IN_PROGRESS });
@@ -585,7 +585,7 @@ describe('AuditCalendarSystem', () => {
     it('should generate comprehensive schedule analytics', () => {
       const analytics = calendarSystem.generateScheduleAnalytics({)
         start: new Date('2025-07-01T00:00:00Z'),
-        end: new Date('2025-07-31T23:59:59Z')
+        end: new Date('2025-07-31T23:59:59Z'),
       });
       expect(analytics.summary).toBeDefined();
       expect(analytics.summary.total_schedules).toBe(2);
@@ -600,14 +600,14 @@ describe('AuditCalendarSystem', () => {
     it('should calculate correct completion rate', () => {
       const analytics = calendarSystem.generateScheduleAnalytics({)
         start: new Date('2025-07-01T00:00:00Z'),
-        end: new Date('2025-07-31T23:59:59Z')
+        end: new Date('2025-07-31T23:59:59Z'),
       });
       expect(analytics.summary.completion_rate).toBe(50); // 1 out of 2 completed
     });
     it('should provide resource utilization data', () => {
       const analytics = calendarSystem.generateScheduleAnalytics({)
         start: new Date('2025-07-01T00:00:00Z'),
-        end: new Date('2025-07-31T23:59:59Z')
+        end: new Date('2025-07-31T23:59:59Z'),
       });
       expect(analytics.resource_utilization.by_assignee['auditor-1']).toBe(1);
       expect(analytics.resource_utilization.by_assignee['auditor-2']).toBe(1);
@@ -651,7 +651,7 @@ describe('AuditCalendarSystem', () => {
       const calendarView = generateCalendarView({)
         view_type: 'month',
         start_date: new Date('2025-07-01T00:00:00Z'),
-        end_date: new Date('2025-07-31T23:59:59Z')
+        end_date: new Date('2025-07-31T23:59:59Z'),
       });
       expect(calendarView).toBeDefined();
       expect(calendarView.events).toBeDefined();
@@ -685,7 +685,7 @@ describe('AuditCalendarSystem', () => {
     it('should handle invalid query parameters', () => {
       const result = calendarSystem.querySchedules({)
         page: -1, // Invalid page
-        limit: 0 // Invalid limit
+        limit: 0 // Invalid limit,
       });
       // Should handle gracefully and return valid structure
       expect(result).toBeDefined();
@@ -696,7 +696,7 @@ describe('AuditCalendarSystem', () => {
       const calendarView = calendarSystem.generateCalendarView({)
         view_type: 'month',
         start_date: new Date('2025-01-01T00:00:00Z'),
-        end_date: new Date('2025-01-02T00:00:00Z') // Very narrow range with no events
+        end_date: new Date('2025-01-02T00:00:00Z') // Very narrow range with no events,
       });
       expect(calendarView.events).toHaveLength(0);
       expect(calendarView.summary.total_events).toBe(0);

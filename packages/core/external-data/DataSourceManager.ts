@@ -133,7 +133,7 @@ export class DataSourceManager extends EventEmitter {
         enabled: true,
         ttl: 3600, // 1 hour
         strategy: 'hybrid',
-        maxSize: 50 // 50MB
+        maxSize: 50 // 50MB,
       },
       transforms: [,
         {
@@ -181,7 +181,7 @@ export class DataSourceManager extends EventEmitter {
         enabled: true,
         ttl: 7200, // 2 hours
         strategy: 'hybrid',
-        maxSize: 100 // 100MB
+        maxSize: 100 // 100MB,
       },
       transforms: [,
         {
@@ -227,7 +227,7 @@ export class DataSourceManager extends EventEmitter {
         enabled: true,
         ttl: 86400, // 24 hours
         strategy: 'memory',
-        maxSize: 10 // 10MB
+        maxSize: 10 // 10MB,
       },
       transforms: [,
         {
@@ -297,9 +297,9 @@ export class DataSourceManager extends EventEmitter {
             query,
             source: source.id,
             cached: false,
-            executionTime: Date.now() - startTime
+            executionTime: Date.now() - startTime,
           },
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         };
         results.push(errorResult);
         return errorResult;
@@ -309,7 +309,7 @@ export class DataSourceManager extends EventEmitter {
     this.emit('queryComplete', {)
       query,
       results,
-      totalTime: Date.now() - startTime
+      totalTime: Date.now() - startTime,
     });
     return results;
   }
@@ -333,7 +333,7 @@ export class DataSourceManager extends EventEmitter {
             query,
             source: source.id,
             cached: true,
-            executionTime: Date.now() - startTime
+            executionTime: Date.now() - startTime,
           }
         };
       }
@@ -375,7 +375,7 @@ export class DataSourceManager extends EventEmitter {
         query,
         source: source.id,
         cached: false,
-        executionTime: Date.now() - startTime
+        executionTime: Date.now() - startTime,
       }
     };
   }
@@ -502,7 +502,7 @@ export class DataSourceManager extends EventEmitter {
       era: Array.isArray(query.era) ? query.era.join(',') : query.era,
       category: query.category,
       limit: query.limit || 50,
-      offset: query.offset || 0
+      offset: query.offset || 0,
     };
   }
   private extractDataFromAPIResponse(source: DataSource, response: any): any[] {
@@ -662,7 +662,7 @@ export class DataSourceManager extends EventEmitter {
         timestamp: new Date().toISOString(),
         metadata: {,
           queryHash: this.generateQueryHash(query),
-          extractedAt: new Date().toISOString()
+          extractedAt: new Date().toISOString(),
         }
       };
       results.push(item);

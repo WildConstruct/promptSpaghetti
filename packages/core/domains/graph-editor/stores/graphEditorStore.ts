@@ -100,8 +100,8 @@ interface GraphEditorStore extends GraphEditorState {
 }
 
 export const useGraphEditorStore = create<GraphEditorStore>()()
-  devtools()
-    subscribeWithSelector()
+  devtools();
+    subscribeWithSelector();
       immer((set, get) => ({)
         // Initial state
         graph: createEmptyGraph(),
@@ -120,13 +120,13 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
         historyIndex: -1,
         maxHistorySize: 50,
         // Graph operations
-        setGraph: (graph: Graph) => set((state) => {
+        setGraph: (graph: Graph) => set((state) => {,
           state.graph = graph;
           state.isDirty = true;
           state.selectedNodeIds = [];
           state.validationErrors = [];
         }),
-        updateGraph: (updater: (graph: Graph) => Graph) => set((state) => {
+        updateGraph: (updater: (graph: Graph) => Graph) => set((state) => {,
           state.graph = updater(state.graph);
           state.isDirty = true;
         }),
@@ -149,7 +149,7 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
             timestamp: Date.now(),
           });
         }),
-        removeNode: (nodeId: string) => set((state) => {
+        removeNode: (nodeId: string) => set((state) => {,
           const nodeIndex = state.graph.nodes.findIndex(n => n.id === nodeId);
           if (nodeIndex === -1) return;
           const removedNode = state.graph.nodes[nodeIndex];
@@ -195,7 +195,7 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
             timestamp: Date.now(),
           });
         }),
-        duplicateNode: (nodeId: string) => set((state) => {
+        duplicateNode: (nodeId: string) => set((state) => {,
           const node = state.graph.nodes.find(n => n.id === nodeId);
           if (!node) return;
           const newNodeId = `${node.type}-${Date.now()}`;}
@@ -204,7 +204,7 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
             id: newNodeId,
             position: {,
               x: node.position.x + 50,
-              y: node.position.y + 50
+              y: node.position.y + 50,
             }
           };
           state.graph.nodes.push(duplicatedNode);
@@ -228,7 +228,7 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
             timestamp: Date.now(),
           });
         }),
-        removeEdge: (edgeId: string) => set((state) => {
+        removeEdge: (edgeId: string) => set((state) => {,
           const edgeIndex = state.graph.edges.findIndex(e => e.id === edgeId);
           if (edgeIndex === -1) return;
           const removedEdge = state.graph.edges[edgeIndex];
@@ -247,10 +247,10 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
             ? [...new Set([...state.selectedNodeIds, ...nodeIds])]
             : nodeIds;
         }),
-        clearSelection: () => set((state) => {
+        clearSelection: () => set((state) => {,
           state.selectedNodeIds = [];
         }),
-        toggleNodeSelection: (nodeId: string) => set((state) => {
+        toggleNodeSelection: (nodeId: string) => set((state) => {,
           const isSelected = state.selectedNodeIds.includes(nodeId);
           if (isSelected) {
             state.selectedNodeIds = state.selectedNodeIds.filter(id => id !== nodeId);
@@ -259,42 +259,42 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
           }
         }),
         // Execution
-        setExecuting: (isExecuting: boolean) => set((state) => {
+        setExecuting: (isExecuting: boolean) => set((state) => {,
           state.isExecuting = isExecuting;
         }),
         setExecutionResults: (results: Record<string, any>) => set((state) => {
           state.executionResults = results;
         }),
-        clearExecutionResults: () => set((state) => {
+        clearExecutionResults: () => set((state) => {,
           state.executionResults = {};
         }),
         // Validation
-        setValidationErrors: (errors: ValidationError[]) => set((state) => {
+        setValidationErrors: (errors: ValidationError[]) => set((state) => {,
           state.validationErrors = errors;
         }),
-        clearValidationErrors: () => set((state) => {
+        clearValidationErrors: () => set((state) => {,
           state.validationErrors = [];
         }),
         // Preview seeds
-        setPreviewSeeds: (seeds: number[]) => set((state) => {
+        setPreviewSeeds: (seeds: number[]) => set((state) => {,
           state.previewSeeds = seeds;
         }),
-        addPreviewSeed: () => set((state) => {
+        addPreviewSeed: () => set((state) => {,
           if (state.previewSeeds.length < state.config.preview.maxSeeds) {
             const newSeed = Math.floor(Math.random() * 10000);
             state.previewSeeds.push(newSeed);
           }
         }),
-        removePreviewSeed: (index: number) => set((state) => {
+        removePreviewSeed: (index: number) => set((state) => {,
           if (index >= 0 && index < state.previewSeeds.length) {
             state.previewSeeds.splice(index, 1);
           }
         }),
         // State management
-        setDirty: (isDirty: boolean) => set((state) => {
+        setDirty: (isDirty: boolean) => set((state) => {,
           state.isDirty = isDirty;
         }),
-        resetState: () => set((state) => {
+        resetState: () => set((state) => {,
           state.graph = createEmptyGraph();
           state.selectedNodeIds = [];
           state.draggedNodeId = null;
@@ -307,14 +307,14 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
           state.historyIndex = -1;
         }),
         // Configuration
-        updateConfig: (config: Partial<GraphEditorConfig>) => set((state) => {
+        updateConfig: (config: Partial<GraphEditorConfig>) => set((state) => {,
           state.config = { ...state.config, ...config };
         }),
-        resetConfig: () => set((state) => {
+        resetConfig: () => set((state) => {,
           state.config = DEFAULT_CONFIG;
         }),
         // History operations
-        addToHistory: (operation: GraphOperation) => set((state) => {
+        addToHistory: (operation: GraphOperation) => set((state) => {,
           // Remove future history if we're not at the end
           if (state.historyIndex < state.history.length - 1) {
             state.history = state.history.slice(0, state.historyIndex + 1);
@@ -328,14 +328,14 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
             state.historyIndex = state.history.length - 1;
           }
         }),
-        undo: () => set((state) => {
+        undo: () => set((state) => {,
           if (state.historyIndex >= 0) {
             // Implementation would reverse the operation
             state.historyIndex--;
             state.isDirty = true;
           }
         }),
-        redo: () => set((state) => {
+        redo: () => set((state) => {,
           if (state.historyIndex < state.history.length - 1) {
             state.historyIndex++;
             // Implementation would apply the operation
@@ -344,19 +344,19 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
         }),
         canUndo: () => get().historyIndex >= 0,
         canRedo: () => get().historyIndex < get().history.length - 1,
-        clearHistory: () => set((state) => {
+        clearHistory: () => set((state) => {,
           state.history = [];
           state.historyIndex = -1;
         }),
         // Utilities
-        getNodeById: (nodeId: string) => {
+        getNodeById: (nodeId: string) => {,
           return get().graph.nodes.find(n => n.id === nodeId);
         },
-        getSelectedNodes: () => {
+        getSelectedNodes: () => {,
           const state = get();
           return state.graph.nodes.filter(n => state.selectedNodeIds.includes(n.id));
         },
-        isNodeSelected: (nodeId: string) => {
+        isNodeSelected: (nodeId: string) => {,
           return get().selectedNodeIds.includes(nodeId);
         }
       })),
@@ -364,8 +364,6 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
         name: 'graph-editor-store',
         version: 1,
       }
-    )
-  )
 );
 
 // Selector hooks for performance

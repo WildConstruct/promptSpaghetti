@@ -35,7 +35,7 @@ export class RecentProjectsManager {
       const newEntry: RecentProjectEntry = {
         ...entry,
         id: this.generateProjectId(entry.name),
-        lastAccessDate: new Date().toISOString()
+        lastAccessDate: new Date().toISOString(),
       };
       // Add to beginning of list
       const updatedProjects = [newEntry, ...filteredProjects];
@@ -122,7 +122,7 @@ export class RecentProjectsManager {
       const displayNodes = nodes.slice(0, maxNodes);
       const positions = displayNodes.map((_, index) => ({)
         x: (index % 5) * 24 + 12,
-        y: Math.floor(index / 5) * 20 + 12
+        y: Math.floor(index / 5) * 20 + 12,
       }));
       // Create SVG string
       let svg = `<svg width="${svgWidth}" height="${svgHeight}" xmlns="http://www.w3.org/2000/svg">`;}
@@ -182,7 +182,6 @@ export class RecentProjectsManager {
     lastAccessed: string;
     size: string;
     author?: string;
-  } {
     const lastAccessed = this.formatDate(new Date(entry.lastAccessDate));
     const size = entry.fileSize ? this.formatFileSize(entry.fileSize) : 'Unknown';
     return {

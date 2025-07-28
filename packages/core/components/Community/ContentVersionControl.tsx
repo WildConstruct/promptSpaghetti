@@ -142,14 +142,14 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({)
     return types[changeType as keyof typeof types] || changeType;
   };
   if (loading) {
-    return ()
+    return ();
       <div className={`content-version-control loading ${className}`}>}
         <div className="loading-spinner"></div>
         <p>Loading version history...</p>
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`content-version-control ${className}`}>}
       {/* Header */}
       <div className="version-control-header">
@@ -965,7 +965,7 @@ export const ContentVersionControl: React.FC<ContentVersionControlProps> = ({)
 
 // Create Version Modal Component
 interface CreateVersionModalProps {
-  onCreate: (data: {)
+  onCreate: (data: {),
     title: string;
     description: string;
     changelog: string;
@@ -981,7 +981,7 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({)
     title: '',
     description: '',
     changelog: '',
-    revision_type: 'minor' as 'major' | 'minor' | 'patch' | 'editorial'
+    revision_type: 'minor' as 'major' | 'minor' | 'patch' | 'editorial',
   });
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -994,7 +994,7 @@ const CreateVersionModal: React.FC<CreateVersionModalProps> = ({)
       onCancel();
     }
   };
-  return ()
+  return ();
     <div className="modal-overlay" onClick={handleBackdropClick}>
       <div className="modal-content">
         <div className="modal-header">

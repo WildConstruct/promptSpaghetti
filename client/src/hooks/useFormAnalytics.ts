@@ -1,8 +1,6 @@
 // Epic 11 Form Analytics Hook
 // Track user interactions with forms for UX optimization
-
 import { useCallback, useRef } from 'react';
-
 interface FormAnalyticsData {
   sessionId: string;
   formType: string;
@@ -18,15 +16,14 @@ interface FormAnalyticsData {
 }
 
 export const useFormAnalytics = () => {
-  const analyticsData = useRef<FormAnalyticsData>({
+  const analyticsData = useRef<FormAnalyticsData>({)
     sessionId: generateSessionId(),
     formType: '',
     fieldInteractions: new Map(),
     stepTimes: new Map(),
-    startTime: Date.now()
+    startTime: Date.now(),
   });
-
-  const trackFieldEvent = useCallback((
+  const trackFieldEvent = useCallback((;)
     fieldName: string,
     eventType: 'focus' | 'blur' | 'change' | 'error',
     valueLength?: number
@@ -35,9 +32,8 @@ export const useFormAnalytics = () => {
     const field = data.fieldInteractions.get(fieldName) || {
       focusCount: 0,
       changeCount: 0,
-      errorCount: 0
+      errorCount: 0,
     };
-
     switch (eventType) {
     case 'focus':
       field.focusTime = Date.now();
@@ -57,60 +53,51 @@ export const useFormAnalytics = () => {
       field.errorCount++;
       break;
     }
-
     data.fieldInteractions.set(fieldName, field);
-
     // Send real-time analytics for immediate events
     if (eventType !== 'blur') {
       sendFieldAnalytics(fieldName, eventType, { valueLength });
     }
   }, []);
-
-  const trackFormStep = useCallback((
+  const trackFormStep = useCallback((;)
     stepNumber: number,
-    formType: string
+    formType: string,
   ) => {
     const data = analyticsData.current;
     data.formType = formType;
     data.stepTimes.set(stepNumber, Date.now());
-
     // Send step analytics
     sendStepAnalytics(stepNumber, formType);
   }, []);
-
-  const trackFormCompletion = useCallback((
+  const trackFormCompletion = useCallback((;)
     success: boolean,
     formType: string,
     completionData?: any
   ) => {
     const data = analyticsData.current;
     const totalTime = Date.now() - data.startTime;
-
     // Send completion analytics
-    sendCompletionAnalytics(success, formType, {
+    sendCompletionAnalytics(success, formType, {)
       totalTime,
       fieldInteractions: Object.fromEntries(data.fieldInteractions),
       stepTimes: Object.fromEntries(data.stepTimes),
       ...completionData
     });
   }, []);
-
-  const trackFormAbandonment = useCallback((
+  const trackFormAbandonment = useCallback((;)
     currentStep: number,
     formType: string,
     reason?: string
   ) => {
     const data = analyticsData.current;
     const timeOnForm = Date.now() - data.startTime;
-
     // Send abandonment analytics
-    sendAbandonmentAnalytics(currentStep, formType, {
+    sendAbandonmentAnalytics(currentStep, formType, {)
       timeOnForm,
       reason,
-      fieldInteractions: Object.fromEntries(data.fieldInteractions)
+      fieldInteractions: Object.fromEntries(data.fieldInteractions),
     });
   }, []);
-
   return {
     trackFieldEvent,
     trackFormStep,
@@ -121,14 +108,14 @@ export const useFormAnalytics = () => {
 
 // Helper function to generate session ID
 function generateSessionId(): string {
-  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;}
 }
 
 // Analytics sending functions
-async function sendFieldAnalytics(
+async function sendFieldAnalytics()
   fieldName: string,
   eventType: string,
-  data: any
+  data: any,
 ): Promise<void> {
   try {
     // In production, send to analytics service
@@ -136,128 +123,118 @@ async function sendFieldAnalytics(
       console.log('Field Analytics:', { fieldName, eventType, data });
       return;
     }
-
-    await fetch('/analytics/field-interaction', {
+    await fetch('/analytics/field-interaction', {)
       method: 'POST',
-      headers: {
+      headers: {,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
+      body: JSON.stringify({),
         fieldName,
         eventType,
         ...data,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       })
     });
   } catch (error) {
     console.error('Failed to send field analytics:', error);
   }
 }
-
-async function sendStepAnalytics(
+async function sendStepAnalytics()
   stepNumber: number,
-  formType: string
+  formType: string,
 ): Promise<void> {
   try {
     // Google Analytics integration
     if (window.gtag) {
-      window.gtag('event', 'form_step', {
+      window.gtag('event', 'form_step', {)
         step_number: stepNumber,
-        form_type: formType
+        form_type: formType,
       });
     }
-
     // Custom analytics
     if (process.env.NODE_ENV === 'development') {
       console.log('Step Analytics:', { stepNumber, formType });
       return;
     }
-
-    await fetch('/analytics/form-step', {
+    await fetch('/analytics/form-step', {)
       method: 'POST',
-      headers: {
+      headers: {,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
+      body: JSON.stringify({),
         stepNumber,
         formType,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       })
     });
   } catch (error) {
     console.error('Failed to send step analytics:', error);
   }
 }
-
-async function sendCompletionAnalytics(
+async function sendCompletionAnalytics()
   success: boolean,
   formType: string,
-  data: any
+  data: any,
 ): Promise<void> {
   try {
     // Google Analytics integration
     if (window.gtag) {
-      window.gtag('event', 'form_completion', {
+      window.gtag('event', 'form_completion', {)
         success,
         form_type: formType,
-        completion_time: data.totalTime
+        completion_time: data.totalTime,
       });
     }
-
     // Custom analytics
     if (process.env.NODE_ENV === 'development') {
       console.log('Completion Analytics:', { success, formType, data });
       return;
     }
-
-    await fetch('/analytics/form-completion', {
+    await fetch('/analytics/form-completion', {)
       method: 'POST',
-      headers: {
+      headers: {,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
+      body: JSON.stringify({),
         success,
         formType,
         ...data,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       })
     });
   } catch (error) {
     console.error('Failed to send completion analytics:', error);
   }
 }
-
-async function sendAbandonmentAnalytics(
+async function sendAbandonmentAnalytics()
   currentStep: number,
   formType: string,
-  data: any
+  data: any,
 ): Promise<void> {
   try {
     // Google Analytics integration
     if (window.gtag) {
-      window.gtag('event', 'form_abandonment', {
+      window.gtag('event', 'form_abandonment', {)
         step_number: currentStep,
         form_type: formType,
-        time_on_form: data.timeOnForm
+        time_on_form: data.timeOnForm,
       });
     }
-
     // Custom analytics
     if (process.env.NODE_ENV === 'development') {
       console.log('Abandonment Analytics:', { currentStep, formType, data });
       return;
     }
-
-    await fetch('/analytics/form-abandonment', {
+    await fetch('/analytics/form-abandonment', {)
       method: 'POST',
-      headers: {
+      headers: {,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
+      body: JSON.stringify({),
         currentStep,
         formType,
         ...data,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       })
     });
   } catch (error) {
@@ -267,76 +244,73 @@ async function sendAbandonmentAnalytics(
 
 // Advanced form analytics helper
 export const useAdvancedFormAnalytics = () => {
-  const trackFieldValidation = useCallback(async (
+  const trackFieldValidation = useCallback(async (;)
     fieldName: string,
     isValid: boolean,
     validationTime: number,
     errorMessage?: string
   ) => {
     try {
-      await fetch('/analytics/field-validation', {
+      await fetch('/analytics/field-validation', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           fieldName,
           isValid,
           validationTime,
           errorMessage,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         })
       });
     } catch (error) {
       console.error('Failed to send validation analytics:', error);
     }
   }, []);
-
-  const trackUserHesitation = useCallback(async (
+  const trackUserHesitation = useCallback(async (;)
     fieldName: string,
-    hesitationTime: number
+    hesitationTime: number,
   ) => {
     try {
-      await fetch('/analytics/user-hesitation', {
+      await fetch('/analytics/user-hesitation', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           fieldName,
           hesitationTime,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         })
       });
     } catch (error) {
       console.error('Failed to send hesitation analytics:', error);
     }
   }, []);
-
-  const trackFormErrors = useCallback(async (
+  const trackFormErrors = useCallback(async (;)
     errors: Record<string, string>,
-    formData: any
+    formData: any,
   ) => {
     try {
-      await fetch('/analytics/form-errors', {
+      await fetch('/analytics/form-errors', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           errors,
           fieldCompleteness: Object.keys(formData).reduce((acc, key) => {
             acc[key] = !!formData[key];
             return acc;
           }, {} as Record<string, boolean>),
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         })
       });
     } catch (error) {
       console.error('Failed to send error analytics:', error);
     }
   }, []);
-
   return {
     trackFieldValidation,
     trackUserHesitation,
@@ -347,7 +321,7 @@ export const useAdvancedFormAnalytics = () => {
 // Type definitions for window.gtag
 declare global {
   interface Window {
-    gtag: (
+    gtag: (),
       command: string,
       action: string,
       parameters?: Record<string, any>

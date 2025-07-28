@@ -1,5 +1,4 @@
 // Epic 17.1.5 - Conflict Preview Component
-
 import React from 'react';
 import {
   Box,
@@ -25,44 +24,40 @@ import {
   ManualMode as ManualModeIcon,
   Block as BlockIcon
 } from '@mui/icons-material';
-
 interface Conflict {
   description: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
 }
-
 interface ConflictPreviewProps {
   conflicts: Conflict[];
   resolution: 'skip' | 'override' | 'merge';
 }
-
 const SEVERITY_CONFIG = {
-  low: {
+  low: {,
     icon: InfoIcon,
     color: 'info' as const,
     label: 'Low',
-    description: 'Minor scheduling overlap with minimal impact'
+    description: 'Minor scheduling overlap with minimal impact',
   },
-  medium: {
+  medium: {,
     icon: WarningIcon,
     color: 'warning' as const,
     label: 'Medium',
-    description: 'Moderate conflict that may cause unexpected behavior'
+    description: 'Moderate conflict that may cause unexpected behavior',
   },
-  high: {
+  high: {,
     icon: ErrorIcon,
     color: 'error' as const,
     label: 'High',
-    description: 'Significant conflict that will likely cause issues'
+    description: 'Significant conflict that will likely cause issues',
   },
-  critical: {
+  critical: {,
     icon: ErrorIcon,
     color: 'error' as const,
     label: 'Critical',
-    description: 'Severe conflict that could break functionality'
+    description: 'Severe conflict that could break functionality',
   }
 };
-
 
 export 
   const conflictsByType = conflicts.reduce((acc, conflict) => {
@@ -72,22 +67,19 @@ export
     acc[conflict.severity].push(conflict);
     return acc;
   }, {} as Record<string, Conflict[]>);
-
   const getOverallSeverity = () => {
     if (conflicts.some(c => c.severity === 'critical')) return 'critical';
     if (conflicts.some(c => c.severity === 'high')) return 'high';
     if (conflicts.some(c => c.severity === 'medium')) return 'medium';
     return 'low';
   };
-
   const overallSeverity = getOverallSeverity();
   const overallConfig = SEVERITY_CONFIG[overallSeverity];
-
-  return (
+  return ()
     <Paper elevation={1} sx={{ p: 2 }}>
       <Box display="flex" alignItems="center" gap={1} mb={2}>
         <overallConfig.icon color={overallConfig.color} />
-        <Typography variant="h6" color={`${overallConfig.color}.main`}>
+        <Typography variant="h6" color={`${overallConfig.color}.main`}>}
           Schedule Conflicts Detected
         </Typography>
         <Chip 
@@ -96,7 +88,6 @@ export
           size="small"
         />
       </Box>
-
       {/* Summary */}
       <Alert severity={overallConfig.color} sx={{ mb: 2 }}>
         <Typography variant="subtitle2" gutterBottom>
@@ -108,7 +99,6 @@ export
           {overallConfig.description}
         </Typography>
       </Alert>
-
       {/* Conflict Details */}
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -118,12 +108,12 @@ export
           <List dense>
             {Object.entries(conflictsByType).map(([severity, severityConflicts]) => {
               const config = SEVERITY_CONFIG[severity as keyof typeof SEVERITY_CONFIG];
-              return (
+              return ()
                 <Box key={severity} mb={1}>
-                  <Typography variant="subtitle2" color={`${config.color}.main`} gutterBottom>
+                  <Typography variant="subtitle2" color={`${config.color}.main`} gutterBottom>}
                     {config.label} Severity ({severityConflicts.length})
                   </Typography>
-                  {severityConflicts.map((conflict, index) => (
+                  {severityConflicts.map((conflict, index) => ()
                     <ListItem key={index} sx={{ pl: 0 }}>
                       <ListItemIcon sx={{ minWidth: 36 }}>
                         <config.icon 
@@ -143,7 +133,6 @@ export
           </List>
         </AccordionDetails>
       </Accordion>
-
       {/* Resolution Strategy */}
       <Box mt={2}>
         <Typography variant="subtitle2" gutterBottom>
@@ -158,9 +147,8 @@ export
           </Typography>
         </Alert>
       </Box>
-
       {/* Recommendations */}
-      {overallSeverity === 'critical' || overallSeverity === 'high' ? (
+      {overallSeverity === 'critical' || overallSeverity === 'high' ? ()
         <Box mt={2}>
           <Typography variant="subtitle2" gutterBottom color="error">
             Recommendations
@@ -188,7 +176,7 @@ export
                 secondaryTypographyProps={{ variant: 'caption' }}
               />
             </ListItem>
-            {resolution === 'skip' && (
+            {resolution === 'skip' && ()
               <ListItem>
                 <ListItemIcon>
                   <WarningIcon color="warning" fontSize="small" />
@@ -203,7 +191,7 @@ export
             )}
           </List>
         </Box>
-      ) : (
+      ) : ()
         <Box mt={2}>
           <Alert severity="info">
             <Typography variant="body2">
@@ -213,9 +201,8 @@ export
           </Alert>
         </Box>
       )}
-
       {/* Action Buttons */}
-      {(overallSeverity === 'critical' || overallSeverity === 'high') && (
+      {(overallSeverity === 'critical' || overallSeverity === 'high') && ()
         <Box mt={2} display="flex" gap={1}>
           <Button
             variant="outlined"

@@ -94,7 +94,7 @@ describe('PreviewSection', () => {
     });
     it('renders Concat with delimiter', async () => {
       const node = createMockNode('Concat', {)
-        delimiter: ' - '
+        delimiter: ' - ',
       });
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
@@ -104,7 +104,7 @@ describe('PreviewSection', () => {
     });
     it('renders Output with prompt', async () => {
       const node = createMockNode('Output', {)
-        prompt: 'Generate a story about adventure'
+        prompt: 'Generate a story about adventure',
       });
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);

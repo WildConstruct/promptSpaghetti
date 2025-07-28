@@ -201,7 +201,7 @@ describe('DataClassificationAccessControl', () => {
           patchLevel: 'current',
           riskScore: 10,
           registered: true,
-          lastSeen: new Date()
+          lastSeen: new Date(),
         },
         behaviorProfile: {,
           normalAccessPatterns: [],
@@ -328,7 +328,7 @@ describe('DataClassificationAccessControl', () => {
             reviewDue: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
             tags: ['security', 'compliance'],
             complianceFrameworks: ['SOC2'],
-            riskAssessment: 'Medium risk policy for temporal access control'
+            riskAssessment: 'Medium risk policy for temporal access control',
           }
         }
       ]
@@ -436,7 +436,7 @@ describe('DataClassificationAccessControl', () => {
           reviewDue: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
           tags: ['confidential', 'compliance'],
           complianceFrameworks: ['GDPR', 'SOC2'],
-          riskAssessment: 'High sensitivity data requiring enhanced controls'
+          riskAssessment: 'High sensitivity data requiring enhanced controls',
         }
       }
     ];

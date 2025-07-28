@@ -168,7 +168,7 @@ export class DashboardRegistry {
             peakUsageHours: [9, 10, 11, 14, 15, 16]
           }
         },
-        dataClassification: 'CONFIDENTIAL' as any
+        dataClassification: 'CONFIDENTIAL' as any,
       },
       requiredWidgets: ['security-score', 'risk-overview', 'incident-summary'],
       optionalWidgets: ['financial-impact', 'compliance-status', 'threat-trends'],
@@ -243,7 +243,7 @@ export class DashboardRegistry {
             peakUsageHours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23] // 24/7
           }
         },
-        dataClassification: 'INTERNAL' as any
+        dataClassification: 'INTERNAL' as any,
       },
       requiredWidgets: ['alert-queue', 'system-status', 'threat-intel'],
       optionalWidgets: ['network-map', 'log-analysis', 'user-activity'],
@@ -318,7 +318,7 @@ export class DashboardRegistry {
             peakUsageHours: [9, 10, 11, 13, 14, 15, 16]
           }
         },
-        dataClassification: 'CONFIDENTIAL' as any
+        dataClassification: 'CONFIDENTIAL' as any,
       },
       requiredWidgets: ['compliance-score', 'framework-status', 'audit-timeline'],
       optionalWidgets: ['evidence-tracker', 'gap-analysis', 'risk-register'],
@@ -429,7 +429,7 @@ export class DashboardRegistry {
         configure: [SecurityRole.SECURITY_ADMIN],
         export: [SecurityRole.EXECUTIVE, SecurityRole.SECURITY_ADMIN],
         drillDown: [SecurityRole.SECURITY_ADMIN],
-        dataAccess: ['CONFIDENTIAL' as any]
+        dataAccess: ['CONFIDENTIAL' as any],
       },
       tags: ['metrics', 'gauge', 'security', 'executive'],
       version: '1.0.0',
@@ -465,7 +465,7 @@ export class DashboardRegistry {
         configure: [SecurityRole.SECURITY_ADMIN],
         export: [SecurityRole.SOC_ANALYST, SecurityRole.SECURITY_ANALYST],
         drillDown: [SecurityRole.SOC_ANALYST, SecurityRole.SECURITY_ANALYST],
-        dataAccess: ['INTERNAL' as any]
+        dataAccess: ['INTERNAL' as any],
       },
       tags: ['alerts', 'monitoring', 'operational'],
       version: '1.0.0',
@@ -498,7 +498,7 @@ export class DashboardRegistry {
         configure: [SecurityRole.COMPLIANCE_OFFICER],
         export: [SecurityRole.COMPLIANCE_OFFICER, SecurityRole.AUDITOR],
         drillDown: [SecurityRole.COMPLIANCE_OFFICER, SecurityRole.AUDITOR],
-        dataAccess: ['CONFIDENTIAL' as any]
+        dataAccess: ['CONFIDENTIAL' as any],
       },
       tags: ['compliance', 'regulatory', 'audit'],
       version: '1.0.0',
@@ -533,7 +533,7 @@ export class DashboardRegistry {
   /**
    * Get dashboard templates by type or role
    */
-  getDashboardTemplates()
+  getDashboardTemplates();
     type?: DashboardType,
     role?: SecurityRole,
     category?: string
@@ -549,7 +549,7 @@ export class DashboardRegistry {
   /**
    * Get dashboard presets
    */
-  getDashboardPresets()
+  getDashboardPresets();
     dashboardType?: DashboardType,
     layout?: string
   ): DashboardPreset[] {
@@ -574,7 +574,7 @@ export class DashboardRegistry {
   /**
    * Create dashboard from template
    */
-  createDashboardFromTemplate()
+  createDashboardFromTemplate();
     templateId: string,
     overrides?: Partial<DashboardConfig>
   ): DashboardConfig | null {
@@ -590,7 +590,7 @@ export class DashboardRegistry {
         ...template.config.metadata,
         ...overrides?.metadata,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
     } as DashboardConfig;
     return config;
@@ -598,7 +598,7 @@ export class DashboardRegistry {
   /**
    * Create dashboard from preset
    */
-  createDashboardFromPreset()
+  createDashboardFromPreset();
     presetId: string,
     overrides?: Partial<DashboardConfig>
   ): DashboardConfig | null {
@@ -616,7 +616,7 @@ export class DashboardRegistry {
       id: overrides?.id || `${preset.id}-${Date.now()}`,}
       theme: preset.theme,
       permissions: preset.permissions,
-      widgets: preset.widgets.map(w => ({)
+      widgets: preset.widgets.map(w => ({),
         id: w.id,
         type: w.type,
         category: this.widgets.get(w.type)?.category || 'METRICS' as any,
@@ -628,19 +628,19 @@ export class DashboardRegistry {
           type: 'realtime' as const,
           source: 'default',
         },
-        permissions: this.widgets.get(w.type)?.permissions || {
+        permissions: this.widgets.get(w.type)?.permissions || {,
           view: [SecurityRole.VIEWER],
           configure: [SecurityRole.SECURITY_ADMIN],
           export: [SecurityRole.VIEWER],
           drillDown: [SecurityRole.VIEWER],
-          dataAccess: ['INTERNAL' as any]
+          dataAccess: ['INTERNAL' as any],
         }
       })),
       metadata: {,
         ...template.config.metadata,
         ...overrides?.metadata,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
     } as DashboardConfig;
     return config;
@@ -671,7 +671,6 @@ export class DashboardRegistry {
     presetCount: number;
     widgetCount: number;
     categoriesByType: Record<DashboardType, number>;
-    } {
     const categoriesByType: Record<DashboardType, number> = {
       [DashboardType.EXECUTIVE]: 0,
       [DashboardType.OPERATIONAL]: 0,

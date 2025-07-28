@@ -48,7 +48,7 @@ export const HierarchyColors = {
     background: '#1e2a3a',  // Slightly lighter background
     border: '#2d3748',      // Subtle border
     text: '#e2e8f0',       // High contrast text
-    accent: '#065f46'      // Dark green accent
+    accent: '#065f46'      // Dark green accent,
   },
   advanced: {,
     primary: '#60a5fa',     // Blue - Advanced features
@@ -56,7 +56,7 @@ export const HierarchyColors = {
     background: '#1a202c',  // Standard background
     border: '#4a5568',      // Standard border
     text: '#90cdf4',       // Blue-tinted text
-    accent: '#1e3a8a'     // Dark blue accent
+    accent: '#1e3a8a'     // Dark blue accent,
   },
   debug: {,
     primary: '#c4b5fd',     // Purple - Technical/Debug
@@ -64,7 +64,7 @@ export const HierarchyColors = {
     background: '#2d1b69',  // Purple-tinted background
     border: '#553c9a',      // Purple border
     text: '#c4b5fd',       // Light purple text
-    accent: '#581c87'     // Dark purple accent
+    accent: '#581c87'     // Dark purple accent,
   },
   neutral: {,
     primary: '#e2e8f0',     // Neutral text
@@ -72,7 +72,7 @@ export const HierarchyColors = {
     background: '#1a202c',  // Standard background
     border: '#4a5568',      // Standard border
     text: '#e2e8f0',       // Standard text
-    accent: '#4a5568'     // Neutral accent
+    accent: '#4a5568'     // Neutral accent,
   }
 };
 
@@ -202,7 +202,7 @@ export const HierarchyHeader: React.FC<HierarchyHeaderProps> = ({)
 }) => {
   const colors = HierarchyColors[level];
   const typography = priority === 'critical' ? TypographyScale.secondary : TypographyScale.tertiary;
-  return ()
+  return ();
     <div
       style={{
         display: 'flex',
@@ -256,7 +256,7 @@ export const HierarchyHeader: React.FC<HierarchyHeaderProps> = ({)
               fontSize: TypographyScale.caption.fontSize,
               color: colors.secondary,
               transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
-              transition: 'transform 0.2s ease-in-out'
+              transition: 'transform 0.2s ease-in-out',
             }}
           >
             ▶
@@ -291,7 +291,7 @@ export const HierarchyField: React.FC<HierarchyFieldProps> = ({)
 }) => {
   const colors = HierarchyColors[level];
   const fieldStyles = FieldImportanceStyles[priority];
-  return ()
+  return ();
     <div
       className={className}
       style={{
@@ -299,7 +299,7 @@ export const HierarchyField: React.FC<HierarchyFieldProps> = ({)
         ...fieldStyles,
         padding: ComponentSizes.field.padding,
         borderRadius: 4,
-        transition: 'all 0.2s ease-in-out'
+        transition: 'all 0.2s ease-in-out',
       }}
     >
       {label && ()
@@ -391,7 +391,7 @@ export const ComplexityIndicator: React.FC<ComplexityIndicatorProps> = ({)
     medium: { fontSize: 11, padding: '4px 8px' },
     large: { fontSize: 12, padding: '6px 10px' }
   };
-  return ()
+  return ();
     <div
       style={{
         display: 'inline-flex',
@@ -419,22 +419,22 @@ export const AccessibilityUtils = {
     const levelDescriptions = {
       basic: 'Essential setting',
       advanced: 'Advanced option',
-      debug: 'Technical detail'
+      debug: 'Technical detail',
     };
     return `${levelDescriptions[level]}: ${title}`;}
   },
   // Generate ARIA descriptions for field priorities
-  getAriaDescription: (priority: FieldPriority): string => {
+  getAriaDescription: (priority: FieldPriority): string => {,
     const priorityDescriptions = {
       critical: 'Required for basic functionality',
       important: 'Commonly used advanced feature',
       standard: 'Standard configuration option',
-      supplementary: 'Optional technical setting'
+      supplementary: 'Optional technical setting',
     };
     return priorityDescriptions[priority];
   },
   // Focus management utilities
-  getFocusableElements: (container: HTMLElement): HTMLElement[] => {
+  getFocusableElements: (container: HTMLElement): HTMLElement[] => {,
     const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
     return Array.from(container.querySelectorAll(focusableSelector));
   }

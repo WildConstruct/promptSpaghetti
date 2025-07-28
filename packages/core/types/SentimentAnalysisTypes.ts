@@ -33,14 +33,14 @@ export const SentimentAnalysisSchema = z.object({)
     score: z.number().min(-1).max(1), // -1 (very negative) to 1 (very positive)
     confidence: z.number().min(0).max(1),
     magnitude: z.number().min(0).max(1), // Strength of sentiment regardless of polarity
-    subjectivity: z.number().min(0).max(1) // 0 (objective) to 1 (subjective)
+    subjectivity: z.number().min(0).max(1) // 0 (objective) to 1 (subjective),
   }),
   // Emotion analysis
   emotions: z.object({),
     primary: z.enum(['joy', 'sadness', 'anger', 'fear', 'surprise', 'disgust', 'trust', 'anticipation']).optional(),
     scores: z.record(z.enum(['joy', 'sadness', 'anger', 'fear', 'surprise', 'disgust', 'trust', 'anticipation']), z.number().min(0).max(1)).default({}),
     confidence: z.number().min(0).max(1),
-    mixed: z.boolean().default(false) // True if multiple strong emotions detected
+    mixed: z.boolean().default(false) // True if multiple strong emotions detected,
   }),
   // Toxicity and safety analysis
   toxicity: z.object({),
@@ -55,7 +55,7 @@ export const SentimentAnalysisSchema = z.object({)
       spam: z.number().min(0).max(1).default(0),
       inappropriate: z.number().min(0).max(1).default(0),
     }).default({}),
-    flags: z.array(z.string()).default([]) // Specific toxicity flags detected
+    flags: z.array(z.string()).default([]) // Specific toxicity flags detected,
   }),
   // Advanced analysis features
   topics: z.array(z.object({),
@@ -83,7 +83,7 @@ export const SentimentAnalysisSchema = z.object({)
     coherence: z.number().min(0).max(100), // Logical flow and coherence
     constructiveness: z.number().min(0).max(100), // How constructive the feedback is
     specificity: z.number().min(0).max(100), // How specific vs generic
-    helpfulness: z.number().min(0).max(100) // Potential helpfulness to others
+    helpfulness: z.number().min(0).max(100) // Potential helpfulness to others,
   }).optional(),
   // Processing metadata
   metadata: z.object({),
@@ -152,7 +152,7 @@ export const SentimentAnalyticsSchema = z.object({)
       spam: z.number().min(0).max(100).default(0),
       inappropriate: z.number().min(0).max(100).default(0),
     }),
-    actionRequired: z.number().min(0).max(100).default(0) // Percentage requiring action
+    actionRequired: z.number().min(0).max(100).default(0) // Percentage requiring action,
   }),
   // Trends over time
   trends: z.object({),
@@ -179,7 +179,7 @@ export const SentimentAnalyticsSchema = z.object({)
     emergingTopics: z.array(z.object({),
       topic: z.string(),
       sentiment: z.enum(['positive', 'neutral', 'negative']),
-      growth: z.number() // Percentage growth
+      growth: z.number() // Percentage growth,
     })).default([]),
     qualityMetrics: z.object({),
       averageReadability: z.number().min(0).max(100).default(0),

@@ -139,7 +139,7 @@ export const AuthenticationSuite: React.FC = () => {
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-  return ()
+  return ();
     <div className="max-w-7xl mx-auto p-6">
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">Authentication & User Management Suite</h1>

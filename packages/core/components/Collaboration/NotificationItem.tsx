@@ -93,7 +93,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({ )
       window.open(notification.action_url, '_blank');
     }
   };
-  return ()
+  return ();
     <div
       className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
         isUnread ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''

@@ -1,7 +1,6 @@
 // Epic 16 Marketplace - Search Bar Component
 import React, { useState, useRef, useEffect } from 'react';
 import './SearchBar.css';
-
 interface SearchBarProps {
   value: string;
   onChange: (value: string) => void;
@@ -12,7 +11,7 @@ interface SearchBarProps {
   className?: string;
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({
+export const SearchBar: React.FC<SearchBarProps> = ({)
   value,
   onChange,
   onSubmit,
@@ -25,36 +24,30 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
+      if ()
         suggestionsRef.current &&
         !suggestionsRef.current.contains(event.target as Node) &&
         !inputRef.current?.contains(event.target as Node)
-      ) {
         setShowSuggestions(false);
         setSelectedSuggestion(-1);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     onChange(newValue);
     setShowSuggestions(newValue.length > 0 && suggestions.length > 0);
     setSelectedSuggestion(-1);
   };
-
   const handleInputFocus = () => {
     if (suggestions.length > 0 && value.length > 0) {
       setShowSuggestions(true);
     }
   };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!showSuggestions) {
       if (e.key === 'Enter') {
@@ -62,17 +55,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       }
       return;
     }
-
     switch (e.key) {
     case 'ArrowDown':
       e.preventDefault();
-      setSelectedSuggestion(prev => 
+      setSelectedSuggestion(prev => )
         prev < suggestions.length - 1 ? prev + 1 : 0
       );
       break;
     case 'ArrowUp':
       e.preventDefault();
-      setSelectedSuggestion(prev => 
+      setSelectedSuggestion(prev => )
         prev > 0 ? prev - 1 : suggestions.length - 1
       );
       break;
@@ -91,29 +83,25 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       break;
     }
   };
-
   const handleSuggestionSelect = (suggestion: string) => {
     onChange(suggestion);
     setShowSuggestions(false);
     setSelectedSuggestion(-1);
     handleSubmit();
   };
-
   const handleSubmit = () => {
     onSubmit?.();
     setShowSuggestions(false);
     setSelectedSuggestion(-1);
   };
-
   const handleClearSearch = () => {
     onChange('');
     setShowSuggestions(false);
     setSelectedSuggestion(-1);
     inputRef.current?.focus();
   };
-
-  return (
-    <div className={`search-bar ${className}`}>
+  return ()
+    <div className={`search-bar ${className}`}>}
       <div className="search-input-container">
         <div className="search-icon">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -126,7 +114,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             />
           </svg>
         </div>
-
         <input
           ref={inputRef}
           type="text"
@@ -139,8 +126,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           aria-label="Search templates"
           autoComplete="off"
         />
-
-        {value && (
+        {value && ()
           <button
             onClick={handleClearSearch}
             className="clear-button"
@@ -158,13 +144,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             </svg>
           </button>
         )}
-
-        {loading && (
+        {loading && ()
           <div className="search-loading">
             <div className="spinner"></div>
           </div>
         )}
-
         <button
           onClick={handleSubmit}
           className="search-submit"
@@ -174,11 +158,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           Search
         </button>
       </div>
-
       {/* Search Suggestions */}
-      {showSuggestions && suggestions.length > 0 && (
+      {showSuggestions && suggestions.length > 0 && ()
         <div ref={suggestionsRef} className="search-suggestions">
-          {suggestions.map((suggestion, index) => (
+          {suggestions.map((suggestion, index) => ()
             <button
               key={suggestion}
               onClick={() => handleSuggestionSelect(suggestion)}

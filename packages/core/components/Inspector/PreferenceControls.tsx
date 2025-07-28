@@ -57,7 +57,7 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = ()
     clearNodePreferences();
   };
   if (compact) {
-    return ()
+    return ();
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -94,7 +94,7 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = ()
       </div>
     );
   }
-  return ()
+  return ();
     <div style={{ marginBottom: 16 }}>
       <div style={{
         background: '#1a202c',
@@ -273,7 +273,7 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = ()
           alignItems: 'center',
           marginTop: 12,
           paddingTop: 8,
-          borderTop: '1px solid #4a5568'
+          borderTop: '1px solid #4a5568',
         }}>
           <div style={{ fontSize: 10, color: '#6b7280' }}>
             {Object.keys(nodePreferences).length} custom node preferences
@@ -289,7 +289,7 @@ const PreferenceControls: React.FC<PreferenceControlsProps> = ()
               border: 'none',
               borderRadius: 3,
               cursor: Object.keys(nodePreferences).length > 0 ? 'pointer' : 'not-allowed',
-              opacity: Object.keys(nodePreferences).length > 0 ? 1 : 0.5
+              opacity: Object.keys(nodePreferences).length > 0 ? 1 : 0.5,
             }}
           >
             Reset All

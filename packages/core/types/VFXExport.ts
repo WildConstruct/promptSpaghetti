@@ -414,14 +414,14 @@ export interface VFXValidationResult {
 
 // === EXPORT FUNCTIONS INTERFACE ===
 export interface VFXExporter {
-  exportGraph()
+  exportGraph();
     graph: any, 
     options: VFXExportOptions,
   ): Promise<VFXExportFormat>;
-  validateExport()
+  validateExport();
     exportData: VFXExportFormat,
   ): VFXValidationResult;
-  generateDocumentation()
+  generateDocumentation();
     exportData: VFXExportFormat,
   ): string;
 }
@@ -910,7 +910,7 @@ export interface VFXZadaVariant {
     context: 'pre-production' | 'production' | 'post-production' | 'presentation' | 'documentation';
   };
   equivalence: {,
-    marsMapping: {                    // Which MARS sections this variant represents
+    marsMapping: {                    // Which MARS sections this variant represents,
       metadata: boolean;
       actions: boolean;
       rendering: boolean;
@@ -945,7 +945,7 @@ export interface VFXHollywoodProtocol {
   // Creative variation seeds
   creative: {,
     directorVariant: number;          // Director's preferred variant
-    alternativeVersions: {            // Alternative creative versions
+    alternativeVersions: {            // Alternative creative versions,
       [versionName: string]: {
         seed: number;
         description: string;
@@ -964,7 +964,7 @@ export interface VFXHollywoodProtocol {
   reproducibility: {    ,
     guaranteeLevel: 'exact' | 'approximate' | 'creative-equivalent' | 'concept-only';
     environmentHash: string;          // Hash of rendering environment
-    softwareVersions: {              // Critical software versions
+    softwareVersions: {              // Critical software versions,
       [software: string]: string;
     };
     hardwareFingerprint: string;     // Hardware configuration hash

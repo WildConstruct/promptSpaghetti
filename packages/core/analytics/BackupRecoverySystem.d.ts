@@ -128,7 +128,7 @@ export declare class BackupRecoverySystem {
     /**
      * Create backup of analytics data
      */
-    createBackup()
+    createBackup();
       backupName: string,
       filter?: EventFilter,
       config?: Partial<BackupConfig>,

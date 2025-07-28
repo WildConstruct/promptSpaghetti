@@ -459,7 +459,7 @@ describe('Attribution Models', () => {
     };
     const event = manager.createEnhancedEvent(baseEvent, touchpoints, privacyConsent);
     // Should have position-based attribution among assisted models
-    const positionBasedModel = event.attributionData.assistedAttribution.find(;)
+    const positionBasedModel = event.attributionData.assistedAttribution.find(;);
       model => model.name === 'position_based'
     );
     expect(positionBasedModel).toBeDefined();

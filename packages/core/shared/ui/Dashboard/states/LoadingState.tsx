@@ -29,7 +29,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({)
     large: { spinner: 32, fontSize: '18px', padding: '32px' }
   };
   const config = sizeConfig[size];
-  const content = (;)
+  const content = (;);
     <div 
       className={`loading-state ${overlay ? 'overlay' : ''} ${className}`}
       style={{ padding: config.padding }}

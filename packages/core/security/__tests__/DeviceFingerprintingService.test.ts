@@ -230,7 +230,7 @@ describe('DeviceFingerprintingService', () => {
         userAgent: 'Mozilla/5.0 (compatible; HeadlessChrome/91.0.4472.101)',
         headers: {},
         clientData: {,
-          plugins: [] // No plugins indicates possible automation
+          plugins: [] // No plugins indicates possible automation,
         }
       };
       const fingerprint = await service.generateFingerprint(context);
@@ -416,7 +416,7 @@ describe('DeviceFingerprintingService', () => {
         userAgent: `Mozilla/5.0 (Test Browser ${i})`,}
         headers: {}
       }));
-      const promises = contexts.map(context => ;)
+      const promises = contexts.map(context => ;);
         service.generateFingerprint(context)
       );
       const fingerprints = await Promise.all(promises);

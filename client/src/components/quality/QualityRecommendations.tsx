@@ -6,7 +6,6 @@
  * 
  * Task: E18-1753114562561-695DBB - Create quality dashboards
  */
-
 import React, { useState } from 'react';
 import {
   Card,
@@ -45,7 +44,7 @@ export interface QualityRecommendationsProps {
   className?: string;
 }
 
-export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
+export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({)
   recommendations,
   onRecommendationAction,
   compact = false,
@@ -56,7 +55,6 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
   const [statusFilter, setStatusFilter] = useState<'all' | 'new' | 'acknowledged' | 'in_progress' | 'completed' | 'dismissed'>('all');
   const [sortBy, setSortBy] = useState<'priority' | 'impact' | 'effort' | 'createdAt'>('priority');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-
   // Helper function to get priority color
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -72,7 +70,6 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
       return 'outline';
     }
   };
-
   // Helper function to get priority icon
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
@@ -88,7 +85,6 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
       return <Lightbulb className="w-4 h-4 text-gray-600" />;
     }
   };
-
   // Helper function to get status icon
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -106,7 +102,6 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
       return <PauseCircle className="w-4 h-4 text-gray-500" />;
     }
   };
-
   // Helper function to get category icon
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -126,7 +121,6 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
       return '💡';
     }
   };
-
   // Helper function to get impact/effort indicator
   const getEffortColor = (effort: string) => {
     switch (effort) {
@@ -140,19 +134,16 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
       return 'bg-gray-500';
     }
   };
-
   // Filter recommendations
-  const filteredRecommendations = recommendations.filter(rec => {
+  const filteredRecommendations = recommendations.filter(rec => {)
     const categoryMatch = categoryFilter === 'all' || rec.category === categoryFilter;
     const priorityMatch = priorityFilter === 'all' || rec.priority === priorityFilter;
     const statusMatch = statusFilter === 'all' || rec.status === statusFilter;
     return categoryMatch && priorityMatch && statusMatch;
   });
-
   // Sort recommendations
   const sortedRecommendations = [...filteredRecommendations].sort((a, b) => {
     let comparison = 0;
-    
     switch (sortBy) {
     case 'priority': {
       const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
@@ -178,28 +169,24 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
     default:
       comparison = 0;
     }
-    
     return sortOrder === 'asc' ? comparison : -comparison;
   });
-
   // Handle recommendation actions
-  const handleRecommendationAction = (
+  const handleRecommendationAction = (;)
     recommendationId: string,
-    action: 'acknowledge' | 'start' | 'complete' | 'dismiss'
+    action: 'acknowledge' | 'start' | 'complete' | 'dismiss',
   ) => {
     if (onRecommendationAction) {
       onRecommendationAction(recommendationId, action);
     }
   };
-
   // Toggle sort order
   const toggleSort = () => {
     setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
   };
-
   if (compact) {
-    return (
-      <div className={`quality-recommendations-compact ${className}`}>
+    return ()
+      <div className={`quality-recommendations-compact ${className}`}>}
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center justify-between">
@@ -211,7 +198,7 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
           </CardHeader>
           <CardContent>
             <div className="space-y-3 max-h-64 overflow-y-auto">
-              {sortedRecommendations.slice(0, 3).map((rec) => (
+              {sortedRecommendations.slice(0, 3).map((rec) => ()
                 <div key={rec.id} className="p-3 bg-gray-50 rounded-md">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center space-x-2">
@@ -229,7 +216,6 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
                       {rec.priority}
                     </Badge>
                   </div>
-                  
                   <div className="flex items-center justify-between text-xs text-gray-500">
                     <div className="flex space-x-2">
                       <span>Impact: {rec.impact}</span>
@@ -240,15 +226,13 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
                   </div>
                 </div>
               ))}
-              
-              {sortedRecommendations.length === 0 && (
+              {sortedRecommendations.length === 0 && ()
                 <div className="text-center py-4 text-gray-500">
                   <CheckCircle className="w-8 h-8 mx-auto mb-2 text-green-500" />
                   <p className="text-sm">No recommendations</p>
                 </div>
               )}
-              
-              {sortedRecommendations.length > 3 && (
+              {sortedRecommendations.length > 3 && ()
                 <div className="text-center pt-2">
                   <p className="text-xs text-gray-500">
                     and {sortedRecommendations.length - 3} more recommendations...
@@ -261,9 +245,8 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`quality-recommendations ${className}`}>
+  return ()
+    <div className={`quality-recommendations ${className}`}>}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -275,7 +258,6 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
               {filteredRecommendations.length} of {recommendations.length} recommendations
             </Badge>
           </div>
-
           {/* Filters and Controls */}
           <div className="flex items-center space-x-4 pt-4">
             {/* Category Filter */}
@@ -294,7 +276,6 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
                 <SelectItem value="buildHealth">Build Health</SelectItem>
               </SelectContent>
             </Select>
-
             {/* Priority Filter */}
             <Select value={priorityFilter} onValueChange={setPriorityFilter}>
               <SelectTrigger className="w-32">
@@ -308,7 +289,6 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
                 <SelectItem value="low">Low</SelectItem>
               </SelectContent>
             </Select>
-
             {/* Status Filter */}
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-32">
@@ -323,7 +303,6 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
                 <SelectItem value="dismissed">Dismissed</SelectItem>
               </SelectContent>
             </Select>
-
             {/* Sort Controls */}
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-32">
@@ -336,16 +315,14 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
                 <SelectItem value="createdAt">Created</SelectItem>
               </SelectContent>
             </Select>
-
             <Button variant="outline" size="sm" onClick={toggleSort}>
               <ArrowUpDown className="w-4 h-4" />
             </Button>
           </div>
         </CardHeader>
-
         <CardContent>
           <div className="space-y-6 max-h-96 overflow-y-auto">
-            {sortedRecommendations.map((rec) => (
+            {sortedRecommendations.map((rec) => ()
               <div key={rec.id} className="border border-gray-200 rounded-lg p-6">
                 {/* Recommendation Header */}
                 <div className="flex items-start justify-between mb-4">
@@ -376,7 +353,6 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
                       </div>
                     </div>
                   </div>
-
                   <div className="flex items-center space-x-2">
                     {getStatusIcon(rec.status)}
                     <span className="text-sm text-gray-500 capitalize">
@@ -384,9 +360,8 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
                     </span>
                   </div>
                 </div>
-
                 {/* Expected Improvement */}
-                {rec.expectedImprovement && (
+                {rec.expectedImprovement && ()
                   <div className="mb-4 p-4 bg-blue-50 rounded-lg">
                     <h5 className="font-medium text-blue-900 mb-2">Expected Improvement</h5>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
@@ -415,55 +390,53 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
                     </div>
                   </div>
                 )}
-
                 {/* Action Items */}
-                {rec.actions && rec.actions.length > 0 && (
+                {rec.actions && rec.actions.length > 0 && ()
                   <div className="mb-4">
                     <h5 className="font-medium text-gray-900 mb-2">Action Items</h5>
                     <div className="space-y-2">
-                      {rec.actions.map((action, index) => (
+                      {rec.actions.map((action, index) => ()
                         <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
                           <div className="flex-1">
                             <p className="text-sm text-gray-900">{action.description}</p>
                             <div className="flex items-center space-x-4 text-xs text-gray-600 mt-1">
                               <span>Type: {action.type.replace('_', ' ')}</span>
                               <span>Effort: {action.effort}</span>
-                              {action.automated && (
+                              {action.automated && ()
                                 <Badge variant="outline" size="sm">Automated</Badge>
                               )}
                             </div>
                           </div>
-                          <div className={`w-2 h-2 rounded-full ${getEffortColor(action.effort)}`}></div>
+                          <div className={`w-2 h-2 rounded-full ${getEffortColor(action.effort)}`}></div>}
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
-
                 {/* Related Files/Components */}
-                {(rec.relatedFiles?.length > 0 || rec.relatedComponents?.length > 0) && (
+                {(rec.relatedFiles?.length > 0 || rec.relatedComponents?.length > 0) && ()
                   <div className="mb-4 text-sm">
-                    {rec.relatedFiles?.length > 0 && (
+                    {rec.relatedFiles?.length > 0 && ()
                       <div className="mb-2">
                         <span className="font-medium text-gray-700">Related Files:</span>
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {rec.relatedFiles.slice(0, 3).map((file, index) => (
+                          {rec.relatedFiles.slice(0, 3).map((file, index) => ()
                             <Badge key={index} variant="outline" size="sm">{file}</Badge>
                           ))}
-                          {rec.relatedFiles.length > 3 && (
+                          {rec.relatedFiles.length > 3 && ()
                             <Badge variant="outline" size="sm">+{rec.relatedFiles.length - 3} more</Badge>
                           )}
                         </div>
                       </div>
                     )}
-                    {rec.relatedComponents?.length > 0 && (
+                    {rec.relatedComponents?.length > 0 && ()
                       <div>
                         <span className="font-medium text-gray-700">Related Components:</span>
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {rec.relatedComponents.slice(0, 3).map((component, index) => (
+                          {rec.relatedComponents.slice(0, 3).map((component, index) => ()
                             <Badge key={index} variant="outline" size="sm">{component}</Badge>
                           ))}
-                          {rec.relatedComponents.length > 3 && (
+                          {rec.relatedComponents.length > 3 && ()
                             <Badge variant="outline" size="sm">+{rec.relatedComponents.length - 3} more</Badge>
                           )}
                         </div>
@@ -471,17 +444,15 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
                     )}
                   </div>
                 )}
-
                 {/* Actions */}
                 <div className="flex items-center justify-between">
                   <div className="text-xs text-gray-500">
                     Created: {rec.createdAt.toLocaleDateString()}
-                    {rec.updatedAt && rec.updatedAt.getTime() !== rec.createdAt.getTime() && (
+                    {rec.updatedAt && rec.updatedAt.getTime() !== rec.createdAt.getTime() && ()
                       <span> • Updated: {rec.updatedAt.toLocaleDateString()}</span>
                     )}
                   </div>
-
-                  {rec.status === 'new' && (
+                  {rec.status === 'new' && ()
                     <div className="flex space-x-2">
                       <Button
                         size="sm"
@@ -505,8 +476,7 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
                       </Button>
                     </div>
                   )}
-
-                  {rec.status === 'acknowledged' && (
+                  {rec.status === 'acknowledged' && ()
                     <div className="flex space-x-2">
                       <Button
                         size="sm"
@@ -523,8 +493,7 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
                       </Button>
                     </div>
                   )}
-
-                  {rec.status === 'in_progress' && (
+                  {rec.status === 'in_progress' && ()
                     <div className="flex space-x-2">
                       <Button
                         size="sm"
@@ -537,8 +506,7 @@ export const QualityRecommendations: React.FC<QualityRecommendationsProps> = ({
                 </div>
               </div>
             ))}
-
-            {sortedRecommendations.length === 0 && (
+            {sortedRecommendations.length === 0 && ()
               <div className="text-center py-12">
                 <CheckCircle className="w-16 h-16 mx-auto mb-4 text-green-500" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">

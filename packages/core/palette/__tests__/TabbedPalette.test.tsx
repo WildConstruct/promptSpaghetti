@@ -26,7 +26,7 @@ jest.mock('react-icons/fi', () => ({)
   FiZap: () => <div data-testid="zap-icon">Zap</div>,
   FiCpu: () => <div data-testid="cpu-icon">CPU</div>,
   FiCode: () => <div data-testid="code-icon">Code</div>,
-  FiFolder: () => <div data-testid="folder-icon">Folder</div>
+  FiFolder: () => <div data-testid="folder-icon">Folder</div>,
 }));
 
 // Mock nodes for testing
@@ -43,28 +43,28 @@ const mockNodes: NodeMeta[] = [
     label: 'Random Selection',
     icon: '🎲',
     category: 'flow',
-    tooltip: 'Choose randomly from multiple options with different likelihood'
+    tooltip: 'Choose randomly from multiple options with different likelihood',
   },
   {
     id: 'Conditional',
     label: 'If/Then',
     icon: '🔀',
     category: 'advanced',
-    tooltip: 'Choose different creative paths based on conditions'
+    tooltip: 'Choose different creative paths based on conditions',
   },
   {
     id: 'Output',
     label: 'Result',
     icon: '📝',
     category: 'output',
-    tooltip: 'Final generated content ready for use'
+    tooltip: 'Final generated content ready for use',
   },
   {
     id: 'SetVariable',
     label: 'Store Value',
     icon: '💾',
     category: 'memory',
-    tooltip: 'Save a value to use later in your workflow'
+    tooltip: 'Save a value to use later in your workflow',
   }
 ];
 

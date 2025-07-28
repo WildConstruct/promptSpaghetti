@@ -81,7 +81,7 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({)
     (selectedWorkspace.role_permissions & (1 << 2)) !== 0; // WORKSPACE_ADMIN
   const canInviteUsers = selectedWorkspace?.role_permissions && ;
     (selectedWorkspace.role_permissions & (1 << 15)) !== 0; // USER_INVITE
-  return ()
+  return ();
     <div className="workspace-manager">
       <div className="workspace-manager__header">
         <h2>Workspaces</h2>

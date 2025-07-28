@@ -128,7 +128,7 @@ export class SynchronizationRecovery extends EventEmitter {
   async startRecovery()
     documentId: string, 
     localState: DocumentState, 
-    serverStateProvider: () => Promise<DocumentState>
+    serverStateProvider: () => Promise<DocumentState>,
   ): Promise<SyncDelta> {
     console.log(`Starting synchronization recovery for document ${documentId}`);}
     if (this.currentRecovery) {
@@ -213,7 +213,7 @@ export class SynchronizationRecovery extends EventEmitter {
       return delta;
     }
     // Get operations between versions
-    const missingOperations = serverState.operations.filter(;)
+    const missingOperations = serverState.operations.filter(;);
       op => op.version > localState.version && op.version <= serverState.version
     );
     // Sort operations by version and timestamp
@@ -351,7 +351,7 @@ export class SynchronizationRecovery extends EventEmitter {
         resolvedOperation = {
           ...conflict.operation1,
           data: resolution.result,
-          id: uuidv4() // New ID for resolved operation
+          id: uuidv4() // New ID for resolved operation,
         };
         break;
       default:
@@ -375,7 +375,7 @@ export class SynchronizationRecovery extends EventEmitter {
       console.error(`Failed to resolve conflict ${conflictId}:`, error);}
       this.emit('conflict_resolution_failed', {)
         conflictId,
-        error: error as Error
+        error: error as Error,
       });
       return false;
     }
@@ -511,7 +511,7 @@ export class SynchronizationRecovery extends EventEmitter {
         throw new Error('Invalid operation data');
       }
       // Check for conflicts (simplified)
-      const existingOp = state.operations.find(;)
+      const existingOp = state.operations.find(;);
         op => op.targetId === operation.targetId && 
               op.target === operation.target &&
               Math.abs(op.timestamp - operation.timestamp) < 1000 // 1 second window
@@ -635,7 +635,7 @@ export class SynchronizationRecovery extends EventEmitter {
     // Simple hash for demo - would use crypto.subtle in production
     const str = JSON.stringify({)
       version: state.version,
-      operations: state.operations.map(op => ({ )
+      operations: state.operations.map(op => ({ ),
         id: op.id, 
         type: op.type, 
         targetId: op.targetId, 

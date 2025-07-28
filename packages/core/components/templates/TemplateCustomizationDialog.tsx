@@ -93,7 +93,7 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
     }
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
         {/* Header */}
@@ -225,7 +225,7 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
   const renderInput = () => {
     switch (variable.type) {
     case 'text':
-      return ()
+      return ();
         <input
           type="text"
           value={value || ''}
@@ -237,7 +237,7 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
         />
       );
     case 'textarea':
-      return ()
+      return ();
         <textarea
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
@@ -249,7 +249,7 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
         />
       );
     case 'number':
-      return ()
+      return ();
         <input
           type="number"
           value={value || ''}
@@ -263,7 +263,7 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
         />
       );
     case 'boolean':
-      return ()
+      return ();
         <label className="flex items-center">
           <input
             type="checkbox"
@@ -275,7 +275,7 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
         </label>
       );
     case 'select':
-      return ()
+      return ();
         <select
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
@@ -293,7 +293,7 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
       return null;
     }
   };
-  return ()
+  return ();
     <div className="space-y-2">
       <label className="block text-sm font-medium text-gray-700">
         {variable.label}
@@ -318,7 +318,7 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
   const renderInput = () => {
     switch (point.ui_component) {
     case 'input':
-      return ()
+      return ();
         <input
           type="text"
           value={value || ''}
@@ -328,7 +328,7 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
         />
       );
     case 'select':
-      return ()
+      return ();
         <select
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
@@ -339,7 +339,7 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
         </select>
       );
     case 'color_picker':
-      return ()
+      return ();
         <div className="flex items-center space-x-2">
           <input
             type="color"
@@ -357,7 +357,7 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
         </div>
       );
     case 'slider':
-      return ()
+      return ();
         <div className="space-y-2">
           <input
             type="range"
@@ -371,7 +371,7 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
         </div>
       );
     case 'toggle':
-      return ()
+      return ();
         <label className="flex items-center">
           <input
             type="checkbox"
@@ -386,7 +386,7 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
       return null;
     }
   };
-  return ()
+  return ();
     <div className="space-y-2">
       <label className="block text-sm font-medium text-gray-700">
         {point.name}

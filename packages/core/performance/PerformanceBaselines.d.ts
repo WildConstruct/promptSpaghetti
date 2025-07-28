@@ -447,7 +447,7 @@ export declare class PerformanceBaselineManager {
     /**
      * Add a measurement to a baseline
      */
-    addMeasurement()
+    addMeasurement();
       baselineId: string,
       measurement: Omit<PerformanceMeasurement,
       'id' | 'timestamp' | 'environment'>

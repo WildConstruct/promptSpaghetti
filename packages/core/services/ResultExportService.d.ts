@@ -57,7 +57,7 @@ export declare class ResultExportService {
     /**
      * Export a single preview result in the specified format
      */
-    exportIndividualResult()
+    exportIndividualResult();
       result: PreviewResultWithPath,
       resultIndex: number,
       totalResults: number,
@@ -67,7 +67,7 @@ export declare class ResultExportService {
     /**
      * Export multiple selected results as a batch
      */
-    exportBatchResults()
+    exportBatchResults();
       results: PreviewResultWithPath[],
       selectedIndices: number[],
       options: ResultExportOptions,
@@ -76,7 +76,7 @@ export declare class ResultExportService {
     /**
      * Export all results with comparison analysis
      */
-    exportComparison()
+    exportComparison();
       results: PreviewResultWithPath[],
       options: ResultExportOptions,
       sourceGraph?: any

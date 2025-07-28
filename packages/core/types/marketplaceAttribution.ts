@@ -95,7 +95,7 @@ export const TemplateAttributionSchema = z.object({)
     collaboratorShares: z.record(z.number().min(0).max(100)),
     originalCreatorShare: z.number().min(0).max(100).optional(),
     platformFee: z.number().min(0).max(100),
-    totalPercentage: z.number().min(99.99).max(100.01) // Allow for rounding
+    totalPercentage: z.number().min(99.99).max(100.01) // Allow for rounding,
   }),
   // Verification and claims
   attributionClaims: z.array(z.object({),
@@ -409,7 +409,7 @@ export const MARKETPLACE_RESOURCE_TYPE_DESCRIPTIONS = {
   template_collection: 'Template collection',
   creator_profile: 'Creator profile',
   revenue_record: 'Revenue record',
-  attribution_claim: 'Attribution claim'
+  attribution_claim: 'Attribution claim',
 } as const;
 
 export const MARKETPLACE_CHANGE_TYPE_DESCRIPTIONS = {
@@ -422,7 +422,7 @@ export const MARKETPLACE_CHANGE_TYPE_DESCRIPTIONS = {
   collaboration_joined: 'Collaboration joined',
   template_derived: 'Template derived',
   collection_add: 'Added to collection',
-  creator_verified: 'Creator verified'
+  creator_verified: 'Creator verified',
 } as const;
 
 export const MARKETPLACE_ATTRIBUTION_DEFAULTS = {

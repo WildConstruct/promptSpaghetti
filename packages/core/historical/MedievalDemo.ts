@@ -119,7 +119,6 @@ export class MedievalDemoDatabase {
     outfit: (MedievalClothing | UTDGNode)[];
     description: string;
     historical_notes: string[];
-  } {
     const outfit: (MedievalClothing | UTDGNode)[] = [];
     const historical_notes: string[] = [];
     // Base layer
@@ -140,7 +139,7 @@ export class MedievalDemoDatabase {
       era: criteria.era,
       social_class: criteria.social_class,
       gender: criteria.gender,
-      ceremonial: criteria.occasion === 'ceremonial'
+      ceremonial: criteria.occasion === 'ceremonial',
     }).filter(item => )
       item.medieval_specific.garment_type === 'tunic' || 
       item.medieval_specific.garment_type === 'gown'
@@ -452,7 +451,7 @@ export const MEDIEVAL_DEMO_CONSTRAINTS = [
     ],
     enforcement: 'strict' as const,
     message: 'Clothing items should match medieval period accuracy',
-    historical_basis: 'Medieval clothing was highly regulated by sumptuary laws and social class distinctions'
+    historical_basis: 'Medieval clothing was highly regulated by sumptuary laws and social class distinctions',
   },
   {
     id: 'medieval-material-availability',
@@ -462,7 +461,7 @@ export const MEDIEVAL_DEMO_CONSTRAINTS = [
     ],
     enforcement: 'warning' as const,
     message: 'Some materials may have been rare or unavailable in medieval Europe',
-    historical_basis: 'Trade routes and material availability varied significantly in medieval times'
+    historical_basis: 'Trade routes and material availability varied significantly in medieval times',
   },
   {
     id: 'social-class-restrictions',
@@ -473,7 +472,7 @@ export const MEDIEVAL_DEMO_CONSTRAINTS = [
     social_classes: ['peasant', 'artisan', 'merchant', 'noble'] as const,
     enforcement: 'suggestion' as const,
     message: 'Consider social class appropriateness for clothing and accessories',
-    historical_basis: 'Medieval society had strict hierarchies reflected in clothing and possessions'
+    historical_basis: 'Medieval society had strict hierarchies reflected in clothing and possessions',
   }
 ];
 

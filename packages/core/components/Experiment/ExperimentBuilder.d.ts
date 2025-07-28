@@ -7,7 +7,7 @@ import { Experiment, ExperimentVariant } from '../../types/experiment';
 export interface ExperimentBuilderProps {
     experiment?: Experiment;
     onSave: (experiment: Partial<Experiment>) => Promise<void>;
-    onPreview: (variant: ExperimentVariant) => Promise<{
+    onPreview: (variant: ExperimentVariant) => Promise<{,
         cost: number;
         tokens: number;
         latency: number;

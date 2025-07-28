@@ -168,14 +168,14 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
     return { passed: passedRequired, total: requiredCriteria.length };
   };
   if (loading) {
-    return ()
+    return ();
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <XCircleIcon className="h-5 w-5 text-red-400" />
@@ -187,7 +187,7 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
       </div>
     );
   }
-  return ()
+  return ();
     <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg">
       {/* Header */}
       <div className="border-b border-gray-200 p-6">

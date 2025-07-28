@@ -503,7 +503,7 @@ export const [error, setError] = useState<string | null>(null);
       };
       const result = await analyticsInfrastructure.executeQuery(query);
       if (result.success && result.data) {
-        const analysisData = await processAttributionData(;)
+        const analysisData = await processAttributionData(;);
           result.data,
           attributionConfig,
           channels
@@ -526,7 +526,7 @@ export const [error, setError] = useState<string | null>(null);
     }
   }, [funnelDefinition, analyticsInfrastructure, timeRange, segments, cohorts, attributionConfig, channels, onInsightGenerated]);
   // Process attribution data
-  const processAttributionData = async (;)
+  const processAttributionData = async (;);
     rawData: unknown,
     config: AttributionConfiguration,
     channelList: MarketingChannel[],
@@ -548,7 +548,7 @@ export const [error, setError] = useState<string | null>(null);
     };
   };
   // Generate channel attribution data
-  const generateChannelAttributionData = (;)
+  const generateChannelAttributionData = (;);
     channelList: MarketingChannel[],
     models: AttributionModel[],
   ): ChannelAttributionData[] => {
@@ -562,7 +562,7 @@ export const [error, setError] = useState<string | null>(null);
           attributedRevenue: Math.floor(Math.random() * 50000 + 10000),
           attributionWeight: Math.random() * 0.8 + 0.2,
           confidence: Math.random() * 0.3 + 0.7,
-          incrementality: Math.random() * 0.4 + 0.6
+          incrementality: Math.random() * 0.4 + 0.6,
         };
         return acc;
       }, {} as Record<AttributionModel, ChannelAttribution>),
@@ -573,7 +573,7 @@ export const [error, setError] = useState<string | null>(null);
         bounceRate: Math.random() * 0.4 + 0.3,
         averageSessionDuration: Math.floor(Math.random() * 300 + 60),
         pagesPerSession: Math.random() * 3 + 1,
-        goalCompletions: Math.floor(Math.random() * 500 + 50)
+        goalCompletions: Math.floor(Math.random() * 500 + 50),
       },
       touchpointMetrics: {,
         totalTouchpoints: Math.floor(Math.random() * 10000 + 2000),
@@ -582,7 +582,7 @@ export const [error, setError] = useState<string | null>(null);
         firstTouchPercent: Math.random() * 30 + 10,
         lastTouchPercent: Math.random() * 25 + 10,
         middleTouchPercent: Math.random() * 45 + 20,
-        assistedConversions: Math.floor(Math.random() * 300 + 50)
+        assistedConversions: Math.floor(Math.random() * 300 + 50),
       },
       conversionContribution: {,
         directConversions: Math.floor(Math.random() * 200 + 50),
@@ -590,7 +590,7 @@ export const [error, setError] = useState<string | null>(null);
         totalConversions: 0, // Will be calculated
         conversionRate: Math.random() * 0.05 + 0.01,
         averageTimeToConversion: Math.floor(Math.random() * 10 + 1),
-        conversionValue: Math.floor(Math.random() * 5000 + 1000)
+        conversionValue: Math.floor(Math.random() * 5000 + 1000),
       },
       journeyRole: {,
         primaryRole: (),
@@ -603,7 +603,7 @@ export const [error, setError] = useState<string | null>(null);
           discovery: Math.random() * 0.4,
           consideration: Math.random() * 0.3,
           conversion: Math.random() * 0.2,
-          retention: Math.random() * 0.1
+          retention: Math.random() * 0.1,
         },
         synergisticChannels: [],
         competingChannels: [],
@@ -614,7 +614,7 @@ export const [error, setError] = useState<string | null>(null);
         costPerClick: Math.random() * 5 + 0.5,
         costPerAcquisition: Math.floor(Math.random() * 150 + 30),
         lifetimeValue: Math.floor(Math.random() * 2000 + 500),
-        efficiencyScore: Math.random() * 0.4 + 0.6
+        efficiencyScore: Math.random() * 0.4 + 0.6,
       }
     }));
   };
@@ -652,7 +652,7 @@ export const [error, setError] = useState<string | null>(null);
             precision: Math.random() * 0.2 + 0.75,
             recall: Math.random() * 0.25 + 0.7,
             f1Score: Math.random() * 0.2 + 0.75,
-            incrementalityScore: Math.random() * 0.3 + 0.6
+            incrementalityScore: Math.random() * 0.3 + 0.6,
           },
           recommendations: [],
         });
@@ -757,7 +757,7 @@ export const [error, setError] = useState<string | null>(null);
         bottlenecks: [],
         opportunities: [],
         alternativePaths: [],
-        expectedImprovement: Math.random() * 0.2 + 0.1
+        expectedImprovement: Math.random() * 0.2 + 0.1,
       }
     }));
   };
@@ -766,13 +766,13 @@ export const [error, setError] = useState<string | null>(null);
     const periods = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
     return periods.map(period => ({)
       period,
-      channelTrends: channelList.map(channel => ({)
+      channelTrends: channelList.map(channel => ({),
         channelId: channel.id,
         channelName: channel.name,
         trendDirection: (['increasing', 'decreasing', 'stable'] as const)[Math.floor(Math.random() * 3)],
         trendStrength: Math.random(),
         attribution: Math.random() * 0.3 + 0.1,
-        confidence: Math.random() * 0.3 + 0.7
+        confidence: Math.random() * 0.3 + 0.7,
       })),
       modelStability: [],
       seasonalityFactors: [],
@@ -826,7 +826,7 @@ export const [error, setError] = useState<string | null>(null);
       conversionPaths: attributionData.conversionPaths,
       exportTimestamp: Date.now(),
       configuration: attributionConfig,
-      insights: attributionData.crossChannelInsights.map(insight => ({)
+      insights: attributionData.crossChannelInsights.map(insight => ({),
         type: 'cross_channel_effect' as AttributionInsightType,
         title: insight.description,
         description: insight.description,
@@ -834,12 +834,12 @@ export const [error, setError] = useState<string | null>(null);
         confidence: insight.confidence,
         affectedChannels: insight.channels,
         actionable: insight.actionable,
-        recommendations: insight.recommendations.map(rec => ({)
+        recommendations: insight.recommendations.map(rec => ({),
           action: rec,
           impact: 0.1,
           effort: 'medium' as const,
           timeline: '2 weeks',
-          resources: ['Marketing Team']
+          resources: ['Marketing Team'],
         })),
         data: {}
       }))
@@ -847,7 +847,7 @@ export const [error, setError] = useState<string | null>(null);
     onExport(exportData);
   }, [attributionData, attributionConfig, onExport]);
   if (loading) {
-    return ()
+    return ();
       <div className="funnel-attribution-analysis-loading">
         <div className="loading-spinner"></div>
         <p>Loading attribution analysis data...</p>
@@ -855,7 +855,7 @@ export const [error, setError] = useState<string | null>(null);
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className="funnel-attribution-analysis-error">
         <h3>Error Loading Attribution Analysis</h3>
         <p className="error-message">{error}</p>
@@ -868,7 +868,7 @@ export const [error, setError] = useState<string | null>(null);
   if (!attributionData) {
     return <div className="funnel-attribution-analysis-error">No data available</div>;
   }
-  return ()
+  return ();
     <div className="funnel-attribution-analysis">
       <div className="attribution-header">
         <div className="attribution-info">

@@ -343,7 +343,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
     this.intelligenceStore.set(intelligence.id, intelligence);
     // Cross-correlate with existing intelligence
     if (this.config.enableCrossCorrelation) {
-      const correlatedIntelligence = await this.correlationEngine.correlate(;)
+      const correlatedIntelligence = await this.correlationEngine.correlate(;);
         intelligence, 
         Array.from(this.intelligenceStore.values())
       );
@@ -399,7 +399,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       intelligence,
       alertLevel: intelligence.severity,
       message: this.generateAlertMessage(intelligence),
-      recipients: await this.getAlertRecipients(intelligence.severity)
+      recipients: await this.getAlertRecipients(intelligence.severity),
     };
     // Send to Epic 17 alerting system
     if (this.config.epic17Integration.enableRealTimeAlerts) {
@@ -439,7 +439,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       geolocation: securityEvent.geolocation,
       success: securityEvent.severity !== SecuritySeverity.CRITICAL,
       duration: securityEvent.metadata.duration as number,
-      dataVolumeBytes: securityEvent.metadata.dataVolumeBytes as number
+      dataVolumeBytes: securityEvent.metadata.dataVolumeBytes as number,
     };
   }
   private convertToSecurityEvent(behaviorEvent: UserBehaviorEvent): SecurityEvent | null {
@@ -499,7 +499,7 @@ export class MLSecurityAnalyticsFramework extends EventEmitter {
       parameters: action.parameters,
       priority: action.urgency === 'immediate' ? 10 : 5,
       estimatedEffectiveness: action.estimatedEffectiveness,
-      requiresApproval: action.urgency !== 'immediate'
+      requiresApproval: action.urgency !== 'immediate',
     }));
   }
   private async convertStringActions(actions: string[]): Promise<SecurityAction[]> {
@@ -613,7 +613,7 @@ class CorrelationEngine {
     existingIntelligence: SecurityIntelligence[],
   ): Promise<SecurityIntelligence | null> {
     // Simplified correlation logic
-    const recentIntelligence = existingIntelligence.filter(i => ;)
+    const recentIntelligence = existingIntelligence.filter(i => ;);
       (Date.now() - i.timestamp.getTime()) < 3600000 // Last hour
     );
     return recentIntelligence.length > 2 ? intelligence : null;

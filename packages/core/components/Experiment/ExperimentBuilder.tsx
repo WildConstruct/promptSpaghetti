@@ -65,7 +65,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
   className = ''
 }) => {
   const [state, setState] = useState<BuilderState>({)
-    experiment: experiment || {
+    experiment: experiment || {,
       name: '',
       type: 'prompt' as ExperimentType,
       hypothesis: '',
@@ -161,7 +161,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
    * Update variant
    */
   const updateVariant = useCallback((variantId: string, field: string, value: unknown) => {
-    const updatedVariants = state.experiment.variants?.map(variant => ;)
+    const updatedVariants = state.experiment.variants?.map(variant => ;);
       variant.id === variantId 
         ? { ...variant, [field]: value }
         : variant
@@ -215,7 +215,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
    * Update metric
    */
   const updateMetric = useCallback((metricId: string, field: string, value: unknown) => {
-    const updatedMetrics = state.experiment.metrics?.map(metric => ;)
+    const updatedMetrics = state.experiment.metrics?.map(metric => ;);
       metric.id === metricId 
         ? { ...metric, [field]: value }
         : metric
@@ -319,17 +319,17 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
       const baselineRate = 0.1; // 10% baseline assumption;
       const mde = primaryMetric.minimumDetectableEffect;
       // Basic formula for proportions
-      const sampleSize = Math.ceil(;)
+      const sampleSize = Math.ceil(;);
         2 * Math.pow(1.96 + 0.84, 2) * baselineRate * (1 - baselineRate) / Math.pow(mde, 2)
       );
       setState(prev => ({)
         ...prev,
         estimatedSampleSize: sampleSize,
-        estimatedDuration: Math.ceil(sampleSize / 100) // Assume 100 users/hour
+        estimatedDuration: Math.ceil(sampleSize / 100) // Assume 100 users/hour,
       }));
     }
   }, [state.experiment.metrics]);
-  return ()
+  return ();
     <div className={`experiment-builder ${className}`}>}
       {/* Header */}
       <div className="builder-header">
@@ -579,7 +579,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
               <div className="space-y-3">
                 {state.experiment.variants?.map((variant) => {
                   const percentage = state.experiment.trafficAllocation?.[variant.id] || 0;
-                  return ()
+                  return ();
                     <div key={variant.id} className="flex items-center space-x-3">
                       <div className="w-24 text-sm font-medium">{variant.name}:</div>
                       <Progress value={percentage} className="flex-1" />
@@ -708,7 +708,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
                     value={state.experiment.schedule?.startAt?.toISOString().slice(0, 16) || ''}
                     onChange={(e) => updateExperiment('schedule', {)
                       ...state.experiment.schedule,
-                      startAt: e.target.value ? new Date(e.target.value) : undefined
+                      startAt: e.target.value ? new Date(e.target.value) : undefined,
                     })}
                   />
                 </div>
@@ -719,7 +719,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
                     value={state.experiment.schedule?.endAt?.toISOString().slice(0, 16) || ''}
                     onChange={(e) => updateExperiment('schedule', {)
                       ...state.experiment.schedule,
-                      endAt: e.target.value ? new Date(e.target.value) : undefined
+                      endAt: e.target.value ? new Date(e.target.value) : undefined,
                     })}
                   />
                 </div>
@@ -747,7 +747,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
                       ...state.experiment.schedule,
                       autoStop: {,
                         ...state.experiment.schedule?.autoStop,
-                        minSampleSize: parseInt(e.target.value) || undefined
+                        minSampleSize: parseInt(e.target.value) || undefined,
                       }
                     })}
                     placeholder="1000"
@@ -767,7 +767,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
                       ...state.experiment.schedule,
                       autoStop: {,
                         ...state.experiment.schedule?.autoStop,
-                        maxPValue: parseFloat(e.target.value) || undefined
+                        maxPValue: parseFloat(e.target.value) || undefined,
                       }
                     })}
                     placeholder="0.05"

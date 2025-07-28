@@ -317,7 +317,7 @@ export class ResourceOptimizer {
       } catch (error) {
         failed.push({)
           strategy: strategy.name,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     }
@@ -505,7 +505,7 @@ export class ResourceOptimizer {
     const recentUsage = profile.utilizationHistory.slice(-1)[0];
     return {
       responseTime: Math.random() * 5000, // Would get actual metrics
-      resourceUsage: recentUsage ? recentUsage.usage : this.currentUsage
+      resourceUsage: recentUsage ? recentUsage.usage : this.currentUsage,
     };
   }
   private async isModelCold(modelId: string): Promise<boolean> {
@@ -571,12 +571,11 @@ export class ResourceOptimizer {
     cpuReduction: number;
     costSavings: number;
     responseTimeImprovement: number;
-  } {
     return strategies.reduce((impact, strategy) => ({)
       memoryReduction: impact.memoryReduction + (strategy.estimatedSavings.memory || 0),
       cpuReduction: impact.cpuReduction + (strategy.estimatedSavings.cpu || 0),
       costSavings: impact.costSavings + (strategy.estimatedSavings.cost || 0),
-      responseTimeImprovement: impact.responseTimeImprovement + (strategy.estimatedSavings.responseTime || 0)
+      responseTimeImprovement: impact.responseTimeImprovement + (strategy.estimatedSavings.responseTime || 0),
     }), {
       memoryReduction: 0,
       cpuReduction: 0,
@@ -599,12 +598,11 @@ export class ResourceOptimizer {
     cpuSaved: number;
     costSaved: number;
     responseTimeImproved: number;
-  } {
     return {
       memoryFreed: Math.max(0, before.memory.used - after.memory.used),
       cpuSaved: Math.max(0, before.cpu.usage - after.cpu.usage),
       costSaved: strategy.estimatedSavings.cost || 0,
-      responseTimeImproved: strategy.estimatedSavings.responseTime || 0
+      responseTimeImproved: strategy.estimatedSavings.responseTime || 0,
     };
   }
   destroy(): void {

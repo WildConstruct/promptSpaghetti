@@ -258,7 +258,7 @@ export class SessionConflictNotificationService extends EventEmitter {
   ): Promise<boolean> {
     try {
       const preferences = this.getUserPreferences(userId);
-      const notification = this.createEvictionNotification(;)
+      const notification = this.createEvictionNotification(;);
         sessionId,
         userId,
         reason,
@@ -270,7 +270,7 @@ export class SessionConflictNotificationService extends EventEmitter {
       this.emit('notificationError', { )
         userId, 
         sessionId, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+        error: error instanceof Error ? error.message : 'Unknown error' ,
       });
       return false;
     }
@@ -285,7 +285,7 @@ export class SessionConflictNotificationService extends EventEmitter {
   ): Promise<boolean> {
     try {
       const preferences = this.getUserPreferences(targetUserId);
-      const notification = this.createEmergencyOverrideNotification(;)
+      const notification = this.createEmergencyOverrideNotification(;);
         adminUserId,
         targetUserId,
         evictedSessions,
@@ -296,7 +296,7 @@ export class SessionConflictNotificationService extends EventEmitter {
       this.emit('notificationError', { )
         adminUserId, 
         targetUserId, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+        error: error instanceof Error ? error.message : 'Unknown error' ,
       });
       return false;
     }
@@ -307,7 +307,7 @@ export class SessionConflictNotificationService extends EventEmitter {
   public async promptUserChoice()
     conflict: SessionConflict,
     userId: string,
-    timeoutMinutes: number = 5
+    timeoutMinutes: number = 5,
   ): Promise<ConflictResolutionResponse | null> {
     try {
       const preferences = this.getUserPreferences(userId);
@@ -318,11 +318,11 @@ export class SessionConflictNotificationService extends EventEmitter {
           userId,
           resolution: preferences.conflictResolution.preferredResolution,
           confirmed: true,
-          timestamp: new Date()
+          timestamp: new Date(),
         };
       }
       // Create interactive notification
-      const notification = this.createChoicePromptNotification(;)
+      const notification = this.createChoicePromptNotification(;);
         conflict,
         userId,
         timeoutMinutes,
@@ -343,7 +343,7 @@ export class SessionConflictNotificationService extends EventEmitter {
       this.emit('notificationError', { )
         userId, 
         conflictId: conflict.id, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+        error: error instanceof Error ? error.message : 'Unknown error' ,
       });
       return null;
     }
@@ -379,7 +379,7 @@ export class SessionConflictNotificationService extends EventEmitter {
   ): Promise<boolean> {
     try {
       const preferences = this.getUserPreferences(userId);
-      const notification = this.createGracePeriodWarningNotification(;)
+      const notification = this.createGracePeriodWarningNotification(;);
         sessionId,
         userId,
         minutesRemaining,
@@ -390,7 +390,7 @@ export class SessionConflictNotificationService extends EventEmitter {
       this.emit('notificationError', { )
         userId, 
         sessionId, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+        error: error instanceof Error ? error.message : 'Unknown error' ,
       });
       return false;
     }
@@ -738,7 +738,7 @@ export class SessionConflictNotificationService extends EventEmitter {
         type: 'primary',
         action: 'extend_session',
         data: { sessionId },
-        timeout: gracePeriodMinutes * 60
+        timeout: gracePeriodMinutes * 60,
       });
     }
     actions.push({)
@@ -801,7 +801,7 @@ export class SessionConflictNotificationService extends EventEmitter {
       action: 'user_choice',
       data: { resolution: option, conflictId: conflict.id },
       requiresConfirmation: preferences.conflictResolution.requireConfirmation,
-      timeout: timeoutMinutes * 60
+      timeout: timeoutMinutes * 60,
     }));
     return {
       id: `choice_${conflict.id}_${Date.now()}`,}
@@ -925,7 +925,7 @@ export class SessionConflictNotificationService extends EventEmitter {
     if (!userLimit || now > userLimit.resetTime) {
       this.rateLimits.set(userId, {)
         count: 1,
-        resetTime: now + this.config.rateLimitWindow
+        resetTime: now + this.config.rateLimitWindow,
       });
     } else {
       userLimit.count++;
@@ -946,7 +946,7 @@ export class SessionConflictNotificationService extends EventEmitter {
           resolution,
           selectedSessionId: data?.sessionId,
           confirmed: true,
-          timestamp: new Date()
+          timestamp: new Date(),
         };
         this.handleConflictResponse(response);
       }

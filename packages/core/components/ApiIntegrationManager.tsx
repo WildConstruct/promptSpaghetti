@@ -243,7 +243,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
     'workflow_completed',
     'schedule_executed'
   ];
-  const renderApiKeysTab = () => (;)
+  const renderApiKeysTab = () => (;);
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">API Keys</h3>
@@ -329,7 +329,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
       )}
     </div>
   );
-  const renderWebhooksTab = () => (;)
+  const renderWebhooksTab = () => (;);
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Webhooks</h3>
@@ -394,7 +394,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
       )}
     </div>
   );
-  const renderUsageTab = () => (;)
+  const renderUsageTab = () => (;);
     <div className="space-y-6">
       <h3 className="text-lg font-semibold">Usage Statistics</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -451,7 +451,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
       </div>
     </div>
   );
-  const renderDocumentationTab = () => (;)
+  const renderDocumentationTab = () => (;);
     <div className="space-y-6">
       <h3 className="text-lg font-semibold">API Documentation</h3>
       <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -460,7 +460,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
           Include your API key in the Authorization header:
         </p>
         <code className="block bg-gray-100 p-3 rounded text-sm">
-          Authorization: Bearer YOUR_API_KEY
+          Authorization: Bearer YOUR_API_KEY,
         </code>
       </div>
       <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -479,7 +479,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
               {JSON.stringify({)
                 resource_id: 'resource_uuid',
                 to_state_id: 'state_uuid',
-                comment: 'Transition comment'
+                comment: 'Transition comment',
               }, null, 2)}
             </code>
           </div>
@@ -523,7 +523,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
     { id: 'usage', label: 'Usage', icon: ChartBarIcon },
     { id: 'documentation', label: 'Documentation', icon: GlobeAltIcon }
   ];
-  return ()
+  return ();
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
@@ -638,10 +638,10 @@ const CreateApiKeyModal: React.FC<{
     e.preventDefault();
     onSubmit({)
       ...formData,
-      expires_at: formData.expires_at ? new Date(formData.expires_at) : undefined
+      expires_at: formData.expires_at ? new Date(formData.expires_at) : undefined,
     });
   };
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">Create API Key</h3>
@@ -677,7 +677,7 @@ const CreateApiKeyModal: React.FC<{
                       } else {
                         setFormData(prev => ({)
                           ...prev,
-                          permissions: prev.permissions.filter(p => p !== permission)
+                          permissions: prev.permissions.filter(p => p !== permission),
                         }));
                       }
                     }}
@@ -740,13 +740,13 @@ const CreateWebhookModal: React.FC<{
   const [formData, setFormData] = useState({)
     name: '',
     url: '',
-    events: [] as string[]
+    events: [] as string[],
   });
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
   };
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">Create Webhook</h3>
@@ -794,7 +794,7 @@ const CreateWebhookModal: React.FC<{
                       } else {
                         setFormData(prev => ({)
                           ...prev,
-                          events: prev.events.filter(e => e !== event)
+                          events: prev.events.filter(e => e !== event),
                         }));
                       }
                     }}
@@ -830,7 +830,7 @@ const DeleteConfirmationModal: React.FC<{
   onConfirm: () => void;
   itemType: string;
 }> = ({ onClose, onConfirm, itemType }) => {
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">Delete {itemType}</h3>

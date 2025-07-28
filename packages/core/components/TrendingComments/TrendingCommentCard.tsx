@@ -74,7 +74,7 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({)
   const handleEngagementClick = (engagementType: string) => {
     onEngagement(comment.commentId, engagementType);
   };
-  return ()
+  return ();
     <div style={{
       backgroundColor: isReply ? '#fafbfc' : 'white',
       border: '1px solid #e5e7eb',
@@ -99,7 +99,7 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({)
           alignItems: 'center',
           gap: '4px',
           border: '1px solid',
-          borderColor: trendingBadge.text + '40'
+          borderColor: trendingBadge.text + '40',
         }}>
           <span>{trendingBadge.icon}</span>
           #{rank}
@@ -111,7 +111,7 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({)
         alignItems: 'center',
         gap: '12px',
         marginBottom: '12px',
-        marginTop: isReply ? '0' : '8px'
+        marginTop: isReply ? '0' : '8px',
       }}>
         {/* Author Avatar */}
         <div style={{
@@ -272,7 +272,7 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({)
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingTop: '8px',
-        borderTop: '1px solid #f3f4f6'
+        borderTop: '1px solid #f3f4f6',
       }}>
         {/* Engagement Buttons */}
         <div style={{
@@ -364,7 +364,7 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({)
             <span>Quality:</span>
             <span style={{
               fontWeight: '600',
-              color: comment.score.scores.qualityScore >= 80 ? '#059669' :
+              color: comment.score.scores.qualityScore >= 80 ? '#059669' :,
                 comment.score.scores.qualityScore >= 60 ? '#d97706' : '#dc2626'
             }}>
               {comment.score.scores.qualityScore.toFixed(0)}

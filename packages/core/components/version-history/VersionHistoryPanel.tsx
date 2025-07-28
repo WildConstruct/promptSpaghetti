@@ -90,7 +90,7 @@ export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({)
   const loadChangeEvents = async () => {
     const filter = {
       limit: 100,
-      author_id: authorFilter || undefined
+      author_id: authorFilter || undefined,
     };
     if (dateFilter !== 'all') {
       const days = dateFilter === 'week' ? 7 : dateFilter === 'month' ? 30 : 90;
@@ -192,7 +192,7 @@ export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({)
     }
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div className={`version-history-panel ${className} fixed right-0 top-0 h-full w-96 bg-white shadow-xl border-l border-gray-200 z-50 flex flex-col`}>}
       {/* Header */}
       <div className="p-4 border-b border-gray-200">
@@ -348,7 +348,7 @@ const SnapshotTimeline: React.FC<SnapshotTimelineProps> = ({)
   getSnapshotTypeIcon,
   getSnapshotTypeColor
 }) => {
-  return ()
+  return ();
     <div className="p-4">
       {snapshots.length === 0 ? ()
         <div className="text-center py-8 text-gray-500">
@@ -439,7 +439,7 @@ const BranchView: React.FC<BranchViewProps> = ({)
     default: return '🌿';
     }
   };
-  return ()
+  return ();
     <div className="p-4">
       <div className="space-y-3">
         {branches.map(branch => ()
@@ -522,7 +522,7 @@ const ChangeEventsList: React.FC<ChangeEventsListProps> = ({ events, formatTimeA
       return event_type.replace(/_/g, ' ');
     }
   };
-  return ()
+  return ();
     <div className="p-4">
       {events.length === 0 ? ()
         <div className="text-center py-8 text-gray-500">
@@ -584,7 +584,7 @@ const AnnotationsList: React.FC<AnnotationsListProps> = ({ annotations, formatTi
     default: return 'text-gray-600';
     }
   };
-  return ()
+  return ();
     <div className="p-4">
       {annotations.length === 0 ? ()
         <div className="text-center py-8 text-gray-500">

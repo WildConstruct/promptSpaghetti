@@ -36,7 +36,7 @@ export declare class WorkspaceDAO implements WorkspaceOperations {
     updateResource(id: ResourceId, data: Partial<Resource>): Promise<Resource>;
     deleteResource(id: ResourceId): Promise<void>;
     getResourcesByProject(projectId: ProjectId, type?: ResourceType): Promise<Resource[]>;
-    addWorkspaceMember()
+    addWorkspaceMember();
       workspaceId: WorkspaceId,
       userId: UserId,
       role: WorkspaceRole,
@@ -45,7 +45,7 @@ export declare class WorkspaceDAO implements WorkspaceOperations {
     removeWorkspaceMember(workspaceId: WorkspaceId, userId: UserId): Promise<void>;
     updateWorkspaceMemberRole(workspaceId: WorkspaceId, userId: UserId, role: WorkspaceRole): Promise<WorkspaceMember>;
     getWorkspaceMembers(workspaceId: WorkspaceId): Promise<WorkspaceMember[]>;
-    addProjectMember()
+    addProjectMember();
       projectId: ProjectId,
       userId: UserId,
       role: ProjectRole,

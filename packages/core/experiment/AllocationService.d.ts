@@ -29,7 +29,7 @@ export declare class AllocationService {
     private cache;
     private storage;
     private metrics;
-    constructor()
+    constructor();
       config: AllocationServiceConfig,
       cache: AllocationCache,
       storage: AssignmentStorage,
@@ -42,7 +42,7 @@ export declare class AllocationService {
     /**
      * Get assignments for multiple experiments
      */
-    bulkAssignUser()
+    bulkAssignUser();
       userId: string,
       experimentIds: string[],
       sessionId?: string,
@@ -51,7 +51,7 @@ export declare class AllocationService {
     /**
      * Force assign a user to a specific variant (for debugging/testing)
      */
-    forceAssignUser()
+    forceAssignUser();
       userId: string,
       experimentId: string,
       variantId: string,

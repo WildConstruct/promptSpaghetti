@@ -42,7 +42,7 @@ export const SystemHealthWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
     if (score >= 70) return 'Warning';
     return 'Critical';
   };
-  return ()
+  return ();
     <div className={`health-widget ${className}`} style={{}
       backgroundColor: '#FFFFFF',
       borderRadius: '8px',
@@ -99,7 +99,7 @@ export const SystemHealthWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '8px 0',
-            borderBottom: index < 3 ? '1px solid #f3f4f6' : 'none'
+            borderBottom: index < 3 ? '1px solid #f3f4f6' : 'none',
           }}>
             <span style={{ fontSize: '13px', color: '#374151' }}>{component.name}</span>
             <span style={{
@@ -130,7 +130,7 @@ export const ResourceUsageWidget: React.FC<MonitoringWidgetProps> = ({ data, cla
       if (value >= threshold.warning) return '#f59e0b';
       return '#10b981';
     };
-    return ()
+    return ();
       <div style={{ marginBottom: '16px' }}>
         <div style={{
           display: 'flex',
@@ -155,13 +155,13 @@ export const ResourceUsageWidget: React.FC<MonitoringWidgetProps> = ({ data, cla
             height: '100%',
             backgroundColor: getColor(),
             borderRadius: '3px',
-            transition: 'width 0.3s ease'
+            transition: 'width 0.3s ease',
           }} />
         </div>
       </div>
     );
   };
-  return ()
+  return ();
     <div className={`resource-usage-widget ${className}`} style={{}
       backgroundColor: '#FFFFFF',
       borderRadius: '8px',
@@ -239,7 +239,7 @@ export const APIMetricsWidget: React.FC<MonitoringWidgetProps> = ({ data, classN
       )}
     </div>
   );
-  return ()
+  return ();
     <div className={`api-metrics-widget ${className}`} style={{}
       backgroundColor: '#FFFFFF',
       borderRadius: '8px',
@@ -297,13 +297,13 @@ export const SecurityOverviewWidget: React.FC<MonitoringWidgetProps> = ({ data, 
       warning: '#f59e0b',
       critical: '#ef4444',
     };
-    return ()
+    return ();
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '8px 0',
-        borderBottom: '1px solid #f3f4f6'
+        borderBottom: '1px solid #f3f4f6',
       }}>
         <span style={{ fontSize: '13px', color: '#374151' }}>{label}</span>
         <span style={{
@@ -316,7 +316,7 @@ export const SecurityOverviewWidget: React.FC<MonitoringWidgetProps> = ({ data, 
       </div>
     );
   };
-  return ()
+  return ();
     <div className={`security-overview-widget ${className}`} style={{}
       backgroundColor: '#FFFFFF',
       borderRadius: '8px',
@@ -409,7 +409,7 @@ export const ActivityFeedWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
     default: return '⚪';
     }
   };
-  return ()
+  return ();
     <div className={`activity-feed-widget ${className}`} style={{}
       backgroundColor: '#FFFFFF',
       borderRadius: '8px',
@@ -487,7 +487,7 @@ export const MonitoringWidget: React.FC<MonitoringWidgetProps> = (props) => {
     }
     return <div>Unknown widget: {config.id}</div>;
   };
-  return ()
+  return ();
     <div style={getSizeStyles(config.size)}>
       {renderWidget()}
     </div>

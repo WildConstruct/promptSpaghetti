@@ -62,7 +62,7 @@ describe('Individual Result Management', () => {
   describe('Result Action Controls', () => {
     it('should display regenerate buttons for each result', () => {
       const mockOnResultAction = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -78,7 +78,7 @@ describe('Individual Result Management', () => {
     });
     it('should display lock/unlock buttons for each result', () => {
       const mockOnResultAction = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -94,7 +94,7 @@ describe('Individual Result Management', () => {
     });
     it('should display export buttons for each result', () => {
       const mockOnResultAction = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -110,7 +110,7 @@ describe('Individual Result Management', () => {
     });
     it('should call onResultAction when regenerate button is clicked', () => {
       const mockOnResultAction = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -130,7 +130,7 @@ describe('Individual Result Management', () => {
     });
     it('should call onResultAction when lock button is clicked', () => {
       const mockOnResultAction = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -150,7 +150,7 @@ describe('Individual Result Management', () => {
     });
     it('should call onResultAction when export button is clicked', () => {
       const mockOnResultAction = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -175,9 +175,9 @@ describe('Individual Result Management', () => {
         index: 0,
         seed: 12345,
         lockedAt: Date.now(),
-        note: 'Favorite result'
+        note: 'Favorite result',
       }];
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -198,7 +198,7 @@ describe('Individual Result Management', () => {
         seed: 12345,
         lockedAt: Date.now(),
       }];
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -221,7 +221,7 @@ describe('Individual Result Management', () => {
         seed: 12345,
         lockedAt: Date.now(),
       }];
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -245,7 +245,7 @@ describe('Individual Result Management', () => {
         seed: 12345,
         lockedAt: Date.now(),
       }];
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -268,7 +268,7 @@ describe('Individual Result Management', () => {
   describe('Result Regeneration', () => {
     it('should display regenerating state for results being regenerated', () => {
       const regeneratingResults = [1];
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -285,7 +285,7 @@ describe('Individual Result Management', () => {
     });
     it('should disable regenerate button for results being regenerated', () => {
       const regeneratingResults = [1];
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -304,7 +304,7 @@ describe('Individual Result Management', () => {
     });
     it('should show correct styling for regenerating results', () => {
       const regeneratingResults = [0];
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -321,7 +321,7 @@ describe('Individual Result Management', () => {
   });
   describe('Result Comparison', () => {
     it('should show compare mode toggle button', () => {
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -333,7 +333,7 @@ describe('Individual Result Management', () => {
       expect(screen.getByText('⚖️ Compare')).toBeInTheDocument();
     });
     it('should enter compare mode when compare button is clicked', () => {
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -352,7 +352,7 @@ describe('Individual Result Management', () => {
       expect(checkButtons).toHaveLength(3);
     });
     it('should allow selecting results for comparison', () => {
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -372,7 +372,7 @@ describe('Individual Result Management', () => {
       expect(screen.getByText('2/3 selected')).toBeInTheDocument();
     });
     it('should show comparison view when 2 or more results are selected', () => {
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -394,7 +394,7 @@ describe('Individual Result Management', () => {
       expect(screen.getByText('Seed 67890')).toBeInTheDocument();
     });
     it('should limit selection to 3 results maximum', () => {
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -420,7 +420,7 @@ describe('Individual Result Management', () => {
       });
     });
     it('should exit compare mode and clear selections when exit button is clicked', () => {
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -449,7 +449,7 @@ describe('Individual Result Management', () => {
         { index: 0, seed: 12345, lockedAt: Date.now() },
         { index: 2, seed: 54321, lockedAt: Date.now() }
       ];
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -463,7 +463,7 @@ describe('Individual Result Management', () => {
     });
     it('should show regenerating results count in footer', () => {
       const regeneratingResults = [0, 1];
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -478,7 +478,7 @@ describe('Individual Result Management', () => {
     it('should show both locked and regenerating counts when present', () => {
       const lockedResults = [{ index: 2, seed: 54321, lockedAt: Date.now() }];
       const regeneratingResults = [0];
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -495,7 +495,7 @@ describe('Individual Result Management', () => {
   });
   describe('Accessibility', () => {
     it('should have proper ARIA attributes for action buttons', () => {
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -513,7 +513,7 @@ describe('Individual Result Management', () => {
       });
     });
     it('should support keyboard navigation for action buttons', () => {
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -530,7 +530,7 @@ describe('Individual Result Management', () => {
   });
   describe('Error Handling', () => {
     it('should handle missing onResultAction gracefully', () => {
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -547,7 +547,7 @@ describe('Individual Result Management', () => {
       expect(() => fireEvent.click(regenerateButton)).not.toThrow();
     });
     it('should handle empty results array', () => {
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}
@@ -568,7 +568,7 @@ describe('Individual Result Management', () => {
           usedEdgeIds: [],
         }
       ];
-      render()
+      render();
         <PreviewModal
           open={true}
           loading={false}

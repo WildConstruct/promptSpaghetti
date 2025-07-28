@@ -5,7 +5,6 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-
 import React, { useState, useEffect } from 'react';
 import {
   ConsentType,
@@ -15,7 +14,6 @@ import {
 } from '../../types/consent';
 import { useConsent } from '../../hooks/useConsent';
 import './ConsentPreferencesModal.css';
-
 interface ConsentPreferencesModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -24,7 +22,7 @@ interface ConsentPreferencesModalProps {
   config: ConsentConfiguration | null;
 }
 
-export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = ({
+export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = ({)
   isOpen,
   onClose,
   onSave,
@@ -32,56 +30,46 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
   config
 }) => {
   const { hasConsent, grantConsent, withdrawConsent } = useConsent();
-  const [localPreferences, setLocalPreferences] = useState<Record<ConsentType, boolean>>(
+  const [localPreferences, setLocalPreferences] = useState<Record<ConsentType, boolean>>()
     {} as Record<ConsentType,
     boolean>
   );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'consents' | 'privacy' | 'communication'>('consents');
-
   useEffect(() => {
     if (isOpen && config && preferences) {
       // Initialize local state from current preferences
       const initialState: Record<ConsentType, boolean> = {} as Record<ConsentType, boolean>;
-      
-      config.consentTypes.forEach(typeConfig => {
+      config.consentTypes.forEach(typeConfig => {)
         initialState[typeConfig.type] = hasConsent(typeConfig.type);
       });
-      
       setLocalPreferences(initialState);
       setError(null);
     }
   }, [isOpen, config, preferences, hasConsent]);
-
   const handleConsentToggle = (consentType: ConsentType, granted: boolean) => {
-    setLocalPreferences(prev => ({
+    setLocalPreferences(prev => ({)
       ...prev,
       [consentType]: granted
     }));
   };
-
   const handleSave = async () => {
     if (!preferences || !config) return;
-    
     setIsLoading(true);
     setError(null);
-    
     try {
       // Apply consent changes
       for (const [consentType, granted] of Object.entries(localPreferences)) {
         const currentStatus = hasConsent(consentType as ConsentType);
-        
         if (granted && !currentStatus) {
           await grantConsent(consentType as ConsentType, 'preferences');
         } else if (!granted && currentStatus) {
           await withdrawConsent(consentType as ConsentType, 'preferences');
         }
       }
-      
       // Call parent save handler
       await onSave(preferences);
-      
     } catch (error) {
       console.error('Failed to save consent preferences:', error);
       setError('Failed to save preferences. Please try again.');
@@ -89,12 +77,11 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
       setIsLoading(false);
     }
   };
-
   const handleCancel = () => {
     // Reset local state
     if (config && preferences) {
       const resetState: Record<ConsentType, boolean> = {} as Record<ConsentType, boolean>;
-      config.consentTypes.forEach(typeConfig => {
+      config.consentTypes.forEach(typeConfig => {)
         resetState[typeConfig.type] = hasConsent(typeConfig.type);
       });
       setLocalPreferences(resetState);
@@ -102,12 +89,10 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
     setError(null);
     onClose();
   };
-
   const renderConsentTypeCard = (typeConfig: ConsentTypeConfig) => {
     const isEssential = typeConfig.isEssential;
     const isGranted = localPreferences[typeConfig.type];
-    
-    return (
+    return ()
       <div key={typeConfig.type} className="consent-card">
         <div className="consent-card__header">
           <div className="consent-card__info">
@@ -120,7 +105,6 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
               <strong>Purpose:</strong> {typeConfig.purpose}
             </p>
           </div>
-          
           <div className="consent-card__toggle">
             <label className="toggle-switch">
               <input
@@ -132,20 +116,19 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
               />
               <span className="toggle-switch__slider"></span>
             </label>
-            <span id={`consent-${typeConfig.type}-label`} className="sr-only">
+            <span id={`consent-${typeConfig.type}-label`} className="sr-only">}
               {isGranted ? 'Disable' : 'Enable'} {typeConfig.name} cookies
             </span>
           </div>
         </div>
-        
-        {typeConfig.dataCategories.length > 0 && (
+        {typeConfig.dataCategories.length > 0 && ()
           <div className="consent-card__details">
             <h4 className="consent-card__details-title">Data Categories:</h4>
             <ul className="consent-card__list">
-              {typeConfig.dataCategories.map((category, index) => (
+              {typeConfig.dataCategories.map((category, index) => ()
                 <li key={index}>
                   <strong>{category.name}:</strong> {category.description}
-                  {category.examples.length > 0 && (
+                  {category.examples.length > 0 && ()
                     <div className="consent-card__examples">
                       Examples: {category.examples.join(', ')}
                     </div>
@@ -155,12 +138,11 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
             </ul>
           </div>
         )}
-        
-        {typeConfig.thirdParties.length > 0 && (
+        {typeConfig.thirdParties.length > 0 && ()
           <div className="consent-card__details">
             <h4 className="consent-card__details-title">Third Parties:</h4>
             <ul className="consent-card__list">
-              {typeConfig.thirdParties.map((party, index) => (
+              {typeConfig.thirdParties.map((party, index) => ()
                 <li key={index}>
                   <strong>{party.name}</strong> ({party.domain})
                   <div>Purpose: {party.purpose}</div>
@@ -178,12 +160,11 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
             </ul>
           </div>
         )}
-        
-        {typeConfig.cookies.length > 0 && (
+        {typeConfig.cookies.length > 0 && ()
           <details className="consent-card__cookies">
             <summary>Cookie Details ({typeConfig.cookies.length})</summary>
             <div className="consent-card__cookies-list">
-              {typeConfig.cookies.map((cookie, index) => (
+              {typeConfig.cookies.map((cookie, index) => ()
                 <div key={index} className="cookie-item">
                   <div className="cookie-item__name">{cookie.name}</div>
                   <div className="cookie-item__details">
@@ -200,16 +181,12 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
       </div>
     );
   };
-
   const renderPrivacySettings = () => {
     if (!preferences) return null;
-    
     const privacySettings = preferences.userPreferences.privacySettings;
-    
-    return (
+    return ()
       <div className="privacy-settings">
         <h3>Privacy Settings</h3>
-        
         <div className="setting-item">
           <label>
             <input
@@ -223,7 +200,6 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
             Allow data processing for service improvement
           </label>
         </div>
-        
         <div className="setting-item">
           <label>
             Profile Visibility:
@@ -240,7 +216,6 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
             </select>
           </label>
         </div>
-        
         <div className="setting-item">
           <label>
             <input
@@ -256,16 +231,12 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
       </div>
     );
   };
-
   const renderCommunicationSettings = () => {
     if (!preferences) return null;
-    
     const commSettings = preferences.userPreferences.communicationPreferences;
-    
-    return (
+    return ()
       <div className="communication-settings">
         <h3>Communication Preferences</h3>
-        
         <div className="setting-item">
           <label>
             <input
@@ -278,7 +249,6 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
             Email notifications
           </label>
         </div>
-        
         <div className="setting-item">
           <label>
             <input
@@ -291,7 +261,6 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
             Marketing emails
           </label>
         </div>
-        
         <div className="setting-item">
           <label>
             <input
@@ -304,7 +273,6 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
             Product updates
           </label>
         </div>
-        
         <div className="setting-item">
           <label>
             <input
@@ -321,12 +289,10 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
       </div>
     );
   };
-
   if (!isOpen) {
     return null;
   }
-
-  return (
+  return ()
     <div className="consent-modal-overlay" onClick={onClose}>
       <div 
         className="consent-modal" 
@@ -345,7 +311,6 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
             ×
           </button>
         </div>
-        
         <div className="consent-modal__tabs">
           <button
             className={`consent-modal__tab ${activeTab === 'consents' ? 'active' : ''}`}
@@ -366,29 +331,24 @@ export const ConsentPreferencesModal: React.FC<ConsentPreferencesModalProps> = (
             Communications
           </button>
         </div>
-        
         <div className="consent-modal__content">
-          {error && (
+          {error && ()
             <div className="consent-modal__error" role="alert">
               {error}
             </div>
           )}
-          
-          {activeTab === 'consents' && config && (
+          {activeTab === 'consents' && config && ()
             <div className="consent-types">
               <p className="consent-modal__description">
                 Manage your cookie and data processing preferences. Essential cookies are required 
                 for the website to function and cannot be disabled.
               </p>
-              
               {config.consentTypes.map(typeConfig => renderConsentTypeCard(typeConfig))}
             </div>
           )}
-          
           {activeTab === 'privacy' && renderPrivacySettings()}
           {activeTab === 'communication' && renderCommunicationSettings()}
         </div>
-        
         <div className="consent-modal__footer">
           <button
             className="consent-modal__button consent-modal__button--secondary"

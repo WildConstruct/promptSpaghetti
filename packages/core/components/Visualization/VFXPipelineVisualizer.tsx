@@ -145,10 +145,10 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
       const isoY = (x + z) * Math.sin(Math.PI / 6) - y;
       return {
         x: canvasWidth / 2 + isoX * 2,
-        y: canvasHeight / 2 + isoY * 2
+        y: canvasHeight / 2 + isoY * 2,
       };
     }, []);
-    return ()
+    return ();
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -194,14 +194,14 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
               {/* Assets */}
               <g className="scene-assets">
                 {scene.assets.map((asset, index) => {
-                  const pos = project3DToIsometric(;)
+                  const pos = project3DToIsometric(;);
                     (index % 5) * 100 - 200,
                     0,
                     Math.floor(index / 5) * 80 - 100
                   );
                   const color = asset.accuracy > 90 ? '#10b981' :;
                     asset.accuracy > 70 ? '#f59e0b' : '#ef4444';
-                  return ()
+                  return ();
                     <g key={asset.id} transform={`translate(${pos.x}, ${pos.y})`}>}
                       {/* Asset representation */}
                       {asset.type === 'building' && ()
@@ -244,14 +244,14 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
               {/* Characters */}
               <g className="scene-characters">
                 {scene.characters.map((character, index) => {
-                  const pos = project3DToIsometric(;)
+                  const pos = project3DToIsometric(;);
                     character.position.x || (index * 60 - 120),
                     character.position.y || 0,
                     character.position.z || (index * 30 - 60)
                   );
                   const color = character.type === 'hero' ? '#3b82f6' :;
                     character.type === 'crowd' ? '#8b5cf6' : '#6b7280';
-                  return ()
+                  return ();
                     <g key={character.id} transform={`translate(${pos.x}, ${pos.y})`}>}
                       {/* Character silhouette */}
                       <ellipse rx="6" ry="3" cy="20" fill={color} fillOpacity="0.3" />
@@ -340,7 +340,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
       default: return 'bg-gray-100 text-gray-800';
       }
     };
-    return ()
+    return ();
       <div className="space-y-6">
         {/* Overall Accuracy Score */}
         <Card>
@@ -441,7 +441,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
   };
   // Material Properties Visualization
   const MaterialPropertiesVisualizer: React.FC<{ assets: VFXAsset[] }> = ({ assets }) => {
-    return ()
+    return ();
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -494,7 +494,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
       frameRate: 24 + Math.random() * 16, // 24-40 FPS
       loadingProgress: 100,
     });
-    return ()
+    return ();
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -603,10 +603,10 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
         types: typeDistribution,
         avgAccuracy,
         cultures: [...new Set(characters.map(c => c.culture))],
-        periods: [...new Set(characters.map(c => c.period))]
+        periods: [...new Set(characters.map(c => c.period))],
       };
     }, [characters]);
-    return ()
+    return ();
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -624,7 +624,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
                   const percentage = (count / crowdStats.total) * 100;
                   const color = type === 'hero' ? 'bg-blue-500' : ;
                     type === 'crowd' ? 'bg-purple-500' : 'bg-gray-500';
-                  return ()
+                  return ();
                     <div key={type} className="flex items-center gap-3">
                       <div className="w-16 text-sm text-gray-600 capitalize">{type}</div>
                       <div className="flex-1 bg-gray-200 rounded-full h-2">
@@ -697,7 +697,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
       status: scene.accuracy.expertValidated ? 'completed' : 'in-progress',
       position: index,
     }));
-    return ()
+    return ();
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -796,7 +796,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
       };
       return colors[type as keyof typeof colors] || '#6b7280';
     };
-    return ()
+    return ();
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -916,7 +916,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
     );
   };
   if (!selectedScene) {
-    return ()
+    return ();
       <div className={`vfx-pipeline-visualizer ${className}`}>}
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
@@ -930,7 +930,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`vfx-pipeline-visualizer ${className}`}>}
       <Tabs value={activeView} onValueChange={setActiveView}>
         <div className="mb-6">

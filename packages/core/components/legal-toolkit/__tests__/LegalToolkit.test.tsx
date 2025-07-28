@@ -30,7 +30,6 @@ jest.mock('../LegalDocumentParser', () => ({)
       </button>
       <span data-testid="supported-types">{supportedTypes.join(',')}</span>
     </div>
-  )
 }));
 jest.mock('../ContractAnalyzer', () => ({)
   ContractAnalyzer: ({ document, onAnalysisComplete }: unknown) => ()
@@ -43,7 +42,6 @@ jest.mock('../ContractAnalyzer', () => ({)
       </button>
       <span data-testid="document-id">{document.id}</span>
     </div>
-  )
 }));
 jest.mock('../ComplianceChecker', () => ({)
   ComplianceChecker: ({ document, regulations, onComplianceResults }: unknown) => ()
@@ -56,7 +54,6 @@ jest.mock('../ComplianceChecker', () => ({)
       </button>
       <span data-testid="regulations">{regulations.join(',')}</span>
     </div>
-  )
 }));
 jest.mock('../CitationManager', () => ({)
   CitationManager: ({ citations, onCitationAdd, onCitationEdit, onCitationDelete }: unknown) => ()
@@ -81,7 +78,6 @@ jest.mock('../CitationManager', () => ({)
       </button>
       <span data-testid="citation-count">{citations.length}</span>
     </div>
-  )
 }));
 jest.mock('../TerminologyValidator', () => ({)
   TerminologyValidator: ({ text, onValidationResults }: unknown) => ()
@@ -94,7 +90,6 @@ jest.mock('../TerminologyValidator', () => ({)
       </button>
       <span data-testid="text-length">{text.length}</span>
     </div>
-  )
 }));
 
 // Mock data
@@ -135,7 +130,7 @@ const mockAnalysis: ContractAnalysis = {
       description: 'Termination clause risks',
       impact: 'medium',
       likelihood: 'low',
-      mitigation: ['Review termination terms']
+      mitigation: ['Review termination terms'],
     }],
     mitigation: ['Review all clauses'],
     score: 65,
@@ -171,10 +166,10 @@ const mockTerminologyResults: TermValidationResult[] = [{
     definition: 'Something of value exchanged in a contract',
     context: 'contract law',
     jurisdiction: 'US',
-    source: 'Black\'s Law Dictionary'
+    source: 'Black\'s Law Dictionary',
   }],
   confidence: 90,
-  context: 'contract formation'
+  context: 'contract formation',
 }];
 describe('LegalToolkit Component', () => {
   const mockOnWorkflowComplete = jest.fn<unknown[], unknown>();

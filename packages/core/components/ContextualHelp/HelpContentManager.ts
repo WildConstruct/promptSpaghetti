@@ -66,7 +66,7 @@ export class HelpContentManager {
         ...parsed,
         viewedContent: new Set(parsed.viewedContent),
         completedTours: new Set(parsed.completedTours),
-        lastActivity: new Date(parsed.lastActivity)
+        lastActivity: new Date(parsed.lastActivity),
       };
     }
     return {
@@ -87,7 +87,7 @@ export class HelpContentManager {
         projectsCompleted: 0,
         advancedFeaturesUsed: [],
       },
-      lastActivity: new Date()
+      lastActivity: new Date(),
     };
   }
   private saveUserProfile(): void {
@@ -388,13 +388,13 @@ export class HelpContentManager {
       if (!this.userProfile.viewedContent.has(step.contentId)) {
         // Check if requirements are met
         if (step.requiredProgress) {
-          const progressMet = Object.entries(step.requiredProgress).every(;)
+          const progressMet = Object.entries(step.requiredProgress).every(;);
             ([key, value]) => (this.userProfile.progress as any)[key] >= value
           );
           if (!progressMet) continue;
         }
         if (step.unlockConditions) {
-          const conditionsMet = step.unlockConditions.every(;)
+          const conditionsMet = step.unlockConditions.every(;);
             condition => this.userProfile.completedTours.has(condition)
           );
           if (!conditionsMet) continue;

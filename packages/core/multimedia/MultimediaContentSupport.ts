@@ -233,7 +233,7 @@ export class MultimediaContentSupport extends EventEmitter {
         enableThumbnails: true,
         enableAccessibility: true,
         maxConcurrentJobs: 3,
-        timeoutMs: 300000 // 5 minutes
+        timeoutMs: 300000 // 5 minutes,
       },
       delivery: {,
         cdnEnabled: false,
@@ -309,7 +309,7 @@ export class MultimediaContentSupport extends EventEmitter {
           }
         },
         created: new Date(),
-        lastModified: new Date()
+        lastModified: new Date(),
       };
       // Store asset
       this.assets.set(assetId, asset);
@@ -329,7 +329,7 @@ export class MultimediaContentSupport extends EventEmitter {
     } catch (error) {
       this.emit('uploadError', {)
         error: error.message,
-        file: file instanceof File ? file.name : 'buffer'
+        file: file instanceof File ? file.name : 'buffer',
       });
       throw error;
     }
@@ -553,7 +553,6 @@ export class MultimediaContentSupport extends EventEmitter {
       available: number;
       efficiency: number;
     };
-    } {
     const assets = Array.from(this.assets.values());
     const totalSize = assets.reduce((sum, asset) => sum + asset.size, 0);
     const assetsByType: Record<string, number> = {};
@@ -782,7 +781,7 @@ export class MultimediaContentSupport extends EventEmitter {
           language: 'en',
           startTime: 0,
           endTime: 5,
-          text: 'Auto-generated caption...'
+          text: 'Auto-generated caption...',
         }
       ];
     }

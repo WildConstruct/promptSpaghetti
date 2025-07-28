@@ -213,7 +213,7 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
       hasWeightedChoices,
       hasConditionals,
       isEmpty: nodeCount === 0 && edgeCount === 0,
-      isComplex: nodeCount > 5 || edgeCount > 8
+      isComplex: nodeCount > 5 || edgeCount > 8,
     };
   }, [nodes, edges, selectedNodeId]);
   // Find relevant help content based on current context
@@ -276,7 +276,7 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
     setCurrentTour(tourType);
     setTourStep(0);
     // Get tour content
-    const tourContent = helpDatabase.filter(help => ;)
+    const tourContent = helpDatabase.filter(help => ;);
       help.type === tourType || help.level === 'beginner'
     );
     if (tourContent.length > 0) {
@@ -286,7 +286,7 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
   // Next tour step
   const nextTourStep = useCallback(() => {
     if (!currentTour) return;
-    const tourContent = helpDatabase.filter(help => ;)
+    const tourContent = helpDatabase.filter(help => ;);
       help.type === currentTour || help.level === 'beginner'
     );
     const nextStep = tourStep + 1;
@@ -301,7 +301,7 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({)
     }
   }, [currentTour, tourStep, helpDatabase, closeHelp]);
   if (!enabled) return null;
-  return ()
+  return ();
     <div className="contextual-help-system">
       {/* Help Launcher - Always visible */}
       <div className="help-launcher">

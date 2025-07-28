@@ -62,7 +62,7 @@ describe('OWASP Security Test Suite', () => {
         'delete currentUser.role'
       ];
       for (const attempt of privilegeEscalationAttempts) {
-        const node = new ConditionalNode('test', [;)
+        const node = new ConditionalNode('test', [;);
           { condition: attempt, output: 'escalated' }
         ], 'safe');
         expect(() => node.run(ctx)).toThrow();
@@ -157,12 +157,12 @@ describe('OWASP Security Test Suite', () => {
     it('should enforce secure defaults', () => {
       const ctx = new AdvancedExecutionContext('test');
       // Strict mode should be available as an option
-      const strictNode = new ConditionalNode('strict', [;)
+      const strictNode = new ConditionalNode('strict', [;);
         { condition: 'undefinedVar > 0', output: 'should fail' }
       ], 'default', { strictMode: true });
       expect(() => strictNode.run(ctx)).toThrow();
       // Non-strict mode logs warning but continues
-      const nonStrictNode = new ConditionalNode('non-strict', [;)
+      const nonStrictNode = new ConditionalNode('non-strict', [;);
         { condition: 'undefinedVar > 0', output: 'should fail' }
       ], 'default', { strictMode: false });
       expect(nonStrictNode.run(ctx)).toBe('default');
@@ -294,7 +294,7 @@ describe('OWASP Security Test Suite', () => {
       ];
       for (const op of operations) {
         try {
-          const node = new ConditionalNode('test', [;)
+          const node = new ConditionalNode('test', [;);
             { condition: op.expr, output: 'result' }
           ], 'default');
           node.run(ctx);

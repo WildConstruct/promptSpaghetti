@@ -123,7 +123,7 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
       fontSize: 'var(--font-size-xs)',
       color: professionalColors.text.secondary,
       lineHeight: 1.4,
-      fontFamily: 'var(--font-mono)' // Use monospace for technical properties
+      fontFamily: 'var(--font-mono)' // Use monospace for technical properties,
     };
     const handleBaseStyle: React.CSSProperties = {
       width: 14, // Slightly larger for better interaction
@@ -166,9 +166,9 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
       fontSize: 10,
       fontWeight: 'bold',
       boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)',
-      transition: 'all 0.2s ease'
+      transition: 'all 0.2s ease',
     };
-    return ()
+    return ();
       <div
         role="button"
         data-testid={`node-${id}`}
@@ -269,7 +269,7 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
   } catch (error) {
     console.error('ProfessionalNodeRenderer error:', error, 'Props:', { id, data });
     // Professional error state
-    return ()
+    return ();
       <div
         style={{
           cursor: 'pointer',

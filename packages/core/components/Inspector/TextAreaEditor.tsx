@@ -74,7 +74,7 @@ export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({)
   };
   const wordCount = getWordCount(localValue);
   const charCount = localValue.length;
-  return ()
+  return ();
     <div style={{ marginBottom: 16 }}>
       <label htmlFor={inputId} style={labelStyle}>
         {label}

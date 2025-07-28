@@ -112,7 +112,7 @@ describe('SecureCodeGenerator', () => {
       const code = '123456';
       const userId = 'user123';
       const purpose = 'email_verification';
-      const verificationCode = await generator.createVerificationCode(;)
+      const verificationCode = await generator.createVerificationCode(;);
         code, 
         userId, 
         purpose
@@ -138,7 +138,7 @@ describe('SecureCodeGenerator', () => {
       expect(code1.codeHash).not.toBe(code2.codeHash); // Different due to different salts
     });
     test('should respect custom expiration and max attempts', async () => {
-      const verificationCode = await generator.createVerificationCode(;)
+      const verificationCode = await generator.createVerificationCode(;);
         '123456',
         'user123',
         'test',
@@ -193,7 +193,7 @@ describe('SecureCodeGenerator', () => {
     test('should reject expired code', async () => {
       const expiredCode = {
         ...verificationCode,
-        expiresAt: new Date(Date.now() - 1000) // 1 second ago
+        expiresAt: new Date(Date.now() - 1000) // 1 second ago,
       };
       const result = await generator.validateCode(testCode, expiredCode);
       expect(result.valid).toBe(false);
@@ -252,7 +252,7 @@ describe('SecureCodeGenerator', () => {
       expect(generator.validateCodeFormat('123-456', 'numeric')).toEqual({ valid: true });
       expect(generator.validateCodeFormat('123abc', 'numeric')).toEqual({)
         valid: false,
-        reason: 'Invalid character \'A\' in code'
+        reason: 'Invalid character \'A\' in code',
       });
     });
     test('should validate alphanumeric codes', () => {
@@ -260,31 +260,31 @@ describe('SecureCodeGenerator', () => {
       expect(generator.validateCodeFormat('AB-C2-34', 'alphanumeric')).toEqual({ valid: true });
       expect(generator.validateCodeFormat('ABC0123', 'alphanumeric')).toEqual({)
         valid: false,
-        reason: 'Invalid character \'0\' in code'
+        reason: 'Invalid character \'0\' in code',
       });
       expect(generator.validateCodeFormat('ABC1234', 'alphanumeric')).toEqual({)
         valid: false,
-        reason: 'Invalid character \'1\' in code'
+        reason: 'Invalid character \'1\' in code',
       });
     });
     test('should validate length constraints', () => {
       expect(generator.validateCodeFormat('12', 'numeric')).toEqual({)
         valid: false,
-        reason: 'Code length must be between 4 and 12 characters'
+        reason: 'Code length must be between 4 and 12 characters',
       });
       expect(generator.validateCodeFormat('1234567890123', 'numeric')).toEqual({)
         valid: false,
-        reason: 'Code length must be between 4 and 12 characters'
+        reason: 'Code length must be between 4 and 12 characters',
       });
     });
     test('should handle invalid input', () => {
       expect(generator.validateCodeFormat('', 'numeric')).toEqual({)
         valid: false,
-        reason: 'Code must be a non-empty string'
+        reason: 'Code must be a non-empty string',
       });
       expect(generator.validateCodeFormat(null as any, 'numeric')).toEqual({)
         valid: false,
-        reason: 'Code must be a non-empty string'
+        reason: 'Code must be a non-empty string',
       });
     });
   });
@@ -425,7 +425,7 @@ describe('Security Properties', () => {
     const originalTimingSafeEqual = crypto.timingSafeEqual;
     const mockTimingSafeEqual = jest.fn().mockImplementation(originalTimingSafeEqual);
     crypto.timingSafeEqual = mockTimingSafeEqual;
-    const verificationCode = await generator.createVerificationCode(;)
+    const verificationCode = await generator.createVerificationCode(;);
       '123456',
       'user123',
       'test'

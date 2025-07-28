@@ -28,7 +28,7 @@ export declare class SettingsManager {
     /**
      * Update settings with validation
      */
-    updateSettings()
+    updateSettings();
       newSettings: Partial<AdvancedSettings>,
       source?: 'user' | 'system' | 'import'
     ): SettingsValidationResult;

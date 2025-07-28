@@ -156,7 +156,7 @@ describe('NodeCategory System', () => {
       const results = searchCategories('text');
       expect(results.length).toBeGreaterThan(0);
       // Should find categories that have 'text' in their keywords
-      const hasTextKeyword = results.some(cat => ;)
+      const hasTextKeyword = results.some(cat => ;);
         cat.metadata?.keywords?.some(keyword => keyword.includes('text'))
       );
       expect(hasTextKeyword).toBe(true);

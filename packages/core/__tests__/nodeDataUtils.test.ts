@@ -134,7 +134,7 @@ describe('nodeDataUtils', () => {
         label: 'Test',
         type: 'WeightedChoice' as const,
         options: ['a', 'b'],
-        weights: [1] // Mismatch with options length
+        weights: [1] // Mismatch with options length,
       };
       const result = validateNodeDataLegacy(invalidWeightedChoice);
       expect(result.valid).toBe(false);

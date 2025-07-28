@@ -222,7 +222,7 @@ describe('Zod Schema Security Tests', () => {
             id: 'test',
             type: 'SetVariable',
             key: '__proto__',
-            value: 'any value'
+            value: 'any value',
           }]
         },
         {
@@ -230,7 +230,7 @@ describe('Zod Schema Security Tests', () => {
             id: 'test',
             type: 'SetVariable',
             key: 'constructor',
-            value: 'any value'
+            value: 'any value',
           }]
         }
       ];
@@ -485,7 +485,7 @@ describe('Runtime Security Tests', () => {
     beforeEach(() => {
       ctx.variables = {
         safeKey: 'safe value',
-        normalProperty: 'normal value'
+        normalProperty: 'normal value',
       };
     });
     it('should reject dangerous variable keys at runtime', () => {
@@ -511,7 +511,7 @@ describe('Runtime Security Tests', () => {
     it('should handle safe property access', () => {
       const lookup = {
         template1: 'Hello World',
-        template2: 'Another template'
+        template2: 'Another template',
       };
       const node = new IncludeNode('test', 'template1', lookup);
       const result = node.run(ctx);
@@ -519,7 +519,7 @@ describe('Runtime Security Tests', () => {
     });
     it('should reject dangerous property access', () => {
       const lookup = {
-        template1: 'Hello World'
+        template1: 'Hello World',
       };
       const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
       dangerousKeys.forEach(key => {)
@@ -530,7 +530,7 @@ describe('Runtime Security Tests', () => {
     });
     it('should handle non-existent properties safely', () => {
       const lookup = {
-        template1: 'Hello World'
+        template1: 'Hello World',
       };
       const node = new IncludeNode('test', 'nonExistent', lookup);
       const result = node.run(ctx);
@@ -548,7 +548,7 @@ describe('Runtime Security Tests', () => {
       const lookup = {
         template1: 123 as any, // Non-string value
         template2: null as any,
-        template3: undefined as any
+        template3: undefined as any,
       };
       ['template1', 'template2', 'template3'].forEach(key => {)
         const node = new IncludeNode('test', key, lookup);
@@ -564,7 +564,7 @@ describe('Comprehensive Security Test Suite', () => {
     expect(testResults).toBe(true);
   });
   it('should detect injection attempts in string validation', () => {
-    const result = SecurityTesting.testInjectionProtection(;)
+    const result = SecurityTesting.testInjectionProtection(;);
       SecurityValidation.validateSafeString,
       'String Validation'
     );
@@ -572,7 +572,7 @@ describe('Comprehensive Security Test Suite', () => {
     expect(result.passed).toBeGreaterThan(0);
   });
   it('should detect injection attempts in expression validation', () => {
-    const result = SecurityTesting.testInjectionProtection(;)
+    const result = SecurityTesting.testInjectionProtection(;);
       SecurityValidation.validateSafeExpression,
       'Expression Validation'
     );
@@ -580,7 +580,7 @@ describe('Comprehensive Security Test Suite', () => {
     expect(result.passed).toBeGreaterThan(0);
   });
   it('should detect injection attempts in property key validation', () => {
-    const result = SecurityTesting.testInjectionProtection(;)
+    const result = SecurityTesting.testInjectionProtection(;);
       SecurityValidation.validateSafePropertyKey,
       'Property Key Validation'
     );

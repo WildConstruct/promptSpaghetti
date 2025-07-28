@@ -77,9 +77,9 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({ )
     // Optimize for presentation
     userSelect: 'none' as const,
     // Professional cursor
-    cursor: 'default' as const
+    cursor: 'default' as const,
   } : {};
-  return ()
+  return ();
     <div 
       style={{
         position: 'relative',
@@ -142,7 +142,7 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({ )
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
             <span>FPS:</span>
             <span style={{ 
-              color: performanceMetrics.fps >= 55 ? professionalColors.accent.green : 
+              color: performanceMetrics.fps >= 55 ? professionalColors.accent.green : ,
                 performanceMetrics.fps >= 30 ? professionalColors.accent.yellow : 
                   professionalColors.accent.red 
             }}>
@@ -152,7 +152,7 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({ )
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
             <span>Screen:</span>
             <span style={{ 
-              color: screenSize.isPresentationSize ? professionalColors.accent.green : professionalColors.accent.yellow 
+              color: screenSize.isPresentationSize ? professionalColors.accent.green : professionalColors.accent.yellow ,
             }}>
               {screenSize.width}×{screenSize.height}
             </span>
@@ -224,7 +224,7 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({ )
           ...(enabled && {)
             // Hide development elements in demo mode
             '& [data-dev-only]': {
-              display: 'none !important'
+              display: 'none !important',
             },
             // Ensure professional appearance
             '& *': {

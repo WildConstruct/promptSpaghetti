@@ -84,7 +84,7 @@ export interface PreviewStateStore {
     setError: (error: string | null) => void;
     setResults: (results: PreviewResult[]) => void;
     setAggregateError: (error: string | null) => void;
-    setPerformanceStats: (stats: {)
+    setPerformanceStats: (stats: {),
         totalTime: number;
         averageTime: number;
     } | null) => void;
@@ -104,7 +104,7 @@ export interface PreviewStateStore {
     setRegeneratingResult: (index: number, regenerating: boolean) => void;
     updatePerformanceMetrics: (metrics: Partial<PreviewPerformanceMetrics>) => void;
     addPerformanceSnapshot: () => void;
-    getPerformanceInsights: () => {
+    getPerformanceInsights: () => {,
         trend: 'improving' | 'degrading' | 'stable';
         bottlenecks: string[];
         recommendations: string[];

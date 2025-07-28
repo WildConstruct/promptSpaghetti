@@ -358,7 +358,7 @@ export interface CaseStudyFilter {
 }
 
 export interface CaseStudySort {
-  field: 'createdAt' | 'publishedAt' | 'updatedAt' | 'views' | 'likes' | 
+  field: 'createdAt' | 'publishedAt' | 'updatedAt' | 'views' | 'likes' | ,
          'helpfulVotes' | 'roiValue' | 'timeSaved' | 'title' | 'priority';
   direction: 'asc' | 'desc';
 }

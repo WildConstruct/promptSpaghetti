@@ -292,7 +292,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
       if (score >= 75) return themeStyles.warning;
       return themeStyles.error;
     };
-    return ()
+    return ();
       <div style={{
         background: themeStyles.surface,
         border: `1px solid ${themeStyles.border}`,}
@@ -365,7 +365,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
     );
   };
   // Render requirement item
-  const renderRequirementItem = (requirement: ComplianceRequirement) => (;)
+  const renderRequirementItem = (requirement: ComplianceRequirement) => (;);
     <div
       key={requirement.id}
       onClick={() => setSelectedRequirement(requirement)}
@@ -377,7 +377,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
         padding: '16px',
         marginBottom: '12px',
         cursor: 'pointer',
-        transition: 'all 0.2s ease'
+        transition: 'all 0.2s ease',
       }}
     >
       <div style={{
@@ -467,7 +467,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
       )}
     </div>
   );
-  return ()
+  return ();
     <div style={{
       background: themeStyles.background,
       color: themeStyles.text,
@@ -478,14 +478,14 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
       <div style={{
         background: themeStyles.surface,
         borderBottom: `1px solid ${themeStyles.border}`,}
-        padding: '20px 24px'
+        padding: '20px 24px',
       }}>
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           maxWidth: '1400px',
-          margin: '0 auto'
+          margin: '0 auto',
         }}>
           <div>
             <h1 style={{
@@ -526,7 +526,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
                     fontSize: '12px',
                     fontWeight: 500,
                     cursor: selectedFramework === 'all' ? 'not-allowed' : 'pointer',
-                    opacity: selectedFramework === 'all' ? 0.5 : 1
+                    opacity: selectedFramework === 'all' ? 0.5 : 1,
                   }}
                 >
                   {reportGenerating === `${selectedFramework}-${format}` ? '⏳' : '📊'} Export {format.toUpperCase()}
@@ -557,7 +557,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
           <div style={{
             fontSize: '48px',
             fontWeight: 800,
-            color: metrics.overallScore >= 90 ? themeStyles.success :
+            color: metrics.overallScore >= 90 ? themeStyles.success :,
               metrics.overallScore >= 75 ? themeStyles.warning : themeStyles.error,
             marginBottom: '8px',
           }}>
@@ -605,7 +605,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
             <div style={{
               fontSize: '28px',
               fontWeight: 700,
-              color: metrics.riskProfile.high > 0 ? themeStyles.error : themeStyles.success
+              color: metrics.riskProfile.high > 0 ? themeStyles.error : themeStyles.success,
             }}>
               {metrics.riskProfile.high}
             </div>
@@ -649,7 +649,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
             <div style={{
               fontSize: '28px',
               fontWeight: 700,
-              color: metrics.evidenceHealth.missing > 0 ? themeStyles.error : themeStyles.success
+              color: metrics.evidenceHealth.missing > 0 ? themeStyles.error : themeStyles.success,
             }}>
               {metrics.evidenceHealth.missing}
             </div>
@@ -671,7 +671,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
             <div style={{
               fontSize: '28px',
               fontWeight: 700,
-              color: metrics.evidenceHealth.expiringWithin30Days > 0 ? themeStyles.warning : themeStyles.success
+              color: metrics.evidenceHealth.expiringWithin30Days > 0 ? themeStyles.warning : themeStyles.success,
             }}>
               {metrics.evidenceHealth.expiringWithin30Days}
             </div>

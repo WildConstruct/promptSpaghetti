@@ -1,6 +1,5 @@
 // Epic 19.4 - Incident Response Panel Component
 // Task: T-1752989145014 - Create frontend components for Security Monitoring & Incident Response
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   AlertTriangle,
@@ -23,7 +22,6 @@ import {
   Activity
 } from 'lucide-react';
 import { format, formatDistanceToNow } from 'date-fns';
-
 interface SecurityIncident {
   id: string;
   title: string;
@@ -40,7 +38,6 @@ interface SecurityIncident {
   timeline: TimelineEntry[];
   response_actions: ResponseAction[];
 }
-
 interface Evidence {
   id: string;
   type: 'log' | 'screenshot' | 'file' | 'url' | 'note';
@@ -49,7 +46,6 @@ interface Evidence {
   collected_at: Date;
   collected_by: string;
 }
-
 interface TimelineEntry {
   id: string;
   timestamp: Date;
@@ -58,7 +54,6 @@ interface TimelineEntry {
   author: string;
   type: 'status_change' | 'assignment' | 'action' | 'note' | 'evidence';
 }
-
 interface ResponseAction {
   id: string;
   title: string;
@@ -68,14 +63,12 @@ interface ResponseAction {
   due_date?: Date;
   completed_at?: Date;
 }
-
 interface IncidentResponsePanelProps {
   incidentId: string;
   onIncidentUpdate?: (incident: SecurityIncident) => void;
   onClose?: () => void;
 }
-
-const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({ 
+const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({ )
   incidentId, 
   onIncidentUpdate, 
   // onClose // Commented out unused prop
@@ -86,14 +79,11 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
   const [newNote, setNewNote] = useState('');
   const [newAction, setNewAction] = useState({ title: '', description: '', assigned_to: '', due_date: '' });
   const [showAddAction, setShowAddAction] = useState(false);
-
   useEffect(() => {
     loadIncident();
   }, [incidentId, loadIncident]);
-
   const loadIncident = useCallback(async () => {
     setIsLoading(true);
-    
     // Mock data - replace with actual API call
     setTimeout(() => {
       const mockIncident: SecurityIncident = {
@@ -108,14 +98,14 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
         reporter: 'system.monitor@company.com',
         category: 'Authentication',
         affected_systems: ['Authentication Service', 'User Database', 'API Gateway'],
-        evidence: [
+        evidence: [,
           {
             id: 'evidence-1',
             type: 'log',
             title: 'Authentication Service Logs',
             content: '2025-07-22 05:45:12 - Failed login attempt for user suspicious@domain.com from 192.168.1.100',
             collected_at: new Date(Date.now() - 1 * 60 * 60 * 1000),
-            collected_by: 'security.team@company.com'
+            collected_by: 'security.team@company.com',
           },
           {
             id: 'evidence-2',
@@ -123,17 +113,17 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
             title: 'Initial Assessment',
             content: 'IP address shows no previous legitimate access. Pattern suggests automated attack tool.',
             collected_at: new Date(Date.now() - 45 * 60 * 1000),
-            collected_by: 'analyst@company.com'
+            collected_by: 'analyst@company.com',
           }
         ],
-        timeline: [
+        timeline: [,
           {
             id: 'timeline-1',
             timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
             event: 'Incident Created',
             description: 'Automated detection triggered incident creation',
             author: 'system.monitor@company.com',
-            type: 'status_change'
+            type: 'status_change',
           },
           {
             id: 'timeline-2',
@@ -141,7 +131,7 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
             event: 'Assigned to Security Team',
             description: 'Incident escalated to security team for investigation',
             author: 'incident.manager@company.com',
-            type: 'assignment'
+            type: 'assignment',
           },
           {
             id: 'timeline-3',
@@ -149,17 +139,17 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
             event: 'IP Address Blocked',
             description: 'Temporarily blocked source IP 192.168.1.100 to prevent further attempts',
             author: 'security.team@company.com',
-            type: 'action'
+            type: 'action',
           }
         ],
-        response_actions: [
+        response_actions: [,
           {
             id: 'action-1',
             title: 'Block Source IP',
             description: 'Add source IP to firewall blacklist',
             status: 'completed',
             assigned_to: 'security.team@company.com',
-            completed_at: new Date(Date.now() - 1 * 60 * 60 * 1000)
+            completed_at: new Date(Date.now() - 1 * 60 * 60 * 1000),
           },
           {
             id: 'action-2',
@@ -167,7 +157,7 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
             description: 'Review logs to determine attack methodology and tools used',
             status: 'in_progress',
             assigned_to: 'analyst@company.com',
-            due_date: new Date(Date.now() + 2 * 60 * 60 * 1000)
+            due_date: new Date(Date.now() + 2 * 60 * 60 * 1000),
           },
           {
             id: 'action-3',
@@ -175,16 +165,14 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
             description: 'Strengthen rate limiting rules for login endpoints',
             status: 'pending',
             assigned_to: 'devops@company.com',
-            due_date: new Date(Date.now() + 4 * 60 * 60 * 1000)
+            due_date: new Date(Date.now() + 4 * 60 * 60 * 1000),
           }
         ]
       };
-
       setIncident(mockIncident);
       setIsLoading(false);
     }, 800);
   }, [incidentId]);
-
   const getSeverityColor = (severity: string) => {
     switch (severity) {
     case 'critical': return 'text-red-600 bg-red-100 border-red-200';
@@ -194,7 +182,6 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
     default: return 'text-gray-600 bg-gray-100 border-gray-200';
     }
   };
-
   const getStatusColor = (status: string) => {
     switch (status) {
     case 'open': return 'text-red-600 bg-red-50';
@@ -205,7 +192,6 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
     default: return 'text-gray-600 bg-gray-50';
     }
   };
-
   const getActionStatusIcon = (status: string) => {
     switch (status) {
     case 'completed': return <CheckCircle className="h-4 w-4 text-green-600" />;
@@ -215,65 +201,53 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
     default: return <Clock className="h-4 w-4 text-gray-400" />;
     }
   };
-
   const handleStatusChange = async (newStatus: string) => {
     if (!incident) return;
-    
     const updatedIncident = {
       ...incident,
       status: newStatus as SecurityIncident['status'],
-      updated_at: new Date()
+      updated_at: new Date(),
     };
-    
     setIncident(updatedIncident);
     onIncidentUpdate?.(updatedIncident);
   };
-
   const handleAddNote = async () => {
     if (!incident || !newNote.trim()) return;
-
     const newTimelineEntry: TimelineEntry = {
-      id: `timeline-${Date.now()}`,
+      id: `timeline-${Date.now()}`,}
       timestamp: new Date(),
       event: 'Note Added',
       description: newNote,
       author: 'current.user@company.com',
-      type: 'note'
+      type: 'note',
     };
-
-    setIncident({
+    setIncident({)
       ...incident,
       timeline: [...incident.timeline, newTimelineEntry],
-      updated_at: new Date()
+      updated_at: new Date(),
     });
-
     setNewNote('');
   };
-
   const handleAddAction = async () => {
     if (!incident || !newAction.title.trim()) return;
-
     const action: ResponseAction = {
-      id: `action-${Date.now()}`,
+      id: `action-${Date.now()}`,}
       title: newAction.title,
       description: newAction.description,
       status: 'pending',
       assigned_to: newAction.assigned_to || undefined,
-      due_date: newAction.due_date ? new Date(newAction.due_date) : undefined
+      due_date: newAction.due_date ? new Date(newAction.due_date) : undefined,
     };
-
-    setIncident({
+    setIncident({)
       ...incident,
       response_actions: [...incident.response_actions, action],
-      updated_at: new Date()
+      updated_at: new Date(),
     });
-
     setNewAction({ title: '', description: '', assigned_to: '', due_date: '' });
     setShowAddAction(false);
   };
-
   if (isLoading) {
-    return (
+    return ()
       <div className="incident-response-panel loading">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -282,9 +256,8 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
       </div>
     );
   }
-
   if (!incident) {
-    return (
+    return ()
       <div className="incident-response-panel error">
         <div className="error-state">
           <AlertTriangle className="h-12 w-12 text-red-500" />
@@ -294,8 +267,7 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="incident-response-panel">
       {/* Header */}
       <div className="incident-header">
@@ -304,18 +276,16 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
             <AlertTriangle className="h-5 w-5 text-orange-600" />
             <h2>{incident.title}</h2>
           </div>
-          
           <div className="incident-badges">
-            <span className={`severity-badge ${getSeverityColor(incident.severity)}`}>
+            <span className={`severity-badge ${getSeverityColor(incident.severity)}`}>}
               <Flag className="h-3 w-3" />
               {incident.severity.toUpperCase()}
             </span>
-            <span className={`status-badge ${getStatusColor(incident.status)}`}>
+            <span className={`status-badge ${getStatusColor(incident.status)}`}>}
               {incident.status.replace('_', ' ').toUpperCase()}
             </span>
           </div>
         </div>
-
         <div className="incident-meta">
           <div className="meta-item">
             <Calendar className="h-4 w-4" />
@@ -330,7 +300,6 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
             <span>Category: {incident.category}</span>
           </div>
         </div>
-
         <div className="incident-actions">
           <select 
             value={incident.status} 
@@ -343,19 +312,16 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
             <option value="resolved">Resolved</option>
             <option value="closed">Closed</option>
           </select>
-          
           <button className="btn btn-secondary">
             <Users className="h-4 w-4" />
             Reassign
           </button>
-          
           <button className="btn btn-primary">
             <FileText className="h-4 w-4" />
             Generate Report
           </button>
         </div>
       </div>
-
       {/* Tabs */}
       <div className="incident-tabs">
         <button 
@@ -383,27 +349,24 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
           Actions ({incident.response_actions.length})
         </button>
       </div>
-
       {/* Tab Content */}
       <div className="incident-content">
-        {activeTab === 'overview' && (
+        {activeTab === 'overview' && ()
           <div className="overview-tab">
             <div className="overview-section">
               <h3>Description</h3>
               <p>{incident.description}</p>
             </div>
-
             <div className="overview-section">
               <h3>Affected Systems</h3>
               <div className="system-tags">
-                {incident.affected_systems.map((system, index) => (
+                {incident.affected_systems.map((system, index) => ()
                   <span key={index} className="system-tag">
                     {system}
                   </span>
                 ))}
               </div>
             </div>
-
             <div className="overview-section">
               <h3>Quick Actions</h3>
               <div className="quick-actions-grid">
@@ -423,11 +386,10 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
             </div>
           </div>
         )}
-
-        {activeTab === 'timeline' && (
+        {activeTab === 'timeline' && ()
           <div className="timeline-tab">
             <div className="timeline-list">
-              {incident.timeline.map((entry) => (
+              {incident.timeline.map((entry) => ()
                 <div key={entry.id} className="timeline-entry">
                   <div className="timeline-marker"></div>
                   <div className="timeline-content">
@@ -446,7 +408,6 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
                 </div>
               ))}
             </div>
-
             {/* Add Note */}
             <div className="add-note-section">
               <h3>Add Note</h3>
@@ -468,11 +429,10 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
             </div>
           </div>
         )}
-
-        {activeTab === 'evidence' && (
+        {activeTab === 'evidence' && ()
           <div className="evidence-tab">
             <div className="evidence-list">
-              {incident.evidence.map((evidence) => (
+              {incident.evidence.map((evidence) => ()
                 <div key={evidence.id} className="evidence-item">
                   <div className="evidence-header">
                     <h4>{evidence.title}</h4>
@@ -490,8 +450,7 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
             </div>
           </div>
         )}
-
-        {activeTab === 'actions' && (
+        {activeTab === 'actions' && ()
           <div className="actions-tab">
             <div className="actions-header">
               <h3>Response Actions</h3>
@@ -503,8 +462,7 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
                 Add Action
               </button>
             </div>
-
-            {showAddAction && (
+            {showAddAction && ()
               <div className="add-action-form">
                 <input
                   type="text"
@@ -551,36 +509,32 @@ const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({
                 </div>
               </div>
             )}
-
             <div className="actions-list">
-              {incident.response_actions.map((action) => (
+              {incident.response_actions.map((action) => ()
                 <div key={action.id} className="action-item">
                   <div className="action-status">
                     {getActionStatusIcon(action.status)}
                   </div>
-                  
                   <div className="action-content">
                     <div className="action-header">
                       <h4>{action.title}</h4>
-                      <span className={`action-status-badge ${action.status}`}>
+                      <span className={`action-status-badge ${action.status}`}>}
                         {action.status.replace('_', ' ')}
                       </span>
                     </div>
                     <p>{action.description}</p>
-                    
                     <div className="action-meta">
-                      {action.assigned_to && (
+                      {action.assigned_to && ()
                         <span>Assigned to: {action.assigned_to}</span>
                       )}
-                      {action.due_date && (
+                      {action.due_date && ()
                         <span>Due: {format(action.due_date, 'MMM dd, HH:mm')}</span>
                       )}
-                      {action.completed_at && (
+                      {action.completed_at && ()
                         <span>Completed: {format(action.completed_at, 'MMM dd, HH:mm')}</span>
                       )}
                     </div>
                   </div>
-
                   <div className="action-buttons">
                     <button className="btn btn-sm btn-text">
                       <Edit3 className="h-3 w-3" />

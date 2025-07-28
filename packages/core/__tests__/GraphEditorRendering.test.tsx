@@ -72,13 +72,13 @@ describe('GraphEditor Scene Rendering Integration', () => {
       id: `edge-${i + 1}`,}
       source: `node-${i + 1}`,}
       target: `node-${i + 2}`,}
-      animated: i % 2 === 0
+      animated: i % 2 === 0,
     }));
     return { nodes, edges };
   };
   it('renders complete graph with nodes and edges', () => {
     const { nodes, edges } = createMockGraph(3, 2);
-    render()
+    render();
       <GraphEditor 
         initialNodes={nodes} 
         initialEdges={edges}
@@ -97,7 +97,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
     expect(edge1).toHaveAttribute('data-target', 'node-2');
   });
   it('handles empty graph rendering', () => {
-    render()
+    render();
       <GraphEditor 
         initialNodes={[]} 
         initialEdges={[]}
@@ -133,7 +133,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
         data: { label: 'Positioned Node' }
       }
     ];
-    render()
+    render();
       <GraphEditor 
         initialNodes={nodes} 
         initialEdges={[]}
@@ -161,7 +161,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
         data: { label: 'Output Node', nodeType: 'Output' }
       }
     ];
-    render()
+    render();
       <GraphEditor 
         initialNodes={nodes} 
         initialEdges={[]}
@@ -174,7 +174,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
   });
   it('handles node selection rendering', async () => {
     const { nodes, edges } = createMockGraph(2, 1);
-    render()
+    render();
       <GraphEditor 
         initialNodes={nodes} 
         initialEdges={edges}
@@ -191,7 +191,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
     const validateConnection = jest.fn(() => [;
       { edgeId: 'edge-1', message: 'Invalid connection type' }
     ]);
-    render()
+    render();
       <GraphEditor 
         initialNodes={nodes} 
         initialEdges={edges}
@@ -203,7 +203,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
   });
   it('renders zoom controls when enabled', () => {
     const { nodes, edges } = createMockGraph(2, 1);
-    render()
+    render();
       <GraphEditor 
         initialNodes={nodes} 
         initialEdges={edges}
@@ -217,7 +217,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
   });
   it('handles viewport transformations', async () => {
     const { nodes, edges } = createMockGraph(3, 2);
-    render()
+    render();
       <GraphEditor 
         initialNodes={nodes} 
         initialEdges={edges}
@@ -252,7 +252,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
       }
     ];
     const { nodes } = createMockGraph(3, 0);
-    render()
+    render();
       <GraphEditor 
         initialNodes={nodes} 
         initialEdges={edges}
@@ -263,7 +263,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
   });
   it('handles drag and drop node creation', async () => {
     const { nodes, edges } = createMockGraph(1, 0);
-    render()
+    render();
       <GraphEditor 
         initialNodes={nodes} 
         initialEdges={edges}
@@ -282,7 +282,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
   });
   it('renders minimap when enabled', () => {
     const { nodes, edges } = createMockGraph(5, 4);
-    render()
+    render();
       <GraphEditor 
         initialNodes={nodes} 
         initialEdges={edges}
@@ -306,7 +306,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
         ...node,
         position: { x: node.position.x + i * 10, y: node.position.y + i * 10 }
       }));
-      rerender()
+      rerender();
         <GraphEditor 
           initialNodes={updatedNodes} 
           initialEdges={edges}
@@ -322,7 +322,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
     const { nodes } = createMockGraph(3, 0);
     const onEdgeCreate = jest.fn();
     const onEdgeDelete = jest.fn();
-    render()
+    render();
       <GraphEditor 
         initialNodes={nodes} 
         initialEdges={[]}
@@ -347,7 +347,7 @@ describe('GraphEditor Scene Rendering Integration', () => {
       configurable: true,
       value: 800,
     });
-    render()
+    render();
       <GraphEditor 
         initialNodes={nodes} 
         initialEdges={edges}

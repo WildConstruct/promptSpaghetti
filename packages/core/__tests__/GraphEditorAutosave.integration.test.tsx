@@ -19,7 +19,7 @@ describe('GraphEditor autosave/restore/download integration', () => {
   ];
   const initialEdges: Edge[] = [];
   it('autosaves graph to localStorage every 5s', () => {
-    render()
+    render();
       <GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />
     );
     expect(localStorage.getItem('graphDraft')).toBeNull();
@@ -38,7 +38,7 @@ describe('GraphEditor autosave/restore/download integration', () => {
         edges: [],
       })
     );
-    render()
+    render();
       <GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />
     );
     expect(await screen.findByText(/restore unsaved graph draft/i)).toBeInTheDocument();
@@ -54,7 +54,7 @@ describe('GraphEditor autosave/restore/download integration', () => {
       'graphDraft',
       JSON.stringify({ nodes: [{ id: 'x', type: 'default', data: {}, position: { x: 0, y: 0 } }], edges: [] })
     );
-    render()
+    render();
       <GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />
     );
     expect(await screen.findByText(/restore unsaved graph draft/i)).toBeInTheDocument();
@@ -63,7 +63,7 @@ describe('GraphEditor autosave/restore/download integration', () => {
     expect(screen.queryByText(/restore unsaved graph draft/i)).not.toBeInTheDocument();
   });
   it('downloads graph as JSON when Save as JSON is clicked', async () => {
-    render()
+    render();
       <GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />
     );
     // Mock createObjectURL and click

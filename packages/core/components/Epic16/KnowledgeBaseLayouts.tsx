@@ -145,7 +145,7 @@ export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({)
       onSearch(searchQuery.trim());
     }
   };
-  return ()
+  return ();
     <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <div className="max-w-7xl mx-auto px-4 py-16">
         {/* Main Hero Content */}
@@ -250,7 +250,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({)
     }
   };
   if (variant === 'compact') {
-    return ()
+    return ();
       <div className={`bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer ${className}`}>}
         <div onClick={handleCardClick}>
           <div className="flex items-start justify-between mb-2">
@@ -284,7 +284,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({)
     );
   }
   if (variant === 'list') {
-    return ()
+    return ();
       <div className={`bg-white border-b border-gray-200 p-4 hover:bg-gray-50 cursor-pointer ${className}`}>}
         <div onClick={handleCardClick} className="flex items-center justify-between">
           <div className="flex-1">
@@ -333,7 +333,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({)
     );
   }
   if (variant === 'featured') {
-    return ()
+    return ();
       <div className={`bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow ${className}`}>}
         <div className="p-6">
           <div className="flex items-start justify-between mb-4">
@@ -420,7 +420,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({)
     );
   }
   // Default detailed variant
-  return ()
+  return ();
     <div className={`bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow ${className}`}>}
       <div onClick={handleCardClick} className="cursor-pointer">
         <div className="flex items-start justify-between mb-3">
@@ -519,7 +519,7 @@ export const CategoryBrowser: React.FC<CategoryBrowserProps> = ({)
   showArticleCount = true
 }) => {
   if (layout === 'list') {
-    return ()
+    return ();
       <div className="space-y-2">
         {categories.map((category) => ()
           <div
@@ -549,7 +549,7 @@ export const CategoryBrowser: React.FC<CategoryBrowserProps> = ({)
     );
   }
   // Grid layout (default)
-  return ()
+  return ();
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {categories.map((category) => ()
         <div
@@ -597,7 +597,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({)
   const completedSteps = learningPath.steps.filter(step => step.completed).length;
   const progressPercentage = currentUserProgress || (completedSteps / learningPath.steps.length) * 100;
   if (variant === 'compact') {
-    return ()
+    return ();
       <div className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer">
         <div onClick={() => onClick?.(learningPath)}>
           <h3 className="font-medium text-gray-900 mb-2 line-clamp-2">{learningPath.title}</h3>
@@ -627,7 +627,7 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({)
     );
   }
   // Detailed variant
-  return ()
+  return ();
     <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
       <div onClick={() => onClick?.(learningPath)} className="cursor-pointer">
         <div className="flex items-start justify-between mb-4">
@@ -782,7 +782,7 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({)
     if (!selectedCategory) return articles;
     return articles.filter(article => article.category.id === selectedCategory);
   }, [articles, selectedCategory]);
-  return ()
+  return ();
     <div className={`min-h-screen bg-gray-50 ${className}`}>}
       {/* Hero Section */}
       <KnowledgeBaseHero

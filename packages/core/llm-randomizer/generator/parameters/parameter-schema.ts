@@ -94,7 +94,7 @@ export class ParameterValidator {
       console.log('Schema validation failed:', result.error.errors);
       return {
         isValid: false,
-        errors: result.error.errors.map(err => ({)
+        errors: result.error.errors.map(err => ({),
           field: err.path.join('.'),
           message: err.message,
           code: err.code,
@@ -129,7 +129,7 @@ export class ParameterValidator {
       warnings.push({)
         field: 'purpose',
         message: 'Purpose description is quite brief',
-        suggestion: 'Provide more detailed purpose for better graph generation'
+        suggestion: 'Provide more detailed purpose for better graph generation',
       });
     }
     // Purpose-complexity mismatch validation
@@ -150,14 +150,14 @@ export class ParameterValidator {
       warnings.push({)
         field: 'complexity',
         message: 'Purpose suggests complex requirements but complexity is set to simple',
-        suggestion: 'Consider setting complexity to "moderate" or "complex" for better results'
+        suggestion: 'Consider setting complexity to "moderate" or "complex" for better results',
       });
     } else if (parameters.complexity === 'moderate' && )
                complexityKeywords.complex.some(keyword => purposeLower.includes(keyword))) {
       warnings.push({)
         field: 'complexity',
         message: 'Purpose suggests complex requirements but complexity is set to moderate',
-        suggestion: 'Consider setting complexity to "complex" for better results'
+        suggestion: 'Consider setting complexity to "complex" for better results',
       });
     }
     // Node type requirements validation
@@ -174,7 +174,7 @@ export class ParameterValidator {
       warnings.push({)
         field: 'temperature',
         message: 'High temperature may reduce output quality for OpenAI models',
-        suggestion: 'Consider temperature 0.3-1.0 for structured output'
+        suggestion: 'Consider temperature 0.3-1.0 for structured output',
       });
     }
     return {
@@ -191,7 +191,6 @@ export class ParameterValidator {
     nodeTypes?: string[];
     temperature?: number;
     focusAreas?: string[];
-  } {
     const suggestions: any = {};
     // Suggest node count based on complexity
     if (parameters.complexity && !parameters.nodeCount) {
@@ -304,7 +303,7 @@ export const defaultPresets: ParameterPreset[] = [
     tags: ['beginner', 'greeting', 'simple'],
     isDefault: true,
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   },
   {
     id: 'creative-storyteller',
@@ -336,7 +335,7 @@ export const defaultPresets: ParameterPreset[] = [
     tags: ['creative', 'storytelling', 'branching'],
     isDefault: true,
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   },
   {
     id: 'technical-docs',
@@ -368,6 +367,6 @@ export const defaultPresets: ParameterPreset[] = [
     tags: ['technical', 'documentation', 'structured'],
     isDefault: true,
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   }
 ];

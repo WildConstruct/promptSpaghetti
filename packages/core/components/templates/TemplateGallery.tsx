@@ -79,9 +79,9 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({)
   const _____complexityColors = {
     beginner: 'bg-green-100 text-green-800',
     intermediate: 'bg-yellow-100 text-yellow-800',
-    advanced: 'bg-red-100 text-red-800'
+    advanced: 'bg-red-100 text-red-800',
   };
-  return ()
+  return ();
     <div className={`template-gallery ${className}`}>}
       {/* Header */}
       <div className="mb-6">
@@ -197,9 +197,9 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onPreview,
   const complexityColors = {
     beginner: 'bg-green-100 text-green-800',
     intermediate: 'bg-yellow-100 text-yellow-800',
-    advanced: 'bg-red-100 text-red-800'
+    advanced: 'bg-red-100 text-red-800',
   };
-  return ()
+  return ();
     <div className={`bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border ${featured ? 'border-blue-200 bg-blue-50' : 'border-gray-200'}`}>}
       {featured && ()
         <div className="bg-blue-500 text-white text-xs font-medium px-3 py-1 rounded-t-lg">

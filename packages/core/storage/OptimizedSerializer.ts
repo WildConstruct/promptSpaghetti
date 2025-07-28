@@ -155,7 +155,6 @@ export class OptimizedSerializer {
       averageRatio: number;
       timeSaved: number;
     };
-    } {
     // Implementation would track these metrics
     return {
       averageSerializationTime: 0,
@@ -219,7 +218,7 @@ export class OptimizedSerializer {
         data: compressed,
         format: `json+${options.compression}`,}
         size: compressed.byteLength,
-        compressionRatio: compressed.byteLength / originalSize
+        compressionRatio: compressed.byteLength / originalSize,
       };
     }
     return {
@@ -260,7 +259,7 @@ export class OptimizedSerializer {
       format: 'json', 
       compression: undefined ,
     });
-    const compressed = await this.compressString(;)
+    const compressed = await this.compressString(;);
       jsonResult.data as string, 
       options.compression || 'gzip'
     );
@@ -268,7 +267,7 @@ export class OptimizedSerializer {
       data: compressed,
       format: `compressed+${options.compression || 'gzip'}`,}
       size: compressed.byteLength,
-      compressionRatio: compressed.byteLength / jsonResult.size
+      compressionRatio: compressed.byteLength / jsonResult.size,
     };
   }
   private async deserializeBinary(data: ArrayBuffer): Promise<any> {

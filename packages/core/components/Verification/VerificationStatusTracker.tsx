@@ -81,17 +81,17 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
         email_verification: { ,
           status: 'approved', 
           requestId: 'req_email_123',
-          submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago
+          submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago,
         },
         phone_verification: { ,
           status: 'pending', 
           requestId: 'req_phone_456',
-          submittedAt: new Date(Date.now() - 1 * 60 * 60 * 1000) // 1 hour ago
+          submittedAt: new Date(Date.now() - 1 * 60 * 60 * 1000) // 1 hour ago,
         },
         government_id: { ,
           status: 'in_review', 
           requestId: 'req_id_789',
-          submittedAt: new Date(Date.now() - 6 * 60 * 60 * 1000) // 6 hours ago
+          submittedAt: new Date(Date.now() - 6 * 60 * 60 * 1000) // 6 hours ago,
         }
       };
       const items: VerificationStatusItem[] = VERIFICATION_TYPES.map(type => {)
@@ -171,7 +171,7 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
   const totalCount = verificationItems.length;
   const completionPercentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
   if (isLoading) {
-    return ()
+    return ();
       <div className="verification-status-tracker loading">
         <div className="loading-spinner">Loading verification status...</div>
         <style>{`
@@ -189,7 +189,7 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
       </div>
     );
   }
-  return ()
+  return ();
     <div className="verification-status-tracker">
       {/* Header */}
       <div className="tracker-header">

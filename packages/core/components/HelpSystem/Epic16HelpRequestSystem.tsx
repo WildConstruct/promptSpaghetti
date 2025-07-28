@@ -49,7 +49,7 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
         id: `submitted-${data.request.id}`,}
         type: 'success',
         message: `Help request ${data.request.id} has been submitted`,}
-        timestamp: new Date()
+        timestamp: new Date(),
       }]);
     };
     const handleRequestAutoResolved = (data: { request: HelpRequest }) => {
@@ -57,7 +57,7 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
         id: `auto-resolved-${data.request.id}`,}
         type: 'info',
         message: `Help request ${data.request.id} was automatically resolved`,}
-        timestamp: new Date()
+        timestamp: new Date(),
       }]);
     };
     const handleRequestStatusChanged = (data: { )
@@ -69,7 +69,7 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
         id: `status-${data.request.id}-${Date.now()}`,}
         type: 'info',
         message: `Help request ${data.request.id} status changed to ${data.newStatus}`,}
-        timestamp: new Date()
+        timestamp: new Date(),
       }]);
     };
     const handleRequestEscalated = (data: { )
@@ -80,7 +80,7 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
         id: `escalated-${data.request.id}`,}
         type: 'warning',
         message: `Help request ${data.request.id} has been escalated`,}
-        timestamp: new Date()
+        timestamp: new Date(),
       }]);
     };
     const handleResponseAdded = (data: { )
@@ -90,7 +90,7 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
         id: `response-${data.request.id}-${Date.now()}`,}
         type: 'info',
         message: `New response added to help request ${data.request.id}`,}
-        timestamp: new Date()
+        timestamp: new Date(),
       }]);
     };
     // Subscribe to events
@@ -130,7 +130,7 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
   const handleViewChange = (newView: 'dashboard' | 'form' | 'settings') => {
     setView(newView);
   };
-  return ()
+  return ();
     <div className="epic16-help-request-system h-full flex flex-col relative">
       {/* Navigation Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -228,7 +228,7 @@ const HelpSystemSettings: React.FC<HelpSystemSettingsProps> = ({)
   helpService,
   onConfigChange
 }) => {
-  return ()
+  return ();
     <div className="p-6">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Help System Settings</h2>
       <div className="space-y-6">
@@ -383,16 +383,16 @@ interface NotificationSystemProps {
 }
 const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }) => {
   if (notifications.length === 0) return null;
-  return ()
+  return ();
     <div className="fixed top-4 right-4 z-50 space-y-2">
       {notifications.slice(-3).map((notification) => {
         const colors = {
           success: 'bg-green-50 border-green-200 text-green-700',
           error: 'bg-red-50 border-red-200 text-red-700',
           info: 'bg-blue-50 border-blue-200 text-blue-700',
-          warning: 'bg-yellow-50 border-yellow-200 text-yellow-700'
+          warning: 'bg-yellow-50 border-yellow-200 text-yellow-700',
         };
-        return ()
+        return ();
           <div
             key={notification.id}
             className={`max-w-sm w-full border rounded-md p-4 shadow-lg ${colors[notification.type]}`}
@@ -437,7 +437,7 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }
 // Help System Documentation Component
 const HelpSystemDocumentation: React.FC = () => {
   const [showHelp, setShowHelp] = useState(false);
-  return ()
+  return ();
     <>
       <button
         onClick={() => setShowHelp(true)}

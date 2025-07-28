@@ -16,7 +16,7 @@ interface PaletteProps {
 }
 
 export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, onDragStart }) => {
-  return ()
+  return ();
     <aside
       aria-label="Node Palette"
       style={{
@@ -107,12 +107,12 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
               memory: 'Memory & Storage',
               smart: 'Smart Tools',
               process: 'Custom Processing',
-              other: 'Other Tools'
+              other: 'Other Tools',
             };
             return categoryOrder.map(categoryKey => {)
               const categoryNodes = categories[categoryKey];
               if (!categoryNodes || categoryNodes.length === 0) return null;
-              return ()
+              return ();
                 <div key={categoryKey} style={{ marginBottom: 16 }}>
                   <div style={{
                     fontSize: 11,
@@ -149,7 +149,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                         background: 'none',
                         cursor: 'grab',
                         outline: 'none',
-                        transition: 'background-color 0.2s'
+                        transition: 'background-color 0.2s',
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = '#2a2f3a';

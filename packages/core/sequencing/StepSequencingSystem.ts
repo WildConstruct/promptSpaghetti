@@ -259,7 +259,7 @@ export class StepSequencingSystem extends EventEmitter {
         trackExecutionMetrics: true,
         optimizeExecutionOrder: true,
         enableCaching: true,
-        cacheExpiryTime: 3600000 // 1 hour
+        cacheExpiryTime: 3600000 // 1 hour,
       },
       ...config
     };
@@ -274,7 +274,7 @@ export class StepSequencingSystem extends EventEmitter {
       metadata: {,
         ...definition.metadata,
         createdAt: new Date(),
-        lastModified: new Date()
+        lastModified: new Date(),
       }
     };
     // Validate sequence
@@ -307,7 +307,7 @@ export class StepSequencingSystem extends EventEmitter {
       metadata: {,
         ...sequence.metadata,
         ...updates.metadata,
-        lastModified: new Date()
+        lastModified: new Date(),
       }
     };
     await this.validateSequence(updatedSequence);
@@ -380,7 +380,7 @@ export class StepSequencingSystem extends EventEmitter {
         errorCount: 0,
         effectiveSuccessRate: 0,
       },
-      startTime: new Date()
+      startTime: new Date(),
     };
     this.executions.set(executionId, execution);
     this.activeExecutions.add(executionId);
@@ -658,7 +658,6 @@ export class StepSequencingSystem extends EventEmitter {
     averageDuration: number;
     commonFailurePoints: Array<{ stepId: string; failureRate: number }>;
     performanceMetrics: Record<string, unknown>;
-  } {
     const executions = this.listExecutions({ sequenceId });
     const completedExecutions = executions.filter(exec => exec.status === 'completed');
     const totalExecutions = executions.length;
@@ -680,7 +679,7 @@ export class StepSequencingSystem extends EventEmitter {
     const commonFailurePoints = Object.entries(failureCounts);
       .map(([stepId, failures]) => ({)
         stepId,
-        failureRate: (failures / (stepCounts[stepId] || 1)) * 100
+        failureRate: (failures / (stepCounts[stepId] || 1)) * 100,
       }))
       .sort((a, b) => b.failureRate - a.failureRate);
     return {
@@ -965,7 +964,7 @@ export class StepSequencingSystem extends EventEmitter {
       timestamp: new Date(),
       state: { ...execution.context.executionState },
       action: step.action?.type || 'unknown',
-      reversible: step.rollback.action !== undefined
+      reversible: step.rollback.action !== undefined,
     };
     execution.context.rollbackStack.push(entry);
   }
@@ -1111,7 +1110,7 @@ export class SequenceBuilder {
         estimatedTotalDuration: 0,
         difficulty: 'medium',
         createdAt: new Date(),
-        lastModified: new Date()
+        lastModified: new Date(),
       }
     };
   }

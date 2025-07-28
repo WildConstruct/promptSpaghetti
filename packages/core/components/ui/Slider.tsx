@@ -23,7 +23,7 @@ export const Slider: React.FC<SliderProps> = ({)
     const newValue = parseFloat(e.target.value);
     onValueChange?.([newValue]);
   };
-  return ()
+  return ();
     <input
       type="range"
       value={value[0] || 0}

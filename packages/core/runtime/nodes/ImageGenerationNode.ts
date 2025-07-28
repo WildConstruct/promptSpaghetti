@@ -101,7 +101,7 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
           cost: result.usage?.totalCost || result.usage?.estimatedCost || 0,
           seed: img.seed || seed,
           prompt,
-          negativePrompt: negativePrompt || undefined
+          negativePrompt: negativePrompt || undefined,
         }
       }));
       const totalCost = images.reduce((sum, img) => sum + img.metadata.cost, 0);
@@ -294,7 +294,7 @@ export class ImageVariationNode extends AdvancedRuntimeNode {
         },
         executionTime: 5000,
         tokensUsed: { input: 0, output: 0 },
-        cost: 0.02 * count
+        cost: 0.02 * count,
       };
     } catch (error) {
       throw new Error(`Image variation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
@@ -340,7 +340,7 @@ export class ImageUpscaleNode extends AdvancedRuntimeNode {
         originalImage: image,
         scaleFactor,
         method,
-        processedAt: new Date()
+        processedAt: new Date(),
       };
       return {
         outputs: {,
@@ -349,7 +349,7 @@ export class ImageUpscaleNode extends AdvancedRuntimeNode {
         },
         executionTime: 8000,
         tokensUsed: { input: 0, output: 0 },
-        cost: 0.01 * scaleFactor
+        cost: 0.01 * scaleFactor,
       };
     } catch (error) {
       throw new Error(`Image upscaling failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
@@ -395,7 +395,7 @@ export class ImageEditNode extends AdvancedRuntimeNode {
         mask,
         editPrompt,
         strength,
-        processedAt: new Date()
+        processedAt: new Date(),
       };
       return {
         outputs: {,

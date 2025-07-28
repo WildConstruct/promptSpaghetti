@@ -34,7 +34,7 @@ export const ShareAnalyticsDashboard: React.FC<ShareAnalyticsDashboardProps> = (
       try {
         const defaultTimeRange = timeRange || {
           start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
-          end: new Date()
+          end: new Date(),
         };
         const metricsData = await sharingService.getShareMetrics(shareLinkId, defaultTimeRange);
         setMetrics(metricsData);
@@ -58,7 +58,7 @@ export const ShareAnalyticsDashboard: React.FC<ShareAnalyticsDashboardProps> = (
     return (num * 100).toFixed(1) + '%';
   };
   if (isLoading) {
-    return ()
+    return ();
       <div style={{
         padding: '40px',
         textAlign: 'center',
@@ -71,14 +71,14 @@ export const ShareAnalyticsDashboard: React.FC<ShareAnalyticsDashboardProps> = (
           borderTop: '3px solid #3b82f6',
           borderRadius: '50%',
           animation: 'spin 1s linear infinite',
-          margin: '0 auto 16px'
+          margin: '0 auto 16px',
         }}></div>
         Loading analytics...
       </div>
     );
   }
   if (error) {
-    return ()
+    return ();
       <div style={{
         padding: '40px',
         textAlign: 'center',
@@ -90,7 +90,7 @@ export const ShareAnalyticsDashboard: React.FC<ShareAnalyticsDashboardProps> = (
     );
   }
   if (!metrics) {
-    return ()
+    return ();
       <div style={{
         padding: '40px',
         textAlign: 'center',
@@ -100,12 +100,12 @@ export const ShareAnalyticsDashboard: React.FC<ShareAnalyticsDashboardProps> = (
       </div>
     );
   }
-  return ()
+  return ();
     <div style={{
       padding: '24px',
       backgroundColor: 'white',
       borderRadius: '12px',
-      border: '1px solid #e5e7eb'
+      border: '1px solid #e5e7eb',
     }}>
       <h3 style={{
         margin: '0 0 24px 0',

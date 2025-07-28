@@ -212,9 +212,9 @@ export abstract class BaseAIModel {
           processingTime: Date.now() - startTime,
           cost,
           modelUsed: this._id,
-          quality: await this._assessOutputQuality(output)
+          quality: await this._assessOutputQuality(output),
         },
-        completedAt: new Date()
+        completedAt: new Date(),
       };
       this._status = AIModelStatus.READY;
       return response;
@@ -228,7 +228,7 @@ export abstract class BaseAIModel {
           message: error instanceof Error ? error.message : 'Unknown error',
           details: error,
         },
-        completedAt: new Date()
+        completedAt: new Date(),
       };
       this._status = AIModelStatus.ERROR;
       return response;

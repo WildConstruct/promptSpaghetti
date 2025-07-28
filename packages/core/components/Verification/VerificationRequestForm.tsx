@@ -94,7 +94,7 @@ export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = (
   if (!currentStepData) {
     return <div className="verification-error">Invalid verification step</div>;
   }
-  return ()
+  return ();
     <div className="verification-request-form">
       <div className="verification-header">
         <h2>Account Verification</h2>
@@ -342,7 +342,7 @@ const VerificationStepContent: React.FC<VerificationStepContentProps> = ({)
   }, []);
   switch (step.verificationType) {
   case 'email_verification':
-    return ()
+    return ();
       <EmailVerificationStep
         data={stepData}
         onUpdate={updateStepData}
@@ -351,7 +351,7 @@ const VerificationStepContent: React.FC<VerificationStepContentProps> = ({)
       />
     );
   case 'phone_verification':
-    return ()
+    return ();
       <PhoneVerificationStep
         data={stepData}
         onUpdate={updateStepData}
@@ -360,7 +360,7 @@ const VerificationStepContent: React.FC<VerificationStepContentProps> = ({)
       />
     );
   case 'government_id':
-    return ()
+    return ();
       <GovernmentIdStep
         data={stepData}
         onUpdate={updateStepData}
@@ -369,7 +369,7 @@ const VerificationStepContent: React.FC<VerificationStepContentProps> = ({)
       />
     );
   case 'professional_credentials':
-    return ()
+    return ();
       <ProfessionalCredentialsStep
         data={stepData}
         onUpdate={updateStepData}
@@ -378,7 +378,7 @@ const VerificationStepContent: React.FC<VerificationStepContentProps> = ({)
       />
     );
   case 'social_media_verification':
-    return ()
+    return ();
       <SocialMediaStep
         data={stepData}
         onUpdate={updateStepData}
@@ -398,7 +398,7 @@ const EmailVerificationStep: React.FC<{
   onSubmit: (e: React.FormEvent) => Promise<void>;
   isSubmitting: boolean;
 }> = ({ data, onUpdate, onSubmit, isSubmitting }) => {
-  return ()
+  return ();
     <form onSubmit={onSubmit}>
       <div className="form-group">
         <label htmlFor="email">Email Address *</label>
@@ -434,7 +434,7 @@ const EmailVerificationStep: React.FC<{
           border-radius: 6px;
           font-size: 14px;
         }
-        input:focus {
+        input:focus {,
           outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
@@ -461,7 +461,7 @@ const PhoneVerificationStep: React.FC<{
   onSubmit: (e: React.FormEvent) => Promise<void>;
   isSubmitting: boolean;
 }> = ({ data, onUpdate, onSubmit, isSubmitting }) => {
-  return ()
+  return ();
     <form onSubmit={onSubmit}>
       <div className="form-group">
         <label htmlFor="phone">Phone Number *</label>
@@ -498,7 +498,7 @@ const PhoneVerificationStep: React.FC<{
           border-radius: 6px;
           font-size: 14px;
         }
-        input:focus {
+        input:focus {,
           outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);

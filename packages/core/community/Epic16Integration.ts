@@ -372,12 +372,11 @@ export class Epic16IntegratedService implements Epic16UnifiedService {
   private analyticsService: LearningAnalyticsServiceImpl;
   private contributionService: ContributionManagementService;
   private skillService: SkillLevelTaggingService;
-  constructor()
+  constructor();
     tutorialService: MarketplaceTutorialSystemService,
     analyticsService: LearningAnalyticsServiceImpl,
     contributionService: ContributionManagementService,
     skillService: SkillLevelTaggingService,
-  ) {
     this.tutorialService = tutorialService;
     this.analyticsService = analyticsService;
     this.contributionService = contributionService;
@@ -398,7 +397,7 @@ export class Epic16IntegratedService implements Epic16UnifiedService {
       // Get personalized tutorial recommendations
       const tutorials = await this.tutorialService.discoverTutorials(userProfile, discoveryContext);
       // Apply additional personalization based on marketplace context
-      const personalizedTutorials = await this.applyMarketplacePersonalization(;)
+      const personalizedTutorials = await this.applyMarketplacePersonalization(;);
         tutorials,
         context.marketplace_context
       );
@@ -493,7 +492,7 @@ export class Epic16IntegratedService implements Epic16UnifiedService {
         skill_profile_updates: await this.getSkillProfileUpdates(completionData),
         completion_insights: completionInsights,
         marketplace_impact: await this.assessMarketplaceImpact(completionData),
-        next_learning_opportunities: await this.identifyNextLearningOpportunities(completionData)
+        next_learning_opportunities: await this.identifyNextLearningOpportunities(completionData),
       };
     } catch (error) {
       console.error('Failed to complete learning experience:', error);
@@ -600,7 +599,7 @@ export class Epic16IntegratedService implements Epic16UnifiedService {
         knowledge_transfer_metrics: knowledgeTransferMetrics,
         cross_platform_insights: crossPlatformInsights,
         system_optimizations: systemOptimizations,
-        strategic_recommendations: await this.generateStrategicRecommendations(timeRange)
+        strategic_recommendations: await this.generateStrategicRecommendations(timeRange),
       };
     } catch (error) {
       console.error('Failed to get system-wide insights:', error);

@@ -53,7 +53,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({)
     }
   };
   if (error) {
-    return ()
+    return ();
       <div className="activity-feed activity-feed--error">
         <div className="activity-feed__error">
           <h3>Failed to load activity</h3>
@@ -68,7 +68,7 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`activity-feed ${compact ? 'activity-feed--compact' : ''}`}>}
       {showStats && stats && !compact && ()
         <ActivityStats

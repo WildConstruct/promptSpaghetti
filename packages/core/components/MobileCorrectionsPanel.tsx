@@ -72,7 +72,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({ 
     return applyCorrections(testText);
   }, [testText, applyCorrections]);
   if (!isOpen) return null;
-  return ()
+  return ();
     <div
       style={{
         position: 'fixed',
@@ -107,7 +107,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({ 
             color: '#a0aec0',
             cursor: 'pointer',
             fontSize: '20px',
-            padding: '4px 8px'
+            padding: '4px 8px',
           }}
         >
           ×
@@ -138,7 +138,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({ 
               cursor: 'pointer',
               fontSize: '14px',
               fontWeight: 500,
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
             }}
           >
             {tab.label}
@@ -236,7 +236,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({ 
                     <p style={{ 
                       fontSize: '14px', 
                       color: '#a0aec0', 
-                      margin: '0 0 8px 0' 
+                      margin: '0 0 8px 0' ,
                     }}>
                       {rule.description}
                     </p>
@@ -475,7 +475,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({ 
                 background: '#2a2e37',
                 padding: '16px',
                 borderRadius: '8px',
-                border: '1px solid #444'
+                border: '1px solid #444',
               }}>
                 <h4 style={{ fontSize: '16px', marginBottom: '8px' }}>Statistics</h4>
                 <p style={{ fontSize: '14px', color: '#a0aec0', marginBottom: '8px' }}>
@@ -492,7 +492,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({ 
                 background: '#2a2e37',
                 padding: '16px',
                 borderRadius: '8px',
-                border: '1px solid #444'
+                border: '1px solid #444',
               }}>
                 <h4 style={{ fontSize: '16px', marginBottom: '8px' }}>Export/Import</h4>
                 <p style={{ fontSize: '14px', color: '#a0aec0', marginBottom: '12px' }}>

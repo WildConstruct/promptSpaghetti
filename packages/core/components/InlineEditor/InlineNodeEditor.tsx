@@ -128,7 +128,7 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({)
     onClose();
   }, [node.data, onClose]);
   if (!isActive) return null;
-  return ()
+  return ();
     <div
       ref={editorRef}
       className="inline-node-editor"
@@ -146,7 +146,7 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({)
         zIndex: 1000,
         color: 'white',
         fontSize: 14,
-        animation: 'slideIn 0.2s ease-out'
+        animation: 'slideIn 0.2s ease-out',
       }}
     >
       {/* Header */}
@@ -156,7 +156,7 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({)
         alignItems: 'center',
         marginBottom: 12,
         paddingBottom: 8,
-        borderBottom: '1px solid #4a5568'
+        borderBottom: '1px solid #4a5568',
       }}>
         <h3 style={{ 
           margin: 0, 
@@ -242,7 +242,7 @@ export const InlineNodeEditor: React.FC<InlineNodeEditorProps> = ({)
         alignItems: 'center',
         marginTop: 16,
         paddingTop: 12,
-        borderTop: '1px solid #4a5568'
+        borderTop: '1px solid #4a5568',
       }}>
         <div style={{ fontSize: 12, color: '#a0aec0' }}>
           Press ⌘Enter to save, Esc to cancel
@@ -323,7 +323,7 @@ const NodeSpecificEditor: React.FC<NodeSpecificEditorProps> = ({)
     case 'output':
       return <OutputEditor {...editorProps} />;
     default:
-      return ()
+      return ();
         <div style={{ 
           padding: 12, 
           textAlign: 'center', 

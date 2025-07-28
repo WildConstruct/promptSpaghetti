@@ -79,7 +79,7 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({)
   };
   if (!showDetailedView) {
     // Compact view - just avatars
-    return ()
+    return ();
       <div className={`flex items-center space-x-2 ${className}`}>}
         <UserAvatarList
           users={users}
@@ -100,7 +100,7 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({)
     );
   }
   // Detailed view - expandable panel
-  return ()
+  return ();
     <div className={`bg-white rounded-lg shadow-lg border ${className}`}>}
       {/* Header */}
       <div 
@@ -242,7 +242,7 @@ const UserPresenceItem: React.FC<UserPresenceItemProps> = ({)
       onFollowUser(user.userId);
     }
   };
-  return ()
+  return ();
     <div
       className={`flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 ${
         !isCurrentUser && onUserClick ? 'cursor-pointer' : ''

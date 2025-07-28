@@ -363,7 +363,7 @@ export class ConversionEventValidator {
       for (const field of this.deduplicationConfig.fuzzyMatchFields) {
         const weight = this.getFieldWeight(field);
         totalWeight += weight;
-        const similarity = this.calculateFieldSimilarity(;)
+        const similarity = this.calculateFieldSimilarity(;);
           this.getFieldValue(event1, field),
           this.getFieldValue(event2, field),
           field
@@ -476,7 +476,7 @@ export class ConversionEventValidator {
       category: 'schema',
       weight: 1.0,
       enabled: true,
-      validator: (event: EnhancedConversionEvent) => {
+      validator: (event: EnhancedConversionEvent) => {,
         const errors: ValidationError[] = [];
         const requiredFields = ['id', 'userId', 'type', 'timestamp'];
         for (const field of requiredFields) {
@@ -509,7 +509,7 @@ export class ConversionEventValidator {
       category: 'schema',
       weight: 0.8,
       enabled: true,
-      validator: (event: EnhancedConversionEvent) => {
+      validator: (event: EnhancedConversionEvent) => {,
         const errors: ValidationError[] = [];
         const warnings: ValidationWarning[] = [];
         const now = Date.now();
@@ -536,7 +536,7 @@ export class ConversionEventValidator {
             field: 'timestamp',
             message: 'Event is more than 24 hours old',
             code: 'OLD_TIMESTAMP',
-            impact: 'May affect attribution accuracy'
+            impact: 'May affect attribution accuracy',
           });
         }
         return {
@@ -557,7 +557,7 @@ export class ConversionEventValidator {
       category: 'schema',
       weight: 0.6,
       enabled: true,
-      validator: (event: EnhancedConversionEvent) => {
+      validator: (event: EnhancedConversionEvent) => {,
         const errors: ValidationError[] = [];
         if (event.value !== undefined && event.value < 0) {
           errors.push({)
@@ -586,7 +586,7 @@ export class ConversionEventValidator {
       category: 'privacy',
       weight: 1.0,
       enabled: true,
-      validator: (event: EnhancedConversionEvent) => {
+      validator: (event: EnhancedConversionEvent) => {,
         const errors: ValidationError[] = [];
         const warnings: ValidationWarning[] = [];
         if (!event.privacyConsent) {
@@ -613,7 +613,7 @@ export class ConversionEventValidator {
               field: 'crossDeviceUserId',
               message: 'Cross-device tracking without explicit consent',
               code: 'CROSS_DEVICE_CONSENT_WARNING',
-              impact: 'May violate privacy regulations'
+              impact: 'May violate privacy regulations',
             });
           }
         }
@@ -646,12 +646,12 @@ export class ConversionEventValidator {
             field: 'value',
             message: 'Unusually high event value detected',
             code: 'HIGH_VALUE_ANOMALY',
-            impact: 'May indicate fraudulent activity'
+            impact: 'May indicate fraudulent activity',
           });
         }
         // Check for rapid event succession
         if (context?.recentEvents) {
-          const recentCount = context.recentEvents.filter(;)
+          const recentCount = context.recentEvents.filter(;);
             e => (event.timestamp - e.timestamp) < 1000 // Last second
           ).length;
           if (recentCount > 5) {
@@ -660,7 +660,7 @@ export class ConversionEventValidator {
               rule: 'anomaly_detection',
               message: 'Rapid event succession detected',
               code: 'RAPID_EVENTS_ANOMALY',
-              impact: 'May indicate automated/bot activity'
+              impact: 'May indicate automated/bot activity',
             });
           }
         }
@@ -673,7 +673,7 @@ export class ConversionEventValidator {
               field: 'deviceFingerprint',
               message: 'Device associated with multiple users',
               code: 'SHARED_DEVICE_ANOMALY',
-              impact: 'May indicate shared or compromised device'
+              impact: 'May indicate shared or compromised device',
             });
           }
         }
@@ -717,7 +717,7 @@ export class ConversionEventValidator {
       {
         name: 'timestamp',
         weight: 0.2,
-        transform: (timestamp: number) => Math.floor(timestamp / 1000).toString()
+        transform: (timestamp: number) => Math.floor(timestamp / 1000).toString(),
       }
     ];
   }

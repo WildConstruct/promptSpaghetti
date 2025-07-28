@@ -33,7 +33,7 @@ export const MetricsGrid: React.FC<MetricsGridProps> = ({)
     medium: 'gap-medium', 
     large: 'gap-large',
   }[gap];
-  return ()
+  return ();
     <div 
       className={`metrics-grid ${gapClass} ${className}`}
       style={{

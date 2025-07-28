@@ -65,7 +65,7 @@ export declare class EmailTemplateManager {
     /**
      * Render an email template
      */
-    renderTemplate()
+    renderTemplate();
       templateName: string,
       variables: TemplateVariables,
       format?: 'html' | 'text',

@@ -425,7 +425,7 @@ export class SecurityReliabilityEngineer extends EventEmitter {
               threshold: alert.burn_rate_threshold,
               remaining_budget: slo.error_budget.remaining_budget,
             },
-            projected_impact: slo.error_budget.remaining_budget < 20 
+            projected_impact: slo.error_budget.remaining_budget < 20 ,
               ? 'Error budget may be exhausted within hours'
               : 'Monitor for continued high burn rate',
             recommended_actions: [,
@@ -557,7 +557,7 @@ export class SecurityReliabilityEngineer extends EventEmitter {
         downtime_minutes: Math.random() * 5,
         mtbf: 10080 + Math.random() * 5040, // 7-14 days
         mttr: 15 + Math.random() * 30, // 15-45 minutes
-        mttd: 5 + Math.random() * 10 // 5-15 minutes
+        mttd: 5 + Math.random() * 10 // 5-15 minutes,
       },
       performance: {,
         avg_response_time: 50 + Math.random() * 100,
@@ -565,13 +565,13 @@ export class SecurityReliabilityEngineer extends EventEmitter {
         p95_response_time: 200 + Math.random() * 300,
         p99_response_time: 500 + Math.random() * 1000,
         throughput_rps: 100 + Math.random() * 900,
-        error_rate_percentage: Math.random() * 2
+        error_rate_percentage: Math.random() * 2,
       },
       error_budget: {,
         total_budget: 0.1, // 99.9% SLO = 0.1% error budget
         consumed_budget: Math.random() * 0.05,
         remaining_budget: 0.1 - Math.random() * 0.05,
-        burn_rate: 0.5 + Math.random() * 1.5
+        burn_rate: 0.5 + Math.random() * 1.5,
       },
       capacity: {,
         cpu_utilization: 30 + Math.random() * 40,
@@ -579,7 +579,7 @@ export class SecurityReliabilityEngineer extends EventEmitter {
         disk_utilization: 20 + Math.random() * 30,
         network_utilization: 10 + Math.random() * 20,
         connection_pool_utilization: 25 + Math.random() * 50,
-        queue_depth: Math.floor(Math.random() * 100)
+        queue_depth: Math.floor(Math.random() * 100),
       },
       dependencies: [,
         {
@@ -587,14 +587,14 @@ export class SecurityReliabilityEngineer extends EventEmitter {
           availability: 99.9 + (Math.random() - 0.5) * 0.2,
           avg_response_time: 25 + Math.random() * 50,
           error_rate: Math.random() * 1,
-          health_score: 85 + Math.random() * 15
+          health_score: 85 + Math.random() * 15,
         },
         {
           service: 'database',
           availability: 99.95 + (Math.random() - 0.5) * 0.1,
           avg_response_time: 10 + Math.random() * 20,
           error_rate: Math.random() * 0.5,
-          health_score: 90 + Math.random() * 10
+          health_score: 90 + Math.random() * 10,
         }
       ],
       collected_at: Date.now(),
@@ -689,7 +689,7 @@ export class SecurityReliabilityEngineer extends EventEmitter {
             sev1: periodIncidents.filter(i => i.severity === 'sev1').length,
             sev2: periodIncidents.filter(i => i.severity === 'sev2').length,
             sev3: periodIncidents.filter(i => i.severity === 'sev3').length,
-            sev4: periodIncidents.filter(i => i.severity === 'sev4').length
+            sev4: periodIncidents.filter(i => i.severity === 'sev4').length,
           },
           by_category: periodIncidents.reduce((acc, incident) => {
             const category = incident.classification.category;
@@ -699,7 +699,7 @@ export class SecurityReliabilityEngineer extends EventEmitter {
           avg_mttr: this.calculateAverageMTTR(periodIncidents),
           avg_mttd: this.calculateAverageMTTD(periodIncidents),
         },
-        service_health: Array.from(this.metrics.keys()).map(service => {)
+        service_health: Array.from(this.metrics.keys()).map(service => {),
           const recentMetrics = this.metrics.get(service)?.slice(-10) || [];
           const avgHealth = recentMetrics.length > 0;
             ? recentMetrics.reduce((sum, m) => sum + this.calculateServiceHealthScore(m), 0) / recentMetrics.length
@@ -709,7 +709,7 @@ export class SecurityReliabilityEngineer extends EventEmitter {
             availability: 99.9, // Simplified
             performance_score: avgHealth,
             capacity_utilization: 50, // Simplified
-            trend: 'stable' as const
+            trend: 'stable' as const,
           };
         })
       },
@@ -720,7 +720,7 @@ export class SecurityReliabilityEngineer extends EventEmitter {
           title: 'Implement comprehensive synthetic monitoring',
           description: 'Deploy synthetic transactions to detect issues before users are affected',
           estimated_impact: 'Reduce MTTD by 50%',
-          estimated_effort: '2 weeks'
+          estimated_effort: '2 weeks',
         },
         {
           priority: 'medium',
@@ -728,7 +728,7 @@ export class SecurityReliabilityEngineer extends EventEmitter {
           title: 'Automate incident response playbooks',
           description: 'Implement runbook automation for common incident scenarios',
           estimated_impact: 'Reduce MTTR by 30%',
-          estimated_effort: '4 weeks'
+          estimated_effort: '4 weeks',
         }
       ],
       generated_by: 'sre_system',
@@ -766,7 +766,6 @@ export class SecurityReliabilityEngineer extends EventEmitter {
       status: 'healthy' | 'degraded' | 'unhealthy';
       health_score: number;
     }>;
-  } {
     const activeSLOs = Array.from(this.slos.values()).filter(slo => slo.enabled);
     const metSLOs = activeSLOs.filter(slo => slo.error_budget.remaining_budget > 20);
     const sloCompliance = activeSLOs.length > 0 ? (metSLOs.length / activeSLOs.length) * 100 : 100;
@@ -809,7 +808,7 @@ export class SecurityReliabilityEngineer extends EventEmitter {
           metric_type: 'availability' as const,
           target_value: 99.9,
           measurement_window: 3600000, // 1 hour
-          evaluation_period: 'monthly' as const
+          evaluation_period: 'monthly' as const,
         },
         alerting: {,
           burn_rate_alerts: [,
@@ -901,7 +900,7 @@ export class SecurityReliabilityEngineer extends EventEmitter {
       }
       this.emit('configuration_imported', {)
         slos_imported: config.slos?.length || 0,
-        templates_imported: config.postmortem_templates?.length || 0
+        templates_imported: config.postmortem_templates?.length || 0,
       });
     } catch (error) {
       throw new Error(`Failed to import configuration: ${error}`);}

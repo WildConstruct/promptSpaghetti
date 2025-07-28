@@ -196,11 +196,10 @@ export class AutomatedModerationService {
   private moderationRules: ModerationRule[] = [];
   private moderationQueues: ModerationQueue[] = [];
   private cache: Map<string, { result: ModerationResult; expiresAt: number }> = new Map();
-  constructor()
+  constructor();
     policyCheckersService: PolicyCheckersService,
     trustScoreService: TrustScoreService,
     enforcementService: AutomatedEnforcementService,
-  ) {
     this.policyCheckersService = policyCheckersService;
     this.trustScoreService = trustScoreService;
     this.enforcementService = enforcementService;
@@ -264,7 +263,7 @@ export class AutomatedModerationService {
       // Cache result
       this.cache.set(cacheKey, {)
         result,
-        expiresAt: Date.now() + (5 * 60 * 1000) // 5 minutes
+        expiresAt: Date.now() + (5 * 60 * 1000) // 5 minutes,
       });
       // Log moderation decision
       await this.logModerationDecision(request, result);
@@ -398,10 +397,10 @@ export class AutomatedModerationService {
   }> {
     const { policyResults, mlAnalysis, trustAnalysis } = analysis;
     // Analyze violations and risk factors
-    const criticalViolations = policyResults.filter(r => ;)
+    const criticalViolations = policyResults.filter(r => ;);
       r.status === 'failed' && r.severity === 'critical'
     ).length;
-    const highViolations = policyResults.filter(r => ;)
+    const highViolations = policyResults.filter(r => ;);
       r.status === 'failed' && r.severity === 'high'
     ).length;
     const toxicityHigh = (mlAnalysis?.toxicityScore || 0) > 80;
@@ -564,7 +563,7 @@ export class AutomatedModerationService {
         { reason: 'inappropriate_content', count: 45 },
         { reason: 'trust_score_low', count: 34 }
       ],
-      averageProcessingTime: 247 // milliseconds
+      averageProcessingTime: 247 // milliseconds,
     };
   }
   // Helper Methods

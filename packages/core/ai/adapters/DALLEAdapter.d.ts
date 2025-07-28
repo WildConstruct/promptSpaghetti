@@ -66,7 +66,7 @@ export declare class DALLEAdapter extends BaseAIModel {
     cleanup(): Promise<void>;
     estimate(input: unknown, options?: DALLERequestOptions): Promise<CostEstimate>;
     generateVariations(imageUrl: string, options?: Partial<DALLERequestOptions>): Promise<ImageGenerationResult>;
-    editImage()
+    editImage();
       imageUrl: string,
       maskUrl: string,
       prompt: string,

@@ -241,7 +241,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
     onAlertAction?.(alertId, action);
   }, [onAlertAction]);
   // Render metric card
-  const renderMetricCard = (title: string, value: string | number, subtitle?: string, color?: string, onClick?: () => void) => (;)
+  const renderMetricCard = (title: string, value: string | number, subtitle?: string, color?: string, onClick?: () => void) => (;);
     <div
       onClick={onClick}
       style={{
@@ -267,7 +267,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
         fontSize: '24px',
         fontWeight: 700,
         color: color || themeStyles.text,
-        marginBottom: subtitle ? '4px' : '0'
+        marginBottom: subtitle ? '4px' : '0',
       }}>
         {value}
       </div>
@@ -282,7 +282,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
     </div>
   );
   // Render alert item
-  const renderAlertItem = (alert: SecurityAlert) => (;)
+  const renderAlertItem = (alert: SecurityAlert) => (;);
     <div
       key={alert.id}
       onClick={() => setSelectedAlert(alert)}
@@ -294,7 +294,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
         padding: '12px',
         marginBottom: '8px',
         cursor: 'pointer',
-        transition: 'all 0.2s ease'
+        transition: 'all 0.2s ease',
       }}
     >
       <div style={{
@@ -358,7 +358,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
       </div>
     </div>
   );
-  return ()
+  return ();
     <div style={{
       background: themeStyles.background,
       color: themeStyles.text,
@@ -412,7 +412,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                 width: '8px',
                 height: '8px',
                 borderRadius: '50%',
-                background: isConnected ? themeStyles.success : themeStyles.error
+                background: isConnected ? themeStyles.success : themeStyles.error,
               }} />
               {isConnected ? 'LIVE' : 'DISCONNECTED'}
             </div>
@@ -469,7 +469,7 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
           display: 'grid',
           gridTemplateColumns: '2fr 1fr',
           gap: '24px',
-          height: 'calc(100vh - 300px)'
+          height: 'calc(100vh - 300px)',
         }}>
           {/* Alert Queue */}
           <div style={{
@@ -626,10 +626,10 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                       <span style={{
                         fontSize: '10px',
                         padding: '2px 6px',
-                        background: intel.confidence === 'high' ? themeStyles.success + '20' : 
+                        background: intel.confidence === 'high' ? themeStyles.success + '20' : ,
                           intel.confidence === 'medium' ? themeStyles.warning + '20' : 
                             themeStyles.error + '20',
-                        color: intel.confidence === 'high' ? themeStyles.success : 
+                        color: intel.confidence === 'high' ? themeStyles.success : ,
                           intel.confidence === 'medium' ? themeStyles.warning : 
                             themeStyles.error,
                         borderRadius: '4px',

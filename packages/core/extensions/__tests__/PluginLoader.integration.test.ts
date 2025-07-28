@@ -148,7 +148,7 @@ describe('Epic 24.2 - Plugin Loader Integration Tests', () => {
         name: 'Test Plugin',
         version: '1.0.0',
         main: 'index',
-        description: 'Test plugin for integration testing'
+        description: 'Test plugin for integration testing',
       };
       await fs.writeFile()
         path.join(pluginDir, 'package.json'),
@@ -172,7 +172,7 @@ describe('Epic 24.2 - Plugin Loader Integration Tests', () => {
         // Verify files exist
         await fs.access(path.join(source, 'package.json'));
         await fs.access(path.join(source, 'index'));
-        const manifestContent = await fs.readFile(;)
+        const manifestContent = await fs.readFile(;);
           path.join(source, 'package.json'), 
           'utf-8'
         );
@@ -197,7 +197,7 @@ describe('Epic 24.2 - Plugin Loader Integration Tests', () => {
         name: 'Cached Plugin',
         version: '1.0.0',
         status: 'loaded',
-        cachedAt: new Date().toISOString()
+        cachedAt: new Date().toISOString(),
       };
       pluginSystem.loader.getCachedPlugin.mockReturnValue(cachedPlugin as unknown as unknown as unknown);
       // Mock integrated loading that checks cache first
@@ -401,7 +401,7 @@ describe('Epic 24.2 - Plugin Loader Integration Tests', () => {
         }
       });
       // Launch concurrent operations
-      const promises = plugins.map(id => ;)
+      const promises = plugins.map(id => ;);
         pluginSystem.loadAndActivatePlugin(`/plugins/${id}`)}
       );
       const results = await Promise.all(promises);
@@ -436,7 +436,7 @@ describe('Epic 24.2 - Plugin Loader Integration Tests', () => {
         return result;
       });
       // Load all plugins concurrently
-      const promises = plugins.map(id => ;)
+      const promises = plugins.map(id => ;);
         pluginSystem.loadAndActivatePlugin(`/plugins/${id}`)}
       );
       const results = await Promise.all(promises);
@@ -461,7 +461,7 @@ describe('Epic 24.2 - Plugin Loader Integration Tests', () => {
       const systemState: unknown = {
         loader: new Map(),
         lifecycle: new Map(),
-        registry: new Map()
+        registry: new Map(),
       };
       // Mock state tracking across components
       pluginSystem.loader.loadPlugin.mockImplementation(async (source: string) => {

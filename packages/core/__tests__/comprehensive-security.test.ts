@@ -258,12 +258,12 @@ describe('Comprehensive Security Test Suite', () => {
       expect(auditLog[0]).toMatchObject({)
         functionName: 'min',
         allowed: true,
-        reason: 'Safe function accessed'
+        reason: 'Safe function accessed',
       });
       expect(auditLog[1]).toMatchObject({)
         functionName: 'random',
         allowed: false,
-        reason: 'Blocked function access attempted'
+        reason: 'Blocked function access attempted',
       });
     });
     it('should prevent Math object modification', () => {
@@ -386,7 +386,7 @@ describe('Comprehensive Security Test Suite', () => {
         items: ['apple', 'banana', 'cherry'],
         config: { enabled: true, threshold: 80 }
       };
-      const conditional = new ConditionalNode(;)
+      const conditional = new ConditionalNode(;);
         'secure-conditional',
         [
           { condition: 'userRole === "admin" && config.enabled', output: 'Admin access granted' },
@@ -405,7 +405,7 @@ describe('Comprehensive Security Test Suite', () => {
     it('should block dangerous conditional expressions', () => {
       const ctx = new AdvancedExecutionContext('test-seed');
       ctx.variables = { value: 10 };
-      const dangerousConditional = new ConditionalNode(;)
+      const dangerousConditional = new ConditionalNode(;);
         'dangerous-conditional',
         [
           { condition: 'eval("value > 5")', output: 'Eval used' },
@@ -423,7 +423,7 @@ describe('Comprehensive Security Test Suite', () => {
     it('should handle non-strict mode gracefully', () => {
       const ctx = new AdvancedExecutionContext('test-seed');
       ctx.variables = { x: 5 };
-      const nonStrictConditional = new ConditionalNode(;)
+      const nonStrictConditional = new ConditionalNode(;);
         'non-strict',
         [
           { condition: 'undefinedVariable > 0', output: 'Should not match' },
@@ -486,13 +486,13 @@ describe('Comprehensive Security Test Suite', () => {
       const ctx = new AdvancedExecutionContext('test-seed');
       ctx.variables = { x: 10, y: 5 };
       // Safe operations
-      const safeNode = new ConditionalNode('safe', [;)
+      const safeNode = new ConditionalNode('safe', [;);
         { condition: 'x > y', output: 'greater' },
         { condition: 'Math.min(x, y) === y', output: 'min is y' }
       ], 'equal');
       safeNode.run(ctx);
       // Dangerous operations (will throw)
-      const dangerousNode = new ConditionalNode('danger', [;)
+      const dangerousNode = new ConditionalNode('danger', [;);
         { condition: 'eval(x)', output: 'eval' },
         { condition: 'x.__proto__', output: 'proto' }
       ], 'safe');

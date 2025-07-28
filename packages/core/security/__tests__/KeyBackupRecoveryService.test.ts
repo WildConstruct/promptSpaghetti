@@ -82,7 +82,7 @@ describe('KeyBackupRecoveryService', () => {
     });
     test('should create incremental backup', async () => {
       const backup = await service.createBackup(BackupType.INCREMENTAL, {)
-        description: 'Test incremental backup'
+        description: 'Test incremental backup',
       });
       expect(backup.type).toBe(BackupType.INCREMENTAL);
       expect(backup.status).toBe(BackupStatus.COMPLETED);
@@ -91,7 +91,7 @@ describe('KeyBackupRecoveryService', () => {
       const specificKeys = ['key1', 'key2'];
       const backup = await service.createBackup(BackupType.SELECTIVE, {)
         specificKeys,
-        description: 'Test selective backup'
+        description: 'Test selective backup',
       });
       expect(backup.type).toBe(BackupType.SELECTIVE);
       expect(backup.keyCount).toBe(specificKeys.length);
@@ -99,7 +99,7 @@ describe('KeyBackupRecoveryService', () => {
     test('should create emergency backup', async () => {
       const backup = await service.createBackup(BackupType.EMERGENCY, {)
         emergency: true,
-        description: 'Emergency backup'
+        description: 'Emergency backup',
       });
       expect(backup.type).toBe(BackupType.EMERGENCY);
       expect(backup.recoveryComplexity).toBe('critical');
@@ -122,7 +122,7 @@ describe('KeyBackupRecoveryService', () => {
       const errorHandler = jest.fn<unknown[], unknown>();
       service.on('backupFailed', errorHandler);
       // Force an error by providing invalid configuration
-      const invalidService = new KeyBackupRecoveryService(;)
+      const invalidService = new KeyBackupRecoveryService(;);
         null as any, // Invalid key management service
         testConfig
       );
@@ -192,7 +192,7 @@ describe('KeyBackupRecoveryService', () => {
         requestedBy: 'test-user',
         approvals: [{,
           approver: 'admin-user',
-          approvedAt: new Date()
+          approvedAt: new Date(),
         }],
         emergencyProcedure: false,
         reason: 'Test recovery',
@@ -225,7 +225,7 @@ describe('KeyBackupRecoveryService', () => {
         requestedBy: 'test-user',
         approvals: [{,
           approver: 'admin-user',
-          approvedAt: new Date()
+          approvedAt: new Date(),
         }],
         emergencyProcedure: false,
         reason: 'Selective recovery test',
@@ -347,7 +347,7 @@ describe('KeyBackupRecoveryService', () => {
       expect(eventHandler).toHaveBeenCalledWith()
         expect.objectContaining({)
           backupId: backup.id,
-          reason: 'Test deletion'
+          reason: 'Test deletion',
         })
       );
     });
@@ -426,7 +426,7 @@ describe('KeyBackupRecoveryService', () => {
       expect(eventHandler).toHaveBeenCalledWith()
         expect.objectContaining({)
           backupId: 'invalid-backup-id',
-          error: 'Backup not found'
+          error: 'Backup not found',
         })
       );
     });
@@ -504,7 +504,7 @@ describe('KeyBackupRecoveryService', () => {
   describe('Compliance and Audit', () => {
     test('should maintain audit logs', async () => {
       const backup = await service.createBackup(BackupType.FULL, {)
-        description: 'Audit test backup'
+        description: 'Audit test backup',
       });
       await service.verifyBackup(backup.id);
       await service.deleteBackup(backup.id, 'Audit test cleanup');

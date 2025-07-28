@@ -529,7 +529,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
       previewId,
       policyId,
       changes: changes.length,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return preview;
   }
@@ -557,7 +557,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
       throw new Error('Staging environment not found');
     }
     // Check deployment limits
-    const activeDeployments = preview.stagingDeployments.filter(d => ;)
+    const activeDeployments = preview.stagingDeployments.filter(d => ;);
       d.status === StagingDeploymentStatus.ACTIVE || 
       d.status === StagingDeploymentStatus.MONITORING
     );
@@ -575,7 +575,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
       metrics: this.initializeMetrics(),
       issues: [],
       rollbackTriggers: this.createDefaultRollbackTriggers(),
-      autoRollbackEnabled: options.autoRollbackEnabled ?? true
+      autoRollbackEnabled: options.autoRollbackEnabled ?? true,
     };
     try {
       // Perform actual deployment
@@ -590,7 +590,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
         deploymentId,
         previewId,
         environmentId,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return deployment;
     } catch (error) {
@@ -600,7 +600,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
         previewId,
         environmentId,
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       throw error;
     }
@@ -622,7 +622,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
       previewId: preview.previewId,
       results: results.length,
       passed: results.filter(r => r.status === ValidationStatus.PASS).length,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return results;
   }
@@ -647,13 +647,13 @@ export class PolicyPreviewStagingService extends EventEmitter {
       impactAnalysis,
       userImpactAssessment,
       complianceComparison,
-      generatedAt: new Date()
+      generatedAt: new Date(),
     };
     this.emit('comparisonReportGenerated', {)
       comparisonId,
       differences: differences.length,
       overallRisk: impactAnalysis.overallRisk,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return report;
   }
@@ -684,7 +684,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
       categories: feedback.categories,
       submittedAt: new Date(),
       processed: false,
-      actionRequired: feedback.rating <= 2 || feedback.categories.includes(FeedbackCategory.BUG_REPORT)
+      actionRequired: feedback.rating <= 2 || feedback.categories.includes(FeedbackCategory.BUG_REPORT),
     };
     preview.userFeedback.push(userFeedback);
     this.emit('userFeedbackReceived', {)
@@ -692,7 +692,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
       userId,
       rating: feedback.rating,
       actionRequired: userFeedback.actionRequired,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return userFeedback;
   }
@@ -741,14 +741,14 @@ export class PolicyPreviewStagingService extends EventEmitter {
         previewId,
         productionVersion,
         approvedBy: options.approvedBy,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return { promoted: true, productionVersion };
     } catch (error) {
       this.emit('promotionFailed', {)
         previewId,
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       throw error;
     }
@@ -778,7 +778,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
         deploymentId,
         reason,
         triggeredBy,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return { success: true };
     } catch (error) {
@@ -786,7 +786,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
       this.emit('rollbackFailed', {)
         deploymentId,
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       throw error;
     }
@@ -802,7 +802,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
       confidence: 85,
       simulatedAt: new Date(),
       duration: 30,
-      methodology: 'Monte Carlo simulation with user behavior modeling'
+      methodology: 'Monte Carlo simulation with user behavior modeling',
     };
   }
   private async executeValidation()
@@ -860,7 +860,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
         this.emit('monitoringError', {)
           deploymentId: deployment.deploymentId,
           error: error.message,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     }, 60000); // Check every minute
@@ -871,7 +871,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
         deployment.status = StagingDeploymentStatus.COMPLETED;
         this.emit('monitoringCompleted', {)
           deploymentId: deployment.deploymentId,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     }, durationHours * 60 * 60 * 1000);
@@ -912,7 +912,7 @@ export class PolicyPreviewStagingService extends EventEmitter {
             triggerType: trigger.triggerType,
             value: triggerValue,
             threshold: trigger.threshold,
-            timestamp: new Date()
+            timestamp: new Date(),
           });
         }
         break;

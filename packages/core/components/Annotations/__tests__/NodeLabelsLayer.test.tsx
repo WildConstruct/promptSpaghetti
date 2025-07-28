@@ -62,7 +62,7 @@ describe('NodeLabelsLayer Component', () => {
       expect(screen.getByText('Custom Label 1')).toBeInTheDocument();
     });
     test('renders built-in labels when no custom config exists', () => {
-      render()
+      render();
         <NodeLabelsLayer
           {...defaultProps}
           labelConfigs={{}}
@@ -88,7 +88,7 @@ describe('NodeLabelsLayer Component', () => {
         />
       );
       expect(screen.queryByText('Node 1')).not.toBeInTheDocument();
-      rerender()
+      rerender();
         <NodeLabelsLayer
           {...defaultProps}
           labelConfigs={{}}
@@ -116,7 +116,7 @@ describe('NodeLabelsLayer Component', () => {
   describe('Label Actions', () => {
     test('creates new label config', () => {
       const onLabelConfigsChange = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <NodeLabelsLayer
           {...defaultProps}
           onLabelConfigsChange={onLabelConfigsChange}
@@ -130,7 +130,7 @@ describe('NodeLabelsLayer Component', () => {
     });
     test('updates existing label config', () => {
       const onLabelConfigsChange = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <NodeLabelsLayer
           {...defaultProps}
           onLabelConfigsChange={onLabelConfigsChange}
@@ -143,7 +143,7 @@ describe('NodeLabelsLayer Component', () => {
     });
     test('deletes label config', () => {
       const onLabelConfigsChange = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <NodeLabelsLayer
           {...defaultProps}
           onLabelConfigsChange={onLabelConfigsChange}
@@ -157,7 +157,7 @@ describe('NodeLabelsLayer Component', () => {
   describe('Context Menu Integration', () => {
     test('handles right-click on node area', () => {
       const onLabelConfigsChange = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <NodeLabelsLayer
           {...defaultProps}
           onLabelConfigsChange={onLabelConfigsChange}
@@ -171,7 +171,7 @@ describe('NodeLabelsLayer Component', () => {
     });
     test('ignores context menu when read-only', () => {
       const onLabelConfigsChange = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <NodeLabelsLayer
           {...defaultProps}
           onLabelConfigsChange={onLabelConfigsChange}
@@ -209,7 +209,7 @@ describe('NodeLabelsLayer Component', () => {
     });
     test('ignores keyboard shortcuts when read-only', () => {
       const onLabelConfigsChange = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <NodeLabelsLayer
           {...defaultProps}
           onLabelConfigsChange={onLabelConfigsChange}
@@ -235,7 +235,7 @@ describe('NodeLabelsLayer Component', () => {
       );
       // No labels should be visible when nothing selected
       expect(screen.queryByText('Custom Label 1')).not.toBeInTheDocument();
-      rerender()
+      rerender();
         <NodeLabelsLayer
           {...defaultProps}
           labelPreferences={{
@@ -261,7 +261,7 @@ describe('NodeLabelsLayer Component', () => {
       );
       // No labels should be visible when nothing hovered
       expect(screen.queryByText('Custom Label 1')).not.toBeInTheDocument();
-      rerender()
+      rerender();
         <NodeLabelsLayer
           {...defaultProps}
           labelPreferences={{
@@ -286,7 +286,7 @@ describe('NodeLabelsLayer Component', () => {
         />
       );
       expect(screen.queryByText('Custom Label 1')).not.toBeInTheDocument();
-      rerender()
+      rerender();
         <NodeLabelsLayer
           {...defaultProps}
           labelPreferences={{
@@ -301,7 +301,7 @@ describe('NodeLabelsLayer Component', () => {
   });
   describe('Canvas Integration', () => {
     test('applies correct canvas offset and zoom', () => {
-      render()
+      render();
         <NodeLabelsLayer
           {...defaultProps}
           canvasOffset={{ x: -50, y: -25 }}
@@ -334,7 +334,7 @@ describe('NodeLabelsLayer Component', () => {
   });
   describe('Instructions Overlay', () => {
     test('shows instructions when no labels exist and not read-only', () => {
-      render()
+      render();
         <NodeLabelsLayer
           {...defaultProps}
           labelConfigs={{}}
@@ -350,7 +350,7 @@ describe('NodeLabelsLayer Component', () => {
       expect(screen.queryByText('Node Labels')).not.toBeInTheDocument();
     });
     test('hides instructions when read-only', () => {
-      render()
+      render();
         <NodeLabelsLayer
           {...defaultProps}
           labelConfigs={{}}
@@ -371,7 +371,7 @@ describe('NodeLabelsLayer Component', () => {
         height: 90,
       }));
       const startTime = performance.now();
-      render()
+      render();
         <NodeLabelsLayer
           {...defaultProps}
           nodes={manyNodes}
@@ -417,7 +417,7 @@ describe('NodeLabelsLayer Component', () => {
       expect(layer).toHaveAttribute('role', 'region');
     });
     test('provides keyboard navigation hints', () => {
-      render()
+      render();
         <NodeLabelsLayer
           {...defaultProps}
           labelConfigs={{}}
@@ -441,7 +441,7 @@ describe('NodeLabelsLayer Component', () => {
         }
       ];
       expect(() => {
-        render()
+        render();
           <NodeLabelsLayer
             {...defaultProps}
             nodes={nodesWithMissingData}
@@ -457,7 +457,7 @@ describe('NodeLabelsLayer Component', () => {
         } as any
       };
       expect(() => {
-        render()
+        render();
           <NodeLabelsLayer
             {...defaultProps}
             labelConfigs={invalidConfigs}

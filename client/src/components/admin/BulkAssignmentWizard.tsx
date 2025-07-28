@@ -6,7 +6,6 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   PolicyAssignment, 
@@ -19,43 +18,38 @@ import {
   BulkAssignmentStrategy
 } from '../../types/PolicyAssignmentTypes';
 import './BulkAssignmentWizard.css';
-
 interface BulkAssignmentWizardProps {
   onSubmit: (data: Partial<BulkPolicyAssignment>) => Promise<void>;
   onCancel: () => void;
 }
-
 interface WizardStep {
   id: string;
   title: string;
   description: string;
   isValid: boolean;
 }
-
 interface BulkFormData {
   title: string;
   description: string;
   assignments: Partial<PolicyAssignment>[];
   strategy: BulkAssignmentStrategy;
 }
-
 const INITIAL_STRATEGY: BulkAssignmentStrategy = {
   conflictResolution: ConflictResolutionStrategy.MOST_RESTRICTIVE,
   inheritanceHandling: 'PRESERVE_EXISTING',
   approvalRequired: false,
   dryRun: false,
   executionMode: 'IMMEDIATE',
-  rollbackOnError: true
+  rollbackOnError: true,
 };
-
 const INITIAL_FORM_DATA: BulkFormData = {
   title: '',
   description: '',
   assignments: [],
-  strategy: INITIAL_STRATEGY
+  strategy: INITIAL_STRATEGY,
 };
 
-export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
+export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
   onSubmit,
   onCancel
 }) => {
@@ -65,55 +59,51 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [csvData, setCsvData] = useState<string>('');
-
   const steps: WizardStep[] = [
     {
       id: 'basic',
       title: 'Basic Information',
       description: 'Define the bulk assignment details',
-      isValid: formData.title.trim().length > 0
+      isValid: formData.title.trim().length > 0,
     },
     {
       id: 'assignments',
       title: 'Policy Assignments',
       description: 'Add individual policy assignments',
-      isValid: formData.assignments.length > 0
+      isValid: formData.assignments.length > 0,
     },
     {
       id: 'strategy',
       title: 'Execution Strategy',
       description: 'Configure how assignments are processed',
-      isValid: true
+      isValid: true,
     },
     {
       id: 'conflicts',
       title: 'Conflict Analysis',
       description: 'Review and resolve potential conflicts',
-      isValid: true
+      isValid: true,
     },
     {
       id: 'review',
       title: 'Review & Submit',
       description: 'Final review before execution',
-      isValid: true
+      isValid: true,
     }
   ];
-
   useEffect(() => {
     if (currentStep === 3 && formData.assignments.length > 0) {
       analyzeConflicts();
     }
   }, [currentStep, analyzeConflicts, formData.assignments.length]);
-
   const analyzeConflicts = useCallback(async () => {
     setIsAnalyzing(true);
     try {
-      const response = await fetch('/api/policy-assignments/assignments/analyze-conflicts', {
+      const response = await fetch('/api/policy-assignments/assignments/analyze-conflicts', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ assignments: formData.assignments })
       });
-      
       const data = await response.json();
       if (data.success) {
         setConflicts(data.data.conflicts || []);
@@ -124,19 +114,16 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
       setIsAnalyzing(false);
     }
   }, [formData.assignments]);
-
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     }
   };
-
   const handlePrevious = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   };
-
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
@@ -145,7 +132,6 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
       setIsSubmitting(false);
     }
   };
-
   const addAssignment = () => {
     const newAssignment: Partial<PolicyAssignment> = {
       policyId: '',
@@ -157,55 +143,47 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
       effectiveDate: new Date(),
       priority: 100,
       conditions: [],
-      inheritance: {
+      inheritance: {,
         type: InheritanceType.NONE,
         inheritanceDepth: 0,
-        blockInheritance: false
+        blockInheritance: false,
       },
-      metadata: {
+      metadata: {,
         reason: '',
         businessJustification: '',
         riskLevel: RiskLevel.MEDIUM,
         reviewRequired: false,
         tags: [],
-        complianceFrameworks: []
+        complianceFrameworks: [],
       }
     };
-
-    setFormData(prev => ({
+    setFormData(prev => ({)
       ...prev,
       assignments: [...prev.assignments, newAssignment]
     }));
   };
-
   const updateAssignment = (index: number, field: string, value: Error) => {
-    setFormData(prev => ({
+    setFormData(prev => ({)
       ...prev,
       assignments: prev.assignments.map((assignment, i) =>
         i === index ? { ...assignment, [field]: value } : assignment
-      )
     }));
   };
-
   const removeAssignment = (index: number) => {
-    setFormData(prev => ({
+    setFormData(prev => ({)
       ...prev,
       assignments: prev.assignments.filter((_, i) => i !== index)
     }));
   };
-
   const parseCsvData = () => {
     if (!csvData.trim()) return;
-
     try {
       const lines = csvData.trim().split('\n');
       const headers = lines[0].split(',').map(h => h.trim());
       const assignments: Partial<PolicyAssignment>[] = [];
-
       for (let i = 1; i < lines.length; i++) {
         const values = lines[i].split(',').map(v => v.trim());
         if (values.length !== headers.length) continue;
-
         const assignment: Partial<PolicyAssignment> = {
           policyId: values[headers.indexOf('policyId')] || '',
           policyType: values[headers.indexOf('policyType')] || '',
@@ -215,25 +193,23 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
           priority: parseInt(values[headers.indexOf('priority')]) || 100,
           effectiveDate: new Date(),
           conditions: [],
-          inheritance: {
+          inheritance: {,
             type: InheritanceType.NONE,
             inheritanceDepth: 0,
-            blockInheritance: false
+            blockInheritance: false,
           },
-          metadata: {
+          metadata: {,
             reason: values[headers.indexOf('reason')] || '',
             businessJustification: values[headers.indexOf('businessJustification')] || '',
             riskLevel: (values[headers.indexOf('riskLevel')] as RiskLevel) || RiskLevel.MEDIUM,
             reviewRequired: values[headers.indexOf('reviewRequired')] === 'true',
             tags: [],
-            complianceFrameworks: []
+            complianceFrameworks: [],
           }
         };
-
         assignments.push(assignment);
       }
-
-      setFormData(prev => ({
+      setFormData(prev => ({)
         ...prev,
         assignments
       }));
@@ -242,8 +218,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
       console.error('Error parsing CSV:', error);
     }
   };
-
-  const renderBasicStep = () => (
+  const renderBasicStep = () => (;)
     <div className="wizard-step">
       <div className="form-group">
         <label htmlFor="bulkTitle">Title *</label>
@@ -255,7 +230,6 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
           placeholder="Enter bulk assignment title"
         />
       </div>
-      
       <div className="form-group">
         <label htmlFor="bulkDescription">Description</label>
         <textarea
@@ -268,8 +242,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
       </div>
     </div>
   );
-
-  const renderAssignmentsStep = () => (
+  const renderAssignmentsStep = () => (;)
     <div className="wizard-step">
       <div className="assignments-header">
         <h3>Policy Assignments ({formData.assignments.length})</h3>
@@ -279,13 +252,12 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
           </button>
         </div>
       </div>
-
       <div className="csv-import">
         <h4>Bulk Import from CSV</h4>
         <textarea
           value={csvData}
           onChange={(e) => setCsvData(e.target.value)}
-          placeholder="Paste CSV data here (
+          placeholder="Paste CSV data here ()
             policyId,
             policyType,
             targetType,
@@ -303,9 +275,8 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
           Import CSV
         </button>
       </div>
-
       <div className="assignments-list">
-        {formData.assignments.map((assignment, index) => (
+        {formData.assignments.map((assignment, index) => ()
           <div key={index} className="assignment-card">
             <div className="assignment-header">
               <span>Assignment {index + 1}</span>
@@ -317,7 +288,6 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
                 Remove
               </button>
             </div>
-
             <div className="assignment-form">
               <div className="form-row">
                 <div className="form-group">
@@ -337,7 +307,6 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
                   />
                 </div>
               </div>
-
               <div className="form-row">
                 <div className="form-group">
                   <label>Target Type</label>
@@ -364,15 +333,14 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
                   />
                 </div>
               </div>
-
               <div className="form-group">
                 <label>Business Justification</label>
                 <input
                   type="text"
                   value={assignment.metadata?.businessJustification || ''}
-                  onChange={(e) => updateAssignment(index, 'metadata', {
+                  onChange={(e) => updateAssignment(index, 'metadata', {)
                     ...assignment.metadata,
-                    businessJustification: e.target.value
+                    businessJustification: e.target.value,
                   })}
                 />
               </div>
@@ -382,22 +350,20 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
       </div>
     </div>
   );
-
-  const renderStrategyStep = () => (
+  const renderStrategyStep = () => (;)
     <div className="wizard-step">
       <div className="strategy-section">
         <h3>Execution Strategy</h3>
-        
         <div className="form-row">
           <div className="form-group">
             <label>Conflict Resolution</label>
             <select
               value={formData.strategy.conflictResolution}
-              onChange={(e) => setFormData({
+              onChange={(e) => setFormData({)
                 ...formData,
-                strategy: {
+                strategy: {,
                   ...formData.strategy,
-                  conflictResolution: e.target.value as ConflictResolutionStrategy
+                  conflictResolution: e.target.value as ConflictResolutionStrategy,
                 }
               })}
             >
@@ -408,16 +374,15 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
               <option value={ConflictResolutionStrategy.MANUAL_REVIEW}>Manual Review</option>
             </select>
           </div>
-          
           <div className="form-group">
             <label>Execution Mode</label>
             <select
               value={formData.strategy.executionMode}
-              onChange={(e) => setFormData({
+              onChange={(e) => setFormData({)
                 ...formData,
-                strategy: {
+                strategy: {,
                   ...formData.strategy,
-                  executionMode: e.target.value
+                  executionMode: e.target.value,
                 }
               })}
             >
@@ -428,47 +393,44 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
             </select>
           </div>
         </div>
-
         <div className="strategy-options">
           <label>
             <input
               type="checkbox"
               checked={formData.strategy.approvalRequired}
-              onChange={(e) => setFormData({
+              onChange={(e) => setFormData({)
                 ...formData,
-                strategy: {
+                strategy: {,
                   ...formData.strategy,
-                  approvalRequired: e.target.checked
+                  approvalRequired: e.target.checked,
                 }
               })}
             />
             Require Approval
           </label>
-          
           <label>
             <input
               type="checkbox"
               checked={formData.strategy.dryRun}
-              onChange={(e) => setFormData({
+              onChange={(e) => setFormData({)
                 ...formData,
-                strategy: {
+                strategy: {,
                   ...formData.strategy,
-                  dryRun: e.target.checked
+                  dryRun: e.target.checked,
                 }
               })}
             />
             Dry Run (Test Mode)
           </label>
-          
           <label>
             <input
               type="checkbox"
               checked={formData.strategy.rollbackOnError}
-              onChange={(e) => setFormData({
+              onChange={(e) => setFormData({)
                 ...formData,
-                strategy: {
+                strategy: {,
                   ...formData.strategy,
-                  rollbackOnError: e.target.checked
+                  rollbackOnError: e.target.checked,
                 }
               })}
             />
@@ -478,28 +440,26 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
       </div>
     </div>
   );
-
-  const renderConflictsStep = () => (
+  const renderConflictsStep = () => (;)
     <div className="wizard-step">
       <div className="conflicts-section">
         <h3>Conflict Analysis</h3>
-        
-        {isAnalyzing ? (
+        {isAnalyzing ? ()
           <div className="analyzing">
             <div className="spinner" />
             <p>Analyzing conflicts...</p>
           </div>
-        ) : (
+        ) : ()
           <>
-            {conflicts.length === 0 ? (
+            {conflicts.length === 0 ? ()
               <div className="no-conflicts">
                 <p>✅ No conflicts detected. All assignments can be processed safely.</p>
               </div>
-            ) : (
+            ) : ()
               <div className="conflicts-list">
                 <p>⚠️ {conflicts.length} potential conflicts detected:</p>
-                {conflicts.map((conflict, index) => (
-                  <div key={index} className={`conflict-card severity-${conflict.severity.toLowerCase()}`}>
+                {conflicts.map((conflict, index) => ()
+                  <div key={index} className={`conflict-card severity-${conflict.severity.toLowerCase()}`}>}
                     <div className="conflict-header">
                       <span className="conflict-type">{conflict.type}</span>
                       <span className="conflict-severity">{conflict.severity}</span>
@@ -507,11 +467,11 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
                     <p className="conflict-description">{conflict.description}</p>
                     <div className="conflict-assignments">
                       <strong>Affected assignments:</strong>
-                      {conflict.conflictingAssignments.map(id => (
+                      {conflict.conflictingAssignments.map(id => ()
                         <span key={id} className="assignment-ref">{id}</span>
                       ))}
                     </div>
-                    {conflict.resolutionSuggestion && (
+                    {conflict.resolutionSuggestion && ()
                       <div className="resolution-suggestion">
                         <strong>Suggested resolution:</strong> {conflict.resolutionSuggestion}
                       </div>
@@ -522,19 +482,16 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
             )}
           </>
         )}
-        
         <button type="button" onClick={analyzeConflicts} className="btn btn-outline">
           Re-analyze Conflicts
         </button>
       </div>
     </div>
   );
-
-  const renderReviewStep = () => (
+  const renderReviewStep = () => (;)
     <div className="wizard-step">
       <div className="review-section">
         <h3>Review & Submit</h3>
-        
         <div className="review-summary">
           <div className="summary-item">
             <strong>Title:</strong> {formData.title}
@@ -555,8 +512,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
             <strong>Dry Run:</strong> {formData.strategy.dryRun ? 'Yes' : 'No'}
           </div>
         </div>
-
-        {conflicts.length > 0 && (
+        {conflicts.length > 0 && ()
           <div className="review-warning">
             ⚠️ This bulk assignment has {conflicts.length} conflicts that will be resolved using the &quot;{formData.strategy.conflictResolution}&quot; strategy.
           </div>
@@ -564,8 +520,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
       </div>
     </div>
   );
-
-  return (
+  return ()
     <div className="modal-overlay">
       <div className="bulk-assignment-wizard">
         <div className="wizard-header">
@@ -574,9 +529,8 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
             ×
           </button>
         </div>
-
         <div className="wizard-progress">
-          {steps.map((step, index) => (
+          {steps.map((step, index) => ()
             <div 
               key={step.id} 
               className={`progress-step ${index === currentStep ? 'active' : ''} ${index < currentStep ? 'completed' : ''}`}
@@ -589,7 +543,6 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
             </div>
           ))}
         </div>
-
         <div className="wizard-content">
           {currentStep === 0 && renderBasicStep()}
           {currentStep === 1 && renderAssignmentsStep()}
@@ -597,7 +550,6 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
           {currentStep === 3 && renderConflictsStep()}
           {currentStep === 4 && renderReviewStep()}
         </div>
-
         <div className="wizard-footer">
           <button 
             type="button" 
@@ -606,7 +558,6 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
           >
             Cancel
           </button>
-          
           <div className="wizard-navigation">
             <button 
               type="button" 
@@ -616,8 +567,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
             >
               Previous
             </button>
-            
-            {currentStep < steps.length - 1 ? (
+            {currentStep < steps.length - 1 ? ()
               <button 
                 type="button" 
                 onClick={handleNext}
@@ -626,7 +576,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
               >
                 Next
               </button>
-            ) : (
+            ) : ()
               <button 
                 type="button" 
                 onClick={handleSubmit}

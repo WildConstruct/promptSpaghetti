@@ -182,7 +182,7 @@ export class AIModelFactory implements IAIModelFactory {
     }
   }
   async destroyAllModels(): Promise<void> {
-    const destroyPromises = Array.from(this.modelInstances.keys()).map(id => ;)
+    const destroyPromises = Array.from(this.modelInstances.keys()).map(id => ;);
       this.destroyModel(id)
     );
     await Promise.all(destroyPromises);

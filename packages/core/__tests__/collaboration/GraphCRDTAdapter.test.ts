@@ -7,7 +7,7 @@ import { Graph, Node, Edge } from '../../graphSchema';
 
 // Mock the CRDT research package for testing
 jest.mock('../../../crdt-research/src/graph-sync', () => ({)
-  GraphSyncHandler: jest.fn().mockImplementation(() => ({)
+  GraphSyncHandler: jest.fn().mockImplementation(() => ({),
     getGraph: jest.fn().mockReturnValue({),
       addNode: jest.fn(),
       updateNode: jest.fn(),

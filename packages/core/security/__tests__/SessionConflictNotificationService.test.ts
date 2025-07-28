@@ -187,7 +187,7 @@ describe('SessionConflictNotificationService', () => {
   });
   describe('Session Eviction Notifications', () => {
     test('should send eviction notification', async () => {
-      const result = await service.sendEvictionNotification(;)
+      const result = await service.sendEvictionNotification(;);
         'session-evict',
         'user-evict',
         'session limit exceeded',
@@ -196,7 +196,7 @@ describe('SessionConflictNotificationService', () => {
       expect(result).toBe(true);
     });
     test('should send eviction notification without grace period', async () => {
-      const result = await service.sendEvictionNotification(;)
+      const result = await service.sendEvictionNotification(;);
         'session-evict-no-grace',
         'user-evict-no-grace',
         'security violation'
@@ -207,7 +207,7 @@ describe('SessionConflictNotificationService', () => {
       // Create service with failing delivery
       const failingService = new SessionConflictNotificationService();
       (failingService as any).sendNotification = jest.fn().mockResolvedValue(false);
-      const result = await failingService.sendEvictionNotification(;)
+      const result = await failingService.sendEvictionNotification(;);
         'session-fail',
         'user-fail',
         'test failure'
@@ -218,7 +218,7 @@ describe('SessionConflictNotificationService', () => {
   });
   describe('Emergency Override Notifications', () => {
     test('should send emergency override notification', async () => {
-      const result = await service.sendEmergencyOverrideNotification(;)
+      const result = await service.sendEmergencyOverrideNotification(;);
         'admin-123',
         'user-target',
         ['session-1', 'session-2']
@@ -228,7 +228,7 @@ describe('SessionConflictNotificationService', () => {
     test('should handle emergency notification errors', async () => {
       const failingService = new SessionConflictNotificationService();
       (failingService as any).sendNotification = jest.fn().mockResolvedValue(false);
-      const result = await failingService.sendEmergencyOverrideNotification(;)
+      const result = await failingService.sendEmergencyOverrideNotification(;);
         'admin-fail',
         'user-fail',
         ['session-fail']
@@ -239,7 +239,7 @@ describe('SessionConflictNotificationService', () => {
   });
   describe('Grace Period Warnings', () => {
     test('should send grace period warning', async () => {
-      const result = await service.sendGracePeriodWarning(;)
+      const result = await service.sendGracePeriodWarning(;);
         'session-grace',
         'user-grace',
         3
@@ -249,7 +249,7 @@ describe('SessionConflictNotificationService', () => {
     test('should handle grace period warning errors', async () => {
       const failingService = new SessionConflictNotificationService();
       (failingService as any).sendNotification = jest.fn().mockResolvedValue(false);
-      const result = await failingService.sendGracePeriodWarning(;)
+      const result = await failingService.sendGracePeriodWarning(;);
         'session-fail',
         'user-fail',
         2
@@ -354,7 +354,7 @@ describe('SessionConflictNotificationService', () => {
           userId: 'user-response',
           resolution: ConflictResolution.EVICT_OLDEST,
           confirmed: true,
-          timestamp: new Date()
+          timestamp: new Date(),
         };
         service.handleConflictResponse(userResponse);
       }, 100);
@@ -467,7 +467,7 @@ describe('SessionConflictNotificationService', () => {
           deliveryStatus: {,
             [NotificationChannel.EMAIL]: {
               status: DeliveryStatus.DELIVERED,
-              deliveredAt: new Date()
+              deliveredAt: new Date(),
             }
           }
         },
@@ -507,7 +507,7 @@ describe('SessionConflictNotificationService', () => {
     test('should apply rate limiting to prevent spam', async () => {
       const rateLimitedService = new SessionConflictNotificationService({)
         rateLimitCount: 2,
-        rateLimitWindow: 1000 // 1 second
+        rateLimitWindow: 1000 // 1 second,
       });
       const conflict: SessionConflict = {
         id: 'conflict-rate-limit',
@@ -549,7 +549,7 @@ describe('SessionConflictNotificationService', () => {
         userId: 'user-resolved',
         resolution: ConflictResolution.EVICT_OLDEST,
         confirmed: true,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
       service.handleConflictResponse(response);
     });

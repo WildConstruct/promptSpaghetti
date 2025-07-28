@@ -159,7 +159,7 @@ export class PerformanceMonitor {
       max: sorted[sorted.length - 1],
       p95: sorted[Math.floor(count * 0.95)],
       p99: sorted[Math.floor(count * 0.99)],
-      recent: values.slice(-10) // Last 10 measurements
+      recent: values.slice(-10) // Last 10 measurements,
     };
   }
   /**
@@ -172,10 +172,10 @@ export class PerformanceMonitor {
       period: {,
         start,
         end: now,
-        duration: periodMinutes * 60 * 1000
+        duration: periodMinutes * 60 * 1000,
       },
       metrics: {},
-      alerts: this.alerts.filter(alert => alert.timestamp >= start)
+      alerts: this.alerts.filter(alert => alert.timestamp >= start),
     };
     // Generate stats for all metrics
     for (const [name, values] of this.metrics.entries()) {
@@ -259,7 +259,7 @@ export class PerformanceMonitor {
           } else if (entry.entryType === 'resource') {
             this.recordMetric('resource-load-time', entry.duration, {)
               name: entry.name,
-              type: (entry as any).initiatorType
+              type: (entry as any).initiatorType,
             });
           }
         }
@@ -379,9 +379,8 @@ export class PerformanceMonitor {
       trend: 'improving' | 'stable' | 'degrading';
     }[];
     recentAlerts: PerformanceAlert[];
-    } {
     const totalMetrics = this.metrics.size;
-    const recentAlerts = this.alerts.filter(alert => ;)
+    const recentAlerts = this.alerts.filter(alert => ;);
       alert.timestamp > Date.now() - 60000 // Last minute
     );
     // Calculate health score based on recent alerts
@@ -415,7 +414,7 @@ export class PerformanceMonitor {
         healthScore
       },
       keyMetrics,
-      recentAlerts: recentAlerts.slice(-10) // Last 10 alerts
+      recentAlerts: recentAlerts.slice(-10) // Last 10 alerts,
     };
   }
 }

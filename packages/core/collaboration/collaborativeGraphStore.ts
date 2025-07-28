@@ -71,13 +71,13 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
     isConnected: false,
     connectionStatus: 'disconnected',
     // Enable collaborative editing
-    enableCollaboration: async (options: CollaborativeGraphOptions) => {
+    enableCollaboration: async (options: CollaborativeGraphOptions) => {,
       const currentGraph = get().graph;
       // Create CRDT adapter
-      const crdtAdapter = new GraphCRDTAdapter(;)
+      const crdtAdapter = new GraphCRDTAdapter(;);
         {
           ...options,
-          onGraphChange: (graph: Graph) => {
+          onGraphChange: (graph: Graph) => {,
             set({ graph, lastSyncTime: Date.now() });
           },
           onUserPresence: (awareness: Map<string, unknown>) => {
@@ -94,10 +94,10 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
             });
             set({ connectedUsers });
           },
-          onConnectionStatus: (connected: boolean) => {
+          onConnectionStatus: (connected: boolean) => {,
             set({ )
               isConnected: connected,
-              connectionStatus: connected ? 'connected' : 'disconnected'
+              connectionStatus: connected ? 'connected' : 'disconnected',
             });
           }
         },
@@ -119,7 +119,7 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
       });
     },
     // Disable collaborative editing
-    disableCollaboration: () => {
+    disableCollaboration: () => {,
       const { crdtAdapter } = get();
       if (crdtAdapter) {
         crdtAdapter.destroy();
@@ -137,7 +137,7 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
       });
     },
     // Set entire graph (replaces current)
-    setGraph: (graph: Graph) => {
+    setGraph: (graph: Graph) => {,
       const { crdtAdapter, isCollaborative } = get();
       if (isCollaborative && crdtAdapter) {
         // For collaborative mode, we don't directly replace the graph
@@ -170,15 +170,14 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
         // Non-collaborative mode
         const newGraph = {
           ...graph,
-          nodes: graph.nodes.map(node => )
+          nodes: graph.nodes.map(node => ),
             node.id === nodeId ? { ...node, ...updates } : node
-          )
         };
         set({ graph: newGraph });
       }
     },
     // Delete node (collaborative when enabled)
-    deleteNode: (nodeId: string) => {
+    deleteNode: (nodeId: string) => {,
       const { crdtAdapter, isCollaborative, graph } = get();
       if (isCollaborative && crdtAdapter) {
         crdtAdapter.deleteNode(nodeId);
@@ -186,15 +185,14 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
         // Non-collaborative mode
         const newGraph = {
           nodes: graph.nodes.filter(node => node.id !== nodeId),
-          edges: graph.edges.filter(edge => )
+          edges: graph.edges.filter(edge => ),
             edge.source !== nodeId && edge.target !== nodeId
-          )
         };
         set({ graph: newGraph });
       }
     },
     // Add edge (collaborative when enabled)
-    addEdge: (edge: Edge) => {
+    addEdge: (edge: Edge) => {,
       const { crdtAdapter, isCollaborative, graph } = get();
       if (isCollaborative && crdtAdapter) {
         crdtAdapter.addEdge(edge);
@@ -208,7 +206,7 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
       }
     },
     // Delete edge (collaborative when enabled)
-    deleteEdge: (edgeId: string) => {
+    deleteEdge: (edgeId: string) => {,
       const { crdtAdapter, isCollaborative, graph } = get();
       if (isCollaborative && crdtAdapter) {
         crdtAdapter.deleteEdge(edgeId);
@@ -216,7 +214,7 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
         // Non-collaborative mode
         const newGraph = {
           nodes: graph.nodes,
-          edges: graph.edges.filter(edge => edge.id !== edgeId)
+          edges: graph.edges.filter(edge => edge.id !== edgeId),
         };
         set({ graph: newGraph });
       }
@@ -230,7 +228,7 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
       // In non-collaborative mode, position updates are handled by React Flow
     },
     // Update local user presence
-    updateLocalPresence: (presence: Partial<UserPresence>) => {
+    updateLocalPresence: (presence: Partial<UserPresence>) => {,
       const { crdtAdapter, localPresence, userId } = get();
       if (localPresence && userId) {
         const newPresence = { ...localPresence, ...presence, lastSeen: Date.now() };
@@ -253,36 +251,36 @@ export const useCollaborativeGraphStore = create<CollaborativeGraphState>()()
       });
     },
     // Update user selection
-    updateUserSelection: (nodeIds: string[]) => {
+    updateUserSelection: (nodeIds: string[]) => {,
       const { updateLocalPresence } = get();
       updateLocalPresence({)
         selection: nodeIds,
       });
     },
     // Apply remote update
-    applyRemoteUpdate: (update: Uint8Array) => {
+    applyRemoteUpdate: (update: Uint8Array) => {,
       const { crdtAdapter } = get();
       if (crdtAdapter) {
         crdtAdapter.applyRemoteUpdate(update);
       }
     },
     // Get document state for initial sync
-    getDocumentState: () => {
+    getDocumentState: () => {,
       const { crdtAdapter } = get();
       return crdtAdapter ? crdtAdapter.getDocumentState() : null;
     },
     // Create snapshot
-    createSnapshot: () => {
+    createSnapshot: () => {,
       const { crdtAdapter } = get();
       return crdtAdapter ? crdtAdapter.createSnapshot() : null;
     },
     // Get metrics
-    getMetrics: () => {
+    getMetrics: () => {,
       const { crdtAdapter } = get();
       return crdtAdapter ? crdtAdapter.getMetrics() : null;
     },
     // Get sync state
-    getSyncState: () => {
+    getSyncState: () => {,
       const { crdtAdapter } = get();
       return crdtAdapter ? crdtAdapter.getSyncState() : null;
     }

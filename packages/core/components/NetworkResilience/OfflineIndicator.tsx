@@ -101,7 +101,7 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({)
   }
   const colors = getIndicatorColor();
   const message = getIndicatorMessage();
-  return ()
+  return ();
     <div 
       className={`offline-indicator ${position} ${className}`}
       style={{

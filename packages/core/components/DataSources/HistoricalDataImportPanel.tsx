@@ -69,7 +69,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
   } = useExternalDataImport({)
     autoRefresh: false,
     cacheStrategy: 'conservative',
-    onSuccess: (results) => {
+    onSuccess: (results) => {,
       setImportResults(results);
       if (onDataImported) {
         onDataImported(results);
@@ -116,7 +116,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
   const handleExport = useCallback((format: 'json' | 'csv') => {
     const data = exportResults(format);
     const blob = new Blob([data], { )
-      type: format === 'json' ? 'application/json' : 'text/csv' 
+      type: format === 'json' ? 'application/json' : 'text/csv' ,
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -128,7 +128,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
     URL.revokeObjectURL(url);
   }, [exportResults]);
   if (!visible) return null;
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 0,
@@ -162,7 +162,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
           {/* Header */}
           <div style={{
             padding: 16,
-            borderBottom: '1px solid #4a5568'
+            borderBottom: '1px solid #4a5568',
           }}>
             <h3 style={{ color: '#e2e8f0', margin: 0, fontSize: 16 }}>
               Historical Data Import
@@ -483,7 +483,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
                   borderRadius: 4,
                   color: 'white',
                   fontSize: 14,
-                  cursor: isValid && !dataState.isLoading ? 'pointer' : 'not-allowed'
+                  cursor: isValid && !dataState.isLoading ? 'pointer' : 'not-allowed',
                 }}
               >
                 {dataState.isLoading ? 'Importing...' : 'Import Data'}
@@ -649,10 +649,10 @@ const HistoricalDataResults: React.FC<{ results: QueryResult[] }> = ({ results }
   const filteredResults = selectedSource ;
     ? results.filter(r => r.metadata.source === selectedSource)
     : results;
-  const allItems = filteredResults.flatMap(result => ;)
+  const allItems = filteredResults.flatMap(result => ;);
     result.data.map(item => ({ ...item, _source: result.metadata.source }))
   );
-  return ()
+  return ();
     <div style={{ height: '100%', display: 'flex' }}>
       {/* Source Filter Sidebar */}
       <div style={{

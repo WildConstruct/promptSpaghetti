@@ -215,7 +215,7 @@ describe('FilePreview Component', () => {
     it('handles invalid date objects', () => {
       const fileWithInvalidDate = {
         ...mockFile,
-        lastModified: new Date('invalid-date')
+        lastModified: new Date('invalid-date'),
       };
       expect(() => {
         render(<FilePreview file={fileWithInvalidDate} mode="compact" />);
@@ -224,7 +224,7 @@ describe('FilePreview Component', () => {
     it('handles missing metadata object', () => {
       const fileWithoutMetadata = {
         ...mockFile,
-        metadata: undefined as any
+        metadata: undefined as any,
       };
       expect(() => {
         render(<FilePreview file={fileWithoutMetadata} mode="full" />);

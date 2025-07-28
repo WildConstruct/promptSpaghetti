@@ -13,7 +13,7 @@ describe('SynchronizationRecovery', () => {
       maxRecoveryTime: 10000,
       enableDependencyTracking: true,
       validateIntegrity: true,
-      backupBeforeRecovery: false // Disable for tests
+      backupBeforeRecovery: false // Disable for tests,
     });
   });
   afterEach(() => {
@@ -213,7 +213,7 @@ describe('SynchronizationRecovery', () => {
       recovery.on('recovery_progress', (progress) => progressEvents.push(progress));
       const successEvents: any[] = [];
       recovery.on('recovery_success', (event) => successEvents.push(event));
-      const delta = await recovery.startRecovery(;)
+      const delta = await recovery.startRecovery(;);
         'test-doc',
         localState,
         async () => serverState
@@ -225,7 +225,7 @@ describe('SynchronizationRecovery', () => {
     });
     test('should handle recovery timeout', async () => {
       const recovery = new SynchronizationRecovery({)
-        maxRecoveryTime: 100 // Very short timeout
+        maxRecoveryTime: 100 // Very short timeout,
       });
       const localState: DocumentState = {
         version: 1,
@@ -282,7 +282,7 @@ describe('SynchronizationRecovery', () => {
         ],
         metadata: {}
       };
-      const delta = await recovery.startRecovery(;)
+      const delta = await recovery.startRecovery(;);
         'test-doc',
         localState,
         async () => serverState
@@ -325,7 +325,7 @@ describe('SynchronizationRecovery', () => {
           confidence: 0.8,
         }],
         autoResolvable: true,
-        severity: 'medium' as const
+        severity: 'medium' as const,
       };
       // Add conflict to pending conflicts
       (recovery as any).pendingConflicts.set(conflictId, conflict);
@@ -358,7 +358,7 @@ describe('SynchronizationRecovery', () => {
         description: 'Test conflict',
         resolutionOptions: [],
         autoResolvable: false,
-        severity: 'high' as const
+        severity: 'high' as const,
       };
       (recovery as any).pendingConflicts.set(conflictId, conflict);
       const result = await recovery.resolveConflict(conflictId, {)
@@ -515,7 +515,7 @@ describe('SynchronizationRecovery', () => {
         data: { title: `Node ${i}` },}
         timestamp: Date.now() + i,
         userId: 'user1',
-        version: i + 2
+        version: i + 2,
       }));
       const localState: DocumentState = {
         version: 1,
@@ -581,7 +581,7 @@ describe('SynchronizationRecovery', () => {
           timestamp: Date.now(),
           userId: 'user1',
           version: 2,
-          dependencies: ['op1'] // Depends on missing operation
+          dependencies: ['op1'] // Depends on missing operation,
         }
       ];
       try {

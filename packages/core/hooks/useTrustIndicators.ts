@@ -87,7 +87,7 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
           identity: validationSummary?.completedValidations?.includes('government_id') || false,
           professional: validationSummary?.completedValidations?.includes('professional_credentials') || false,
           portfolio: validationSummary?.completedValidations?.includes('portfolio_verification') || false,
-          social: validationSummary?.completedValidations?.includes('social_media_verification') || false
+          social: validationSummary?.completedValidations?.includes('social_media_verification') || false,
         },
         badges: trustScore?.badges || [],
         communityStanding: calculateCommunityStanding(trustScore, creatorAnalytics),
@@ -253,7 +253,7 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
     trustScore: trustData?.trustScore?.overall || 0,
     trustTier: trustData?.trustScore?.tier || 'unverified',
     // Verification status
-    verificationStatus: trustData?.verificationStatus || {
+    verificationStatus: trustData?.verificationStatus || {,
       email: false, phone: false, identity: false,
       professional: false, portfolio: false, social: false
     },
@@ -287,7 +287,7 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
     hasIdentityVerification: trustData?.verificationStatus.identity || false,
     hasProfessionalVerification: trustData?.verificationStatus.professional || false,
     hasPortfolioVerification: trustData?.verificationStatus.portfolio || false,
-    hasSocialVerification: trustData?.verificationStatus.social || false
+    hasSocialVerification: trustData?.verificationStatus.social || false,
   };
 };
 

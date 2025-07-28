@@ -155,7 +155,7 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
       setError('Failed to create rule');
     }
   };
-  const handleReviewSubmit = async (;)
+  const handleReviewSubmit = async (;);
     decision: 'approve' | 'reject' | 'abstain',
     comment?: string,
     criteriaEvaluations?: Record<string, any>
@@ -199,7 +199,7 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
       e.preventDefault();
       onSave(formData);
     };
-    return ()
+    return ();
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
           <h3 className="text-lg font-medium text-gray-900 mb-4">
@@ -275,7 +275,7 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
     );
   };
   const canManageWorkflow = ['admin', 'manager'].includes(userRole);
-  return ()
+  return ();
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">

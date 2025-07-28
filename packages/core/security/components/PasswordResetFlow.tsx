@@ -254,13 +254,13 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
       setCurrentStep(ResetStep.VERIFY);
       onSecurityEvent?.(SecurityEvent.RESET_REQUESTED, {)
         email,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send reset code');
       onSecurityEvent?.(SecurityEvent.RESET_REQUEST_FAILED, {)
         email,
-        error: err instanceof Error ? err.message : 'Unknown error'
+        error: err instanceof Error ? err.message : 'Unknown error',
       });
     } finally {
       setLoading(false);
@@ -280,13 +280,13 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
       setCurrentStep(ResetStep.RESET);
       onSecurityEvent?.(SecurityEvent.TOKEN_VERIFIED, {)
         email,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to verify code');
       onSecurityEvent?.(SecurityEvent.TOKEN_VERIFICATION_FAILED, {)
         email,
-        error: err instanceof Error ? err.message : 'Unknown error'
+        error: err instanceof Error ? err.message : 'Unknown error',
       });
     } finally {
       setLoading(false);
@@ -307,13 +307,13 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
       onResetComplete?.(true, email);
       onSecurityEvent?.(SecurityEvent.PASSWORD_RESET_COMPLETED, {)
         email,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to reset password');
       onSecurityEvent?.(SecurityEvent.PASSWORD_RESET_FAILED, {)
         email,
-        error: err instanceof Error ? err.message : 'Unknown error'
+        error: err instanceof Error ? err.message : 'Unknown error',
       });
     } finally {
       setLoading(false);
@@ -329,7 +329,7 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
       setResendTimer(60);
       onSecurityEvent?.(SecurityEvent.RESET_CODE_RESENT, {)
         email,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to resend code');
@@ -358,7 +358,7 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
   const getPasswordStrengthWidth = (score: number) => {
     return `${Math.max(score, 10)}%`;}
   };
-  return ()
+  return ();
     <div className={`max-w-md mx-auto bg-white rounded-lg shadow-lg ${className}`}>}
       {/* Header */}
       <div className="p-6 border-b border-gray-200">

@@ -547,7 +547,7 @@ export class PerformanceBudgetManager extends EventEmitter {
       critical: violations.filter(v => v.severity === 'critical').length,
       high: violations.filter(v => v.severity === 'high').length,
       medium: violations.filter(v => v.severity === 'medium').length,
-      low: violations.filter(v => v.severity === 'low').length
+      low: violations.filter(v => v.severity === 'low').length,
     };
   }
   private generateRecommendations(violations: BudgetViolation[]): string[] {
@@ -575,7 +575,6 @@ export class PerformanceBudgetManager extends EventEmitter {
     memoryUsage: number[];
     apiLatency: number[];
     violations: number[];
-    } {
     const recent = this.snapshots.slice(-20);
     return {
       bundleSize: recent.map(s => s.bundles.total),
@@ -586,7 +585,6 @@ export class PerformanceBudgetManager extends EventEmitter {
           v.timestamp >= (recent[i]?.timestamp || 0) && 
           v.timestamp < (recent[i + 1]?.timestamp || Infinity)
         ).length
-      )
     };
   }
   /**
@@ -617,38 +615,38 @@ export const defaultPerformanceBudget: PerformanceBudgetConfig = {
     main: 250,      // 250KB main bundle
     vendor: 500,    // 500KB vendor bundle
     chunks: 100,    // 100KB max chunk size
-    total: 1000     // 1MB total bundle size
+    total: 1000     // 1MB total bundle size,
   },
   runtime: {,
     firstContentfulPaint: 1500,    // 1.5s FCP
     largestContentfulPaint: 2500,  // 2.5s LCP
     firstInputDelay: 100,          // 100ms FID
     cumulativeLayoutShift: 0.1,    // 0.1 CLS
-    timeToInteractive: 3000        // 3s TTI
+    timeToInteractive: 3000        // 3s TTI,
   },
   api: {,
     graphExecution: 1000,    // 1s graph execution
     preview: 500,            // 500ms preview generation
     validation: 100,         // 100ms validation
-    authentication: 200      // 200ms auth
+    authentication: 200      // 200ms auth,
   },
   memory: {,
     initialHeap: 50,         // 50MB initial heap
     peakHeap: 150,           // 150MB peak heap
     steadyState: 75,         // 75MB steady state
-    leakThreshold: 5         // 5MB/hour leak threshold
+    leakThreshold: 5         // 5MB/hour leak threshold,
   },
   network: {,
     totalRequests: 25,           // 25 total requests
     totalTransferSize: 1500,     // 1.5MB transfer size
     thirdPartyRequests: 5,       // 5 third-party requests
-    criticalResourceCount: 10    // 10 critical resources
+    criticalResourceCount: 10    // 10 critical resources,
   },
   build: {,
     buildTime: 60,          // 60s build time
     typeCheckTime: 15,      // 15s type check
     lintTime: 10,           // 10s linting
-    testTime: 30            // 30s test execution
+    testTime: 30            // 30s test execution,
   }
 };
 

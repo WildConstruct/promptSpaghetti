@@ -161,7 +161,7 @@ export class WebSocketClient extends EventEmitter {
           organizationId: this.config.organizationId,
           ...config?.filters
         },
-        throttle: config?.throttle || 1000
+        throttle: config?.throttle || 1000,
       };
       this.subscriptions.set(topic, subscriptionConfig);
       if (this.connectionState === ConnectionState.CONNECTED) {
@@ -415,7 +415,7 @@ export class AnalyticsWebSocketClient extends WebSocketClient {
       filters: {,
         eventTypes: ['analytics_update', 'performance_metric']
       },
-      throttle: 5000 // Update every 5 seconds
+      throttle: 5000 // Update every 5 seconds,
     });
   }
   /**
@@ -427,7 +427,7 @@ export class AnalyticsWebSocketClient extends WebSocketClient {
         eventTypes: ['cost_alert', 'budget_alert'],
         minSeverity: 'warning',
       },
-      throttle: 1000 // Immediate alerts
+      throttle: 1000 // Immediate alerts,
     });
   }
   /**
@@ -438,7 +438,7 @@ export class AnalyticsWebSocketClient extends WebSocketClient {
       filters: {,
         eventTypes: ['recommendation'],
       },
-      throttle: 10000 // Update every 10 seconds
+      throttle: 10000 // Update every 10 seconds,
     });
   }
   /**
@@ -449,7 +449,7 @@ export class AnalyticsWebSocketClient extends WebSocketClient {
       filters: {,
         eventTypes: ['user_activity'],
       },
-      throttle: 2000 // Update every 2 seconds
+      throttle: 2000 // Update every 2 seconds,
     });
   }
   /**

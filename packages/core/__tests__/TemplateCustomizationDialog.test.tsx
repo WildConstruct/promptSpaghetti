@@ -13,7 +13,7 @@ const mockUseExport = {
   previewTemplate: jest.fn<unknown[], unknown>()
 };
 jest.mock('../hooks/useExport', () => ({)
-  useExport: () => mockUseExport
+  useExport: () => mockUseExport,
 }));
 import { TemplateCustomizationDialog } from '../components/export/TemplateCustomizationDialog';
 
@@ -392,7 +392,7 @@ describe('TemplateCustomizationDialog', () => {
     });
     it('handles undefined callbacks gracefully', () => {
       expect(() => {
-        render()
+        render();
           <TemplateCustomizationDialog 
             {...defaultProps}
             onClose={undefined}

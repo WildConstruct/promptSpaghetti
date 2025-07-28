@@ -26,7 +26,7 @@ import { ThreatLevel } from '../RateLimitingService';
 export function createQuickSecuritySetup() {
   console.log('=== Quick Security Setup Example ===');
   // Create a production-ready unified security system
-  const security = UnifiedSecurityProtectionFactory.createUnifiedProtection(;)
+  const security = UnifiedSecurityProtectionFactory.createUnifiedProtection(;);
     SecurityProfile.PRODUCTION
   );
   console.log('Created unified security protection with:');
@@ -71,7 +71,7 @@ export function createCustomSecuritySetup() {
     }
   };
   // Create with custom configuration
-  const security = UnifiedSecurityProtectionFactory.createUnifiedProtection(;)
+  const security = UnifiedSecurityProtectionFactory.createUnifiedProtection(;);
     SecurityProfile.PRODUCTION,
     customConfig
   );
@@ -93,7 +93,6 @@ export async function handleSecurityRequest()
     userId?: string;
     userAgent: string;
   }
-) {
   console.log('=== Security Request Handling Example ===');
   // Create protection context
   const context: UnifiedProtectionContext = {
@@ -374,7 +373,7 @@ export {
 
 // Run the complete example if this file is executed directly
 if (require.main === module) {
-  completeIntegrationExample()
+  completeIntegrationExample();
     .then(() => {
       console.log('\n✅ Complete integration example finished successfully');
     })

@@ -4,11 +4,9 @@
  * 
  * Handles all form field types with validation and consistent UX
  */
-
 import React from 'react';
 import { Eye, EyeOff, AlertCircle, HelpCircle } from 'lucide-react';
 import { FormFieldSchema } from './AdminFormBuilder';
-
 interface FormFieldProps {
   field: FormFieldSchema;
   value: any;
@@ -20,7 +18,7 @@ interface FormFieldProps {
   disabled?: boolean;
 }
 
-export const FormField: React.FC<FormFieldProps> = ({
+export const FormField: React.FC<FormFieldProps> = ({)
   field,
   value,
   error,
@@ -30,21 +28,19 @@ export const FormField: React.FC<FormFieldProps> = ({
   onTogglePassword,
   disabled = false
 }) => {
-  const fieldId = `field-${field.name}`;
+  const fieldId = `field-${field.name}`;}
   const hasError = Boolean(error);
-
   const renderInput = () => {
     const baseProps = {
       id: fieldId,
       name: field.name,
       disabled,
       onBlur,
-      className: `form-input ${hasError ? 'error' : ''}`
+      className: `form-input ${hasError ? 'error' : ''}`}
     };
-
     switch (field.type) {
       case 'textarea':
-        return (
+        return ()
           <textarea
             {...baseProps}
             value={value || ''}
@@ -53,20 +49,19 @@ export const FormField: React.FC<FormFieldProps> = ({
             rows={field.rows || 3}
           />
         );
-
       case 'select':
-        return (
+        return ()
           <select
             {...baseProps}
             value={value || ''}
             onChange={(e) => onChange(e.target.value)}
           >
-            {field.placeholder && (
+            {field.placeholder && ()
               <option value="" disabled>
                 {field.placeholder}
               </option>
             )}
-            {field.options?.map((option) => (
+            {field.options?.map((option) => ()
               <option 
                 key={option.value} 
                 value={option.value}
@@ -77,9 +72,8 @@ export const FormField: React.FC<FormFieldProps> = ({
             ))}
           </select>
         );
-
       case 'multiselect':
-        return (
+        return ()
           <select
             {...baseProps}
             multiple
@@ -89,7 +83,7 @@ export const FormField: React.FC<FormFieldProps> = ({
               onChange(selectedValues);
             }}
           >
-            {field.options?.map((option) => (
+            {field.options?.map((option) => ()
               <option 
                 key={option.value} 
                 value={option.value}
@@ -100,9 +94,8 @@ export const FormField: React.FC<FormFieldProps> = ({
             ))}
           </select>
         );
-
       case 'checkbox':
-        return (
+        return ()
           <label className="checkbox-wrapper">
             <input
               type="checkbox"
@@ -114,11 +107,10 @@ export const FormField: React.FC<FormFieldProps> = ({
             <span className="checkbox-label">{field.label}</span>
           </label>
         );
-
       case 'radio':
-        return (
+        return ()
           <div className="radio-group">
-            {field.options?.map((option) => (
+            {field.options?.map((option) => ()
               <label key={option.value} className="radio-wrapper">
                 <input
                   type="radio"
@@ -134,9 +126,8 @@ export const FormField: React.FC<FormFieldProps> = ({
             ))}
           </div>
         );
-
       case 'file':
-        return (
+        return ()
           <input
             {...baseProps}
             type="file"
@@ -148,9 +139,8 @@ export const FormField: React.FC<FormFieldProps> = ({
             multiple={field.multiple}
           />
         );
-
       case 'password':
-        return (
+        return ()
           <div className="password-input-wrapper">
             <input
               {...baseProps}
@@ -159,7 +149,7 @@ export const FormField: React.FC<FormFieldProps> = ({
               onChange={(e) => onChange(e.target.value)}
               placeholder={field.placeholder}
             />
-            {onTogglePassword && (
+            {onTogglePassword && ()
               <button
                 type="button"
                 onClick={onTogglePassword}
@@ -171,9 +161,8 @@ export const FormField: React.FC<FormFieldProps> = ({
             )}
           </div>
         );
-
       case 'number':
-        return (
+        return ()
           <input
             {...baseProps}
             type="number"
@@ -184,9 +173,8 @@ export const FormField: React.FC<FormFieldProps> = ({
             max={field.validation?.max}
           />
         );
-
       case 'email':
-        return (
+        return ()
           <input
             {...baseProps}
             type="email"
@@ -195,10 +183,9 @@ export const FormField: React.FC<FormFieldProps> = ({
             placeholder={field.placeholder}
           />
         );
-
       case 'date':
       case 'datetime-local':
-        return (
+        return ()
           <input
             {...baseProps}
             type={field.type}
@@ -206,9 +193,8 @@ export const FormField: React.FC<FormFieldProps> = ({
             onChange={(e) => onChange(e.target.value)}
           />
         );
-
       default:
-        return (
+        return ()
           <input
             {...baseProps}
             type="text"
@@ -219,17 +205,15 @@ export const FormField: React.FC<FormFieldProps> = ({
         );
     }
   };
-
   // Don't render label for checkbox since it's handled in the input
   const shouldRenderLabel = field.type !== 'checkbox';
-
-  return (
-    <div className={`form-field ${field.type === 'checkbox' ? 'checkbox-field' : ''}`}>
-      {shouldRenderLabel && (
+  return ()
+    <div className={`form-field ${field.type === 'checkbox' ? 'checkbox-field' : ''}`}>}
+      {shouldRenderLabel && ()
         <label htmlFor={fieldId} className="form-label">
           {field.label}
           {field.required && <span className="required-asterisk">*</span>}
-          {field.help && (
+          {field.help && ()
             <div className="help-tooltip">
               <HelpCircle size={14} />
               <div className="tooltip-content">{field.help}</div>
@@ -237,21 +221,18 @@ export const FormField: React.FC<FormFieldProps> = ({
           )}
         </label>
       )}
-
       <div className="form-input-wrapper">
         {renderInput()}
       </div>
-
       {/* Error Message */}
-      {error && (
+      {error && ()
         <div className="form-error">
           <AlertCircle size={14} />
           <span>{error}</span>
         </div>
       )}
-
       {/* Help Text */}
-      {field.help && field.type !== 'checkbox' && (
+      {field.help && field.type !== 'checkbox' && ()
         <div className="form-help">
           {field.help}
         </div>

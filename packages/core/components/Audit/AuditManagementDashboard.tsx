@@ -156,7 +156,7 @@ export const AuditManagementDashboard: React.FC = () => {
     if (score >= 7) color = 'red';
     else if (score >= 5) color = 'orange';
     else if (score >= 3) color = 'gold';
-    return ()
+    return ();
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <Progress 
           percent={score * 10} 
@@ -173,7 +173,7 @@ export const AuditManagementDashboard: React.FC = () => {
   const renderOverviewCards = () => {
     if (!dashboardState.analytics) return null;
     const { analytics } = dashboardState;
-    return ()
+    return ();
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col span={6}>
           <Card>
@@ -222,7 +222,7 @@ export const AuditManagementDashboard: React.FC = () => {
   // Anomalous patterns alerts
   const renderAnomalousPatterns = () => {
     if (dashboardState.anomalousPatterns.length === 0) return null;
-    return ()
+    return ();
       <div style={{ marginBottom: 24 }}>
         <h3>🚨 Anomalous Patterns Detected</h3>
         {dashboardState.anomalousPatterns.map((pattern, index) => ()
@@ -288,7 +288,7 @@ export const AuditManagementDashboard: React.FC = () => {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        render: (status: AuditStatus) => {
+        render: (status: AuditStatus) => {,
           const colors = {
             [AuditStatus.ACTIVE]: 'blue',
             [AuditStatus.RESOLVED]: 'green',
@@ -303,18 +303,17 @@ export const AuditManagementDashboard: React.FC = () => {
         title: 'Compliance',
         dataIndex: 'compliance_frameworks',
         key: 'compliance_frameworks',
-        render: (frameworks: ComplianceFramework[]) => ()
+        render: (frameworks: ComplianceFramework[]) => (),
           <div>
             {frameworks.map(framework => ()
               <Tag key={framework} size="small">{framework.toUpperCase()}</Tag>
             ))}
           </div>
-        )
       },
       {
         title: 'Actions',
         key: 'actions',
-        render: (record: AuditEvent) => ()
+        render: (record: AuditEvent) => (),
           <Space>
             <Button 
               size="small" 
@@ -323,10 +322,9 @@ export const AuditManagementDashboard: React.FC = () => {
               View Details
             </Button>
           </Space>
-        )
       }
     ];
-    return ()
+    return ();
       <Table
         columns={columns}
         dataSource={dashboardState.events}
@@ -356,14 +354,14 @@ export const AuditManagementDashboard: React.FC = () => {
     // Severity distribution pie chart
     const severityData = Object.entries(analytics.severity_distribution || {}).map(([severity, count]) => ({)
       type: severity,
-      value: count as number
+      value: count as number,
     }));
     // Event type distribution bar chart
     const eventTypeData = Object.entries(analytics.event_type_distribution || {}).map(([type, count]) => ({)
       type: type.replace('_', ' '),
-      value: count as number
+      value: count as number,
     }));
-    return ()
+    return ();
       <Row gutter={16}>
         <Col span={12}>
           <Card title="Severity Distribution" style={{ marginBottom: 16 }}>
@@ -397,7 +395,7 @@ export const AuditManagementDashboard: React.FC = () => {
   const renderEventDetailsModal = () => {
     if (!dashboardState.selectedEvent) return null;
     const event = dashboardState.selectedEvent;
-    return ()
+    return ();
       <Modal
         title={`Audit Event Details - ${event.title}`}
         visible={!!dashboardState.selectedEvent}
@@ -458,7 +456,7 @@ export const AuditManagementDashboard: React.FC = () => {
     );
   };
   // Filter panel
-  const renderFilterPanel = () => (;)
+  const renderFilterPanel = () => (;);
     <Card style={{ marginBottom: 16 }}>
       <Row gutter={16}>
         <Col span={6}>
@@ -545,7 +543,7 @@ export const AuditManagementDashboard: React.FC = () => {
       </Row>
     </Card>
   );
-  return ()
+  return ();
     <div style={{ padding: '24px' }}>
       <div style={{ marginBottom: 24 }}>
         <h1>🔍 Audit Management Dashboard</h1>
@@ -586,7 +584,7 @@ const ComplianceReportsTab: React.FC = () => {
     try {
       const report = auditManagementSystem.generateComplianceReport(selectedFramework, {)
         start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
-        end: new Date()
+        end: new Date(),
       });
       setReportData(report);
     } catch (error) {
@@ -597,7 +595,7 @@ const ComplianceReportsTab: React.FC = () => {
   useEffect(() => {
     generateComplianceReport();
   }, [selectedFramework]);
-  return ()
+  return ();
     <div>
       <Row gutter={16} style={{ marginBottom: 16 }}>
         <Col span={6}>
@@ -674,12 +672,12 @@ const RealTimeMonitoringTab: React.FC = () => {
       setMonitoringData({)
         eventsPerMinute: Math.floor(Math.random() * 50),
         alertsActive: Math.floor(Math.random() * 5),
-        systemHealth: Math.random() > 0.1 ? 'healthy' : 'warning'
+        systemHealth: Math.random() > 0.1 ? 'healthy' : 'warning',
       });
     }, 5000);
     return () => clearInterval(interval);
   }, []);
-  return ()
+  return ();
     <div>
       <Row gutter={16} style={{ marginBottom: 16 }}>
         <Col span={8}>
@@ -724,7 +722,7 @@ const RealTimeMonitoringTab: React.FC = () => {
 
 // System Health Tab Component
 const SystemHealthTab: React.FC = () => {
-  return ()
+  return ();
     <div>
       <Card title="Audit System Health Check" style={{ marginBottom: 16 }}>
         <Row gutter={16}>

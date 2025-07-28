@@ -159,7 +159,7 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
   error: null,
   selectedExtensionId: null,
   // Load installed extensions
-  loadInstalledExtensions: async () => {
+  loadInstalledExtensions: async () => {,
     set({ isLoading: true, error: null });
     try {
       // In a real implementation, this would fetch from the extension registry
@@ -187,7 +187,7 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
     }
   },
   // Load available extensions from marketplace
-  loadAvailableExtensions: async () => {
+  loadAvailableExtensions: async () => {,
     set({ isLoading: true, error: null });
     try {
       // In a real implementation, this would fetch from marketplace API
@@ -204,11 +204,11 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
     }
   },
   // Install extension
-  installExtension: async (extension: ExtensionManifest) => {
+  installExtension: async (extension: ExtensionManifest) => {,
     set({ isLoading: true, error: null });
     try {
       // Check compatibility before installation
-      const compatibilityResult = extensionCompatibilityChecker.checkExtensionCompatibility(;)
+      const compatibilityResult = extensionCompatibilityChecker.checkExtensionCompatibility(;);
         extension,
         {
           systemVersion: '1.0.0',
@@ -249,7 +249,7 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
     }
   },
   // Uninstall extension
-  uninstallExtension: async (extensionId: string) => {
+  uninstallExtension: async (extensionId: string) => {,
     set({ isLoading: true, error: null });
     try {
       // Simulate uninstallation process
@@ -276,7 +276,7 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
     }
   },
   // Enable extension
-  enableExtension: async (extensionId: string) => {
+  enableExtension: async (extensionId: string) => {,
     const state = get();
     const status = state.extensionStatuses.get(extensionId);
     if (!status) {
@@ -306,7 +306,7 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
     }
   },
   // Disable extension
-  disableExtension: async (extensionId: string) => {
+  disableExtension: async (extensionId: string) => {,
     const state = get();
     const status = state.extensionStatuses.get(extensionId);
     if (!status) {
@@ -329,7 +329,7 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
     }
   },
   // Update extension
-  updateExtension: async (extensionId: string) => {
+  updateExtension: async (extensionId: string) => {,
     set({ isLoading: true, error: null });
     try {
       // Simulate update process
@@ -343,7 +343,7 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
       // Update version (simulate)
       const newVersion = status.availableVersion || `${parseInt(extension.version.split('.')[0]) + 1}.0.0`;}
       const updatedExtension = { ...extension, version: newVersion };
-      const newInstalledExtensions = state.installedExtensions.map(ext =>;)
+      const newInstalledExtensions = state.installedExtensions.map(ext =>;);
         ext.id === extensionId ? updatedExtension : ext
       );
       const newStatuses = new Map(state.extensionStatuses);
@@ -381,7 +381,7 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
     }
   },
   // Get extension status
-  getExtensionStatus: (extensionId: string) => {
+  getExtensionStatus: (extensionId: string) => {,
     const state = get();
     return state.extensionStatuses.get(extensionId) || {
       enabled: false,
@@ -392,7 +392,7 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
     };
   },
   // Check for updates
-  checkForUpdates: async () => {
+  checkForUpdates: async () => {,
     const state = get();
     const newStatuses = new Map(state.extensionStatuses);
     // Simulate checking for updates
@@ -412,11 +412,11 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
     set({ extensionStatuses: newStatuses });
   },
   // Clear error
-  clearError: () => {
+  clearError: () => {,
     set({ error: null });
   },
   // Set selected extension
-  setSelectedExtension: (extensionId: string | null) => {
+  setSelectedExtension: (extensionId: string | null) => {,
     set({ selectedExtensionId: extensionId });
   }
 }));

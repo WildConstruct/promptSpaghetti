@@ -42,7 +42,7 @@ export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({)
     try {
       await onSubmit({)
         name: formData.name.trim(),
-        description: formData.description.trim() || undefined
+        description: formData.description.trim() || undefined,
       });
     } catch (error) {
       // Handle error (could set form-level error state)
@@ -58,7 +58,7 @@ export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({)
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
   };
-  return ()
+  return ();
     <div className="modal-overlay">
       <div className="modal modal--medium">
         <div className="modal__header">

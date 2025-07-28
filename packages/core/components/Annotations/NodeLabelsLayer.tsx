@@ -60,7 +60,7 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({)
       showIcon: false,
       truncateLength: labelPreferences.maxLabelLength,
       author,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }, [generateLabelId, labelPreferences, author]);
   // Handle label actions
@@ -75,7 +75,7 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({)
           const newConfig = {
             ...createLabelConfig(action.nodeId),
             ...action.config,
-            id: action.labelId || generateLabelId()
+            id: action.labelId || generateLabelId(),
           };
           updatedConfigs[newConfig.id] = newConfig;
         }
@@ -85,7 +85,7 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({)
           updatedConfigs[action.labelId] = {
             ...updatedConfigs[action.labelId],
             ...action.config,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           };
           if (action.customLabel !== undefined) {
             updatedConfigs[action.labelId].customLabel = action.customLabel;
@@ -203,7 +203,7 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({)
       y: node.position.y,
     };
   }, [nodes]);
-  return ()
+  return ();
     <div
       ref={layerRef}
       data-testid="node-labels-layer"
@@ -221,7 +221,7 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({)
       {nodes.map(node => {)
         const labelConfig = getLabelConfigForNode(node.id);
         // Show label if we have a custom config, or if the node should show its default label
-        const shouldShowLabel = labelConfig || (;)
+        const shouldShowLabel = labelConfig || (;);
           labelPreferences.defaultDisplayMode === 'always' ||
           (labelPreferences.defaultDisplayMode === 'selected' && selectedNodeId === node.id) ||
           (labelPreferences.defaultDisplayMode === 'hover' && hoveredNodeId === node.id) ||
@@ -239,9 +239,9 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({)
           showIcon: false,
           truncateLength: labelPreferences.maxLabelLength,
           author,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         };
-        return ()
+        return ();
           <div
             key={`label-container-${node.id}`}
             style={{
@@ -286,7 +286,7 @@ export const NodeLabelsLayer: React.FC<NodeLabelsLayerProps> = ({)
             pointerEvents: 'all',
             zIndex: 2000,
             opacity: 0.7,
-            transition: 'opacity 0.3s ease'
+            transition: 'opacity 0.3s ease',
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.opacity = '1';

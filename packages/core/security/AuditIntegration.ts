@@ -44,7 +44,7 @@ export class AuditIntegration {
       logAllOperations: config.logAllOperations ?? true,
       logDeniedAccess: config.logDeniedAccess ?? true,
       logClassificationChanges: config.logClassificationChanges ?? true,
-      enrichWithClassification: config.enrichWithClassification ?? true
+      enrichWithClassification: config.enrichWithClassification ?? true,
     };
     // Set up event listeners if components are provided
     this.setupEventListeners();
@@ -89,7 +89,7 @@ export class AuditIntegration {
       {
         ...metadata,
         ...classificationMetadata,
-        enforcementResult: enforcementResult ? {
+        enforcementResult: enforcementResult ? {,
           allowed: enforcementResult.allowed,
           riskScore: enforcementResult.riskScore,
           appliedControls: enforcementResult.appliedControls,
@@ -137,7 +137,7 @@ export class AuditIntegration {
       sessionId: context.sessionId,
       authorized: true,
       success: true,
-      sensitiveAccess: target.classification ? 
+      sensitiveAccess: target.classification ? ,
         this.isSensitiveClassification(target.classification) : false,
       metadata: {,
         targetUserId: target.userId,

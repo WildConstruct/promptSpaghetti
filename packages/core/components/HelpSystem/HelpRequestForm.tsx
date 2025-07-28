@@ -267,11 +267,11 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
   const removeTag = (tag: string) => {
     setFormData(prev => ({)
       ...prev,
-      tags: prev.tags.filter(t => t !== tag)
+      tags: prev.tags.filter(t => t !== tag),
     }));
   };
   // Render category selection step
-  const renderCategoryStep = () => (;)
+  const renderCategoryStep = () => (;);
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">What do you need help with?</h3>
@@ -354,7 +354,7 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
     </div>
   );
   // Render details step
-  const renderDetailsStep = () => (;)
+  const renderDetailsStep = () => (;);
     <div className="space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -491,7 +491,7 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
     </div>
   );
   // Render suggestions step
-  const renderSuggestionsStep = () => (;)
+  const renderSuggestionsStep = () => (;);
     <div className="space-y-6">
       {suggestedArticles.length > 0 ? ()
         <>
@@ -557,7 +557,7 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
     </div>
   );
   // Render review step
-  const renderReviewStep = () => (;)
+  const renderReviewStep = () => (;);
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">Review your request</h3>
@@ -633,7 +633,7 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
       </div>
     </div>
   );
-  return ()
+  return ();
     <div className="help-request-form max-w-2xl mx-auto">
       {/* Progress indicator */}
       <div className="mb-8">

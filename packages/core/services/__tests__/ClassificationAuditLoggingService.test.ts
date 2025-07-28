@@ -34,7 +34,7 @@ describe('ClassificationAuditLoggingService', () => {
   });
   describe('Audit Logging', () => {
     it('should log audit events with all required fields', async () => {
-      const entryId = await service.logAuditEvent(;)
+      const entryId = await service.logAuditEvent(;);
         'ACCESS_DATA',
         'CONFIDENTIAL',
         'data123',
@@ -67,7 +67,7 @@ describe('ClassificationAuditLoggingService', () => {
       expect(entry?.riskScore).toBeGreaterThan(0);
     });
     it('should generate appropriate compliance flags', async () => {
-      const entryId = await service.logAuditEvent(;)
+      const entryId = await service.logAuditEvent(;);
         'EXPORT_DATA',
         'RESTRICTED',
         'restricted_data_001',
@@ -84,7 +84,7 @@ describe('ClassificationAuditLoggingService', () => {
     });
     it('should calculate risk scores based on action and classification', async () => {
       // High-risk scenario
-      const highRiskId = await service.logAuditEvent(;)
+      const highRiskId = await service.logAuditEvent(;);
         'EXPORT_DATA',
         'RESTRICTED',
         'data123',
@@ -93,7 +93,7 @@ describe('ClassificationAuditLoggingService', () => {
         { success: false }
       );
       // Low-risk scenario
-      const lowRiskId = await service.logAuditEvent(;)
+      const lowRiskId = await service.logAuditEvent(;);
         'ACCESS_DATA',
         'PUBLIC',
         'data456',
@@ -122,7 +122,7 @@ describe('ClassificationAuditLoggingService', () => {
         );
       }
       // Now create the 12th entry which should detect the violation
-      const lastEntryId = await service.logAuditEvent(;)
+      const lastEntryId = await service.logAuditEvent(;);
         'ACCESS_DATA',
         'CONFIDENTIAL',
         'data_final',
@@ -258,7 +258,7 @@ describe('ClassificationAuditLoggingService', () => {
       }
     });
     it('should generate comprehensive audit reports', async () => {
-      const reportId = await service.generateAuditReport(;)
+      const reportId = await service.generateAuditReport(;);
         'Test Report',
         'Comprehensive test report',
         { sortBy: 'timestamp' },
@@ -274,7 +274,7 @@ describe('ClassificationAuditLoggingService', () => {
       expect(report?.entries.length).toBeGreaterThan(0);
     });
     it('should generate accurate audit summaries', async () => {
-      const reportId = await service.generateAuditReport(;)
+      const reportId = await service.generateAuditReport(;);
         'Summary Test',
         'Test summary generation',
         {},
@@ -293,7 +293,7 @@ describe('ClassificationAuditLoggingService', () => {
       expect(actionTotal).toBe(summary?.totalEntries);
     });
     it('should export audit reports in different formats', async () => {
-      const reportId = await service.generateAuditReport(;)
+      const reportId = await service.generateAuditReport(;);
         'Export Test',
         'Test report export',
         { limit: 5 },
@@ -308,7 +308,7 @@ describe('ClassificationAuditLoggingService', () => {
         expect(lines.length).toBeGreaterThan(1); // Header + data rows
       }
       // Test JSON export
-      const jsonReportId = await service.generateAuditReport(;)
+      const jsonReportId = await service.generateAuditReport(;);
         'JSON Export Test',
         'Test JSON export',
         { limit: 5 },
@@ -369,7 +369,7 @@ describe('ClassificationAuditLoggingService', () => {
   });
   describe('Compliance Tracking', () => {
     it('should generate GDPR compliance flags for relevant actions', async () => {
-      const entryId = await service.logAuditEvent(;)
+      const entryId = await service.logAuditEvent(;);
         'EXPORT_DATA',
         'CONFIDENTIAL',
         'personal_data_001',
@@ -387,13 +387,13 @@ describe('ClassificationAuditLoggingService', () => {
       expect(gdprFlag?.status).toBe('COMPLIANT');
     });
     it('should track compliance status across multiple frameworks', async () => {
-      const entryId = await service.logAuditEvent(;)
+      const entryId = await service.logAuditEvent(;);
         'ACCESS_DATA',
         'RESTRICTED',
         'healthcare_data_001',
         { 
           accessMethod: 'API',
-          businessJustification: 'Medical research'
+          businessJustification: 'Medical research',
         },
         mockContext,
         { success: true }
@@ -405,7 +405,7 @@ describe('ClassificationAuditLoggingService', () => {
       expect(frameworks).toContain('SOC2');
     });
     it('should set appropriate compliance statuses', async () => {
-      const entryId = await service.logAuditEvent(;)
+      const entryId = await service.logAuditEvent(;);
         'DELETE_DATA',
         'CONFIDENTIAL',
         'data_to_delete',
@@ -475,7 +475,7 @@ describe('ClassificationAuditLoggingService', () => {
       const query: AuditQuery = { 
         userId: 'non-existent-user',
         startDate: new Date('2020-01-01'),
-        endDate: new Date('2020-01-02')
+        endDate: new Date('2020-01-02'),
       };
       const results = service.queryAuditLogs(query);
       expect(results).toHaveLength(0);
@@ -483,7 +483,7 @@ describe('ClassificationAuditLoggingService', () => {
     it('should validate query parameters', () => {
       const query: AuditQuery = { 
         limit: -1,  // Invalid limit
-        offset: -5  // Invalid offset
+        offset: -5  // Invalid offset,
       };
       const results = service.queryAuditLogs(query);
       // Should handle gracefully without throwing
@@ -499,7 +499,7 @@ describe('ClassificationAuditLoggingService', () => {
         { dataId: 'unknown_xyz', expectedType: 'SYSTEM' }
       ];
       for (const testCase of testCases) {
-        const entryId = await service.logAuditEvent(;)
+        const entryId = await service.logAuditEvent(;);
           'ACCESS_DATA',
           'PUBLIC',
           testCase.dataId,

@@ -100,7 +100,7 @@ export declare class ModelManager {
     private pools;
     private loadBalancingConfig;
     private warmupStrategy;
-    constructor()
+    constructor();
       factoryConfig?: FactoryConfig,
       cacheConfig?: CacheConfig,
       loadBalancingConfig?: LoadBalancingConfig,

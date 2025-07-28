@@ -81,7 +81,7 @@ export class WebSocketClient extends EventEmitter {
       payload: update,
       timestamp: Date.now(),
       documentId: this.documentId || undefined,
-      userId: this.userId || undefined
+      userId: this.userId || undefined,
     });
   }
   /**
@@ -93,7 +93,7 @@ export class WebSocketClient extends EventEmitter {
       payload: presence,
       timestamp: Date.now(),
       documentId: this.documentId || undefined,
-      userId: this.userId || undefined
+      userId: this.userId || undefined,
     });
   }
   /**
@@ -105,7 +105,7 @@ export class WebSocketClient extends EventEmitter {
       payload: { x, y, nodeId, viewportBounds },
       timestamp: Date.now(),
       documentId: this.documentId || undefined,
-      userId: this.userId || undefined
+      userId: this.userId || undefined,
     });
   }
   /**
@@ -117,7 +117,7 @@ export class WebSocketClient extends EventEmitter {
       payload: { nodeIds, edgeIds, selectionBox },
       timestamp: Date.now(),
       documentId: this.documentId || undefined,
-      userId: this.userId || undefined
+      userId: this.userId || undefined,
     });
   }
   /**
@@ -129,7 +129,7 @@ export class WebSocketClient extends EventEmitter {
       payload: { currentTool, isTyping, focusedNodeId },
       timestamp: Date.now(),
       documentId: this.documentId || undefined,
-      userId: this.userId || undefined
+      userId: this.userId || undefined,
     });
   }
   /**
@@ -141,7 +141,7 @@ export class WebSocketClient extends EventEmitter {
       payload: {},
       timestamp: Date.now(),
       documentId: this.documentId || undefined,
-      userId: this.userId || undefined
+      userId: this.userId || undefined,
     });
   }
   /**
@@ -338,7 +338,7 @@ export class WebSocketClient extends EventEmitter {
    */
   private scheduleReconnect(): void {
     this.state.reconnectAttempts++;
-    const delay = Math.min(;)
+    const delay = Math.min(;);
       this.config.reconnectInterval * Math.pow(2, this.state.reconnectAttempts - 1),
       30000 // Max 30 seconds
     );

@@ -74,7 +74,7 @@ export abstract class BaseError extends Error {
   public readonly suggestions: string[];
   public readonly recoveryActions: RecoveryAction[];
   public readonly userMessage?: string;
-  constructor()
+  constructor();
     message: string,
     code: ErrorCode,
     severity: ErrorSeverity = ErrorSeverity.MEDIUM,
@@ -85,7 +85,6 @@ export abstract class BaseError extends Error {
       userMessage?: string;
       cause?: Error;
     } = {}
-  ) {
     super(message);
     this.name = this.constructor.name;
     this.code = code;
@@ -136,12 +135,11 @@ export abstract class BaseError extends Error {
  * Graph-related errors
  */
 export class GraphValidationError extends BaseError {
-  constructor()
+  constructor();
     message: string,
     public validationErrors: Array<{ field: string; value: any; expected: string }>,
     context?: Partial<ErrorContext>
-  ) {
-    super()
+    super();
       message,
       ErrorCode.GRAPH_VALIDATION_ERROR,
       ErrorSeverity.HIGH,
@@ -159,12 +157,11 @@ export class GraphValidationError extends BaseError {
 }
 
 export class GraphExecutionError extends BaseError {
-  constructor()
+  constructor();
     message: string,
     context?: Partial<ErrorContext>,
     cause?: Error
-  ) {
-    super()
+    super();
       message,
       ErrorCode.GRAPH_EXECUTION_ERROR,
       ErrorSeverity.HIGH,
@@ -180,11 +177,11 @@ export class GraphExecutionError extends BaseError {
         recoveryActions: [,
           {
             type: 'retry',
-            description: 'Retry execution with the same parameters'
+            description: 'Retry execution with the same parameters',
           },
           {
             type: 'reset',
-            description: 'Reset graph state and try again'
+            description: 'Reset graph state and try again',
           }
         ]
       }
@@ -193,14 +190,13 @@ export class GraphExecutionError extends BaseError {
 }
 
 export class NodeExecutionError extends BaseError {
-  constructor()
+  constructor();
     nodeId: string,
     operation: string,
     message: string,
     cause?: Error,
     context?: Partial<ErrorContext>
-  ) {
-    super()
+    super();
       `Node ${nodeId} failed during ${operation}: ${message}`,}
       ErrorCode.NODE_EXECUTION_ERROR,
       ErrorSeverity.MEDIUM,
@@ -222,7 +218,7 @@ export class NodeExecutionError extends BaseError {
  */
 export class DatabaseConnectionError extends BaseError {
   constructor(message: string, context?: Partial<ErrorContext>, cause?: Error) {
-    super()
+    super();
       `Database connection failed: ${message}`,}
       ErrorCode.DATABASE_CONNECTION_ERROR,
       ErrorSeverity.CRITICAL,
@@ -243,7 +239,7 @@ export class DatabaseConnectionError extends BaseError {
           },
           {
             type: 'fallback',
-            description: 'Use cached data if available'
+            description: 'Use cached data if available',
           }
         ]
       }
@@ -253,7 +249,7 @@ export class DatabaseConnectionError extends BaseError {
 
 export class ConnectionFactoryError extends BaseError {
   constructor(message: string, context?: Partial<ErrorContext>) {
-    super()
+    super();
       message,
       ErrorCode.CONNECTION_FACTORY_ERROR,
       ErrorSeverity.HIGH,
@@ -274,7 +270,7 @@ export class ConnectionFactoryError extends BaseError {
  */
 export class AuthenticationError extends BaseError {
   constructor(message: string, context?: Partial<ErrorContext>) {
-    super()
+    super();
       message,
       ErrorCode.AUTHENTICATION_ERROR,
       ErrorSeverity.HIGH,
@@ -300,7 +296,7 @@ export class AuthenticationError extends BaseError {
 
 export class MFAError extends BaseError {
   constructor(message: string, mfaType?: string, context?: Partial<ErrorContext>) {
-    super()
+    super();
       message,
       ErrorCode.MFA_ERROR,
       ErrorSeverity.MEDIUM,
@@ -321,7 +317,7 @@ export class MFAError extends BaseError {
  */
 export class ProjectLockedError extends BaseError {
   constructor(projectId?: string, context?: Partial<ErrorContext>) {
-    super()
+    super();
       'Project is locked and cannot be modified',
       ErrorCode.PROJECT_LOCKED_ERROR,
       ErrorSeverity.MEDIUM,
@@ -349,7 +345,7 @@ export class ProjectLockedError extends BaseError {
  */
 export class WorkflowStateError extends BaseError {
   constructor(message: string, context?: Partial<ErrorContext>) {
-    super()
+    super();
       message,
       ErrorCode.WORKFLOW_STATE_ERROR,
       ErrorSeverity.MEDIUM,
@@ -369,19 +365,18 @@ export class WorkflowStateError extends BaseError {
  * API and Analytics errors
  */
 export class APIError extends BaseError {
-  constructor()
+  constructor();
     statusCode: number,
     message: string,
     endpoint?: string,
     context?: Partial<ErrorContext>
-  ) {
-    super()
+    super();
       `HTTP ${statusCode}: ${message}`,}
       ErrorCode.API_ERROR,
       statusCode >= 500 ? ErrorSeverity.HIGH : ErrorSeverity.MEDIUM,
       { ...context, metadata: { statusCode, endpoint } },
       {
-        userMessage: statusCode >= 500 
+        userMessage: statusCode >= 500 ,
           ? 'Server error occurred. Please try again later.'
           : 'Request failed. Please check your input and try again.',
         suggestions: [,
@@ -390,7 +385,7 @@ export class APIError extends BaseError {
           statusCode === 429 ? 'Wait before making more requests' : '',
           'Try refreshing the page'
         ].filter(Boolean),
-        recoveryActions: statusCode >= 500 ? [
+        recoveryActions: statusCode >= 500 ? [,
           {
             type: 'retry',
             description: 'Retry request',
@@ -405,13 +400,12 @@ export class APIError extends BaseError {
  * Validation errors
  */
 export class ValidationError extends BaseError {
-  constructor()
+  constructor();
     field: string,
     value: any,
     expected: string,
     context?: Partial<ErrorContext>
-  ) {
-    super()
+    super();
       `Invalid ${field}: expected ${expected}, got ${typeof value}`,}
       ErrorCode.VALIDATION_ERROR,
       ErrorSeverity.LOW,
@@ -432,7 +426,7 @@ export class ValidationError extends BaseError {
  */
 export class ConfigurationError extends BaseError {
   constructor(message: string, configKey?: string, context?: Partial<ErrorContext>) {
-    super()
+    super();
       message,
       ErrorCode.CONFIGURATION_ERROR,
       ErrorSeverity.HIGH,

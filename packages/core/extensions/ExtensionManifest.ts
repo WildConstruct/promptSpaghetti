@@ -138,7 +138,7 @@ export class ExtensionManifestParser {
         return {
           success: false,
           error: 'Schema validation failed',
-          details: result.error.issues.map(issue => ({)
+          details: result.error.issues.map(issue => ({),
             path: issue.path.join('.'),
             message: issue.message,
             code: issue.code,
@@ -151,7 +151,7 @@ export class ExtensionManifestParser {
         return {
           success: false,
           error: 'Logical validation failed',
-          details: additionalValidation.errors.map(error => ({)
+          details: additionalValidation.errors.map(error => ({),
             path: '',
             message: error,
             code: 'custom',
@@ -292,21 +292,21 @@ export class ExtensionManifestParser {
       extension_type: options.extensionType,
       main: options.main || 'index.js',
       dependencies: {,
-        system: options.systemVersion || '1.0.0'
+        system: options.systemVersion || '1.0.0',
       },
       permissions: options.permissions || [],
       capabilities: {,
         provides: options.provides || [],
-        requires: options.requires || []
+        requires: options.requires || [],
       },
       metadata: {,
         license: options.license || 'MIT',
         keywords: options.keywords || [],
-        categories: options.categories || []
+        categories: options.categories || [],
       },
       compatibility: {,
         min_system_version: options.minSystemVersion || '1.0.0',
-        platforms: options.platforms || ['web']
+        platforms: options.platforms || ['web'],
       },
       security: {,
         sandbox: {,
@@ -318,7 +318,7 @@ export class ExtensionManifestParser {
     switch (options.extensionType) {
     case 'node':
       template.runtime = {
-        node_types: options.nodeTypes || []
+        node_types: options.nodeTypes || [],
       };
       break;
     case 'ui':
@@ -329,12 +329,12 @@ export class ExtensionManifestParser {
       break;
     case 'transform':
       template.runtime = {
-        transforms: options.transforms || []
+        transforms: options.transforms || [],
       };
       break;
     case 'storage':
       template.runtime = {
-        storage_providers: options.storageProviders || []
+        storage_providers: options.storageProviders || [],
       };
       break;
     }

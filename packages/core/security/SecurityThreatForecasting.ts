@@ -289,7 +289,7 @@ export class SecurityThreatForecasting extends EventEmitter {
    */
   public async generateThreatForecast()
     threatType: ThreatType,
-    timeHorizon: number = this.config.defaultTimeHorizon
+    timeHorizon: number = this.config.defaultTimeHorizon,
   ): Promise<ThreatForecast> {
     const seriesKey = `threat_${threatType}`;}
     const timeSeries = this.timeSeriesData.get(seriesKey) || [];
@@ -307,7 +307,7 @@ export class SecurityThreatForecasting extends EventEmitter {
       trendComponents = await this.performTrendAnalysis(timeSeries);
     }
     // Generate ensemble forecast
-    const ensembleForecast = await this.generateEnsembleForecast(;)
+    const ensembleForecast = await this.generateEnsembleForecast(;);
       timeSeries,
       timeHorizon,
       seasonalFactors,
@@ -316,7 +316,7 @@ export class SecurityThreatForecasting extends EventEmitter {
     // Assess forecast risk
     const riskMetrics = this.calculateForecastRisk(ensembleForecast, seasonalFactors, trendComponents);
     // Generate recommendations
-    const recommendations = this.generateForecastRecommendations(;)
+    const recommendations = this.generateForecastRecommendations(;);
       ensembleForecast,
       riskMetrics,
       threatType
@@ -355,7 +355,7 @@ export class SecurityThreatForecasting extends EventEmitter {
     for (const [modelId, model] of this.forecastingModels) {
       if (!model.isActive) continue;
       try {
-        const result = await this.runForecastingModel(;)
+        const result = await this.runForecastingModel(;);
           model,
           timeSeries,
           timeHorizon,
@@ -598,7 +598,7 @@ export class SecurityThreatForecasting extends EventEmitter {
       hourlyBuckets[hour].sum += point.value;
       hourlyBuckets[hour].count += 1;
     });
-    const pattern = hourlyBuckets.map(bucket => ;)
+    const pattern = hourlyBuckets.map(bucket => ;);
       bucket.count > 0 ? bucket.sum / bucket.count : 0
     );
     const amplitude = this.calculateAmplitude(pattern);
@@ -613,7 +613,7 @@ export class SecurityThreatForecasting extends EventEmitter {
       dailyBuckets[dayOfWeek].sum += point.value;
       dailyBuckets[dayOfWeek].count += 1;
     });
-    const pattern = dailyBuckets.map(bucket => ;)
+    const pattern = dailyBuckets.map(bucket => ;);
       bucket.count > 0 ? bucket.sum / bucket.count : 0
     );
     const amplitude = this.calculateAmplitude(pattern);
@@ -630,7 +630,7 @@ export class SecurityThreatForecasting extends EventEmitter {
       weeklyBuckets[bucket].sum += point.value;
       weeklyBuckets[bucket].count += 1;
     });
-    const pattern = weeklyBuckets.map(bucket => ;)
+    const pattern = weeklyBuckets.map(bucket => ;);
       bucket.count > 0 ? bucket.sum / bucket.count : 0
     );
     const amplitude = this.calculateAmplitude(pattern);
@@ -785,19 +785,19 @@ export class SecurityThreatForecasting extends EventEmitter {
         scenario: 'Trend Acceleration',
         probability: trendComponents.length > 0 ? 0.3 : 0.1,
         impact: 80,
-        description: 'Current trend accelerates beyond forecast'
+        description: 'Current trend accelerates beyond forecast',
       },
       {
         scenario: 'Seasonal Peak',
         probability: seasonalFactors.length > 0 ? 0.4 : 0.1,
         impact: 60,
-        description: 'Seasonal patterns intensify'
+        description: 'Seasonal patterns intensify',
       },
       {
         scenario: 'Black Swan Event',
         probability: 0.05,
         impact: 100,
-        description: 'Unprecedented security event occurs'
+        description: 'Unprecedented security event occurs',
       }
     ];
     return {
@@ -938,7 +938,7 @@ export class SecurityThreatForecasting extends EventEmitter {
         },
         features: ['historical_values', 'seasonal_patterns', 'trend_components'],
         hyperparameters: { ensemble_weights: results.map(r => r.weight) },
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       }
     };
   }

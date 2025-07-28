@@ -112,7 +112,7 @@ export function useVerificationRequests(userId: string): VerificationRequestsHoo
       setIsLoading(false);
     }
   }, [userId, handleApiError]);
-  const submitVerificationRequest = useCallback(async (;)
+  const submitVerificationRequest = useCallback(async (;);
     type: IdentityValidationType,
     data: Partial<IdentityValidationData>,
   ): Promise<{ requestId: string; status: string }> => {

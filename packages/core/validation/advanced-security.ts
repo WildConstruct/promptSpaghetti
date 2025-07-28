@@ -23,21 +23,21 @@ const ADVANCED_THREAT_PATTERNS: PatternSignature[] = [
     weight: 0.9,
     category: 'injection',
     severity: 'critical',
-    description: 'Array-based constructor access attempt'
+    description: 'Array-based constructor access attempt',
   },
   {
     pattern: /window\[.*\]\s*\(/gi,)
     weight: 0.85,
     category: 'execution',
     severity: 'high',
-    description: 'Dynamic window property execution'
+    description: 'Dynamic window property execution',
   },
   {
     pattern: /globalThis\./gi,
     weight: 0.8,
     category: 'injection',
     severity: 'high',
-    description: 'GlobalThis object access'
+    description: 'GlobalThis object access',
   },
   // Advanced prototype pollution vectors
   {
@@ -45,14 +45,14 @@ const ADVANCED_THREAT_PATTERNS: PatternSignature[] = [
     weight: 0.95,
     category: 'pollution',
     severity: 'critical',
-    description: 'Bracket notation prototype pollution'
+    description: 'Bracket notation prototype pollution',
   },
   {
     pattern: /JSON\.parse.*__proto__/gi,
     weight: 0.9,
     category: 'pollution',
     severity: 'critical',
-    description: 'JSON prototype pollution vector'
+    description: 'JSON prototype pollution vector',
   },
   // Template literal injection variants
   {
@@ -60,14 +60,14 @@ const ADVANCED_THREAT_PATTERNS: PatternSignature[] = [
     weight: 0.8,
     category: 'injection',
     severity: 'high',
-    description: 'String.raw template injection'
+    description: 'String.raw template injection',
   },
   {
     pattern: /`[^`]*\$\{[^}]*eval/gi,
     weight: 0.95,
     category: 'execution',
     severity: 'critical',
-    description: 'Template literal eval injection'
+    description: 'Template literal eval injection',
   },
   // Advanced function construction
   {
@@ -75,14 +75,14 @@ const ADVANCED_THREAT_PATTERNS: PatternSignature[] = [
     weight: 0.85,
     category: 'execution',
     severity: 'high',
-    description: 'Arrow function constructor access'
+    description: 'Arrow function constructor access',
   },
   {
     pattern: /async\s*function.*eval/gi,
     weight: 0.9,
     category: 'execution',
     severity: 'critical',
-    description: 'Async function eval injection'
+    description: 'Async function eval injection',
   },
   // Node.js specific advanced patterns
   {
@@ -90,14 +90,14 @@ const ADVANCED_THREAT_PATTERNS: PatternSignature[] = [
     weight: 0.8,
     category: 'traversal',
     severity: 'high',
-    description: 'Module resolution abuse'
+    description: 'Module resolution abuse',
   },
   {
     pattern: /process\.binding/gi,
     weight: 0.9,
     category: 'execution',
     severity: 'critical',
-    description: 'Process binding access'
+    description: 'Process binding access',
   },
   // Reflection and introspection attacks
   {
@@ -105,14 +105,14 @@ const ADVANCED_THREAT_PATTERNS: PatternSignature[] = [
     weight: 0.85,
     category: 'enumeration',
     severity: 'high',
-    description: 'Reflection API abuse'
+    description: 'Reflection API abuse',
   },
   {
     pattern: /Proxy\s*\(/gi,)
     weight: 0.8,
     category: 'injection',
     severity: 'high',
-    description: 'Proxy object creation'
+    description: 'Proxy object creation',
   },
   // Advanced DOM manipulation
   {
@@ -120,14 +120,14 @@ const ADVANCED_THREAT_PATTERNS: PatternSignature[] = [
     weight: 0.75,
     category: 'execution',
     severity: 'medium',
-    description: 'DOM implementation access'
+    description: 'DOM implementation access',
   },
   {
     pattern: /contentDocument\./gi,
     weight: 0.8,
     category: 'traversal',
     severity: 'high',
-    description: 'Frame content document access'
+    description: 'Frame content document access',
   },
   // Memory and performance attacks
   {
@@ -135,14 +135,14 @@ const ADVANCED_THREAT_PATTERNS: PatternSignature[] = [
     weight: 0.6,
     category: 'enumeration',
     severity: 'medium',
-    description: 'Weak reference manipulation'
+    description: 'Weak reference manipulation',
   },
   {
     pattern: /SharedArrayBuffer/gi,
     weight: 0.85,
     category: 'execution',
     severity: 'high',
-    description: 'Shared memory access'
+    description: 'Shared memory access',
   }
 ];
 
@@ -259,7 +259,7 @@ export class AdvancedSecurityAnalyzer {
       cacheSize: this.patternCache.size,
       learningDataPoints: this.learningEngine.threatHistory.size,
       version: '1.0.0',
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
   }
   private calculateRiskScore(pattern: PatternSignature): number {
@@ -278,7 +278,7 @@ export class AdvancedSecurityAnalyzer {
   private buildResult()
     input: string,
     riskScore: number,
-    threatsDetected: string[] = []
+    threatsDetected: string[] = [],
   ): SecurityAnalysisResult {
     return {
       isSecure: riskScore < 0.7,
@@ -318,7 +318,7 @@ export },
   /**
    * Enhanced expression validation
    */
-  enhancedSafeExpression: (maxLength: number = 500) => {
+  enhancedSafeExpression: (maxLength: number = 500) => {,
     return (expression: string): boolean => {
       if (expression.length > maxLength) return false;
       // Combined traditional and advanced validation
@@ -332,7 +332,7 @@ export },
   /**
    * Get security analysis details
    */
-  getAnalysis: (input: string): SecurityAnalysisResult => {
+  getAnalysis: (input: string): SecurityAnalysisResult => {,
     return advancedSecurityAnalyzer.analyzeInput(input);
   }
 };

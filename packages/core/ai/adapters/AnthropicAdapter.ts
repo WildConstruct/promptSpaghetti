@@ -39,7 +39,7 @@ export interface AnthropicRequestOptions {
 
 export interface ClaudeMessage {
   role: 'user' | 'assistant';
-  content: string | Array<{
+  content: string | Array<{,
     type: 'text' | 'image';
     text?: string;
     source?: {
@@ -85,7 +85,7 @@ export class AnthropicAdapter extends BaseAIModel {
         tokensPerMinute: 80000,
       },
       tags: ['chat', 'reasoning', 'analysis', 'multimodal'],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     const capabilities: ModelCapabilities = {
       inputTypes: ['text', 'json', 'image'],

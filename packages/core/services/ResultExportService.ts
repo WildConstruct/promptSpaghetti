@@ -116,7 +116,7 @@ export class ResultExportService {
       exportedAt: new Date().toISOString(),
       sourceGraph
     };
-    const filename = options.filename || this.generateFilename(;)
+    const filename = options.filename || this.generateFilename(;);
       options.format,
       'batch',
       selectedResults.map(r => r.seed)
@@ -288,7 +288,6 @@ export class ResultExportService {
     estimatedSize: number;
     unit: 'KB' | 'MB';
     warning?: string;
-  } {
     const baseSize = results.reduce((total, result) => {
       return total + (result.output?.length || 0) + 200; // Base overhead
     }, 0);
@@ -328,13 +327,13 @@ export class ResultExportService {
       return {
         estimatedSize: Math.ceil(estimatedKB / 1024),
         unit: 'MB',
-        warning: estimatedKB > 10240 ? 'Large export size - may take time to generate' : undefined
+        warning: estimatedKB > 10240 ? 'Large export size - may take time to generate' : undefined,
       };
     }
     return {
       estimatedSize: estimatedKB,
       unit: 'KB',
-      warning: estimatedKB > 5120 ? 'Large export size - consider reducing options' : undefined
+      warning: estimatedKB > 5120 ? 'Large export size - consider reducing options' : undefined,
     };
   }
   /**
@@ -344,7 +343,7 @@ export class ResultExportService {
     data: IndividualExportData | BatchExportData | any,
     options: ResultExportOptions,
     filename: string,
-    exportType: 'individual' | 'batch' | 'comparison'
+    exportType: 'individual' | 'batch' | 'comparison',
   ): Promise<ExportResult> {
     // Transform data to match existing export system format
     const exportRequest: ExportRequest = {
@@ -483,7 +482,7 @@ export class ResultExportService {
         resultIndex: index,
         seed: result.seed,
         output: result.output,
-        timeline: result.executionPath ? this.buildExecutionTimeline(result.executionPath) : null
+        timeline: result.executionPath ? this.buildExecutionTimeline(result.executionPath) : null,
       }))
     };
     return {
@@ -515,7 +514,7 @@ export class ResultExportService {
       totalResults: data.results?.length || 0,
       selectedResults: data.selectedIndices?.length || data.results?.length || 0,
       aggregateStats: data.aggregateStats || this.calculateAggregateStats(data.results || []),
-      breakdown: this.generateBatchBreakdown(data.results || [])
+      breakdown: this.generateBatchBreakdown(data.results || []),
     };
     return {
       type: 'text',
@@ -557,7 +556,7 @@ export class ResultExportService {
       .filter((t): t is number => typeof t === 'number');
     return {
       totalResults: results.length,
-      averageExecutionTime: executionTimes.length > 0 
+      averageExecutionTime: executionTimes.length > 0 ,
         ? Math.round(executionTimes.reduce((sum, time) => sum + time, 0) / executionTimes.length)
         : 0,
       uniqueSeeds: [...new Set(results.map(r => r.seed))],
@@ -609,11 +608,11 @@ export class ResultExportService {
       min: times[0],
       max: times[times.length - 1],
       median: times[Math.floor(times.length / 2)],
-      spread: times[times.length - 1] - times[0]
+      spread: times[times.length - 1] - times[0],
     };
   }
   private analyzeRandomization(results: PreviewResultWithPath[]) {
-    const randomizationCounts = results.map(r => ;)
+    const randomizationCounts = results.map(r => ;);
       r.executionPath?.randomizationPoints.length || 0
     );
     return {
@@ -654,7 +653,7 @@ export class ResultExportService {
       sceneDataIntegration: vfxOptions.sceneDataIntegration,
       pipeline: 'stable-diffusion',
       resolution: [1920, 1080],
-      results: results.map(r => ({)
+      results: results.map(r => ({),
         seed: r.seed,
         prompt: r.output,
         executionPath: r.executionPath,
@@ -716,7 +715,7 @@ export class ResultExportService {
       nodeType: step.nodeType,
       timestamp: step.timestamp,
       executionTime: step.executionTimeMs,
-      randomChoice: step.randomChoice ? {
+      randomChoice: step.randomChoice ? {,
         type: step.randomChoice.choiceType,
         selected: step.randomChoice.selectedOption,
         reason: step.randomChoice.selectionReason,
@@ -769,7 +768,7 @@ export class ResultExportService {
       byExecutionTime: this.groupByExecutionTime(results),
       byOutputLength: this.groupByOutputLength(results),
       byRandomizationCount: this.groupByRandomizationCount(results),
-      errorRate: results.filter(r => r.error).length / results.length
+      errorRate: results.filter(r => r.error).length / results.length,
     };
   }
   private groupByExecutionTime(results: PreviewResultWithPath[]) {

@@ -1,6 +1,5 @@
 // Data Access Dashboard - Epic 19.4
 // User interface for managing data access permissions and requests
-
 import React, { useState, useEffect, useCallback } from 'react';
 import './DataAccessDashboard.css';
 
@@ -17,13 +16,11 @@ interface DataAccessGrant {
   reason: string;
   restrictions: AccessRestriction[];
 }
-
 interface AccessRestriction {
   type: string;
   value: string;
   description: string;
 }
-
 interface AccessHistoryEvent {
   id: string;
   userId: string;
@@ -36,7 +33,6 @@ interface AccessHistoryEvent {
   timestamp: Date;
   riskScore: number;
 }
-
 interface AccessRequest {
   resourceId: string;
   resourceType: string;
@@ -55,13 +51,11 @@ interface AccessRequest {
 //   restrictions: AccessRestriction[];
 //   auditId: string;
 // }
-
 interface DataAccessDashboardProps {
   userId: string;
   apiBaseUrl?: string;
 }
-
-const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
+const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({)
   userId,
   apiBaseUrl = '/api'
 }) => {
@@ -71,61 +65,54 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
   const [history, setHistory] = useState<AccessHistoryEvent[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
   // Request form state
   const [showRequestForm, setShowRequestForm] = useState(false);
-  const [requestForm, setRequestForm] = useState<AccessRequest>({
+  const [requestForm, setRequestForm] = useState<AccessRequest>({)
     resourceId: '',
     resourceType: '',
     operation: 'READ',
-    reason: ''
+    reason: '',
   });
-
   // Filters
-  const [historyFilter, setHistoryFilter] = useState({
+  const [historyFilter, setHistoryFilter] = useState({)
     operation: '',
     allowed: '',
     startDate: '',
-    endDate: ''
+    endDate: '',
   });
-
   // API helpers
   const apiRequest = useCallback(async (endpoint: string, options: RequestInit = {}) => {
-    const token = localStorage.getItem('authToken'); // Adjust based on your auth system
-    const response = await fetch(`${apiBaseUrl}${endpoint}`, {
+    const token = localStorage.getItem('authToken'); // Adjust based on your auth system;
+    const response = await fetch(`${apiBaseUrl}${endpoint}`, {)}
       ...options,
-      headers: {
+      headers: {,
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`,}
         ...options.headers
       }
     });
-
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `Request failed with status ${response.status}`);
+      throw new Error(errorData.message || `Request failed with status ${response.status}`);}
     }
-
     return response.json();
   }, [apiBaseUrl]);
-
   // Load data
   const loadGrants = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await apiRequest(`/data-access/grants/${userId}`);
+      const response = await apiRequest(`/data-access/grants/${userId}`);}
       setGrants(response.grants || []);
     } catch (err) {
-      setError(`Failed to load access grants: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setError(`Failed to load access grants: ${err instanceof Error ? err.message : 'Unknown error'}`);}
     } finally {
       setLoading(false);
     }
   }, [userId, apiRequest]);
-
   const loadHistory = useCallback(async () => {
     try {
       setLoading(true);
-      const queryParams = new URLSearchParams({
+      const queryParams = new URLSearchParams({)
         limit: '50',
         offset: '0',
         ...(historyFilter.operation && { operation: historyFilter.operation }),
@@ -133,44 +120,38 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
         ...(historyFilter.startDate && { startDate: historyFilter.startDate }),
         ...(historyFilter.endDate && { endDate: historyFilter.endDate })
       });
-
-      const response = await apiRequest(`/data-access/audit/${userId}?${queryParams}`);
+      const response = await apiRequest(`/data-access/audit/${userId}?${queryParams}`);}
       setHistory(response.data || []);
     } catch (err) {
-      setError(`Failed to load access history: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setError(`Failed to load access history: ${err instanceof Error ? err.message : 'Unknown error'}`);}
     } finally {
       setLoading(false);
     }
   }, [userId, historyFilter, apiRequest]);
-
   // Submit access request
   const submitAccessRequest = async () => {
     try {
       setLoading(true);
-      await apiRequest('/data-access/request', {
+      await apiRequest('/data-access/request', {)
         method: 'POST',
-        body: JSON.stringify(requestForm)
+        body: JSON.stringify(requestForm),
       });
-
       setShowRequestForm(false);
-      setRequestForm({
+      setRequestForm({)
         resourceId: '',
         resourceType: '',
         operation: 'READ',
-        reason: ''
+        reason: '',
       });
-      
       // Reload grants to show any auto-approved requests
       await loadGrants();
-      
       alert('Access request submitted successfully!');
     } catch (err) {
-      setError(`Failed to submit access request: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setError(`Failed to submit access request: ${err instanceof Error ? err.message : 'Unknown error'}`);}
     } finally {
       setLoading(false);
     }
   };
-
   // Check specific resource access - commented out as unused
   //   //     if (!response.ok) throw new Error('Failed to check access');
   //     const data = await response.json();
@@ -180,7 +161,6 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
   //     return null;
   //   }
   // };
-
   // Effects
   useEffect(() => {
     if (activeTab === 'permissions') {
@@ -189,12 +169,10 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
       loadHistory();
     }
   }, [activeTab, historyFilter, loadGrants, loadHistory]);
-
   // Render helpers
   const formatDate = (date: Date | string) => {
     return new Date(date).toLocaleString();
   };
-
   const getClassificationColor = (classification: string) => {
     switch (classification) {
     case 'PUBLIC': return '#28a745';
@@ -204,7 +182,6 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
     default: return '#6c757d';
     }
   };
-
   const getAccessLevelIcon = (level: string) => {
     switch (level) {
     case 'GRANTED': return '✅';
@@ -214,9 +191,8 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
     default: return '❓';
     }
   };
-
   // Render current grants
-  const renderGrantsTab = () => (
+  const renderGrantsTab = () => (;)
     <div className="grants-tab">
       <div className="tab-header">
         <h3>Your Access Permissions</h3>
@@ -228,8 +204,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
           Request Access
         </button>
       </div>
-
-      {grants.length === 0 ? (
+      {grants.length === 0 ? ()
         <div className="empty-state">
           <p>No active access grants found.</p>
           <button 
@@ -239,9 +214,9 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
             Request Your First Access
           </button>
         </div>
-      ) : (
+      ) : ()
         <div className="grants-grid">
-          {grants.map(grant => (
+          {grants.map(grant => ()
             <div key={grant.id} className="grant-card">
               <div className="grant-header">
                 <div className="resource-info">
@@ -255,16 +230,14 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
                   {grant.classification}
                 </div>
               </div>
-
               <div className="grant-operations">
                 <h4>Allowed Operations:</h4>
                 <div className="operations-list">
-                  {grant.operations.map(op => (
+                  {grant.operations.map(op => ()
                     <span key={op} className="operation-tag">{op}</span>
                   ))}
                 </div>
               </div>
-
               <div className="grant-details">
                 <div className="detail-row">
                   <span className="label">Granted by:</span>
@@ -283,11 +256,10 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
                   <span className="value">{grant.reason}</span>
                 </div>
               </div>
-
-              {grant.restrictions.length > 0 && (
+              {grant.restrictions.length > 0 && ()
                 <div className="grant-restrictions">
                   <h4>Restrictions:</h4>
-                  {grant.restrictions.map((restriction, index) => (
+                  {grant.restrictions.map((restriction, index) => ()
                     <div key={index} className="restriction-item">
                       <span className="restriction-type">{restriction.type}:</span>
                       <span className="restriction-description">{restriction.description}</span>
@@ -301,9 +273,8 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
       )}
     </div>
   );
-
   // Render access history
-  const renderHistoryTab = () => (
+  const renderHistoryTab = () => (;)
     <div className="history-tab">
       <div className="tab-header">
         <h3>Access History</h3>
@@ -318,7 +289,6 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
             <option value="DELETE">Delete</option>
             <option value="EXPORT">Export</option>
           </select>
-          
           <select 
             value={historyFilter.allowed}
             onChange={e => setHistoryFilter({...historyFilter, allowed: e.target.value})}
@@ -327,14 +297,12 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
             <option value="true">Allowed</option>
             <option value="false">Denied</option>
           </select>
-
           <input
             type="date"
             value={historyFilter.startDate}
             onChange={e => setHistoryFilter({...historyFilter, startDate: e.target.value})}
             placeholder="Start Date"
           />
-
           <input
             type="date"
             value={historyFilter.endDate}
@@ -343,13 +311,12 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
           />
         </div>
       </div>
-
       <div className="history-list">
-        {history.length === 0 ? (
+        {history.length === 0 ? ()
           <div className="empty-state">
             <p>No access history found for the selected filters.</p>
           </div>
-        ) : (
+        ) : ()
           <table className="history-table">
             <thead>
               <tr>
@@ -363,7 +330,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
               </tr>
             </thead>
             <tbody>
-              {history.map(event => (
+              {history.map(event => ()
                 <tr key={event.id} className={event.allowed ? 'allowed' : 'denied'}>
                   <td className="timestamp">{formatDate(event.timestamp)}</td>
                   <td className="resource">{event.resourceId}</td>
@@ -380,7 +347,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
                     </span>
                   </td>
                   <td className="risk-score">
-                    <span className={`risk-badge ${event.riskScore > 70 ? 'high' : event.riskScore > 30 ? 'medium' : 'low'}`}>
+                    <span className={`risk-badge ${event.riskScore > 70 ? 'high' : event.riskScore > 30 ? 'medium' : 'low'}`}>}
                       {event.riskScore}
                     </span>
                   </td>
@@ -393,12 +360,10 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
       </div>
     </div>
   );
-
   // Render request form modal
   const renderRequestForm = () => {
     if (!showRequestForm) return null;
-
-    return (
+    return ()
       <div className="modal-overlay">
         <div className="modal-content">
           <div className="modal-header">
@@ -410,7 +375,6 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
               ×
             </button>
           </div>
-
           <div className="modal-body">
             <div className="form-group">
               <label>Resource ID</label>
@@ -422,7 +386,6 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
                 required
               />
             </div>
-
             <div className="form-group">
               <label>Resource Type</label>
               <select
@@ -439,7 +402,6 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
                 <option value="documents">Documents</option>
               </select>
             </div>
-
             <div className="form-group">
               <label>Operation</label>
               <select
@@ -454,7 +416,6 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
                 <option value="SHARE">Share</option>
               </select>
             </div>
-
             <div className="form-group">
               <label>Business Justification</label>
               <textarea
@@ -466,21 +427,19 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
                 minLength={10}
               />
             </div>
-
             <div className="form-group">
               <label>Access Duration (Optional)</label>
               <input
                 type="datetime-local"
                 value={requestForm.expiresAt ? new Date(requestForm.expiresAt).toISOString().slice(0, 16) : ''}
-                onChange={e => setRequestForm({
+                onChange={e => setRequestForm({)
                   ...requestForm, 
-                  expiresAt: e.target.value ? new Date(e.target.value) : undefined
+                  expiresAt: e.target.value ? new Date(e.target.value) : undefined,
                 })}
               />
               <small>Leave empty for standard duration</small>
             </div>
           </div>
-
           <div className="modal-footer">
             <button 
               className="btn btn-secondary"
@@ -501,21 +460,18 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
       </div>
     );
   };
-
-  return (
+  return ()
     <div className="data-access-dashboard">
       <div className="dashboard-header">
         <h2>Data Access Dashboard</h2>
         <p>Manage your data access permissions and view your access history</p>
       </div>
-
-      {error && (
+      {error && ()
         <div className="error-banner">
           <span>⚠️ {error}</span>
           <button onClick={() => setError(null)}>×</button>
         </div>
       )}
-
       <div className="dashboard-tabs">
         <button 
           className={`tab-btn ${activeTab === 'permissions' ? 'active' : ''}`}
@@ -530,14 +486,11 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
           Access History
         </button>
       </div>
-
       <div className="dashboard-content">
         {loading && <div className="loading-spinner">Loading...</div>}
-        
         {activeTab === 'permissions' && renderGrantsTab()}
         {activeTab === 'history' && renderHistoryTab()}
       </div>
-
       {renderRequestForm()}
     </div>
   );

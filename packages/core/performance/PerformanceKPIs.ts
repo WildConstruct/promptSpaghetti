@@ -53,7 +53,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Web Vitals API / Performance Observer',
       frequency: 'realtime',
-      source: 'client-side measurement'
+      source: 'client-side measurement',
     },
     businessImpact: 'Affects perceived performance and user engagement',
     priority: 'critical',
@@ -70,7 +70,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Web Vitals API / Performance Observer',
       frequency: 'realtime',
-      source: 'client-side measurement'
+      source: 'client-side measurement',
     },
     businessImpact: 'Indicates when main content is available to users',
     priority: 'critical',
@@ -87,7 +87,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Web Vitals API / Performance Observer',
       frequency: 'realtime',
-      source: 'client-side measurement'
+      source: 'client-side measurement',
     },
     businessImpact: 'Affects user experience and interaction responsiveness',
     priority: 'critical',
@@ -104,7 +104,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Web Vitals API / Performance Observer',
       frequency: 'realtime',
-      source: 'client-side measurement'
+      source: 'client-side measurement',
     },
     businessImpact: 'Affects visual stability and user experience quality',
     priority: 'high',
@@ -121,7 +121,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Lighthouse / Performance monitoring',
       frequency: 'interval',
-      source: 'client-side measurement'
+      source: 'client-side measurement',
     },
     businessImpact: 'Indicates when users can fully interact with the application',
     priority: 'high',
@@ -139,7 +139,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Server-side execution timing',
       frequency: 'realtime',
-      source: 'server-side measurement'
+      source: 'server-side measurement',
     },
     businessImpact: 'Core workflow performance affecting user productivity',
     priority: 'critical',
@@ -156,7 +156,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Server-side execution timing',
       frequency: 'realtime',
-      source: 'server-side measurement'
+      source: 'server-side measurement',
     },
     businessImpact: 'Affects iteration speed and user workflow efficiency',
     priority: 'high',
@@ -173,7 +173,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Server-side validation timing',
       frequency: 'realtime',
-      source: 'server-side measurement'
+      source: 'server-side measurement',
     },
     businessImpact: 'Affects real-time feedback and editing responsiveness',
     priority: 'medium',
@@ -190,7 +190,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Server request counting',
       frequency: 'interval',
-      source: 'server-side monitoring'
+      source: 'server-side monitoring',
     },
     businessImpact: 'System scalability and concurrent user support',
     priority: 'high',
@@ -208,7 +208,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Build-time bundle analysis',
       frequency: 'on-demand',
-      source: 'build system'
+      source: 'build system',
     },
     businessImpact: 'Affects initial load time and user experience',
     priority: 'high',
@@ -225,7 +225,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Build-time bundle analysis',
       frequency: 'on-demand',
-      source: 'build system'
+      source: 'build system',
     },
     businessImpact: 'Overall application loading performance',
     priority: 'medium',
@@ -243,7 +243,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Runtime memory monitoring',
       frequency: 'realtime',
-      source: 'client-side measurement'
+      source: 'client-side measurement',
     },
     businessImpact: 'Browser stability and user experience on low-end devices',
     priority: 'medium',
@@ -260,7 +260,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Memory trend analysis',
       frequency: 'interval',
-      source: 'client-side monitoring'
+      source: 'client-side monitoring',
     },
     businessImpact: 'Long-term application stability and performance',
     priority: 'high',
@@ -278,7 +278,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Network monitoring',
       frequency: 'realtime',
-      source: 'client-side measurement'
+      source: 'client-side measurement',
     },
     businessImpact: 'Load time on slower connections and mobile devices',
     priority: 'medium',
@@ -295,7 +295,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Network monitoring',
       frequency: 'realtime',
-      source: 'client-side measurement'
+      source: 'client-side measurement',
     },
     businessImpact: 'Initial load performance and server load',
     priority: 'medium',
@@ -313,7 +313,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Build system timing',
       frequency: 'on-demand',
-      source: 'build system'
+      source: 'build system',
     },
     businessImpact: 'Developer productivity and deployment speed',
     priority: 'medium',
@@ -330,7 +330,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Test runner timing',
       frequency: 'on-demand',
-      source: 'test system'
+      source: 'test system',
     },
     businessImpact: 'Developer productivity and CI/CD pipeline efficiency',
     priority: 'low',
@@ -348,7 +348,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'User flow tracking',
       frequency: 'on-demand',
-      source: 'client-side analytics'
+      source: 'client-side analytics',
     },
     businessImpact: 'User productivity and workflow efficiency',
     priority: 'high',
@@ -365,7 +365,7 @@ export const corePerformanceKPIs: KPIDefinition[] = [
     measurement: {,
       method: 'Error tracking and analytics',
       frequency: 'realtime',
-      source: 'client-side monitoring'
+      source: 'client-side monitoring',
     },
     businessImpact: 'User satisfaction and application reliability',
     priority: 'critical',

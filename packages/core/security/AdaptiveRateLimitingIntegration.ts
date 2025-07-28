@@ -154,11 +154,10 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
     systemAgreementRate: number;
     falsePositiveRate: number;
   };
-  constructor()
+  constructor();
     rateLimitingService: RateLimitingService,
     throttlingEngine: AdaptiveThrottlingRulesEngine,
     config: Partial<IntegrationConfig> = {}
-  ) {
     super();
     this.rateLimitingService = rateLimitingService;
     this.throttlingEngine = throttlingEngine;
@@ -213,17 +212,17 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
       this.emit('protectionApplied', {)
         context: enhancedContext,
         result,
-        decisionTime: Date.now() - startTime
+        decisionTime: Date.now() - startTime,
       });
       return result;
     } catch (error) {
       this.emit('protectionError', {)
         context,
         error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       // Fallback to rate limiting only
-      const rateLimitResult = await this.rateLimitingService.checkRateLimit(;)
+      const rateLimitResult = await this.rateLimitingService.checkRateLimit(;);
         context.ip,
         context.endpoint,
         { threatLevel: context.threatLevel }
@@ -238,7 +237,7 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
     context: UnifiedProtectionContext,
   ): Promise<UnifiedProtectionResult> {
     // Step 1: Apply rate limiting
-    const rateLimitResult = await this.rateLimitingService.checkRateLimit(;)
+    const rateLimitResult = await this.rateLimitingService.checkRateLimit(;);
       context.ip,
       context.endpoint,
       { 
@@ -295,7 +294,7 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
     // Decision logic for which system to use
     const useRateLimiting = this.shouldUseRateLimiting(context);
     if (useRateLimiting) {
-      const rateLimitResult = await this.rateLimitingService.checkRateLimit(;)
+      const rateLimitResult = await this.rateLimitingService.checkRateLimit(;);
         context.ip,
         context.endpoint,
         { 
@@ -334,7 +333,7 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
   ): Promise<UnifiedProtectionResult> {
     const results: Array<{ system: string; result: any; priority: number }> = [];
     // Apply rate limiting
-    const rateLimitResult = await this.rateLimitingService.checkRateLimit(;)
+    const rateLimitResult = await this.rateLimitingService.checkRateLimit(;);
       context.ip,
       context.endpoint,
       { 
@@ -442,7 +441,7 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
       };
     }
     // Both allow - use higher delay if any
-    const maxDelay = Math.max(;)
+    const maxDelay = Math.max(;);
       rateLimitResult.retryAfter ? rateLimitResult.retryAfter * 1000 : 0,
       throttlingResult.delay
     );
@@ -463,7 +462,7 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
   ): { finalAction: 'allow' | 'block' | 'throttle' | 'delay'; finalDelay: number; decisionSystem: string; reasoning: string; confidence: number } {
     // If either allows, allow (with minimum delay)
     if (rateLimitResult.result === 'allowed' || throttlingResult.action === 'allow') {
-      const minDelay = Math.min(;)
+      const minDelay = Math.min(;);
         rateLimitResult.retryAfter ? rateLimitResult.retryAfter * 1000 : 0,
         throttlingResult.delay
       );
@@ -572,7 +571,7 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
     }
     // Both agree on allowing
     if (!rateLimitBlocks && !throttlingBlocks) {
-      const maxDelay = Math.max(;)
+      const maxDelay = Math.max(;);
         rateLimitResult.retryAfter ? rateLimitResult.retryAfter * 1000 : 0,
         throttlingResult.delay
       );
@@ -741,7 +740,7 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
       recentThrottling: 0, // Would track recent throttling events
       systemCondition: this.throttlingEngine.getSystemCondition(),
       activeRules: Array.from({ length: throttlingStats.activeRules }, (_, i) => `rule-${i}`),}
-      effectivenessScore: 85 // Would calculate from historical data
+      effectivenessScore: 85 // Would calculate from historical data,
     };
     // Add integration metadata
     const integrationMetadata = {
@@ -1001,7 +1000,6 @@ export class AdaptiveRateLimitingIntegration extends EventEmitter {
       integrationHealth: number;
       overallHealth: number;
     };
-  } {
     const systemHealth = {
       rateLimitingHealth: this.calculateSystemHealth('rate_limiting'),
       throttlingHealth: this.calculateSystemHealth('throttling'),

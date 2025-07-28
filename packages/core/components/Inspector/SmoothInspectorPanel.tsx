@@ -128,7 +128,6 @@ export const SmoothInspectorPanel = ({ )
       ['width', 'min-width', 'box-shadow'], 
       animationDurations.panel,
       easingFunctions.cinema4d.professional
-    )
   };
   const headerStyle: React.CSSProperties = {
     padding: collapsed ? '8px' : '16px 20px',
@@ -153,7 +152,6 @@ export const SmoothInspectorPanel = ({ )
     ...createSmoothTransition()
       ['background', 'border-color', 'transform', 'box-shadow'],
       animationDurations.micro
-    )
   };
   const getHoverButtonStyle = (isHovered: boolean): React.CSSProperties => ({)
     ...buttonStyle,
@@ -181,7 +179,7 @@ export const SmoothInspectorPanel = ({ )
     setDebugMode(!debugMode);
   }, [debugMode, setDebugMode]);
   if (!node || !schema) {
-    return ()
+    return ();
       <aside style={panelStyle}>
         <div style={headerStyle}>
           {!collapsed && ()
@@ -273,7 +271,7 @@ export const SmoothInspectorPanel = ({ )
     );
   }
   const nodeTypeName = getFilmmakerFriendlyName(node.type);
-  return ()
+  return ();
     <aside style={panelStyle} className="inspector-panel">
       {/* Header with smooth animations */}
       <div style={headerStyle}>
@@ -376,7 +374,7 @@ export const SmoothInspectorPanel = ({ )
           <div style={{ 
             flex: 1, 
             overflow: 'auto',
-            padding: '0 4px'
+            padding: '0 4px',
           }}>
             <PropertiesSection 
               node={node} 
@@ -407,7 +405,7 @@ export const SmoothInspectorPanel = ({ )
           cursor: 'col-resize',
           background: 'transparent',
           zIndex: 20,
-          borderRadius: '0 3px 3px 0'
+          borderRadius: '0 3px 3px 0',
         }}
         className="smooth-transition"
       />
@@ -426,7 +424,6 @@ export const SmoothInspectorPanel = ({ )
           ...createSmoothTransition()
             ['background', 'box-shadow'], 
             animationDurations.fast
-          )
         }}
       />
       {/* Subtle glow effect when active */}

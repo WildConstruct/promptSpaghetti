@@ -3,14 +3,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { Badge } from '../common/Badge';
 import './PreviewModal.css';
-
 interface PreviewModalProps {
   templateId: string;
   template: Error;
   onClose: () => void;
   className?: string;
 }
-
 interface PreviewMetadata {
   template_id: string;
   version_id: string;
@@ -21,12 +19,11 @@ interface PreviewMetadata {
   can_preview: boolean;
   preview_limitations: string[];
 }
-
 interface PreviewResponse {
   output: string;
   cost_estimate: number;
   quality_score: number;
-  token_usage: {
+  token_usage: {,
     input_tokens: number;
     output_tokens: number;
   };
@@ -34,7 +31,7 @@ interface PreviewResponse {
   redacted_sections: string[];
 }
 
-export const PreviewModal: React.FC<PreviewModalProps> = ({
+export const PreviewModal: React.FC<PreviewModalProps> = ({)
   templateId,
   template,
   onClose,
@@ -47,14 +44,12 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [selectedModel, setSelectedModel] = useState<string>('');
-
   useEffect(() => {
     loadPreviewMetadata();
   }, [loadPreviewMetadata]);
-
   const loadPreviewMetadata = useCallback(async () => {
     try {
-      const response = await fetch(`/api/marketplace/templates/${templateId}/preview-metadata`);
+      const response = await fetch(`/api/marketplace/templates/${templateId}/preview-metadata`);}
       if (response.ok) {
         const data = await response.json();
         setMetadata(data);
@@ -68,28 +63,24 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
       setError('Failed to load preview information');
     }
   }, [templateId]);
-
   const generatePreview = async () => {
     if (!metadata) return;
-
     setLoading(true);
     setError(null);
-
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`/api/marketplace/templates/${templateId}/preview`, {
+      const response = await fetch(`/api/marketplace/templates/${templateId}/preview`, {)}
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`}
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           version_id: metadata.version_id,
           user_input: Object.keys(userInput).length > 0 ? userInput : undefined,
-          claude_model_override: selectedModel !== metadata.claude_model ? selectedModel : undefined
+          claude_model_override: selectedModel !== metadata.claude_model ? selectedModel : undefined,
         })
       });
-
       if (response.ok) {
         const data = await response.json();
         setPreview(data);
@@ -105,36 +96,31 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
       setLoading(false);
     }
   };
-
   const handleInputChange = (key: string, value: string) => {
-    setUserInput(prev => ({
+    setUserInput(prev => ({)
       ...prev,
       [key]: value
     }));
   };
-
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       onClose();
     }
   };
-
   const formatCost = (cost: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-US', {)
       style: 'currency',
       currency: 'USD',
-      minimumFractionDigits: 4
+      minimumFractionDigits: 4,
     }).format(cost);
   };
-
   const getQualityBadgeVariant = (score: number) => {
     if (score >= 4.5) return 'success';
     if (score >= 3.5) return 'warning';
     return 'default';
   };
-
-  return (
-    <div className={`preview-modal-overlay ${className}`} onClick={onClose} onKeyDown={handleKeyPress}>
+  return ()
+    <div className={`preview-modal-overlay ${className}`} onClick={onClose} onKeyDown={handleKeyPress}>}
       <div className="preview-modal" onClick={(e) => e.stopPropagation()}>
         <header className="modal-header">
           <h2>Preview Template</h2>
@@ -150,7 +136,6 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
             </svg>
           </button>
         </header>
-
         <div className="modal-content">
           {/* Template Info */}
           <div className="template-info">
@@ -161,8 +146,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
               {template.is_ai_generated && <Badge variant="ai">AI Generated</Badge>}
             </div>
           </div>
-
-          {error && (
+          {error && ()
             <div className="error-message">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path
@@ -176,8 +160,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
               {error}
             </div>
           )}
-
-          {metadata && (
+          {metadata && ()
             <div className="preview-sections">
               {/* Input Section */}
               <section className="input-section">
@@ -193,7 +176,6 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                       placeholder="e.g., AI in healthcare, space exploration..."
                     />
                   </div>
-
                   <div className="input-group">
                     <label htmlFor="style">Style or Tone:</label>
                     <input
@@ -204,7 +186,6 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                       placeholder="e.g., professional, casual, technical..."
                     />
                   </div>
-
                   <div className="input-group">
                     <label htmlFor="length">Length:</label>
                     <select
@@ -218,7 +199,6 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                       <option value="detailed">Detailed (6+ paragraphs)</option>
                     </select>
                   </div>
-
                   {/* Advanced Options */}
                   <div className="advanced-toggle">
                     <button
@@ -243,8 +223,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                       </svg>
                     </button>
                   </div>
-
-                  {showAdvanced && (
+                  {showAdvanced && ()
                     <div className="advanced-options">
                       <div className="input-group">
                         <label htmlFor="model">Claude Model:</label>
@@ -253,7 +232,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                           value={selectedModel}
                           onChange={(e) => setSelectedModel(e.target.value)}
                         >
-                          {template.claude_compat?.map((model: string) => (
+                          {template.claude_compat?.map((model: string) => ()
                             <option key={model} value={model}>
                               {model.replace('claude-', 'Claude ')}
                             </option>
@@ -263,28 +242,25 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                     </div>
                   )}
                 </div>
-
                 <button
                   onClick={generatePreview}
                   disabled={loading || !metadata.can_preview}
                   className="generate-button"
                 >
-                  {loading ? (
+                  {loading ? ()
                     <>
                       <LoadingSpinner size="small" />
                       Generating...
                     </>
-                  ) : (
+                  ) : ()
                     'Generate Preview'
                   )}
                 </button>
               </section>
-
               {/* Output Section */}
               <section className="output-section">
                 <h4>Preview Output</h4>
-                
-                {preview ? (
+                {preview ? ()
                   <div className="preview-result">
                     <div className="output-header">
                       <div className="output-meta">
@@ -304,17 +280,15 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                             {preview.token_usage.input_tokens + preview.token_usage.output_tokens}
                           </span>
                         </div>
-                        {preview.cached && (
+                        {preview.cached && ()
                           <Badge variant="default">Cached</Badge>
                         )}
                       </div>
                     </div>
-
                     <div className="output-content">
                       <pre>{preview.output}</pre>
                     </div>
-
-                    {preview.redacted_sections.length > 0 && (
+                    {preview.redacted_sections.length > 0 && ()
                       <div className="redaction-notice">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                           <path
@@ -326,13 +300,12 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                       </div>
                     )}
                   </div>
-                ) : (
+                ) : ()
                   <div className="no-preview">
                     <p>Click &quot;Generate Preview&quot; to see how this template works.</p>
                   </div>
                 )}
               </section>
-
               {/* Template Details */}
               <section className="details-section">
                 <h4>Template Details</h4>
@@ -354,12 +327,11 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
                     <span className="detail-value">{metadata.safety_score.toFixed(2)}/1.00</span>
                   </div>
                 </div>
-
-                {metadata.preview_limitations.length > 0 && (
+                {metadata.preview_limitations.length > 0 && ()
                   <div className="limitations">
                     <h5>Preview Limitations:</h5>
                     <ul>
-                      {metadata.preview_limitations.map((limitation, index) => (
+                      {metadata.preview_limitations.map((limitation, index) => ()
                         <li key={index}>{limitation}</li>
                       ))}
                     </ul>
@@ -368,14 +340,12 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
               </section>
             </div>
           )}
-
-          {!metadata && !error && (
+          {!metadata && !error && ()
             <div className="loading-state">
               <LoadingSpinner size="large" message="Loading preview information..." />
             </div>
           )}
         </div>
-
         <footer className="modal-footer">
           <button onClick={onClose} className="cancel-button">
             Close

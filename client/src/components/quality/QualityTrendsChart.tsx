@@ -6,7 +6,6 @@
  * 
  * Task: E18-1753114562561-695DBB - Create quality dashboards
  */
-
 import React, { useState, useMemo } from 'react';
 import {
   LineChart,
@@ -43,7 +42,7 @@ export interface QualityTrendsChartProps {
   onTimeRangeChange?: (timeRange: string) => void;
 }
 
-export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
+export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({)
   trends,
   compact = false,
   className = '',
@@ -52,11 +51,9 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
   const [selectedTimeRange, setSelectedTimeRange] = useState<'daily' | 'weekly' | 'monthly'>('daily');
   const [selectedMetric, setSelectedMetric] = useState<'all' | 'overall' | 'testCoverage' | 'codeQuality' | 'performance' | 'security' | 'documentation' | 'buildHealth'>('all');
   const [chartType, setChartType] = useState<'line' | 'area'>('line');
-  
   // Transform trends data for chart
   const chartData = useMemo(() => {
     if (!trends) return [];
-    
     const getDataForRange = (trendData: { daily?: number[]; weekly?: number[]; monthly?: number[] }) => {
       switch (selectedTimeRange) {
       case 'daily':
@@ -69,9 +66,8 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
         return trendData.daily || [];
       }
     };
-    
     // Get the maximum length to ensure all series have the same number of points
-    const maxLength = Math.max(
+    const maxLength = Math.max(;)
       getDataForRange(trends.overall).length,
       getDataForRange(trends.testCoverage).length,
       getDataForRange(trends.codeQuality).length,
@@ -80,13 +76,11 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
       getDataForRange(trends.documentation).length,
       getDataForRange(trends.buildHealth).length
     );
-    
     return Array.from({ length: maxLength }, (_, index) => {
       const getValueAtIndex = (trendData: { daily?: number[]; weekly?: number[]; monthly?: number[] }, idx: number) => {
         const data = getDataForRange(trendData);
         return data[idx] || data[data.length - 1] || 0;
       };
-      
       // Generate date labels based on time range
       const getDateLabel = (idx: number) => {
         const now = new Date();
@@ -99,7 +93,7 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
         case 'weekly': {
           const weeksAgo = maxLength - idx - 1;
           const weekDate = new Date(now.getTime() - weeksAgo * 7 * 24 * 60 * 60 * 1000);
-          return `Week of ${weekDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+          return `Week of ${weekDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;}
         }
         case 'monthly': {
           const monthsAgo = maxLength - idx - 1;
@@ -107,10 +101,9 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
           return monthDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
         }
         default:
-          return `Point ${idx + 1}`;
+          return `Point ${idx + 1}`;}
         }
       };
-      
       return {
         date: getDateLabel(index),
         overall: Math.round(getValueAtIndex(trends.overall, index)),
@@ -123,7 +116,6 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
       };
     });
   }, [trends, selectedTimeRange]);
-  
   // Chart color configuration
   const chartColors = {
     overall: '#3b82f6',
@@ -132,13 +124,12 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
     performance: '#10b981',
     security: '#ef4444',
     documentation: '#6366f1',
-    buildHealth: '#f59e0b'
+    buildHealth: '#f59e0b',
   };
-  
   // Get chart lines based on selected metric
   const getChartLines = () => {
     if (selectedMetric === 'all') {
-      return Object.entries(chartColors).map(([key, color]) => ({
+      return Object.entries(chartColors).map(([key, color]) => ({)
         key,
         color,
         name: key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')
@@ -153,19 +144,16 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
       }];
     }
   };
-  
   // Get trend direction for a metric
   const getTrendDirection = (metricKey: string) => {
     if (!trends) return 'stable';
     return trends[metricKey as keyof QualityTrends]?.direction || 'stable';
   };
-  
   // Get trend velocity for a metric
   const getTrendVelocity = (metricKey: string) => {
     if (!trends) return 0;
     return trends[metricKey as keyof QualityTrends]?.velocity || 0;
   };
-  
   // Handle time range change
   const handleTimeRangeChange = (timeRange: string) => {
     setSelectedTimeRange(timeRange as 'daily' | 'weekly' | 'monthly');
@@ -173,24 +161,22 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
       onTimeRangeChange(timeRange);
     }
   };
-  
   // Custom tooltip
   interface TooltipEntry {
     name?: string;
     value?: number | string;
     color?: string;
   }
-
-  const CustomTooltip = (
+  const CustomTooltip = (;)
     { active,
     payload,
     label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }
   ) => {
     if (active && payload && payload.length) {
-      return (
+      return ()
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900 mb-2">{label}</p>
-          {payload.map((entry: TooltipEntry, index: number) => (
+          {payload.map((entry: TooltipEntry, index: number) => ()
             <div key={index} className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-2">
                 <div 
@@ -207,10 +193,9 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
     }
     return null;
   };
-  
   if (!trends || chartData.length === 0) {
-    return (
-      <div className={`quality-trends-chart ${className}`}>
+    return ()
+      <div className={`quality-trends-chart ${className}`}>}
         <Card>
           <CardContent className="flex items-center justify-center h-64">
             <div className="text-center">
@@ -227,10 +212,9 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
       </div>
     );
   }
-  
   if (compact) {
-    return (
-      <div className={`quality-trends-chart-compact ${className}`}>
+    return ()
+      <div className={`quality-trends-chart-compact ${className}`}>}
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base">Quality Trends</CardTitle>
@@ -261,9 +245,8 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
       </div>
     );
   }
-  
-  return (
-    <div className={`quality-trends-chart ${className}`}>
+  return ()
+    <div className={`quality-trends-chart ${className}`}>}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -271,7 +254,6 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
               <BarChart3 className="w-5 h-5" />
               <span>Quality Trends</span>
             </CardTitle>
-            
             <div className="flex items-center space-x-2">
               {/* Chart Type Toggle */}
               <Button
@@ -290,7 +272,6 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
               </Button>
             </div>
           </div>
-          
           <div className="flex items-center space-x-4">
             {/* Time Range Selector */}
             <Select value={selectedTimeRange} onValueChange={handleTimeRangeChange}>
@@ -303,7 +284,6 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
                 <SelectItem value="monthly">Monthly</SelectItem>
               </SelectContent>
             </Select>
-            
             {/* Metric Selector */}
             <Select value={selectedMetric} onValueChange={setSelectedMetric}>
               <SelectTrigger className="w-40">
@@ -322,15 +302,13 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
             </Select>
           </div>
         </CardHeader>
-        
         <CardContent>
           {/* Trend Summary */}
           <div className="mb-6 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
             {Object.entries(chartColors).map(([key, color]) => {
               const direction = getTrendDirection(key);
               const velocity = getTrendVelocity(key);
-              
-              return (
+              return ()
                 <div key={key} className="text-center">
                   <div className="flex items-center justify-center space-x-1 mb-1">
                     <div 
@@ -352,11 +330,10 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
               );
             })}
           </div>
-          
           {/* Chart */}
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              {chartType === 'line' ? (
+              {chartType === 'line' ? ()
                 <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
@@ -372,8 +349,7 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
                   />
                   <Tooltip content={<CustomTooltip />} />
                   {selectedMetric === 'all' && <Legend />}
-                  
-                  {getChartLines().map(({ key, color, name }) => (
+                  {getChartLines().map(({ key, color, name }) => ()
                     <Line
                       key={key}
                       type="monotone"
@@ -386,7 +362,7 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
                     />
                   ))}
                 </LineChart>
-              ) : (
+              ) : ()
                 <AreaChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
@@ -402,8 +378,7 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
                   />
                   <Tooltip content={<CustomTooltip />} />
                   {selectedMetric === 'all' && <Legend />}
-                  
-                  {getChartLines().map(({ key, color, name }) => (
+                  {getChartLines().map(({ key, color, name }) => ()
                     <Area
                       key={key}
                       type="monotone"
@@ -419,7 +394,6 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
               )}
             </ResponsiveContainer>
           </div>
-          
           {/* Summary */}
           <div className="mt-4 pt-4 border-t border-gray-200">
             <div className="flex items-center justify-between text-sm text-gray-600">

@@ -43,7 +43,7 @@ export declare class OptimizedSerializer {
     /**
      * Incremental serialization - only serialize changes
      */
-    serializeIncremental()
+    serializeIncremental();
       projectData: PSGFile,
       projectId: string,
       options?: SerializationOptions

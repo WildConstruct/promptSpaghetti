@@ -5,7 +5,6 @@
  * Event-driven policy system interfaces for real-time notifications,
  * workflow automation, and system integration.
  */
-
 import {
   BasePolicy,
   PolicyType,
@@ -19,7 +18,6 @@ import {
 // =============================================================================
 // Core Event System Interfaces
 // =============================================================================
-
 /**
  * Base policy event interface
  */
@@ -28,25 +26,20 @@ export interface BasePolicyEvent {
   readonly eventType: PolicyEventType;
   readonly timestamp: Date;
   readonly source: EventSource;
-  
   // Event context
   userId?: string;
   organizationId?: string;
   sessionId?: string;
-  
   // Event data
   data: PolicyEventData;
-  
   // Event metadata
   correlationId?: string;
   causationId?: string; // ID of event that caused this event
   version: string;
-  
   // Processing information
   processed: boolean;
   processedAt?: Date;
   processingErrors?: EventProcessingError[];
-  
   // Retry information
   retryCount: number;
   maxRetries: number;
@@ -65,7 +58,6 @@ export type PolicyEventType =
   | 'policy.version.created'
   | 'policy.validation.completed'
   | 'policy.test.completed'
-  
   // Assignment events
   | 'assignment.created'
   | 'assignment.updated'
@@ -74,39 +66,33 @@ export type PolicyEventType =
   | 'assignment.deactivated'
   | 'assignment.conflict.detected'
   | 'assignment.conflict.resolved'
-  
   // Evaluation events
   | 'evaluation.requested'
   | 'evaluation.completed'
   | 'evaluation.failed'
   | 'evaluation.cached'
   | 'evaluation.cache.expired'
-  
   // Compliance events
   | 'compliance.violation.detected'
   | 'compliance.violation.resolved'
   | 'compliance.audit.started'
   | 'compliance.audit.completed'
   | 'compliance.report.generated'
-  
   // Security events
   | 'security.policy.breached'
   | 'security.unauthorized.access'
   | 'security.suspicious.activity'
   | 'security.threat.detected'
-  
   // System events
   | 'system.performance.degraded'
   | 'system.error.occurred'
   | 'system.maintenance.started'
   | 'system.maintenance.completed'
-  
   // Workflow events
   | 'workflow.started'
   | 'workflow.completed'
   | 'workflow.failed'
   | 'workflow.step.completed'
-  
   // Integration events
   | 'integration.sync.started'
   | 'integration.sync.completed'
@@ -131,15 +117,12 @@ export interface PolicyEventData {
   resourceType: 'policy' | 'assignment' | 'evaluation' | 'template' | 'workflow';
   resourceId: string;
   resourceVersion?: string;
-  
   // Change information (for update events)
   changes?: PolicyEventChange[];
   previousState?: any;
   currentState?: any;
-  
   // Context information
   context?: EvaluationContext;
-  
   // Additional event-specific data
   metadata?: Record<string, any>;
 }
@@ -162,12 +145,11 @@ export interface EventProcessingError {
 // =============================================================================
 // Specific Event Type Interfaces
 // =============================================================================
-
 /**
  * Policy lifecycle event
  */
 export interface PolicyLifecycleEvent extends BasePolicyEvent {
-  eventType: 'policy.created' | 'policy.updated' | 'policy.deleted' | 
+  eventType: 'policy.created' | 'policy.updated' | 'policy.deleted' | ,
             'policy.activated' | 'policy.deactivated' | 'policy.deprecated' | 'policy.archived';
   data: PolicyLifecycleEventData;
 }
@@ -179,12 +161,11 @@ export interface PolicyLifecycleEventData extends PolicyEventData {
   reason?: string;
   replacementPolicyId?: string; // For deprecation
 }
-
 /**
  * Assignment event
  */
 export interface PolicyAssignmentEvent extends BasePolicyEvent {
-  eventType: 'assignment.created' | 'assignment.updated' | 'assignment.deleted' |
+  eventType: 'assignment.created' | 'assignment.updated' | 'assignment.deleted' |,
             'assignment.activated' | 'assignment.deactivated' | 
             'assignment.conflict.detected' | 'assignment.conflict.resolved';
   data: PolicyAssignmentEventData;
@@ -212,12 +193,11 @@ export interface ConflictResolution {
   resultingAssignments: string[];
   notes?: string;
 }
-
 /**
  * Evaluation event
  */
 export interface PolicyEvaluationEvent extends BasePolicyEvent {
-  eventType: 'evaluation.requested' | 'evaluation.completed' | 'evaluation.failed' |
+  eventType: 'evaluation.requested' | 'evaluation.completed' | 'evaluation.failed' |,
             'evaluation.cached' | 'evaluation.cache.expired';
   data: PolicyEvaluationEventData;
 }
@@ -244,12 +224,11 @@ export interface CacheInfo {
   cacheExpiration?: Date;
   cacheSize?: number;
 }
-
 /**
  * Compliance event
  */
 export interface ComplianceEvent extends BasePolicyEvent {
-  eventType: 'compliance.violation.detected' | 'compliance.violation.resolved' |
+  eventType: 'compliance.violation.detected' | 'compliance.violation.resolved' |,
             'compliance.audit.started' | 'compliance.audit.completed' | 
             'compliance.report.generated';
   data: ComplianceEventData;
@@ -264,12 +243,11 @@ export interface ComplianceEventData extends PolicyEventData {
   auditId?: string;
   reportId?: string;
 }
-
 /**
  * Security event
  */
 export interface SecurityEvent extends BasePolicyEvent {
-  eventType: 'security.policy.breached' | 'security.unauthorized.access' |
+  eventType: 'security.policy.breached' | 'security.unauthorized.access' |,
             'security.suspicious.activity' | 'security.threat.detected';
   data: SecurityEventData;
 }
@@ -287,7 +265,6 @@ export interface SecurityEventData extends PolicyEventData {
 // =============================================================================
 // Event Processing and Subscription Interfaces
 // =============================================================================
-
 /**
  * Event handler interface
  */
@@ -296,7 +273,6 @@ export interface IPolicyEventHandler {
   readonly name: string;
   readonly eventTypes: PolicyEventType[];
   readonly priority: number; // Higher numbers = higher priority
-  
   canHandle(event: BasePolicyEvent): boolean;
   handle(event: BasePolicyEvent): Promise<EventHandlerResult>;
   onError(event: BasePolicyEvent, error: Error): Promise<void>;
@@ -310,7 +286,6 @@ export interface EventHandlerResult {
   errors?: EventProcessingError[];
   metadata?: Record<string, any>;
 }
-
 /**
  * Event subscription interface
  */
@@ -318,20 +293,16 @@ export interface PolicyEventSubscription {
   subscriptionId: string;
   subscriberId: string;
   subscriberName: string;
-  
   // Subscription configuration
   eventTypes: PolicyEventType[];
   filters: EventFilter[];
-  
   // Delivery configuration
   deliveryMethod: DeliveryMethod;
   deliveryConfig: DeliveryConfiguration;
-  
   // Processing options
   batchSize: number;
   batchTimeout: number; // milliseconds
   retryPolicy: RetryPolicy;
-  
   // Status and metadata
   active: boolean;
   createdAt: Date;
@@ -353,23 +324,18 @@ export interface DeliveryConfiguration {
   webhookUrl?: string;
   webhookHeaders?: Record<string, string>;
   webhookTimeout?: number; // milliseconds
-  
   // Queue configuration
   queueName?: string;
   queuePriority?: number;
-  
   // Email configuration
   emailAddresses?: string[];
   emailTemplate?: string;
-  
   // SMS configuration
   phoneNumbers?: string[];
   smsTemplate?: string;
-  
   // Push notification configuration
   pushTokens?: string[];
   pushTemplate?: string;
-  
   // Database configuration
   databaseTable?: string;
   databaseFields?: Record<string, string>;
@@ -400,18 +366,15 @@ export interface DeliveryStats {
 // =============================================================================
 // Event Publishing and Bus Interfaces
 // =============================================================================
-
 /**
  * Event publisher interface
  */
 export interface IPolicyEventPublisher {
   publish(event: BasePolicyEvent): Promise<PublishResult>;
   publishBatch(events: BasePolicyEvent[]): Promise<BatchPublishResult>;
-  
   // Scheduled publishing
   scheduleEvent(event: BasePolicyEvent, scheduledTime: Date): Promise<ScheduledEventResult>;
   cancelScheduledEvent(eventId: string): Promise<void>;
-  
   // Event validation
   validateEvent(event: BasePolicyEvent): Promise<EventValidationResult>;
 }
@@ -461,7 +424,6 @@ export interface EventValidationWarning {
   message: string;
   code: string;
 }
-
 /**
  * Event bus interface
  */
@@ -469,17 +431,14 @@ export interface IPolicyEventBus {
   // Event publishing
   emit(event: BasePolicyEvent): Promise<void>;
   emitBatch(events: BasePolicyEvent[]): Promise<void>;
-  
   // Subscription management
   subscribe(subscription: PolicyEventSubscription): Promise<string>;
   unsubscribe(subscriptionId: string): Promise<void>;
   updateSubscription(subscriptionId: string, updates: Partial<PolicyEventSubscription>): Promise<void>;
   getSubscriptions(subscriberId?: string): Promise<PolicyEventSubscription[]>;
-  
   // Event history and replay
   getEventHistory(criteria: EventHistoryCriteria): Promise<EventHistoryResult>;
   replayEvents(criteria: EventReplayCriteria): Promise<EventReplayResult>;
-  
   // System management
   getStats(): Promise<EventBusStats>;
   health(): Promise<EventBusHealth>;
@@ -545,7 +504,6 @@ export interface ComponentStatus {
 // =============================================================================
 // Notification System Interfaces
 // =============================================================================
-
 /**
  * Notification interface
  */
@@ -553,39 +511,31 @@ export interface PolicyNotification {
   notificationId: string;
   type: NotificationType;
   priority: NotificationPriority;
-  
   // Notification content
   title: string;
   message: string;
   details?: string;
   actionUrl?: string;
   actionLabel?: string;
-  
   // Recipients
   recipients: NotificationRecipient[];
-  
   // Categorization
   category: NotificationCategory;
   tags: string[];
-  
   // Source information
   sourceEvent?: BasePolicyEvent;
   sourceSystem: string;
-  
   // Delivery configuration
   channels: NotificationChannel[];
   deliverySettings: NotificationDeliverySettings;
-  
   // Status and tracking
   status: NotificationStatus;
   createdAt: Date;
   scheduledFor?: Date;
   deliveredAt?: Date;
   readAt?: Date;
-  
   // Expiration
   expiresAt?: Date;
-  
   // Metadata
   metadata?: Record<string, any>;
 }
@@ -675,7 +625,6 @@ export type NotificationStatus =
   | 'failed'
   | 'cancelled'
   | 'expired';
-
 /**
  * Notification service interface
  */
@@ -686,22 +635,18 @@ export interface IPolicyNotificationService {
   getNotification(id: string): Promise<PolicyNotification>;
   getNotifications(criteria: NotificationSearchCriteria): Promise<NotificationSearchResult>;
   deleteNotification(id: string): Promise<void>;
-  
   // Delivery management
   sendNotification(id: string, options?: SendOptions): Promise<NotificationDeliveryResult>;
   sendBulkNotifications(ids: string[], options?: SendOptions): Promise<BulkNotificationResult>;
   scheduleNotification(id: string, scheduledTime: Date): Promise<void>;
   cancelScheduledNotification(id: string): Promise<void>;
-  
   // Template management
   createTemplate(template: NotificationTemplate): Promise<NotificationTemplate>;
   updateTemplate(id: string, updates: Partial<NotificationTemplate>): Promise<NotificationTemplate>;
   getTemplates(category?: NotificationCategory): Promise<NotificationTemplate[]>;
-  
   // Preference management
   updatePreferences(userId: string, preferences: NotificationPreferences): Promise<void>;
   getPreferences(userId: string): Promise<NotificationPreferences>;
-  
   // Analytics and reporting
   getDeliveryStats(criteria: DeliveryStatsCriteria): Promise<NotificationDeliveryStats>;
   getEngagementMetrics(criteria: EngagementMetricsCriteria): Promise<NotificationEngagementMetrics>;
@@ -767,19 +712,15 @@ export interface NotificationTemplate {
   name: string;
   category: NotificationCategory;
   type: NotificationType;
-  
   // Template content
   titleTemplate: string;
   messageTemplate: string;
   detailsTemplate?: string;
-  
   // Channel-specific templates
   channelTemplates: ChannelTemplate[];
-  
   // Template configuration
   variables: TemplateVariable[];
   defaultValues?: Record<string, any>;
-  
   // Metadata
   createdAt: Date;
   updatedAt: Date;
@@ -815,13 +756,10 @@ export interface NotificationDeliveryStats {
   deliveredNotifications: number;
   failedNotifications: number;
   deliveryRate: number; // percentage
-  
   // By channel
   channelStats: ChannelDeliveryStats[];
-  
   // By category
   categoryStats: CategoryDeliveryStats[];
-  
   // Performance metrics
   averageDeliveryTime: number; // milliseconds
   p95DeliveryTime: number; // milliseconds
@@ -855,14 +793,11 @@ export interface NotificationEngagementMetrics {
   totalNotifications: number;
   openedNotifications: number;
   clickedNotifications: number;
-  
   // Rates
   openRate: number; // percentage
   clickRate: number; // percentage
-  
   // By category
   categoryEngagement: CategoryEngagementMetrics[];
-  
   // Time-based metrics
   averageTimeToOpen: number; // milliseconds
   averageTimeToClick: number; // milliseconds

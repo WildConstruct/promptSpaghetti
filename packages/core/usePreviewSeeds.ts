@@ -77,7 +77,7 @@ export function usePreviewSeeds() {
         body: JSON.stringify({),
           graph,
           runs: 5,
-          seedStart: Math.floor(Math.random() * 10000)
+          seedStart: Math.floor(Math.random() * 10000),
         }),
         signal: controller.signal,
       });
@@ -102,9 +102,9 @@ export function usePreviewSeeds() {
         executionPath: result.executionPath,
         weightChoices: result.weightChoices || [],
         // Extract node/edge tracking from execution path
-        usedNodeIds: result.executionPath ? result.executionPath.nodeExecutionOrder : 
+        usedNodeIds: result.executionPath ? result.executionPath.nodeExecutionOrder : ,
           (result.output && !result.output.startsWith('Error:') ? [`node_${result.seed}`] : []),}
-        usedEdgeIds: result.executionPath ? [] : // Will be computed from execution path if needed
+        usedEdgeIds: result.executionPath ? [] : // Will be computed from execution path if needed,
           (result.output && !result.output.startsWith('Error:') ? [`edge_${result.seed}`] : []),}
         // Generate debug info for visualization
         debugInfo: result.executionPath ? generateDebugInfo(result.executionPath) : undefined,
@@ -166,7 +166,7 @@ export function usePreviewSeeds() {
         body: JSON.stringify({),
           graph,
           runs: 1,
-          seedStart: Math.floor(Math.random() * 10000) // Use new random seed
+          seedStart: Math.floor(Math.random() * 10000) // Use new random seed,
         }),
         signal: controller.signal,
       });
@@ -184,11 +184,11 @@ export function usePreviewSeeds() {
           executionTimeMs: newResult.executionTimeMs,
           executionPath: newResult.executionPath,
           weightChoices: newResult.weightChoices || [],
-          usedNodeIds: newResult.executionPath ? newResult.executionPath.nodeExecutionOrder : 
+          usedNodeIds: newResult.executionPath ? newResult.executionPath.nodeExecutionOrder : ,
             (newResult.output && !newResult.output.startsWith('Error:') ? [`node_${newResult.seed}`] : []),}
-          usedEdgeIds: newResult.executionPath ? [] : 
+          usedEdgeIds: newResult.executionPath ? [] : ,
             (newResult.output && !newResult.output.startsWith('Error:') ? [`edge_${newResult.seed}`] : []),}
-          debugInfo: newResult.executionPath ? generateDebugInfo(newResult.executionPath) : undefined
+          debugInfo: newResult.executionPath ? generateDebugInfo(newResult.executionPath) : undefined,
         };
         // Update only the specific result
         setResults(prev => {)
@@ -272,6 +272,6 @@ function generateDebugInfo(executionPath: ExecutionPath) {
     nodeExecutionOrder: executionPath.nodeExecutionOrder,
     randomChoices: executionPath.randomizationPoints,
     performanceBreakdown: debugInfo.performanceBreakdown,
-    memoryUsage: undefined // Could be added in future
+    memoryUsage: undefined // Could be added in future,
   };
 }

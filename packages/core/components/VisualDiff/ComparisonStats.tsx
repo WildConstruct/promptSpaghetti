@@ -30,7 +30,7 @@ export const ComparisonStats: React.FC<ComparisonStatsProps> = ({)
     if (score >= 0.5) return 'text-yellow-600';
     return 'text-red-600';
   };
-  return ()
+  return ();
     <div className={`bg-gray-50 rounded-lg p-4 ${className}`}>}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {/* Similarity Score */}

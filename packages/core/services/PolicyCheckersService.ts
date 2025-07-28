@@ -122,10 +122,9 @@ export class PolicyCheckersService {
   private complianceMonitor: ComplianceMonitor;
   private contentQualityService: ContentQualityMetricsService;
   private cache: Map<string, { result: PolicyCheckResult; expiresAt: number }> = new Map();
-  constructor()
+  constructor();
     complianceMonitor: ComplianceMonitor,
     contentQualityService: ContentQualityMetricsService,
-  ) {
     this.complianceMonitor = complianceMonitor;
     this.contentQualityService = contentQualityService;
     this.initializeBuiltInCheckers();
@@ -160,7 +159,7 @@ export class PolicyCheckersService {
         if (result.score !== undefined) {
           this.cache.set(cacheKey, {)
             result,
-            expiresAt: Date.now() + (60 * 1000) // 1 minute default cache
+            expiresAt: Date.now() + (60 * 1000) // 1 minute default cache,
           });
         }
         return result;
@@ -263,12 +262,12 @@ export class PolicyCheckersService {
         userId: action.userId,
         userRole: action.userRole,
         source: 'user_action_validation',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       checksRequested: ['access_control', 'security_compliance']
     };
     const results = await this.executeChecks(request);
-    const blockedResults = results.filter(r => ;)
+    const blockedResults = results.filter(r => ;);
       r.status === 'failed' && r.severity === 'critical'
     );
     const allowed = blockedResults.length === 0;
@@ -355,7 +354,7 @@ export class PolicyCheckersService {
       totalViolations: violations.length,
       criticalViolations: criticalViolations.length,
       executionTimeMs: totalExecutionTimeMs,
-      results: results.map(r => ({)
+      results: results.map(r => ({),
         type: r.policyType,
         status: r.status,
         score: r.score,
@@ -403,13 +402,13 @@ class ContentQualityPolicyChecker implements PolicyChecker {
         qualityMetrics: {,
           readability: qualityScore + 5,
           completeness: qualityScore - 3,
-          accuracy: qualityScore + 2
+          accuracy: qualityScore + 2,
         }
       },
       violations,
       recommendations,
       timestamp: new Date().toISOString(),
-      executionTimeMs: Date.now() - startTime
+      executionTimeMs: Date.now() - startTime,
     };
   }
   async validateRule(rule: PolicyRule): Promise<boolean> {
@@ -459,7 +458,7 @@ class ContentSafetyPolicyChecker implements PolicyChecker {
         ruleId: 'content_safety_standard',
         ruleName: 'Content Safety Standard',
         description: 'Content contains potentially unsafe elements',
-        severity: safetyScore < 70 ? 'critical' : 'medium'
+        severity: safetyScore < 70 ? 'critical' : 'medium',
       });
       recommendations.push('Review content for harmful or inappropriate material');
     }
@@ -482,7 +481,7 @@ class ContentSafetyPolicyChecker implements PolicyChecker {
       violations,
       recommendations,
       timestamp: new Date().toISOString(),
-      executionTimeMs: Date.now() - startTime
+      executionTimeMs: Date.now() - startTime,
     };
   }
   async validateRule(rule: PolicyRule): Promise<boolean> {
@@ -529,14 +528,14 @@ class SecurityCompliancePolicyChecker implements PolicyChecker {
       ruleId: v.checkType,
       ruleName: v.checkType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
       description: v.description,
-      severity: v.severity as PolicySeverity
+      severity: v.severity as PolicySeverity,
     }));
     return {
       checkId: `security-compliance-${Date.now()}`,}
       policyType: this.type,
       policyName: this.name,
       status: complianceResult.overallStatus === 'compliant' ? 'passed' : 'failed',
-      severity: complianceResult.criticalViolations > 0 ? 'critical' : 
+      severity: complianceResult.criticalViolations > 0 ? 'critical' : ,
         complianceResult.highViolations > 0 ? 'high' : 'medium',
       score: Math.round(complianceResult.compliancePercentage),
       message: `Security compliance: ${Math.round(complianceResult.compliancePercentage)}%`,}
@@ -547,7 +546,7 @@ class SecurityCompliancePolicyChecker implements PolicyChecker {
       violations,
       recommendations: ['Review security compliance violations', 'Update security configurations'],
       timestamp: new Date().toISOString(),
-      executionTimeMs: Date.now() - startTime
+      executionTimeMs: Date.now() - startTime,
     };
   }
   async validateRule(rule: PolicyRule): Promise<boolean> {
@@ -614,7 +613,7 @@ class AccessControlPolicyChecker implements PolicyChecker {
       violations,
       recommendations: hasValidAccess ? [] : ['Verify user permissions', 'Contact administrator'],
       timestamp: new Date().toISOString(),
-      executionTimeMs: Date.now() - startTime
+      executionTimeMs: Date.now() - startTime,
     };
   }
   async validateRule(rule: PolicyRule): Promise<boolean> {
@@ -675,12 +674,12 @@ class DataProtectionPolicyChecker implements PolicyChecker {
       details: {,
         gdprCompliance: score >= 90,
         dataEncryption: true,
-        consentManagement: score >= 85
+        consentManagement: score >= 85,
       },
       violations,
       recommendations: score < 90 ? ['Review data handling practices', 'Update privacy policies'] : [],
       timestamp: new Date().toISOString(),
-      executionTimeMs: Date.now() - startTime
+      executionTimeMs: Date.now() - startTime,
     };
   }
   async validateRule(rule: PolicyRule): Promise<boolean> {
@@ -748,7 +747,7 @@ class RegulatoryCompliancePolicyChecker implements PolicyChecker {
       violations,
       recommendations: score < 95 ? ['Review compliance documentation'] : [],
       timestamp: new Date().toISOString(),
-      executionTimeMs: Date.now() - startTime
+      executionTimeMs: Date.now() - startTime,
     };
   }
   async validateRule(rule: PolicyRule): Promise<boolean> {

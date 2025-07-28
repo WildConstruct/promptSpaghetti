@@ -25,7 +25,7 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({)
     name: 'Professional Email Templates',
     price: 999, // $9.99 in cents
     description: 'Comprehensive set of business email templates for various scenarios',
-    category: 'Business Communication'
+    category: 'Business Communication',
   }
 }) => {
   const [activeTab, setActiveTab] = useState<'roi' | 'savings' | 'summary'>('roi');
@@ -53,9 +53,9 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({)
         totalValue: roiResults.netSavings + savingsResults.totalSavings.totalProjectSavings,
         paybackTime: roiResults.timeToValue,
         efficiency: savingsResults.productivity.productivityGain,
-        recommendation: roiResults.roi > 100 ? 'Strongly Recommended' : roiResults.roi > 50 ? 'Recommended' : 'Consider Alternatives'
+        recommendation: roiResults.roi > 100 ? 'Strongly Recommended' : roiResults.roi > 50 ? 'Recommended' : 'Consider Alternatives',
       },
-      generatedAt: new Date().toISOString()
+      generatedAt: new Date().toISOString(),
     };
     const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -67,7 +67,7 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({)
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-  return ()
+  return ();
     <div className={`space-y-6 ${className}`}>}
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border border-blue-200">

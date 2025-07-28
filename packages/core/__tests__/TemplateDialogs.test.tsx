@@ -22,7 +22,7 @@ describe('SaveTemplateDialog', () => {
     jest.clearAllMocks();
   });
   it('should render when open', () => {
-    render()
+    render();
       <SaveTemplateDialog
         isOpen={true}
         onClose={mockOnClose}
@@ -35,7 +35,7 @@ describe('SaveTemplateDialog', () => {
     expect(screen.getByLabelText(/Category/)).toBeInTheDocument();
   });
   it('should not render when closed', () => {
-    render()
+    render();
       <SaveTemplateDialog
         isOpen={false}
         onClose={mockOnClose}
@@ -46,7 +46,7 @@ describe('SaveTemplateDialog', () => {
   });
   it('should handle form input changes', async () => {
     const user = userEvent.setup();
-    render()
+    render();
       <SaveTemplateDialog
         isOpen={true}
         onClose={mockOnClose}
@@ -65,7 +65,7 @@ describe('SaveTemplateDialog', () => {
   });
   it('should handle tag addition', async () => {
     const user = userEvent.setup();
-    render()
+    render();
       <SaveTemplateDialog
         isOpen={true}
         onClose={mockOnClose}
@@ -81,7 +81,7 @@ describe('SaveTemplateDialog', () => {
   });
   it('should handle tag addition with Enter key', async () => {
     const user = userEvent.setup();
-    render()
+    render();
       <SaveTemplateDialog
         isOpen={true}
         onClose={mockOnClose}
@@ -95,7 +95,7 @@ describe('SaveTemplateDialog', () => {
   });
   it('should handle tag removal', async () => {
     const user = userEvent.setup();
-    render()
+    render();
       <SaveTemplateDialog
         isOpen={true}
         onClose={mockOnClose}
@@ -110,7 +110,7 @@ describe('SaveTemplateDialog', () => {
   });
   it('should validate required fields', async () => {
     const user = userEvent.setup();
-    render()
+    render();
       <SaveTemplateDialog
         isOpen={true}
         onClose={mockOnClose}
@@ -124,7 +124,7 @@ describe('SaveTemplateDialog', () => {
   });
   it('should validate name length', async () => {
     const user = userEvent.setup();
-    render()
+    render();
       <SaveTemplateDialog
         isOpen={true}
         onClose={mockOnClose}
@@ -143,7 +143,7 @@ describe('SaveTemplateDialog', () => {
   it('should call onSave with correct data', async () => {
     const user = userEvent.setup();
     mockOnSave.mockResolvedValue({ success: true } as unknown as unknown);
-    render()
+    render();
       <SaveTemplateDialog
         isOpen={true}
         onClose={mockOnClose}
@@ -178,7 +178,7 @@ describe('SaveTemplateDialog', () => {
   it('should handle save errors', async () => {
     const user = userEvent.setup();
     mockOnSave.mockResolvedValue({ success: false, error: 'Save failed' } as unknown as unknown);
-    render()
+    render();
       <SaveTemplateDialog
         isOpen={true}
         onClose={mockOnClose}
@@ -198,7 +198,7 @@ describe('SaveTemplateDialog', () => {
   it('should disable form during save', async () => {
     const user = userEvent.setup();
     mockOnSave.mockImplementation(() => new Promise(() => {})); // Never resolves
-    render()
+    render();
       <SaveTemplateDialog
         isOpen={true}
         onClose={mockOnClose}
@@ -222,7 +222,7 @@ describe('SaveTemplateDialog', () => {
   it('should close dialog on successful save', async () => {
     const user = userEvent.setup();
     mockOnSave.mockResolvedValue({ success: true } as unknown as unknown);
-    render()
+    render();
       <SaveTemplateDialog
         isOpen={true}
         onClose={mockOnClose}
@@ -255,7 +255,7 @@ describe('SaveTemplateDialog', () => {
     await user.click(saveButton);
     // Wait for save to complete, then reopen dialog
     await waitFor(() => expect(mockOnClose).toHaveBeenCalled());
-    rerender()
+    rerender();
       <SaveTemplateDialog
         isOpen={true}
         onClose={mockOnClose}
@@ -274,7 +274,7 @@ describe('SaveTemplateDialog', () => {
       isPublic: true,
       includeAnnotations: false,
     };
-    render()
+    render();
       <SaveTemplateDialog
         isOpen={true}
         onClose={mockOnClose}
@@ -388,7 +388,7 @@ describe('TemplateBrowser', () => {
     templateService.searchTemplates.mockResolvedValue(sampleTemplates as unknown as unknown);
   });
   it('should render when open', async () => {
-    render()
+    render();
       <TemplateBrowser
         isOpen={true}
         onClose={mockOnClose}
@@ -403,7 +403,7 @@ describe('TemplateBrowser', () => {
     });
   });
   it('should not render when closed', () => {
-    render()
+    render();
       <TemplateBrowser
         isOpen={false}
         onClose={mockOnClose}
@@ -415,7 +415,7 @@ describe('TemplateBrowser', () => {
   it('should handle search', async () => {
     const user = userEvent.setup();
     const { templateService } = require('../services/TemplateService');
-    render()
+    render();
       <TemplateBrowser
         isOpen={true}
         onClose={mockOnClose}
@@ -435,7 +435,7 @@ describe('TemplateBrowser', () => {
   it('should handle category filter', async () => {
     const user = userEvent.setup();
     const { templateService } = require('../services/TemplateService');
-    render()
+    render();
       <TemplateBrowser
         isOpen={true}
         onClose={mockOnClose}
@@ -455,7 +455,7 @@ describe('TemplateBrowser', () => {
   it('should handle sort options', async () => {
     const user = userEvent.setup();
     const { templateService } = require('../services/TemplateService');
-    render()
+    render();
       <TemplateBrowser
         isOpen={true}
         onClose={mockOnClose}
@@ -475,7 +475,7 @@ describe('TemplateBrowser', () => {
   it('should show loading state', () => {
     const { templateService } = require('../services/TemplateService');
     templateService.searchTemplates.mockImplementation(() => new Promise(() => {})); // Never resolves
-    render()
+    render();
       <TemplateBrowser
         isOpen={true}
         onClose={mockOnClose}
@@ -487,7 +487,7 @@ describe('TemplateBrowser', () => {
   it('should show empty state', async () => {
     const { templateService } = require('../services/TemplateService');
     templateService.searchTemplates.mockResolvedValue([] as unknown as unknown);
-    render()
+    render();
       <TemplateBrowser
         isOpen={true}
         onClose={mockOnClose}
@@ -501,7 +501,7 @@ describe('TemplateBrowser', () => {
   });
   it('should handle template application', async () => {
     const user = userEvent.setup();
-    render()
+    render();
       <TemplateBrowser
         isOpen={true}
         onClose={mockOnClose}
@@ -525,7 +525,7 @@ describe('TemplateBrowser', () => {
   });
   it('should handle instantiation options', async () => {
     const user = userEvent.setup();
-    render()
+    render();
       <TemplateBrowser
         isOpen={true}
         onClose={mockOnClose}
@@ -552,7 +552,7 @@ describe('TemplateBrowser', () => {
   });
   it('should handle view mode switch', async () => {
     const user = userEvent.setup();
-    render()
+    render();
       <TemplateBrowser
         isOpen={true}
         onClose={mockOnClose}
@@ -571,7 +571,7 @@ describe('TemplateBrowser', () => {
   });
   it('should handle template preview', async () => {
     const user = userEvent.setup();
-    render()
+    render();
       <TemplateBrowser
         isOpen={true}
         onClose={mockOnClose}
@@ -594,7 +594,7 @@ describe('TemplateBrowser', () => {
   it('should handle template deletion for owned templates', async () => {
     const user = userEvent.setup();
     const { templateService } = require('../services/TemplateService');
-    render()
+    render();
       <TemplateBrowser
         isOpen={true}
         onClose={mockOnClose}
@@ -618,7 +618,7 @@ describe('TemplateBrowser', () => {
   it('should handle error states', async () => {
     const { templateService } = require('../services/TemplateService');
     templateService.searchTemplates.mockRejectedValue(new Error('Network error'));
-    render()
+    render();
       <TemplateBrowser
         isOpen={true}
         onClose={mockOnClose}

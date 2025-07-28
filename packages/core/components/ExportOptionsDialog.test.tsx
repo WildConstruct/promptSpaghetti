@@ -12,7 +12,7 @@ import { ExportFormat } from '../services/ResultExportService';
 // Mock the ResultExportService
 jest.mock('../services/ResultExportService', () => ({)
   ResultExportService: jest.fn<unknown[], unknown>().mockImplementation(() => ({)
-    getAvailableFormats: () => [
+    getAvailableFormats: () => [,
       {
         format: 'json-simple',
         name: 'JSON (Simple)',
@@ -55,7 +55,7 @@ jest.mock('../services/ResultExportService', () => ({)
       }
     ],
     validateExportOptions: jest.fn(() => []),
-    estimateExportSize: jest.fn(() => ({)
+    estimateExportSize: jest.fn(() => ({),
       estimatedSize: 15,
       unit: 'KB',
       warning: undefined,
@@ -124,7 +124,7 @@ describe('ExportOptionsDialog', () => {
       expect(screen.queryByText('Export Options')).not.toBeInTheDocument();
     });
     it('should display correct result count for individual export', () => {
-      render()
+      render();
         <ExportOptionsDialog
           {...defaultProps}
           exportType="individual"
@@ -156,7 +156,7 @@ describe('ExportOptionsDialog', () => {
     });
     it('should filter formats based on export type', () => {
       // CSV Analysis doesn't support individual export
-      render()
+      render();
         <ExportOptionsDialog
           {...defaultProps}
           exportType="individual"
@@ -239,7 +239,7 @@ describe('ExportOptionsDialog', () => {
       mockInstance.estimateExportSize.mockReturnValue({)
         estimatedSize: 5000,
         unit: 'KB',
-        warning: 'Large export size - consider reducing options'
+        warning: 'Large export size - consider reducing options',
       } as unknown);
       render(<ExportOptionsDialog {...defaultProps} />);
       expect(screen.getByText('⚡ Large export size - consider reducing options')).toBeInTheDocument();
@@ -256,7 +256,7 @@ describe('ExportOptionsDialog', () => {
   describe('Export Actions', () => {
     it('should call onExport with correct parameters', async () => {
       const mockOnExport = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
-      render()
+      render();
         <ExportOptionsDialog
           {...defaultProps}
           onExport={mockOnExport}
@@ -278,7 +278,7 @@ describe('ExportOptionsDialog', () => {
     });
     it('should show loading state during export', async () => {
       const mockOnExport = jest.fn(() => new Promise(resolve => setTimeout(resolve, 100)));
-      render()
+      render();
         <ExportOptionsDialog
           {...defaultProps}
           onExport={mockOnExport}
@@ -295,7 +295,7 @@ describe('ExportOptionsDialog', () => {
     it('should close dialog after successful export', async () => {
       const mockOnExport = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown);
       const mockOnClose = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <ExportOptionsDialog
           {...defaultProps}
           onExport={mockOnExport}
@@ -310,7 +310,7 @@ describe('ExportOptionsDialog', () => {
     });
     it('should handle export errors gracefully', async () => {
       const mockOnExport = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Export failed'));
-      render()
+      render();
         <ExportOptionsDialog
           {...defaultProps}
           onExport={mockOnExport}
@@ -326,7 +326,7 @@ describe('ExportOptionsDialog', () => {
     });
     it('should call onClose when cancel button is clicked', () => {
       const mockOnClose = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <ExportOptionsDialog
           {...defaultProps}
           onClose={mockOnClose}
@@ -339,7 +339,7 @@ describe('ExportOptionsDialog', () => {
   });
   describe('Export Type Information', () => {
     it('should show correct information for individual export', () => {
-      render()
+      render();
         <ExportOptionsDialog
           {...defaultProps}
           exportType="individual"
@@ -349,7 +349,7 @@ describe('ExportOptionsDialog', () => {
       expect(screen.getByText('Exporting result 1 of 2')).toBeInTheDocument();
     });
     it('should show correct information for batch export', () => {
-      render()
+      render();
         <ExportOptionsDialog
           {...defaultProps}
           exportType="batch"
@@ -359,7 +359,7 @@ describe('ExportOptionsDialog', () => {
       expect(screen.getByText('Exporting 2 selected results')).toBeInTheDocument();
     });
     it('should show correct information for comparison export', () => {
-      render()
+      render();
         <ExportOptionsDialog
           {...defaultProps}
           exportType="comparison"
@@ -427,7 +427,7 @@ describe('ExportOptionsDialog', () => {
   });
   describe('Edge Cases', () => {
     it('should handle empty results array', () => {
-      render()
+      render();
         <ExportOptionsDialog
           {...defaultProps}
           results={[]}
@@ -441,7 +441,7 @@ describe('ExportOptionsDialog', () => {
         ...result,
         executionPath: undefined,
       }));
-      render()
+      render();
         <ExportOptionsDialog
           {...defaultProps}
           results={resultsWithoutPaths}

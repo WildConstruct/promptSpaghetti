@@ -8,7 +8,6 @@
  * Part of Epic 17 - Backstage Admin Controls
  * Task: E17-1753114397430-2D9B2A - Implement user satisfaction tracking
  */
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -16,7 +15,6 @@ import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { AlertTriangle, TrendingUp, TrendingDown, Users, MessageSquare, Star } from 'lucide-react';
-
 interface SatisfactionMetrics {
   overallScore: number;
   npsScore: number;
@@ -24,7 +22,6 @@ interface SatisfactionMetrics {
   totalResponses: number;
   trendDirection: 'up' | 'down' | 'stable';
 }
-
 interface SatisfactionAlert {
   alertId: string;
   alertType: string;
@@ -35,7 +32,6 @@ interface SatisfactionAlert {
   triggeredAt: Date;
   acknowledged: boolean;
 }
-
 interface RecentFeedback {
   positive: { text: string; user: string; timestamp: Date }[];
   negative: { text: string; user: string; timestamp: Date }[];
@@ -65,13 +61,12 @@ interface RecentFeedback {
 //   timestamp: Date;
 //   dataFreshness: number;
 // }
-
 interface SatisfactionSurveyWidgetProps {
   className?: string;
   refreshInterval?: number;
 }
 
-export     realtime: Record<string, unknown>;
+export realtime: Record<string, unknown>;
     segments: Record<string, unknown>;
     features: Record<string, unknown>;
     alerts: SatisfactionAlert[];
@@ -81,13 +76,11 @@ export     realtime: Record<string, unknown>;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
-
   // Fetch dashboard data
   const fetchDashboardData = async () => {
     try {
       const response = await fetch('/api/admin/satisfaction/dashboard');
       const result = await response.json();
-      
       if (result.success) {
         setDashboardData(result.data);
         setError(null);
@@ -101,23 +94,19 @@ export     realtime: Record<string, unknown>;
       setLoading(false);
     }
   };
-
   // Setup periodic refresh
   useEffect(() => {
     fetchDashboardData();
-    
     const interval = setInterval(fetchDashboardData, refreshInterval);
     return () => clearInterval(interval);
   }, [refreshInterval]);
-
   // Acknowledge alert
   const handleAcknowledgeAlert = async (alertId: string) => {
     try {
-      const response = await fetch(`/api/admin/satisfaction/alerts/${alertId}/acknowledge`, {
+      const response = await fetch(`/api/admin/satisfaction/alerts/${alertId}/acknowledge`, {)}
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
-      
       if (response.ok) {
         // Refresh data to update alert status
         fetchDashboardData();
@@ -126,18 +115,15 @@ export     realtime: Record<string, unknown>;
       console.error('Error acknowledging alert:', err);
     }
   };
-
   // Create new survey
   const handleCreateSurvey = async (surveyType: string) => {
     try {
-      const response = await fetch('/api/admin/satisfaction/surveys', {
+      const response = await fetch('/api/admin/satisfaction/surveys', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ surveyType })
       });
-      
       const result = await response.json();
-      
       if (result.success) {
         // Handle successful survey creation
         console.log('Survey created:', result.data);
@@ -146,9 +132,8 @@ export     realtime: Record<string, unknown>;
       console.error('Error creating survey:', err);
     }
   };
-
   if (loading) {
-    return (
+    return ()
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div className="animate-pulse">Loading satisfaction data...</div>
@@ -156,9 +141,8 @@ export     realtime: Record<string, unknown>;
       </Card>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div className="text-red-600">
@@ -169,9 +153,8 @@ export     realtime: Record<string, unknown>;
       </Card>
     );
   }
-
   if (!dashboardData) {
-    return (
+    return ()
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div>No satisfaction data available</div>
@@ -179,10 +162,8 @@ export     realtime: Record<string, unknown>;
       </Card>
     );
   }
-
   const { summary, realtime, segments, features, alerts, recentFeedback } = dashboardData;
-
-  return (
+  return ()
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -196,7 +177,6 @@ export     realtime: Record<string, unknown>;
           </Badge>
         </CardTitle>
       </CardHeader>
-      
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-5">
@@ -206,7 +186,6 @@ export     realtime: Record<string, unknown>;
             <TabsTrigger value="alerts">Alerts</TabsTrigger>
             <TabsTrigger value="feedback">Feedback</TabsTrigger>
           </TabsList>
-
           <TabsContent value="overview" className="space-y-4">
             {/* Summary Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -215,7 +194,6 @@ export     realtime: Record<string, unknown>;
                 <div className="text-sm text-gray-600">Overall Score</div>
                 <Progress value={summary.overallScore} className="mt-2" />
               </div>
-              
               <div className="text-center">
                 <div className="text-2xl font-bold text-green-600">{summary.npsScore}</div>
                 <div className="text-sm text-gray-600">NPS Score</div>
@@ -223,20 +201,17 @@ export     realtime: Record<string, unknown>;
                   {summary.npsScore > 0 ? 'Positive' : summary.npsScore < 0 ? 'Negative' : 'Neutral'}
                 </div>
               </div>
-              
               <div className="text-center">
                 <div className="text-2xl font-bold text-purple-600">{summary.responseRate}%</div>
                 <div className="text-sm text-gray-600">Response Rate</div>
                 <Progress value={summary.responseRate} className="mt-2" />
               </div>
-              
               <div className="text-center">
                 <div className="text-2xl font-bold text-orange-600">{summary.totalResponses}</div>
                 <div className="text-sm text-gray-600">Total Responses</div>
                 <div className="text-xs text-gray-500">All time</div>
               </div>
             </div>
-
             {/* Realtime Data */}
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-3">Today&apos;s Activity</h3>
@@ -250,12 +225,11 @@ export     realtime: Record<string, unknown>;
                   <div className="text-sm text-gray-600">Average Score Today</div>
                 </div>
               </div>
-              
               {/* Hourly trend would be displayed as a small chart */}
               <div className="mt-3">
                 <div className="text-xs text-gray-500">Hourly Trend (last 24h)</div>
                 <div className="flex items-end space-x-1 mt-1">
-                  {realtime.hourlyTrend.map((point, i) => (
+                  {realtime.hourlyTrend.map((point, i) => ()
                     <div
                       key={i}
                       className="bg-blue-200 w-2"
@@ -266,7 +240,6 @@ export     realtime: Record<string, unknown>;
                 </div>
               </div>
             </div>
-
             {/* Quick Actions */}
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-3">Quick Actions</h3>
@@ -283,14 +256,13 @@ export     realtime: Record<string, unknown>;
               </div>
             </div>
           </TabsContent>
-
           <TabsContent value="segments" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* User Type Segments */}
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3">By User Type</h3>
                 <div className="space-y-2">
-                  {segments.userType.map((segment, i) => (
+                  {segments.userType.map((segment, i) => ()
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm">{segment.segment}</span>
                       <div className="flex items-center gap-2">
@@ -301,12 +273,11 @@ export     realtime: Record<string, unknown>;
                   ))}
                 </div>
               </div>
-
               {/* Geography Segments */}
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3">By Region</h3>
                 <div className="space-y-2">
-                  {segments.geography.map((segment, i) => (
+                  {segments.geography.map((segment, i) => ()
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm">{segment.region}</span>
                       <div className="flex items-center gap-2">
@@ -317,12 +288,11 @@ export     realtime: Record<string, unknown>;
                   ))}
                 </div>
               </div>
-
               {/* Tenure Segments */}
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3">By User Tenure</h3>
                 <div className="space-y-2">
-                  {segments.tenure.map((segment, i) => (
+                  {segments.tenure.map((segment, i) => ()
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm">{segment.group}</span>
                       <div className="flex items-center gap-2">
@@ -335,14 +305,13 @@ export     realtime: Record<string, unknown>;
               </div>
             </div>
           </TabsContent>
-
           <TabsContent value="features" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Top Rated Features */}
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3 text-green-600">Top Rated Features</h3>
                 <div className="space-y-2">
-                  {features.topRated.map((feature, i) => (
+                  {features.topRated.map((feature, i) => ()
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm">{feature.feature}</span>
                       <div className="flex items-center gap-1">
@@ -354,12 +323,11 @@ export     realtime: Record<string, unknown>;
                   ))}
                 </div>
               </div>
-
               {/* Bottom Rated Features */}
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3 text-red-600">Needs Improvement</h3>
                 <div className="space-y-2">
-                  {features.bottomRated.map((feature, i) => (
+                  {features.bottomRated.map((feature, i) => ()
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm">{feature.feature}</span>
                       <div className="flex items-center gap-1">
@@ -371,18 +339,17 @@ export     realtime: Record<string, unknown>;
                   ))}
                 </div>
               </div>
-
               {/* Trending Features */}
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3">Trending</h3>
                 <div className="space-y-2">
-                  {features.trending.map((feature, i) => (
+                  {features.trending.map((feature, i) => ()
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-sm">{feature.feature}</span>
                       <div className="flex items-center gap-1">
-                        {feature.change > 0 ? (
+                        {feature.change > 0 ? ()
                           <TrendingUp className="w-3 h-3 text-green-500" />
-                        ) : (
+                        ) : ()
                           <TrendingDown className="w-3 h-3 text-red-500" />
                         )}
                         <span className="text-sm font-medium">{feature.current}</span>
@@ -399,15 +366,14 @@ export     realtime: Record<string, unknown>;
               </div>
             </div>
           </TabsContent>
-
           <TabsContent value="alerts" className="space-y-4">
-            {alerts.length === 0 ? (
+            {alerts.length === 0 ? ()
               <div className="text-center py-8 text-gray-500">
                 No active satisfaction alerts
               </div>
-            ) : (
+            ) : ()
               <div className="space-y-3">
-                {alerts.map((alert) => (
+                {alerts.map((alert) => ()
                   <div
                     key={alert.alertId}
                     className={`border rounded-lg p-4 ${
@@ -436,9 +402,7 @@ export     realtime: Record<string, unknown>;
                             {alert.severity}
                           </Badge>
                         </div>
-                        
                         <p className="text-sm text-gray-600 mb-2">{alert.description}</p>
-                        
                         <div className="flex items-center gap-4 text-xs text-gray-500">
                           <span>
                             <Users className="w-3 h-3 inline mr-1" />
@@ -447,9 +411,8 @@ export     realtime: Record<string, unknown>;
                           <span>{new Date(alert.triggeredAt).toLocaleString()}</span>
                         </div>
                       </div>
-                      
                       <div className="ml-4">
-                        {!alert.acknowledged && (
+                        {!alert.acknowledged && ()
                           <Button 
                             size="sm" 
                             variant="outline"
@@ -458,7 +421,7 @@ export     realtime: Record<string, unknown>;
                             Acknowledge
                           </Button>
                         )}
-                        {alert.acknowledged && (
+                        {alert.acknowledged && ()
                           <Badge variant="success">Acknowledged</Badge>
                         )}
                       </div>
@@ -468,14 +431,13 @@ export     realtime: Record<string, unknown>;
               </div>
             )}
           </TabsContent>
-
           <TabsContent value="feedback" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Positive Feedback */}
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3 text-green-600">Recent Positive Feedback</h3>
                 <div className="space-y-3">
-                  {recentFeedback.positive.map((feedback, i) => (
+                  {recentFeedback.positive.map((feedback, i) => ()
                     <div key={i} className="text-sm">
                       <p className="text-gray-700">&quot;{feedback.text}&quot;</p>
                       <div className="text-xs text-gray-500 mt-1">
@@ -485,12 +447,11 @@ export     realtime: Record<string, unknown>;
                   ))}
                 </div>
               </div>
-
               {/* Negative Feedback */}
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3 text-red-600">Recent Concerns</h3>
                 <div className="space-y-3">
-                  {recentFeedback.negative.map((feedback, i) => (
+                  {recentFeedback.negative.map((feedback, i) => ()
                     <div key={i} className="text-sm">
                       <p className="text-gray-700">&quot;{feedback.text}&quot;</p>
                       <div className="text-xs text-gray-500 mt-1">
@@ -500,12 +461,11 @@ export     realtime: Record<string, unknown>;
                   ))}
                 </div>
               </div>
-
               {/* Suggestions */}
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-3 text-blue-600">Recent Suggestions</h3>
                 <div className="space-y-3">
-                  {recentFeedback.suggestions.map((feedback, i) => (
+                  {recentFeedback.suggestions.map((feedback, i) => ()
                     <div key={i} className="text-sm">
                       <p className="text-gray-700">&quot;{feedback.text}&quot;</p>
                       <div className="text-xs text-gray-500 mt-1">
@@ -518,7 +478,6 @@ export     realtime: Record<string, unknown>;
             </div>
           </TabsContent>
         </Tabs>
-
         {/* Data freshness indicator */}
         <div className="mt-4 text-xs text-gray-500 text-center">
           Data updated {dashboardData.dataFreshness} minutes ago

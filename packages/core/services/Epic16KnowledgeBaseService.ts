@@ -561,7 +561,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
       suggestions,
       totalResults: results.length,
       searchTime,
-      didYouMean: await this.generateDidYouMean(query)
+      didYouMean: await this.generateDidYouMean(query),
     };
     this.emit('searchPerformed', { query, results: results.length, userId });
     return searchResult;
@@ -628,7 +628,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
     session.searchHistory.push({)
       query,
       timestamp: new Date(),
-      results: 0 // Will be updated after search
+      results: 0 // Will be updated after search,
     });
     // Keep only last 100 searches
     if (session.searchHistory.length > 100) {
@@ -657,7 +657,7 @@ export class Epic16KnowledgeBaseService extends EventEmitter {
     // Add new rating
     article.ratings.push({)
       ...rating,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     this.updateHelpfulnessScore(articleId);
     this.emit('articleRated', { articleId, rating });

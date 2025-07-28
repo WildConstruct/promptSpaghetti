@@ -165,7 +165,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
       setError(null);
       const filter: AdvancedSearchFilter = {
         ...currentFilter,
-        search: searchQuery ? {
+        search: searchQuery ? {,
           query: searchQuery,
           fields: ['description', 'action', 'actor_email', 'resource_name'],
           operator: 'OR',
@@ -210,7 +210,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
           uniqueActors: 12,
           timeRange: {,
             start: new Date(Date.now() - 24 * 60 * 60 * 1000),
-            end: new Date()
+            end: new Date(),
           }
         },
         performance: {,
@@ -220,7 +220,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
           cacheHit: false,
         },
         filterSummary: {,
-          appliedFilters: Object.keys(filter).filter(key => )
+          appliedFilters: Object.keys(filter).filter(key => ),
             filter[key as keyof AdvancedSearchFilter] !== undefined
           ),
           filterCount: Object.keys(filter).length,
@@ -270,7 +270,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
         tags: [],
         complianceStandards: [ComplianceStandard.SOC2],
         timestamp: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000),
-        duration: Math.floor(Math.random() * 1000)
+        duration: Math.floor(Math.random() * 1000),
       });
     }
     return events.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
@@ -284,13 +284,13 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
   const applySeverityFilter = (severities: AuditSeverity[]) => {
     setCurrentFilter(prev => ({)
       ...prev,
-      severities: severities.length > 0 ? severities : undefined
+      severities: severities.length > 0 ? severities : undefined,
     }));
   };
   const applyCategoryFilter = (categories: AuditCategory[]) => {
     setCurrentFilter(prev => ({)
       ...prev,
-      categories: categories.length > 0 ? categories : undefined
+      categories: categories.length > 0 ? categories : undefined,
     }));
   };
   const clearFilters = () => {
@@ -358,7 +358,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
     const OutcomeIcon = OUTCOME_CONFIG[event.outcome].icon;
     const isExpanded = expandedEvents.includes(event.id);
     const isSelected = selectedEvents.includes(event.id);
-    return ()
+    return ();
       <Card key={event.id} className={`mb-4 ${isSelected ? 'ring-2 ring-blue-500' : ''}`}>}
         <CardContent className="p-4">
           <div className="flex items-start justify-between">
@@ -484,7 +484,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
       </Card>
     );
   };
-  const renderFilterBar = () => (;)
+  const renderFilterBar = () => (;);
     <Card className="mb-6">
       <CardContent className="p-4">
         <div className="flex flex-wrap items-center gap-4 mb-4">
@@ -636,7 +636,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
                           } else {
                             setCurrentFilter(prev => ({)
                               ...prev,
-                              outcomes: outcomes.filter(o => o !== outcome)
+                              outcomes: outcomes.filter(o => o !== outcome),
                             }));
                           }
                         }}
@@ -666,7 +666,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
   );
   const renderSummaryStats = () => {
     if (!searchResults) return null;
-    return ()
+    return ();
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <Card>
           <CardContent className="p-4">
@@ -723,7 +723,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
       </div>
     );
   };
-  const renderActionBar = () => (;)
+  const renderActionBar = () => (;);
     <div className="flex items-center justify-between mb-4">
       <div className="flex items-center space-x-2">
         {selectedEvents.length > 0 && ()
@@ -763,7 +763,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
       </div>
     </div>
   );
-  return ()
+  return ();
     <div className={`audit-log-dashboard ${className}`}>}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Audit Logs</h1>

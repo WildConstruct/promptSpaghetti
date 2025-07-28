@@ -16,7 +16,7 @@ describe('UnsavedChangesDialog', () => {
     jest.clearAllMocks();
   });
   test('does not render when isOpen is false', () => {
-    render()
+    render();
       <UnsavedChangesDialog
         {...defaultProps}
         isOpen={false}
@@ -31,7 +31,7 @@ describe('UnsavedChangesDialog', () => {
     expect(screen.getByText(/Do you want to save your changes before continuing/)).toBeInTheDocument();
   });
   test('renders with project name when provided', () => {
-    render()
+    render();
       <UnsavedChangesDialog
         {...defaultProps}
         projectName="My Project"
@@ -41,7 +41,7 @@ describe('UnsavedChangesDialog', () => {
     expect(screen.getByText('"My Project"')).toBeInTheDocument();
   });
   test('renders with custom action description', () => {
-    render()
+    render();
       <UnsavedChangesDialog
         {...defaultProps}
         actionDescription="opening a new file"
@@ -57,7 +57,7 @@ describe('UnsavedChangesDialog', () => {
   });
   test('calls onSave when Save button is clicked', () => {
     const onSave = jest.fn<unknown[], unknown>();
-    render()
+    render();
       <UnsavedChangesDialog
         {...defaultProps}
         onSave={onSave}
@@ -68,7 +68,7 @@ describe('UnsavedChangesDialog', () => {
   });
   test('calls onDontSave when Don\'t Save button is clicked', () => {
     const onDontSave = jest.fn<unknown[], unknown>();
-    render()
+    render();
       <UnsavedChangesDialog
         {...defaultProps}
         onDontSave={onDontSave}
@@ -79,7 +79,7 @@ describe('UnsavedChangesDialog', () => {
   });
   test('calls onCancel when Cancel button is clicked', () => {
     const onCancel = jest.fn<unknown[], unknown>();
-    render()
+    render();
       <UnsavedChangesDialog
         {...defaultProps}
         onCancel={onCancel}
@@ -104,7 +104,7 @@ describe('UnsavedChangesDialog', () => {
   });
   test('does not call onCancel when dialog content is clicked', () => {
     const onCancel = jest.fn<unknown[], unknown>();
-    render()
+    render();
       <UnsavedChangesDialog
         {...defaultProps}
         onCancel={onCancel}
@@ -176,7 +176,7 @@ describe('UnsavedChangesDialog', () => {
       />
     );
     expect(screen.getByText('"Project A"')).toBeInTheDocument();
-    rerender()
+    rerender();
       <UnsavedChangesDialog
         {...defaultProps}
         projectName="A Very Long Project Name That Should Display Correctly"
@@ -185,7 +185,7 @@ describe('UnsavedChangesDialog', () => {
     expect(screen.getByText('"A Very Long Project Name That Should Display Correctly"')).toBeInTheDocument();
   });
   test('handles special characters in project name', () => {
-    render()
+    render();
       <UnsavedChangesDialog
         {...defaultProps}
         projectName="Project & File <script>alert('test')</script>"

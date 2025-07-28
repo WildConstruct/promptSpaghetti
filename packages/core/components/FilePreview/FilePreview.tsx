@@ -50,7 +50,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
     const nodeCount = file.nodeCount;
     return {
       totalNodes: nodeCount,
-      hasContent: nodeCount > 0
+      hasContent: nodeCount > 0,
     };
   }, [file.nodeCount]);
   // Format file size
@@ -77,7 +77,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   // Render thumbnail
   const renderThumbnail = useCallback(() => {
     if (thumbnail) {
-      return ()
+      return ();
         <img
           src={thumbnail}
           alt={`${file.name} preview`}
@@ -91,7 +91,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
       );
     }
     if (isLoadingThumbnail) {
-      return ()
+      return ();
         <div style={{
           width: '100%',
           height: '100%',
@@ -110,7 +110,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
     }
     const { hasContent, totalNodes } = fileStats;
     if (!hasContent) {
-      return ()
+      return ();
         <div style={{
           width: '100%',
           height: '100%',
@@ -128,7 +128,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
       );
     }
     // Fallback visual representation
-    return ()
+    return ();
       <div style={{
         width: '100%',
         height: '100%',
@@ -165,7 +165,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
     ...style
   };
   if (mode === 'compact') {
-    return ()
+    return ();
       <div
         className={className}
         style={{
@@ -248,7 +248,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
     );
   }
   // Full mode for detailed previews/modals
-  return ()
+  return ();
     <div
       className={className}
       style={{
@@ -356,7 +356,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
 // Memoized component for performance
 const MemoizedFilePreview = React.memo(FilePreview, (prevProps, nextProps) => {
   // Only re-render if file properties change
-  return ()
+  return ();
     prevProps.file.id === nextProps.file.id &&
     prevProps.file.lastModified.getTime() === nextProps.file.lastModified.getTime() &&
     prevProps.file.isFavorite === nextProps.file.isFavorite &&

@@ -308,7 +308,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
         warnings.push({)
           field: 'selection.selectedNodes',
           message: `Selected node ${nodeId} does not exist`,}
-          suggestion: 'Remove from selection'
+          suggestion: 'Remove from selection',
         });
       }
     });
@@ -317,7 +317,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
         warnings.push({)
           field: 'selection.selectedEdges',
           message: `Selected edge ${edgeId} does not exist`,}
-          suggestion: 'Remove from selection'
+          suggestion: 'Remove from selection',
         });
       }
     });
@@ -326,7 +326,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
       warnings.push({)
         field: 'graph',
         message: 'Graph contains cycles',
-        suggestion: 'Consider removing cyclic dependencies'
+        suggestion: 'Consider removing cyclic dependencies',
       });
     }
     // Performance validation
@@ -336,14 +336,14 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
       warnings.push({)
         field: 'performance',
         message: `Large number of nodes (${nodeCount})`,}
-        suggestion: 'Consider using virtualization for better performance'
+        suggestion: 'Consider using virtualization for better performance',
       });
     }
     if (edgeCount > 2000) {
       warnings.push({)
         field: 'performance',
         message: `Large number of edges (${edgeCount})`,}
-        suggestion: 'Consider simplifying the graph structure'
+        suggestion: 'Consider simplifying the graph structure',
       });
     }
     return {
@@ -371,7 +371,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
     this.activeTransaction = transaction;
     try {
       // Apply all operations in the transaction atomically
-      const finalState = transaction.operations.reduce(;)
+      const finalState = transaction.operations.reduce(;);
         (state, operation) => this.applyOperationToState(state, operation),
         this.getState()
       );
@@ -410,7 +410,6 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
         newState.edges = Object.fromEntries()
           Object.entries(state.edges).filter(([, edge]) => 
             edge.source !== operation.nodeId && edge.target !== operation.nodeId
-          )
         );
         newState.performance.nodeCount = Object.keys(newState.nodes).length;
         newState.performance.edgeCount = Object.keys(newState.edges).length;
@@ -438,7 +437,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
           selectedNodes: operation.append ,
             ? [...state.selection.selectedNodes, ...operation.nodeIds]
             : operation.nodeIds,
-          selectedEdges: operation.append ? state.selection.selectedEdges : []
+          selectedEdges: operation.append ? state.selection.selectedEdges : [],
         };
         break;
       case 'SELECT_EDGES':
@@ -447,7 +446,7 @@ export class GraphStateContainer extends BaseStateContainer<GraphState> implemen
           selectedEdges: operation.append ,
             ? [...state.selection.selectedEdges, ...operation.edgeIds]
             : operation.edgeIds,
-          selectedNodes: operation.append ? state.selection.selectedNodes : []
+          selectedNodes: operation.append ? state.selection.selectedNodes : [],
         };
         break;
       case 'CLEAR_SELECTION':

@@ -98,7 +98,6 @@ export userId: string;
           notification.id === id 
             ? { ...notification, read_at: new Date().toISOString() }
             : notification
-        )
       );
       setUnreadCount(prev => Math.max(0, prev - 1));
     } catch (err) {
@@ -210,7 +209,6 @@ export userId: string;
                 n.id === notificationEvent.notification.id 
                   ? notificationEvent.notification 
                   : n
-              )
             );
             break;
           case 'notification_deleted':
@@ -239,7 +237,7 @@ export userId: string;
       reconnectTimeoutRef.current = setTimeout(() => {
         setRealTimeConnection(prev => ({)
           ...prev,
-          reconnectAttempts: prev.reconnectAttempts + 1
+          reconnectAttempts: prev.reconnectAttempts + 1,
         }));
         connectWebSocket();
       }, reconnectDelay);
@@ -248,7 +246,7 @@ export userId: string;
       setRealTimeConnection(prev => ({ )
         ...prev, 
         status: 'error',
-        error: 'WebSocket connection error'
+        error: 'WebSocket connection error',
       }));
     };
     wsRef.current = ws;

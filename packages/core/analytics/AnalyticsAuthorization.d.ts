@@ -107,7 +107,7 @@ export declare class AnalyticsAuthorizationService {
     /**
      * Authorize event publication
      */
-    authorizeEventPublication()
+    authorizeEventPublication();
       event: Partial<UnifiedAnalyticsEvent>,
       authContext: AuthContext,
     ): Promise<AuthorizationResult>;
@@ -126,7 +126,7 @@ export declare class AnalyticsAuthorizationService {
     /**
      * Authorize dashboard access
      */
-    authorizeDashboardAccess()
+    authorizeDashboardAccess();
       dashboardType: 'user' | 'organization' | 'admin' | 'system',
       authContext: AuthContext,
     ): Promise<AuthorizationResult>;

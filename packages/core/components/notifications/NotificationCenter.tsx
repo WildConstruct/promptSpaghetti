@@ -95,7 +95,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
           n.id === notificationId 
             ? { ...n, read_at: new Date().toISOString() }
             : n
-        )
       );
       setUnreadCount(prev => Math.max(0, prev - 1));
     } catch (error) {
@@ -182,7 +181,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
     return date.toLocaleDateString();
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div className={`notification-center ${className}`}>}
       <div 
         ref={panelRef}
@@ -298,7 +297,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({)
   formatTimeAgo
 }) => {
   const [showActions, setShowActions] = useState(false);
-  return ()
+  return ();
     <div 
       className={`p-4 hover:bg-gray-50 transition-colors cursor-pointer relative ${
         !notification.read_at ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''

@@ -32,7 +32,7 @@ export declare const useRealTimePreview: (graph: GraphData, seedConfig?: SeedCon
     getVariant: (variantId: string) => PreviewVariant | undefined;
     clearVariants: () => void;
     getPerformanceInsights: () => string[];
-    exportVariants: () => {
+    exportVariants: () => {,
         template: any;
         variables: any;
         variants: {,

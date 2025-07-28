@@ -190,7 +190,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       { id: 'categories', label: 'Categories', icon: Award },
       { id: 'engagement', label: 'Community', icon: Trophy }
     ];
-    return ()
+    return ();
       <div className="border-b border-gray-200 mb-6">
         <nav className="-mb-px flex space-x-8">
           {tabs.map((tab) => ()
@@ -213,7 +213,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   };
   const renderMetricSelector = () => {
     const metrics = getMetricsForTab(activeTab);
-    return ()
+    return ();
       <div className="flex flex-wrap gap-2">
         {metrics.map((metric) => ()
           <button
@@ -239,7 +239,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       { id: '90d', label: '90 Days' },
       { id: 'all', label: 'All Time' }
     ];
-    return ()
+    return ();
       <div className="flex flex-wrap items-center gap-4">
         {/* Timeframe Filter */}
         <div className="flex items-center space-x-2">
@@ -288,7 +288,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   };
   const renderLeaderboardHeader = () => {
     if (!leaderboard) return null;
-    return ()
+    return ();
       <div className="bg-blue-50 rounded-lg p-4 mb-6">
         <div className="flex items-center justify-between">
           <div>
@@ -312,7 +312,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   const renderLeaderboardEntry = (entry: LeaderboardEntry, index: number) => {
     const isTopThree = index < 3;
     const rankIcon = getRankIcon(index + 1);
-    return ()
+    return ();
       <div
         key={entry.id}
         onClick={() => handleEntryClick(entry)}
@@ -365,7 +365,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
     switch (activeTab) {
     case 'templates':
       const templateData = entry.metadata as any;
-      return ()
+      return ();
         <div className="flex items-center space-x-4 text-xs">
           <span>by {templateData.creatorName}</span>
           <span className="flex items-center">
@@ -380,7 +380,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       );
     case 'creators':
       const creatorData = entry.metadata as any;
-      return ()
+      return ();
         <div className="flex items-center space-x-4 text-xs">
           <span>{creatorData.templateCount} templates</span>
           <span className="flex items-center">
@@ -396,7 +396,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       );
     case 'categories':
       const categoryData = entry.metadata as any;
-      return ()
+      return ();
         <div className="flex items-center space-x-4 text-xs">
           <span>{categoryData.templateCount} templates</span>
           <span>Growth: {categoryData.growthRate?.toFixed(1)}%</span>
@@ -404,7 +404,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       );
     case 'engagement':
       const engagementData = entry.metadata as any;
-      return ()
+      return ();
         <div className="flex items-center space-x-4 text-xs">
           <span>{engagementData.badgeCount} badges</span>
           <span>Level {engagementData.level}</span>
@@ -417,7 +417,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   };
   const renderLeaderboard = () => {
     if (loading) {
-      return ()
+      return ();
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           <span className="ml-3 text-gray-600">Loading leaderboard...</span>
@@ -425,7 +425,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       );
     }
     if (error) {
-      return ()
+      return ();
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
           <div className="text-red-600 mb-2">Failed to load leaderboard</div>
           <div className="text-sm text-red-500 mb-4">{error}</div>
@@ -439,7 +439,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       );
     }
     if (!leaderboard || leaderboard.leaderboard.length === 0) {
-      return ()
+      return ();
         <div className="text-center py-12">
           <Trophy className="mx-auto w-16 h-16 text-gray-400" />
           <h3 className="mt-4 text-lg font-medium text-gray-900">No entries found</h3>
@@ -449,7 +449,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
         </div>
       );
     }
-    return ()
+    return ();
       <div className="space-y-3">
         {leaderboard.leaderboard.map((entry, index) => 
           renderLeaderboardEntry(entry, index)
@@ -460,7 +460,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   // =============================================================================
   // Main Render
   // =============================================================================
-  return ()
+  return ();
     <div className={`marketplace-leaderboards ${className}`}>}
       {/* Header */}
       <div className="mb-8">
@@ -558,7 +558,7 @@ function getLeaderboardTitle(tab: string, metric: string): string {
     growth: 'Fastest Growing',
     points: 'Most Points',
     reviews: 'Most Reviews',
-    contributions: 'Top Contributors'
+    contributions: 'Top Contributors',
   };
   const tabLabels: Record<string, string> = {
     templates: 'Templates',

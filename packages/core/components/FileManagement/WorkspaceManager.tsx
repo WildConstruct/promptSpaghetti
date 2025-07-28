@@ -98,7 +98,7 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({)
       if (stored) {
         const parsedSessions = JSON.parse(stored).map((session: any) => ({)
           ...session,
-          timestamp: new Date(session.timestamp)
+          timestamp: new Date(session.timestamp),
         }));
         setSessions(parsedSessions);
       }
@@ -187,7 +187,7 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({)
       }).format(date);
     }
   };
-  return ()
+  return ();
     <div style={{
       backgroundColor: styles.background,
       color: styles.text,
@@ -314,7 +314,7 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({)
                   border: `1px solid ${selectedSession?.id === session.id ? styles.accent : styles.border}`,}
                   borderRadius: '8px',
                   cursor: 'pointer',
-                  transition: 'all 0.15s ease'
+                  transition: 'all 0.15s ease',
                 }}
                 onClick={() => setSelectedSession(session)}
                 onDoubleClick={() => handleLoadSession(session)}
@@ -541,7 +541,7 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({)
                   color: styles.background,
                   fontSize: '14px',
                   fontWeight: '500',
-                  cursor: newSessionName.trim() ? 'pointer' : 'not-allowed'
+                  cursor: newSessionName.trim() ? 'pointer' : 'not-allowed',
                 }}
               >
                 Create Session

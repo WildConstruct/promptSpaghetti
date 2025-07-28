@@ -4,22 +4,18 @@
  * 
  * Provides authenticated API calls, error handling, and loading states
  */
-
 import { useState, useCallback, useRef } from 'react';
-
 interface ApiOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
   body?: any;
   signal?: AbortSignal;
 }
-
 interface ApiResponse<T = any> {
   data: T;
   status: number;
   headers: Headers;
 }
-
 interface UseAdminApiReturn {
   loading: boolean;
   error: string | null;
@@ -37,71 +33,58 @@ export const useAdminApi = (): UseAdminApiReturn => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
-
-  const apiCall = useCallback(async <T = any>(
+  const apiCall = useCallback(async <T = any>(;)
     endpoint: string, 
     options: ApiOptions = {}
   ): Promise<ApiResponse<T>> => {
     // Create abort controller for this request
     abortControllerRef.current = new AbortController();
     const signal = options.signal || abortControllerRef.current.signal;
-
     setLoading(true);
     setError(null);
-
     try {
       const token = getAuthToken();
-      
       const defaultHeaders: Record<string, string> = {
         'Content-Type': 'application/json',
-        ...(token && { 'Authorization': `Bearer ${token}` })
+        ...(token && { 'Authorization': `Bearer ${token}` })}
       };
-
       const requestOptions: RequestInit = {
         method: options.method || 'GET',
-        headers: {
+        headers: {,
           ...defaultHeaders,
           ...options.headers
         },
         signal,
-        ...(options.body && {
-          body: typeof options.body === 'string' ? options.body : JSON.stringify(options.body)
+        ...(options.body && {)
+          body: typeof options.body === 'string' ? options.body : JSON.stringify(options.body),
         })
       };
-
       // Ensure endpoint starts with / or is a full URL
-      const url = endpoint.startsWith('http') ? endpoint : 
-                  endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-
+      const url = endpoint.startsWith('http') ? endpoint : ;
+                  endpoint.startsWith('/') ? endpoint : `/${endpoint}`;}
       const response = await fetch(url, requestOptions);
-
       // Handle different response types
       let data: T;
       const contentType = response.headers.get('content-type');
-      
       if (contentType && contentType.includes('application/json')) {
         data = await response.json();
       } else {
         data = await response.text() as any;
       }
-
       if (!response.ok) {
         // Extract error message from response
-        const errorMessage = typeof data === 'object' && data && 'error' in data
+        const errorMessage = typeof data === 'object' && data && 'error' in data;
           ? (data as any).error
           : typeof data === 'object' && data && 'message' in data
           ? (data as any).message
-          : `HTTP ${response.status}: ${response.statusText}`;
-        
+          : `HTTP ${response.status}: ${response.statusText}`;}
         throw new Error(errorMessage);
       }
-
       return {
         data,
         status: response.status,
-        headers: response.headers
+        headers: response.headers,
       };
-
     } catch (err) {
       if (err instanceof Error) {
         if (err.name === 'AbortError') {
@@ -119,17 +102,14 @@ export const useAdminApi = (): UseAdminApiReturn => {
       setLoading(false);
     }
   }, []);
-
   const clearError = useCallback(() => {
     setError(null);
   }, []);
-
   const abort = useCallback(() => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
   }, []);
-
   return {
     loading,
     error,
@@ -142,8 +122,7 @@ export const useAdminApi = (): UseAdminApiReturn => {
 // Specialized hooks for common admin operations
 export const useAdminUserApi = () => {
   const { apiCall, loading, error, clearError } = useAdminApi();
-
-  const getUsers = useCallback(async (params?: {
+  const getUsers = useCallback(async (params?: {)
     page?: number;
     limit?: number;
     search?: string;
@@ -156,25 +135,21 @@ export const useAdminUserApi = () => {
     if (params?.search) searchParams.set('search', params.search);
     if (params?.role) searchParams.set('role', params.role);
     if (params?.status) searchParams.set('status', params.status);
-
     const query = searchParams.toString();
-    return apiCall(`/api/admin/users${query ? `?${query}` : ''}`);
+    return apiCall(`/api/admin/users${query ? `?${query}` : ''}`);}
   }, [apiCall]);
-
   const updateUserStatus = useCallback(async (userId: string, status: string, reason: string) => {
-    return apiCall(`/api/admin/users/${userId}/status`, {
+    return apiCall(`/api/admin/users/${userId}/status`, {)}
       method: 'PUT',
       body: { status, reason }
     });
   }, [apiCall]);
-
   const deleteUser = useCallback(async (userId: string, reason: string) => {
-    return apiCall(`/api/admin/users/${userId}`, {
+    return apiCall(`/api/admin/users/${userId}`, {)}
       method: 'DELETE',
       body: { reason }
     });
   }, [apiCall]);
-
   return {
     getUsers,
     updateUserStatus,
@@ -187,8 +162,7 @@ export const useAdminUserApi = () => {
 
 export const useAdminFeatureToggleApi = () => {
   const { apiCall, loading, error, clearError } = useAdminApi();
-
-  const getToggles = useCallback(async (params?: {
+  const getToggles = useCallback(async (params?: {)
     page?: number;
     limit?: number;
     search?: string;
@@ -201,32 +175,27 @@ export const useAdminFeatureToggleApi = () => {
     if (params?.search) searchParams.set('search', params.search);
     if (params?.enabled !== undefined) searchParams.set('enabled', params.enabled.toString());
     if (params?.type) searchParams.set('type', params.type);
-
     const query = searchParams.toString();
-    return apiCall(`/api/admin/feature-toggles${query ? `?${query}` : ''}`);
+    return apiCall(`/api/admin/feature-toggles${query ? `?${query}` : ''}`);}
   }, [apiCall]);
-
   const createToggle = useCallback(async (toggleData: any) => {
-    return apiCall('/api/admin/feature-toggles', {
+    return apiCall('/api/admin/feature-toggles', {)
       method: 'POST',
-      body: toggleData
+      body: toggleData,
     });
   }, [apiCall]);
-
   const updateToggle = useCallback(async (toggleId: string, data: any) => {
-    return apiCall(`/api/admin/feature-toggles/${toggleId}`, {
+    return apiCall(`/api/admin/feature-toggles/${toggleId}`, {)}
       method: 'PUT',
-      body: data
+      body: data,
     });
   }, [apiCall]);
-
   const toggleEnabled = useCallback(async (toggleId: string, enabled: boolean, reason: string) => {
-    return apiCall(`/api/admin/feature-toggles/${toggleId}/toggle`, {
+    return apiCall(`/api/admin/feature-toggles/${toggleId}/toggle`, {)}
       method: 'POST',
       body: { enabled, reason }
     });
   }, [apiCall]);
-
   return {
     getToggles,
     createToggle,

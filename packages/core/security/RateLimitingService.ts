@@ -178,7 +178,7 @@ export class RateLimitingService extends EventEmitter {
     const backoffState = this.getBackoffState(identifier, endpoint);
     // Check if currently in backoff period
     if (backoffState && new Date() < backoffState.nextAllowedTime) {
-      const retryAfter = Math.ceil(;)
+      const retryAfter = Math.ceil(;);
         (backoffState.nextAllowedTime.getTime() - Date.now()) / 1000
       );
       return {
@@ -272,7 +272,7 @@ export class RateLimitingService extends EventEmitter {
     this.emit('exemptionAdded', {)
       identifier,
       reason,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -283,7 +283,7 @@ export class RateLimitingService extends EventEmitter {
     if (removed) {
       this.emit('exemptionRemoved', {)
         identifier,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
     return removed;
@@ -346,7 +346,6 @@ export class RateLimitingService extends EventEmitter {
     activeBackoffs: number;
     threatLevels: Record<ThreatLevel, number>;
     topEndpoints: Array<{ endpoint: string; attempts: number }>;
-    } {
     let totalAttempts = 0;
     let blockedAttempts = 0;
     const threatCounts: Record<ThreatLevel, number> = {
@@ -550,7 +549,7 @@ export class RateLimitingService extends EventEmitter {
     const recentFailures = recentAttempts.filter(a => !a.success).length;
     threatScore += recentFailures * 10;
     // Rapid requests increase threat
-    const last5MinuteAttempts = recentAttempts.filter(;)
+    const last5MinuteAttempts = recentAttempts.filter(;);
       a => a.timestamp > new Date(Date.now() - 5 * 60 * 1000)
     ).length;
     if (last5MinuteAttempts > 10) threatScore += 20;
@@ -589,7 +588,7 @@ export class RateLimitingService extends EventEmitter {
         nextAllowedTime: new Date(),
         consecutiveFailures: 0,
         totalFailures: 0,
-        lastFailureTime: new Date()
+        lastFailureTime: new Date(),
       };
     }
     if (success) {
@@ -642,7 +641,7 @@ export class RateLimitingService extends EventEmitter {
       perSecond: Math.ceil(config.limits.perSecond * multiplier),
       perMinute: Math.ceil(config.limits.perMinute * multiplier),
       perHour: Math.ceil(config.limits.perHour * multiplier),
-      perDay: Math.ceil(config.limits.perDay * multiplier)
+      perDay: Math.ceil(config.limits.perDay * multiplier),
     };
   }
   private evaluateRateLimits(attempts: RateLimitAttempt[], limits: any): {
@@ -652,7 +651,6 @@ export class RateLimitingService extends EventEmitter {
     resetTime: Date;
     retryAfter?: number;
     limit: number;
-  } {
     const now = new Date();
     // Check per-second limit
     const lastSecond = attempts.filter(a => a.timestamp > new Date(now.getTime() - 1000));
@@ -707,7 +705,7 @@ export class RateLimitingService extends EventEmitter {
     }
     // Update behavior patterns
     const recentAttempts = this.getRecentAttempts(identifier, attempt.endpoint);
-    const last5Minutes = recentAttempts.filter(;)
+    const last5Minutes = recentAttempts.filter(;);
       a => a.timestamp > new Date(Date.now() - 5 * 60 * 1000)
     );
     context.behaviorPattern.rapidRequests = last5Minutes.length > 20;

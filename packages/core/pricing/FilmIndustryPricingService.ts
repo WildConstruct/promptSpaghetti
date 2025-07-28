@@ -52,7 +52,7 @@ export interface ProjectPricingRequest {
 }
 
 export interface ProjectDeliverable {
-  type: 'script_analysis' | 'character_profiles' | 'scene_breakdown' | 'dialogue_generation' | 
+  type: 'script_analysis' | 'character_profiles' | 'scene_breakdown' | 'dialogue_generation' | ,
         'storyboard_concepts' | 'visual_references' | 'marketing_taglines' | 'synopsis_variants';
   quantity: number;
   complexity: 'basic' | 'standard' | 'premium' | 'custom';
@@ -329,7 +329,6 @@ export class FilmIndustryPricingService extends EventEmitter {
     seasonalPatterns: Array<{ period: string; multiplier: number }>;
     emergingServices: string[];
     competitiveLandscape: Array<{ category: string; competitorCount: number; priceRange: { min: number; max: number } }>;
-    } {
     return {
       averagePricing: {,
         'script_analysis': 2500,
@@ -406,7 +405,7 @@ export class FilmIndustryPricingService extends EventEmitter {
       expectedImpact: {,
         revenueChange: 15, // 15% increase
         volumeChange: -5,  // 5% decrease in volume
-        marginChange: 22   // 22% margin improvement
+        marginChange: 22   // 22% margin improvement,
       },
       implementationPlan: [,
         {
@@ -477,7 +476,6 @@ export class FilmIndustryPricingService extends EventEmitter {
     tierMultiplier: number;
     loyaltyMultiplier: number;
     volumeMultiplier: number;
-  } {
     const tierMultipliers = {
       'independent': 0.8,
       'mid_tier': 1.0,
@@ -493,7 +491,7 @@ export class FilmIndustryPricingService extends EventEmitter {
     return {
       tierMultiplier: tierMultipliers[studio.tier],
       loyaltyMultiplier: loyaltyMultipliers[studio.loyaltyStatus],
-      volumeMultiplier: studio.productionVolume > 20 ? 0.9 : 1.0
+      volumeMultiplier: studio.productionVolume > 20 ? 0.9 : 1.0,
     };
   }
   private calculateProjectAdjustments(request: ProjectPricingRequest): {
@@ -502,7 +500,6 @@ export class FilmIndustryPricingService extends EventEmitter {
     genreMultiplier: number;
     budgetMultiplier: number;
     distributionMultiplier: number;
-  } {
     // Timeline urgency multiplier
     const timeline = request.projectDetails.timeline;
     const projectDuration = (timeline.endDate - timeline.startDate) / (24 * 60 * 60 * 1000);
@@ -512,7 +509,7 @@ export class FilmIndustryPricingService extends EventEmitter {
       timelineMultiplier,
       genreMultiplier: this.genreMultipliers.get(request.projectDetails.genre) || 1.0,
       budgetMultiplier: 1.0, // Already calculated in base price
-      distributionMultiplier: request.projectDetails.distributionPlan.length > 3 ? 1.2 : 1.0
+      distributionMultiplier: request.projectDetails.distributionPlan.length > 3 ? 1.2 : 1.0,
     };
   }
   private calculateDeliverablesPricing(request: ProjectPricingRequest): {
@@ -524,7 +521,6 @@ export class FilmIndustryPricingService extends EventEmitter {
       subtotal: number;
       complexity: string;
     }>;
-  } {
     const breakdown: Array<{
       deliverable: string;
       quantity: number;
@@ -554,7 +550,6 @@ export class FilmIndustryPricingService extends EventEmitter {
     volumeDiscount: number;
     rushPremium: number;
     seasonalAdjustment: number;
-  } {
     const loyaltyDiscounts = {
       'new': 0,
       'standard': 0.05,
@@ -583,14 +578,14 @@ export class FilmIndustryPricingService extends EventEmitter {
           percentage: 50,
           amount: totalAmount * 0.5,
           dueDate: request.projectDetails.timeline.startDate,
-          description: 'Initial payment upon project commencement'
+          description: 'Initial payment upon project commencement',
         },
         {
           milestone: 'Project Completion',
           percentage: 50,
           amount: totalAmount * 0.5,
           dueDate: request.projectDetails.timeline.deliveryDate,
-          description: 'Final payment upon delivery'
+          description: 'Final payment upon delivery',
         }
       );
     }
@@ -615,7 +610,7 @@ export class FilmIndustryPricingService extends EventEmitter {
       breakdown: {,
         basePrice: components.basePrice,
         deliverables: components.deliverablesPricing.total,
-        adjustments: final - components.basePrice - components.deliverablesPricing.total
+        adjustments: final - components.basePrice - components.deliverablesPricing.total,
       }
     };
   }
@@ -624,7 +619,7 @@ export class FilmIndustryPricingService extends EventEmitter {
       studioId,
       period: {,
         start: Date.now(),
-        end: Date.now() + 90 * 24 * 60 * 60 * 1000 // 90 days
+        end: Date.now() + 90 * 24 * 60 * 60 * 1000 // 90 days,
       },
       totalRevenue: 0,
       averageProjectValue: 0,
@@ -735,7 +730,7 @@ export class FilmIndustryPricingService extends EventEmitter {
     return {
       industryAverage: 12000,
       tierAverage: studio.tier === 'major_studio' ? 18000 : 8000,
-      performanceRank: 65 // Out of 100
+      performanceRank: 65 // Out of 100,
     };
   }
   private getCurrentStudioPricing(studioId: string): Record<string, number> {

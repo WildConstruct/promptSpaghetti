@@ -142,12 +142,12 @@ export class SecurityAuditLogger {
   /**
    * Log a security event
    */
-  logEvent()
+  logEvent();
     severity: SecuritySeverity,
     category: SecurityEventCategory,
     message: string,
     context: SecurityEventContext = {},
-    blocked: boolean = false
+    blocked: boolean = false,
   ): string {
     const eventId = this.generateEventId();
     const event: SecurityAuditEvent = {
@@ -158,7 +158,7 @@ export class SecurityAuditLogger {
       message,
       context: {,
         ...context,
-        stackTrace: this.config.enableStackTraces ? this.captureStackTrace() : undefined
+        stackTrace: this.config.enableStackTraces ? this.captureStackTrace() : undefined,
       },
       blocked
     };
@@ -306,7 +306,7 @@ export class SecurityAuditLogger {
     } else {
       // CSV export
       const headers = ['id', 'timestamp', 'severity', 'category', 'message', 'blocked', 'expression', 'nodeType'];
-      const rows = this.events.map(e => [;)
+      const rows = this.events.map(e => [;);
         e.id,
         new Date(e.timestamp).toISOString(),
         e.severity,
@@ -420,7 +420,7 @@ export const securityAudit = SecurityAuditLogger.getInstance();
  */
 export function auditSecurityEvent()
   severity: SecuritySeverity = SecuritySeverity.INFO,
-  category: SecurityEventCategory = SecurityEventCategory.EXPRESSION_VALIDATION
+  category: SecurityEventCategory = SecurityEventCategory.EXPRESSION_VALIDATION,
 ): MethodDecorator {
   return function ()
     target: unknown,

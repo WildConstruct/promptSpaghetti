@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './SubmissionReview.css';
-
 interface SubmissionData {
   title: string;
   description: string;
@@ -24,7 +23,6 @@ interface SubmissionData {
   is_first_submission: boolean;
   previous_version_id?: string;
 }
-
 interface ValidationResult {
   id: string;
   rule_id: string;
@@ -37,7 +35,6 @@ interface ValidationResult {
     field?: string;
   };
 }
-
 interface SubmissionDetails {
   id: string;
   template_id: string;
@@ -54,15 +51,13 @@ interface SubmissionDetails {
   created_at: string;
   updated_at: string;
 }
-
 interface ReviewFeedback {
   category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';
   rating: number;
   comments: string;
   suggestions: string[];
 }
-
-const FEEDBACK_CATEGORIES = [
+const FEEDBACK_CATEGORIES = [;
   { id: 'content', label: 'Content Quality', description: 'Originality, usefulness, and relevance' },
   { id: 'quality', label: 'Technical Quality', description: 'Code structure, performance, and reliability' },
   { id: 'compliance', label: 'Policy Compliance', description: 'Adherence to platform guidelines and policies' },
@@ -79,35 +74,31 @@ export const SubmissionReview: React.FC = () => {
   const [decision, setDecision] = useState<'approved' | 'rejected' | 'changes_requested' | ''>('');
   const [overallScore, setOverallScore] = useState(75);
   const [comments, setComments] = useState('');
-  const [detailedFeedback, setDetailedFeedback] = useState<ReviewFeedback[]>(
-    FEEDBACK_CATEGORIES.map(cat => ({
+  const [detailedFeedback, setDetailedFeedback] = useState<ReviewFeedback[]>()
+    FEEDBACK_CATEGORIES.map(cat => ({)
       category: cat.id as 'content' | 'quality' | 'compliance' | 'usability' | 'technical',
       rating: 3,
       comments: '',
-      suggestions: []
+      suggestions: [],
     }))
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   useEffect(() => {
     if (id) {
       fetchSubmission(id);
     }
   }, [id]);
-
   const fetchSubmission = async (submissionId: string) => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/marketplace/submissions/${submissionId}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+      const response = await fetch(`/api/marketplace/submissions/${submissionId}`, {)}
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
         }
       });
-
       if (!response.ok) {
         throw new Error('Failed to fetch submission');
       }
-
       const data = await response.json();
       setSubmission(data);
     } catch (err) {
@@ -116,59 +107,50 @@ export const SubmissionReview: React.FC = () => {
       setIsLoading(false);
     }
   };
-
   const handleFeedbackChange = (index: number, field: keyof ReviewFeedback, value: Error) => {
     const updated = [...detailedFeedback];
     updated[index] = { ...updated[index], [field]: value };
     setDetailedFeedback(updated);
   };
-
   const handleSuggestionChange = (feedbackIndex: number, suggestionIndex: number, value: string) => {
     const updated = [...detailedFeedback];
     updated[feedbackIndex].suggestions[suggestionIndex] = value;
     setDetailedFeedback(updated);
   };
-
   const addSuggestion = (feedbackIndex: number) => {
     const updated = [...detailedFeedback];
     updated[feedbackIndex].suggestions.push('');
     setDetailedFeedback(updated);
   };
-
   const removeSuggestion = (feedbackIndex: number, suggestionIndex: number) => {
     const updated = [...detailedFeedback];
     updated[feedbackIndex].suggestions.splice(suggestionIndex, 1);
     setDetailedFeedback(updated);
   };
-
   const handleSubmitReview = async () => {
     if (!decision || !comments.trim()) {
       alert('Please provide a decision and comments');
       return;
     }
-
     if (!submission) return;
-
     try {
       setIsSubmitting(true);
-      const response = await fetch(`/api/marketplace/submissions/${submission.id}/review`, {
+      const response = await fetch(`/api/marketplace/submissions/${submission.id}/review`, {)}
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('token')}`}
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           decision,
           score: overallScore,
           comments,
-          detailed_feedback: detailedFeedback.filter(f => f.comments.trim())
+          detailed_feedback: detailedFeedback.filter(f => f.comments.trim()),
         })
       });
-
       if (!response.ok) {
         throw new Error('Failed to submit review');
       }
-
       navigate('/marketplace/admin/review-queue');
     } catch (err) {
       console.error('Review submission failed:', err);
@@ -177,38 +159,33 @@ export const SubmissionReview: React.FC = () => {
       setIsSubmitting(false);
     }
   };
-
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('en-US', {)
       year: 'numeric',
       month: 'long',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
-
   const formatPrice = (cents: number) => {
-    return cents === 0 ? 'Free' : `$${(cents / 100).toFixed(2)}`;
+    return cents === 0 ? 'Free' : `$${(cents / 100).toFixed(2)}`;}
   };
-
   const getValidationSummary = (validation: ValidationResult[]) => {
     const errors = validation.filter(v => v.severity === 'error').length;
     const warnings = validation.filter(v => v.severity === 'warning').length;
     const info = validation.filter(v => v.severity === 'info').length;
     return { errors, warnings, info };
   };
-
   if (isLoading) {
-    return (
+    return ()
       <div className="submission-review loading">
         <div className="loading-spinner">Loading submission...</div>
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="submission-review error">
         <div className="error-message">
           <h3>Error loading submission</h3>
@@ -220,9 +197,8 @@ export const SubmissionReview: React.FC = () => {
       </div>
     );
   }
-
   if (!submission) {
-    return (
+    return ()
       <div className="submission-review error">
         <div className="error-message">
           <h3>Submission not found</h3>
@@ -233,11 +209,9 @@ export const SubmissionReview: React.FC = () => {
       </div>
     );
   }
-
   const validation = getValidationSummary(submission.validation_results);
   const data = submission.submission_data;
-
-  return (
+  return ()
     <div className="submission-review">
       <div className="review-header">
         <div className="submission-info">
@@ -259,7 +233,6 @@ export const SubmissionReview: React.FC = () => {
           </button>
         </div>
       </div>
-
       <div className="review-content">
         <div className="submission-details">
           <div className="detail-section">
@@ -289,13 +262,12 @@ export const SubmissionReview: React.FC = () => {
             <div className="detail-item">
               <label>Tags</label>
               <div className="tags-list">
-                {data.tags.map(tag => (
+                {data.tags.map(tag => ()
                   <span key={tag} className="tag">{tag}</span>
                 ))}
               </div>
             </div>
           </div>
-
           <div className="detail-section">
             <h3>Technical Details</h3>
             <div className="detail-grid">
@@ -314,7 +286,7 @@ export const SubmissionReview: React.FC = () => {
                 <pre>{JSON.stringify(data.graph_json, null, 2)}</pre>
               </div>
             </div>
-            {data.prompt_yaml && (
+            {data.prompt_yaml && ()
               <div className="detail-item">
                 <label>Prompt YAML</label>
                 <div className="code-preview">
@@ -323,37 +295,36 @@ export const SubmissionReview: React.FC = () => {
               </div>
             )}
           </div>
-
           <div className="detail-section">
             <h3>Content Information</h3>
             <div className="detail-item">
               <label>Intended Use Cases</label>
               <ul>
-                {data.intended_use_cases.map((useCase, index) => (
+                {data.intended_use_cases.map((useCase, index) => ()
                   <li key={index}>{useCase}</li>
                 ))}
               </ul>
             </div>
             <div className="detail-item">
               <label>Example Outputs</label>
-              {data.example_outputs.map((output, index) => (
+              {data.example_outputs.map((output, index) => ()
                 <div key={index} className="example-output">
                   <strong>Example {index + 1}:</strong>
                   <p>{output}</p>
                 </div>
               ))}
             </div>
-            {data.technical_requirements.length > 0 && (
+            {data.technical_requirements.length > 0 && ()
               <div className="detail-item">
                 <label>Technical Requirements</label>
                 <ul>
-                  {data.technical_requirements.map((req, index) => (
+                  {data.technical_requirements.map((req, index) => ()
                     <li key={index}>{req}</li>
                   ))}
                 </ul>
               </div>
             )}
-            {data.documentation_md && (
+            {data.documentation_md && ()
               <div className="detail-item">
                 <label>Documentation</label>
                 <div className="documentation-preview">
@@ -361,15 +332,14 @@ export const SubmissionReview: React.FC = () => {
                 </div>
               </div>
             )}
-            {data.moderation_notes && (
+            {data.moderation_notes && ()
               <div className="detail-item">
                 <label>Moderation Notes</label>
                 <div className="moderation-notes">{data.moderation_notes}</div>
               </div>
             )}
           </div>
-
-          {submission.validation_results.length > 0 && (
+          {submission.validation_results.length > 0 && ()
             <div className="detail-section">
               <h3>Validation Results</h3>
               <div className="validation-summary">
@@ -384,13 +354,13 @@ export const SubmissionReview: React.FC = () => {
                 </div>
               </div>
               <div className="validation-details">
-                {submission.validation_results.map(result => (
-                  <div key={result.id} className={`validation-item ${result.severity}`}>
+                {submission.validation_results.map(result => ()
+                  <div key={result.id} className={`validation-item ${result.severity}`}>}
                     <div className="validation-header">
                       <span className="severity">{result.severity}</span>
                       <span className="message">{result.message}</span>
                     </div>
-                    {result.suggested_fix && (
+                    {result.suggested_fix && ()
                       <div className="suggested-fix">
                         <strong>Suggested Fix:</strong> {result.suggested_fix}
                       </div>
@@ -401,10 +371,8 @@ export const SubmissionReview: React.FC = () => {
             </div>
           )}
         </div>
-
         <div className="review-form">
           <h3>Review & Decision</h3>
-          
           <div className="form-section">
             <label>Decision *</label>
             <div className="decision-options">
@@ -440,7 +408,6 @@ export const SubmissionReview: React.FC = () => {
               </label>
             </div>
           </div>
-
           <div className="form-section">
             <label>Overall Score (1-100) *</label>
             <input
@@ -452,7 +419,6 @@ export const SubmissionReview: React.FC = () => {
             />
             <div className="score-display">{overallScore}/100</div>
           </div>
-
           <div className="form-section">
             <label>Comments *</label>
             <textarea
@@ -464,15 +430,13 @@ export const SubmissionReview: React.FC = () => {
             />
             <small>{comments.length}/2000 characters</small>
           </div>
-
           <div className="form-section">
             <label>Detailed Feedback</label>
             <div className="feedback-sections">
-              {FEEDBACK_CATEGORIES.map((category, index) => (
+              {FEEDBACK_CATEGORIES.map((category, index) => ()
                 <div key={category.id} className="feedback-section">
                   <h4>{category.label}</h4>
                   <p className="category-description">{category.description}</p>
-                  
                   <div className="rating-input">
                     <label>Rating (1-5)</label>
                     <input
@@ -484,7 +448,6 @@ export const SubmissionReview: React.FC = () => {
                     />
                     <span className="rating-value">{detailedFeedback[index].rating}/5</span>
                   </div>
-
                   <div className="comments-input">
                     <textarea
                       value={detailedFeedback[index].comments}
@@ -494,10 +457,9 @@ export const SubmissionReview: React.FC = () => {
                       maxLength={1000}
                     />
                   </div>
-
                   <div className="suggestions-input">
                     <label>Suggestions</label>
-                    {detailedFeedback[index].suggestions.map((suggestion, suggestionIndex) => (
+                    {detailedFeedback[index].suggestions.map((suggestion, suggestionIndex) => ()
                       <div key={suggestionIndex} className="suggestion-item">
                         <input
                           type="text"
@@ -526,7 +488,6 @@ export const SubmissionReview: React.FC = () => {
               ))}
             </div>
           </div>
-
           <div className="form-actions">
             <button 
               className="btn-primary"

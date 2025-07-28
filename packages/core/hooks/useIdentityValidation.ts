@@ -75,7 +75,7 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
       return { success: false, error: 'User ID is required' };
     }
     try {
-      const result = await identityValidationService.submitValidationRequest(;)
+      const result = await identityValidationService.submitValidationRequest(;);
         userId,
         'email_verification',
         { email },
@@ -91,7 +91,7 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Email verification failed'
+        error: error instanceof Error ? error.message : 'Email verification failed',
       };
     }
   }, [userId, loadUserData]);
@@ -103,7 +103,7 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
       return { success: false, error: 'User ID is required' };
     }
     try {
-      const result = await identityValidationService.submitValidationRequest(;)
+      const result = await identityValidationService.submitValidationRequest(;);
         userId,
         'phone_verification',
         { phoneNumber },
@@ -118,21 +118,21 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Phone verification failed'
+        error: error instanceof Error ? error.message : 'Phone verification failed',
       };
     }
   }, [userId, loadUserData]);
   /**
    * Submit government ID verification
    */
-  const submitGovernmentIdVerification = useCallback(async (;)
+  const submitGovernmentIdVerification = useCallback(async (;);
     governmentIdData: NonNullable<IdentityValidationData['governmentId']>,
   ): Promise<ValidationSubmissionResult> => {
     if (!userId) {
       return { success: false, error: 'User ID is required' };
     }
     try {
-      const result = await identityValidationService.submitValidationRequest(;)
+      const result = await identityValidationService.submitValidationRequest(;);
         userId,
         'government_id',
         { governmentId: governmentIdData },
@@ -147,21 +147,21 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Government ID verification failed'
+        error: error instanceof Error ? error.message : 'Government ID verification failed',
       };
     }
   }, [userId, loadUserData]);
   /**
    * Submit professional credentials verification
    */
-  const submitProfessionalCredentials = useCallback(async (;)
+  const submitProfessionalCredentials = useCallback(async (;);
     professionalData: NonNullable<IdentityValidationData['professionalCredentials']>,
   ): Promise<ValidationSubmissionResult> => {
     if (!userId) {
       return { success: false, error: 'User ID is required' };
     }
     try {
-      const result = await identityValidationService.submitValidationRequest(;)
+      const result = await identityValidationService.submitValidationRequest(;);
         userId,
         'professional_credentials',
         { professionalCredentials: professionalData },
@@ -176,21 +176,21 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Professional credentials verification failed'
+        error: error instanceof Error ? error.message : 'Professional credentials verification failed',
       };
     }
   }, [userId, loadUserData]);
   /**
    * Submit social media verification
    */
-  const submitSocialMediaVerification = useCallback(async (;)
+  const submitSocialMediaVerification = useCallback(async (;);
     socialMediaData: NonNullable<IdentityValidationData['socialMediaProfiles']>,
   ): Promise<ValidationSubmissionResult> => {
     if (!userId) {
       return { success: false, error: 'User ID is required' };
     }
     try {
-      const result = await identityValidationService.submitValidationRequest(;)
+      const result = await identityValidationService.submitValidationRequest(;);
         userId,
         'social_media_verification',
         { socialMediaProfiles: socialMediaData },
@@ -205,21 +205,21 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Social media verification failed'
+        error: error instanceof Error ? error.message : 'Social media verification failed',
       };
     }
   }, [userId, loadUserData]);
   /**
    * Submit portfolio verification
    */
-  const submitPortfolioVerification = useCallback(async (;)
+  const submitPortfolioVerification = useCallback(async (;);
     portfolioData: NonNullable<IdentityValidationData['professionalCredentials']>['portfolio'],
   ): Promise<ValidationSubmissionResult> => {
     if (!userId) {
       return { success: false, error: 'User ID is required' };
     }
     try {
-      const result = await identityValidationService.submitValidationRequest(;)
+      const result = await identityValidationService.submitValidationRequest(;);
         userId,
         'portfolio_verification',
         { professionalCredentials: { portfolio: portfolioData } as any },
@@ -234,7 +234,7 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Portfolio verification failed'
+        error: error instanceof Error ? error.message : 'Portfolio verification failed',
       };
     }
   }, [userId, loadUserData]);
@@ -278,7 +278,7 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
         title: 'Verify Email Address',
         description: 'Confirm your email address to enable account security features',
         priority: 'high' as const,
-        requiredFor: 'Basic verification'
+        requiredFor: 'Basic verification',
       });
     }
     if (missing.includes('phone_verification')) {
@@ -287,7 +287,7 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
         title: 'Verify Phone Number',
         description: 'Add two-factor authentication and account recovery options',
         priority: 'high' as const,
-        requiredFor: 'Account security'
+        requiredFor: 'Account security',
       });
     }
     if (missing.includes('professional_credentials')) {
@@ -296,7 +296,7 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
         title: 'Add Professional Credentials',
         description: 'Showcase your education, certifications, and industry experience',
         priority: 'medium' as const,
-        requiredFor: 'Professional tier access'
+        requiredFor: 'Professional tier access',
       });
     }
     if (missing.includes('portfolio_verification')) {
@@ -305,7 +305,7 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
         title: 'Verify Portfolio',
         description: 'Link your professional work to build credibility',
         priority: 'medium' as const,
-        requiredFor: 'Creator marketplace'
+        requiredFor: 'Creator marketplace',
       });
     }
     if (missing.includes('social_media_verification')) {
@@ -314,7 +314,7 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
         title: 'Connect Social Profiles',
         description: 'Link your LinkedIn, IMDb, or other professional profiles',
         priority: 'low' as const,
-        requiredFor: 'Community features'
+        requiredFor: 'Community features',
       });
     }
     if (missing.includes('government_id')) {
@@ -323,7 +323,7 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
         title: 'Government ID Verification',
         description: 'Complete identity verification for premium features',
         priority: 'medium' as const,
-        requiredFor: 'Payment processing'
+        requiredFor: 'Payment processing',
       });
     }
     return steps.sort((a, b) => {

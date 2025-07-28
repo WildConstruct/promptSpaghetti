@@ -57,7 +57,7 @@ export interface CRDTGraph {
 export interface CRDTNode {
     id: string;
     type: 'WeightedChoice' | 'Concat' | 'Output' | 'SetVariable' | 'GetVariable' | 'Include' | string;
-    position: {
+    position: {,
         x: number;
         y: number;
     };

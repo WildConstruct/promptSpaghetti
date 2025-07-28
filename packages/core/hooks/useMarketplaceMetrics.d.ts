@@ -33,7 +33,7 @@ export declare const useMarketplaceMetrics: (config?: MarketplaceMetricsConfig) 
     getTemplateAnalytics: (templateId: string) => TemplateMetrics | null;
     getCreatorAnalytics: (creatorId: string) => CreatorMetrics | null;
     getTopPerformingTemplates: (metric?: "revenue" | "downloads" | "rating", limit?: number) => TemplateMetrics[];
-    getSearchAnalytics: () => {
+    getSearchAnalytics: () => {,
         topQueries: Array<{,
             query: string;
             count: number;

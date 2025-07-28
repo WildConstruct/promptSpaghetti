@@ -149,7 +149,7 @@ export class UTDGFoundation {
           tags: ['historical_era', 'chronology'],
           confidence: 1.0,
           sources: ['Historical academic sources'],
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         },
         relationships: [],
       };
@@ -174,7 +174,7 @@ export class UTDGFoundation {
           tags: ['literary_genre', 'creative_writing'],
           confidence: 1.0,
           sources: ['Literary theory', 'Genre studies'],
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         },
         relationships: [],
       };
@@ -200,7 +200,7 @@ export class UTDGFoundation {
           tags: ['social_class', 'hierarchy', 'society'],
           confidence: 0.9,
           sources: ['Social history', 'Medieval studies'],
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         },
         relationships: [],
       };
@@ -232,10 +232,10 @@ export class UTDGFoundation {
         metadata: {,
           era: 'medieval',
           tags: ['clothing', 'material_culture', clothing.socialClass, clothing.gender],
-          confidence: clothing.historicalAccuracy === 'high' ? 0.9 : 
+          confidence: clothing.historicalAccuracy === 'high' ? 0.9 : ,
                      clothing.historicalAccuracy === 'medium' ? 0.7 : 0.5,
           sources: clothing.sources,
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         },
         relationships: [],
       };
@@ -249,7 +249,7 @@ export class UTDGFoundation {
           type: 'requires',
           strength: 0.8,
           direction: 'sourceToTarget',
-          context: 'Appropriate social class for wearing this clothing'
+          context: 'Appropriate social class for wearing this clothing',
         });
       }
     }
@@ -274,7 +274,7 @@ export class UTDGFoundation {
           tags: ['material', 'trade', 'economy', material.type],
           confidence: 0.9,
           sources: ['Archaeological evidence', 'Trade records'],
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         },
         relationships: [],
       };
@@ -301,7 +301,7 @@ export class UTDGFoundation {
           tags: ['character', 'person', character.profession, character.socialClass],
           confidence: 0.8,
           sources: ['Historical records', 'Archaeological evidence'],
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         },
         relationships: [],
       };
@@ -329,7 +329,7 @@ export class UTDGFoundation {
           tags: ['location', 'setting', location.type],
           confidence: 0.9,
           sources: ['Archaeological sites', 'Historical documents'],
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         },
         relationships: [],
       };
@@ -350,7 +350,7 @@ export class UTDGFoundation {
         type: 'temporal',
         strength: 1.0,
         direction: 'sourceToTarget',
-        context: 'Historical chronological progression'
+        context: 'Historical chronological progression',
       });
     }
     // Social hierarchy relationships
@@ -363,7 +363,7 @@ export class UTDGFoundation {
         type: 'influences',
         strength: 0.8,
         direction: 'targetToSource',
-        context: 'Social hierarchy and power structure'
+        context: 'Social hierarchy and power structure',
       });
     }
     // Genre compatibility relationships
@@ -374,7 +374,7 @@ export class UTDGFoundation {
       type: 'requires',
       strength: 0.9,
       direction: 'sourceToTarget',
-      context: 'Historical fiction often set in medieval period'
+      context: 'Historical fiction often set in medieval period',
     });
     this.addRelationship({)
       id: 'fantasy_medieval_influences',
@@ -383,7 +383,7 @@ export class UTDGFoundation {
       type: 'influences',
       strength: 0.7,
       direction: 'sourceToTarget',
-      context: 'Fantasy genre draws heavily from medieval aesthetics'
+      context: 'Fantasy genre draws heavily from medieval aesthetics',
     });
   }
   /**
@@ -467,7 +467,7 @@ export class UTDGFoundation {
       maxResults: 20,
     });
     // Generate character suggestions
-    const characters = relevantNodes.filter(node => ;)
+    const characters = relevantNodes.filter(node => ;);
       node.metadata.tags.includes('character') || node.type === 'entity' && node.id.startsWith('character_')
     );
     if (characters.length > 0) {
@@ -481,7 +481,7 @@ export class UTDGFoundation {
       });
     }
     // Generate setting suggestions
-    const settings = relevantNodes.filter(node => ;)
+    const settings = relevantNodes.filter(node => ;);
       node.metadata.tags.includes('location') || node.metadata.tags.includes('setting')
     );
     if (settings.length > 0) {
@@ -495,7 +495,7 @@ export class UTDGFoundation {
       });
     }
     // Generate object suggestions
-    const objects = relevantNodes.filter(node => ;)
+    const objects = relevantNodes.filter(node => ;);
       node.metadata.tags.includes('clothing') || 
       node.metadata.tags.includes('material') ||
       node.metadata.tags.includes('object')
@@ -519,7 +519,6 @@ export class UTDGFoundation {
     score: number;
     violations: string[];
     suggestions: string[];
-  } {
     const violations: string[] = [];
     const suggestions: string[] = [];
     let score = node.metadata.confidence;
@@ -702,7 +701,6 @@ export class UTDGFoundation {
     nodesByType: Record<string, number>;
     nodesByEra: Record<string, number>;
     averageConfidence: number;
-  } {
     const nodesByType: Record<string, number> = {};
     const nodesByEra: Record<string, number> = {};
     let totalConfidence = 0;
@@ -718,7 +716,7 @@ export class UTDGFoundation {
       totalRelationships: this.relationships.size,
       nodesByType,
       nodesByEra,
-      averageConfidence: this.nodes.size > 0 ? totalConfidence / this.nodes.size : 0
+      averageConfidence: this.nodes.size > 0 ? totalConfidence / this.nodes.size : 0,
     };
   }
   /**
@@ -732,7 +730,6 @@ export class UTDGFoundation {
       version: string;
       stats: any;
     };
-  } {
     return {
       nodes: Array.from(this.nodes.values()),
       relationships: Array.from(this.relationships.values()),

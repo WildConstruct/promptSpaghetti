@@ -39,7 +39,7 @@ export class NodeAdapter {
         ...baseUI,
         type: 'SetVariable',
         variableName: internal.key || '',
-        value: internal.value || ''
+        value: internal.value || '',
       };
     case 'GetVariable':
       return {
@@ -73,16 +73,16 @@ export class NodeAdapter {
   static toInternal(ui: UINode, existingId?: string): InternalNode {
     const baseInternal = {
       id: existingId || uuidv4(),
-      inputs: [] // Will be set by graph connection logic
+      inputs: [] // Will be set by graph connection logic,
     };
     switch (ui.type) {
     case 'WeightedChoice':
       return {
         ...baseInternal,
         type: 'WeightedChoice',
-        choices: ui.choices.map(choice => ({)
+        choices: ui.choices.map(choice => ({),
           value: choice,
-          weight: 1 // Default equal weights
+          weight: 1 // Default equal weights,
         }))
       };
     case 'Concat':
@@ -114,7 +114,7 @@ export class NodeAdapter {
       return {
         ...baseInternal,
         type: 'Conditional',
-        branches: ui.conditions.map(condition => ({)
+        branches: ui.conditions.map(condition => ({),
           condition: condition.when,
           output: condition.then,
           label: condition.label,

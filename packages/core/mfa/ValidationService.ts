@@ -102,11 +102,10 @@ export class ValidationService extends EventEmitter {
   private generator: SecureCodeGenerator;
   private config: ValidationServiceConfig;
   private cleanupInterval?: NodeJS.Timeout;
-  constructor()
+  constructor();
     private storage: VerificationCodeStorage,
     private rateLimiter: RateLimiter,
     config?: Partial<ValidationServiceConfig>
-  ) {
     super();
     this.generator = new SecureCodeGenerator();
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -142,7 +141,7 @@ export class ValidationService extends EventEmitter {
     // Rate limiting check
     if (this.config.rateLimiting.enabled) {
       const rateLimitKey = `generate:${userId}`;}
-      const allowed = await this.rateLimiter.isAllowed(;)
+      const allowed = await this.rateLimiter.isAllowed(;);
         rateLimitKey,
         this.config.rateLimiting.maxGenerationsPerHour,
         60 * 60 * 1000 // 1 hour
@@ -152,7 +151,7 @@ export class ValidationService extends EventEmitter {
           type: 'generation',
           userId,
           ipAddress,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
         throw new Error('Rate limit exceeded for code generation');
       }
@@ -162,7 +161,7 @@ export class ValidationService extends EventEmitter {
     // Generate the code
     const code = this.generator.generateCode({ length, format });
     // Create verification code data
-    const verificationCode = await this.generator.createVerificationCode(;)
+    const verificationCode = await this.generator.createVerificationCode(;);
       code,
       userId,
       purpose,
@@ -180,7 +179,7 @@ export class ValidationService extends EventEmitter {
       userId,
       purpose,
       metadata: { codeLength: length, format },
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return { code, id: verificationCode.id };
   }
@@ -203,7 +202,7 @@ export class ValidationService extends EventEmitter {
     // Rate limiting check
     if (this.config.rateLimiting.enabled && userId) {
       const rateLimitKey = `validate:${userId}`;}
-      const allowed = await this.rateLimiter.isAllowed(;)
+      const allowed = await this.rateLimiter.isAllowed(;);
         rateLimitKey,
         this.config.rateLimiting.maxValidationAttemptsPerHour,
         60 * 60 * 1000
@@ -213,7 +212,7 @@ export class ValidationService extends EventEmitter {
           type: 'validation',
           userId,
           ipAddress,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
         return {
           valid: false,
@@ -233,7 +232,7 @@ export class ValidationService extends EventEmitter {
         reason: 'not_found',
         ipAddress,
         userAgent,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return {
         valid: false,
@@ -248,7 +247,7 @@ export class ValidationService extends EventEmitter {
         codeId,
         storedUserId: storedCode.userId,
         ipAddress,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return {
         valid: false,
@@ -263,7 +262,7 @@ export class ValidationService extends EventEmitter {
         expectedPurpose: purpose,
         actualPurpose: storedCode.purpose,
         ipAddress,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return {
         valid: false,
@@ -291,7 +290,7 @@ export class ValidationService extends EventEmitter {
       reason: result.reason,
       ipAddress,
       userAgent,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     // Increment rate limiting counter
     if (this.config.rateLimiting.enabled && userId) {
@@ -310,7 +309,7 @@ export class ValidationService extends EventEmitter {
       reason: result.reason,
       attempts: result.code?.attempts || 0,
       ipAddress,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return result;
   }
@@ -350,7 +349,7 @@ export class ValidationService extends EventEmitter {
     await this.storage.update(codeId, { used: true });
     this.emit('codeInvalidated', {)
       id: codeId,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -367,7 +366,7 @@ export class ValidationService extends EventEmitter {
       userId,
       purpose,
       count: codes.length,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -402,7 +401,7 @@ export class ValidationService extends EventEmitter {
     const deletedCount = await this.storage.deleteExpired();
     this.emit('expiredCodesCleanup', {)
       deletedCount,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return deletedCount;
   }
@@ -468,7 +467,7 @@ export class ValidationService extends EventEmitter {
   ): Promise<void> {
     // Check for rapid-fire attempts
     const recentCodes = await this.storage.findByUser(userId);
-    const recentAttempts = recentCodes.filter(code => ;)
+    const recentAttempts = recentCodes.filter(code => ;);
       Date.now() - code.createdAt.getTime() < 5 * 60 * 1000 && // Last 5 minutes
       code.attempts > 0
     );
@@ -481,7 +480,7 @@ export class ValidationService extends EventEmitter {
           timeWindow: '5 minutes',
           ipAddress
         },
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
     // Check for enumeration attacks (using expired codes)
@@ -496,7 +495,7 @@ export class ValidationService extends EventEmitter {
           attempts: code.attempts,
           ipAddress
         },
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -506,7 +505,7 @@ export class ValidationService extends EventEmitter {
 export function createValidationService()
   storage: VerificationCodeStorage,
   rateLimiter: RateLimiter,
-  environment: 'development' | 'production' = 'production'
+  environment: 'development' | 'production' = 'production',
 ): ValidationService {
   const config: Partial<ValidationServiceConfig> = environment === 'development' ? {
     rateLimiting: {,

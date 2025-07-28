@@ -128,7 +128,7 @@ describe('VerificationCodeManager', () => {
         deliveryAddress: 'custom@test.com',
         ipAddress: '192.168.1.1',
         userAgent: 'Mozilla/5.0',
-        expirationMinutes: 15 // 15 minutes
+        expirationMinutes: 15 // 15 minutes,
       };
       const result = await manager.generateCode(request);
       expect(result).not.toBeNull();
@@ -288,7 +288,7 @@ describe('VerificationCodeManager', () => {
         code: result!.code,
         type: VerificationCodeType.EMAIL_VERIFICATION,
         ipAddress: '192.168.1.100',
-        userAgent: 'Different Agent'
+        userAgent: 'Different Agent',
       };
       const highRiskValidation = await manager.validateCode(highRiskRequest);
       expect(lowRiskValidation.valid).toBe(true);
@@ -417,12 +417,12 @@ describe('VerificationCodeManager', () => {
           userAgent: 'Mozilla/5.0',
         }
       ];
-      const results = await Promise.all(;)
+      const results = await Promise.all(;);
         requests.map(request => manager.generateCode(request))
       );
       results.forEach(result => expect(result).not.toBeNull());
       // Revoke all email verification codes
-      const revokedCount = await manager.revokeUserCodes(;)
+      const revokedCount = await manager.revokeUserCodes(;);
         userId,
         VerificationCodeType.EMAIL_VERIFICATION,
         'user_requested'
@@ -626,7 +626,7 @@ describe('VerificationCodeManager', () => {
           userAgent: 'Mozilla/5.0',
         }
       ];
-      const results = await Promise.all(;)
+      const results = await Promise.all(;);
         requests.map(request => manager.generateCode(request))
       );
       // Use one code
@@ -787,7 +787,7 @@ describe('VerificationCodeManager', () => {
         const cleanupThreshold = new Date(now.getTime() - 1); // 1ms ago instead of 24 hours;
         let codesRemoved = 0;
         for (const [codeId, code] of this.codes) {
-          const shouldCleanup = (;)
+          const shouldCleanup = (;);
             code.status === CodeStatus.EXPIRED || 
             code.status === CodeStatus.USED ||
             code.status === CodeStatus.REVOKED

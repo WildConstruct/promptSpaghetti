@@ -78,7 +78,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nod
     relatedFeatures: ['variable-system', 'template-engine'],
     priority: 'medium',
   });
-  return ()
+  return ();
     <div className="variable-editor">
       {/* BASIC LEVEL: Simplified variable workflow */}
       <ProgressiveDisclosureSection

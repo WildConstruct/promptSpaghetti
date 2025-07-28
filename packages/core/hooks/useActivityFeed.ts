@@ -26,7 +26,6 @@ export function useActivityFeed()
   userId: string,
   filters: ActivityEventFilter = {},
   options: UseActivityFeedOptions = {}
-) {
   const { limit = 20, autoRefresh = false, refreshInterval = 30000 } = options;
   const [activities, setActivities] = useState<ActivityEventWithActorInfo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,10 +49,10 @@ export function useActivityFeed()
     return params.toString();
   }, [limit]);
   // Fetch activity feed
-  const fetchActivities = useCallback(async (;)
+  const fetchActivities = useCallback(async (;);
     filters: ActivityEventFilter,
     page: number = 1,
-    append: boolean = false
+    append: boolean = false,
   ) => {
     try {
       if (!append) {
@@ -200,7 +199,6 @@ export function useProjectActivityFeed()
   projectId: string,
   userId: string,
   options: UseActivityFeedOptions = {}
-) {
   const { limit = 20, autoRefresh = false, refreshInterval = 30000 } = options;
   const [activities, setActivities] = useState<ActivityEventWithActorInfo[]>([]);
   const [loading, setLoading] = useState(true);

@@ -27,7 +27,7 @@ const enforcer = createClassificationEnforcer('production');
 app.use(createClassificationEnforcementMiddleware({)
   environment: 'production',
   detailedErrors: false,
-  classificationExtractor: async (req) => {
+  classificationExtractor: async (req) => {,
     // Custom logic to extract classification from request
     // e.g., from database based on resource ID
     if (req.params.id) {
@@ -36,7 +36,7 @@ app.use(createClassificationEnforcementMiddleware({)
     }
     return null;
   },
-  controlsExtractor: (req) => {
+  controlsExtractor: (req) => {,
     const controls = [];
     // Check for MFA
     if (req.headers['x-mfa-verified'] === 'true') {
@@ -116,7 +116,7 @@ app.post('/api/restricted/financial-data',)
     res.json({)
       success: true,
       id: 'fin-' + Date.now(),
-      message: 'Financial data securely stored'
+      message: 'Financial data securely stored',
     });
   }
 );
@@ -128,7 +128,7 @@ app.post('/api/data/:id/export',)
     // Get data classification (in real app, from database)
     const classification = 'CONFIDENTIAL';
     // Validate export operation
-    const validation = await enforcer.validateOperation(;)
+    const validation = await enforcer.validateOperation(;);
       {
         operation: 'export',
         userId: req.user?.id || 'anonymous',
@@ -137,7 +137,7 @@ app.post('/api/data/:id/export',)
         environment: process.env.NODE_ENV || 'production',
         timestamp: new Date(),
         source: 'api',
-        requestId: req.headers['x-request-id'] as string || 'req-' + Date.now()
+        requestId: req.headers['x-request-id'] as string || 'req-' + Date.now(),
       },
       classification,
       { id: dataId }
@@ -153,7 +153,7 @@ app.post('/api/data/:id/export',)
     res.json({)
       exportUrl: '/exports/' + dataId,
       controls: validation.controls,
-      expiresIn: '15 minutes'
+      expiresIn: '15 minutes',
     });
   }
 );
@@ -163,10 +163,9 @@ async function processDataOperation()
   userId: string,
   dataId: string,
   operation: 'read' | 'write' | 'delete',
-  classification: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED'
-) {
+  classification: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED',
   // Make access decision
-  const decision = await enforcer.makeAccessDecision(;)
+  const decision = await enforcer.makeAccessDecision(;);
     userId,
     dataId,
     classification,
@@ -204,10 +203,9 @@ async function processDataOperation()
 async function batchProcessData()
   userId: string,
   dataItems: Array<{ id: string; classification: any; value: any }>
-) {
   const results = [];
   for (const item of dataItems) {
-    const enforcementResult = await enforcer.enforceClassification(;)
+    const enforcementResult = await enforcer.enforceClassification(;);
       item.classification,
       {
         operation: 'read',
@@ -217,7 +215,7 @@ async function batchProcessData()
         environment: 'production',
         timestamp: new Date(),
         source: 'batch',
-        requestId: 'batch-req-' + item.id
+        requestId: 'batch-req-' + item.id,
       },
       ['auth-standard', 'audit-enhanced']
     );
@@ -240,7 +238,7 @@ function createCustomEnforcer() {
   return new ClassificationEnforcer({)
     strictMode: false,
     gracePeriodDays: 30,
-    policyOverrides: new Map([)
+    policyOverrides: new Map([),
       ['INTERNAL', {
         access: {,
           authenticationLevel: 'STANDARD',

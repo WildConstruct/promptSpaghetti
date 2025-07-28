@@ -197,7 +197,7 @@ describe('ClassificationMonitoringService', () => {
         context: mockContext,
         metrics: {,
           processingTimeMs: 100,
-          complianceScore: 70 // Below 80 threshold
+          complianceScore: 70 // Below 80 threshold,
         }
       });
       const initialAlertCount = receivedAlerts.length;
@@ -342,7 +342,7 @@ describe('ClassificationMonitoringService', () => {
           context: mockContext,
           metrics: {,
             processingTimeMs: 50 + (i * 10),
-            complianceScore: 80 + (i % 20)
+            complianceScore: 80 + (i % 20),
           }
         });
       }
@@ -437,7 +437,7 @@ describe('ClassificationMonitoringService', () => {
         context: mockContext,
         metrics: {,
           processingTimeMs: 150,
-          complianceScore: 50 // Very low compliance
+          complianceScore: 50 // Very low compliance,
         }
       });
       expect(receivedAlerts.length).toBeGreaterThan(0);

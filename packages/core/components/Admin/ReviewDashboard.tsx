@@ -94,7 +94,7 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
         averageCompletionTime: 18.5, // hours
         reviewerUtilization: 78,
         qualityScore: 92,
-        throughput: 45 // reviews per day
+        throughput: 45 // reviews per day,
       };
       const mockActiveReviews: ReviewItem[] = [
         {
@@ -182,7 +182,7 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
   if (loading) {
-    return ()
+    return ();
       <div className={`review-dashboard loading ${className}`}>}
         <div className="loading-spinner">
           <RefreshCw className="animate-spin" size={24} />
@@ -191,7 +191,7 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`review-dashboard ${className}`}>}
       {/* Dashboard Header */}
       <div className="dashboard-header">
@@ -285,7 +285,7 @@ const OverviewTab: React.FC<{
   onReviewSelect: (review: ReviewItem) => void;
 }> = ({ summary, escalatedReviews, overdueReviews, recentDecisions, onReviewSelect }) => {
   if (!summary) return <div>Loading...</div>;
-  return ()
+  return ();
     <div className="overview-tab">
       {/* Summary Cards */}
       <div className="summary-cards">
@@ -368,7 +368,7 @@ const QueueTab: React.FC<{
   onReviewSelect: (review: ReviewItem) => void;
   onAssignmentAction: (action: AssignmentAction) => void;
 }> = ({ reviews, filters, onFilterChange, onReviewSelect, onAssignmentAction }) => {
-  return ()
+  return ();
     <div className="queue-tab">
       {/* Filters */}
       <ReviewFilters
@@ -393,7 +393,7 @@ const SummaryCard: React.FC<{
   trend?: { value: number; direction: 'up' | 'down' };
   className?: string;
 }> = ({ title, value, icon, trend, className = '' }) => {
-  return ()
+  return ();
     <div className={`summary-card ${className}`}>}
       <div className="card-header">
         <span className="card-icon">{icon}</span>
@@ -416,7 +416,7 @@ const PrioritySection: React.FC<{
   onReviewSelect: (review: ReviewItem) => void;
   className?: string;
 }> = ({ title, icon, reviews, onReviewSelect, className = '' }) => {
-  return ()
+  return ();
     <div className={`priority-section ${className}`}>}
       <div className="section-header">
         {icon}
@@ -446,7 +446,7 @@ const ReviewSummaryCard: React.FC<{
     medium: 'bg-blue-500',
     low: 'bg-gray-500',
   };
-  return ()
+  return ();
     <div className="review-summary-card" onClick={onClick}>
       <div className="card-content">
         <div className="review-header">
@@ -474,7 +474,7 @@ const AssignmentsTab: React.FC<{
   pendingAssignments: ReviewAssignment[];
   onAssignmentAction: (action: AssignmentAction) => void;
 }> = ({ pendingAssignments, onAssignmentAction }) => {
-  return ()
+  return ();
     <div className="assignments-tab">
       <h2>Pending Assignments</h2>
       {/* Assignment management interface would go here */}
@@ -484,7 +484,7 @@ const AssignmentsTab: React.FC<{
 const AnalyticsTab: React.FC<{
   summary: DashboardSummary | null;
 }> = ({ summary }) => {
-  return ()
+  return ();
     <div className="analytics-tab">
       <h2>Review Analytics</h2>
       {/* Analytics charts and reports would go here */}
@@ -495,7 +495,7 @@ const ReviewFilters: React.FC<{
   filters: DashboardFilters;
   onFilterChange: (filters: Partial<DashboardFilters>) => void;
 }> = ({ filters, onFilterChange }) => {
-  return ()
+  return ();
     <div className="review-filters">
       <div className="filter-row">
         <div className="search-box">
@@ -520,7 +520,7 @@ const ReviewList: React.FC<{
   onReviewSelect: (review: ReviewItem) => void;
   onAssignmentAction: (action: AssignmentAction) => void;
 }> = ({ reviews, onReviewSelect, onAssignmentAction }) => {
-  return ()
+  return ();
     <div className="review-list">
       {reviews.map(review => ()
         <ReviewListItem
@@ -538,7 +538,7 @@ const ReviewListItem: React.FC<{
   onSelect: () => void;
   onAssignmentAction: (action: AssignmentAction) => void;
 }> = ({ review, onSelect, onAssignmentAction }) => {
-  return ()
+  return ();
     <div className="review-list-item" onClick={onSelect}>
       {/* Review item content would go here */}
       <div className="review-summary">

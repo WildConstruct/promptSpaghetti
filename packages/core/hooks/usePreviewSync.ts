@@ -57,7 +57,7 @@ const generateGraphHash = (graph: any): string => {
 };
 
 // Analyze graph changes to determine significance
-const analyzeGraphChanges = (;)
+const analyzeGraphChanges = (;);
   oldGraph: any,
   newGraph: any,
   oldHash: string,
@@ -122,7 +122,7 @@ const analyzeGraphChanges = (;)
       affectedNodes: changedNodes,
       affectedEdges: [],
       significance: Math.min(0.8, changedNodes.length / 5), // Content changes are less significant
-      shouldTriggerPreview: changedNodes.length > 0
+      shouldTriggerPreview: changedNodes.length > 0,
     };
   }
   // If we reach here, it's likely a cosmetic change
@@ -168,7 +168,7 @@ export
   const performanceMetricsCalc = useMemo(() => {
     const data = performanceDataRef.current;
     return {
-      avgSyncTime: data.syncTimes.length > 0 
+      avgSyncTime: data.syncTimes.length > 0 ,
         ? data.syncTimes.reduce((sum, time) => sum + time, 0) / data.syncTimes.length 
         : 0,
       successRate: data.totalAttempts > 0 ? data.successCount / data.totalAttempts : 1,
@@ -218,7 +218,7 @@ export
         body: JSON.stringify({),
           graph,
           runs: 5,
-          seedStart: Math.floor(Math.random() * 10000)
+          seedStart: Math.floor(Math.random() * 10000),
         })
       });
       if (!response.ok) {
@@ -262,7 +262,7 @@ export
         updatePerformanceMetrics({)
           totalExecutionTime: performanceMetrics.totalExecutionTime + syncTime,
           averageExecutionTime: performanceMetricsCalc.avgSyncTime,
-          lastExecutionCount: performanceMetrics.lastExecutionCount + 1
+          lastExecutionCount: performanceMetrics.lastExecutionCount + 1,
         });
       }
       performanceDataRef.current.successCount++;
@@ -272,7 +272,7 @@ export
     } catch (error) {
       console.error('Preview sync failed:', error);
       usePreviewStateStore.setState({)
-        error: error instanceof Error ? error.message : 'Preview sync failed'
+        error: error instanceof Error ? error.message : 'Preview sync failed',
       });
       return false;
     } finally {
@@ -287,7 +287,7 @@ export
     enablePerformanceTracking
   ]);
   // Debounced sync function
-  const debouncedSync = useMemo(;)
+  const debouncedSync = useMemo(;);
     () => debounce((graph: any, analysis: GraphChangeAnalysis) => {
       if (analysis.shouldTriggerPreview && analysis.significance >= significanceThreshold) {
         executePreview(graph);

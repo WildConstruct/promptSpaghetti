@@ -1445,7 +1445,7 @@ export class Epic16LearningPathService extends EventEmitter {
         const skillMatch = path.skillsRequired.filter(s => userSkills.includes(s.id)).length;
         score += skillMatch * 2;
         // Prerequisites met
-        const prerequisitesMet = path.prerequisites.every(prereq => ;)
+        const prerequisitesMet = path.prerequisites.every(prereq => ;);
           completedPaths.some(e => e.pathId === prereq)
         );
         if (!prerequisitesMet) score -= 5;

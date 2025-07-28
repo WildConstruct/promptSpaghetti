@@ -4,7 +4,6 @@
  * 
  * Complete example of migrating complex admin functionality to new architecture
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Users, Plus, Download, Edit, Trash2, Shield, Mail } from 'lucide-react';
 import {
@@ -21,7 +20,6 @@ import {
   PERMISSIONS
 } from '../shared';
 import type { TableColumn, TableAction, FormSchema } from '../shared';
-
 interface User {
   id: string;
   name: string;
@@ -41,25 +39,22 @@ export const UserManagementDashboard: React.FC = () => {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-
   // Pagination state
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState({)
     current: 1,
     pageSize: 10,
-    total: 0
+    total: 0,
   });
-
   const { getUsers, updateUserStatus, deleteUser, loading, error } = useAdminUserApi();
   const { hasPermission } = usePermissions();
-
   // Load users
   const loadUsers = useCallback(async () => {
     try {
-      const response = await getUsers({
+      const response = await getUsers({)
         page: pagination.current,
         limit: pagination.pageSize,
         search: searchTerm,
-        status: statusFilter
+        status: statusFilter,
       });
       setUsers(response.data.users || []);
       setPagination(prev => ({ ...prev, total: response.data.total || 0 }));
@@ -67,11 +62,9 @@ export const UserManagementDashboard: React.FC = () => {
       console.error('Failed to load users:', err);
     }
   }, [getUsers, pagination.current, pagination.pageSize, searchTerm, statusFilter]);
-
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
-
   // Handle user status change
   const handleStatusChange = useCallback(async (userId: string, newStatus: string, reason: string) => {
     try {
@@ -81,7 +74,6 @@ export const UserManagementDashboard: React.FC = () => {
       console.error('Failed to update user status:', err);
     }
   }, [updateUserStatus, loadUsers]);
-
   // Handle user deletion
   const handleDeleteUser = useCallback(async (userId: string, reason: string) => {
     try {
@@ -91,7 +83,6 @@ export const UserManagementDashboard: React.FC = () => {
       console.error('Failed to delete user:', err);
     }
   }, [deleteUser, loadUsers]);
-
   // Bulk operations
   const handleBulkStatusChange = useCallback(async (newStatus: string, reason: string) => {
     for (const user of selectedUsers) {
@@ -99,36 +90,34 @@ export const UserManagementDashboard: React.FC = () => {
     }
     setSelectedUsers([]);
   }, [selectedUsers, handleStatusChange]);
-
   // Calculate metrics
-  const metrics = [
+  const metrics = [;
     {
       value: users.length,
       label: 'Total Users',
-      format: 'number' as const
+      format: 'number' as const,
     },
     {
       value: users.filter(u => u.status === 'active').length,
       label: 'Active Users',
       format: 'number' as const,
-      trend: {
+      trend: {,
         value: 8,
         direction: 'up' as const,
-        label: 'vs last month'
+        label: 'vs last month',
       }
     },
     {
       value: users.filter(u => u.status === 'pending_activation').length,
       label: 'Pending Activation',
-      format: 'number' as const
+      format: 'number' as const,
     },
     {
       value: Math.round((users.filter(u => u.lastLogin && new Date(u.lastLogin) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)).length / Math.max(users.length, 1)) * 100),
       label: 'Active This Month',
-      format: 'percentage' as const
+      format: 'percentage' as const,
     }
   ];
-
   // Table columns
   const columns: TableColumn<User>[] = [
     {
@@ -136,7 +125,7 @@ export const UserManagementDashboard: React.FC = () => {
       title: 'User',
       dataIndex: 'name',
       sortable: true,
-      render: (_, record) => (
+      render: (_, record) => ()
         <div>
           <div style={{ fontWeight: '500', color: '#1f2937' }}>
             {record.name}
@@ -145,7 +134,6 @@ export const UserManagementDashboard: React.FC = () => {
             {record.email}
           </div>
         </div>
-      )
     },
     {
       key: 'status',
@@ -154,7 +142,7 @@ export const UserManagementDashboard: React.FC = () => {
       sortable: true,
       filterable: true,
       filterType: 'select',
-      filterOptions: [
+      filterOptions: [,
         { label: 'Active', value: 'active' },
         { label: 'Suspended', value: 'suspended' },
         { label: 'Locked', value: 'locked' },
@@ -166,52 +154,48 @@ export const UserManagementDashboard: React.FC = () => {
       key: 'roles',
       title: 'Roles',
       dataIndex: 'roles',
-      render: (roles: string[]) => (
+      render: (roles: string[]) => (),
         <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-          {roles.slice(0, 2).map(role => (
+          {roles.slice(0, 2).map(role => ()
             <StatusBadge key={role} status="medium" size="small">
               {role}
             </StatusBadge>
           ))}
-          {roles.length > 2 && (
+          {roles.length > 2 && ()
             <span style={{ fontSize: '12px', color: '#6b7280' }}>
               +{roles.length - 2} more
             </span>
           )}
         </div>
-      )
     },
     {
       key: 'lastLogin',
       title: 'Last Login',
       dataIndex: 'lastLogin',
       sortable: true,
-      render: (lastLogin) => (
+      render: (lastLogin) => (),
         <div style={{ fontSize: '12px', color: '#6b7280' }}>
           {lastLogin ? new Date(lastLogin).toLocaleDateString() : 'Never'}
         </div>
-      )
     },
     {
       key: 'createdAt',
       title: 'Created',
       dataIndex: 'createdAt',
       sortable: true,
-      render: (createdAt) => (
+      render: (createdAt) => (),
         <div style={{ fontSize: '12px', color: '#6b7280' }}>
           {new Date(createdAt).toLocaleDateString()}
         </div>
-      )
     }
   ];
-
   // Table actions
   const actions: TableAction<User>[] = [
     {
       key: 'edit',
       label: 'Edit',
       icon: Edit,
-      onClick: (user) => {
+      onClick: (user) => {,
         setEditingUser(user);
         setShowEditModal(true);
       },
@@ -221,32 +205,31 @@ export const UserManagementDashboard: React.FC = () => {
       key: 'message',
       label: 'Send Message',
       icon: Mail,
-      onClick: (user) => {
+      onClick: (user) => {,
         console.log('Send message to:', user.email);
       },
-      disabled: (user) => user.status !== 'active'
+      disabled: (user) => user.status !== 'active',
     },
     {
       key: 'delete',
       label: 'Delete',
       icon: Trash2,
-      onClick: (user) => {
-        if (confirm(`Are you sure you want to delete ${user.name}?`)) {
+      onClick: (user) => {,
+        if (confirm(`Are you sure you want to delete ${user.name}?`)) {}
           handleDeleteUser(user.id, 'Deleted via admin dashboard');
         }
       },
       disabled: (user) => !hasPermission('users', 'delete'),
-      danger: true
+      danger: true,
     }
   ];
-
   // Bulk actions
-  const bulkActions = [
+  const bulkActions = [;
     {
       key: 'activate',
       label: 'Activate Selected',
       icon: Shield,
-      onClick: (selectedUsers: User[]) => {
+      onClick: (selectedUsers: User[]) => {,
         const reason = prompt('Enter reason for activation:');
         if (reason) {
           handleBulkStatusChange('active', reason);
@@ -256,31 +239,30 @@ export const UserManagementDashboard: React.FC = () => {
     {
       key: 'suspend',
       label: 'Suspend Selected',
-      onClick: (selectedUsers: User[]) => {
+      onClick: (selectedUsers: User[]) => {,
         const reason = prompt('Enter reason for suspension:');
         if (reason) {
           handleBulkStatusChange('suspended', reason);
         }
       },
-      danger: true
+      danger: true,
     }
   ];
-
   // Create user form schema
   const createUserSchema: FormSchema = {
     title: 'Create New User',
     description: 'Add a new user to the system',
     layout: 'two-column',
-    fields: [
+    fields: [,
       {
         name: 'name',
         label: 'Full Name',
         type: 'text',
         required: true,
         placeholder: 'Enter full name',
-        validation: {
+        validation: {,
           minLength: 2,
-          maxLength: 100
+          maxLength: 100,
         }
       },
       {
@@ -289,8 +271,8 @@ export const UserManagementDashboard: React.FC = () => {
         type: 'email',
         required: true,
         placeholder: 'Enter email address',
-        validation: {
-          pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$'
+        validation: {,
+          pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
         }
       },
       {
@@ -298,7 +280,7 @@ export const UserManagementDashboard: React.FC = () => {
         label: 'Roles',
         type: 'multiselect',
         required: true,
-        options: [
+        options: [,
           { label: 'Admin', value: 'admin' },
           { label: 'Moderator', value: 'moderator' },
           { label: 'User', value: 'user' },
@@ -309,7 +291,7 @@ export const UserManagementDashboard: React.FC = () => {
         name: 'department',
         label: 'Department',
         type: 'select',
-        options: [
+        options: [,
           { label: 'Engineering', value: 'engineering' },
           { label: 'Marketing', value: 'marketing' },
           { label: 'Sales', value: 'sales' },
@@ -321,26 +303,24 @@ export const UserManagementDashboard: React.FC = () => {
         label: 'Send Welcome Email',
         type: 'checkbox',
         defaultValue: true,
-        help: 'User will receive an email with login instructions'
+        help: 'User will receive an email with login instructions',
       },
       {
         name: 'requirePasswordChange',
         label: 'Require Password Change',
         type: 'checkbox',
         defaultValue: true,
-        help: 'User must change password on first login'
+        help: 'User must change password on first login',
       }
     ],
     submitText: 'Create User',
-    cancelText: 'Cancel'
+    cancelText: 'Cancel',
   };
-
-  const breadcrumbs = [
+  const breadcrumbs = [;
     { label: 'Admin', href: '/admin' },
     { label: 'User Management' }
   ];
-
-  const headerActions = (
+  const headerActions = (;)
     <div style={{ display: 'flex', gap: '12px' }}>
       <PermissionGate resource="users" action="view">
         <button
@@ -354,14 +334,13 @@ export const UserManagementDashboard: React.FC = () => {
             border: '1px solid #d1d5db',
             borderRadius: '6px',
             fontSize: '14px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           <Download size={16} />
           Export
         </button>
       </PermissionGate>
-
       <PermissionGate resource="users" action="create">
         <button
           onClick={() => setShowCreateModal(true)}
@@ -376,7 +355,7 @@ export const UserManagementDashboard: React.FC = () => {
             borderRadius: '6px',
             fontSize: '14px',
             fontWeight: '500',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           <Plus size={16} />
@@ -385,8 +364,7 @@ export const UserManagementDashboard: React.FC = () => {
       </PermissionGate>
     </div>
   );
-
-  return (
+  return ()
     <AdminLayout
       title="User Management"
       subtitle="Manage user accounts, roles, and permissions"
@@ -398,7 +376,7 @@ export const UserManagementDashboard: React.FC = () => {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
         gap: '20px',
-        marginBottom: '24px'
+        marginBottom: '24px',
       }}>
         <MetricsCard
           title="User Analytics"
@@ -407,7 +385,6 @@ export const UserManagementDashboard: React.FC = () => {
           variant="default"
         />
       </div>
-
       {/* Users Table */}
       <AdminTable
         columns={columns}
@@ -432,12 +409,11 @@ export const UserManagementDashboard: React.FC = () => {
         emptyText="No users found"
         emptyAction={hasPermission('users', 'create') ? {
           label: 'Add First User',
-          onClick: () => setShowCreateModal(true)
+          onClick: () => setShowCreateModal(true),
         } : undefined}
       />
-
       {/* Create User Modal */}
-      {showCreateModal && (
+      {showCreateModal && ()
         <div style={{
           position: 'fixed',
           top: 0,
@@ -448,7 +424,7 @@ export const UserManagementDashboard: React.FC = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 1000
+          zIndex: 1000,
         }}>
           <div style={{
             backgroundColor: '#ffffff',
@@ -456,7 +432,7 @@ export const UserManagementDashboard: React.FC = () => {
             width: '600px',
             maxWidth: '90vw',
             maxHeight: '90vh',
-            overflow: 'auto'
+            overflow: 'auto',
           }}>
             <AdminFormBuilder
               schema={createUserSchema}

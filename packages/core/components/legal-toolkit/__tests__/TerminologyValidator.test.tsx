@@ -17,7 +17,7 @@ const mockText = 'This contract establishes consideration for services provided.
         definition: 'To compensate for harm or loss; to provide security against legal responsibility',
         context: 'liability',
         jurisdiction: 'US',
-        source: 'Legal Dictionary'
+        source: 'Legal Dictionary',
       }
     ],
     confidence: 92,
@@ -38,7 +38,7 @@ const mockText = 'This contract establishes consideration for services provided.
       }
     ],
     confidence: 88,
-    context: 'contract performance'
+    context: 'contract performance',
   },
   {
     term: 'jurisdiction',
@@ -50,11 +50,11 @@ const mockText = 'This contract establishes consideration for services provided.
         definition: 'The power and authority of a court to hear and determine a case',
         context: 'legal authority',
         jurisdiction: 'US',
-        source: 'Black\'s Law Dictionary'
+        source: 'Black\'s Law Dictionary',
       }
     ],
     confidence: 97,
-    context: 'legal authority'
+    context: 'legal authority',
   }
 ];
 describe('TerminologyValidator Component', () => {
@@ -64,7 +64,7 @@ describe('TerminologyValidator Component', () => {
   });
   describe('Initial Rendering', () => {
     it('renders terminology validator interface', () => {
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -75,7 +75,7 @@ describe('TerminologyValidator Component', () => {
       expect(screen.getByText(/Text to validate:/i)).toBeInTheDocument();
     });
     it('displays text content correctly', () => {
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -84,7 +84,7 @@ describe('TerminologyValidator Component', () => {
       expect(screen.getByText(/This contract establishes consideration/)).toBeInTheDocument();
     });
     it('shows jurisdiction when provided', () => {
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -94,7 +94,7 @@ describe('TerminologyValidator Component', () => {
       expect(screen.getByText(/Jurisdiction: US-CA/i)).toBeInTheDocument();
     });
     it('shows practice area when provided', () => {
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -104,7 +104,7 @@ describe('TerminologyValidator Component', () => {
       expect(screen.getByText(/Practice Area: contract law/i)).toBeInTheDocument();
     });
     it('starts auto-validation when enabled', () => {
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -117,7 +117,7 @@ describe('TerminologyValidator Component', () => {
   describe('Validation Process', () => {
     it('starts validation when button is clicked', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -130,7 +130,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('shows progress during validation', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -145,7 +145,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('calls onValidationResults when validation completes', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -172,7 +172,7 @@ describe('TerminologyValidator Component', () => {
       }, { timeout: 5000 });
     });
     it('performs auto-validation on component mount', async () => {
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -187,7 +187,7 @@ describe('TerminologyValidator Component', () => {
   describe('Results Display', () => {
     it('displays validation results', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -205,7 +205,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('highlights terms in text', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -222,7 +222,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('shows validation status with appropriate styling', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -245,7 +245,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('displays confidence scores', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -264,7 +264,7 @@ describe('TerminologyValidator Component', () => {
   describe('Term Details and Suggestions', () => {
     it('shows term definitions when clicked', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -282,7 +282,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('displays alternative suggestions for invalid terms', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -301,7 +301,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('allows copying correct term suggestions', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -319,7 +319,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('shows contextual information', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -338,7 +338,7 @@ describe('TerminologyValidator Component', () => {
   describe('Filtering and Search', () => {
     it('filters terms by validity status', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -355,7 +355,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('filters terms by context', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -372,7 +372,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('searches terms by name', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -389,7 +389,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('sorts terms by confidence', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -411,7 +411,7 @@ describe('TerminologyValidator Component', () => {
   describe('Text Editing and Re-validation', () => {
     it('allows editing text and re-validating', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -441,7 +441,7 @@ describe('TerminologyValidator Component', () => {
         expect(mockOnValidationResults).toHaveBeenCalled();
       });
       mockOnValidationResults.mockClear();
-      rerender()
+      rerender();
         <TerminologyValidator
           text="Different text with new legal terms like estoppel."
           onValidationResults={mockOnValidationResults}
@@ -456,7 +456,7 @@ describe('TerminologyValidator Component', () => {
   describe('Export and Reporting', () => {
     it('allows exporting validation results', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -474,7 +474,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('generates terminology report', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -494,7 +494,7 @@ describe('TerminologyValidator Component', () => {
   describe('Error Handling', () => {
     it('handles validation errors gracefully', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text=""
           onValidationResults={mockOnValidationResults}
@@ -510,7 +510,7 @@ describe('TerminologyValidator Component', () => {
     it('handles network errors during validation', async () => {
       const user = userEvent.setup();
       // Simulate network error by providing invalid text
-      render()
+      render();
         <TerminologyValidator
           text="[NETWORK_ERROR]"
           onValidationResults={mockOnValidationResults}
@@ -525,7 +525,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('shows retry option on validation failure', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text=""
           onValidationResults={mockOnValidationResults}
@@ -543,7 +543,7 @@ describe('TerminologyValidator Component', () => {
   });
   describe('Accessibility', () => {
     it('provides proper ARIA labels', () => {
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -554,7 +554,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('supports keyboard navigation', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -567,7 +567,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('announces validation progress to screen readers', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}
@@ -579,7 +579,7 @@ describe('TerminologyValidator Component', () => {
     });
     it('provides keyboard shortcuts for common actions', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TerminologyValidator
           text={mockText}
           onValidationResults={mockOnValidationResults}

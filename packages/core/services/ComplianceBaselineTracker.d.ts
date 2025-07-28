@@ -80,7 +80,7 @@ export declare class ComplianceBaselineTracker {
     /**
      * Record a new measurement against a baseline
      */
-    recordMeasurement()
+    recordMeasurement();
       baselineId: string,
       actualValue: number,
       context?: Record<string,
@@ -98,7 +98,7 @@ export declare class ComplianceBaselineTracker {
     /**
      * Update baseline target or tolerance
      */
-    updateBaseline()
+    updateBaseline();
       baselineId: string,
       updates: Partial<Pick<ComplianceBaseline,
       'targetValue' | 'toleranceThreshold' | 'isActive'>>
@@ -106,7 +106,7 @@ export declare class ComplianceBaselineTracker {
     /**
      * Create custom baseline
      */
-    createCustomBaseline()
+    createCustomBaseline();
       baseline: Omit<ComplianceBaseline,
       'id' | 'baselineEstablishedAt' | 'lastUpdatedAt'>
     ): Promise<ComplianceBaseline>;

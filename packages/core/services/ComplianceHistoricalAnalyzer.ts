@@ -160,7 +160,7 @@ export class ComplianceHistoricalAnalyzer {
     const allDataPoints: HistoricalDataPoint[] = [];
     for (const [key, dataPoints] of this.historicalData.entries()) {
       if (key.startsWith(framework)) {
-        const filteredPoints = dataPoints.filter(dp => ;)
+        const filteredPoints = dataPoints.filter(dp => ;);
           dp.timestamp >= startDate && dp.timestamp <= endDate
         );
         allDataPoints.push(...filteredPoints);
@@ -186,10 +186,10 @@ export class ComplianceHistoricalAnalyzer {
       current.average < worst.average ? current : worst
     ).metric;
     // Determine improvement trend
-    const firstHalf = allDataPoints.filter(dp => ;)
+    const firstHalf = allDataPoints.filter(dp => ;);
       dp.timestamp <= new Date(startDate.getTime() + (endDate.getTime() - startDate.getTime()) / 2)
     );
-    const secondHalf = allDataPoints.filter(dp => ;)
+    const secondHalf = allDataPoints.filter(dp => ;);
       dp.timestamp > new Date(startDate.getTime() + (endDate.getTime() - startDate.getTime()) / 2)
     );
     const firstHalfAvg = firstHalf.reduce((sum, dp) => sum + dp.value, 0) / firstHalf.length;
@@ -218,7 +218,6 @@ export class ComplianceHistoricalAnalyzer {
           historicalAverage,
           trendDirection,
           complianceRate
-        )
       };
     });
     // Generate key events
@@ -226,7 +225,7 @@ export class ComplianceHistoricalAnalyzer {
     // Calculate periodic comparison (current vs previous period)
     const periodLength = endDate.getTime() - startDate.getTime();
     const previousPeriodStart = new Date(startDate.getTime() - periodLength);
-    const previousPeriodData = allDataPoints.filter(dp => ;)
+    const previousPeriodData = allDataPoints.filter(dp => ;);
       dp.timestamp >= previousPeriodStart && dp.timestamp < startDate
     );
     const currentPeriodAvg = averageCompliance;
@@ -266,7 +265,7 @@ export class ComplianceHistoricalAnalyzer {
    */
   async generateForecast()
     baselineId: string, 
-    forecastHorizon: number = 30
+    forecastHorizon: number = 30,
   ): Promise<ComplianceForecasting> {
     // Get historical data for the baseline
     const historicalKey = this.findHistoricalKeyForBaseline(baselineId);
@@ -293,9 +292,9 @@ export class ComplianceHistoricalAnalyzer {
         predictedValue: Math.round(predictedValue * 100) / 100,
         confidenceInterval: {,
           lower: Math.round((predictedValue - margin) * 100) / 100,
-          upper: Math.round((predictedValue + margin) * 100) / 100
+          upper: Math.round((predictedValue + margin) * 100) / 100,
         },
-        riskLevel: predictedValue < 70 ? 'high' : predictedValue < 85 ? 'medium' : 'low'
+        riskLevel: predictedValue < 70 ? 'high' : predictedValue < 85 ? 'medium' : 'low',
       });
     }
     // Calculate forecast accuracy based on recent predictions vs actual
@@ -334,7 +333,7 @@ export class ComplianceHistoricalAnalyzer {
   /**
    * Get compliance history for a specific metric
    */
-  getMetricHistory()
+  getMetricHistory();
     framework: string, 
     metric: string, 
     startDate?: Date, 
@@ -365,7 +364,6 @@ export class ComplianceHistoricalAnalyzer {
       };
     };
     data: HistoricalDataPoint[];
-  } {
     const allData: HistoricalDataPoint[] = [];
     for (const [key, dataPoints] of this.historicalData.entries()) {
       if (!framework || key.startsWith(framework)) {
@@ -380,7 +378,7 @@ export class ComplianceHistoricalAnalyzer {
         totalDataPoints: allData.length,
         dateRange: {,
           earliest: allData[0]?.timestamp || new Date(),
-          latest: allData[allData.length - 1]?.timestamp || new Date()
+          latest: allData[allData.length - 1]?.timestamp || new Date(),
         }
       },
       data: allData,

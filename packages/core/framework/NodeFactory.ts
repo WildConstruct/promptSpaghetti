@@ -60,11 +60,10 @@ export class NodeFactory {
     success: boolean;
     error?: string;
   }> = [];
-  constructor()
+  constructor();
     framework: NodeFramework,
     validationService: NodeValidationService,
     config: Partial<NodeFactoryConfig> = {}
-  ) {
     this.framework = framework;
     this.validationService = validationService;
     this.config = {
@@ -166,7 +165,7 @@ export class NodeFactory {
       const batch = specs.slice(i, i + batchSize);
       const batchPromises = batch.map(async (spec) => {
         try {
-          const node = await this.createNode(;)
+          const node = await this.createNode(;);
             spec.type,
             spec.id,
             spec.config,
@@ -281,7 +280,6 @@ export class NodeFactory {
     averageCreationTime: number;
     typeDistribution: Record<string, number>;
     recentFailures: Array<{ nodeType: string; nodeId: string; error: string; timestamp: number }>;
-    } {
     const total = this.creationHistory.length;
     const successful = this.creationHistory.filter(h => h.success).length;
     const failed = total - successful;

@@ -36,7 +36,7 @@ const CanvasHeatMap: React.FC<HeatMapProps> = ({ data, width = 600, height = 400
       const normalized = (point.intensity - minIntensity) / (maxIntensity - minIntensity);
       const alpha = Math.max(0.1, normalized);
       // Create radial gradient for each point
-      const gradient = ctx.createRadialGradient(;)
+      const gradient = ctx.createRadialGradient(;);
         point.x, point.y, 0,
         point.x, point.y, 20
       );
@@ -48,7 +48,7 @@ const CanvasHeatMap: React.FC<HeatMapProps> = ({ data, width = 600, height = 400
       ctx.fill();
     });
   }, [data, width, height]);
-  return ()
+  return ();
     <div className="heat-map-container">
       <canvas
         ref={canvasRef}
@@ -75,13 +75,13 @@ const CanvasHeatMap: React.FC<HeatMapProps> = ({ data, width = 600, height = 400
  */
 const UserJourneyFlow: React.FC<{ journeyData: unknown[] }> = ({ journeyData }) => {
   if (!journeyData || journeyData.length === 0) {
-    return ()
+    return ();
       <div className="text-center py-8 text-gray-500">
         No journey data available
       </div>
     );
   }
-  return ()
+  return ();
     <div className="journey-flow">
       <div className="space-y-4">
         {journeyData.slice(0, 10).map((flow, index) => ()
@@ -187,7 +187,7 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
       setState(prev => ({)
         ...prev,
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load usage data'
+        error: error instanceof Error ? error.message : 'Failed to load usage data',
       }));
     }
   }, [analyticsClient, timeRange]);
@@ -220,7 +220,7 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
     return patternData.data.map((item: unknown) => ({)
       period: new Date(item.period).toLocaleDateString(),
       value: item.value,
-      timestamp: new Date(item.period).getTime()
+      timestamp: new Date(item.period).getTime(),
     }));
   }, []);
   /**
@@ -236,7 +236,7 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
     return hourlyData.map((value, hour) => ({)
       hour: `${hour.toString().padStart(2, '0')}:00`,}
       value,
-      percentage: (value / Math.max(...hourlyData)) * 100
+      percentage: (value / Math.max(...hourlyData)) * 100,
     }));
   }, [state.hourlyPattern]);
   /**
@@ -246,7 +246,7 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
     loadUsageData();
   }, [loadUsageData]);
   if (state.loading) {
-    return ()
+    return ();
       <div className="usage-patterns">
         <div className="loading-container">
           <div className="loading-spinner"></div>
@@ -256,7 +256,7 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
     );
   }
   if (state.error) {
-    return ()
+    return ();
       <div className="usage-patterns">
         <Alert variant="destructive">
           <AlertDescription>
@@ -277,7 +277,7 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
   const currentPattern = getCurrentPatternData();
   const patternChartData = formatPatternData(currentPattern);
   const hourlyDistribution = generateHourlyDistribution();
-  return ()
+  return ();
     <div className="usage-patterns">
       <Tabs defaultValue="patterns" className="w-full">
         <TabsList className="grid grid-cols-4 w-full">

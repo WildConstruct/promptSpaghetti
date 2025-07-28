@@ -117,7 +117,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({)
     medium: 'dashboard-padding-medium',
     large: 'dashboard-padding-large',
   }[padding];
-  return ()
+  return ();
     <DashboardProvider
       timeRange={timeRange}
       onTimeRangeChange={handleTimeRangeChange}

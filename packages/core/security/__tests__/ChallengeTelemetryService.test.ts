@@ -54,7 +54,7 @@ describe('ChallengeTelemetryService', () => {
           geolocation: {,
             country: 'US',
             region: 'California',
-            city: 'San Francisco'
+            city: 'San Francisco',
           },
           browserInfo: {,
             name: 'Chrome',
@@ -150,7 +150,7 @@ describe('ChallengeTelemetryService', () => {
     test('should start challenge session', () => {
       service.startChallengeSession('session-456', ChallengeType.TWO_FACTOR_SMS, {)
         ipAddress: '203.0.113.1',
-        userAgent: 'Mobile App'
+        userAgent: 'Mobile App',
       });
       // Session should be tracked internally
       // We can verify this by recording a completion
@@ -423,7 +423,7 @@ describe('ChallengeTelemetryService', () => {
         userBehavior: {,
           mouseMovements: 0, // No mouse movement
           totalInteractionTime: 400,
-          hesitationTime: 0 // No hesitation
+          hesitationTime: 0 // No hesitation,
         },
         fraudIndicators: {,
           riskScore: 30,
@@ -724,7 +724,7 @@ describe('ChallengeTelemetryService', () => {
           geolocation: {,
             country: 'US',
             region: 'California',
-            city: 'Los Angeles'
+            city: 'Los Angeles',
           },
           browserInfo: {,
             name: 'Test',

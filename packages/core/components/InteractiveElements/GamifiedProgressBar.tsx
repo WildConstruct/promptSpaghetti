@@ -101,7 +101,7 @@ export const GamifiedProgressBar: React.FC<GamifiedProgressBarProps> = ({)
         description: 'Started your journey',
         icon: '🎯',
         unlocked: currentValue > config.min_value,
-        value: config.min_value + 1
+        value: config.min_value + 1,
       },
       {
         id: 'quarter_way',
@@ -109,7 +109,7 @@ export const GamifiedProgressBar: React.FC<GamifiedProgressBarProps> = ({)
         description: 'Reached 25% progress',
         icon: '🏃',
         unlocked: progressPercentage >= 25,
-        value: config.min_value + (config.max_value - config.min_value) * 0.25
+        value: config.min_value + (config.max_value - config.min_value) * 0.25,
       },
       {
         id: 'halfway_hero',
@@ -117,7 +117,7 @@ export const GamifiedProgressBar: React.FC<GamifiedProgressBarProps> = ({)
         description: 'Reached 50% progress',
         icon: '⭐',
         unlocked: progressPercentage >= 50,
-        value: config.min_value + (config.max_value - config.min_value) * 0.5
+        value: config.min_value + (config.max_value - config.min_value) * 0.5,
       },
       {
         id: 'three_quarter_master',
@@ -125,7 +125,7 @@ export const GamifiedProgressBar: React.FC<GamifiedProgressBarProps> = ({)
         description: 'Reached 75% progress',
         icon: '🔥',
         unlocked: progressPercentage >= 75,
-        value: config.min_value + (config.max_value - config.min_value) * 0.75
+        value: config.min_value + (config.max_value - config.min_value) * 0.75,
       },
       {
         id: 'completion_champion',
@@ -150,7 +150,7 @@ export const GamifiedProgressBar: React.FC<GamifiedProgressBarProps> = ({)
       }));
       // Check for milestone reached
       if (config.milestones) {
-        const newlyReachedMilestone = config.milestones.find(;)
+        const newlyReachedMilestone = config.milestones.find(;);
           milestone => previousValue < milestone.value && currentValue >= milestone.value
         );
         if (newlyReachedMilestone) {
@@ -235,7 +235,7 @@ export const GamifiedProgressBar: React.FC<GamifiedProgressBarProps> = ({)
       const milestonePercentage = ((milestone.value - config.min_value) / (config.max_value - config.min_value)) * 100;
       const isReached = currentValue >= milestone.value;
       const isNext = milestone === nextMilestone;
-      return ()
+      return ();
         <div
           key={milestone.value}
           className="absolute transform -translate-x-1/2"
@@ -269,11 +269,11 @@ export const GamifiedProgressBar: React.FC<GamifiedProgressBarProps> = ({)
   };
   // Render achievements
   const renderAchievements = () => {
-    const recentlyUnlocked = achievements.filter(achievement => ;)
+    const recentlyUnlocked = achievements.filter(achievement => ;);
       achievement.unlocked && (!achievement.unlockedAt || Date.now() - achievement.unlockedAt.getTime() < 5000)
     );
     if (recentlyUnlocked.length === 0) return null;
-    return ()
+    return ();
       <div className="absolute top-full mt-4 left-0 right-0">
         {recentlyUnlocked.map(achievement => ()
           <div
@@ -292,7 +292,7 @@ export const GamifiedProgressBar: React.FC<GamifiedProgressBarProps> = ({)
       </div>
     );
   };
-  return ()
+  return ();
     <div className={`relative ${className}`}>}
       {/* Progress Bar Container */}
       <div 
@@ -308,7 +308,7 @@ export const GamifiedProgressBar: React.FC<GamifiedProgressBarProps> = ({)
           style={{
             width: `${progressPercentage}%`,}
             backgroundColor: currentColor,
-            transform: animationState.isAnimating && config.animated ? 'scaleX(1.05)' : 'scaleX(1)'
+            transform: animationState.isAnimating && config.animated ? 'scaleX(1.05)' : 'scaleX(1)',
           }}
         >
           {/* Shine effect */}

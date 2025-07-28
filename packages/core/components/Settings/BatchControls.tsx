@@ -108,7 +108,7 @@ export const BatchControls: React.FC<BatchControlsProps> = ({)
       .replace('{timestamp}', sampleTimestamp)
       .replace('{index}', '001');
   };
-  return ()
+  return ();
     <div style={{ marginBottom: '24px' }}>
       {/* Section Header */}
       <div style={{
@@ -197,7 +197,7 @@ export const BatchControls: React.FC<BatchControlsProps> = ({)
           {outputFormats.map((format) => {
             const Icon = format.icon;
             const isSelected = settings.outputFormat === format.value;
-            return ()
+            return ();
               <button
                 key={format.value}
                 onClick={() => handleOutputFormatChange(format.value)}
@@ -243,7 +243,7 @@ export const BatchControls: React.FC<BatchControlsProps> = ({)
                   </div>
                   <div style={{
                     fontSize: '11px',
-                    color: isSelected ? uiColors.accent.primary : uiColors.text.secondary
+                    color: isSelected ? uiColors.accent.primary : uiColors.text.secondary,
                   }}>
                     {format.description}
                   </div>

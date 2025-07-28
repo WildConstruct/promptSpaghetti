@@ -6,7 +6,7 @@ export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElemen
 
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>()
   ({ className, onCheckedChange, onChange, ...props }, ref) => {
-    return ()
+    return ();
       <input
         type="checkbox"
         className={`checkbox ${className || ''}`}

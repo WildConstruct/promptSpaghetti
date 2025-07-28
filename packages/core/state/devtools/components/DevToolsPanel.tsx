@@ -69,7 +69,7 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
       ...prevState,
       timeTravelState: timeTravel.getTimeTravelState(),
       performanceAlerts: performanceProfiler.getAlerts(),
-      isRecording: timeTravel.getTimeTravelState()?.isReplaying || false
+      isRecording: timeTravel.getTimeTravelState()?.isReplaying || false,
     }));
   }, [timeTravel, performanceProfiler]);
   // Setup event listeners
@@ -143,7 +143,7 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
     return null;
   }
   const panelClasses = `devtools-panel devtools-panel--${position} devtools-panel--${theme}`;}
-  return ()
+  return ();
     <div className={panelClasses}>
       <div className="devtools-header">
         <div className="devtools-title">
@@ -415,7 +415,7 @@ const DevToolsSettingsPanel: React.FC<DevToolsSettingsPanelProps> = ({)
     a.click();
     URL.revokeObjectURL(url);
   };
-  return ()
+  return ();
     <div className="devtools-settings">
       <h4>Configuration</h4>
       <div className="setting-group">

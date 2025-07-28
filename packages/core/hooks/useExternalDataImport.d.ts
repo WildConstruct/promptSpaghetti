@@ -30,7 +30,7 @@ interface UseExternalDataImportReturn {
     getDataSource: (sourceId: string) => DataSource | null;
     startRealTimeUpdates: () => void;
     stopRealTimeUpdates: () => void;
-    validateQuery: (query: HistoricalQuery) => {
+    validateQuery: (query: HistoricalQuery) => {,
         valid: boolean;
         errors: string[];
     };

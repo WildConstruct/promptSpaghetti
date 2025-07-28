@@ -337,7 +337,7 @@ export class KeyManagementService extends EventEmitter {
         type: options.type,
         purpose: options.purpose,
         algorithm: options.algorithm,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return key;
     } catch (error) {
@@ -345,7 +345,7 @@ export class KeyManagementService extends EventEmitter {
       this.emit('keyGenerationError', {)
         error: error instanceof Error ? error.message : 'Unknown error',
         options,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       throw error;
     }
@@ -444,7 +444,7 @@ export class KeyManagementService extends EventEmitter {
         oldKeyId: keyId,
         newKeyId: newKey.metadata.id,
         reason: options.rotationReason,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return newKey;
     } catch (error) {
@@ -476,7 +476,7 @@ export class KeyManagementService extends EventEmitter {
         keyId,
         reason,
         requesterId,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     } catch (error) {
       this.updateMetrics('key_revocation_error', Date.now() - startTime);
@@ -824,7 +824,7 @@ export class KeyManagementService extends EventEmitter {
   private cacheKey(key: CryptographicKey): void {
     this.keyCache.set(key.metadata.id, {)
       key: { ...key },
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   private getCachedKey(keyId: string): CryptographicKey | null {
@@ -980,7 +980,7 @@ export class KeyManagementService extends EventEmitter {
         } catch (error) {
           this.emit('backgroundRotationError', {)
             keyId,
-            error: error instanceof Error ? error.message : 'Unknown error'
+            error: error instanceof Error ? error.message : 'Unknown error',
           });
         }
       }

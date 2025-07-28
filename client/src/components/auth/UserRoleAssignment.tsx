@@ -1,9 +1,7 @@
 // Epic 11.3 User Role Assignment Component
 // Interface for assigning and managing user roles with organization and team context
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Plus, X, Calendar, Users, Shield, AlertCircle } from 'lucide-react';
-
 interface User {
   id: string;
   email: string;
@@ -12,7 +10,6 @@ interface User {
   lastName?: string;
   createdAt: string;
 }
-
 interface Role {
   id: string;
   name: string;
@@ -20,7 +17,6 @@ interface Role {
   scope: 'global' | 'organization' | 'team';
   organizationId?: string;
 }
-
 interface UserRole {
   id: string;
   userId: string;
@@ -32,7 +28,6 @@ interface UserRole {
   expiresAt?: string;
   scopeContext?: Record<string, unknown>;
 }
-
 interface AssignRoleData {
   userId: string;
   roleId: string;
@@ -49,30 +44,26 @@ export const UserRoleAssignment: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter] = useState('');
   const [showAssignModal, setShowAssignModal] = useState(false);
-  
   // Assignment form state
-  const [assignmentForm, setAssignmentForm] = useState<AssignRoleData>({
+  const [assignmentForm, setAssignmentForm] = useState<AssignRoleData>({)
     userId: '',
-    roleId: ''
+    roleId: '',
   });
   const [assignmentExpiry, setAssignmentExpiry] = useState('');
   const [assignmentContext, setAssignmentContext] = useState('');
-
   useEffect(() => {
     loadUsers();
     loadRoles();
   }, [loadUsers, loadRoles]);
-
   const loadUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/auth/users?' + new URLSearchParams({
+      const response = await fetch('/api/auth/users?' + new URLSearchParams({)
         ...(searchQuery && { search: searchQuery }),
-        limit: '50'
+        limit: '50',
       }), {
-        credentials: 'include'
+        credentials: 'include',
       });
-
       if (response.ok) {
         const data = await response.json();
         setUsers(data.users || []);
@@ -83,15 +74,13 @@ export const UserRoleAssignment: React.FC = () => {
       setLoading(false);
     }
   }, [searchQuery]);
-
   const loadRoles = useCallback(async () => {
     try {
-      const response = await fetch('/api/auth/rbac/roles?' + new URLSearchParams({
+      const response = await fetch('/api/auth/rbac/roles?' + new URLSearchParams({)
         ...(roleFilter && { scope: roleFilter })
       }), {
-        credentials: 'include'
+        credentials: 'include',
       });
-
       if (response.ok) {
         const data = await response.json();
         setRoles(data.roles || []);
@@ -100,17 +89,15 @@ export const UserRoleAssignment: React.FC = () => {
       console.error('Failed to load roles:', error);
     }
   }, [roleFilter]);
-
   const loadUserRoles = async (userId: string) => {
     try {
-      const response = await fetch(`/api/auth/rbac/users/${userId}/roles`, {
-        credentials: 'include'
+      const response = await fetch(`/api/auth/rbac/users/${userId}/roles`, {)}
+        credentials: 'include',
       });
-
       if (response.ok) {
         const data = await response.json();
         // Transform roles to include assignment details
-        const userRolesWithDetails = data.roles.map((role: Error) => ({
+        const userRolesWithDetails = data.roles.map((role: Error) => ({)
           id: role.assignmentId || role.id,
           userId,
           roleId: role.id,
@@ -119,7 +106,7 @@ export const UserRoleAssignment: React.FC = () => {
           grantedBy: role.grantedBy,
           grantedAt: role.grantedAt,
           expiresAt: role.expiresAt,
-          scopeContext: role.scopeContext
+          scopeContext: role.scopeContext,
         }));
         setUserRoles(userRolesWithDetails);
       }
@@ -127,27 +114,22 @@ export const UserRoleAssignment: React.FC = () => {
       console.error('Failed to load user roles:', error);
     }
   };
-
   const handleUserSelect = (user: User) => {
     setSelectedUser(user);
     loadUserRoles(user.id);
   };
-
   const handleAssignRole = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedUser) return;
-
     setLoading(true);
     try {
       const assignmentData: AssignRoleData = {
         userId: selectedUser.id,
-        roleId: assignmentForm.roleId
+        roleId: assignmentForm.roleId,
       };
-
       if (assignmentExpiry) {
         assignmentData.expiresAt = new Date(assignmentExpiry).toISOString();
       }
-
       if (assignmentContext) {
         try {
           assignmentData.scopeContext = JSON.parse(assignmentContext);
@@ -156,16 +138,14 @@ export const UserRoleAssignment: React.FC = () => {
           return;
         }
       }
-
-      const response = await fetch('/api/auth/rbac/assign-role', {
+      const response = await fetch('/api/auth/rbac/assign-role', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(assignmentData)
+        body: JSON.stringify(assignmentData),
       });
-
       if (response.ok) {
         setShowAssignModal(false);
         setAssignmentForm({ userId: '', roleId: '' });
@@ -183,27 +163,23 @@ export const UserRoleAssignment: React.FC = () => {
       setLoading(false);
     }
   };
-
   const handleRemoveRole = async (roleId: string) => {
     if (!selectedUser) return;
-    
     if (!confirm('Are you sure you want to remove this role from the user?')) {
       return;
     }
-
     try {
-      const response = await fetch('/api/auth/rbac/remove-role', {
+      const response = await fetch('/api/auth/rbac/remove-role', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify({
+        body: JSON.stringify({),
           userId: selectedUser.id,
           roleId
         })
       });
-
       if (response.ok) {
         loadUserRoles(selectedUser.id);
       } else {
@@ -215,11 +191,9 @@ export const UserRoleAssignment: React.FC = () => {
       alert('Failed to remove role');
     }
   };
-
   const isRoleExpired = (expiresAt?: string) => {
     return expiresAt && new Date(expiresAt) < new Date();
   };
-
   const isRoleExpiringSoon = (expiresAt?: string) => {
     if (!expiresAt) return false;
     const expiry = new Date(expiresAt);
@@ -227,8 +201,7 @@ export const UserRoleAssignment: React.FC = () => {
     const sevenDaysFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
     return expiry > now && expiry < sevenDaysFromNow;
   };
-
-  return (
+  return ()
     <div className="max-w-7xl mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -237,7 +210,6 @@ export const UserRoleAssignment: React.FC = () => {
           <p className="text-gray-600">Assign and manage user roles and permissions</p>
         </div>
       </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* User List */}
         <div className="space-y-4">
@@ -246,7 +218,6 @@ export const UserRoleAssignment: React.FC = () => {
               <h2 className="text-lg font-semibold text-gray-900">Users</h2>
               <Users className="w-5 h-5 text-gray-400" />
             </div>
-
             {/* Search */}
             <div className="relative mb-4">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -259,17 +230,15 @@ export const UserRoleAssignment: React.FC = () => {
                 placeholder="Search users..."
               />
             </div>
-
             <button
               onClick={loadUsers}
               className="w-full mb-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
             >
               Search Users
             </button>
-
             {/* User List */}
             <div className="space-y-2 max-h-96 overflow-y-auto">
-              {users.map((user) => (
+              {users.map((user) => ()
                 <div
                   key={user.id}
                   onClick={() => handleUserSelect(user)}
@@ -293,18 +262,16 @@ export const UserRoleAssignment: React.FC = () => {
                 </div>
               ))}
             </div>
-
-            {loading && (
+            {loading && ()
               <div className="flex justify-center py-4">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
               </div>
             )}
           </div>
         </div>
-
         {/* User Roles */}
         <div className="lg:col-span-2 space-y-4">
-          {selectedUser ? (
+          {selectedUser ? ()
             <>
               {/* User Info */}
               <div className="bg-white p-4 rounded-lg border border-gray-200">
@@ -332,7 +299,6 @@ export const UserRoleAssignment: React.FC = () => {
                   </button>
                 </div>
               </div>
-
               {/* Roles */}
               <div className="bg-white rounded-lg border border-gray-200">
                 <div className="p-4 border-b border-gray-200">
@@ -341,9 +307,8 @@ export const UserRoleAssignment: React.FC = () => {
                     <span className="text-sm text-gray-500">{userRoles.length} roles</span>
                   </div>
                 </div>
-
                 <div className="divide-y divide-gray-200">
-                  {userRoles.map((userRole) => (
+                  {userRoles.map((userRole) => ()
                     <div key={userRole.id} className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
@@ -362,13 +327,13 @@ export const UserRoleAssignment: React.FC = () => {
                                 <span className="text-xs text-gray-500">
                                   Granted {new Date(userRole.grantedAt).toLocaleDateString()}
                                 </span>
-                                {userRole.expiresAt && (
+                                {userRole.expiresAt && ()
                                   <div className="flex items-center space-x-1">
-                                    {isRoleExpired(userRole.expiresAt) ? (
+                                    {isRoleExpired(userRole.expiresAt) ? ()
                                       <AlertCircle className="w-3 h-3 text-red-500" />
-                                    ) : isRoleExpiringSoon(userRole.expiresAt) ? (
+                                    ) : isRoleExpiringSoon(userRole.expiresAt) ? ()
                                       <AlertCircle className="w-3 h-3 text-yellow-500" />
-                                    ) : (
+                                    ) : ()
                                       <Calendar className="w-3 h-3 text-gray-400" />
                                     )}
                                     <span className={`text-xs ${
@@ -384,7 +349,7 @@ export const UserRoleAssignment: React.FC = () => {
                               </div>
                             </div>
                           </div>
-                          {userRole.scopeContext && Object.keys(userRole.scopeContext).length > 0 && (
+                          {userRole.scopeContext && Object.keys(userRole.scopeContext).length > 0 && ()
                             <div className="mt-2 p-2 bg-gray-50 rounded border text-xs">
                               <strong>Context:</strong> {JSON.stringify(userRole.scopeContext)}
                             </div>
@@ -399,8 +364,7 @@ export const UserRoleAssignment: React.FC = () => {
                       </div>
                     </div>
                   ))}
-
-                  {userRoles.length === 0 && (
+                  {userRoles.length === 0 && ()
                     <div className="p-8 text-center">
                       <Shield className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                       <p className="text-gray-500">No roles assigned to this user</p>
@@ -415,7 +379,7 @@ export const UserRoleAssignment: React.FC = () => {
                 </div>
               </div>
             </>
-          ) : (
+          ) : ()
             <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
               <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
               <p className="text-gray-500">Select a user to view and manage their roles</p>
@@ -423,9 +387,8 @@ export const UserRoleAssignment: React.FC = () => {
           )}
         </div>
       </div>
-
       {/* Assign Role Modal */}
-      {showAssignModal && selectedUser && (
+      {showAssignModal && selectedUser && ()
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <div className="flex items-center justify-between mb-4">
@@ -437,7 +400,6 @@ export const UserRoleAssignment: React.FC = () => {
                 <X className="w-5 h-5" />
               </button>
             </div>
-
             <form onSubmit={handleAssignRole} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -457,7 +419,6 @@ export const UserRoleAssignment: React.FC = () => {
                   </div>
                 </div>
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Role
@@ -469,14 +430,13 @@ export const UserRoleAssignment: React.FC = () => {
                   required
                 >
                   <option value="">Select a role</option>
-                  {roles.map((role) => (
+                  {roles.map((role) => ()
                     <option key={role.id} value={role.id}>
                       {role.name} ({role.scope})
                     </option>
                   ))}
                 </select>
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Expiry Date (Optional)
@@ -488,7 +448,6 @@ export const UserRoleAssignment: React.FC = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Scope Context (JSON, Optional)
@@ -501,7 +460,6 @@ export const UserRoleAssignment: React.FC = () => {
                   rows={3}
                 />
               </div>
-
               <div className="flex space-x-3">
                 <button
                   type="submit"

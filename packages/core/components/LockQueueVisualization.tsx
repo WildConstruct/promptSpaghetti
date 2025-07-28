@@ -44,7 +44,7 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({)
     }
   };
   if (queue.length === 0) {
-    return ()
+    return ();
       <div className="text-center py-8">
         <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No Queue Items</h3>
@@ -54,7 +54,7 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="space-y-6">
       {Object.entries(groupedQueue).map(([resourceId, items]) => ()
         <div key={resourceId} className="bg-white border border-gray-200 rounded-lg p-4">
@@ -142,7 +142,6 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({)
                   {formatWaitTime()
                     Math.round()
                       items.reduce((sum, item) => sum + (item.estimated_wait_time || 0), 0) / items.length
-                    )
                   )}
                 </div>
               </div>

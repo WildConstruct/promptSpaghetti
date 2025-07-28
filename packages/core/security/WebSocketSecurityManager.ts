@@ -147,13 +147,12 @@ export class WebSocketSecurityManager extends EventEmitter {
   private rateLimiters: Map<string, { count: number; resetTime: number }> = new Map();
   private suspiciousIPs: Set<string> = new Set();
   private blockedConnections: Set<string> = new Set();
-  constructor()
+  constructor();
     private config: WebSocketSecurityConfig,
     private keyManagementService: KeyManagementService,
     private dataClassifier: DataClassifier,
     private fingerprintService: DeviceFingerprintingService,
     private trustedDeviceManager: TrustedDeviceManager
-  ) {
     super();
     this.initializeThreatDetectionRules();
     this.startSecurityMonitoring();
@@ -179,7 +178,7 @@ export class WebSocketSecurityManager extends EventEmitter {
         headers: requestInfo.headers,
       };
       // Generate device fingerprint
-      const deviceFingerprint = await this.fingerprintService.generateFingerprint(;)
+      const deviceFingerprint = await this.fingerprintService.generateFingerprint(;);
         fingerprintContext
       );
       // Assess initial risk
@@ -217,7 +216,7 @@ export class WebSocketSecurityManager extends EventEmitter {
         }
       });
       // Check if device is trusted
-      const trustDecision = await this.trustedDeviceManager.checkDeviceTrust(;)
+      const trustDecision = await this.trustedDeviceManager.checkDeviceTrust(;);
         userId,
         fingerprintContext
       );
@@ -330,7 +329,7 @@ export class WebSocketSecurityManager extends EventEmitter {
       }
       // Device verification
       if (this.config.requireDeviceVerification && credentials.deviceVerificationToken) {
-        const verifiedDevice = await this.trustedDeviceManager.verifyDevice(;)
+        const verifiedDevice = await this.trustedDeviceManager.verifyDevice(;);
           credentials.deviceVerificationToken
         );
         context.deviceVerified = !!verifiedDevice;
@@ -385,7 +384,7 @@ export class WebSocketSecurityManager extends EventEmitter {
           dataType: 'json',
           context: { messageType: message.type },
           source: 'websocket',
-          timestamp: new Date()
+          timestamp: new Date(),
         })
         : { level: ClassificationLevel.PUBLIC, category: 'operational', confidence: 100, matchedRules: [], complianceRequirements: [], encryptionRequired: false, retentionPeriod: '1 year', accessControls: [], reasoning: [] };
       // Check if encryption is required based on classification
@@ -566,7 +565,7 @@ export class WebSocketSecurityManager extends EventEmitter {
       userId: context?.userId,
       reason,
       duration,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -625,7 +624,7 @@ export class WebSocketSecurityManager extends EventEmitter {
       blockedConnections: this.blockedConnections.size,
       suspiciousIPs: this.suspiciousIPs.size,
       securityEvents: this.securityEvents.length,
-      avgRiskScore: contexts.length > 0 
+      avgRiskScore: contexts.length > 0 ,
         ? contexts.reduce((sum, c) => sum + c.riskScore, 0) / contexts.length 
         : 0
     };
@@ -761,7 +760,7 @@ export class WebSocketSecurityManager extends EventEmitter {
         threshold: this.config.rateLimitMessagesPerMinute,
         timeWindowMinutes: 1,
         action: 'warn',
-        description: 'Detect when users exceed message rate limits'
+        description: 'Detect when users exceed message rate limits',
       },
       {
         id: 'rapid_reconnection',
@@ -771,7 +770,7 @@ export class WebSocketSecurityManager extends EventEmitter {
         threshold: 5,
         timeWindowMinutes: 5,
         action: 'block',
-        description: 'Detect rapid reconnection attempts'
+        description: 'Detect rapid reconnection attempts',
       },
       {
         id: 'large_payload',
@@ -781,7 +780,7 @@ export class WebSocketSecurityManager extends EventEmitter {
         threshold: 100000, // 100KB
         timeWindowMinutes: 1,
         action: 'log',
-        description: 'Detect unusually large message payloads'
+        description: 'Detect unusually large message payloads',
       }
     ];
     defaultRules.forEach(rule => {)

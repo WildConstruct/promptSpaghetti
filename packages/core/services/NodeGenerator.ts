@@ -49,7 +49,7 @@ export class NodeGenerator {
         console.warn(`Generating ${request.selectedSuggestions.length} nodes may impact performance`);}
       }
       // Generate layout
-      const layoutResult = this.calculateLayout(;)
+      const layoutResult = this.calculateLayout(;);
         request.selectedSuggestions,
         request.options.layout,
         request.canvasPosition,
@@ -58,7 +58,7 @@ export class NodeGenerator {
       // Create nodes
       const nodes = this.createNodes(request.selectedSuggestions, layoutResult.positions);
       // Generate connections
-      const connectionResult = this.generateConnections(;)
+      const connectionResult = this.generateConnections(;);
         request.selectedSuggestions,
         nodes,
         request.options.connectionPattern
@@ -75,7 +75,7 @@ export class NodeGenerator {
           nodesGenerated: nodes.length,
           edgesGenerated: connectionResult.edges.length,
           layoutTimeMs: layoutResult.efficiency * 10, // Estimated
-          validationTimeMs: validation.errors.length * 5 // Estimated
+          validationTimeMs: validation.errors.length * 5 // Estimated,
         },
         options: request.options,
         validation: {,
@@ -163,7 +163,7 @@ export class NodeGenerator {
           items.forEach((suggestion, index) => {
             positions.set(suggestion.id, {)
               x: currentX + (index * spacing.horizontal),
-              y: currentY + yOffset
+              y: currentY + yOffset,
             });
           });
           yOffset += spacing.vertical;
@@ -178,7 +178,7 @@ export class NodeGenerator {
           const angle = (2 * Math.PI * index) / suggestions.length;
           positions.set(suggestion.id, {)
             x: centerX + radius * Math.cos(angle),
-            y: centerY + radius * Math.sin(angle)
+            y: centerY + radius * Math.sin(angle),
           });
         });
         break;
@@ -190,7 +190,7 @@ export class NodeGenerator {
           const col = index % cols;
           positions.set(suggestion.id, {)
             x: currentX + (col * spacing.horizontal),
-            y: currentY + (row * spacing.vertical)
+            y: currentY + (row * spacing.vertical),
           });
         });
         break;
@@ -211,7 +211,7 @@ export class NodeGenerator {
       positions,
       bounds,
       efficiency,
-      overlaps: 0 // Would need collision detection for accurate overlap count
+      overlaps: 0 // Would need collision detection for accurate overlap count,
     };
   }
   /**
@@ -314,7 +314,7 @@ export class NodeGenerator {
       validation: {,
         validConnections: edges.length,
         invalidConnections: 0, // Would need actual validation
-        duplicateConnections: 0 // Would need duplicate detection
+        duplicateConnections: 0 // Would need duplicate detection,
       }
     };
   }
@@ -368,7 +368,7 @@ export class NodeGenerator {
       animated: false,
       data: {,
         generated: true,
-        generatedAt: new Date().toISOString()
+        generatedAt: new Date().toISOString(),
       }
     };
   }
@@ -389,7 +389,7 @@ export class NodeGenerator {
           message: 'Node missing required properties',
           nodeId: node.id,
           severity: 'error',
-          suggestions: ['Ensure all nodes have id and position properties']
+          suggestions: ['Ensure all nodes have id and position properties'],
         });
       }
       if (!node.data || !node.data.nodeType) {
@@ -398,7 +398,7 @@ export class NodeGenerator {
           message: 'Node missing nodeType in data',
           nodeId: node.id,
           severity: 'error',
-          suggestions: ['Add nodeType to node data']
+          suggestions: ['Add nodeType to node data'],
         });
       }
     });
@@ -411,7 +411,7 @@ export class NodeGenerator {
           message: 'Edge references non-existent node',
           edgeId: edge.id,
           severity: 'error',
-          suggestions: ['Ensure all edge sources and targets reference valid nodes']
+          suggestions: ['Ensure all edge sources and targets reference valid nodes'],
         });
       }
       if (edge.source === edge.target) {
@@ -420,7 +420,7 @@ export class NodeGenerator {
           message: 'Edge creates self-loop',
           edgeId: edge.id,
           impact: 'low',
-          recommendation: 'Consider removing self-loops for cleaner workflow'
+          recommendation: 'Consider removing self-loops for cleaner workflow',
         });
       }
     });
@@ -437,7 +437,7 @@ export class NodeGenerator {
           message: 'Node has no connections',
           nodeId: node.id,
           impact: 'medium',
-          recommendation: 'Consider connecting isolated nodes to the workflow'
+          recommendation: 'Consider connecting isolated nodes to the workflow',
         });
       }
     });
@@ -534,7 +534,7 @@ export class NodeGenerator {
       validationRules: {,
         requireInputValidation: true,
         sanitizeUserContent: true,
-        enforceRateLimiting: false // Would need rate limiting implementation
+        enforceRateLimiting: false // Would need rate limiting implementation,
       }
     };
   }

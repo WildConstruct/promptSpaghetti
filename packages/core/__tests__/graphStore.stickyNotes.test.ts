@@ -37,12 +37,11 @@ jest.mock('../graphStore', () => ({)
     () => mockStore,
     {
       getState: () => mockStore,
-      setState: (fn: unknown) => {
+      setState: (fn: unknown) => {,
         const newState = typeof fn === 'function' ? fn(mockStore) : fn;
         Object.assign(mockStore, newState);
       }
     }
-  )
 }));
 const mockNotes: StickyNote[] = [
   {

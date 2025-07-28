@@ -43,7 +43,7 @@ describe('PrerequisiteSystemService', () => {
       const invalidPrerequisite = {
         ...mockPrerequisite,
         name: '', // Invalid: empty name
-        requiredScore: 150 // Invalid: score > 100
+        requiredScore: 150 // Invalid: score > 100,
       };
       const result = await service.createPrerequisite(invalidPrerequisite as Prerequisite, mockUserId);
       expect(result.success).toBe(false);
@@ -64,7 +64,7 @@ describe('PrerequisiteSystemService', () => {
       const longPrerequisite = {
         ...mockPrerequisite,
         name: 'A'.repeat(200), // Exceeds maximum length
-        description: 'B'.repeat(1000) // Exceeds maximum length
+        description: 'B'.repeat(1000) // Exceeds maximum length,
       };
       const result = await service.createPrerequisite(longPrerequisite, mockUserId);
       expect(result.success).toBe(false);
@@ -74,7 +74,7 @@ describe('PrerequisiteSystemService', () => {
       const specialCharsPrerequisite = {
         ...mockPrerequisite,
         name: 'JavaScript & TypeScript (Advanced)',
-        description: 'Learn advanced JavaScript and TypeScript concepts'
+        description: 'Learn advanced JavaScript and TypeScript concepts',
       };
       const result = await service.createPrerequisite(specialCharsPrerequisite, mockUserId);
       expect(result.success).toBe(true);
@@ -139,7 +139,7 @@ describe('PrerequisiteSystemService', () => {
       const secondPrerequisite: Prerequisite = {
         ...mockPrerequisite,
         id: '550e8400-e29b-41d4-a716-446655440002',
-        name: 'Advanced JavaScript'
+        name: 'Advanced JavaScript',
       };
       await service.createPrerequisite(secondPrerequisite, mockUserId);
       // Complete first prerequisite only
@@ -149,7 +149,7 @@ describe('PrerequisiteSystemService', () => {
         completedAt: new Date(),
         attempts: 1,
       });
-      const result = await service.evaluatePrerequisites(mockUserId, [;)
+      const result = await service.evaluatePrerequisites(mockUserId, [;);
         mockPrerequisite.id,
         secondPrerequisite.id
       ]);
@@ -175,9 +175,9 @@ describe('PrerequisiteSystemService', () => {
     it('should validate progress data schema', async () => {
       const invalidProgressData = {
         status: 'invalid_status', // Invalid enum value
-        score: 150 // Invalid: score > 100
+        score: 150 // Invalid: score > 100,
       };
-      const result = await service.updateProgress(;)
+      const result = await service.updateProgress(;);
         mockUserId, 
         mockPrerequisite.id, 
         invalidProgressData as Partial<UserProgress>
@@ -238,7 +238,7 @@ describe('DependencyResolver', () => {
       const invalidPrerequisite = {
         ...mockPrerequisite,
         id: 'invalid-uuid', // Invalid UUID
-        requiredScore: -1 // Invalid negative score
+        requiredScore: -1 // Invalid negative score,
       };
       const result = resolver.addPrerequisite(invalidPrerequisite as Prerequisite);
       expect(result.success).toBe(false);
@@ -277,7 +277,7 @@ describe('DependencyResolver', () => {
       const secondPrerequisite: Prerequisite = {
         ...mockPrerequisite,
         id: '550e8400-e29b-41d4-a716-446655440003',
-        name: 'Second Prerequisite'
+        name: 'Second Prerequisite',
       };
       resolver.addPrerequisite(secondPrerequisite);
       // Create circular dependency
@@ -379,7 +379,7 @@ describe('PrerequisiteSecurity', () => {
   });
   describe('validateUserPermissions', () => {
     it('should validate legitimate user and action', () => {
-      const isValid = PrerequisiteSecurity.validateUserPermissions(;)
+      const isValid = PrerequisiteSecurity.validateUserPermissions(;);
         '550e8400-e29b-41d4-a716-446655440000', 
         'view'
       );
@@ -390,7 +390,7 @@ describe('PrerequisiteSecurity', () => {
       expect(isValid).toBe(false);
     });
     it('should reject invalid action', () => {
-      const isValid = PrerequisiteSecurity.validateUserPermissions(;)
+      const isValid = PrerequisiteSecurity.validateUserPermissions(;);
         '550e8400-e29b-41d4-a716-446655440000', 
         'invalid_action'
       );

@@ -337,7 +337,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
   });
   describe('3. Circular Dependency Detection', () => {
     it('should detect simple circular dependencies', () => {
-      const circularDeps = new Map<string, string[]>([;)
+      const circularDeps = new Map<string, string[]>([;);
         ['plugin-a', ['plugin-b']],
         ['plugin-b', ['plugin-a']]
       ]);
@@ -350,7 +350,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
       expect(dependencyResolver.detectCircularDependencies).toHaveBeenCalledWith(circularDeps);
     });
     it('should detect complex circular dependencies', () => {
-      const complexCircular = new Map<string, string[]>([;)
+      const complexCircular = new Map<string, string[]>([;);
         ['plugin-a', ['plugin-b']],
         ['plugin-b', ['plugin-c', 'plugin-d']],
         ['plugin-c', ['plugin-d']],
@@ -363,7 +363,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
       expect(result).toEqual(['plugin-a', 'plugin-b', 'plugin-d', 'plugin-a']);
     });
     it('should return null for acyclic dependency graphs', () => {
-      const acyclicDeps = new Map<string, string[]>([;)
+      const acyclicDeps = new Map<string, string[]>([;);
         ['base-plugin', []],
         ['utils-plugin', ['base-plugin']],
         ['ui-plugin', ['base-plugin', 'utils-plugin']],
@@ -374,7 +374,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
       expect(result).toBeNull();
     });
     it('should detect self-referencing dependencies', () => {
-      const selfReferencingDeps = new Map<string, string[]>([;)
+      const selfReferencingDeps = new Map<string, string[]>([;);
         ['broken-plugin', ['broken-plugin']] // Plugin depends on itself
       ]);
       dependencyResolver.detectCircularDependencies.mockReturnValue()
@@ -398,7 +398,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
           versions: ['1.1.0', '1.3.0']
         }
       ];
-      const expectedResolution = new Map<string, string>([;)
+      const expectedResolution = new Map<string, string>([;);
         ['shared-lib', '1.2.0'] // Highest version that satisfies both constraints
       ]);
       dependencyResolver.resolveConflicts.mockReturnValue(expectedResolution as unknown as unknown as unknown as unknown as unknown);
@@ -411,12 +411,12 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
         {
           plugin: 'old-plugin',
           dependency: 'api-lib',
-          versions: ['1.0.0'] // Requires old version
+          versions: ['1.0.0'] // Requires old version,
         },
         {
           plugin: 'new-plugin',
           dependency: 'api-lib', 
-          versions: ['2.0.0'] // Requires new version with breaking changes
+          versions: ['2.0.0'] // Requires new version with breaking changes,
         }
       ];
       dependencyResolver.resolveConflicts.mockImplementation(() => {
@@ -430,11 +430,11 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
         {
           plugin: 'theme-aware-plugin',
           dependency: 'theme-engine',
-          versions: ['2.1.0'] // Regular dependency
+          versions: ['2.1.0'] // Regular dependency,
         }
       ];
       // Mock that theme-engine 2.0.0 is a peer dependency of another plugin
-      const peerVersions = new Map<string, string>([;)
+      const peerVersions = new Map<string, string>([;);
         ['theme-engine', '2.0.0']
       ]);
       dependencyResolver.resolveConflicts.mockImplementation((conflicts) => {

@@ -188,7 +188,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
       performanceMetrics: {,
         successRate: 91.7,
         averageExecutionTime: 1.8,
-        lastFailureReason: 'Network timeout'
+        lastFailureReason: 'Network timeout',
       }
     },
     {
@@ -203,7 +203,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
       recurrence: {,
         type: RecurrenceType.DAILY,
         interval: 1,
-        endDate: new Date('2024-02-15T00:00:00.000Z')
+        endDate: new Date('2024-02-15T00:00:00.000Z'),
       },
       actionConfig: {,
         rolloutPercentage: 10,
@@ -275,7 +275,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
       type: 'time_overlap',
       severity: 'medium',
       description: 'Feature rollout and maintenance window overlap on Sundays at 9 AM',
-      suggestedResolution: 'Reschedule feature rollout to 10 AM on Sundays'
+      suggestedResolution: 'Reschedule feature rollout to 10 AM on Sundays',
     }
   ];
   useEffect(() => {
@@ -370,7 +370,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
     }
   };
   if (loading) {
-    return ()
+    return ();
       <div className={`p-6 ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <RefreshCw className="h-8 w-8 animate-spin text-blue-600" />
@@ -379,7 +379,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`p-6 space-y-6 ${className}`}>}
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -444,7 +444,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
             {filteredSchedules.map((schedule) => {
               const ActionIcon = ACTION_CONFIG[schedule.action].icon;
               const StatusIcon = STATUS_CONFIG[schedule.status].icon;
-              return ()
+              return ();
                 <Card key={schedule.id}>
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">

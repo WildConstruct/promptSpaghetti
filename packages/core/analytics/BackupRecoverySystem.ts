@@ -142,7 +142,7 @@ export class BackupRecoverySystem {
       console.log(`Starting backup ${backupId}: ${backupName}`);}
       const events = await this.eventRepository.findMany({)
         filter,
-        limit: 1000000 // Large limit for backup
+        limit: 1000000 // Large limit for backup,
       });
       if (events.length === 0) {
         throw new Error('No events found matching the specified filter');
@@ -170,7 +170,7 @@ export class BackupRecoverySystem {
       // Create backup metadata
       const timeRange = events.length > 0 ? {
         start: Math.min(...events.map(e => e.timestamp)),
-        end: Math.max(...events.map(e => e.timestamp))
+        end: Math.max(...events.map(e => e.timestamp)),
       } : { start: 0, end: 0 };
       const systemSources = Array.from(new Set(events.map(e => e.source)));
       const metadata: BackupMetadata = {
@@ -329,7 +329,7 @@ export class BackupRecoverySystem {
   async restoreFromBackup()
     backupId: string,
     targetFilter?: EventFilter,
-    validateBeforeRestore: boolean = true
+    validateBeforeRestore: boolean = true,
   ): Promise<string> {
     const recoveryId = `recovery_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     try {
@@ -380,7 +380,7 @@ export class BackupRecoverySystem {
     recoveryId: string,
     backup: BackupMetadata,
     targetFilter?: EventFilter,
-    validateBeforeRestore: boolean = true
+    validateBeforeRestore: boolean = true,
   ): Promise<void> {
     const recovery = this.recoveryMetadata.get(recoveryId);
     if (!recovery) throw new Error(`Recovery ${recoveryId} not found`);}
@@ -781,7 +781,6 @@ export class BackupRecoverySystem {
     totalEvents: number;
     oldestBackup?: number;
     newestBackup?: number;
-  } {
     const backups = Array.from(this.backupMetadata.values());
     const completedBackups = backups.filter(b => b.status === BackupStatus.COMPLETED || b.status === BackupStatus.VERIFIED);
     return {
@@ -790,7 +789,7 @@ export class BackupRecoverySystem {
       totalSize: completedBackups.reduce((sum, b) => sum + b.size, 0),
       totalEvents: completedBackups.reduce((sum, b) => sum + b.eventCount, 0),
       oldestBackup: backups.length > 0 ? Math.min(...backups.map(b => b.createdAt)) : undefined,
-      newestBackup: backups.length > 0 ? Math.max(...backups.map(b => b.createdAt)) : undefined
+      newestBackup: backups.length > 0 ? Math.max(...backups.map(b => b.createdAt)) : undefined,
     };
   }
 }

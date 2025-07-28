@@ -53,7 +53,7 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
     zIndex: 1000,
     pointerEvents: 'all' as const,
     maxWidth: 200,
-    textAlign: 'center' as const
+    textAlign: 'center' as const,
   }), [edge, x, y]);
   const handleClick = useCallback(() => {
     if (edge.interactive && !isEditing) {
@@ -82,7 +82,7 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
   if (!edge.showLabel || !edge.label) {
     return null;
   }
-  return ()
+  return ();
     <div
       style={labelStyle}
       onClick={handleClick}
@@ -163,7 +163,7 @@ export const AnnotatedEdgeComponent: React.FC<AnnotatedEdgeComponentProps> = ({)
     return { x, y };
   }, [data, labelX, labelY, sourceX, sourceY, targetX, targetY]);
   const { x: finalLabelX, y: finalLabelY } = getLabelPosition();
-  return ()
+  return ();
     <>
       <path
         id={id}
@@ -216,7 +216,7 @@ export const ConnectionLabelEditor: React.FC<ConnectionLabelEditorProps> = ({)
         color,
         backgroundColor
       },
-      labelPosition: labelPosition === 'center' || labelPosition === 'start' || labelPosition === 'end' 
+      labelPosition: labelPosition === 'center' || labelPosition === 'start' || labelPosition === 'end' ,
         ? labelPosition as 'center' | 'start' | 'end'
         : parseFloat(labelPosition) || 50,
       showLabel,
@@ -226,7 +226,7 @@ export const ConnectionLabelEditor: React.FC<ConnectionLabelEditorProps> = ({)
     onClose();
   }, [edge, label, fontSize, color, backgroundColor, labelPosition, showLabel, interactive, onUpdateEdge, onClose]);
   if (!edge) return null;
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: '50%',
@@ -472,7 +472,7 @@ export const optimizeLabelPositions = ()
       // Adjust position if collision detected
       offset = {
         x: offset.x + (Math.random() - 0.5) * 20,
-        y: offset.y + (Math.random() - 0.5) * 20
+        y: offset.y + (Math.random() - 0.5) * 20,
       };
       attempts++;
     }

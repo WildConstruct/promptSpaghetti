@@ -73,7 +73,7 @@ export class OpenAIGraphAgent {
                 model: this.config.model,
                 temperature: currentTemperature,
                 tokenCount: response.tokenCount || 0,
-                generationTime: Date.now() - startTime
+                generationTime: Date.now() - startTime,
               }
             };
           } else {
@@ -88,7 +88,7 @@ export class OpenAIGraphAgent {
                   model: this.config.model,
                   temperature: currentTemperature,
                   tokenCount: response.tokenCount || 0,
-                  generationTime: Date.now() - startTime
+                  generationTime: Date.now() - startTime,
                 }
               };
             }
@@ -112,7 +112,7 @@ export class OpenAIGraphAgent {
         model: this.config.model,
         temperature: currentTemperature,
         tokenCount: 0,
-        generationTime: Date.now() - startTime
+        generationTime: Date.now() - startTime,
       }
     };
   }
@@ -126,8 +126,8 @@ Output must follow this exact format:
 \`\`\`
 version: 1.0.0,
 metadata:
-  name: "Graph Name"
-  description: "Brief description"
+  name: "Graph Name",
+  description: "Brief description",
   author: "llm-agent",
   created: "${new Date().toISOString()}"}
 ---NODES---
@@ -257,12 +257,12 @@ OUTPUT THE COMPLETE GRAPH:`;
       return {
         success: true,
         content: mockResponse,
-        tokenCount: mockResponse.length / 4 // Rough token estimate
+        tokenCount: mockResponse.length / 4 // Rough token estimate,
       };
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   }
@@ -289,8 +289,8 @@ OUTPUT THE COMPLETE GRAPH:`;
   private generateMockResponse(userPrompt: string): string {
     return `version: 1.0.0
 metadata:
-  name: "Sample Generated Graph"
-  description: "Mock response for development"
+  name: "Sample Generated Graph",
+  description: "Mock response for development",
   author: "llm-agent",
   created: "${new Date().toISOString()}"}
 ---NODES---

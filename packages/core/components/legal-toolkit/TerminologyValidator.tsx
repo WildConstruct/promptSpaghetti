@@ -148,7 +148,7 @@ export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({)
       tokens.push({)
         token: match[0],
         start: match.index,
-        end: match.index + match[0].length
+        end: match.index + match[0].length,
       });
     }
     return tokens;
@@ -157,7 +157,7 @@ export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({)
     const legalTerms: { term: string; start: number; end: number }[] = [];
     // Single word terms
     tokens.forEach(token => {)
-      const isLegalTerm = LEGAL_TERMINOLOGY_DB.some(term => ;)
+      const isLegalTerm = LEGAL_TERMINOLOGY_DB.some(term => ;);
         term.term.toLowerCase() === token.token.toLowerCase()
       );
       if (isLegalTerm) {
@@ -171,14 +171,14 @@ export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({)
     // Multi-word terms (simplified approach)
     for (let i = 0; i < tokens.length - 1; i++) {
       const twoWordTerm = `${tokens[i].token} ${tokens[i + 1].token}`;}
-      const isLegalTerm = LEGAL_TERMINOLOGY_DB.some(term => ;)
+      const isLegalTerm = LEGAL_TERMINOLOGY_DB.some(term => ;);
         term.term.toLowerCase() === twoWordTerm.toLowerCase()
       );
       if (isLegalTerm) {
         legalTerms.push({)
           term: twoWordTerm,
           start: tokens[i].start,
-          end: tokens[i + 1].end
+          end: tokens[i + 1].end,
         });
       }
     }
@@ -189,18 +189,18 @@ export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({)
         legalTerms.push({)
           term: threeWordTerm,
           start: tokens[i].start,
-          end: tokens[i + 2].end
+          end: tokens[i + 2].end,
         });
       }
     }
     return legalTerms;
   };
-  const validateTerm = async (;)
+  const validateTerm = async (;);
     termInfo: { term: string; start: number; end: number }, 
     fullText: string,
     settings: ValidationSettings,
   ): Promise<TermValidationResult | null> => {
-    const matchingTerms = LEGAL_TERMINOLOGY_DB.filter(dbTerm => ;)
+    const matchingTerms = LEGAL_TERMINOLOGY_DB.filter(dbTerm => ;);
       dbTerm.term.toLowerCase() === termInfo.term.toLowerCase()
     );
     if (matchingTerms.length === 0) {
@@ -257,11 +257,9 @@ export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({)
     return LEGAL_TERMINOLOGY_DB
       .filter(dbTerm => )
         dbTerm.jurisdiction === settings.jurisdiction || dbTerm.jurisdiction === 'Universal'
-      )
       .filter(dbTerm => )
         dbTerm.alternatives?.some(alt => alt.toLowerCase().includes(term.toLowerCase())) ||
         dbTerm.term.toLowerCase().includes(term.toLowerCase())
-      )
       .slice(0, 2);
   };
   const calculateSimilarity = (str1: string, str2: string): number => {
@@ -332,7 +330,7 @@ export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({)
                 definition: 'Consistent terminology usage',
                 context: 'Consistency Check',
                 jurisdiction: 'Universal',
-                source: 'Style Guide'
+                source: 'Style Guide',
               }],
               confidence: 0.8,
               context: extractContext(text, position, endPosition)
@@ -363,7 +361,7 @@ export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({)
     return { total, valid, invalid };
   };
   const summary = getValidationSummary();
-  return ()
+  return ();
     <div className={`terminology-validator ${className}`}>}
       <style>
         {`

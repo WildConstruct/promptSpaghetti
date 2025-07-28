@@ -225,7 +225,7 @@ export declare class SecurityLogger extends EventEmitter {
     /**
      * Log unlock attempt
      */
-    logUnlockAttempt()
+    logUnlockAttempt();
       lockoutId: string,
       adminId: string,
       reason: string,
@@ -235,7 +235,7 @@ export declare class SecurityLogger extends EventEmitter {
     /**
      * Log emergency unlock event
      */
-    logEmergencyUnlock()
+    logEmergencyUnlock();
       lockoutId: string,
       adminId: string,
       emergencyCode: string,
@@ -245,7 +245,7 @@ export declare class SecurityLogger extends EventEmitter {
     /**
      * Log security alert
      */
-    logSecurityAlert()
+    logSecurityAlert();
       alertType: string,
       severity: 'low' | 'medium' | 'high' | 'critical',
       details: Record<string,
@@ -275,7 +275,7 @@ export declare class SecurityLogger extends EventEmitter {
     /**
      * Export logs for compliance
      */
-    exportLogsForCompliance()
+    exportLogsForCompliance();
       framework: ComplianceFramework,
       startTime: Date,
       endTime: Date,

@@ -102,7 +102,7 @@ export interface LockingState {
 }
 export interface LockingActions {
     fetchLocks: (workspaceId: string) => Promise<void>;
-    acquireLock: (request: LockRequest) => Promise<{
+    acquireLock: (request: LockRequest) => Promise<{,
         success: boolean;
         error?: string;
     }>;
@@ -125,7 +125,7 @@ export interface LockingActions {
         error?: string;
     }>;
     fetchNotifications: (userId: string, unreadOnly?: boolean) => Promise<void>;
-    markNotificationAsRead: (notificationId: string) => Promise<{
+    markNotificationAsRead: (notificationId: string) => Promise<{,
         success: boolean;
         error?: string;
     }>;

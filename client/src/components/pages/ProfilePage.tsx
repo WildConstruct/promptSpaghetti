@@ -2,48 +2,44 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { ArrowLeft } from 'lucide-react';
-
 const ProfilePage: React.FC = () => {
   const { user, updateUser } = useAuthStore();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({)
     name: user?.name || '',
     email: user?.email || '',
-    displayName: user?.displayName || ''
+    displayName: user?.displayName || '',
   });
-
   const handleSave = () => {
     if (updateUser) {
-      updateUser({
+      updateUser({)
         ...user,
         ...formData
       });
     }
     setIsEditing(false);
   };
-
   const handleCancel = () => {
-    setFormData({
+    setFormData({)
       name: user?.name || '',
       email: user?.email || '',
-      displayName: user?.displayName || ''
+      displayName: user?.displayName || '',
     });
     setIsEditing(false);
   };
-
-  return (
+  return ()
     <div style={{
       padding: '40px',
       maxWidth: '800px',
       margin: '0 auto',
       backgroundColor: '#ffffff',
-      minHeight: '100vh'
+      minHeight: '100vh',
     }}>
       <div style={{
         marginBottom: '32px',
         borderBottom: '1px solid #e5e7eb',
-        paddingBottom: '16px'
+        paddingBottom: '16px',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
           <button
@@ -59,7 +55,7 @@ const ProfilePage: React.FC = () => {
               cursor: 'pointer',
               fontSize: '14px',
               color: '#374151',
-              textDecoration: 'none'
+              textDecoration: 'none',
             }}
           >
             <ArrowLeft size={16} />
@@ -69,7 +65,7 @@ const ProfilePage: React.FC = () => {
             fontSize: '24px',
             fontWeight: '700',
             color: '#111827',
-            margin: 0
+            margin: 0,
           }}>
             User Profile
           </h1>
@@ -77,23 +73,22 @@ const ProfilePage: React.FC = () => {
         <p style={{
           color: '#6b7280',
           fontSize: '14px',
-          margin: 0
+          margin: 0,
         }}>
           Manage your account information and preferences
         </p>
       </div>
-
       <div style={{
         backgroundColor: '#f9fafb',
         border: '1px solid #e5e7eb',
         borderRadius: '8px',
         padding: '24px',
-        marginBottom: '24px'
+        marginBottom: '24px',
       }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          marginBottom: '24px'
+          marginBottom: '24px',
         }}>
           <div style={{
             width: '80px',
@@ -106,7 +101,7 @@ const ProfilePage: React.FC = () => {
             color: '#ffffff',
             fontSize: '28px',
             fontWeight: '600',
-            marginRight: '20px'
+            marginRight: '20px',
           }}>
             {user?.name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || 'U'}
           </div>
@@ -115,33 +110,32 @@ const ProfilePage: React.FC = () => {
               fontSize: '18px',
               fontWeight: '600',
               color: '#111827',
-              margin: '0 0 4px 0'
+              margin: '0 0 4px 0',
             }}>
               {user?.displayName || user?.name || 'User'}
             </h3>
             <p style={{
               color: '#6b7280',
               fontSize: '14px',
-              margin: '0 0 4px 0'
+              margin: '0 0 4px 0',
             }}>
               {user?.email || 'No email set'}
             </p>
-            {user?.role && (
+            {user?.role && ()
               <span style={{
                 backgroundColor: user.role === 'admin' ? '#dc2626' : '#059669',
                 color: '#ffffff',
                 padding: '2px 8px',
                 borderRadius: '12px',
                 fontSize: '12px',
-                fontWeight: '500'
+                fontWeight: '500',
               }}>
                 {user.role}
               </span>
             )}
           </div>
         </div>
-
-        {!isEditing ? (
+        {!isEditing ? ()
           <button
             onClick={() => setIsEditing(true)}
             style={{
@@ -152,12 +146,12 @@ const ProfilePage: React.FC = () => {
               borderRadius: '6px',
               fontSize: '14px',
               cursor: 'pointer',
-              fontWeight: '500'
+              fontWeight: '500',
             }}
           >
             Edit Profile
           </button>
-        ) : (
+        ) : ()
           <div>
             <div style={{ marginBottom: '16px' }}>
               <label style={{
@@ -165,7 +159,7 @@ const ProfilePage: React.FC = () => {
                 fontSize: '14px',
                 fontWeight: '500',
                 color: '#374151',
-                marginBottom: '4px'
+                marginBottom: '4px',
               }}>
                 Display Name
               </label>
@@ -178,19 +172,18 @@ const ProfilePage: React.FC = () => {
                   padding: '8px 12px',
                   border: '1px solid #d1d5db',
                   borderRadius: '6px',
-                  fontSize: '14px'
+                  fontSize: '14px',
                 }}
                 placeholder="Your display name"
               />
             </div>
-
             <div style={{ marginBottom: '16px' }}>
               <label style={{
                 display: 'block',
                 fontSize: '14px',
                 fontWeight: '500',
                 color: '#374151',
-                marginBottom: '4px'
+                marginBottom: '4px',
               }}>
                 Full Name
               </label>
@@ -203,19 +196,18 @@ const ProfilePage: React.FC = () => {
                   padding: '8px 12px',
                   border: '1px solid #d1d5db',
                   borderRadius: '6px',
-                  fontSize: '14px'
+                  fontSize: '14px',
                 }}
                 placeholder="Your full name"
               />
             </div>
-
             <div style={{ marginBottom: '20px' }}>
               <label style={{
                 display: 'block',
                 fontSize: '14px',
                 fontWeight: '500',
                 color: '#374151',
-                marginBottom: '4px'
+                marginBottom: '4px',
               }}>
                 Email
               </label>
@@ -228,12 +220,11 @@ const ProfilePage: React.FC = () => {
                   padding: '8px 12px',
                   border: '1px solid #d1d5db',
                   borderRadius: '6px',
-                  fontSize: '14px'
+                  fontSize: '14px',
                 }}
                 placeholder="your.email@example.com"
               />
             </div>
-
             <div style={{ display: 'flex', gap: '12px' }}>
               <button
                 onClick={handleSave}
@@ -245,7 +236,7 @@ const ProfilePage: React.FC = () => {
                   borderRadius: '6px',
                   fontSize: '14px',
                   cursor: 'pointer',
-                  fontWeight: '500'
+                  fontWeight: '500',
                 }}
               >
                 Save Changes
@@ -260,7 +251,7 @@ const ProfilePage: React.FC = () => {
                   borderRadius: '6px',
                   fontSize: '14px',
                   cursor: 'pointer',
-                  fontWeight: '500'
+                  fontWeight: '500',
                 }}
               >
                 Cancel
@@ -269,18 +260,17 @@ const ProfilePage: React.FC = () => {
           </div>
         )}
       </div>
-
       <div style={{
         backgroundColor: '#f9fafb',
         border: '1px solid #e5e7eb',
         borderRadius: '8px',
-        padding: '24px'
+        padding: '24px',
       }}>
         <h3 style={{
           fontSize: '16px',
           fontWeight: '600',
           color: '#111827',
-          marginBottom: '12px'
+          marginBottom: '12px',
         }}>
           Account Information
         </h3>

@@ -80,7 +80,7 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
       'Edo Japan (1603-1868)'
     ];
     const randomPeriod = periods[Math.floor(Math.random() * periods.length)];
-    const newScene = generateRandomScene(;)
+    const newScene = generateRandomScene(;);
       `generated-${Date.now()}`,}
       `Generated ${randomPeriod.split(' ')[0]} Scene`,}
       randomPeriod
@@ -94,7 +94,7 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
     setShowDebugInfo(false);
     setRealTimeUpdate(true);
   };
-  return ()
+  return ();
     <div className={`vfx-visualization-demo ${className}`}>}
       <Card className="mb-6">
         <CardHeader>
@@ -300,7 +300,7 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
           realTimeUpdate={realTimeUpdate}
           showControls={selectedVisualizationMode !== 'compact'}
           onSceneUpdate={(updatedScene) => {
-            const updatedScenes = scenes.map(scene => ;)
+            const updatedScenes = scenes.map(scene => ;);
               scene.id === updatedScene.id ? updatedScene : scene
             );
             setScenes(updatedScenes);

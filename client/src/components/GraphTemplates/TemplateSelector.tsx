@@ -2,7 +2,6 @@
  * TemplateSelector - UI component for selecting and managing graph templates
  * REFACTOR-001: EnhancedGraphEditor Data Extraction
  */
-
 import React, { useState } from 'react';
 import { 
   GraphTemplate, 
@@ -10,26 +9,23 @@ import {
   retroGamingDemoTemplate,
   templateCategories 
 } from '../../data/nodeTemplates';
-
 interface TemplateSelectorProps {
   onTemplateSelect?: (template: GraphTemplate) => void;
   onNodeTemplateSelect?: (nodeTemplate: NodeTemplate) => void;
   className?: string;
 }
 
-export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
+export const TemplateSelector: React.FC<TemplateSelectorProps> = ({)
   onTemplateSelect,
   onNodeTemplateSelect,
   className = ""
 }) => {
   const [activeTab, setActiveTab] = useState<'graphs' | 'nodes'>('graphs');
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'logic' | 'transform'>('all');
-
   // Available graph templates (can be expanded)
   const graphTemplates: GraphTemplate[] = [
     retroGamingDemoTemplate
   ];
-
   // Get node templates by category
   const getNodeTemplatesByCategory = () => {
     if (selectedCategory === 'all') {
@@ -37,17 +33,14 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
     }
     return templateCategories[selectedCategory] || [];
   };
-
   const handleGraphTemplateSelect = (template: GraphTemplate) => {
     onTemplateSelect?.(template);
   };
-
   const handleNodeTemplateSelect = (template: NodeTemplate) => {
     onNodeTemplateSelect?.(template);
   };
-
-  return (
-    <div className={`template-selector bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg ${className}`}>
+  return ()
+    <div className={`template-selector bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg ${className}`}>}
       {/* Header with tabs */}
       <div className="border-b border-gray-200 dark:border-gray-700">
         <div className="flex space-x-1 p-2">
@@ -73,16 +66,14 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
           </button>
         </div>
       </div>
-
       <div className="p-4">
-        {activeTab === 'graphs' && (
+        {activeTab === 'graphs' && ()
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
               Complete Graph Templates
             </h3>
-            
             <div className="space-y-3">
-              {graphTemplates.map((template, index) => (
+              {graphTemplates.map((template, index) => ()
                 <div
                   key={index}
                   className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors"
@@ -107,14 +98,12 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             </div>
           </div>
         )}
-
-        {activeTab === 'nodes' && (
+        {activeTab === 'nodes' && ()
           <div>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                 Individual Node Templates
               </h3>
-              
               {/* Category filter */}
               <select
                 value={selectedCategory}
@@ -126,9 +115,8 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
                 <option value="transform">Transform Nodes</option>
               </select>
             </div>
-
             <div className="space-y-3">
-              {getNodeTemplatesByCategory().map((template) => (
+              {getNodeTemplatesByCategory().map((template) => ()
                 <div
                   key={template.id}
                   className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors"
@@ -153,7 +141,6 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
                       {template.type}
                     </span>
                   </div>
-                  
                   <div className="flex items-center justify-between mt-3">
                     <span className="text-xs text-gray-500 dark:text-gray-400">
                       {template.data.options.length} configuration options

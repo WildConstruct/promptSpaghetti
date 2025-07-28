@@ -205,7 +205,7 @@ export declare class RateLimitingAnalyticsDashboard extends EventEmitter {
     private mlUpdateTimer?;
     private historicalData;
     private startTime;
-    constructor()
+    constructor();
       rateLimitingService: RateLimitingService,
       throttlingEngine?: AdaptiveThrottlingRulesEngine,
       performanceMetrics?: RateLimitingPerformanceMetrics,

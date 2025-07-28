@@ -208,7 +208,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
     if (!promotionData) return null;
     const { slot } = promotionData.schedule;
     const currentContent = promotionData.content[currentContentIndex] || promotionData.content[0];
-    return ()
+    return ();
       <div className="slot-preview">
         <div className="slot-header">
           <Title level={4}>
@@ -234,7 +234,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
             justifyContent: 'center',
             position: 'relative',
             background: '#fafafa',
-            margin: '20px 0'
+            margin: '20px 0',
           }}
         >
           {previewMode === 'rotation' ? ()
@@ -369,7 +369,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
               value={promotionData.predicted_performance.confidence_level}
               suffix="%"
               valueStyle={{ 
-                color: promotionData.predicted_performance.confidence_level > 80 ? '#3f8600' : '#cf1322' 
+                color: promotionData.predicted_performance.confidence_level > 80 ? '#3f8600' : '#cf1322' ,
               }}
             />
           </Col>
@@ -379,7 +379,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
   };
   // Render performance predictions
   const renderPerformancePredictions = () => {
-    return ()
+    return ();
       <div className="performance-predictions">
         {performancePredictions.map((prediction, index) => ()
           <Card key={prediction.metric} className="prediction-card">
@@ -445,7 +445,6 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
             <br />
             <Text type="secondary">{start.toLocaleString()}</Text>
           </div>
-        )
       },
       {
         color: progress > 25 ? 'green' : 'gray',
@@ -455,7 +454,6 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
             <br />
             <Text type="secondary">25% duration milestone</Text>
           </div>
-        )
       },
       {
         color: progress > 50 ? 'green' : 'gray',
@@ -465,7 +463,6 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
             <br />
             <Text type="secondary">Performance optimization checkpoint</Text>
           </div>
-        )
       },
       {
         color: progress > 75 ? 'green' : 'gray',
@@ -475,7 +472,6 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
             <br />
             <Text type="secondary">Prepare transition to next campaign</Text>
           </div>
-        )
       },
       {
         color: progress >= 100 ? 'green' : 'gray',
@@ -485,10 +481,9 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
             <br />
             <Text type="secondary">{end.toLocaleString()}</Text>
           </div>
-        )
       }
     ];
-    return ()
+    return ();
       <div className="schedule-timeline">
         <Row gutter={[16, 16]} style={{ marginBottom: '20px' }}>
           <Col span={12}>
@@ -521,7 +516,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
   const renderABTestPreview = () => {
     if (!promotionData?.ab_test_config) return null;
     const { ab_test_config } = promotionData;
-    return ()
+    return ();
       <div className="ab-test-preview">
         <Alert
           message="A/B Test Configuration"
@@ -583,13 +578,13 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
     );
   };
   if (!promotionData) {
-    return ()
+    return ();
       <div className="promotion-preview-empty">
         <Text type="secondary">No promotion data available for preview</Text>
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`promotion-preview ${className}`}>}
       <div className="preview-header">
         <Title level={3}>

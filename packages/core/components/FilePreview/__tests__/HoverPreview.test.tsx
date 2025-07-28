@@ -32,7 +32,7 @@ describe('HoverPreview Component', () => {
       tags: ['test', 'hover'],
       author: 'Test Author',
       version: '1.2.0',
-      created: new Date('2025-01-10T09:00:00Z')
+      created: new Date('2025-01-10T09:00:00Z'),
     },
     isFavorite: true,
   };
@@ -61,7 +61,7 @@ describe('HoverPreview Component', () => {
   });
   describe('Basic Functionality', () => {
     it('renders trigger element', () => {
-      render()
+      render();
         <HoverPreview file={mockFile}>
           <span>Hover target</span>
         </HoverPreview>
@@ -69,7 +69,7 @@ describe('HoverPreview Component', () => {
       expect(screen.getByText('Hover target')).toBeInTheDocument();
     });
     it('does not show preview initially', () => {
-      render()
+      render();
         <HoverPreview file={mockFile}>
           <span>Hover target</span>
         </HoverPreview>
@@ -79,7 +79,7 @@ describe('HoverPreview Component', () => {
   });
   describe('Hover Behavior', () => {
     it('shows preview after hover delay', async () => {
-      render()
+      render();
         <HoverPreview file={mockFile} delay={500}>
           <span>Hover target</span>
         </HoverPreview>
@@ -96,7 +96,7 @@ describe('HoverPreview Component', () => {
       }, { timeout: 1000 });
     });
     it('cancels preview if mouse leaves before delay', async () => {
-      render()
+      render();
         <HoverPreview file={mockFile} delay={500}>
           <span>Hover target</span>
         </HoverPreview>
@@ -111,7 +111,7 @@ describe('HoverPreview Component', () => {
       expect(screen.queryByText('Hover Test File')).not.toBeInTheDocument();
     });
     it('hides preview when mouse leaves', async () => {
-      render()
+      render();
         <HoverPreview file={mockFile} delay={200}>
           <span>Hover target</span>
         </HoverPreview>
@@ -130,7 +130,7 @@ describe('HoverPreview Component', () => {
   });
   describe('Preview Content', () => {
     it('displays file information in preview', async () => {
-      render()
+      render();
         <HoverPreview file={mockFile} delay={100}>
           <span>Hover target</span>
         </HoverPreview>
@@ -147,7 +147,7 @@ describe('HoverPreview Component', () => {
       });
     });
     it('shows favorite status in preview', async () => {
-      render()
+      render();
         <HoverPreview file={mockFile} delay={100}>
           <span>Hover target</span>
         </HoverPreview>
@@ -160,7 +160,7 @@ describe('HoverPreview Component', () => {
       });
     });
     it('generates and displays thumbnail', async () => {
-      render()
+      render();
         <HoverPreview file={mockFile} delay={100}>
           <span>Hover target</span>
         </HoverPreview>
@@ -179,7 +179,7 @@ describe('HoverPreview Component', () => {
   });
   describe('Positioning Logic', () => {
     it('positions preview to the right by default', async () => {
-      render()
+      render();
         <HoverPreview file={mockFile} delay={100}>
           <span>Hover target</span>
         </HoverPreview>
@@ -204,7 +204,7 @@ describe('HoverPreview Component', () => {
         x: 900,
         y: 200,
       } as unknown as unknown);
-      render()
+      render();
         <HoverPreview file={mockFile} delay={100}>
           <span>Hover target</span>
         </HoverPreview>
@@ -230,7 +230,7 @@ describe('HoverPreview Component', () => {
         x: 100,
         y: 700,
       } as unknown as unknown);
-      render()
+      render();
         <HoverPreview file={mockFile} delay={100}>
           <span>Hover target</span>
         </HoverPreview>
@@ -247,7 +247,7 @@ describe('HoverPreview Component', () => {
   });
   describe('Performance', () => {
     it('debounces hover events', () => {
-      render()
+      render();
         <HoverPreview file={mockFile} delay={300}>
           <span>Hover target</span>
         </HoverPreview>
@@ -283,7 +283,7 @@ describe('HoverPreview Component', () => {
   describe('Error Handling', () => {
     it('handles thumbnail generation errors gracefully', async () => {
       mockProjectManager.generateThumbnail.mockRejectedValue(new Error('Thumbnail failed'));
-      render()
+      render();
         <HoverPreview file={mockFile} delay={100}>
           <span>Hover target</span>
         </HoverPreview>
@@ -307,7 +307,7 @@ describe('HoverPreview Component', () => {
           author: undefined,
         }
       };
-      render()
+      render();
         <HoverPreview file={fileWithoutMetadata} delay={100}>
           <span>Hover target</span>
         </HoverPreview>
@@ -323,7 +323,7 @@ describe('HoverPreview Component', () => {
   });
   describe('Accessibility', () => {
     it('has proper ARIA attributes for preview', async () => {
-      render()
+      render();
         <HoverPreview file={mockFile} delay={100}>
           <span>Hover target</span>
         </HoverPreview>
@@ -337,7 +337,7 @@ describe('HoverPreview Component', () => {
       });
     });
     it('supports focus events for keyboard users', async () => {
-      render()
+      render();
         <HoverPreview file={mockFile} delay={100}>
           <span tabIndex={0}>Hover target</span>
         </HoverPreview>
@@ -350,7 +350,7 @@ describe('HoverPreview Component', () => {
       });
     });
     it('hides preview on blur for keyboard users', async () => {
-      render()
+      render();
         <HoverPreview file={mockFile} delay={100}>
           <span tabIndex={0}>Hover target</span>
         </HoverPreview>
@@ -369,7 +369,7 @@ describe('HoverPreview Component', () => {
   });
   describe('Custom Delay', () => {
     it('respects custom delay prop', async () => {
-      render()
+      render();
         <HoverPreview file={mockFile} delay={1000}>
           <span>Hover target</span>
         </HoverPreview>
@@ -386,7 +386,7 @@ describe('HoverPreview Component', () => {
       });
     });
     it('uses default delay when not specified', async () => {
-      render()
+      render();
         <HoverPreview file={mockFile}>
           <span>Hover target</span>
         </HoverPreview>

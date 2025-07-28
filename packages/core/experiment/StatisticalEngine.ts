@@ -45,7 +45,7 @@ export class StatisticalEngine {
   /**
    * Perform comprehensive statistical analysis of experiment results
    */
-  analyzeExperimentResults()
+  analyzeExperimentResults();
     variants: VariantResults[],
     metrics: ExperimentMetric[],
     controlVariantId: string,
@@ -59,13 +59,13 @@ export class StatisticalEngine {
       throw new Error('No primary metric found');
     }
     // Calculate statistical results for primary metric
-    const primaryResults = this.calculatePrimaryMetricResults(;)
+    const primaryResults = this.calculatePrimaryMetricResults(;);
       variants,
       controlVariant,
       primaryMetric
     );
     // Calculate guardrail metrics
-    const guardrailResults = this.calculateGuardrailResults(;)
+    const guardrailResults = this.calculateGuardrailResults(;);
       variants,
       controlVariant,
       metrics.filter(m => m.isGuardrail)
@@ -87,7 +87,7 @@ export class StatisticalEngine {
   /**
    * Calculate required sample size for an experiment
    */
-  calculateSampleSize()
+  calculateSampleSize();
     baselineRate: number,
     minimumDetectableEffect: number,
     power = 0.8,
@@ -116,7 +116,7 @@ export class StatisticalEngine {
   /**
    * Perform t-test for continuous metrics
    */
-  tTest()
+  tTest();
     controlValues: number[],
     treatmentValues: number[],
     twoTailed = true
@@ -146,13 +146,13 @@ export class StatisticalEngine {
       effectSize,
       confidenceInterval,
       significant: pValue < (1 - this.confidenceLevel),
-      practicallySignificant: Math.abs(relativeEffect) >= this.minimumPracticalEffect
+      practicallySignificant: Math.abs(relativeEffect) >= this.minimumPracticalEffect,
     };
   }
   /**
    * Perform chi-square test for proportions
    */
-  chiSquareTest()
+  chiSquareTest();
     controlSuccesses: number,
     controlTotal: number,
     treatmentSuccesses: number,
@@ -173,7 +173,7 @@ export class StatisticalEngine {
     const effect = treatmentRate - controlRate;
     const relativeEffect = controlRate !== 0 ? effect / controlRate : 0;
     // Confidence interval for difference in proportions
-    const se = Math.sqrt(;)
+    const se = Math.sqrt(;);
       (controlRate * (1 - controlRate)) / controlTotal +
       (treatmentRate * (1 - treatmentRate)) / treatmentTotal
     );
@@ -186,13 +186,13 @@ export class StatisticalEngine {
       effectSize: this.calculateCohensH(controlRate, treatmentRate),
       confidenceInterval,
       significant: pValue < (1 - this.confidenceLevel),
-      practicallySignificant: Math.abs(relativeEffect) >= this.minimumPracticalEffect
+      practicallySignificant: Math.abs(relativeEffect) >= this.minimumPracticalEffect,
     };
   }
   /**
    * Perform Bayesian analysis for conversion rates
    */
-  bayesianAnalysis()
+  bayesianAnalysis();
     controlSuccesses: number,
     controlTotal: number,
     treatmentSuccesses: number,
@@ -223,7 +223,7 @@ export class StatisticalEngine {
     const probabilityToBeatControl = treatmentWins / samples;
     const expectedLoss = lossSum / samples;
     // Credible interval for treatment rate
-    const credibleInterval = this.betaCredibleInterval(;)
+    const credibleInterval = this.betaCredibleInterval(;);
       treatmentPosteriorAlpha,
       treatmentPosteriorBeta,
       this.confidenceLevel
@@ -238,7 +238,7 @@ export class StatisticalEngine {
   /**
    * Detect winner based on statistical criteria
    */
-  detectWinner()
+  detectWinner();
     variants: VariantResults[],
     controlVariantId: string,
     metric: ExperimentMetric,
@@ -296,7 +296,7 @@ export class StatisticalEngine {
     }
     return {
       confidence: maxConfidence,
-      reason: maxConfidence > 0 
+      reason: maxConfidence > 0 ,
         ? 'Improvements detected but not statistically significant'
         : 'No significant improvements detected'
     };

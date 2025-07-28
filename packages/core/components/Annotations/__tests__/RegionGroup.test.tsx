@@ -36,7 +36,7 @@ describe('RegionGroup Component', () => {
   });
   describe('Rendering', () => {
     test('renders group with correct styling and position', () => {
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -51,11 +51,11 @@ describe('RegionGroup Component', () => {
         top: '100px',
         width: '300px',
         height: '200px',
-        border: '2px solid #3b82f6'
+        border: '2px solid #3b82f6',
       });
     });
     test('displays group label and node count', () => {
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -69,7 +69,7 @@ describe('RegionGroup Component', () => {
     });
     test('applies correct color theme', () => {
       const blueGroup = { ...mockGroup, color: REGION_GROUP_COLORS.blue.primary };
-      render()
+      render();
         <RegionGroup
           group={blueGroup}
           onAction={mockOnAction}
@@ -82,7 +82,7 @@ describe('RegionGroup Component', () => {
       });
     });
     test('shows collapse/expand button', () => {
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -93,7 +93,7 @@ describe('RegionGroup Component', () => {
     });
     test('shows lock indicator when group is locked', () => {
       const lockedGroup = { ...mockGroup, isLocked: true };
-      render()
+      render();
         <RegionGroup
           group={lockedGroup}
           onAction={mockOnAction}
@@ -104,7 +104,7 @@ describe('RegionGroup Component', () => {
     });
     test('hides group when visibility conditions not met', () => {
       const hoverGroup = { ...mockGroup, visibility: 'hover' as const };
-      render()
+      render();
         <RegionGroup
           group={hoverGroup}
           onAction={mockOnAction}
@@ -115,7 +115,7 @@ describe('RegionGroup Component', () => {
     });
     test('shows collapsed state indicator', () => {
       const collapsedGroup = { ...mockGroup, collapsed: true };
-      render()
+      render();
         <RegionGroup
           group={collapsedGroup}
           onAction={mockOnAction}
@@ -128,7 +128,7 @@ describe('RegionGroup Component', () => {
   describe('Group Interactions', () => {
     test('handles collapse/expand toggle', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -145,7 +145,7 @@ describe('RegionGroup Component', () => {
     test('handles expand when collapsed', async () => {
       const user = userEvent.setup();
       const collapsedGroup = { ...mockGroup, collapsed: true };
-      render()
+      render();
         <RegionGroup
           group={collapsedGroup}
           onAction={mockOnAction}
@@ -161,7 +161,7 @@ describe('RegionGroup Component', () => {
     });
     test('starts label editing on double-click', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -175,7 +175,7 @@ describe('RegionGroup Component', () => {
     });
     test('prevents label editing when canEdit is false', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -189,7 +189,7 @@ describe('RegionGroup Component', () => {
     });
     test('saves label on Enter key', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -210,7 +210,7 @@ describe('RegionGroup Component', () => {
     });
     test('cancels label editing on Escape key', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -229,7 +229,7 @@ describe('RegionGroup Component', () => {
   });
   describe('Drag and Move', () => {
     test('handles mouse down for dragging', () => {
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -243,7 +243,7 @@ describe('RegionGroup Component', () => {
       expect(groupElement).toHaveStyle({ cursor: 'grabbing' });
     });
     test('prevents dragging when canMove is false', () => {
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -256,7 +256,7 @@ describe('RegionGroup Component', () => {
     });
     test('prevents dragging when locked', () => {
       const lockedGroup = { ...mockGroup, isLocked: true };
-      render()
+      render();
         <RegionGroup
           group={lockedGroup}
           onAction={mockOnAction}
@@ -272,7 +272,7 @@ describe('RegionGroup Component', () => {
   });
   describe('Resize Handles', () => {
     test('shows resize handles when selected and canResize is true', () => {
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -282,13 +282,13 @@ describe('RegionGroup Component', () => {
         />
       );
       // Should show all 4 corner resize handles
-      const handles = screen.getAllByRole('generic').filter(el => ;)
+      const handles = screen.getAllByRole('generic').filter(el => ;);
         el.style.cursor?.includes('resize')
       );
       expect(handles).toHaveLength(4);
     });
     test('hides resize handles when not selected', () => {
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -297,14 +297,14 @@ describe('RegionGroup Component', () => {
           canResize={true}
         />
       );
-      const handles = screen.queryAllByRole('generic').filter(el => ;)
+      const handles = screen.queryAllByRole('generic').filter(el => ;);
         el.style.cursor?.includes('resize')
       );
       expect(handles).toHaveLength(0);
     });
     test('hides resize handles when locked', () => {
       const lockedGroup = { ...mockGroup, isLocked: true };
-      render()
+      render();
         <RegionGroup
           group={lockedGroup}
           onAction={mockOnAction}
@@ -313,7 +313,7 @@ describe('RegionGroup Component', () => {
           canResize={true}
         />
       );
-      const handles = screen.queryAllByRole('generic').filter(el => ;)
+      const handles = screen.queryAllByRole('generic').filter(el => ;);
         el.style.cursor?.includes('resize')
       );
       expect(handles).toHaveLength(0);
@@ -321,7 +321,7 @@ describe('RegionGroup Component', () => {
   });
   describe('Visual States', () => {
     test('applies selected styling when selected', () => {
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -332,11 +332,11 @@ describe('RegionGroup Component', () => {
       const groupElement = screen.getByTestId('region-group-test-group-1');
       expect(groupElement).toHaveStyle({)
         transform: 'scale(1.02)',
-        zIndex: '100' // Base zIndex + selected bonus
+        zIndex: '100' // Base zIndex + selected bonus,
       });
     });
     test('applies hover effects during interaction', () => {
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -362,7 +362,7 @@ describe('RegionGroup Component', () => {
       );
       let groupElement = screen.getByTestId('region-group-test-group-1');
       expect(groupElement).toHaveStyle({ cursor: 'grab' });
-      rerender()
+      rerender();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -376,7 +376,7 @@ describe('RegionGroup Component', () => {
   });
   describe('Accessibility', () => {
     test('has proper test id', () => {
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -386,7 +386,7 @@ describe('RegionGroup Component', () => {
       expect(screen.getByTestId('region-group-test-group-1')).toBeInTheDocument();
     });
     test('provides meaningful tooltips', () => {
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -398,7 +398,7 @@ describe('RegionGroup Component', () => {
     });
     test('supports keyboard navigation for label editing', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}
@@ -416,7 +416,7 @@ describe('RegionGroup Component', () => {
     test('handles missing color theme gracefully', () => {
       const invalidColorGroup = { ...mockGroup, color: '#invalid' };
       expect(() => {
-        render()
+        render();
           <RegionGroup
             group={invalidColorGroup}
             onAction={mockOnAction}
@@ -428,7 +428,7 @@ describe('RegionGroup Component', () => {
     test('handles invalid style configuration', () => {
       const invalidStyleGroup = { ...mockGroup, style: 'invalid' as any };
       expect(() => {
-        render()
+        render();
           <RegionGroup
             group={invalidStyleGroup}
             onAction={mockOnAction}
@@ -439,7 +439,7 @@ describe('RegionGroup Component', () => {
     });
     test('handles zero or negative node count', () => {
       expect(() => {
-        render()
+        render();
           <RegionGroup
             group={mockGroup}
             onAction={mockOnAction}
@@ -455,7 +455,7 @@ describe('RegionGroup Component', () => {
       const renderSpy = jest.fn<unknown[], unknown>();
       const TestWrapper = ({ group }: { group: RegionGroupType }) => {
         renderSpy();
-        return ()
+        return ();
           <RegionGroup
             group={group}
             onAction={mockOnAction}
@@ -475,7 +475,7 @@ describe('RegionGroup Component', () => {
     });
     test('handles rapid interaction events efficiently', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <RegionGroup
           group={mockGroup}
           onAction={mockOnAction}

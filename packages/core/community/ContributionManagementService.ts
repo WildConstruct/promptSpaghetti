@@ -48,7 +48,7 @@ export class ContributionManagementService implements ContributionRepository {
         target_status: 'draft',
       });
       // Initialize workflow based on contributor reputation and content type
-      const workflowTemplate = await this.selectWorkflowTemplate(;)
+      const workflowTemplate = await this.selectWorkflowTemplate(;);
         submissionData.submission.submitted_by,
         submissionData.type,
         submissionData.category
@@ -63,7 +63,7 @@ export class ContributionManagementService implements ContributionRepository {
         current_version_id: contentVersion.id,
         version_history: [contentVersion.id],
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
       const response = await this.apiClient.post('/api/contributions', submission);
       const createdSubmission = response.data;
@@ -82,7 +82,7 @@ export class ContributionManagementService implements ContributionRepository {
     try {
       const updateData = {
         ...updates,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
       const response = await this.apiClient.put(`/api/contributions/${id}`, updateData);}
       return response.data;
@@ -195,7 +195,7 @@ export class ContributionManagementService implements ContributionRepository {
         {
           ...feedback,
           id: `feedback-${Date.now()}`,}
-          submitted_at: new Date().toISOString()
+          submitted_at: new Date().toISOString(),
         }
       ];
       await this.updateContribution(contributionId, {)
@@ -226,7 +226,7 @@ export class ContributionManagementService implements ContributionRepository {
         ...contribution.workflow.approval_chain,
         {
           ...approval,
-          approved_at: new Date().toISOString()
+          approved_at: new Date().toISOString(),
         }
       ];
       const updatedWorkflow = {
@@ -235,7 +235,7 @@ export class ContributionManagementService implements ContributionRepository {
       };
       await this.updateContribution(contributionId, {)
         workflow: updatedWorkflow,
-        status: approval.approval_type === 'full' ? 'approved' : 'revision_needed'
+        status: approval.approval_type === 'full' ? 'approved' : 'revision_needed',
       });
       // If fully approved, advance to publication stage
       if (approval.approval_type === 'full') {
@@ -254,7 +254,7 @@ export class ContributionManagementService implements ContributionRepository {
   async runQualityAssessment(contributionId: string): Promise<CommunityContentQualityMetrics> {
     try {
       const contribution = await this.getContribution(contributionId);
-      const qualityMetrics = await this.qualityService.runComprehensiveAssessment(;)
+      const qualityMetrics = await this.qualityService.runComprehensiveAssessment(;);
         contributionId,
         contribution.current_version_id,
         {
@@ -323,7 +323,7 @@ export class ContributionManagementService implements ContributionRepository {
     try {
       const contribution = await this.getContribution(contributionId);
       // Verify all quality gates have passed
-      const qualityGatesPassed = contribution.workflow.quality_gate_results.every(;)
+      const qualityGatesPassed = contribution.workflow.quality_gate_results.every(;);
         result => result.passed
       );
       if (!qualityGatesPassed) {
@@ -337,7 +337,7 @@ export class ContributionManagementService implements ContributionRepository {
       // Update contribution status
       await this.updateContribution(contributionId, {)
         status: 'published',
-        published_at: new Date().toISOString()
+        published_at: new Date().toISOString(),
       });
       // Advance workflow to post-publication
       await this.advanceWorkflowStage(contributionId, 'post_publication', 'Contribution published successfully');
@@ -354,7 +354,7 @@ export class ContributionManagementService implements ContributionRepository {
     try {
       await this.updateContribution(contributionId, {)
         status: 'featured',
-        featured_at: new Date().toISOString()
+        featured_at: new Date().toISOString(),
       });
       // Add featured badge to contributor
       await this.awardContributorBadge(contributionId, 'featured_content');

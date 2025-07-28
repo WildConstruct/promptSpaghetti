@@ -666,14 +666,14 @@ export class CohortSegmentManager {
     return {
       totalUsers: users.length,
       activeUsers: Math.floor(users.length * 0.8), // 80% active assumption
-      retentionRates: new Map([)
+      retentionRates: new Map([),
         [1, 0.85],
         [7, 0.65],
         [30, 0.45],
         [60, 0.35],
         [90, 0.30]
       ]),
-      conversionRates: new Map([)
+      conversionRates: new Map([),
         [1, 0.15],
         [7, 0.25],
         [30, 0.35],
@@ -682,7 +682,7 @@ export class CohortSegmentManager {
       ]),
       churnRate: 0.25,
       averageLifetimeValue: 250.0,
-      averageTimeToConvert: 432000000 // 5 days in milliseconds
+      averageTimeToConvert: 432000000 // 5 days in milliseconds,
     };
   }
   private async analyzeCohortBehavior(cohort: ConversionCohort, users: string[]): Promise<CohortAnalysisResult['behavior']> {
@@ -761,7 +761,7 @@ export class CohortSegmentManager {
           mean: 85.5,
           median: 45.0,
           standardDeviation: 67.3,
-          percentiles: new Map([)
+          percentiles: new Map([),
             [25, 15.0],
             [50, 45.0],
             [75, 125.0],
@@ -778,15 +778,15 @@ export class CohortSegmentManager {
     metrics: CohortAnalysisResult['metrics'],
   ): Promise<CohortAnalysisResult['predictions']> {
     return {
-      projectedRetention: new Map([)
+      projectedRetention: new Map([),
         [120, 0.28],
         [180, 0.25],
         [365, 0.20]
       ]),
-      churnRisk: new Map()
+      churnRisk: new Map(),
         users.slice(0, 10).map(userId => [userId, Math.random() * 0.5])
       ),
-      lifetimeValueForecast: new Map()
+      lifetimeValueForecast: new Map(),
         users.slice(0, 10).map(userId => [userId, 150 + Math.random() * 200])
       ),
       optimalInterventionPoints: [,
@@ -810,11 +810,11 @@ export class CohortSegmentManager {
       previousPeriod: {,
         cohortId: 'previous_month',
         comparisonPeriod: 'Previous Month',
-        retentionDelta: new Map([)
+        retentionDelta: new Map([),
           [7, 0.05],
           [30, 0.08]
         ]),
-        conversionDelta: new Map([)
+        conversionDelta: new Map([),
           [7, 0.03],
           [30, 0.06]
         ]),
@@ -1003,7 +1003,7 @@ export class CohortSegmentManager {
           valueGrowthRate: 0.12,
         },
         customerLifetimeValue: 180.0,
-        paybackPeriod: 45 // days
+        paybackPeriod: 45 // days,
       },
       retentionMetrics: {,
         retentionRates: new Map([[7, 0.78], [30, 0.56], [90, 0.42]]),
@@ -1035,7 +1035,7 @@ export class CohortSegmentManager {
       acquisitionSources: new Map([['organic', 0.4], ['paid', 0.35], ['referral', 0.25]]),
       transitionPatterns: [],
       exitReasons: new Map([['churned', 0.6], ['upgraded', 0.3], ['downgraded', 0.1]]),
-      averageLifetime: 180 // days
+      averageLifetime: 180 // days,
     };
   }
   private async generateSegmentRecommendations()

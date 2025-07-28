@@ -316,7 +316,7 @@ export declare class FlexibleEventSchemaManager {
     /**
      * Validate event against schema
      */
-    validateEvent()
+    validateEvent();
       event: FlexibleConversionEvent,
       schemaId: string,
       options?: ValidationOptions
@@ -324,7 +324,7 @@ export declare class FlexibleEventSchemaManager {
     /**
      * Transform event according to schema
      */
-    transformEvent()
+    transformEvent();
       event: FlexibleConversionEvent,
       schemaId: string,
       stage?: 'pre_validation' | 'post_validation' | 'pre_storage' | 'post_retrieval'
@@ -344,7 +344,7 @@ export declare class FlexibleEventSchemaManager {
     /**
      * Create schema from template
      */
-    createSchemaFromTemplate()
+    createSchemaFromTemplate();
       templateName: string,
       schemaId: string,
       customizations?: Partial<EventSchemaDefinition>

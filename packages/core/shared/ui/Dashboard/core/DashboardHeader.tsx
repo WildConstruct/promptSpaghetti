@@ -57,7 +57,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({)
     setShowExportMenu(false);
   };
   const currentTimeRangeOption = timeRangeOptions.find(option => option.value === timeRange);
-  return ()
+  return ();
     <div className={`dashboard-header ${className}`}>}
       <div className="header-content">
         {/* Title Section */}

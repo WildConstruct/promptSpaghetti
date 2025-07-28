@@ -75,7 +75,7 @@ const generateUserPreferenceData = (): UserPreferenceData => ({)
       weight: Math.random(),
       source: 'implicit',
       timestamp: Date.now() - Math.random() * 86400000 * 30,
-      confidence: Math.random() * 0.3 + 0.7
+      confidence: Math.random() * 0.3 + 0.7,
     },
     {
       category: 'style',
@@ -84,7 +84,7 @@ const generateUserPreferenceData = (): UserPreferenceData => ({)
       weight: Math.random(),
       source: 'explicit',
       timestamp: Date.now() - Math.random() * 86400000 * 30,
-      confidence: Math.random() * 0.3 + 0.7
+      confidence: Math.random() * 0.3 + 0.7,
     }
   ],
   implicit: [],
@@ -106,19 +106,19 @@ const generateRecommendationPerformance = (): RecommendationPerformanceData => (
       metric: 'click_through_rate',
       value: Math.random() * 0.15 + 0.05,
       benchmark: 0.08,
-      change: (Math.random() - 0.5) * 0.04
+      change: (Math.random() - 0.5) * 0.04,
     },
     {
       metric: 'conversion_rate',
       value: Math.random() * 0.1 + 0.02,
       benchmark: 0.05,
-      change: (Math.random() - 0.5) * 0.02
+      change: (Math.random() - 0.5) * 0.02,
     },
     {
       metric: 'user_satisfaction',
       value: Math.random() * 2 + 3.5,
       benchmark: 4.0,
-      change: (Math.random() - 0.5) * 0.5
+      change: (Math.random() - 0.5) * 0.5,
     }
   ],
   abTestResults: [],
@@ -127,7 +127,7 @@ const generateRecommendationPerformance = (): RecommendationPerformanceData => (
     revenueImpact: (Math.random() - 0.5) * 10000,
     engagementIncrease: Math.random() * 20 + 5,
     retentionImprovement: Math.random() * 15 + 2,
-    costEfficiency: Math.random() * 30 + 10
+    costEfficiency: Math.random() * 30 + 10,
   }
 });
 
@@ -227,7 +227,7 @@ export const UserPreferenceRecommendationAnalytics: React.FC<UserPreferenceRecom
   const selectedUserData = useMemo(() => {
     return selectedUser ? userPreferences.find(u => u.userId === selectedUser) : null;
   }, [selectedUser, userPreferences]);
-  return ()
+  return ();
     <div className="preference-recommendation-analytics">
       <div className="analytics-header">
         <div className="header-section">

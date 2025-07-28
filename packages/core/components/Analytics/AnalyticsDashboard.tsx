@@ -138,14 +138,14 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
         conversionData,
         realTimeMetrics,
         performanceData,
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       }));
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
       setState(prev => ({)
         ...prev,
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load dashboard data'
+        error: error instanceof Error ? error.message : 'Failed to load dashboard data',
       }));
     }
   }, [analyticsClient, userId, organizationId, state.timeRange, getTimeRange]);
@@ -170,7 +170,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
       if (response.success) {
         setState(prev => ({)
           ...prev,
-          alerts: prev.alerts.filter(alert => alert.id !== alertId)
+          alerts: prev.alerts.filter(alert => alert.id !== alertId),
         }));
       }
     } catch (error) {
@@ -196,7 +196,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
    * Render loading state
    */
   if (state.loading && !state.summary) {
-    return ()
+    return ();
       <div className={`analytics-dashboard ${className}`}>}
         <div className="loading-container">
           <div className="loading-spinner"></div>
@@ -209,7 +209,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
    * Render error state
    */
   if (state.error) {
-    return ()
+    return ();
       <div className={`analytics-dashboard ${className}`}>}
         <Alert variant="destructive">
           <AlertDescription>
@@ -227,7 +227,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`analytics-dashboard ${className}`}>}
       {/* Dashboard Header */}
       <div className="dashboard-header">

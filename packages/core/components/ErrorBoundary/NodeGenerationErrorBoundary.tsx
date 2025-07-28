@@ -85,7 +85,7 @@ export class NodeGenerationErrorBoundary extends Component<
       hasError: false,
       error: null,
       errorInfo: null,
-      retryCount: prevState.retryCount + 1
+      retryCount: prevState.retryCount + 1,
     }));
     // Add a small delay before retry to allow any transient issues to resolve
     this.retryTimeoutId = setTimeout(() => {
@@ -145,7 +145,7 @@ export class NodeGenerationErrorBoundary extends Component<
     if (process.env.NODE_ENV !== 'development') {
       return null;
     }
-    return ()
+    return ();
       <details style={{
         marginTop: '16px',
         padding: '12px',
@@ -189,7 +189,7 @@ export class NodeGenerationErrorBoundary extends Component<
   private renderDefaultFallback = (error: Error) => {
     const styles = this.getThemeStyles();
     const canRetry = this.state.retryCount < this.maxRetries;
-    return ()
+    return ();
       <div style={{
         padding: '32px',
         textAlign: 'center',
@@ -376,8 +376,7 @@ export class NodeGenerationErrorBoundary extends Component<
 export function withNodeGenerationErrorBoundary<P extends object>()
   WrappedComponent: React.ComponentType<P>,
   errorBoundaryProps?: Omit<NodeGenerationErrorBoundaryProps, 'children'>
-) {
-  const WithErrorBoundaryComponent = (props: P) => (;)
+  const WithErrorBoundaryComponent = (props: P) => (;);
     <NodeGenerationErrorBoundary {...errorBoundaryProps}>
       <WrappedComponent {...props} />
     </NodeGenerationErrorBoundary>
@@ -398,7 +397,7 @@ export function useErrorHandler() {
       console.warn('Production error reported:', {)
         error: error.message,
         stack: error.stack,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
     // Re-throw to trigger error boundary

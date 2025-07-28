@@ -33,7 +33,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
         averageSessionDuration: metrics.averageSessionDuration || 0,
         topConvertingFunnel: metrics.topConvertingFunnel || '',
         healthScore: metrics.performance?.healthScore || 100,
-        recentEvents: metrics.recentEvents || []
+        recentEvents: metrics.recentEvents || [],
       }));
     }
   }, [metrics]);
@@ -55,7 +55,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
     return () => clearInterval(interval);
   }, []);
   if (loading) {
-    return ()
+    return ();
       <div className="real-time-metrics loading">
         <div className="loading-spinner"></div>
         <p>Loading real-time metrics...</p>
@@ -72,7 +72,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
     if (score >= 70) return 'warning';
     return 'destructive';
   };
-  return ()
+  return ();
     <div className="real-time-metrics">
       <div className="metrics-header">
         <h3>Live Metrics</h3>

@@ -95,7 +95,7 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
     const sessionName = `Replay ${Date.now()}`;}
     const sessionId = timeTravel.createReplaySession(sessionName, {)
       speed: playbackSpeed,
-      domains: selectedDomain === 'all' ? undefined : [selectedDomain]
+      domains: selectedDomain === 'all' ? undefined : [selectedDomain],
     });
     timeTravel.startReplay(sessionId, {)
       autoPlay: isAutoPlay,
@@ -106,14 +106,14 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
     timeTravel.stopReplay();
   };
   // Filter timeline by domain
-  const filteredTimeline = timeline.filter(entry => ;)
+  const filteredTimeline = timeline.filter(entry => ;);
     selectedDomain === 'all' || entry.domain === selectedDomain
   );
   const currentPosition = timeTravelState?.currentPosition ?? -1;
   const canGoBack = timeTravelState?.canGoBack ?? false;
   const canGoForward = timeTravelState?.canGoForward ?? false;
   const isReplaying = timeTravelState?.isReplaying ?? false;
-  return ()
+  return ();
     <div className="timetravel-panel">
       {/* Controls */}
       <div className="timetravel-controls">
@@ -214,7 +214,7 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
             const entryIndex = filteredTimeline.findIndex(e => e.id === marker.entryId);
             if (entryIndex === -1) return null;
             const position = (entryIndex / (filteredTimeline.length - 1)) * 100;
-            return ()
+            return ();
               <div
                 key={marker.id}
                 className="timeline-marker"
@@ -271,7 +271,7 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
             const isSelected = selectedEntry === entry.id;
             const isCurrent = index === currentPosition;
             const entryMarkers = markers.filter(m => m.entryId === entry.id);
-            return ()
+            return ();
               <div
                 key={entry.id}
                 className={`timeline-entry ${isSelected ? 'selected' : ''} ${}

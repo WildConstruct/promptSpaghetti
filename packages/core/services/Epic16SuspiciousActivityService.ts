@@ -831,7 +831,7 @@ export class Epic16SuspiciousActivityService extends EventEmitter {
     const startTime = Date.now();
     try {
       // Check if event matches rule conditions
-      const conditionResults = rule.conditions.map(condition => ;)
+      const conditionResults = rule.conditions.map(condition => ;);
         this.evaluateCondition(condition, event)
       );
       const totalWeight = rule.conditions.reduce((sum, condition) => sum + condition.weight, 0);
@@ -968,7 +968,7 @@ export class Epic16SuspiciousActivityService extends EventEmitter {
           status: ActionStatus.FAILED,
           triggeredAt: new Date(),
           parameters: action.parameters,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     }

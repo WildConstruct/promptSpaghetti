@@ -85,19 +85,19 @@ export interface WorkflowStatistics {
   active_locks: number;
   scheduled_executions: number;
   resources_by_state: Record<string, number>;
-  approval_stats: {
+  approval_stats: {,
     pending: number;
     approved: number;
     rejected: number;
     cancelled: number;
     avg_approval_time_hours: number;
   };
-  lock_stats: {
+  lock_stats: {,
     total_active: number;
     by_type: Record<string, number>;
     avg_lock_duration_hours: number;
   };
-  schedule_stats: {
+  schedule_stats: {,
     total_active: number;
     by_type: Record<string, number>;
     successful_executions: number;
@@ -205,7 +205,7 @@ async function apiCall(endpoint: string, options: RequestInit = {}) {
 
 // Create the store
 export const useWorkflowStore = create<WorkflowStore>()()
-  devtools()
+  devtools();
     (set, get) => ({)
       // Initial state
       states: [],
@@ -217,7 +217,7 @@ export const useWorkflowStore = create<WorkflowStore>()()
       loading: false,
       error: null,
       // State management actions
-      fetchStates: async (workspaceId: string) => {
+      fetchStates: async (workspaceId: string) => {,
         try {
           set({ loading: true, error: null });
           const states = await apiCall(`/states/${workspaceId}`);}
@@ -226,7 +226,7 @@ export const useWorkflowStore = create<WorkflowStore>()()
           set({ error: error instanceof Error ? error.message : 'Failed to fetch states', loading: false });
         }
       },
-      createState: async (data: Partial<WorkflowState>) => {
+      createState: async (data: Partial<WorkflowState>) => {,
         try {
           set({ loading: true, error: null });
           const newState = await apiCall('/states', {)
@@ -260,7 +260,7 @@ export const useWorkflowStore = create<WorkflowStore>()()
           throw error;
         }
       },
-      deleteState: async (id: string) => {
+      deleteState: async (id: string) => {,
         try {
           set({ loading: true, error: null });
           await apiCall(`/states/${id}`, { method: 'DELETE' });}
@@ -284,7 +284,7 @@ export const useWorkflowStore = create<WorkflowStore>()()
           set({ error: error instanceof Error ? error.message : 'Failed to fetch transitions', loading: false });
         }
       },
-      createTransition: async (data: Partial<WorkflowTransition>) => {
+      createTransition: async (data: Partial<WorkflowTransition>) => {,
         try {
           set({ loading: true, error: null });
           const newTransition = await apiCall('/transitions', {)
@@ -301,7 +301,7 @@ export const useWorkflowStore = create<WorkflowStore>()()
           throw error;
         }
       },
-      deleteTransition: async (id: string) => {
+      deleteTransition: async (id: string) => {,
         try {
           set({ loading: true, error: null });
           await apiCall(`/transitions/${id}`, { method: 'DELETE' });}
@@ -315,7 +315,7 @@ export const useWorkflowStore = create<WorkflowStore>()()
         }
       },
       // State transition actions
-      transitionResourceState: async ()
+      transitionResourceState: async (),
         resourceId: string,
         toStateId: string,
         actorId: string,
@@ -348,7 +348,7 @@ export const useWorkflowStore = create<WorkflowStore>()()
           set({ error: error instanceof Error ? error.message : 'Failed to fetch approvals', loading: false });
         }
       },
-      createApproval: async (data: Partial<WorkflowApproval>) => {
+      createApproval: async (data: Partial<WorkflowApproval>) => {,
         try {
           set({ loading: true, error: null });
           const newApproval = await apiCall('/approvals', {)
@@ -374,7 +374,7 @@ export const useWorkflowStore = create<WorkflowStore>()()
           });
           // Update approval status in local state
           set(state => ({)
-            approvals: state.approvals.map(a => )
+            approvals: state.approvals.map(a => ),
               a.id === approvalId 
                 ? { ...a, status: 'approved' as const, approved_by: approverId, approved_at: new Date() }
                 : a
@@ -396,7 +396,7 @@ export const useWorkflowStore = create<WorkflowStore>()()
           });
           // Update approval status in local state
           set(state => ({)
-            approvals: state.approvals.map(a => )
+            approvals: state.approvals.map(a => ),
               a.id === approvalId 
                 ? { ...a, status: 'rejected' as const, approved_by: rejectorId, rejection_reason: reason }
                 : a
@@ -420,7 +420,7 @@ export const useWorkflowStore = create<WorkflowStore>()()
           set({ error: error instanceof Error ? error.message : 'Failed to fetch locks', loading: false });
         }
       },
-      acquireLock: async ()
+      acquireLock: async (),
         resourceId: string,
         userId: string,
         lockType = 'edit',
@@ -489,7 +489,7 @@ export const useWorkflowStore = create<WorkflowStore>()()
           set({ error: error instanceof Error ? error.message : 'Failed to fetch history', loading: false });
         }
       },
-      fetchStatistics: async (workspaceId: string) => {
+      fetchStatistics: async (workspaceId: string) => {,
         try {
           set({ loading: true, error: null });
           const statistics = await apiCall(`/statistics/${workspaceId}`);}
@@ -523,7 +523,7 @@ export const useWorkflowStore = create<WorkflowStore>()()
           return false;
         }
       },
-      performMaintenance: async () => {
+      performMaintenance: async () => {,
         try {
           return await apiCall('/maintenance', { method: 'POST' });
         } catch (error) {
@@ -538,5 +538,4 @@ export const useWorkflowStore = create<WorkflowStore>()()
     {
       name: 'workflow-store',
     }
-  )
 );

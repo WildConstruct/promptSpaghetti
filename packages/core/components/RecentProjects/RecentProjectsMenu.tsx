@@ -76,7 +76,7 @@ export const [recentProjects, setRecentProjects] = useState<RecentProjectEntry[]
     display: 'flex',
     alignItems: 'center',
     gap: '12px',
-    transition: 'background-color 0.2s'
+    transition: 'background-color 0.2s',
   };
   const thumbnailStyle: React.CSSProperties = {
     width: '40px',
@@ -119,9 +119,9 @@ export const [recentProjects, setRecentProjects] = useState<RecentProjectEntry[]
     cursor: 'pointer',
     fontSize: '13px',
     textAlign: 'center',
-    transition: 'background-color 0.2s'
+    transition: 'background-color 0.2s',
   };
-  return ()
+  return ();
     <div ref={menuRef} className={className} style={{ position: 'relative' }}>
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -140,7 +140,7 @@ export const [recentProjects, setRecentProjects] = useState<RecentProjectEntry[]
             <>
               {recentProjects.map((project) => {
                 const displayInfo = RecentProjectsManager.getProjectDisplayInfo(project);
-                return ()
+                return ();
                   <div
                     key={project.id}
                     style={projectItemStyle}

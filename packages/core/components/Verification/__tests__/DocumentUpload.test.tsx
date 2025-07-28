@@ -91,7 +91,7 @@ describe('DocumentUpload', () => {
       const largeContent = 'x'.repeat(2 * 1024 * 1024); // 2MB content;
       const largeFile = new File([largeContent], 'large.pdf', { )
         type: 'application/pdf',
-        size: 2 * 1024 * 1024
+        size: 2 * 1024 * 1024,
       });
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, [largeFile]);
@@ -214,7 +214,7 @@ describe('DocumentUpload', () => {
           size: 2048,
           type: 'application/pdf',
           url: 'https://example.com/file1',
-          uploadedAt: new Date('2023-01-01')
+          uploadedAt: new Date('2023-01-01'),
         }
       ];
       render(<DocumentUpload {...defaultProps} existingFiles={existingFiles} />);
@@ -250,7 +250,7 @@ describe('DocumentUpload', () => {
         }),
         new File(['x'.repeat(1024 * 1024)], 'medium.txt', { 
           type: 'image/jpeg',
-          size: 1024 * 1024 
+          size: 1024 * 1024 ,
         })
       ];
       const input = screen.getByRole('button').querySelector('input[type="file"]');
@@ -269,7 +269,7 @@ describe('DocumentUpload', () => {
         new File(['content'], 'invalid.txt', { type: 'text/plain' }), // Invalid type
         new File(['x'.repeat(20 * 1024 * 1024)], 'large.pdf', { 
           type: 'application/pdf',
-          size: 20 * 1024 * 1024 
+          size: 20 * 1024 * 1024 ,
         }) // Too large
       ];
       const input = screen.getByRole('button').querySelector('input[type="file"]');

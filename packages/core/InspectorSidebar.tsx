@@ -50,7 +50,7 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
     }, 300);
   };
   if (!node || !schema) {
-    return ()
+    return ();
       <aside style={{ padding: 16, width: 320, borderLeft: '1px solid #eee', background: '#fafbfc', height: '100%' }}>
         <em>Select a node to edit its properties.</em>
       </aside>
@@ -74,13 +74,13 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
       shape = typeof s === 'function' ? s() : s;
     }
   }
-  return ()
+  return ();
     <aside style={{ padding: 16, width: 320, borderLeft: '1px solid #eee', background: '#fafbfc', height: '100%' }}>
       <h3 style={{ marginTop: 0 }}>{node.data?.label || node.type} Properties</h3>
       <form>
         {Object.entries(shape).map(([key, zodType]) => {
           // Render basic input for string/number; customize per type as needed
-          return ()
+          return ();
             <div key={key} style={{ marginBottom: 12 }}>
               <label htmlFor={`field-${key}`} style={{ display: 'block', fontWeight: 500, marginBottom: 4 }}>{key}</label>}
               <input

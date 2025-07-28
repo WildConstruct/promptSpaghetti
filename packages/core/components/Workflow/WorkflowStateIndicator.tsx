@@ -163,7 +163,7 @@ const getSizeClasses = (size: 'sm' | 'md' | 'lg') => {
         icon: 'w-5 h-5',
         gap: 'space-x-3',
       };
-    default: // md
+    default: // md,
       return {
         container: 'px-3 py-1 text-sm',
         icon: 'w-4 h-4',
@@ -185,7 +185,7 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
   // Get icon component
   const IconComponent = STATE_ICONS[config.icon as keyof typeof STATE_ICONS] || FileText;
   if (!showLabel) {
-    return ()
+    return ();
       <div 
         className={`inline-flex items-center justify-center rounded-full border ${colors.bg} ${colors.border} ${sizes.container} ${className}`}
         title={`${config.name}${config.description ? ` - ${config.description}` : ''}`}
@@ -194,7 +194,7 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div 
       className={`inline-flex items-center rounded-full border font-medium ${colors.bg} ${colors.text} ${colors.border} ${sizes.container} ${sizes.gap} ${className}`}
       title={config.description}
@@ -214,13 +214,13 @@ interface WorkflowStateTimelineProps {
 }
 
 export const isCurrent = (stateId: WorkflowState) => stateId === currentState;
-  return ()
+  return ();
     <div className={`flex items-center space-x-2 ${className}`}>}
       {states.map((state, index) => {
         const isLast = index === states.length - 1;
         const completed = isCompleted(state.id);
         const current = isCurrent(state.id);
-        return ()
+        return ();
           <React.Fragment key={state.id}>
             <div className="flex flex-col items-center">
               <WorkflowStateIndicator

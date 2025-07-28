@@ -13,7 +13,6 @@
  * - Risk assessment and impact analysis
  * - Remediation workflow management
  */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Shield,
@@ -33,7 +32,6 @@ import {
   Target,
   Plus
 } from 'lucide-react';
-
 interface ComplianceFramework {
   id: string;
   name: string;
@@ -49,7 +47,6 @@ interface ComplianceFramework {
   nextAuditDate: string;
   certificationStatus: 'certified' | 'pending' | 'expired' | 'not_applicable';
 }
-
 interface ComplianceRequirement {
   id: string;
   frameworkId: string;
@@ -64,7 +61,6 @@ interface ComplianceRequirement {
   automatedCheck: boolean;
   checkFrequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
 }
-
 interface ComplianceViolation {
   id: string;
   frameworkId: string;
@@ -86,7 +82,6 @@ interface ComplianceViolation {
   evidence: string[];
   notifications: string[];
 }
-
 interface RemediationAction {
   id: string;
   violationId: string;
@@ -102,7 +97,6 @@ interface RemediationAction {
   dependencies: string[];
   tasks: string[];
 }
-
 interface ComplianceMetrics {
   overallScore: number;
   frameworkScores: { [key: string]: number };
@@ -116,7 +110,6 @@ interface ComplianceMetrics {
   certificationStatus: string;
   lastReportGenerated: string;
 }
-
 interface AuditLog {
   id: string;
   timestamp: string;
@@ -131,7 +124,6 @@ interface AuditLog {
   userAgent: string;
   result: 'success' | 'failure' | 'warning';
 }
-
 const ComplianceReportingDashboard: React.FC = () => {
   const [frameworks, setFrameworks] = useState<ComplianceFramework[]>([]);
   const [violations, setViolations] = useState<ComplianceViolation[]>([]);
@@ -142,7 +134,6 @@ const ComplianceReportingDashboard: React.FC = () => {
   const [_auditLogs, _setAuditLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   // View and filter states
   const [activeView, setActiveView] = useState<'overview' | 'violations' | 'frameworks' | 'audit' | 'reports'>('overview');
   const [searchTerm, setSearchTerm] = useState('');
@@ -150,11 +141,10 @@ const ComplianceReportingDashboard: React.FC = () => {
   const [severityFilter, setSeverityFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_dateRange, _setDateRange] = useState<{ start: string; end: string }>({
+  const [_dateRange, _setDateRange] = useState<{ start: string; end: string }>({)
     start: '',
-    end: ''
+    end: '',
   });
-
   // Modal and selection states
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_selectedViolation, _setSelectedViolation] = useState<ComplianceViolation | null>(null);
@@ -165,13 +155,11 @@ const ComplianceReportingDashboard: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_showCreateReport, _setShowCreateReport] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
-
   // Load compliance data
   const loadComplianceData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
       // Mock data for demonstration - would be replaced with actual API calls
       const mockFrameworks: ComplianceFramework[] = [
         {
@@ -187,7 +175,7 @@ const ComplianceReportingDashboard: React.FC = () => {
           riskLevel: 'medium',
           nextAuditDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
           certificationStatus: 'certified',
-          requirements: [
+          requirements: [,
             {
               id: 'gdpr-art-6',
               frameworkId: 'gdpr',
@@ -200,7 +188,7 @@ const ComplianceReportingDashboard: React.FC = () => {
               evidenceFiles: ['legal_basis_assessment.pdf', 'consent_records.json'],
               remediationActions: [],
               automatedCheck: true,
-              checkFrequency: 'daily'
+              checkFrequency: 'daily',
             }
           ]
         },
@@ -217,7 +205,7 @@ const ComplianceReportingDashboard: React.FC = () => {
           riskLevel: 'low',
           nextAuditDate: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(),
           certificationStatus: 'certified',
-          requirements: []
+          requirements: [],
         },
         {
           id: 'sox',
@@ -232,10 +220,9 @@ const ComplianceReportingDashboard: React.FC = () => {
           riskLevel: 'low',
           nextAuditDate: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000).toISOString(),
           certificationStatus: 'pending',
-          requirements: []
+          requirements: [],
         }
       ];
-
       const mockViolations: ComplianceViolation[] = [
         {
           id: 'violation-001',
@@ -274,34 +261,32 @@ const ComplianceReportingDashboard: React.FC = () => {
           technicalImpact: 'Unnecessary data storage and processing overhead',
           riskScore: 4.2,
           evidence: ['retention_audit_report.pdf'],
-          notifications: ['data-protection@company.com']
+          notifications: ['data-protection@company.com'],
         }
       ];
-
       const mockMetrics: ComplianceMetrics = {
         overallScore: 89,
-        frameworkScores: {
+        frameworkScores: {,
           gdpr: 87,
           hipaa: 94,
           sox: 91,
-          ccpa: 85
+          ccpa: 85,
         },
         totalViolations: 45,
         activeViolations: 6,
         resolvedViolations: 39,
         averageResolutionTime: 4.2, // days
         violationTrend: 'improving',
-        riskDistribution: {
+        riskDistribution: {,
           low: 2,
           medium: 2,
           high: 1,
-          critical: 1
+          critical: 1,
         },
         upcomingAudits: 3,
         certificationStatus: 'All frameworks certified or pending',
-        lastReportGenerated: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+        lastReportGenerated: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
       };
-
       const mockAuditLogs: AuditLog[] = [
         {
           id: 'audit-001',
@@ -315,33 +300,28 @@ const ComplianceReportingDashboard: React.FC = () => {
           details: 'Updated violation status from open to investigating',
           ipAddress: '192.168.1.100',
           userAgent: 'Mozilla/5.0...',
-          result: 'success'
+          result: 'success',
         }
       ];
-
       setFrameworks(mockFrameworks);
       setViolations(mockViolations);
       setMetrics(mockMetrics);
       _setAuditLogs(mockAuditLogs);
       _setRemediationActions([]);
-
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load compliance data');
     } finally {
       setLoading(false);
     }
   }, []);
-
   useEffect(() => {
     loadComplianceData();
-    
     // Auto-refresh if enabled
     if (autoRefresh) {
-      const interval = setInterval(loadComplianceData, 60000); // 1 minute
+      const interval = setInterval(loadComplianceData, 60000); // 1 minute;
       return () => clearInterval(interval);
     }
   }, [loadComplianceData, autoRefresh]);
-
   // Helper functions
   const formatTimeAgo = (dateString: string): string => {
     const date = new Date(dateString);
@@ -350,13 +330,11 @@ const ComplianceReportingDashboard: React.FC = () => {
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
-
     if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    return `${diffDays}d ago`;
+    if (diffMins < 60) return `${diffMins}m ago`;}
+    if (diffHours < 24) return `${diffHours}h ago`;}
+    return `${diffDays}d ago`;}
   };
-
   const getScoreColor = (score: number): string => {
     if (score >= 95) return 'text-green-600';
     if (score >= 85) return 'text-blue-600';
@@ -364,7 +342,6 @@ const ComplianceReportingDashboard: React.FC = () => {
     if (score >= 50) return 'text-orange-600';
     return 'text-red-600';
   };
-
   const getRiskBadgeClass = (risk: string): string => {
     switch (risk) {
     case 'critical': return 'bg-red-100 text-red-800 border-red-200';
@@ -374,7 +351,6 @@ const ComplianceReportingDashboard: React.FC = () => {
     default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-
   const getStatusBadgeClass = (status: string): string => {
     switch (status) {
     case 'compliant':
@@ -397,10 +373,9 @@ const ComplianceReportingDashboard: React.FC = () => {
       return 'bg-gray-100 text-gray-800';
     }
   };
-
   const filteredViolations = useMemo(() => {
-    return violations.filter(violation => {
-      if (searchTerm && 
+    return violations.filter(violation => {)
+      if (searchTerm && )
           !violation.title.toLowerCase().includes(searchTerm.toLowerCase()) && 
           !violation.description.toLowerCase().includes(searchTerm.toLowerCase())) {
         return false;
@@ -417,9 +392,8 @@ const ComplianceReportingDashboard: React.FC = () => {
       return true;
     });
   }, [violations, searchTerm, frameworkFilter, severityFilter, statusFilter]);
-
   if (loading) {
-    return (
+    return ()
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <RefreshCw className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
@@ -428,9 +402,8 @@ const ComplianceReportingDashboard: React.FC = () => {
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
         <AlertTriangle className="w-8 h-8 text-red-600 mx-auto mb-2" />
         <p className="text-red-800">{error}</p>
@@ -441,8 +414,7 @@ const ComplianceReportingDashboard: React.FC = () => {
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="compliance-reporting-dashboard space-y-6">
       {/* Dashboard Header */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -458,7 +430,6 @@ const ComplianceReportingDashboard: React.FC = () => {
               </p>
             </div>
           </div>
-          
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-2">
               <label className="text-sm text-gray-600">Auto-refresh:</label>
@@ -475,7 +446,6 @@ const ComplianceReportingDashboard: React.FC = () => {
                 />
               </button>
             </div>
-            
             <button
               onClick={loadComplianceData}
               className="btn btn-secondary"
@@ -483,7 +453,6 @@ const ComplianceReportingDashboard: React.FC = () => {
               <RefreshCw className="w-4 h-4 mr-2" />
               Refresh
             </button>
-            
             <button
               onClick={() => _setShowCreateReport(true)}
               className="btn btn-primary"
@@ -493,15 +462,14 @@ const ComplianceReportingDashboard: React.FC = () => {
             </button>
           </div>
         </div>
-
         {/* Key Metrics */}
-        {metrics && (
+        {metrics && ()
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-6">
             <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-blue-600">Overall Score</p>
-                  <p className={`text-2xl font-bold ${getScoreColor(metrics.overallScore)}`}>
+                  <p className={`text-2xl font-bold ${getScoreColor(metrics.overallScore)}`}>}
                     {metrics.overallScore}%
                   </p>
                   <p className="text-xs text-blue-700">{frameworks.length} frameworks</p>
@@ -509,7 +477,6 @@ const ComplianceReportingDashboard: React.FC = () => {
                 <Target className="w-8 h-8 text-blue-600" />
               </div>
             </div>
-
             <div className="bg-red-50 rounded-lg p-4 border border-red-100">
               <div className="flex items-center justify-between">
                 <div>
@@ -520,7 +487,6 @@ const ComplianceReportingDashboard: React.FC = () => {
                 <AlertTriangle className="w-8 h-8 text-red-600" />
               </div>
             </div>
-
             <div className="bg-green-50 rounded-lg p-4 border border-green-100">
               <div className="flex items-center justify-between">
                 <div>
@@ -531,19 +497,18 @@ const ComplianceReportingDashboard: React.FC = () => {
                 <Clock className="w-8 h-8 text-green-600" />
               </div>
             </div>
-
             <div className="bg-purple-50 rounded-lg p-4 border border-purple-100">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-purple-600">Trend</p>
                   <div className="flex items-center space-x-1">
-                    {metrics.violationTrend === 'improving' && (
+                    {metrics.violationTrend === 'improving' && ()
                       <TrendingDown className="w-6 h-6 text-green-600" />
                     )}
-                    {metrics.violationTrend === 'stable' && (
+                    {metrics.violationTrend === 'stable' && ()
                       <Activity className="w-6 h-6 text-blue-600" />
                     )}
-                    {metrics.violationTrend === 'declining' && (
+                    {metrics.violationTrend === 'declining' && ()
                       <TrendingUp className="w-6 h-6 text-red-600" />
                     )}
                     <span className="text-sm font-medium text-purple-900 capitalize">
@@ -555,7 +520,6 @@ const ComplianceReportingDashboard: React.FC = () => {
                 <BarChart3 className="w-8 h-8 text-purple-600" />
               </div>
             </div>
-
             <div className="bg-orange-50 rounded-lg p-4 border border-orange-100">
               <div className="flex items-center justify-between">
                 <div>
@@ -569,7 +533,6 @@ const ComplianceReportingDashboard: React.FC = () => {
           </div>
         )}
       </div>
-
       {/* Tab Navigation */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200">
         <div className="border-b border-gray-200">
@@ -580,7 +543,7 @@ const ComplianceReportingDashboard: React.FC = () => {
               { key: 'frameworks', label: 'Frameworks', icon: Shield, count: frameworks.length },
               { key: 'audit', label: 'Audit Trail', icon: FileText },
               { key: 'reports', label: 'Reports', icon: Download }
-            ].map(({ key, label, icon: Icon, count }) => (
+            ].map(({ key, label, icon: Icon, count }) => ()
               <button
                 key={key}
                 onClick={() => setActiveView(key as 'overview' | 'violations' | 'frameworks' | 'audit' | 'reports')}
@@ -592,7 +555,7 @@ const ComplianceReportingDashboard: React.FC = () => {
               >
                 <Icon className="w-4 h-4" />
                 <span>{label}</span>
-                {count !== undefined && (
+                {count !== undefined && ()
                   <span className="bg-gray-200 text-gray-700 rounded-full px-2 py-0.5 text-xs">
                     {count}
                   </span>
@@ -601,31 +564,30 @@ const ComplianceReportingDashboard: React.FC = () => {
             ))}
           </nav>
         </div>
-
         {/* Tab Content */}
         <div className="p-6">
           {/* Overview Tab */}
-          {activeView === 'overview' && (
+          {activeView === 'overview' && ()
             <div className="space-y-6">
               {/* Framework Compliance Scores */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Framework Compliance</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {frameworks.map(framework => (
+                  {frameworks.map(framework => ()
                     <div key={framework.id} className="bg-gray-50 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
                         <div>
                           <h4 className="font-medium text-gray-900">{framework.acronym}</h4>
                           <p className="text-sm text-gray-600">{framework.name}</p>
                         </div>
-                        <span className={`px-2 py-1 text-xs font-medium rounded border ${getRiskBadgeClass(framework.riskLevel)}`}>
+                        <span className={`px-2 py-1 text-xs font-medium rounded border ${getRiskBadgeClass(framework.riskLevel)}`}>}
                           {framework.riskLevel}
                         </span>
                       </div>
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
                           <span>Compliance Score</span>
-                          <span className={`font-semibold ${getScoreColor(framework.complianceScore)}`}>
+                          <span className={`font-semibold ${getScoreColor(framework.complianceScore)}`}>}
                             {framework.complianceScore}%
                           </span>
                         </div>
@@ -649,7 +611,6 @@ const ComplianceReportingDashboard: React.FC = () => {
                   ))}
                 </div>
               </div>
-
               {/* Recent Violations */}
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -662,18 +623,18 @@ const ComplianceReportingDashboard: React.FC = () => {
                   </button>
                 </div>
                 <div className="space-y-3">
-                  {violations.slice(0, 3).map(violation => (
+                  {violations.slice(0, 3).map(violation => ()
                     <div key={violation.id} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors duration-200">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-2">
-                            <span className={`px-2 py-1 text-xs font-medium rounded border ${getRiskBadgeClass(violation.severity)}`}>
+                            <span className={`px-2 py-1 text-xs font-medium rounded border ${getRiskBadgeClass(violation.severity)}`}>}
                               {violation.severity}
                             </span>
                             <span className="text-xs text-gray-600">
                               {frameworks.find(f => f.id === violation.frameworkId)?.acronym}
                             </span>
-                            <span className={`px-2 py-1 text-xs font-medium rounded ${getStatusBadgeClass(violation.status)}`}>
+                            <span className={`px-2 py-1 text-xs font-medium rounded ${getStatusBadgeClass(violation.status)}`}>}
                               {violation.status}
                             </span>
                           </div>
@@ -696,13 +657,12 @@ const ComplianceReportingDashboard: React.FC = () => {
                   ))}
                 </div>
               </div>
-
               {/* Risk Distribution */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Risk Distribution</h3>
                 <div className="bg-gray-50 rounded-lg p-4">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {Object.entries(metrics?.riskDistribution || {}).map(([risk, count]) => (
+                    {Object.entries(metrics?.riskDistribution || {}).map(([risk, count]) => ()
                       <div key={risk} className="text-center">
                         <div className={`w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center ${
                           risk === 'critical' ? 'bg-red-100 text-red-600' :
@@ -720,9 +680,8 @@ const ComplianceReportingDashboard: React.FC = () => {
               </div>
             </div>
           )}
-
           {/* Violations Tab */}
-          {activeView === 'violations' && (
+          {activeView === 'violations' && ()
             <div className="space-y-6">
               {/* Filters */}
               <div className="flex items-center justify-between flex-wrap gap-4">
@@ -737,18 +696,16 @@ const ComplianceReportingDashboard: React.FC = () => {
                       className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                     />
                   </div>
-
                   <select
                     value={frameworkFilter}
                     onChange={(e) => setFrameworkFilter(e.target.value)}
                     className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                   >
                     <option value="all">All Frameworks</option>
-                    {frameworks.map(framework => (
+                    {frameworks.map(framework => ()
                       <option key={framework.id} value={framework.id}>{framework.acronym}</option>
                     ))}
                   </select>
-
                   <select
                     value={severityFilter}
                     onChange={(e) => setSeverityFilter(e.target.value)}
@@ -760,7 +717,6 @@ const ComplianceReportingDashboard: React.FC = () => {
                     <option value="medium">Medium</option>
                     <option value="low">Low</option>
                   </select>
-
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
@@ -774,29 +730,26 @@ const ComplianceReportingDashboard: React.FC = () => {
                   </select>
                 </div>
               </div>
-
               {/* Violations List */}
               <div className="space-y-4">
-                {filteredViolations.map(violation => (
+                {filteredViolations.map(violation => ()
                   <div key={violation.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-200">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-3">
-                          <span className={`px-2 py-1 text-xs font-medium rounded border ${getRiskBadgeClass(violation.severity)}`}>
+                          <span className={`px-2 py-1 text-xs font-medium rounded border ${getRiskBadgeClass(violation.severity)}`}>}
                             {violation.severity}
                           </span>
                           <span className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded">
                             {frameworks.find(f => f.id === violation.frameworkId)?.acronym}
                           </span>
-                          <span className={`px-2 py-1 text-xs font-medium rounded ${getStatusBadgeClass(violation.status)}`}>
+                          <span className={`px-2 py-1 text-xs font-medium rounded ${getStatusBadgeClass(violation.status)}`}>}
                             {violation.status.replace('_', ' ')}
                           </span>
                           <span className="text-xs text-gray-500">ID: {violation.id}</span>
                         </div>
-                        
                         <h4 className="text-lg font-semibold text-gray-900 mb-2">{violation.title}</h4>
                         <p className="text-gray-600 mb-4">{violation.description}</p>
-                        
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
                           <div>
                             <span className="text-gray-500">Affected Records:</span>
@@ -817,12 +770,11 @@ const ComplianceReportingDashboard: React.FC = () => {
                             </p>
                           </div>
                         </div>
-
-                        {violation.affectedSystems.length > 0 && (
+                        {violation.affectedSystems.length > 0 && ()
                           <div className="mt-4">
                             <span className="text-sm text-gray-500 mb-2 block">Affected Systems:</span>
                             <div className="flex flex-wrap gap-1">
-                              {violation.affectedSystems.map(system => (
+                              {violation.affectedSystems.map(system => ()
                                 <span key={system} className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded">
                                   {system}
                                 </span>
@@ -831,7 +783,6 @@ const ComplianceReportingDashboard: React.FC = () => {
                           </div>
                         )}
                       </div>
-
                       <div className="flex items-center space-x-2 ml-4">
                         <button
                           onClick={() => setSelectedViolation(violation)}
@@ -851,9 +802,8 @@ const ComplianceReportingDashboard: React.FC = () => {
                   </div>
                 ))}
               </div>
-
               {/* Empty State */}
-              {filteredViolations.length === 0 && (
+              {filteredViolations.length === 0 && ()
                 <div className="text-center py-12">
                   <AlertTriangle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">No Violations Found</h3>
@@ -866,9 +816,8 @@ const ComplianceReportingDashboard: React.FC = () => {
               )}
             </div>
           )}
-
           {/* Placeholder content for other tabs */}
-          {activeView !== 'overview' && activeView !== 'violations' && (
+          {activeView !== 'overview' && activeView !== 'violations' && ()
             <div className="text-center py-12">
               <div className="max-w-md mx-auto">
                 <div className="p-4 bg-gray-100 rounded-full w-fit mx-auto mb-4">

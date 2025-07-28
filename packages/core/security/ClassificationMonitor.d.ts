@@ -147,7 +147,7 @@ export declare class ClassificationMonitor extends EventEmitter {
     /**
      * Record a compliance violation
      */
-    recordComplianceViolation()
+    recordComplianceViolation();
       dataId: string,
       framework: ComplianceFramework,
       violation: string,

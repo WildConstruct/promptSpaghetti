@@ -1,6 +1,5 @@
 // Epic 19.4 - Security Monitoring Dashboard
 // Task: T-1752989145014 - Create frontend components for Security Monitoring & Incident Response
-
 import React, { useState, useEffect } from 'react';
 import {
   Shield,
@@ -19,12 +18,10 @@ import {
 // SecurityMetric type was removed as unused
 import { formatDistanceToNow } from 'date-fns';
 import './SecurityDashboard.css';
-
 interface SecurityDashboardProps {
   onIncidentClick?: (incidentId: string) => void;
   onThreatClick?: (threatId: string) => void;
 }
-
 interface SecurityAlert {
   id: string;
   type: 'critical' | 'high' | 'medium' | 'low';
@@ -34,7 +31,6 @@ interface SecurityAlert {
   source: string;
   status: 'open' | 'investigating' | 'resolved';
 }
-
 interface ThreatMetrics {
   totalThreats: number;
   blockedThreats: number;
@@ -43,37 +39,33 @@ interface ThreatMetrics {
   lastScan: Date;
 }
 
-export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
+export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({)
   onIncidentClick,
   // onThreatClick // Commented out unused prop
 }) => {
-  const [metrics, setMetrics] = useState<ThreatMetrics>({
+  const [metrics, setMetrics] = useState<ThreatMetrics>({)
     totalThreats: 0,
     blockedThreats: 0,
     activeIncidents: 0,
     riskScore: 0,
-    lastScan: new Date()
+    lastScan: new Date(),
   });
-
   const [alerts, setAlerts] = useState<SecurityAlert[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     // Simulate loading security metrics
     const loadSecurityData = async () => {
       setIsLoading(true);
-      
       // Mock data - replace with actual API calls
       setTimeout(() => {
-        setMetrics({
+        setMetrics({)
           totalThreats: 127,
           blockedThreats: 119,
           activeIncidents: 3,
           riskScore: 7.2,
-          lastScan: new Date(Date.now() - 5 * 60 * 1000) // 5 minutes ago
+          lastScan: new Date(Date.now() - 5 * 60 * 1000) // 5 minutes ago,
         });
-
-        setAlerts([
+        setAlerts([)
           {
             id: 'alert-1',
             type: 'critical',
@@ -81,7 +73,7 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
             description: 'Unusual login activity detected from IP 192.168.1.100',
             timestamp: new Date(Date.now() - 2 * 60 * 1000),
             source: 'Authentication System',
-            status: 'investigating'
+            status: 'investigating',
           },
           {
             id: 'alert-2',
@@ -90,7 +82,7 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
             description: 'Potential data scraping detected on /api/templates endpoint',
             timestamp: new Date(Date.now() - 10 * 60 * 1000),
             source: 'API Gateway',
-            status: 'open'
+            status: 'open',
           },
           {
             id: 'alert-3',
@@ -99,17 +91,14 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
             description: 'Client exceeded rate limit by 150%',
             timestamp: new Date(Date.now() - 15 * 60 * 1000),
             source: 'Rate Limiter',
-            status: 'resolved'
+            status: 'resolved',
           }
         ]);
-
         setIsLoading(false);
       }, 1000);
     };
-
     loadSecurityData();
   }, []);
-
   const getAlertIcon = (type: SecurityAlert['type']) => {
     switch (type) {
     case 'critical':
@@ -124,7 +113,6 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
       return <AlertCircle className="h-4 w-4 text-gray-500" />;
     }
   };
-
   const getStatusColor = (status: SecurityAlert['status']) => {
     switch (status) {
     case 'open':
@@ -137,16 +125,14 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
       return 'bg-gray-100 text-gray-800';
     }
   };
-
   const getRiskScoreColor = (score: number) => {
     if (score >= 8) return 'text-red-600';
     if (score >= 6) return 'text-yellow-600';
     if (score >= 4) return 'text-orange-600';
     return 'text-green-600';
   };
-
   if (isLoading) {
-    return (
+    return ()
       <div className="security-dashboard loading">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -155,8 +141,7 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="security-dashboard">
       {/* Header */}
       <div className="dashboard-header">
@@ -176,13 +161,11 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
             </button>
           </div>
         </div>
-        
         <div className="last-updated">
           <Clock className="h-4 w-4 text-gray-500" />
           <span>Last scan: {formatDistanceToNow(metrics.lastScan)} ago</span>
         </div>
       </div>
-
       {/* Security Metrics Grid */}
       <div className="metrics-grid">
         <div className="metric-card primary">
@@ -196,7 +179,6 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
             <span>+12% from last week</span>
           </div>
         </div>
-
         <div className="metric-card success">
           <div className="metric-header">
             <CheckCircle className="h-5 w-5 text-green-600" />
@@ -207,7 +189,6 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
             {((metrics.blockedThreats / metrics.totalThreats) * 100).toFixed(1)}% success rate
           </div>
         </div>
-
         <div className="metric-card warning">
           <div className="metric-header">
             <AlertTriangle className="h-5 w-5 text-orange-600" />
@@ -216,43 +197,37 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
           <div className="metric-value">{metrics.activeIncidents}</div>
           <div className="metric-subtitle">Requiring immediate attention</div>
         </div>
-
         <div className="metric-card">
           <div className="metric-header">
             <Zap className="h-5 w-5 text-purple-600" />
             <span className="metric-title">Risk Score</span>
           </div>
-          <div className={`metric-value ${getRiskScoreColor(metrics.riskScore)}`}>
+          <div className={`metric-value ${getRiskScoreColor(metrics.riskScore)}`}>}
             {metrics.riskScore.toFixed(1)}/10
           </div>
           <div className="metric-subtitle">Overall system risk level</div>
         </div>
       </div>
-
       {/* Security Alerts Section */}
       <div className="alerts-section">
         <div className="section-header">
           <h2>Recent Security Alerts</h2>
           <button className="btn btn-text">View All Alerts</button>
         </div>
-
         <div className="alerts-list">
-          {alerts.map((alert) => (
+          {alerts.map((alert) => ()
             <div key={alert.id} className="alert-item">
               <div className="alert-indicator">
                 {getAlertIcon(alert.type)}
               </div>
-              
               <div className="alert-content">
                 <div className="alert-header">
                   <h3 className="alert-title">{alert.title}</h3>
-                  <span className={`alert-status ${getStatusColor(alert.status)}`}>
+                  <span className={`alert-status ${getStatusColor(alert.status)}`}>}
                     {alert.status.charAt(0).toUpperCase() + alert.status.slice(1)}
                   </span>
                 </div>
-                
                 <p className="alert-description">{alert.description}</p>
-                
                 <div className="alert-meta">
                   <span className="alert-source">{alert.source}</span>
                   <span className="alert-time">
@@ -260,7 +235,6 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
                   </span>
                 </div>
               </div>
-
               <div className="alert-actions">
                 <button
                   className="btn btn-sm btn-secondary"
@@ -273,7 +247,6 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
           ))}
         </div>
       </div>
-
       {/* Quick Actions */}
       <div className="quick-actions">
         <h3>Quick Actions</h3>
@@ -282,17 +255,14 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
             <Users className="h-5 w-5" />
             <span>Active Sessions</span>
           </button>
-          
           <button className="action-card">
             <Lock className="h-5 w-5" />
             <span>Security Policies</span>
           </button>
-          
           <button className="action-card">
             <Activity className="h-5 w-5" />
             <span>System Health</span>
           </button>
-          
           <button className="action-card">
             <Eye className="h-5 w-5" />
             <span>Audit Logs</span>

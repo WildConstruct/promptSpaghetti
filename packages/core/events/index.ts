@@ -150,7 +150,7 @@ export const EventSystemConfigs = {
  * Initialize event system with environment-specific configuration
  */
 export const initializeEventSystem = ()
-  environment: 'production' | 'development' | 'testing' = 'development'
+  environment: 'production' | 'development' | 'testing' = 'development',
 ) => {
   const config = EventSystemConfigs[environment];
   // Clear existing middleware
@@ -177,7 +177,7 @@ export const performEventSystemHealthCheck = () => {
   const health = {
     status: 'healthy' as 'healthy' | 'degraded' | 'unhealthy',
     stats,
-    issues: [] as string[]
+    issues: [] as string[],
   };
   // Check for excessive subscriptions
   if (stats.subscriptions > 1000) {
@@ -238,14 +238,14 @@ export const EventSystemPresets = {
   /**
    * Minimal setup for simple applications
    */
-  minimal: () => {
+  minimal: () => {,
     globalEventBus.use(createValidationMiddleware());
     globalEventBus.use(createLoggingMiddleware({ logLevel: 'error' }));
   },
   /**
    * Analytics-focused setup
    */
-  analytics: () => {
+  analytics: () => {,
     globalEventBus.use(createValidationMiddleware());
     globalEventBus.use(createPerformanceMiddleware({ sampleRate: 1.0 }));
     globalEventBus.use(createLoggingMiddleware({)
@@ -260,7 +260,7 @@ export const EventSystemPresets = {
   /**
    * High-security setup
    */
-  security: () => {
+  security: () => {,
     globalEventBus.use(createValidationMiddleware({ strictMode: true }));
     globalEventBus.use(createSecurityMiddleware({)
       sensitiveFields: ['password', 'token', 'secret', 'key', 'ssn', 'creditCard', 'auth'],
@@ -278,7 +278,7 @@ export const EventSystemPresets = {
   /**
    * High-performance setup
    */
-  performance: () => {
+  performance: () => {,
     globalEventBus.use(createValidationMiddleware({ strictMode: false }));
     globalEventBus.use(createDeduplicationMiddleware({)
       keyGenerator: (event) => `${event.source}-${event.type}`,}

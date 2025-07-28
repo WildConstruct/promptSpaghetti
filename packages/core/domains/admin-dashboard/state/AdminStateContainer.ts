@@ -503,7 +503,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
       warnings.push({)
         field: 'users.pagination.pageSize',
         message: 'Page size should be between 1 and 100',
-        suggestion: 'Adjust page size for better performance'
+        suggestion: 'Adjust page size for better performance',
       });
     }
     // Validate security incidents
@@ -523,7 +523,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
       warnings.push({)
         field: 'layout.widgets',
         message: `Large number of widgets (${widgetCount})`,}
-        suggestion: 'Consider reducing widgets for better performance'
+        suggestion: 'Consider reducing widgets for better performance',
       });
     }
     const alertCount = state.metrics.alerts.length;
@@ -531,7 +531,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
       warnings.push({)
         field: 'metrics.alerts',
         message: `Large number of alerts (${alertCount})`,}
-        suggestion: 'Consider archiving old alerts'
+        suggestion: 'Consider archiving old alerts',
       });
     }
     return {
@@ -570,17 +570,16 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
       case 'UPDATE_WIDGET':
         newState.layout = {
           ...state.layout,
-          widgets: state.layout.widgets.map(widget =>)
+          widgets: state.layout.widgets.map(widget =>),
             widget.id === operation.widgetId
               ? { ...widget, ...operation.updates }
               : widget
-          )
         };
         break;
       case 'REMOVE_WIDGET':
         newState.layout = {
           ...state.layout,
-          widgets: state.layout.widgets.filter(widget => widget.id !== operation.widgetId)
+          widgets: state.layout.widgets.filter(widget => widget.id !== operation.widgetId),
         };
         break;
       case 'CREATE_USER':
@@ -594,18 +593,17 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
           list: [...state.users.list, newUser],
           pagination: {,
             ...state.users.pagination,
-            total: state.users.pagination.total + 1
+            total: state.users.pagination.total + 1,
           }
         };
         break;
       case 'UPDATE_USER':
         newState.users = {
           ...state.users,
-          list: state.users.list.map(user =>)
+          list: state.users.list.map(user =>),
             user.id === operation.userId
               ? { ...user, ...operation.updates }
               : user
-          )
         };
         break;
       case 'DELETE_USER':
@@ -647,7 +645,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
       case 'ACKNOWLEDGE_ALERT':
         newState.metrics = {
           ...state.metrics,
-          alerts: state.metrics.alerts.map(alert =>)
+          alerts: state.metrics.alerts.map(alert =>),
             alert.id === operation.alertId
               ? {
                   ...alert,
@@ -656,17 +654,15 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
                   acknowledgedAt: Date.now(),
                 }
               : alert
-          )
         };
         break;
       case 'RESOLVE_ALERT':
         newState.metrics = {
           ...state.metrics,
-          alerts: state.metrics.alerts.map(alert =>)
+          alerts: state.metrics.alerts.map(alert =>),
             alert.id === operation.alertId
               ? { ...alert, resolved: true, resolvedAt: Date.now() }
               : alert
-          )
         };
         break;
       case 'UPDATE_SECURITY_STATE':
@@ -687,11 +683,10 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
       case 'UPDATE_INCIDENT':
         newState.security = {
           ...state.security,
-          activeIncidents: state.security.activeIncidents.map(incident =>)
+          activeIncidents: state.security.activeIncidents.map(incident =>),
             incident.id === operation.incidentId
               ? { ...incident, ...operation.updates, updatedAt: Date.now() }
               : incident
-          )
         };
         break;
       case 'UPDATE_SYSTEM_SETTINGS':
@@ -712,7 +707,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
       case 'HIDE_MODAL':
         newState.ui = {
           ...state.ui,
-          modals: state.ui.modals.filter(modal => modal.id !== operation.modalId)
+          modals: state.ui.modals.filter(modal => modal.id !== operation.modalId),
         };
         break;
       case 'ADD_NOTIFICATION':
@@ -726,7 +721,6 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
           ...state.ui,
           notifications: state.ui.notifications.filter(),
             notification => notification.id !== operation.notificationId
-          )
         };
         break;
     }
@@ -816,7 +810,7 @@ export class AdminStateContainer extends BaseStateContainer<AdminDashboardState>
       cpuUsage: Math.random() * 100,
       networkTraffic: Math.random() * 1000,
       errorRate: Math.random() * 10,
-      responseTime: Math.random() * 500
+      responseTime: Math.random() * 500,
     };
     await this.applyOperation({ type: 'UPDATE_METRICS', metrics: mockMetrics });
   }

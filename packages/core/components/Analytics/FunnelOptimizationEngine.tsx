@@ -737,7 +737,7 @@ export const FunnelOptimizationEngine: React.FC<FunnelOptimizationEngineProps> =
         aggregation: { interval: 'day' }
       };
       const results = await analyticsInfrastructure.queryMetrics(query);
-      const optimizationData = await processOptimizationAnalysis(;)
+      const optimizationData = await processOptimizationAnalysis(;);
         funnelDefinition,
         currentPerformance,
         optimizationGoals,
@@ -780,14 +780,14 @@ export const FunnelOptimizationEngine: React.FC<FunnelOptimizationEngineProps> =
     return <OptimizationEngineLoadingState />;
   }
   if (error || !analysisData) {
-    return ()
+    return ();
       <OptimizationEngineErrorState 
         error={error || 'No optimization data available'} 
         onRetry={generateOptimizations} 
       />
     );
   }
-  return ()
+  return ();
     <div className="funnel-optimization-engine">
       <OptimizationEngineHeader
         funnelDefinition={funnelDefinition}
@@ -862,7 +862,7 @@ const OptimizationEngineHeader: React.FC<OptimizationEngineHeaderProps> = ({)
   const totalPotentialImpact = analysisData.impactPredictions;
     .reduce((sum, pred) => sum + pred.predictedImpact
       .find(impact => impact.metric === 'conversion_rate')?.changeRelative || 0, 0);
-  return ()
+  return ();
     <div className="optimization-engine-header">
       <div className="header-info">
         <h3>Optimization Engine: {funnelDefinition.name}</h3>
@@ -922,7 +922,7 @@ const RecommendationsView: React.FC<RecommendationsViewProps> = ({)
       return b.impactScore - a.impactScore;
     });
   }, [recommendations]);
-  return ()
+  return ();
     <div className="recommendations-view">
       <div className="recommendations-overview">
         <h4>Optimization Recommendations</h4>
@@ -974,7 +974,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({)
   isSelected,
   onSelect
 }) => {
-  return ()
+  return ();
     <div 
       className={`recommendation-card ${recommendation.priority} ${isSelected ? 'selected' : ''}`}
       onClick={onSelect}
@@ -1078,7 +1078,7 @@ interface ExperimentsViewProps {
   recommendations: OptimizationRecommendation[];
 }
 const ExperimentsView: React.FC<ExperimentsViewProps> = ({ experimentPlans, recommendations }) => {
-  return ()
+  return ();
     <div className="experiments-view">
       <h4>Experiment Plans</h4>
       <div className="experiments-list">
@@ -1096,7 +1096,7 @@ interface ExperimentCardProps {
   experiment: ExperimentPlan;
 }
 const ExperimentCard: React.FC<ExperimentCardProps> = ({ experiment }) => {
-  return ()
+  return ();
     <div className="experiment-card">
       <div className="experiment-header">
         <h5>{experiment.name}</h5>
@@ -1151,7 +1151,7 @@ interface RoadmapViewProps {
   riskAssessment: RiskAssessment;
 }
 const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap, recommendations, riskAssessment }) => {
-  return ()
+  return ();
     <div className="roadmap-view">
       <h4>Optimization Roadmap</h4>
       <div className="roadmap-timeline">
@@ -1179,7 +1179,7 @@ interface RoadmapPhaseCardProps {
   phase: RoadmapPhase;
 }
 const RoadmapPhaseCard: React.FC<RoadmapPhaseCardProps> = ({ phase }) => {
-  return ()
+  return ();
     <div className="roadmap-phase-card">
       <h5>{phase.phase}</h5>
       <div className="phase-duration">{phase.duration} days</div>
@@ -1220,7 +1220,7 @@ interface ResourceAllocationViewProps {
   recommendations: OptimizationRecommendation[];
 }
 const ResourceAllocationView: React.FC<ResourceAllocationViewProps> = ({ allocation, recommendations }) => {
-  return ()
+  return ();
     <div className="resource-allocation-view">
       <h4>Resource Allocation</h4>
       <div className="allocation-summary">
@@ -1295,7 +1295,7 @@ interface CompetitiveInsightsPanelProps {
   trends: OptimizationTrend[];
 }
 const CompetitiveInsightsPanel: React.FC<CompetitiveInsightsPanelProps> = ({ analysis, trends }) => {
-  return ()
+  return ();
     <div className="competitive-insights-panel">
       <h4>Market Insights</h4>
       <div className="competitive-overview">
@@ -1417,7 +1417,7 @@ async function processOptimizationAnalysis()
                 name: 'Development Complete',
                 date: Date.now() + 10 * 86400000,
                 criteria: ['Features implemented', 'Testing complete'],
-                dependencies: ['Research Complete']
+                dependencies: ['Research Complete'],
               }
             ]
           }
@@ -1443,7 +1443,7 @@ async function processOptimizationAnalysis()
             probability: 0.3,
             impact: 40,
             mitigation: 'Gradual rollout with user feedback',
-            contingency: 'Rollback capability with feature flags'
+            contingency: 'Rollback capability with feature flags',
           }
         ],
         successCriteria: [,
@@ -1595,13 +1595,13 @@ async function processOptimizationAnalysis()
               type: 'ui',
               element: 'Template Grid',
               change: 'Add advanced filtering sidebar',
-              rationale: 'Users need better ways to narrow down template options'
+              rationale: 'Users need better ways to narrow down template options',
             },
             {
               type: 'ui',
               element: 'Search Bar',
               change: 'Enhanced search with autocomplete and suggestions',
-              rationale: 'Faster template discovery reduces frustration'
+              rationale: 'Faster template discovery reduces frustration',
             }
           ],
           trafficPercentage: 50,
@@ -1612,7 +1612,7 @@ async function processOptimizationAnalysis()
       trafficAllocation: {,
         strategy: 'equal',
         exclusionCriteria: ['Mobile users under 5 sessions'],
-        inclusionCriteria: ['Active template browsers']
+        inclusionCriteria: ['Active template browsers'],
       },
       duration: 14,
       sampleSize: {,
@@ -1671,7 +1671,7 @@ async function processOptimizationAnalysis()
             risk: 'Decreased conversion rate',
             probability: 0.2,
             impact: 50,
-            mitigation: 'Real-time monitoring with automatic stop conditions'
+            mitigation: 'Real-time monitoring with automatic stop conditions',
           }
         ],
         technicalRisks: [,
@@ -1679,7 +1679,7 @@ async function processOptimizationAnalysis()
             risk: 'Performance degradation',
             probability: 0.3,
             impact: 30,
-            mitigation: 'Load testing and performance monitoring'
+            mitigation: 'Load testing and performance monitoring',
           }
         ],
         userExperienceRisks: [,
@@ -1687,7 +1687,7 @@ async function processOptimizationAnalysis()
             risk: 'User confusion with new interface',
             probability: 0.4,
             impact: 25,
-            mitigation: 'User feedback collection and support documentation'
+            mitigation: 'User feedback collection and support documentation',
           }
         ],
         mitigationPlans: [],
@@ -1697,7 +1697,7 @@ async function processOptimizationAnalysis()
   return {
     recommendations,
     experimentPlans,
-    impactPredictions: recommendations.map(rec => ({)
+    impactPredictions: recommendations.map(rec => ({),
       recommendationId: rec.id,
       predictedImpact: [,
         {
@@ -1730,20 +1730,20 @@ async function processOptimizationAnalysis()
         recommendationId: rec.id,
         allocatedBudget: rec.effortScore * 500,
         allocatedTime: rec.timeToImplement,
-        allocatedResources: rec.implementation.resources.map(res => ({)
+        allocatedResources: rec.implementation.resources.map(res => ({),
           type: res.type,
           amount: res.hours,
           duration: rec.timeToImplement,
           utilization: 0.8,
         })),
         expectedROI: rec.roiEstimate,
-        priority: index + 1
+        priority: index + 1,
       })),
       priorities: {,
         highImpactLowEffort: recommendations.filter(r => r.impactScore > 70 && r.effortScore < 40).map(r => r.id),
         highImpactHighEffort: recommendations.filter(r => r.impactScore > 70 && r.effortScore >= 40).map(r => r.id),
         lowImpactLowEffort: recommendations.filter(r => r.impactScore <= 70 && r.effortScore < 40).map(r => r.id),
-        lowImpactHighEffort: recommendations.filter(r => r.impactScore <= 70 && r.effortScore >= 40).map(r => r.id)
+        lowImpactHighEffort: recommendations.filter(r => r.impactScore <= 70 && r.effortScore >= 40).map(r => r.id),
       },
       timeline: Array.from({ length: 6 }, (_, i) => ({)
         period: `Month ${i + 1}`,}
@@ -1753,7 +1753,7 @@ async function processOptimizationAnalysis()
           allocatedTime: rec.timeToImplement,
           allocatedResources: [],
           expectedROI: rec.roiEstimate,
-          priority: allocIndex + 1
+          priority: allocIndex + 1,
         })),
         capacity: {,
           available: 100,
@@ -1790,7 +1790,7 @@ async function processOptimizationAnalysis()
             }
           ],
           risks: ['Resource conflicts'],
-          successCriteria: ['5% conversion rate improvement']
+          successCriteria: ['5% conversion rate improvement'],
         },
         {
           phase: 'Major Improvements (Months 2-3)',
@@ -1806,7 +1806,7 @@ async function processOptimizationAnalysis()
             }
           ],
           risks: ['Integration complexity', 'User adoption'],
-          successCriteria: ['15% conversion rate improvement']
+          successCriteria: ['15% conversion rate improvement'],
         }
       ],
       milestones: [,

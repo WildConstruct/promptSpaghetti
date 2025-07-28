@@ -13,7 +13,7 @@ import {
 } from '../hooks/useEditorProviders';
 
 export interface EditorProviderWrapperProps {
-  children: (props: {)
+  children: (props: {),
     registry: ProviderRegistry;
     editorContext: EditorStateContext;
     editorActions: EditorActions;
@@ -127,7 +127,7 @@ export const EditorProviderWrapper: React.FC<EditorProviderWrapperProps> = ({)
   // Error boundary for provider execution
   const safeRegistry = useMemo((): ProviderRegistry => ({)
     ...registry,
-    register: (hook: ProviderHook) => {
+    register: (hook: ProviderHook) => {,
       try {
         registry.register(hook);
         setProviderErrors(prev => {)
@@ -142,7 +142,7 @@ export const EditorProviderWrapper: React.FC<EditorProviderWrapperProps> = ({)
         throw error;
       }
     },
-    executeHooks: async <T extends keyof ProviderHook>()
+    executeHooks: async <T extends keyof ProviderHook>(),
       hookName: T,
       ...args: unknown[]
     ) => {
@@ -177,7 +177,7 @@ export const EditorProviderWrapper: React.FC<EditorProviderWrapperProps> = ({)
   // Enhanced editor actions with error handling
   const safeEditorActions = useMemo((): EditorActions => ({)
     ...editorActions,
-    addNode: async (node: Node) => {
+    addNode: async (node: Node) => {,
       try {
         await editorActions.addNode(node);
       } catch (error) {
@@ -197,7 +197,7 @@ export const EditorProviderWrapper: React.FC<EditorProviderWrapperProps> = ({)
         throw error;
       }
     },
-    removeNode: async (nodeId: string) => {
+    removeNode: async (nodeId: string) => {,
       try {
         await editorActions.removeNode(nodeId);
       } catch (error) {
@@ -207,7 +207,7 @@ export const EditorProviderWrapper: React.FC<EditorProviderWrapperProps> = ({)
         throw error;
       }
     },
-    executeGraph: async () => {
+    executeGraph: async () => {,
       try {
         return await editorActions.executeGraph();
       } catch (error) {
@@ -218,7 +218,7 @@ export const EditorProviderWrapper: React.FC<EditorProviderWrapperProps> = ({)
       }
     }
   }), [editorActions, onProviderError]);
-  return ()
+  return ();
     <>
       {children({)
         registry: safeRegistry,
@@ -294,7 +294,7 @@ export const withEditorProviders = <T extends {}>()
       validationErrors,
       ...componentProps
     } = props;
-    return ()
+    return ();
       <EditorProviderWrapper
         initialNodes={initialNodes}
         initialEdges={initialEdges}

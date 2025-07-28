@@ -425,7 +425,7 @@ export class BulkPropertyUpdateService {
       execution,
       usageCount: 0,
       createdBy,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     this.templates.set(template.id, template);
     this.notifyListeners('template_created', template);
@@ -445,7 +445,7 @@ export class BulkPropertyUpdateService {
     template.usageCount++;
     template.lastUsed = new Date();
     this.templates.set(templateId, template);
-    const operation = await this.createOperation(;)
+    const operation = await this.createOperation(;);
       operationName,
       targets,
       template.updates,
@@ -620,7 +620,7 @@ export class BulkPropertyUpdateService {
           changes: [],
           errors: [{,
             type: 'execution',
-            message: error instanceof Error ? error.message : 'Unknown error'
+            message: error instanceof Error ? error.message : 'Unknown error',
           }],
           executedAt: new Date(),
           duration: 0,
@@ -650,7 +650,7 @@ export class BulkPropertyUpdateService {
           changes: [],
           errors: [{,
             type: 'execution',
-            message: error instanceof Error ? error.message : 'Unknown error'
+            message: error instanceof Error ? error.message : 'Unknown error',
           }],
           executedAt: new Date(),
           duration: 0,
@@ -686,7 +686,7 @@ export class BulkPropertyUpdateService {
             changes: [],
             errors: [{,
               type: 'execution',
-              message: result.reason?.message || 'Unknown error'
+              message: result.reason?.message || 'Unknown error',
             }],
             executedAt: new Date(),
             duration: 0,
@@ -743,7 +743,7 @@ export class BulkPropertyUpdateService {
       result.status = 'failed';
       result.errors.push({)
         type: 'execution',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: error instanceof Error ? error.message : 'Unknown error',
       });
     }
     result.duration = Date.now() - startTime;
@@ -939,7 +939,7 @@ export class BulkPropertyUpdateService {
       result.valid = false;
       result.errors.push({)
         type: 'execution',
-        message: error instanceof Error ? error.message : 'Validation error'
+        message: error instanceof Error ? error.message : 'Validation error',
       });
     }
     return result;
@@ -987,7 +987,7 @@ export class BulkPropertyUpdateService {
       if (!pattern.test(String(value))) {
         return {
           valid: false,
-          message: constraint.message || 'Value does not match required pattern'
+          message: constraint.message || 'Value does not match required pattern',
         };
       }
       break;

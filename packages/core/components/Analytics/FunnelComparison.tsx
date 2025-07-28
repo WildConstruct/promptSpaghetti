@@ -267,7 +267,7 @@ export const FunnelComparison: React.FC<FunnelComparisonProps> = ({)
     try {
       setLoading(true);
       setError(null);
-      const result = await performFunnelComparison(;)
+      const result = await performFunnelComparison(;);
         analyticsInfrastructure,
         primaryFunnel,
         comparisonConfig
@@ -305,7 +305,7 @@ export const FunnelComparison: React.FC<FunnelComparisonProps> = ({)
   if (error || !comparisonResult) {
     return <ComparisonErrorState error={error || 'No data available'} onRetry={loadComparisonData} />;
   }
-  return ()
+  return ();
     <div className="funnel-comparison">
       <ComparisonHeader
         configuration={comparisonConfig}
@@ -376,7 +376,7 @@ const ComparisonHeader: React.FC<ComparisonHeaderProps> = ({)
   onViewModeChange,
   onExport
 }) => {
-  return ()
+  return ();
     <div className="comparison-header">
       <div className="header-info">
         <h2>Funnel Comparison</h2>
@@ -424,7 +424,7 @@ const ComparisonSummary: React.FC<ComparisonSummaryProps> = ({)
   delta,
   mode
 }) => {
-  return ()
+  return ();
     <div className="comparison-summary">
       <div className="summary-grid">
         <MetricComparisonCard
@@ -492,7 +492,7 @@ const MetricComparisonCard: React.FC<MetricComparisonCardProps> = ({)
         return value.toLocaleString();
     }
   };
-  return ()
+  return ();
     <div className="metric-comparison-card">
       <h4 className="metric-title">{title}</h4>
       <div className="metric-values">
@@ -543,7 +543,7 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({)
       return severityOrder[b.severity] - severityOrder[a.severity];
     });
   }, [insights]);
-  return ()
+  return ();
     <div className="insights-panel">
       <h3>Key Insights</h3>
       <div className="insights-grid">
@@ -568,7 +568,7 @@ interface InsightCardProps {
   onClick: () => void;
 }
 const InsightCard: React.FC<InsightCardProps> = ({ insight, isSelected, onClick }) => {
-  return ()
+  return ();
     <div 
       className={`insight-card ${insight.severity} ${isSelected ? 'selected' : ''}`}
       onClick={onClick}
@@ -613,7 +613,7 @@ const OverviewComparison: React.FC<OverviewComparisonProps> = ({)
   comparison,
   delta
 }) => {
-  return ()
+  return ();
     <div className="overview-comparison">
       <div className="funnel-charts">
         <div className="baseline-funnel">
@@ -641,11 +641,11 @@ interface SimpleFunnelChartProps {
 }
 const SimpleFunnelChart: React.FC<SimpleFunnelChartProps> = ({ steps }) => {
   const maxEntries = Math.max(...steps.map(s => s.entries));
-  return ()
+  return ();
     <div className="simple-funnel-chart">
       {steps.map((step, index) => {
         const width = (step.entries / maxEntries) * 100;
-        return ()
+        return ();
           <div key={step.stepId} className="funnel-step">
             <div 
               className="step-bar"
@@ -678,7 +678,7 @@ const StepByStepComparison: React.FC<StepByStepComparisonProps> = ({)
   comparisonSteps,
   stepDeltas
 }) => {
-  return ()
+  return ();
     <div className="step-by-step-comparison">
       <h4>Step-by-Step Analysis</h4>
       <div className="steps-table">
@@ -693,7 +693,7 @@ const StepByStepComparison: React.FC<StepByStepComparisonProps> = ({)
           const comparisonStep = comparisonSteps.find(s => s.stepId === baselineStep.stepId);
           const delta = stepDeltas.find(d => d.stepId === baselineStep.stepId);
           if (!comparisonStep || !delta) return null;
-          return ()
+          return ();
             <div key={baselineStep.stepId} className="table-row">
               <div className="step-name">{baselineStep.stepName}</div>
               <div className="baseline-rate">{baselineStep.conversionRate.toFixed(1)}%</div>
@@ -836,7 +836,7 @@ async function performFunnelComparison()
         comparisonSampleSize: comparisonData.totalEntries,
         dataCompleteness: 0.95,
         outlierCount: 5,
-        confidenceLevel: 1 - configuration.significanceLevel
+        confidenceLevel: 1 - configuration.significanceLevel,
       },
       executionTime: 1500,
       cacheHit: false,
@@ -858,7 +858,7 @@ function calculatePerformanceDelta()
     totalConversions: calculateDelta(baseline.totalConversions, comparison.totalConversions),
     averageTimeToConvert: calculateDelta(baseline.averageTimeToConvert, comparison.averageTimeToConvert),
     totalValue: calculateDelta(baseline.totalValue, comparison.totalValue),
-    stepDeltas: baseline.stepPerformance.map(baseStep => {)
+    stepDeltas: baseline.stepPerformance.map(baseStep => {),
       const compStep = comparison.stepPerformance.find(s => s.stepId === baseStep.stepId);
       return {
         stepId: baseStep.stepId,

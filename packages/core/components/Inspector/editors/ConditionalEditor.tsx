@@ -54,7 +54,7 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
   const handleStrictModeChange = (value: unknown) => {
     onChange({ strictMode: Boolean(value) });
   };
-  return ()
+  return ();
     <div className="conditional-editor">
       {/* BASIC LEVEL: Essential conditional settings */}
       <ProgressiveDisclosureSection
@@ -160,7 +160,7 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
                     border: '1px solid #4a5568',
                     borderRadius: 4,
                     padding: 12,
-                    marginBottom: index < branches.length - 1 ? 8 : 0
+                    marginBottom: index < branches.length - 1 ? 8 : 0,
                   }}
                 >
                   <div style={{
@@ -407,7 +407,7 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
                   padding: '4px 8px',
                   background: 'rgba(66, 153, 225, 0.1)',
                   borderRadius: 2,
-                  borderLeft: '3px solid #4299e1'
+                  borderLeft: '3px solid #4299e1',
                 }}>
                   <div style={{ fontWeight: 500, marginBottom: 2 }}>
                     {index === 0 ? 'IF' : 'ELSE IF'} {branch.label || `Branch ${index + 1}`}:}
@@ -431,7 +431,7 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
                   padding: '4px 8px',
                   background: 'rgba(237, 137, 54, 0.1)',
                   borderRadius: 2,
-                  borderLeft: '3px solid #ed8936'
+                  borderLeft: '3px solid #ed8936',
                 }}>
                   <div style={{ fontWeight: 500, marginBottom: 2 }}>
                     ELSE (Default):

@@ -200,7 +200,7 @@ export interface DeviceVerificationRequestData {
 export class DeviceVerificationService extends EventEmitter {
   private sessions: Map<string, VerificationSession> = new Map();
   private challenges: Map<string, DeviceChallenge> = new Map();
-  constructor()
+  constructor();
     private fingerprintService: DeviceFingerprintingService,
     private trustedDeviceManager: TrustedDeviceManager,
     private verificationCodeManager: VerificationCodeManager,
@@ -227,7 +227,6 @@ export class DeviceVerificationService extends EventEmitter {
       enableAutomaticApproval: false,
       requireDoubleVerification: false,
     }
-  ) {
     super();
     this.startCleanupTimer();
   }
@@ -239,7 +238,7 @@ export class DeviceVerificationService extends EventEmitter {
   ): Promise<VerificationSession> {
     try {
       // Generate device fingerprint
-      const fingerprint = await this.fingerprintService.generateFingerprint(;)
+      const fingerprint = await this.fingerprintService.generateFingerprint(;);
         request.fingerprintContext
       );
       // Get or create location data
@@ -257,7 +256,7 @@ export class DeviceVerificationService extends EventEmitter {
           riskScore: 50,
           factors: [],
           recommendations: [],
-          timestamp: new Date()
+          timestamp: new Date(),
         };
       // Create verification session
       const sessionId = this.generateSessionId();
@@ -304,14 +303,14 @@ export class DeviceVerificationService extends EventEmitter {
         userId: request.userId,
         riskLevel: riskAssessment.overallRisk,
         riskScore: riskAssessment.riskScore,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return session;
     } catch (error) {
       this.emit('verificationError', {)
         userId: request.userId,
         error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       throw error;
     }
@@ -365,7 +364,7 @@ export class DeviceVerificationService extends EventEmitter {
         challengeId,
         challengeType: challenge.type,
         userId: session.userId,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return {
         success: true,
@@ -387,7 +386,7 @@ export class DeviceVerificationService extends EventEmitter {
             sessionId,
             userId: session.userId,
             reason: 'Too many failed attempts',
-            timestamp: new Date()
+            timestamp: new Date(),
           });
         }
       }
@@ -397,7 +396,7 @@ export class DeviceVerificationService extends EventEmitter {
         challengeType: challenge.type,
         userId: session.userId,
         attemptsRemaining: challenge.challengeData.maxAttempts - challenge.challengeData.attempts,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
       return {
         success: false,
@@ -432,7 +431,7 @@ export class DeviceVerificationService extends EventEmitter {
       sessionId,
       userId: session.userId,
       reason,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return true;
   }
@@ -454,7 +453,7 @@ export class DeviceVerificationService extends EventEmitter {
     session.metadata.adminOverride = {
       adminUserId,
       reason,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
     if (approved) {
       // Register trusted device
@@ -466,7 +465,7 @@ export class DeviceVerificationService extends EventEmitter {
       adminUserId,
       approved,
       reason,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return true;
   }
@@ -489,7 +488,7 @@ export class DeviceVerificationService extends EventEmitter {
       break;
     case VerificationStep.CHALLENGE_REQUIRED:
       // Check if all required challenges are completed
-      const requiredCompleted = session.requiredChallenges.every(challengeType =>;)
+      const requiredCompleted = session.requiredChallenges.every(challengeType =>;);
         session.challenges.some(c => c.type === challengeType && c.status === 'completed')
       );
       if (requiredCompleted) {
@@ -657,7 +656,7 @@ export class DeviceVerificationService extends EventEmitter {
       sessionId: session.id,
       userId: session.userId,
       riskScore: session.riskScore,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   private async validateChallengeResponse()
@@ -687,7 +686,7 @@ export class DeviceVerificationService extends EventEmitter {
       outcome: session.outcome,
       riskScore: session.riskScore,
       duration: session.completedAt.getTime() - session.createdAt.getTime(),
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   private async registerTrustedDevice(session: VerificationSession): Promise<void> {
@@ -700,7 +699,7 @@ export class DeviceVerificationService extends EventEmitter {
         metadata: {,
           verificationSessionId: session.id,
           riskScore: session.riskScore,
-          verificationTimestamp: new Date()
+          verificationTimestamp: new Date(),
         }
       };
       const trustedDevice = await this.trustedDeviceManager.registerTrustedDevice(deviceRequest);
@@ -714,7 +713,7 @@ export class DeviceVerificationService extends EventEmitter {
         sessionId: session.id,
         userId: session.userId,
         error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -725,7 +724,7 @@ export class DeviceVerificationService extends EventEmitter {
       userId: session.userId,
       riskScore: session.riskScore,
       flags: session.flags,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   private async checkForSuspiciousActivity(session: VerificationSession): Promise<void> {
@@ -808,7 +807,7 @@ export class DeviceVerificationService extends EventEmitter {
         countryCode: 'US',
         region: 'California',
         regionCode: 'CA',
-        city: 'San Francisco'
+        city: 'San Francisco',
       },
       network: {,
         ipAddress,

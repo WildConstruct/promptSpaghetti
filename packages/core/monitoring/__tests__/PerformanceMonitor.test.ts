@@ -23,7 +23,7 @@ const createMockContext = (overrides: Partial<AdvancedExecutionContext> = {}): A
     startTime: Date.now(),
     executionId: 'test-exec-123',
     nodeExecutionOrder: [],
-    performanceMetrics: new Map()
+    performanceMetrics: new Map(),
   },
   prng: () => Math.random(),
   seed: 12345,
@@ -166,7 +166,7 @@ describe('PerformanceMonitor', () => {
     });
     it('should track deep evaluation warnings', () => {
       const context = createMockContext({)
-        evaluationDepth: 15 // Deep evaluation
+        evaluationDepth: 15 // Deep evaluation,
       });
       const trackingId = monitor.startExecution('deep-node', 'DeepType', context);
       mockTime += 30;

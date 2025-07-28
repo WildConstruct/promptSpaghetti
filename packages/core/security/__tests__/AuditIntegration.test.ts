@@ -27,7 +27,7 @@ jest.mock('../ClassificationEnforcer', () => ({)
       riskScore: 25,
       appliedControls: ['encryption'],
       missingControls: [],
-      reason: 'Access granted'
+      reason: 'Access granted',
     } as unknown as unknown),
     on: jest.fn<unknown[], unknown>()
   }))
@@ -43,13 +43,13 @@ describe('AuditIntegration', () => {
     auditLogger = createAuditLogger({)
       bufferSize: 1, // Force immediate writing
       asyncLogging: false,
-      hashSensitiveData: false // Disable hashing for test
+      hashSensitiveData: false // Disable hashing for test,
     });
     auditIntegration = createAuditIntegration({)
       auditLogger,
       logAllOperations: false,
       enrichWithClassification: true,
-      logDeniedAccess: false // Prevent duplicate logs for denied access
+      logDeniedAccess: false // Prevent duplicate logs for denied access,
     });
   });
   afterEach(() => {
@@ -65,7 +65,7 @@ describe('AuditIntegration', () => {
         purpose: 'customer_analysis',
         ipAddress: '10.0.0.100',
         sessionId: 'session_abc123',
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       const testData = {
         name: 'John Doe',
@@ -101,7 +101,7 @@ describe('AuditIntegration', () => {
         riskScore: 85,
         appliedControls: [],
         missingControls: ['multi_factor_auth'],
-        reason: 'Insufficient authentication'
+        reason: 'Insufficient authentication',
       } as unknown as unknown);
       const denialIntegration = createAuditIntegration({)
         auditLogger,
@@ -113,7 +113,7 @@ describe('AuditIntegration', () => {
         userRole: 'guest',
         purpose: 'unauthorized_access',
         ipAddress: '203.0.113.1',
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       await denialIntegration.logDataAccess()
         context,
@@ -136,7 +136,7 @@ describe('AuditIntegration', () => {
         userRole: 'security_admin',
         purpose: 'access_management',
         ipAddress: '10.0.0.5',
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       await auditIntegration.logAdminOperation()
         'GRANT_ACCESS',
@@ -149,7 +149,7 @@ describe('AuditIntegration', () => {
         },
         {
           reason: 'Quarterly analysis approval',
-          expiresIn: '30 days'
+          expiresIn: '30 days',
         }
       );
       const logs = await auditLogger.query({});
@@ -168,7 +168,7 @@ describe('AuditIntegration', () => {
         userId: 'batch_user',
         userRole: 'system',
         purpose: 'batch_export',
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       const resources = [;
         { type: 'customer', id: 'cust_001', classification: DataClassificationLevel.INTERNAL },
@@ -199,7 +199,7 @@ describe('AuditIntegration', () => {
         userRole: 'contractor',
         purpose: 'data_mining',
         ipAddress: '203.0.113.50',
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       await auditIntegration.logSecurityEvent()
         'ANOMALOUS_ACCESS_PATTERN',
@@ -229,9 +229,9 @@ describe('AuditIntegration', () => {
         userRole: 'data_scientist',
         purpose: 'model_training',
         systemId: 'ml_pipeline',
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
-      const correlationId = await auditIntegration.startAuditTrail(;)
+      const correlationId = await auditIntegration.startAuditTrail(;);
         'training_workflow_001',
         context,
         { modelType: 'classification' }
@@ -288,7 +288,7 @@ describe('AuditIntegration', () => {
     it('should generate compliance reports', async () => {
       const startDate = new Date(Date.now() - 24 * 60 * 60 * 1000);
       const endDate = new Date();
-      const report = await auditIntegration.generateComplianceReport(;)
+      const report = await auditIntegration.generateComplianceReport(;);
         startDate,
         endDate,
         { includeDetails: false }
@@ -309,7 +309,7 @@ describe('AuditIntegration', () => {
     it('should include details when requested', async () => {
       const startDate = new Date(Date.now() - 24 * 60 * 60 * 1000);
       const endDate = new Date();
-      const report = await auditIntegration.generateComplianceReport(;)
+      const report = await auditIntegration.generateComplianceReport(;);
         startDate,
         endDate,
         { includeDetails: true }
@@ -323,12 +323,12 @@ describe('AuditIntegration', () => {
       const minimalIntegration = createAuditIntegration({)
         auditLogger,
         enrichWithClassification: false,
-        logDeniedAccess: false // Prevent duplicate logs for denied access
+        logDeniedAccess: false // Prevent duplicate logs for denied access,
       });
       const context: OperationContext = {
         userId: 'test_user',
         purpose: 'test',
-        requestedAt: new Date()
+        requestedAt: new Date(),
       };
       await expect()
         minimalIntegration.logDataAccess()
@@ -336,7 +336,6 @@ describe('AuditIntegration', () => {
           'test_resource',
           'test_123',
           { some: 'data' }
-        )
       ).resolves.not.toThrow();
       const logs = await auditLogger.query({});
       expect(logs).toHaveLength(1);

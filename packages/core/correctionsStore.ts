@@ -55,8 +55,8 @@ interface CorrectionsState {
 }
 
 export const useCorrectionsStore = create<CorrectionsState>()()
-  devtools()
-    persist()
+  devtools();
+    persist();
       (set, get) => ({)
         // Initial state
         rules: [],
@@ -67,7 +67,7 @@ export const useCorrectionsStore = create<CorrectionsState>()()
             ...rule,
             id: crypto.randomUUID(),
             createdAt: new Date(),
-            updatedAt: new Date()
+            updatedAt: new Date(),
           };
           set((state) => ({)
             rules: [...state.rules, newRule].sort((a, b) => a.priority - b.priority)
@@ -75,25 +75,23 @@ export const useCorrectionsStore = create<CorrectionsState>()()
         },
         updateRule: (id: string, updates: Partial<CorrectionRule>) => {
           set((state) => ({)
-            rules: state.rules.map((rule) =>
+            rules: state.rules.map((rule) =>,
               rule.id === id
                 ? { ...rule, ...updates, updatedAt: new Date() }
                 : rule
-            )
           }));
         },
-        deleteRule: (id: string) => {
+        deleteRule: (id: string) => {,
           set((state) => ({)
-            rules: state.rules.filter((rule) => rule.id !== id)
+            rules: state.rules.filter((rule) => rule.id !== id),
           }));
         },
-        toggleRule: (id: string) => {
+        toggleRule: (id: string) => {,
           set((state) => ({)
-            rules: state.rules.map((rule) =>
+            rules: state.rules.map((rule) =>,
               rule.id === id
                 ? { ...rule, isActive: !rule.isActive, updatedAt: new Date() }
                 : rule
-            )
           }));
         },
         reorderRules: (fromIndex: number, toIndex: number) => {
@@ -106,15 +104,15 @@ export const useCorrectionsStore = create<CorrectionsState>()()
               rules: newRules.map((rule, index) => ({)
                 ...rule,
                 priority: index,
-                updatedAt: new Date()
+                updatedAt: new Date(),
               }))
             };
           });
         },
-        clearAllRules: () => {
+        clearAllRules: () => {,
           set({ rules: [] });
         },
-        applyCorrections: (text: string) => {
+        applyCorrections: (text: string) => {,
           const { rules } = get();
           // Check if corrections are enabled dynamically
           const isEnabled = process.env.NODE_ENV === 'development' || ;
@@ -138,11 +136,11 @@ export const useCorrectionsStore = create<CorrectionsState>()()
               }
             }, text);
         },
-        getActiveRules: () => {
+        getActiveRules: () => {,
           const { rules } = get();
           return rules.filter((rule) => rule.isActive).sort((a, b) => a.priority - b.priority);
         },
-        getDraftRules: () => {
+        getDraftRules: () => {,
           const { rules } = get();
           return rules.filter((rule) => !rule.isActive);
         },
@@ -162,7 +160,7 @@ export const useCorrectionsStore = create<CorrectionsState>()()
               const errorData = await response.json();
               return { 
                 success: false, 
-                error: errorData.error || 'Export failed' 
+                error: errorData.error || 'Export failed' ,
               };
             }
             // Get filename from Content-Disposition header
@@ -179,7 +177,7 @@ export const useCorrectionsStore = create<CorrectionsState>()()
             console.error('Export error:', error);
             return {
               success: false,
-              error: error instanceof Error ? error.message : 'Export failed'
+              error: error instanceof Error ? error.message : 'Export failed',
             };
           }
         },
@@ -195,7 +193,7 @@ export const useCorrectionsStore = create<CorrectionsState>()()
                 content,
                 overwrite: options.overwrite || false,
                 merge: options.merge || false,
-                skipDuplicates: options.skipDuplicates !== false // default true
+                skipDuplicates: options.skipDuplicates !== false // default true,
               })
             });
             const result = await response.json();
@@ -209,13 +207,13 @@ export const useCorrectionsStore = create<CorrectionsState>()()
             // For now, just return success - real integration would sync with server
             return {
               success: true,
-              importedCount: result.importedCount || 0
+              importedCount: result.importedCount || 0,
             };
           } catch (error) {
             console.error('Import error:', error);
             return {
               success: false,
-              error: error instanceof Error ? error.message : 'Import failed'
+              error: error instanceof Error ? error.message : 'Import failed',
             };
           }
         }
@@ -229,7 +227,6 @@ export const useCorrectionsStore = create<CorrectionsState>()()
     {
       name: 'corrections-store',
     }
-  )
 );
 
 // Helper function to escape special regex characters

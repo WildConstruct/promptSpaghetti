@@ -10,7 +10,7 @@ import { AlertTriangle, DollarSign, TrendingUp, Clock, X, Check, BellOff, Filter
 const SEVERITY_COLORS = {
   info: 'text-blue-600 bg-blue-50 border-blue-200',
   warning: 'text-yellow-600 bg-yellow-50 border-yellow-200',
-  critical: 'text-red-600 bg-red-50 border-red-200'
+  critical: 'text-red-600 bg-red-50 border-red-200',
 };
 /**
  * Alert type icons
@@ -59,7 +59,7 @@ const AlertItem: React.FC<AlertItemProps> = ({ alert, onAcknowledge, onDismiss }
   const formatTimestamp = (timestamp: number) => {
     return new Date(timestamp).toLocaleString();
   };
-  return ()
+  return ();
     <Card className={`alert-item ${severityClass} border-l-4`}>}
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between">
@@ -154,7 +154,7 @@ interface AlertSummaryProps {
  * Alert summary card component
  */
 const AlertSummaryCard: React.FC<AlertSummaryProps> = ({ alerts, title, icon, color }) => {
-  return ()
+  return ();
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center gap-2">
@@ -229,7 +229,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
       all: alerts.length,
       critical: alerts.filter(a => a.severity === 'critical').length,
       warning: alerts.filter(a => a.severity === 'warning').length,
-      info: alerts.filter(a => a.severity === 'info').length
+      info: alerts.filter(a => a.severity === 'info').length,
     };
     return counts;
   };
@@ -245,7 +245,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
   const alertCounts = getAlertCounts();
   const { budgetAlerts, performanceAlerts, errorAlerts } = getAlertsByType();
   if (alerts.length === 0) {
-    return ()
+    return ();
       <div className={`alerts-panel ${className}`}>}
         <Card>
           <CardContent className="text-center py-8">
@@ -257,7 +257,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`alerts-panel ${className}`}>}
       {showSummary && ()
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

@@ -82,7 +82,6 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({)
     ? options.filter(option => )
       option.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
         String(option.value).toLowerCase().includes(searchTerm.toLowerCase())
-    )
     : options;
   // Group options if they have groups
   const groupedOptions = filteredOptions.reduce((acc, option) => {
@@ -157,9 +156,9 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({)
     background: selected ? '#4299e1' : 'transparent',
     color: disabled ? '#718096' : '#e2e8f0',
     fontSize: 13,
-    borderBottom: '1px solid #4a5568'
+    borderBottom: '1px solid #4a5568',
   });
-  return ()
+  return ();
     <div style={containerStyle} ref={dropdownRef}>
       <label htmlFor={inputId} style={labelStyle}>
         {label}
@@ -224,7 +223,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({)
                 const selected = multiple;
                   ? Array.isArray(localValue) && localValue.includes(option.value)
                   : localValue === option.value;
-                return ()
+                return ();
                   <div
                     key={option.value}
                     style={optionStyle(selected, option.disabled || false)}

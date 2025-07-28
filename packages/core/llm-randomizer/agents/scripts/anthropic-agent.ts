@@ -77,7 +77,7 @@ export class AnthropicGraphAgent {
                   model: this.config.model,
                   temperature: currentTemperature,
                   tokenCount: response.tokenCount || 0,
-                  generationTime: Date.now() - startTime
+                  generationTime: Date.now() - startTime,
                 }
               };
             } else {
@@ -93,7 +93,7 @@ export class AnthropicGraphAgent {
                     model: this.config.model,
                     temperature: currentTemperature,
                     tokenCount: response.tokenCount || 0,
-                    generationTime: Date.now() - startTime
+                    generationTime: Date.now() - startTime,
                   }
                 };
               }
@@ -118,7 +118,7 @@ export class AnthropicGraphAgent {
         model: this.config.model,
         temperature: currentTemperature,
         tokenCount: 0,
-        generationTime: Date.now() - startTime
+        generationTime: Date.now() - startTime,
       }
     };
   }
@@ -132,8 +132,8 @@ Your task is to generate functional graph structures that solve real problems wh
 The output must follow this exact structure:
 version: 1.0.0,
 metadata:
-  name: "Descriptive Graph Name"
-  description: "Clear purpose description"
+  name: "Descriptive Graph Name",
+  description: "Clear purpose description",
   author: "llm-agent",
   created: "${new Date().toISOString()}"}
 ---NODES---
@@ -196,8 +196,8 @@ CRITICAL REQUIREMENTS:
 Simple example:
 version: 1.0.0,
 metadata:
-  name: "Basic Greeting"
-  description: "Simple personalized greeting"
+  name: "Basic Greeting",
+  description: "Simple personalized greeting",
   author: "llm-agent",
 ---NODES---
 greeting_word:
@@ -239,7 +239,7 @@ When generating graphs:
     const complexitySpecs = {
       simple: 'Simple graph (3-8 nodes) with straightforward logic and single output',
       moderate: 'Moderate complexity (8-20 nodes) with branching logic and multiple features', 
-      complex: 'Complex graph (20-50 nodes) with advanced nodes and sophisticated workflows'
+      complex: 'Complex graph (20-50 nodes) with advanced nodes and sophisticated workflows',
     };
     return `<task>
 Generate a Prompt Spaghetti graph for the following requirements:
@@ -330,12 +330,12 @@ Please provide your reasoning in a <reasoning> section, then output the complete
       return {
         success: true,
         content: mockResponse,
-        tokenCount: mockResponse.length / 4 // Rough token estimate
+        tokenCount: mockResponse.length / 4 // Rough token estimate,
       };
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   }
@@ -354,8 +354,8 @@ The graph should demonstrate good structure while being genuinely useful for the
 <graph>
 version: 1.0.0,
 metadata:
-  name: "Claude Generated Sample"
-  description: "Demonstration graph created by Claude"
+  name: "Claude Generated Sample",
+  description: "Demonstration graph created by Claude",
   author: "llm-agent",
   created: "${new Date().toISOString()}"}
 ---NODES---
@@ -386,12 +386,12 @@ content_builder:
   props:
     branches:
       - condition: "input.includes('technology')"
-        output: "Exploring innovative technological solutions"
+        output: "Exploring innovative technological solutions",
         label: "tech_branch",
       - condition: "input.includes('nature')"
-        output: "Discovering natural wonders and ecosystems"
+        output: "Discovering natural wonders and ecosystems",
         label: "nature_branch",
-    default: "Investigating fascinating topics"
+    default: "Investigating fascinating topics",
 enhanced_content:
   type: Concat,
   inputs: [style_modifier, content_builder]

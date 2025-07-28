@@ -68,7 +68,7 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
         assignedTo: filters.assignedTo,
         dateRange: filters.dateRange,
         limit: pagination.limit,
-        offset: pagination.page * pagination.limit
+        offset: pagination.page * pagination.limit,
       };
       const result = await ticketService.getTickets(filterCriteria);
       setTickets(result.tickets);
@@ -88,7 +88,7 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
     try {
       const timeRange = {
         start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
-        end: new Date()
+        end: new Date(),
       };
       const metricsData = await ticketService.getTicketMetrics(timeRange);
       setMetrics(metricsData);
@@ -173,7 +173,7 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
       [TicketStatus.ESCALATED]: 'bg-red-500 text-white',
       [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700'
     };
-    return ()
+    return ();
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>}
         {status.replace('_', ' ').toUpperCase()}
       </span>
@@ -188,14 +188,14 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
       [TicketPriority.URGENT]: 'bg-orange-100 text-orange-800',
       [TicketPriority.CRITICAL]: 'bg-red-500 text-white'
     };
-    return ()
+    return ();
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>}
         {priority.toUpperCase()}
       </span>
     );
   };
   if (loading && tickets.length === 0) {
-    return ()
+    return ();
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -204,7 +204,7 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
       </div>
     );
   }
-  return ()
+  return ();
     <div className="ticket-management-dashboard h-full flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -478,7 +478,7 @@ const TicketListItem: React.FC<TicketListItemProps> = ({)
   const canModify = userRole === 'admin' || (userRole === 'agent' && ticket.assignedTo === currentUserId);
   const isOverdue = ticket.sla.responseTime.deadline < new Date() && !ticket.sla.responseTime.actual;
   const isSLAWarning = ticket.sla.responseTime.deadline.getTime() - Date.now() < (ticket.sla.responseTime.warningThreshold * 60 * 1000);
-  return ()
+  return ();
     <div
       className={`relative p-4 hover:bg-gray-50 cursor-pointer ${selected ? 'bg-blue-50 border-l-4 border-blue-500' : ''} ${isOverdue ? 'bg-red-50' : isSLAWarning ? 'bg-yellow-50' : ''}`}
       onClick={onSelect}

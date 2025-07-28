@@ -7,14 +7,12 @@ import { MetricSelector } from './MetricSelector';
 import { TemplateSelector } from './TemplateSelector';
 import { analyticsService } from '../../../services/analyticsService';
 import './DetailedAnalytics.css';
-
 interface DetailedAnalyticsProps {
   creatorId: string;
   timeRange: TimeRange;
   startDate?: Date;
   endDate?: Date;
 }
-
 interface Template {
   id: string;
   title: string;
@@ -22,7 +20,7 @@ interface Template {
   created_at: Date;
 }
 
-export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
+export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({)
   creatorId,
   timeRange,
   startDate,
@@ -35,17 +33,14 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'overview' | 'demographics' | 'trends'>('overview');
-
   // Load creator's templates
   const loadTemplates = useCallback(async () => {
     try {
       // This would be replaced with actual API call to get creator's templates
-      const response = await fetch(`/api/templates?creator_id=${creatorId}`);
+      const response = await fetch(`/api/templates?creator_id=${creatorId}`);}
       if (!response.ok) throw new Error('Failed to fetch templates');
-      
       const templatesData = await response.json();
       setTemplates(templatesData);
-      
       if (templatesData.length > 0 && !selectedTemplateId) {
         setSelectedTemplateId(templatesData[0].id);
       }
@@ -53,22 +48,18 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
       console.error('Failed to load templates:', err);
     }
   }, [creatorId, selectedTemplateId]);
-
   // Load template metrics
   const loadTemplateMetrics = useCallback(async (templateId: string) => {
     if (!templateId) return;
-
     try {
       setLoading(true);
       setError(null);
-      
-      const metrics = await analyticsService.getTemplateMetrics(
+      const metrics = await analyticsService.getTemplateMetrics(;)
         templateId,
         timeRange,
         startDate,
         endDate
       );
-      
       setTemplateMetrics(metrics);
     } catch (err) {
       console.error('Failed to load template metrics:', err);
@@ -77,34 +68,29 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
       setLoading(false);
     }
   }, [timeRange, startDate, endDate]);
-
   // Load data on mount and when dependencies change
   useEffect(() => {
     loadTemplates();
   }, [loadTemplates]);
-
   useEffect(() => {
     if (selectedTemplateId) {
       loadTemplateMetrics(selectedTemplateId);
     }
   }, [selectedTemplateId, loadTemplateMetrics]);
-
   // Handle template selection
   const handleTemplateChange = (templateId: string) => {
     setSelectedTemplateId(templateId);
   };
-
   // Handle metric selection
   const handleMetricToggle = (metric: string) => {
-    setSelectedMetrics(prev =>
+    setSelectedMetrics(prev =>)
       prev.includes(metric)
         ? prev.filter(m => m !== metric)
         : [...prev, metric]
     );
   };
-
   if (loading) {
-    return (
+    return ()
       <div className="detailed-analytics loading">
         <div className="loading-header">
           <div className="skeleton-title"></div>
@@ -122,9 +108,8 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
       </div>
     );
   }
-
   if (error) {
-    return (
+    return ()
       <div className="detailed-analytics error">
         <div className="error-message">
           <h3>Failed to Load Analytics</h3>
@@ -139,9 +124,8 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
       </div>
     );
   }
-
   if (templates.length === 0) {
-    return (
+    return ()
       <div className="detailed-analytics empty">
         <div className="empty-state">
           <div className="empty-icon">📊</div>
@@ -151,8 +135,7 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="detailed-analytics">
       <div className="analytics-header">
         <div className="header-content">
@@ -160,7 +143,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
             <h2>Detailed Analytics</h2>
             <p>Deep dive into template performance and user behavior</p>
           </div>
-          
           <div className="header-controls">
             <TemplateSelector
               templates={templates}
@@ -169,7 +151,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
             />
           </div>
         </div>
-
         <div className="view-mode-tabs">
           <button
             className={`tab-button ${viewMode === 'overview' ? 'active' : ''}`}
@@ -194,9 +175,8 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
           </button>
         </div>
       </div>
-
       <div className="analytics-content">
-        {viewMode === 'overview' && templateMetrics && (
+        {viewMode === 'overview' && templateMetrics && ()
           <div className="overview-content">
             {/* Template Performance Cards */}
             <div className="metrics-grid">
@@ -208,7 +188,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                 color="#3b82f6"
                 subtitle="Total / Unique"
               />
-              
               <TemplateMetricsCard
                 title="Downloads"
                 value={templateMetrics.metrics.downloads}
@@ -217,7 +196,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                 color="#10b981"
                 subtitle="Conversion Rate"
               />
-              
               <TemplateMetricsCard
                 title="Rating"
                 value={templateMetrics.metrics.average_rating}
@@ -226,7 +204,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                 color="#f59e0b"
                 subtitle="Reviews"
               />
-              
               <TemplateMetricsCard
                 title="Revenue"
                 value={templateMetrics.metrics.revenue}
@@ -237,7 +214,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                 isRevenue
               />
             </div>
-
             {/* Quick Stats */}
             <div className="quick-stats">
               <div className="stat-item">
@@ -246,14 +222,12 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                   {Math.round(templateMetrics.metrics.usage_minutes)} min
                 </span>
               </div>
-              
               <div className="stat-item">
                 <span className="stat-label">Error Rate</span>
                 <span className="stat-value">
                   {((templateMetrics.metrics.error_count / (templateMetrics.metrics.views || 1)) * 100).toFixed(1)}%
                 </span>
               </div>
-              
               <div className="stat-item">
                 <span className="stat-label">Likes</span>
                 <span className="stat-value">
@@ -261,7 +235,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                 </span>
               </div>
             </div>
-
             {/* Performance Trends Chart */}
             <div className="trends-section">
               <div className="section-header">
@@ -272,7 +245,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                   onMetricToggle={handleMetricToggle}
                 />
               </div>
-              
               <div className="chart-container">
                 <TrendChart
                   data={templateMetrics.trends.daily_metrics}
@@ -283,8 +255,7 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
             </div>
           </div>
         )}
-
-        {viewMode === 'demographics' && templateMetrics && (
+        {viewMode === 'demographics' && templateMetrics && ()
           <div className="demographics-content">
             <div className="demographics-grid">
               {/* Geographic Distribution */}
@@ -296,7 +267,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                   title="Top Countries"
                 />
               </div>
-
               {/* Device Breakdown */}
               <div className="demographics-section">
                 <h3>Device Breakdown</h3>
@@ -306,7 +276,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                   title="Devices Used"
                 />
               </div>
-
               {/* User Segments */}
               <div className="demographics-section">
                 <h3>User Segments</h3>
@@ -316,7 +285,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                   title="User Types"
                 />
               </div>
-
               {/* Demographics Summary */}
               <div className="demographics-summary">
                 <h3>Key Insights</h3>
@@ -326,23 +294,21 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                     <div className="insight-content">
                       <strong>Top Market:</strong> {
                         templateMetrics.demographics.top_countries[0]?.country || 'Unknown'
-                      } ({
+                      } ({)
                         templateMetrics.demographics.top_countries[0]?.percentage.toFixed(1) || '0'
                       }%)
                     </div>
                   </div>
-                  
                   <div className="insight-item">
                     <span className="insight-icon">📱</span>
                     <div className="insight-content">
                       <strong>Primary Device:</strong> {
                         templateMetrics.demographics.device_breakdown[0]?.device || 'Unknown'
-                      } ({
+                      } ({)
                         templateMetrics.demographics.device_breakdown[0]?.percentage.toFixed(1) || '0'
                       }%)
                     </div>
                   </div>
-                  
                   <div className="insight-item">
                     <span className="insight-icon">👤</span>
                     <div className="insight-content">
@@ -356,8 +322,7 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
             </div>
           </div>
         )}
-
-        {viewMode === 'trends' && templateMetrics && (
+        {viewMode === 'trends' && templateMetrics && ()
           <div className="trends-content">
             {/* Growth Metrics */}
             <div className="growth-metrics">
@@ -371,7 +336,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                   {templateMetrics.trends.growth_rates.views_growth > 0 ? '📈' : '📉'}
                 </div>
               </div>
-              
               <div className="growth-card">
                 <h4>Downloads Growth</h4>
                 <div className="growth-value">
@@ -382,7 +346,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                   {templateMetrics.trends.growth_rates.downloads_growth > 0 ? '📈' : '📉'}
                 </div>
               </div>
-              
               <div className="growth-card">
                 <h4>Revenue Growth</h4>
                 <div className="growth-value">
@@ -394,7 +357,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                 </div>
               </div>
             </div>
-
             {/* Detailed Trends Chart */}
             <div className="detailed-trends-chart">
               <div className="chart-header">
@@ -405,7 +367,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                   onMetricToggle={handleMetricToggle}
                 />
               </div>
-              
               <div className="chart-container large">
                 <TrendChart
                   data={templateMetrics.trends.daily_metrics}
@@ -417,7 +378,6 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                 />
               </div>
             </div>
-
             {/* Performance Analysis */}
             <div className="performance-analysis">
               <h3>Performance Analysis</h3>
@@ -426,11 +386,11 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                   <h4>Best Performing Day</h4>
                   <div className="analysis-content">
                     {(() => {
-                      const bestDay = templateMetrics.trends.daily_metrics.reduce(
+                      const bestDay = templateMetrics.trends.daily_metrics.reduce(;)
                         (best, current) => current.views > best.views ? current : best,
                         templateMetrics.trends.daily_metrics[0] || { date: new Date(), views: 0 }
                       );
-                      return (
+                      return ()
                         <>
                           <div className="metric-date">
                             {bestDay.date.toLocaleDateString()}
@@ -443,37 +403,35 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
                     })()}
                   </div>
                 </div>
-
                 <div className="analysis-card">
                   <h4>Average Daily Performance</h4>
                   <div className="analysis-content">
                     <div className="metric-values">
-                      {Math.round(
-                        templateMetrics.trends.daily_metrics.reduce(
+                      {Math.round()
+                        templateMetrics.trends.daily_metrics.reduce()
                           (sum, day) => sum + day.views, 0
                         ) / templateMetrics.trends.daily_metrics.length
                       )} avg views/day
                     </div>
                     <div className="metric-values">
-                      {Math.round(
-                        templateMetrics.trends.daily_metrics.reduce(
+                      {Math.round()
+                        templateMetrics.trends.daily_metrics.reduce()
                           (sum, day) => sum + day.downloads, 0
                         ) / templateMetrics.trends.daily_metrics.length
                       )} avg downloads/day
                     </div>
                   </div>
                 </div>
-
                 <div className="analysis-card">
                   <h4>Total Period Performance</h4>
                   <div className="analysis-content">
                     <div className="metric-values">
-                      {templateMetrics.trends.daily_metrics.reduce(
+                      {templateMetrics.trends.daily_metrics.reduce()
                         (sum, day) => sum + day.views, 0
                       )} total views
                     </div>
                     <div className="metric-values">
-                      ${templateMetrics.trends.daily_metrics.reduce(
+                      ${templateMetrics.trends.daily_metrics.reduce(})}
                         (sum, day) => sum + day.revenue, 0
                       ).toFixed(2)} total revenue
                     </div>

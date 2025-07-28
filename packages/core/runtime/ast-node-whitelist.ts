@@ -267,7 +267,7 @@ export class ASTNodeWhitelistFilter {
  */
 export function createConditionalNodeFilter(): ASTNodeWhitelistFilter {
   const config: ASTNodeWhitelistConfig = {
-    allowedNodeTypes: new Set([)
+    allowedNodeTypes: new Set([),
       // Basic expression types
       'Literal',
       'Identifier',
@@ -281,13 +281,13 @@ export function createConditionalNodeFilter(): ASTNodeWhitelistFilter {
       'Program',
       'ExpressionStatement'
     ]),
-    restrictedNodeTypes: new Set([)
+    restrictedNodeTypes: new Set([),
       // These could be allowed with additional validation
       'ArrayExpression',
       'ObjectExpression',
       'Property'
     ]),
-    dangerousNodeTypes: new Set([)
+    dangerousNodeTypes: new Set([),
       // Definitely not allowed
       'FunctionExpression',
       'ArrowFunctionExpression',
@@ -332,7 +332,7 @@ export function createConditionalNodeFilter(): ASTNodeWhitelistFilter {
  */
 export function createGeneralExpressionFilter(): ASTNodeWhitelistFilter {
   const config: ASTNodeWhitelistConfig = {
-    allowedNodeTypes: new Set([)
+    allowedNodeTypes: new Set([),
       'Literal',
       'Identifier', 
       'BinaryExpression',
@@ -348,7 +348,7 @@ export function createGeneralExpressionFilter(): ASTNodeWhitelistFilter {
       'ExpressionStatement'
     ]),
     restrictedNodeTypes: new Set([]),
-    dangerousNodeTypes: new Set([)
+    dangerousNodeTypes: new Set([),
       'FunctionExpression',
       'ArrowFunctionExpression', 
       'FunctionDeclaration',

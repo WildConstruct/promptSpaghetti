@@ -80,7 +80,7 @@ export declare class YGraph extends Y.AbstractType<any> {
     /**
      * Load graph from JSON
      */
-    fromJSON(data: {
+    fromJSON(data: {)
         nodes: CRDTNode[];
         edges: CRDTEdge[];
     }): void;

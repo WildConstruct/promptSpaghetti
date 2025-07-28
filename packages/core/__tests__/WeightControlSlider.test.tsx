@@ -5,9 +5,9 @@ import { WeightControlSlider, WeightControlOption } from '../components/Inspecto
 
 // Mock the UI settings store
 jest.mock('../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({)
+  useUISettingsStore: () => ({),
     complexityLevel: 'advanced',
-    shouldShowTechnicalFields: () => true
+    shouldShowTechnicalFields: () => true,
   })
 }));
 describe('WeightControlSlider', () => {
@@ -23,7 +23,7 @@ describe('WeightControlSlider', () => {
   });
   describe('Rendering', () => {
     it('renders weight control slider with options', () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -35,7 +35,7 @@ describe('WeightControlSlider', () => {
       expect(screen.getByText('Third Choice')).toBeInTheDocument();
     });
     it('renders empty state when no options provided', () => {
-      render()
+      render();
         <WeightControlSlider 
           options={[]}
           onOptionsChange={mockOnOptionsChange}
@@ -44,7 +44,7 @@ describe('WeightControlSlider', () => {
       expect(screen.getByText('No options to weight. Add some choices first.')).toBeInTheDocument();
     });
     it('renders equal distribution button', () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -53,7 +53,7 @@ describe('WeightControlSlider', () => {
       expect(screen.getByText('⚖️ Equal')).toBeInTheDocument();
     });
     it('renders normalize button in advanced mode', () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -64,7 +64,7 @@ describe('WeightControlSlider', () => {
   });
   describe('Weight Distribution Visualization', () => {
     it('displays correct percentage distribution', () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -89,7 +89,7 @@ describe('WeightControlSlider', () => {
   });
   describe('Weight Adjustment', () => {
     it('handles slider weight changes', async () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -107,7 +107,7 @@ describe('WeightControlSlider', () => {
       });
     });
     it('handles direct numeric input changes', async () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -125,7 +125,7 @@ describe('WeightControlSlider', () => {
       });
     });
     it('enforces weight bounds (0-100)', async () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -155,7 +155,7 @@ describe('WeightControlSlider', () => {
   });
   describe('Preset Weight Patterns', () => {
     it('equalizes weights when equal button is clicked', async () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -177,7 +177,7 @@ describe('WeightControlSlider', () => {
         { id: 'option2', text: 'Second Choice', weight: 100 },
         { id: 'option3', text: 'Third Choice', weight: 40 }
       ];
-      render()
+      render();
         <WeightControlSlider 
           options={unnormalizedOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -197,7 +197,7 @@ describe('WeightControlSlider', () => {
   });
   describe('Locking Functionality', () => {
     it('toggles weight lock when lock button is clicked', async () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -220,7 +220,7 @@ describe('WeightControlSlider', () => {
         { id: 'option2', text: 'Second Choice', weight: 50 },
         { id: 'option3', text: 'Third Choice', weight: 20 }
       ];
-      render()
+      render();
         <WeightControlSlider 
           options={optionsWithLock}
           onOptionsChange={mockOnOptionsChange}
@@ -240,7 +240,7 @@ describe('WeightControlSlider', () => {
   });
   describe('Real-time Preview Integration', () => {
     it('triggers preview requests when weights change', async () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -262,7 +262,7 @@ describe('WeightControlSlider', () => {
       }, { timeout: 200 });
     });
     it('does not trigger preview when showPreview is false', async () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -280,7 +280,7 @@ describe('WeightControlSlider', () => {
   });
   describe('Accessibility', () => {
     it('provides proper ARIA labels and roles', () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -294,7 +294,7 @@ describe('WeightControlSlider', () => {
       expect(screen.getByRole('button', { name: /normalize/i })).toBeInTheDocument();
     });
     it('handles keyboard interactions', async () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -310,7 +310,7 @@ describe('WeightControlSlider', () => {
   });
   describe('Disabled State', () => {
     it('disables controls when disabled prop is true', () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}
@@ -325,7 +325,7 @@ describe('WeightControlSlider', () => {
       expect(equalButton).toBeDisabled();
     });
     it('shows disabled styling when disabled', () => {
-      render()
+      render();
         <WeightControlSlider 
           options={mockOptions}
           onOptionsChange={mockOnOptionsChange}

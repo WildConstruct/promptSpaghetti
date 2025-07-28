@@ -408,7 +408,7 @@ export class VerificationCodeManager extends EventEmitter {
   public async revokeUserCodes()
     userId: string,
     type?: VerificationCodeType,
-    reason: string = 'user_requested'
+    reason: string = 'user_requested',
   ): Promise<number> {
     let revokedCount = 0;
     for (const [codeId, code] of this.codes) {
@@ -727,7 +727,7 @@ export class VerificationCodeManager extends EventEmitter {
           count: 1,
           resetTime,
           lastRequest: new Date(),
-          violations: existing?.violations || 0
+          violations: existing?.violations || 0,
         });
       } else {
         existing.count++;
@@ -747,7 +747,7 @@ export class VerificationCodeManager extends EventEmitter {
     event: SecurityEvent,
     details: Record<string, any>,
     ipAddress: string = 'system',
-    userAgent: string = 'system'
+    userAgent: string = 'system',
   ): void {
     if (!this.config.enableSecurityLogging) return;
     this.emit('securityEvent', {)
@@ -769,7 +769,7 @@ export class VerificationCodeManager extends EventEmitter {
     let codesRemoved = 0;
     // Clean up expired, used, and revoked codes
     for (const [codeId, code] of this.codes) {
-      const shouldCleanup = (;)
+      const shouldCleanup = (;);
         code.status === CodeStatus.EXPIRED || 
         code.status === CodeStatus.USED ||
         code.status === CodeStatus.REVOKED

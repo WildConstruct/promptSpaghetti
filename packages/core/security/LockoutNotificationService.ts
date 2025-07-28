@@ -328,7 +328,6 @@ export class LockoutNotificationService extends EventEmitter {
       failed: number;
       pending: number;
     };
-  } {
     const request = this.notifications.get(notificationId) || null;
     const deliveries = Array.from(this.deliveries.values());
       .filter(d => d.requestId === notificationId);
@@ -336,7 +335,7 @@ export class LockoutNotificationService extends EventEmitter {
       totalDeliveries: deliveries.length,
       successful: deliveries.filter(d => d.status === NotificationStatus.DELIVERED).length,
       failed: deliveries.filter(d => d.status === NotificationStatus.FAILED).length,
-      pending: deliveries.filter(d => [)
+      pending: deliveries.filter(d => [),
         NotificationStatus.PENDING,
         NotificationStatus.QUEUED,
         NotificationStatus.SENDING
@@ -349,7 +348,7 @@ export class LockoutNotificationService extends EventEmitter {
    */
   public getUserNotificationHistory()
     userId: string,
-    limit: number = 50
+    limit: number = 50,
   ): NotificationRequest[] {
     return Array.from(this.notifications.values())
       .filter(n => n.metadata.userId === userId)
@@ -404,7 +403,6 @@ export class LockoutNotificationService extends EventEmitter {
     deliveryRate: number;
     averageDeliveryTime: number;
     failureReasons: Array<{ reason: string; count: number }>;
-  } {
     let notifications = Array.from(this.notifications.values());
     let deliveries = Array.from(this.deliveries.values());
     if (dateRange) {
@@ -540,7 +538,7 @@ export class LockoutNotificationService extends EventEmitter {
     if (!template || delivery.attempts >= template.retryPolicy.maxAttempts) {
       return;
     }
-    const delay = Math.min(;)
+    const delay = Math.min(;);
       template.retryPolicy.baseDelaySeconds * Math.pow(template.retryPolicy.backoffMultiplier, delivery.attempts - 1),
       template.retryPolicy.maxDelaySeconds
     ) * 1000;
@@ -855,7 +853,7 @@ Best regards,
       channel: NotificationChannel.EMAIL,
       language: 'en',
       subject: 'URGENT: Security Alert - {{appName}}',
-      bodyText: `SECURITY ALERT
+      bodyText: `SECURITY ALERT,
 Dear {{userName}},
 We have detected suspicious activity on your account and have temporarily locked it for your protection.
 IMMEDIATE ACTIONS REQUIRED:

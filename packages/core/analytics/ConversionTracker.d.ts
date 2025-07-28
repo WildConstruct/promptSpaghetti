@@ -92,7 +92,7 @@ export declare class ConversionTracker {
     /**
      * Track user engagement events
      */
-    trackEngagement()
+    trackEngagement();
       engagementType: 'feature_usage' | 'help_interaction' | 'collaboration' | 'content_creation',
       details?: Record<string,
       any>
@@ -100,7 +100,7 @@ export declare class ConversionTracker {
     /**
      * Track business conversion events
      */
-    trackBusinessEvent()
+    trackBusinessEvent();
       eventType: 'trial_started' | 'subscription_upgraded' | 'payment_completed' | 'subscription_cancelled',
       value: number,
       metadata?: Record<string,
@@ -132,7 +132,7 @@ export declare class ConversionTracker {
     /**
      * A/B testing integration
      */
-    trackExperimentConversion()
+    trackExperimentConversion();
       experimentId: string,
       variantId: string,
       eventType: ConversionEventType,

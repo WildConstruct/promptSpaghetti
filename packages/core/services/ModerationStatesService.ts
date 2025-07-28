@@ -566,7 +566,7 @@ export class ModerationStatesService {
       ...state,
       ...updates,
       id: stateId,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
     this.states.set(stateId, updatedState);
     this.notifyListeners('state_updated', updatedState);
@@ -600,7 +600,7 @@ export class ModerationStatesService {
         transitionType: 'automatic',
         triggeredBy: 'system',
         reason: 'Initial state assignment',
-        timestamp: new Date()
+        timestamp: new Date(),
       }],
       processingMetrics: {,
         reviewerCount: 0,
@@ -610,7 +610,7 @@ export class ModerationStatesService {
         manualActions: 0,
       },
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
     this.items.set(item.id, item);
     this.notifyListeners('item_created', item);
@@ -647,7 +647,7 @@ export class ModerationStatesService {
       reason,
       metadata,
       timestamp: new Date(),
-      duration: Date.now() - item.updatedAt.getTime()
+      duration: Date.now() - item.updatedAt.getTime(),
     };
     const updatedItem: ModerationItem = {
       ...item,
@@ -655,9 +655,9 @@ export class ModerationStatesService {
       stateHistory: [...item.stateHistory, historyEntry],
       processingMetrics: {,
         ...item.processingMetrics,
-        stateChangeCount: item.processingMetrics.stateChangeCount + 1
+        stateChangeCount: item.processingMetrics.stateChangeCount + 1,
       },
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
     this.items.set(itemId, updatedItem);
     this.notifyListeners('item_transitioned', { item: updatedItem, transition });
@@ -683,7 +683,7 @@ export class ModerationStatesService {
       ...item,
       assignedTo: reviewerId,
       reviewers: [...item.reviewers, assignment],
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
     this.items.set(itemId, updatedItem);
     this.notifyListeners('reviewer_assigned', { item: updatedItem, assignment });
@@ -701,9 +701,9 @@ export class ModerationStatesService {
       escalationLevel: item.escalationLevel + 1,
       processingMetrics: {,
         ...item.processingMetrics,
-        escalationCount: item.processingMetrics.escalationCount + 1
+        escalationCount: item.processingMetrics.escalationCount + 1,
       },
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
     this.items.set(itemId, updatedItem);
     this.notifyListeners('item_escalated', updatedItem);
@@ -816,10 +816,10 @@ export class ModerationStatesService {
     today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const itemsProcessedToday = items.filter(i => ;)
+    const itemsProcessedToday = items.filter(i => ;);
       i.updatedAt >= today && i.updatedAt < tomorrow
     ).length;
-    const itemsResolvedToday = items.filter(i => ;)
+    const itemsResolvedToday = items.filter(i => ;);
       i.resolvedAt && i.resolvedAt >= today && i.resolvedAt < tomorrow
     ).length;
     const now = new Date();
@@ -839,20 +839,20 @@ export class ModerationStatesService {
         averageReviewTime: 0, // TODO: Calculate from reviewer data
         escalationRate: items.filter(i => i.escalationLevel > 0).length / items.length,
         automationRate: items.filter(i => i.autoProcessing.stage === 'processed').length / items.length,
-        accuracyRate: 0.95 // TODO: Calculate from validation data
+        accuracyRate: 0.95 // TODO: Calculate from validation data,
       },
       performance: {,
         itemsProcessedToday,
         itemsResolvedToday,
         backlogSize: items.filter(i => !i.resolvedAt).length,
         overdueTasks,
-        slaCompliance: 0.92 // TODO: Calculate from SLA data
+        slaCompliance: 0.92 // TODO: Calculate from SLA data,
       },
       compliance: {,
         checksPassed,
         checksFailed,
         requiresReview,
-        legalReviewsPending: items.filter(i => i.legalReview?.status === 'pending').length
+        legalReviewsPending: items.filter(i => i.legalReview?.status === 'pending').length,
       },
       automation: {,
         autoActionsTriggered: items.reduce((sum, i) => sum + i.processingMetrics.automationActions, 0),
@@ -963,7 +963,7 @@ export class ModerationStatesService {
         ...stateData,
         id: this.generateStateId(),
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
       this.states.set(state.id, state);
     });

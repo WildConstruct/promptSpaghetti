@@ -140,7 +140,7 @@ export declare class CrowdGenerationPipeline {
     private clothingGenerator;
     private behaviorEngine;
     private vfxExporter;
-    constructor()
+    constructor();
       historicalDataService: HistoricalDataService,
       constraintValidator: ConstraintValidator,
       clothingGenerator: HistoricalClothingGenerator,

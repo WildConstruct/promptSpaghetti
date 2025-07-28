@@ -3,19 +3,16 @@ import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-ro
 import 'reactflow/dist/style.css';
 import './randomizer.css';
 import './professional-theme.css';
-
 import EnhancedGraphEditor from './components/EnhancedGraphEditor';
 import { NodePrototypePage } from './components/NodePrototype';
 import { ProfessionalMenuBar } from '../../packages/core/components/MenuBar/ProfessionalMenuBar';
 import { KeyboardShortcutsManager } from '../../packages/core/components/CommandPalette/KeyboardShortcutsManager';
 import { CommandPalette } from '../../packages/core/components/CommandPalette/CommandPalette';
 import { IntegratedFileBrowser, PSGFile, ProjectManager } from '../../packages/core';
-
 interface GraphEditorProps {
   initialNodes?: unknown[];
   initialEdges?: unknown[];
 }
-
 interface RandomizerPanelProps {
   onGraphGenerated?: (graph: unknown) => void;
   onError?: (error: Error) => void;
@@ -26,7 +23,6 @@ interface RandomizerPanelProps {
 let GraphEditor: React.ComponentType<GraphEditorProps> = EnhancedGraphEditor;
 let RandomizerPanel: React.ComponentType<RandomizerPanelProps>;
 let isEnhancedMode = false;
-
 try {
   // Try to import full core components (works in development)
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -40,12 +36,10 @@ try {
   }
 } catch {
   console.warn('⚠️ Using enhanced components with professional features for deployment compatibility');
-  
   // Use EnhancedGraphEditor which includes professional features
   GraphEditor = EnhancedGraphEditor;
-  
   // Browser-safe RandomizerPanel for deployment
-  const BrowserSafeRandomizerPanel: React.FC<RandomizerPanelProps> = () => (
+  const BrowserSafeRandomizerPanel: React.FC<RandomizerPanelProps> = () => ()
     <div style={{
       display: 'flex',
       alignItems: 'center',
@@ -53,7 +47,7 @@ try {
       height: '100%',
       backgroundColor: 'var(--color-bg-primary, #1e1e1e)',
       flexDirection: 'column',
-      padding: '40px'
+      padding: '40px',
     }}>
       <div style={{
         fontSize: '32px',
@@ -69,7 +63,7 @@ try {
         textAlign: 'center',
         maxWidth: '600px',
         lineHeight: 1.6,
-        marginBottom: '20px'
+        marginBottom: '20px',
       }}>
         The professional-grade nodal prompt randomizer with Cinema 4D-inspired design.
         Full professional features are available in the Graph Editor.
@@ -78,16 +72,14 @@ try {
         fontSize: '14px',
         color: 'var(--color-text-secondary, #b8b8b8)',
         textAlign: 'center',
-        fontStyle: 'italic'
+        fontStyle: 'italic',
       }}>
         Command palette, undo/redo, multi-selection, and keyboard shortcuts included.
       </div>
     </div>
   );
-  
   RandomizerPanel = BrowserSafeRandomizerPanel;
 }
-
 /**
  * Main application interface with tab navigation.
  * Handles graph editor and LLM randomizer functionality.
@@ -96,7 +88,6 @@ function MainApp(): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
   const [generatedGraph, setGeneratedGraph] = useState<unknown>(null);
-  
   // Menu bar state
   const [theme, setTheme] = useState<'light' | 'dark' | 'cinema'>('cinema');
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -107,14 +98,11 @@ function MainApp(): React.ReactElement {
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [selectedProjectFile, setSelectedProjectFile] = useState<PSGFile | null>(null);
   const [recentFiles, setRecentFiles] = useState<PSGFile[]>([]);
-  
   const projectManager = ProjectManager.getInstance();
-
   // Load recent files on mount
   useEffect(() => {
     setRecentFiles(projectManager.getRecentFiles(10));
   }, [projectManager]);
-
   // Determine active tab based on current route (simplified, no auth)
   const getActiveTab = (): string => {
     if (location.pathname === '/randomizer') return 'randomizer';
@@ -123,107 +111,88 @@ function MainApp(): React.ReactElement {
     return 'editor';
   };
   const activeTab = getActiveTab();
-
   const handleTabChange = useCallback((tab: 'editor' | 'randomizer' | 'files' | 'prototype') => {
     const paths = {
       editor: '/',
       randomizer: '/randomizer',
       files: '/files',
-      prototype: '/prototype'
+      prototype: '/prototype',
     };
     navigate(paths[tab] || '/');
   }, [navigate]);
-
   const handleGraphGenerated = useCallback((graph: unknown) => {
     setGeneratedGraph(graph);
     navigate('/'); // Navigate to editor tab
   }, [navigate]);
-
   const handleRandomizerError = useCallback((error: Error) => {
     console.error('Randomizer error:', error);
-    alert(`Generation failed: ${error.message}`);
+    alert(`Generation failed: ${error.message}`);}
   }, []);
-
   // Menu bar handlers
   const menuBarHandlers = {
     // File operations
-    onNew: useCallback(() => {
+    onNew: useCallback(() => {,
       if (confirm('Create a new graph? Unsaved changes will be lost.')) {
         setGeneratedGraph(null);
         navigate('/');
       }
     }, [navigate]),
-    
-    onOpen: useCallback(() => {
+    onOpen: useCallback(() => {,
       // Switch to Files tab to enable file selection
       handleTabChange('files');
     }, [handleTabChange]),
-    
-    onSave: useCallback(() => {
+    onSave: useCallback(() => {,
       // TODO: Integrate with save system
       console.log('Save graph');
     }, []),
-    
-    onSaveAs: useCallback(() => {
+    onSaveAs: useCallback(() => {,
       // TODO: Integrate with save system
       console.log('Save as...');
     }, []),
-    
-    onImport: useCallback(() => {
+    onImport: useCallback(() => {,
       // TODO: Integrate with import system
       console.log('Import');
     }, []),
-    
-    onExport: useCallback((format: 'json' | 'png' | 'svg' | 'pdf') => {
+    onExport: useCallback((format: 'json' | 'png' | 'svg' | 'pdf') => {,
       // TODO: Integrate with export system
       console.log('Export as', format);
     }, []),
-    
     // Edit operations
-    onUndo: useCallback(() => {
+    onUndo: useCallback(() => {,
       // TODO: Integrate with undo system
       console.log('Undo');
     }, []),
-    
-    onRedo: useCallback(() => {
+    onRedo: useCallback(() => {,
       // TODO: Integrate with redo system
       console.log('Redo');
     }, []),
-    
-    onSelectAll: useCallback(() => {
+    onSelectAll: useCallback(() => {,
       // TODO: Integrate with selection system
       console.log('Select all');
     }, []),
-    
     // View operations
-    onZoomIn: useCallback(() => {
+    onZoomIn: useCallback(() => {,
       // TODO: Integrate with React Flow zoom
       console.log('Zoom in');
     }, []),
-    
-    onZoomOut: useCallback(() => {
+    onZoomOut: useCallback(() => {,
       // TODO: Integrate with React Flow zoom
       console.log('Zoom out');
     }, []),
-    
-    onFitView: useCallback(() => {
+    onFitView: useCallback(() => {,
       // TODO: Integrate with React Flow fit view
       console.log('Fit view');
     }, []),
-    
-    onToggleGrid: useCallback(() => {
+    onToggleGrid: useCallback(() => {,
       setGridVisible(prev => !prev);
     }, []),
-    
-    onToggleMinimap: useCallback(() => {
+    onToggleMinimap: useCallback(() => {,
       setMinimapVisible(prev => !prev);
     }, []),
-    
-    onToggleInspector: useCallback(() => {
+    onToggleInspector: useCallback(() => {,
       setInspectorVisible(prev => !prev);
     }, []),
-    
-    onToggleFullscreen: useCallback(() => {
+    onToggleFullscreen: useCallback(() => {,
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
         setIsFullscreen(true);
@@ -232,60 +201,50 @@ function MainApp(): React.ReactElement {
         setIsFullscreen(false);
       }
     }, []),
-    
-    onToggleTheme: useCallback((newTheme: 'light' | 'dark' | 'cinema') => {
+    onToggleTheme: useCallback((newTheme: 'light' | 'dark' | 'cinema') => {,
       setTheme(newTheme);
     }, []),
-    
     // Navigation handlers
     onViewEditor: useCallback(() => handleTabChange('editor'), [handleTabChange]),
     onViewRandomizer: useCallback(() => handleTabChange('randomizer'), [handleTabChange]),
     onViewFiles: useCallback(() => handleTabChange('files'), [handleTabChange]),
     onViewPrototype: useCallback(() => handleTabChange('prototype'), [handleTabChange]),
-    
     // Help operations
-    onKeyboardShortcuts: useCallback(() => {
+    onKeyboardShortcuts: useCallback(() => {,
       // Trigger the help by simulating ? key press
-      const event = new KeyboardEvent('keydown', {
+      const event = new KeyboardEvent('keydown', {)
         key: '?',
         shiftKey: true,
-        bubbles: true
+        bubbles: true,
       });
       document.dispatchEvent(event);
     }, []),
-    
-    onAbout: useCallback(() => {
+    onAbout: useCallback(() => {,
       alert('Prompt Spaghetti - Professional Graph Editor\nVersion 1.0.0\nCinema 4D-inspired interface');
     }, []),
-    
     // Additional handlers for KeyboardShortcutsManager
-    onDelete: useCallback(() => {
+    onDelete: useCallback(() => {,
       // TODO: Integrate with selection deletion
       console.log('Delete selected items');
     }, []),
-    
-    onDuplicate: useCallback(() => {
+    onDuplicate: useCallback(() => {,
       // TODO: Integrate with node duplication
       console.log('Duplicate selected items');
     }, []),
-    
-    onGenerateCharacter: useCallback(() => {
+    onGenerateCharacter: useCallback(() => {,
       // TODO: Integrate with character generation
       console.log('Generate character');
     }, []),
-    
-    onCommandPalette: useCallback(() => {
+    onCommandPalette: useCallback(() => {,
       setShowCommandPalette(true);
     }, []),
   };
-
   // File browser handlers
   const fileBrowserHandlers = {
-    onFileSelected: useCallback((file: PSGFile) => {
+    onFileSelected: useCallback((file: PSGFile) => {,
       setSelectedProjectFile(file);
     }, []),
-
-    onProjectLoad: useCallback((file: PSGFile) => {
+    onProjectLoad: useCallback((file: PSGFile) => {,
       // TODO: Integrate with ProjectManager to load .psg file
       console.log('Loading project:', file.name);
       // Add to recent files
@@ -293,65 +252,56 @@ function MainApp(): React.ReactElement {
       setRecentFiles(projectManager.getRecentFiles(10));
       // This would involve deserializing the .psg file and setting the graph data
       // For now, just show feedback
-      alert(`Loading project: ${file.name}\n\nProject loading integration coming soon!`);
+      alert(`Loading project: ${file.name}\n\nProject loading integration coming soon!`);}
       navigate('/'); // Switch to editor tab
     }, [navigate, projectManager]),
-
-    onNewProject: useCallback(() => {
+    onNewProject: useCallback(() => {,
       if (confirm('Create a new project? Any unsaved changes will be lost.')) {
         setGeneratedGraph(null);
         setSelectedProjectFile(null);
         navigate('/');
       }
     }, [navigate]),
-
     onFileAction: useCallback((action: string, file: PSGFile) => {
-      console.log(`File action: ${action}`, file);
+      console.log(`File action: ${action}`, file);}
       // Handle file actions like delete, rename, duplicate
     }, []),
-
-    onRecentFileLoad: useCallback((file: PSGFile) => {
+    onRecentFileLoad: useCallback((file: PSGFile) => {,
       // Load recent file directly
       projectManager.addToRecentFiles(file);
       setRecentFiles(projectManager.getRecentFiles(10));
-      alert(`Loading recent project: ${file.name}\n\nProject loading integration coming soon!`);
+      alert(`Loading recent project: ${file.name}\n\nProject loading integration coming soon!`);}
       navigate('/'); // Switch to editor tab
     }, [navigate, projectManager])
   };
-
   // Command palette specific handlers
   const commandPaletteHandlers = {
-    onClose: useCallback(() => {
+    onClose: useCallback(() => {,
       setShowCommandPalette(false);
     }, []),
-    
     onGenerationStart: useCallback(async (flow: any, params: Record<string, any>) => {
       // TODO: Integrate with generation flows
       console.log('Starting generation flow:', flow.name, params);
       setShowCommandPalette(false);
     }, []),
-    
     onNodeCreate: useCallback((nodeType: string, position: { x: number; y: number }, data?: any) => {
       // TODO: Integrate with node creation
       console.log('Creating node:', nodeType, position, data);
       setShowCommandPalette(false);
     }, []),
-    
-    onNodeDelete: useCallback((nodeIds: string[]) => {
+    onNodeDelete: useCallback((nodeIds: string[]) => {,
       // TODO: Integrate with node deletion
       console.log('Deleting nodes:', nodeIds);
       setShowCommandPalette(false);
     }, []),
-    
-    onTemplateApply: useCallback((templateId: string) => {
+    onTemplateApply: useCallback((templateId: string) => {,
       // TODO: Integrate with template system
       console.log('Applying template:', templateId);
       setShowCommandPalette(false);
     }, []),
   };
-
   // Custom actions for command palette that integrate with menu bar
-  const customCommandPaletteActions = [
+  const customCommandPaletteActions = [;
     // File operations
     {
       id: 'file-new',
@@ -361,7 +311,7 @@ function MainApp(): React.ReactElement {
       icon: '📄',
       shortcut: '⌘N',
       keywords: ['new', 'create', 'file'],
-      action: () => {
+      action: () => {,
         setShowCommandPalette(false);
         menuBarHandlers.onNew();
       }
@@ -374,7 +324,7 @@ function MainApp(): React.ReactElement {
       icon: '📂',
       shortcut: '⌘O',
       keywords: ['open', 'load', 'file'],
-      action: () => {
+      action: () => {,
         setShowCommandPalette(false);
         menuBarHandlers.onOpen();
       }
@@ -387,7 +337,7 @@ function MainApp(): React.ReactElement {
       icon: '💾',
       shortcut: '⌘S',
       keywords: ['save', 'file'],
-      action: () => {
+      action: () => {,
         setShowCommandPalette(false);
         menuBarHandlers.onSave();
       }
@@ -399,12 +349,11 @@ function MainApp(): React.ReactElement {
       category: 'export' as const,
       icon: '📦',
       keywords: ['export', 'json', 'download'],
-      action: () => {
+      action: () => {,
         setShowCommandPalette(false);
         menuBarHandlers.onExport('json');
       }
     },
-    
     // View operations
     {
       id: 'view-fit',
@@ -414,7 +363,7 @@ function MainApp(): React.ReactElement {
       icon: '🔍',
       shortcut: '⌘0',
       keywords: ['fit', 'view', 'zoom', 'center'],
-      action: () => {
+      action: () => {,
         setShowCommandPalette(false);
         menuBarHandlers.onFitView();
       }
@@ -427,7 +376,7 @@ function MainApp(): React.ReactElement {
       icon: '⛶',
       shortcut: 'Alt+F',
       keywords: ['fullscreen', 'full', 'screen', 'maximize'],
-      action: () => {
+      action: () => {,
         setShowCommandPalette(false);
         menuBarHandlers.onToggleFullscreen();
       }
@@ -439,13 +388,12 @@ function MainApp(): React.ReactElement {
       category: 'editing' as const,
       icon: '🎨',
       keywords: ['theme', 'appearance', 'dark', 'light', 'cinema'],
-      action: () => {
+      action: () => {,
         setShowCommandPalette(false);
         const nextTheme = theme === 'cinema' ? 'dark' : theme === 'dark' ? 'light' : 'cinema';
         menuBarHandlers.onToggleTheme(nextTheme);
       }
     },
-    
     // Navigation
     {
       id: 'nav-randomizer',
@@ -454,7 +402,7 @@ function MainApp(): React.ReactElement {
       category: 'navigation' as const,
       icon: '🎲',
       keywords: ['randomizer', 'llm', 'navigate', 'tab'],
-      action: () => {
+      action: () => {,
         setShowCommandPalette(false);
         menuBarHandlers.onViewRandomizer();
       }
@@ -466,12 +414,11 @@ function MainApp(): React.ReactElement {
       category: 'navigation' as const,
       icon: '📁',
       keywords: ['files', 'browser', 'navigate', 'tab'],
-      action: () => {
+      action: () => {,
         setShowCommandPalette(false);
         menuBarHandlers.onViewFiles();
       }
     },
-    
     // Help
     {
       id: 'help-shortcuts',
@@ -481,7 +428,7 @@ function MainApp(): React.ReactElement {
       icon: '⌨️',
       shortcut: '?',
       keywords: ['help', 'shortcuts', 'keyboard', 'keys'],
-      action: () => {
+      action: () => {,
         setShowCommandPalette(false);
         menuBarHandlers.onKeyboardShortcuts();
       }
@@ -493,15 +440,13 @@ function MainApp(): React.ReactElement {
       category: 'navigation' as const,
       icon: 'ℹ️',
       keywords: ['about', 'info', 'version'],
-      action: () => {
+      action: () => {,
         setShowCommandPalette(false);
         menuBarHandlers.onAbout();
       }
     }
   ];
-
-
-  return (
+  return ()
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Professional Menu Bar */}
       <ProfessionalMenuBar
@@ -516,7 +461,6 @@ function MainApp(): React.ReactElement {
         edges={[]}
         recentFiles={recentFiles}
       />
-      
       {/* Keyboard Shortcuts Manager */}
       <KeyboardShortcutsManager
         onCommandPalette={menuBarHandlers.onCommandPalette}
@@ -535,7 +479,6 @@ function MainApp(): React.ReactElement {
         onToggleFullscreen={menuBarHandlers.onToggleFullscreen}
         theme={theme}
       />
-      
       {/* Command Palette */}
       <CommandPalette
         isOpen={showCommandPalette}
@@ -546,7 +489,6 @@ function MainApp(): React.ReactElement {
         customActions={customCommandPaletteActions}
         {...commandPaletteHandlers}
       />
-      
       {/* Tab Content Area - now hidden behind menu bar */}
       <div style={{ 
         display: 'flex', 
@@ -555,7 +497,7 @@ function MainApp(): React.ReactElement {
         backgroundColor: 'var(--color-bg-secondary, #2a2a2a)',
         padding: '0',
         height: '40px',
-        alignItems: 'center'
+        alignItems: 'center',
       }}>
         <div style={{ display: 'flex' }}>
           <button
@@ -619,21 +561,19 @@ function MainApp(): React.ReactElement {
             🔬 Prototype
           </button>
         </div>
-          
         {/* Status indicator */}
         <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', color: 'var(--color-text-secondary, #666)', fontSize: '12px' }}>
           {isEnhancedMode ? '🚀 Core Enhanced' : '🎨 Professional Mode'} | {theme === 'cinema' ? '🎬 Cinema 4D' : theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
         </div>
       </div>
-
       {/* Main Content */}
       <div style={{ flex: 1, overflow: 'hidden' }}>
-        {activeTab === 'editor' ? (
+        {activeTab === 'editor' ? ()
           <GraphEditor 
             initialNodes={(generatedGraph as { nodes?: unknown[] })?.nodes || []}
             initialEdges={(generatedGraph as { edges?: unknown[] })?.edges || []}
           />
-        ) : activeTab === 'randomizer' ? (
+        ) : activeTab === 'randomizer' ? ()
           <div style={{ 
             padding: '20px', 
             height: '100%', 
@@ -646,9 +586,9 @@ function MainApp(): React.ReactElement {
               className="randomizer-main"
             />
           </div>
-        ) : activeTab === 'prototype' ? (
+        ) : activeTab === 'prototype' ? ()
           <NodePrototypePage />
-        ) : (
+        ) : ()
           <IntegratedFileBrowser
             theme={theme}
             height="100%"
@@ -661,13 +601,12 @@ function MainApp(): React.ReactElement {
     </div>
   );
 }
-
 /**
  * Root App component with routing.
  * Simplified version with authentication disabled.
  */
 export default function App(): React.ReactElement {
-  return (
+  return ()
     <BrowserRouter>
       <Routes>
         {/* Main routes (no authentication) */}
@@ -675,7 +614,6 @@ export default function App(): React.ReactElement {
         <Route path="/randomizer" element={<MainApp />} />
         <Route path="/files" element={<MainApp />} />
         <Route path="/prototype" element={<MainApp />} />
-        
         {/* Catch-all redirect to main app */}
         <Route path="*" element={<MainApp />} />
       </Routes>

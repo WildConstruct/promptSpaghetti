@@ -171,7 +171,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
           type: 'human_review',
           config: {,
             approvers: ['admin-trust', 'admin-security'],
-            timeout: 120 // 2 hours
+            timeout: 120 // 2 hours,
           },
           order: 3,
           enabled: true,
@@ -200,7 +200,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
       policyName: 'Suspicious Transaction Detection',
       trigger: {,
         type: 'violation_detected',
-        conditions: ['fraud.confidence > 0.8']
+        conditions: ['fraud.confidence > 0.8'],
       },
       steps: [,
         {
@@ -299,7 +299,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
     default: return Activity;
     }
   };
-  const renderWorkflowsList = () => (;)
+  const renderWorkflowsList = () => (;);
     <div className="workflows-section">
       <div className="workflows-header">
         <h3>Enforcement Workflows</h3>
@@ -352,7 +352,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
                 <div className="steps-flow">
                   {workflow.steps.slice(0, 3).map((step, index) => {
                     const StepIcon = getStepIcon(step.type);
-                    return ()
+                    return ();
                       <React.Fragment key={step.stepId}>
                         <div className="step-preview">
                           <StepIcon className="w-4 h-4" />
@@ -400,7 +400,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
       </div>
     </div>
   );
-  const renderExecutionsList = () => (;)
+  const renderExecutionsList = () => (;);
     <div className="executions-section">
       <Card>
         <CardHeader>
@@ -476,7 +476,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
   );
   const renderWorkflowDetails = () => {
     if (!selectedWorkflow) return null;
-    return ()
+    return ();
       <div className="workflow-details-overlay">
         <Card className="workflow-details-modal">
           <CardHeader>
@@ -502,7 +502,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
               <div className="steps-diagram">
                 {selectedWorkflow.steps.map((step, index) => {
                   const StepIcon = getStepIcon(step.type);
-                  return ()
+                  return ();
                     <React.Fragment key={step.stepId}>
                       <div className={`step-node ${step.enabled ? 'enabled' : 'disabled'}`}>}
                         <div className="step-icon">
@@ -556,7 +556,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
       </div>
     );
   };
-  return ()
+  return ();
     <div className={`policy-enforcement-workflow ${className}`}>}
       <div className="workflow-header">
         <div className="header-info">

@@ -94,7 +94,7 @@ export interface IAdminDashboardDomain {
   };
   // React Hooks
   hooks: {,
-    useAdminDashboard: () => {
+    useAdminDashboard: () => {,
       state: AdminDashboardState;
       loadLayout: (layoutId: string) => Promise<void>;
       saveLayout: (layout: DashboardLayout) => Promise<void>;
@@ -103,7 +103,7 @@ export interface IAdminDashboardDomain {
       updateWidget: (widgetId: string, updates: any) => void;
       toggleEditMode: () => void;
     };
-    useAdminUsers: () => {
+    useAdminUsers: () => {,
       users: AdminUser[];
       loading: boolean;
       error: string | null;
@@ -112,7 +112,7 @@ export interface IAdminDashboardDomain {
       deleteUser: (userId: string) => Promise<void>;
       suspendUser: (userId: string, reason: string) => Promise<void>;
     };
-    useSecurity: () => {
+    useSecurity: () => {,
       alerts: SecurityAlert[];
       metrics: any;
       loading: boolean;
@@ -120,7 +120,7 @@ export interface IAdminDashboardDomain {
       performScan: () => Promise<void>;
       generateReport: () => Promise<any>;
     };
-    useApiManagement: () => {
+    useApiManagement: () => {,
       apiKeys: ApiKey[];
       loading: boolean;
       error: string | null;
@@ -128,7 +128,7 @@ export interface IAdminDashboardDomain {
       revokeApiKey: (keyId: string) => Promise<void>;
       updateRateLimit: (keyId: string, rateLimit: any) => Promise<void>;
     };
-    useSystemMonitoring: () => {
+    useSystemMonitoring: () => {,
       metrics: SystemMetrics | null;
       health: any;
       loading: boolean;
@@ -146,7 +146,7 @@ export interface IAdminDashboardDomain {
     widgetRegistry: IWidgetRegistry;
   };
   // Event System
-  events: AdminDomainEvents & {
+  events: AdminDomainEvents & {,
     subscribe: (event: keyof AdminDomainEvents, callback: Function) => () => void;
     emit: (event: keyof AdminDomainEvents, ...args: any[]) => void;
   };

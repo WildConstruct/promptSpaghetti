@@ -8,7 +8,7 @@ describe('Error Handling Validation', () => {
       const mockError = {
         message: 'Invalid file type. Supported formats: JSON, YAML, ZIP, Bundle',
         field: 'file',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
       expect(mockError.message).toContain('Invalid file type');
       expect(mockError.field).toBe('file');
@@ -51,7 +51,7 @@ describe('Error Handling Validation', () => {
         error: 'validation_error',
         message: 'deployment_id is required and cannot be empty',
         field: 'deployment_id',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
       expect(deploymentError.deployment_allowed).toBe(false);
       expect(deploymentError.error).toBe('validation_error');
@@ -69,7 +69,7 @@ describe('Error Handling Validation', () => {
           required: 90,
           actual: 0,
           passed: false,
-          error: 'Failed to retrieve test coverage: Connection timeout'
+          error: 'Failed to retrieve test coverage: Connection timeout',
         }]
       };
       expect(autoApprovalResult.eligible).toBe(false);
@@ -94,7 +94,7 @@ describe('Error Handling Validation', () => {
         error: 'database_unavailable',
         message: 'Database temporarily unavailable',
         retry_after: 30,
-        help: 'This is a temporary error. Please try again in a few moments.'
+        help: 'This is a temporary error. Please try again in a few moments.',
       };
       expect(temporaryError.retry_after).toBe(30);
       expect(temporaryError.help).toContain('temporary error');
@@ -105,11 +105,11 @@ describe('Error Handling Validation', () => {
       const validationErrors = [;
         {
           field: 'deployment_id',
-          message: 'deployment_id is required and cannot be empty'
+          message: 'deployment_id is required and cannot be empty',
         },
         {
           field: 'requested_by',
-          message: 'requested_by is required and cannot be empty'
+          message: 'requested_by is required and cannot be empty',
         }
       ];
       validationErrors.forEach(error => {)
@@ -134,7 +134,7 @@ describe('Error Handling Validation', () => {
       const fallbackAssignment = {
         reviewers: ['system-admin'],
         method: 'fallback',
-        reason: 'reviewer assignment failed'
+        reason: 'reviewer assignment failed',
       };
       expect(fallbackAssignment.reviewers).toContain('system-admin');
       expect(fallbackAssignment.method).toBe('fallback');

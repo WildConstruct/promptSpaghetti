@@ -362,7 +362,7 @@ export class SecurityAlertingWorkflow extends EventEmitter {
     resolvedBy: string,
     solution: string,
     preventionMeasures: string[] = [],
-    lessonsLearned: string[] = []
+    lessonsLearned: string[] = [],
   ): Promise<void> {
     const alert = this.alerts.get(alertId);
     if (!alert) {
@@ -395,7 +395,6 @@ export class SecurityAlertingWorkflow extends EventEmitter {
     alerts: SecurityAlert[];
     total: number;
     hasMore: boolean;
-  } {
     let alerts = Array.from(this.alerts.values());
     // Apply filters
     if (options.severity) {
@@ -440,7 +439,7 @@ export class SecurityAlertingWorkflow extends EventEmitter {
     return {
       alerts,
       total,
-      hasMore: (offset + limit) < total
+      hasMore: (offset + limit) < total,
     };
   }
   /**
@@ -455,8 +454,7 @@ export class SecurityAlertingWorkflow extends EventEmitter {
     averageResolutionTime: number;
     escalationRate: number;
     topAlertSources: Array<{ source: string; count: number }>;
-  } {
-    const alerts = Array.from(this.alerts.values()).filter(;)
+    const alerts = Array.from(this.alerts.values()).filter(;);
       alert => alert.timestamp >= timeframe.start && alert.timestamp <= timeframe.end
     );
     const totalAlerts = alerts.length;
@@ -601,7 +599,7 @@ export class SecurityAlertingWorkflow extends EventEmitter {
       name: `Escalation Level ${step.level}`,}
       type: 'escalation',
       status: 'running',
-      startTime: new Date()
+      startTime: new Date(),
     };
     execution.steps.push(workflowStep);
     try {
@@ -1282,7 +1280,7 @@ Do not reply to this email.`;
         ],
         requiresAcknowledgment: true,
         autoResolve: false,
-        escalationTimeout: 900 // 15 minutes
+        escalationTimeout: 900 // 15 minutes,
       },
       automatedActions: [,
         {
@@ -1348,7 +1346,7 @@ Do not reply to this email.`;
         ],
         requiresAcknowledgment: false,
         autoResolve: true,
-        escalationTimeout: 3600 // 1 hour
+        escalationTimeout: 3600 // 1 hour,
       },
       automatedActions: [,
         {
@@ -1406,7 +1404,7 @@ Do not reply to this email.`;
     const rules = this.findApplicableRules(alert);
     for (const rule of rules) {
       if (rule.escalationPolicy) {
-        const nextStep = rule.escalationPolicy.steps.find(;)
+        const nextStep = rule.escalationPolicy.steps.find(;);
           step => step.level === alert.escalation.level + 1
         );
         if (nextStep) {
@@ -1446,7 +1444,7 @@ Do not reply to this email.`;
         `Critical security event: ${event.eventType}`,}
         {
           affectedSystems: ['security-system'],
-          ipAddresses: event.context?.ipAddress ? [event.context.ipAddress] : []
+          ipAddresses: event.context?.ipAddress ? [event.context.ipAddress] : [],
         },
         { eventIds: [event.id] }
       );

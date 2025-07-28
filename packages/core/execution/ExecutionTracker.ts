@@ -96,7 +96,7 @@ export class GraphExecutionTracker implements ExecutionTracker {
       steps: execution.steps || [],
       finalOutput: output,
       nodeExecutionOrder: execution.nodeExecutionOrder || [],
-      randomizationPoints: execution.randomizationPoints || []
+      randomizationPoints: execution.randomizationPoints || [],
     };
     // Clean up
     this.activeExecutions.delete(executionId);
@@ -117,7 +117,7 @@ export class GraphExecutionTracker implements ExecutionTracker {
       steps: execution.steps || [],
       finalOutput: '',
       nodeExecutionOrder: execution.nodeExecutionOrder || [],
-      randomizationPoints: execution.randomizationPoints || []
+      randomizationPoints: execution.randomizationPoints || [],
     };
   }
   /**
@@ -138,7 +138,6 @@ export class GraphExecutionTracker implements ExecutionTracker {
   getTrackingStats(): {
     activeExecutions: number;
     totalExecutionsTracked: number;
-    } {
     return {
       activeExecutions: this.activeExecutions.size,
       totalExecutionsTracked: this.executionCounter,
@@ -177,7 +176,6 @@ export class ExecutionPathAnalyzer {
     commonNodes: string[];
     divergencePoints: string[];
     sharedSequences: string[][];
-  } {
     if (paths.length === 0) {
       return { commonNodes: [], divergencePoints: [], sharedSequences: [] };
     }
@@ -227,7 +225,6 @@ export class ExecutionPathAnalyzer {
     performanceBreakdown: Record<string, number>;
     bottleneckNodes: string[];
     randomizationSummary: string;
-  } {
     const performanceBreakdown: Record<string, number> = {};
     const nodeExecutionTimes: Record<string, number> = {};
     // Calculate performance breakdown by node type

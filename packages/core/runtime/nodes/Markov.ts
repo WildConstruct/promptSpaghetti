@@ -64,11 +64,10 @@ export class StandardTransitionMatrix implements TransitionMatrix {
   states: string[];
   transitions: Record<string, Record<string, number>>;
   private initialState?: string;
-  constructor()
+  constructor();
     states: string[],
     transitions: Record<string, Record<string, number>>,
     initialState?: string
-  ) {
     this.states = [...states]; // Clone to avoid mutations
     this.transitions = JSON.parse(JSON.stringify(transitions)); // Deep clone
     this.initialState = initialState;
@@ -166,11 +165,10 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
   private ioHandler: AdvancedIOHandler;
   private transitionMatrix: TransitionMatrix;
   private markovConfig: MarkovConfig;
-  constructor()
+  constructor();
     id: string, 
     transitionMatrix: TransitionMatrix,
     config: MarkovConfig = {}
-  ) {
     // Configure as deterministic, non-cacheable (stateful), stateful
     const nodeConfig: AdvancedNodeConfig = {
       deterministic: true,
@@ -198,7 +196,7 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
         dataType: 'stringArray',
         required: false,
         defaultValue: [],
-        description: 'Array of possible states'
+        description: 'Array of possible states',
       })
       .addInput({)
         id: 'transitions',
@@ -206,7 +204,7 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
         dataType: 'object',
         required: false,
         defaultValue: {},
-        description: 'Transition probabilities between states'
+        description: 'Transition probabilities between states',
       })
       .addInput({)
         id: 'initialState',
@@ -214,7 +212,7 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
         dataType: 'string',
         required: false,
         defaultValue: '',
-        description: 'Starting state for the Markov chain'
+        description: 'Starting state for the Markov chain',
       })
       .addTextOutput('result', 'Current State')
       .build();
@@ -305,7 +303,7 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
       },
       metadata: {,
         version: '1.0.0',
-        created: new Date().toISOString()
+        created: new Date().toISOString(),
       }
     };
   }
@@ -403,7 +401,7 @@ export const MarkovPresets = {
     }
   }),
   /** Random walk with equal probabilities */
-  randomWalk: (states: string[]) => {
+  randomWalk: (states: string[]) => {,
     const prob = 1.0 / states.length;
     const transitions: Record<string, Record<string, number>> = {};
     for (const state of states) {

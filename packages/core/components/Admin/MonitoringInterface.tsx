@@ -164,7 +164,7 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
           ...alert, 
           acknowledged: action === 'acknowledge' ? true : alert.acknowledged,
           resolved: action === 'resolve' ? true : alert.resolved,
-          assignee: action === 'assign' ? userId : alert.assignee
+          assignee: action === 'assign' ? userId : alert.assignee,
         }
         : alert
     ));
@@ -193,7 +193,7 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
     }
   };
   // Header component
-  const MonitoringHeader = () => (;)
+  const MonitoringHeader = () => (;);
     <div style={{
       display: 'flex',
       alignItems: 'center',
@@ -210,7 +210,7 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
         </h1>
         <p style={{ margin: 0, fontSize: '14px', color: '#6b7280' }}>
           Last updated: {lastUpdated ? new Date(lastUpdated).toLocaleString() : 'Never'} • 
-          Status: <span style={{ 
+          Status: <span style={{ ,
             color: connectionStatus === 'connected' ? '#10b981' : '#ef4444',
             fontWeight: '500',
           }}>
@@ -262,7 +262,7 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
     const criticalAlerts = alerts.filter(a => a.severity === 'critical' && !a.resolved).length;
     const highAlerts = alerts.filter(a => a.severity === 'high' && !a.resolved).length;
     const unacknowledged = alerts.filter(a => !a.acknowledged && !a.resolved).length;
-    return ()
+    return ();
       <div style={{
         backgroundColor: '#FFFFFF',
         borderRadius: '8px',
@@ -296,7 +296,7 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
   // Key Metrics Component
   const KeyMetrics = () => {
     if (!metrics) return <div>Loading metrics...</div>;
-    return ()
+    return ();
       <div style={{
         backgroundColor: '#FFFFFF',
         borderRadius: '8px',
@@ -363,7 +363,7 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
     );
   };
   // Recent Alerts Component
-  const RecentAlerts = () => (;)
+  const RecentAlerts = () => (;);
     <div style={{
       backgroundColor: '#FFFFFF',
       borderRadius: '8px',
@@ -435,7 +435,7 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
     </div>
   );
   if (isLoading && !metrics) {
-    return ()
+    return ();
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -452,14 +452,14 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
             borderTopColor: '#3b82f6',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
-            margin: '0 auto 16px'
+            margin: '0 auto 16px',
           }} />
           <div style={{ fontSize: '14px', color: '#6b7280' }}>Loading monitoring data...</div>
         </div>
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`monitoring-interface ${className}`} style={{ }
       padding: '20px',
       backgroundColor: '#f9fafb',

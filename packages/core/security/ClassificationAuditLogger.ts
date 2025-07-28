@@ -426,7 +426,7 @@ export class ClassificationAuditLogger extends EventEmitter {
       endDate,
       complianceFrameworks: [framework],
     });
-    const violations = relevantLogs.filter(;)
+    const violations = relevantLogs.filter(;);
       log => log.eventType === AuditEventType.POLICY_VIOLATION
     );
     const dataProcessing = {
@@ -550,7 +550,7 @@ export class ClassificationAuditLogger extends EventEmitter {
       if (log.integrity.previousHash !== expectedHash) {
         errors.push({)
           logId: log.id,
-          error: 'Hash chain broken'
+          error: 'Hash chain broken',
         });
         valid = false;
       }
@@ -559,7 +559,7 @@ export class ClassificationAuditLogger extends EventEmitter {
       if (log.integrity.hash !== calculatedHash) {
         errors.push({)
           logId: log.id,
-          error: 'Log hash mismatch'
+          error: 'Log hash mismatch',
         });
         valid = false;
       }
@@ -567,7 +567,7 @@ export class ClassificationAuditLogger extends EventEmitter {
       if (log.integrity.signature && !this.verifySignature(log)) {
         errors.push({)
           logId: log.id,
-          error: 'Invalid signature'
+          error: 'Invalid signature',
         });
         valid = false;
       }
@@ -678,7 +678,7 @@ export class ClassificationAuditLogger extends EventEmitter {
       } catch (error) {
         this.emit('streamError', {)
           endpoint: endpoint.url,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     }
@@ -739,7 +739,7 @@ export class ClassificationAuditLogger extends EventEmitter {
       'resourceType', 'resourceId', 'operation', 'result',
       'classificationLevel', 'framework', 'hash'
     ];
-    const rows = logs.map(log => [;)
+    const rows = logs.map(log => [;);
       log.id,
       log.timestamp.toISOString(),
       log.eventType,
@@ -826,7 +826,7 @@ export class ClassificationAuditLogger extends EventEmitter {
     if (violations.length > 10) {
       recommendations.push('Review and update classification rules to reduce false positives');
     }
-    const criticalCount = violations.filter(;)
+    const criticalCount = violations.filter(;);
       v => v.context.metadata.severity === AlertSeverity.CRITICAL
     ).length;
     if (criticalCount > 0) {
@@ -868,10 +868,10 @@ export class ClassificationAuditLogger extends EventEmitter {
   }
   private async enforceRetentionPolicies(): Promise<void> {
     for (const policy of this.config.retentionPolicies) {
-      const cutoffDate = new Date(;)
+      const cutoffDate = new Date(;);
         Date.now() - policy.retentionDays * 24 * 60 * 60 * 1000
       );
-      const logsToArchive = this.logs.filter(;)
+      const logsToArchive = this.logs.filter(;);
         log => log.eventType === policy.eventType &&
                log.compliance.frameworks.includes(policy.framework) &&
                log.timestamp < cutoffDate

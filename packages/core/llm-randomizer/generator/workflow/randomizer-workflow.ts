@@ -181,7 +181,7 @@ export class RandomizerWorkflow {
             name: `Generated: ${parameters.purpose.substring(0, 50)}`,}
             description: parameters.purpose,
             author: 'llm-randomizer',
-            created: new Date().toISOString()
+            created: new Date().toISOString(),
           });
           result.metadata.serializationTime = Date.now() - serializeStart;
         } catch (error) {
@@ -194,7 +194,7 @@ export class RandomizerWorkflow {
         }
       }
       // Final validation
-      const criticalErrors = result.errors.filter(e => ;)
+      const criticalErrors = result.errors.filter(e => ;);
         ['GENERATION_FAILED', 'PARSE_FAILED', 'CRITICAL_VALIDATION'].includes(e.type)
       );
       result.success = criticalErrors.length === 0 && !!result.graph;
@@ -225,7 +225,7 @@ export class RandomizerWorkflow {
       domain: parameters.domain,
       userContext: parameters.userContext,
       constraints: parameters.constraints,
-      examples: [] // Could be populated from history
+      examples: [] // Could be populated from history,
     };
   }
   /**
@@ -253,7 +253,7 @@ export class RandomizerWorkflow {
         });
         const generationPromise = generateGraph(request, parameters.provider, {)
           temperature: parameters.temperature,
-          maxRetries: 1 // Handle retries at this level
+          maxRetries: 1 // Handle retries at this level,
         });
         const result = await Promise.race([generationPromise, timeoutPromise]) as any;
         if (result.success && result.graph) {
@@ -303,7 +303,6 @@ export class RandomizerWorkflow {
   ): {
     errors: Array<{ type: string; message: string }>;
     warnings: Array<{ message: string; suggestion?: string }>;
-  } {
     const errors: Array<{ type: string; message: string }> = [];
     const warnings: Array<{ message: string; suggestion?: string }> = [];
     // Check node count
@@ -313,7 +312,7 @@ export class RandomizerWorkflow {
     if (Math.abs(nodeCount - targetCount) > tolerance) {
       warnings.push({)
         message: `Node count ${nodeCount} differs from target ${targetCount}`,}
-        suggestion: 'Consider adjusting complexity or node count parameters'
+        suggestion: 'Consider adjusting complexity or node count parameters',
       });
     }
     // Check for required node types
@@ -323,7 +322,7 @@ export class RandomizerWorkflow {
       if (!nodeTypes.has(required.nodeType as any)) {
         warnings.push({)
           message: `Missing required node type: ${required.nodeType}`,}
-          suggestion: 'Regenerate with clearer requirements'
+          suggestion: 'Regenerate with clearer requirements',
         });
       }
     }
@@ -332,7 +331,7 @@ export class RandomizerWorkflow {
     if (!hasOutput) {
       warnings.push({)
         message: 'Graph has no Output nodes',
-        suggestion: 'Results may not be accessible without Output nodes'
+        suggestion: 'Results may not be accessible without Output nodes',
       });
     }
     // Check complexity vs actual structure
@@ -345,7 +344,7 @@ export class RandomizerWorkflow {
     if (nodeCount > limits.max) {
       warnings.push({)
         message: `Graph may be too complex for ${parameters.complexity} level`,}
-        suggestion: 'Consider using higher complexity level'
+        suggestion: 'Consider using higher complexity level',
       });
     }
     return { errors, warnings };
@@ -366,7 +365,7 @@ export class RandomizerWorkflow {
     options: WorkflowOptions = {}
   ): Promise<WorkflowResult[]> {
     const variations = this.createParameterVariations(baseParameters, variationCount);
-    const results = await Promise.all(;)
+    const results = await Promise.all(;);
       variations.map((params, index) =>
         this.generateGraph(params, {)
           ...options,
@@ -374,7 +373,6 @@ export class RandomizerWorkflow {
             options.onProgress?.(`Variation ${index + 1}: ${message}`, progress);}
           }
         })
-      )
     );
     return results;
   }
@@ -411,7 +409,6 @@ export class RandomizerWorkflow {
     isValid: boolean;
     errors: string[];
     warnings: string[];
-  } {
     const errors: string[] = [];
     const warnings: string[] = [];
     // Basic validation

@@ -100,7 +100,7 @@ export class NodeValidationService extends EventEmitter {
           nodeType: nodeData.type,
           valid: result.valid,
           fromCache,
-          duration: Date.now() - startTime
+          duration: Date.now() - startTime,
         });
       }
       return result;
@@ -120,7 +120,7 @@ export class NodeValidationService extends EventEmitter {
         this.emitValidationEvent('validation_error', {)
           nodeId: nodeData.id,
           nodeType: nodeData.type,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
       return errorResult;
@@ -139,7 +139,7 @@ export class NodeValidationService extends EventEmitter {
     });
     for (let i = 0; i < batches.length; i++) {
       const batch = batches[i];
-      const batchResults = await Promise.all(;)
+      const batchResults = await Promise.all(;);
         batch.map(node => this.validateNode(node))
       );
       results.push(...batchResults);
@@ -153,7 +153,7 @@ export class NodeValidationService extends EventEmitter {
     this.emitValidationEvent('batch_validation_complete', {)
       totalNodes: nodes.length,
       validNodes: results.filter(r => r.valid).length,
-      invalidNodes: results.filter(r => !r.valid).length
+      invalidNodes: results.filter(r => !r.valid).length,
     });
     return results;
   }
@@ -194,7 +194,6 @@ export class NodeValidationService extends EventEmitter {
     hitRate: number;
     oldestEntry: number;
     newestEntry: number;
-    } {
     const entries = Array.from(this.cache.values());
     const timestamps = entries.map(e => e.timestamp);
     return {

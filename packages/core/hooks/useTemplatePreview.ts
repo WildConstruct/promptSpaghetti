@@ -129,7 +129,7 @@ export const useTemplatePreview = ()
         }
       }
       // Generate multiple variants with different seeds
-      const newVariants = await Promise.all(;)
+      const newVariants = await Promise.all(;);
         Array.from({ length: config.maxVariants }, async (_, index) => {
           const seed = Math.floor(Math.random() * 1000000);
           // Add some randomness to sample values for variety
@@ -173,7 +173,7 @@ export const useTemplatePreview = ()
             totalGenerations: prev.totalGenerations + 1,
             successRate: ((prev.successRate * prev.totalGenerations + 100) / (prev.totalGenerations + 1)),
             lastUpdate: Date.now(),
-            templatesProcessed: prev.templatesProcessed + 1
+            templatesProcessed: prev.templatesProcessed + 1,
           }));
         }
       }

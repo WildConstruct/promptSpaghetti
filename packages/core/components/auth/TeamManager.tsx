@@ -75,7 +75,7 @@ export const [organizations, setOrganizations] = useState<any[]>([]);
   });
   const [memberFormData, setMemberFormData] = useState({)
     userId: '',
-    role: 'member' as 'owner' | 'admin' | 'member' | 'viewer'
+    role: 'member' as 'owner' | 'admin' | 'member' | 'viewer',
   });
   useEffect(() => {
     loadTeams();
@@ -130,7 +130,7 @@ export const [organizations, setOrganizations] = useState<any[]>([]);
         credentials: 'include',
         body: JSON.stringify({),
           ...formData,
-          parentTeamId: formData.parentTeamId || undefined
+          parentTeamId: formData.parentTeamId || undefined,
         })
       });
       if (!response.ok) {
@@ -157,7 +157,7 @@ export const [organizations, setOrganizations] = useState<any[]>([]);
         credentials: 'include',
         body: JSON.stringify({),
           ...formData,
-          parentTeamId: formData.parentTeamId || undefined
+          parentTeamId: formData.parentTeamId || undefined,
         })
       });
       if (!response.ok) {
@@ -299,7 +299,7 @@ export const [organizations, setOrganizations] = useState<any[]>([]);
     return filteredTeams.map((team) => {
       const hasChildren = teamList.some(t => t.parentTeamId === team.id);
       const isExpanded = expandedTeams.has(team.id);
-      return ()
+      return ();
         <div key={team.id}>
           <div
             onClick={() => setSelectedTeam(team)}
@@ -343,13 +343,13 @@ export const [organizations, setOrganizations] = useState<any[]>([]);
     });
   };
   if (loading) {
-    return ()
+    return ();
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
-  return ()
+  return ();
     <div className="max-w-7xl mx-auto p-6">
       <div className="flex items-center justify-between mb-8">
         <div>

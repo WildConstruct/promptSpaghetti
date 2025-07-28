@@ -215,7 +215,7 @@ export class UnifiedEventBus extends EventEmitter {
       id: subscriberId,
       ...subscriber,
       priority: subscriber.priority ?? 100,
-      enabled: subscriber.enabled ?? true
+      enabled: subscriber.enabled ?? true,
     };
     this.subscribers.set(subscriberId, fullSubscriber);
     this.metrics.subscribersActive = this.subscribers.size;
@@ -248,7 +248,7 @@ export class UnifiedEventBus extends EventEmitter {
     const subscriberId = this.subscribe({)
       name: `stream_${Date.now()}`,}
       filter,
-      handler: (event) => {
+      handler: (event) => {,
         stream.emit('event', event);
       },
       priority: 1000, // High priority for streams
@@ -273,7 +273,6 @@ export class UnifiedEventBus extends EventEmitter {
     status: 'healthy' | 'degraded' | 'unhealthy';
     metrics: EventBusMetrics;
     issues: string[];
-  } {
     const issues: string[] = [];
     let status: 'healthy' | 'degraded' | 'unhealthy' = 'healthy';
     // Check queue depth
@@ -303,7 +302,7 @@ export class UnifiedEventBus extends EventEmitter {
   async migrateFromLegacySystem()
     systemName: string, 
     events: unknown[], 
-    transformer: (legacyEvent: unknown) => Partial<UnifiedAnalyticsEvent>
+    transformer: (legacyEvent: unknown) => Partial<UnifiedAnalyticsEvent>,
   ): Promise<{ migrated: number; failed: number; errors: string[] }> {
     const results = { migrated: 0, failed: 0, errors: [] as string[] };
     for (const legacyEvent of events) {
@@ -314,7 +313,7 @@ export class UnifiedEventBus extends EventEmitter {
           category: EventCategory.SYSTEM,
           severity: EventSeverity.INFO,
           type: AnalyticsEventType.INFO_EVENT,
-          data: transformedEvent.data || ()
+          data: transformedEvent.data || (),
             typeof legacyEvent === 'object' && legacyEvent !== null ? legacyEvent as Record<string,
             unknown> : {}
           ),
@@ -359,7 +358,7 @@ export class UnifiedEventBus extends EventEmitter {
       this.metrics.queueDepth = this.eventQueue.length;
     } catch (error) {
       const errorDetails = {
-        error: error instanceof Error ? {
+        error: error instanceof Error ? {,
           message: error.message,
           stack: error.stack,
         } : { message: 'Unknown queue processing error' },
@@ -396,7 +395,7 @@ export class UnifiedEventBus extends EventEmitter {
         const errorDetails = {
           subscriberId: subscriber.id,
           eventId: event.id,
-          error: error instanceof Error ? {
+          error: error instanceof Error ? {,
             message: error.message,
             stack: error.stack,
           } : { message: 'Unknown subscriber error' },
@@ -440,11 +439,11 @@ export class UnifiedEventBus extends EventEmitter {
             subscriberId: subscriber.id,
             eventId: event.id,
             attempts: attempt,
-            originalError: originalError instanceof Error ? {
+            originalError: originalError instanceof Error ? {,
               message: originalError.message,
               stack: originalError.stack,
             } : { message: 'Unknown original error' },
-            finalError: retryError instanceof Error ? {
+            finalError: retryError instanceof Error ? {,
               message: retryError.message,
               stack: retryError.stack,
             } : { message: 'Unknown retry error' },

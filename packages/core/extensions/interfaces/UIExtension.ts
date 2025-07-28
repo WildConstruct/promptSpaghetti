@@ -576,7 +576,7 @@ export namespace UIExtensionHelpers {
       command: partial.command,
       submenu: partial.submenu,
       when: partial.when,
-      menu: partial.menu || MenuTarget.CUSTOM
+      menu: partial.menu || MenuTarget.CUSTOM,
     };
   }
   export function validateUIComponent(definition: UIComponentDefinition): ExtensionValidationResult {

@@ -126,7 +126,7 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({)
   if (visibleNotifications.length === 0) {
     return null;
   }
-  return ()
+  return ();
     <>
       {/* CSS Animation */}
       <style>{`

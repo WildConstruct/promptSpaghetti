@@ -150,7 +150,7 @@ export const GraphPreview: React.FC<GraphPreviewProps> = ({)
     if (!isDragging || !interactive) return;
     setOffset({)
       x: e.clientX - dragStart.x,
-      y: e.clientY - dragStart.y
+      y: e.clientY - dragStart.y,
     });
   }, [isDragging, interactive, dragStart]);
   // Handle pan end
@@ -165,7 +165,7 @@ export const GraphPreview: React.FC<GraphPreviewProps> = ({)
     setSelectedEdge(null);
   }, []);
   if (isGenerating) {
-    return ()
+    return ();
       <div className={`graph-preview ${className} generating`}>}
         <div className="generating-overlay">
           <div className="spinner"></div>
@@ -175,7 +175,7 @@ export const GraphPreview: React.FC<GraphPreviewProps> = ({)
     );
   }
   if (!graph || !stats) {
-    return ()
+    return ();
       <div className={`graph-preview ${className} empty`}>}
         <div className="empty-state">
           <p>No graph to preview</p>
@@ -184,7 +184,7 @@ export const GraphPreview: React.FC<GraphPreviewProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`graph-preview ${className}`}>}
       {/* Header with stats and controls */}
       <div className="preview-header">
@@ -315,7 +315,7 @@ export const GraphPreview: React.FC<GraphPreviewProps> = ({)
           {(() => {
             const node = graph.nodes.find(n => n.id === selectedNodeId);
             if (!node) return null;
-            return ()
+            return ();
               <div className="info-panel">
                 <h4>{node.id}</h4>
                 <p><strong>Type:</strong> {node.type}</p>
@@ -455,7 +455,7 @@ function generateLayout()
         y: (level + 0.5) * levelHeight,
         level,
         connections,
-        isSelected: nodeId === selectedNodeId
+        isSelected: nodeId === selectedNodeId,
       });
     });
   });
@@ -466,7 +466,7 @@ function generateLayout()
         id: `${source}-${target}`,}
         source,
         target,
-        isSelected: selectedEdge?.source === source && selectedEdge?.target === target
+        isSelected: selectedEdge?.source === source && selectedEdge?.target === target,
       });
     });
   });

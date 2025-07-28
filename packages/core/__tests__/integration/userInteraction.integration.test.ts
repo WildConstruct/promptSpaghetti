@@ -40,7 +40,7 @@ class MockFileReader {
           metadata: { name: 'Dropped Project', author: 'User' },
           settings: { autoSave: true },
           graph: { nodes: [], edges: [] },
-          exportedAt: new Date().toISOString()
+          exportedAt: new Date().toISOString(),
         });
       } else {
         this.result = 'Invalid file content';
@@ -313,7 +313,7 @@ describe('User Interaction Integration Tests', () => {
       const { result } = renderHook(() => useUnsavedChanges({)
         hasUnsavedChanges: true,
         projectName: 'Test Project',
-        onSave: async () => {
+        onSave: async () => {,
           saveDialogOpened = true;
           return mockOnSave();
         }
@@ -339,7 +339,7 @@ describe('User Interaction Integration Tests', () => {
       let actionCompleted = false;
       const { result } = renderHook(() => useUnsavedChanges({)
         hasUnsavedChanges: true,
-        projectName: 'Test Project'
+        projectName: 'Test Project',
       }));
       // Trigger navigation
       act(() => {
@@ -359,7 +359,7 @@ describe('User Interaction Integration Tests', () => {
       let actionCompleted = false;
       const { result } = renderHook(() => useUnsavedChanges({)
         hasUnsavedChanges: true,
-        projectName: 'Test Project'
+        projectName: 'Test Project',
       }));
       // Trigger navigation
       act(() => {
@@ -378,7 +378,7 @@ describe('User Interaction Integration Tests', () => {
     test('browser beforeunload protection works correctly', () => {
       renderHook(() => useUnsavedChanges({)
         hasUnsavedChanges: true,
-        projectName: 'Test Project'
+        projectName: 'Test Project',
       }));
       // Verify beforeunload listener was added
       expect(mockAddEventListener).toHaveBeenCalledWith('beforeunload', expect.any(Function));
@@ -400,7 +400,7 @@ describe('User Interaction Integration Tests', () => {
       let actionCompleted = false;
       const { result } = renderHook(() => useUnsavedChanges({)
         hasUnsavedChanges: false,
-        projectName: 'Test Project'
+        projectName: 'Test Project',
       }));
       // Trigger navigation
       act(() => {
@@ -422,7 +422,7 @@ describe('User Interaction Integration Tests', () => {
       const hasUnsavedChanges = true;
       const { result } = renderHook(() => useUnsavedChanges({)
         hasUnsavedChanges,
-        projectName: 'Current Project'
+        projectName: 'Current Project',
       }));
       // Simulate Ctrl+O keyboard shortcut handler
       const handleKeyDown = (event: KeyboardEvent) => {
@@ -460,7 +460,7 @@ describe('User Interaction Integration Tests', () => {
       let projectLoaded = false;
       const { result } = renderHook(() => useUnsavedChanges({)
         hasUnsavedChanges: true,
-        projectName: 'Current Project'
+        projectName: 'Current Project',
       }));
       // Simulate drag-and-drop handler with unsaved changes check
       const handleDrop = async (event: DragEvent) => {
@@ -505,7 +505,7 @@ describe('User Interaction Integration Tests', () => {
       let actionCount = 0;
       const { result } = renderHook(() => useUnsavedChanges({)
         hasUnsavedChanges: true,
-        projectName: 'Test Project'
+        projectName: 'Test Project',
       }));
       // Simulate rapid user actions
       const actions = [;

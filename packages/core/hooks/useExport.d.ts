@@ -34,7 +34,7 @@ interface UseExportState {
     error: string | null;
 }
 interface UseExportActions {
-    fetchTemplates: (options?: {)
+    fetchTemplates: (options?: {),
         format?: ExportFormat;
         isPublic?: boolean;
         limit?: number;
@@ -44,7 +44,7 @@ interface UseExportActions {
     updateTemplate: (id: string, updates: UpdateExportTemplate) => Promise<ExportTemplate>;
     deleteTemplate: (id: string) => Promise<void>;
     getTemplateWithStats: (id: string) => Promise<ExportTemplateWithStats>;
-    fetchJobs: (options?: {)
+    fetchJobs: (options?: {),
         status?: ExportJobStatus;
         format?: ExportFormat;
         userId?: string;
@@ -66,7 +66,7 @@ interface UseExportActions {
     createShare: (share: CreateExportShare) => Promise<ExportShare>;
     updateShare: (id: string, updates: UpdateExportShare) => Promise<ExportShare>;
     deleteShare: (id: string) => Promise<void>;
-    fetchAnalytics: (options?: {)
+    fetchAnalytics: (options?: {),
         startDate?: string;
         endDate?: string;
         format?: ExportFormat;

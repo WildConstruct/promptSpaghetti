@@ -127,7 +127,7 @@ export class AdvancedIOHandler {
   /**
    * Resolve inputs from connected nodes and apply defaults
    */
-  resolveInputs()
+  resolveInputs();
     connectedInputs: Map<string, any>,
     ___nodeId: string,
   ): ResolvedInputs {
@@ -309,7 +309,6 @@ export class AdvancedIOHandler {
     value: unknown; 
     coercion?: { from: IODataType; to: IODataType }; 
     warnings: string[] ,
-  } {
     const warnings: string[] = [];
     const originalType = this.getValueType(value);
     // No coercion needed if types match
@@ -407,7 +406,7 @@ export class IOSpecBuilder {
   /**
    * Add a standard text input
    */
-  addTextInput()
+  addTextInput();
     id: string, 
     label: string, 
     required: boolean = false, 
@@ -425,7 +424,7 @@ export class IOSpecBuilder {
   /**
    * Add a standard number input
    */
-  addNumberInput()
+  addNumberInput();
     id: string, 
     label: string, 
     required: boolean = false, 
@@ -446,7 +445,7 @@ export class IOSpecBuilder {
   /**
    * Add a standard choice input
    */
-  addChoiceInput()
+  addChoiceInput();
     id: string, 
     label: string, 
     allowedValues: unknown[], 
@@ -489,7 +488,7 @@ export class IOSpecBuilder {
    */
   static createSimple()
     inputLabel: string = 'Input',
-    outputLabel: string = 'Output'
+    outputLabel: string = 'Output',
   ): IOSpec {
     return new IOSpecBuilder()
       .addTextInput('input', inputLabel, false, '')
@@ -501,7 +500,7 @@ export class IOSpecBuilder {
    */
   static createMultiInput()
     inputLabels: string[],
-    outputLabel: string = 'Output'
+    outputLabel: string = 'Output',
   ): IOSpec {
     const builder = new IOSpecBuilder();
     inputLabels.forEach((label, index) => {

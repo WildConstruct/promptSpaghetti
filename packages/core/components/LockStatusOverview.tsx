@@ -36,7 +36,7 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({)
       </div>
     </div>
   );
-  return ()
+  return ();
     <div className="space-y-6">
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -82,7 +82,7 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({)
               admin: 'bg-purple-500',
               custom: 'bg-gray-500',
             };
-            return ()
+            return ();
               <div key={type} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <div className={`w-3 h-3 rounded-full ${colorMap[type] || 'bg-gray-400'}`}></div>}

@@ -25,7 +25,7 @@ export const DashboardTabs: React.FC<DashboardTabsProps> = ({)
       onTabChange(tabId);
     }
   };
-  return ()
+  return ();
     <div className={`dashboard-tabs ${className}`}>}
       <div className="tabs-container">
         <div className="tabs-list" role="tablist">

@@ -103,7 +103,7 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
         const updatedTicket = {
           ...currentTicket,
           comments: [...currentTicket.comments, newComment],
-          updatedAt: new Date()
+          updatedAt: new Date(),
         };
         setCurrentTicket(updatedTicket);
         onTicketUpdate?.(updatedTicket);
@@ -180,7 +180,7 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
       return false;
     });
   }, [currentTicket.comments, canViewInternal, userId, userRole]);
-  return ()
+  return ();
     <div className="ticket-details-view h-full flex flex-col bg-white">
       {/* Header */}
       <div className="border-b border-gray-200 p-6">
@@ -444,7 +444,7 @@ const StatusBadge: React.FC<{ status: TicketStatus }> = ({ status }) => {
     [TicketStatus.ESCALATED]: 'bg-red-500 text-white',
     [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700'
   };
-  return ()
+  return ();
     <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>}
       {status.replace('_', ' ').toUpperCase()}
     </span>
@@ -458,7 +458,7 @@ const PriorityBadge: React.FC<{ priority: TicketPriority }> = ({ priority }) => 
     [TicketPriority.URGENT]: 'bg-orange-100 text-orange-800',
     [TicketPriority.CRITICAL]: 'bg-red-500 text-white'
   };
-  return ()
+  return ();
     <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>}
       {priority.toUpperCase()}
     </span>
@@ -468,9 +468,9 @@ const CommentItem: React.FC<{ comment: TicketComment; _canViewInternal: boolean 
   const visibilityColors = {
     public: 'bg-green-100 text-green-800',
     internal: 'bg-yellow-100 text-yellow-800',
-    private: 'bg-red-100 text-red-800'
+    private: 'bg-red-100 text-red-800',
   };
-  return ()
+  return ();
     <div className="bg-white border border-gray-200 rounded-lg p-4">
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center space-x-2">
@@ -492,7 +492,7 @@ const CommentItem: React.FC<{ comment: TicketComment; _canViewInternal: boolean 
   );
 };
 const AttachmentItem: React.FC<{ attachment: TicketAttachment }> = ({ attachment }) => {
-  return ()
+  return ();
     <div className="flex items-center justify-between p-2 bg-white rounded border">
       <div className="flex items-center space-x-2">
         <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -512,7 +512,7 @@ const StatusUpdateModal: React.FC<{
   onClose: () => void;
 }> = ({ currentStatus, onStatusUpdate, onClose }) => {
   const [selectedStatus, setSelectedStatus] = useState(currentStatus);
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="px-6 py-4 border-b border-gray-200">
@@ -555,7 +555,7 @@ const AssignmentModal: React.FC<{
   onClose: () => void;
 }> = ({ currentAssignee, onAssign, onClose }) => {
   const [selectedAssignee, setSelectedAssignee] = useState(currentAssignee || '');
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="px-6 py-4 border-b border-gray-200">
@@ -597,7 +597,7 @@ const EscalationModal: React.FC<{
   onClose: () => void;
 }> = ({ onEscalate, onClose }) => {
   const [reason, setReason] = useState('');
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="px-6 py-4 border-b border-gray-200">

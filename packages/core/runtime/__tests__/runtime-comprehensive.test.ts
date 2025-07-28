@@ -43,7 +43,7 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
       expect(node.run(mockCtx)).toBeUndefined();
     });
     it('should handle single choice', () => {
-      const node = new WeightedChoiceNode('single-choice', [;)
+      const node = new WeightedChoiceNode('single-choice', [;);
         { weight: 1, value: 'only-choice' }
       ]);
       expect(node.run(mockCtx)).toBe('only-choice');
@@ -51,7 +51,7 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
     it('should handle negative weights', () => {
       const seedrandom = require('seedrandom');
       seedrandom.mockReturnValue(() => 0.5);
-      const node = new WeightedChoiceNode('negative-weights', [;)
+      const node = new WeightedChoiceNode('negative-weights', [;);
         { weight: -0.5, value: 'negative' },
         { weight: 0.8, value: 'positive' }
       ]);
@@ -61,14 +61,14 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
     it('should handle very large weights', () => {
       const seedrandom = require('seedrandom');
       seedrandom.mockReturnValue(() => 0.00001);
-      const node = new WeightedChoiceNode('large-weights', [;)
+      const node = new WeightedChoiceNode('large-weights', [;);
         { weight: 1000000, value: 'huge' },
         { weight: 0.0001, value: 'tiny' }
       ]);
       expect(node.run(mockCtx)).toBe('huge');
     });
     it('should handle non-numeric weights', () => {
-      const node = new WeightedChoiceNode('non-numeric-weights', [;)
+      const node = new WeightedChoiceNode('non-numeric-weights', [;);
         { weight: 'invalid' as any, value: 'first' },
         { weight: null as any, value: 'second' },
         { weight: undefined as any, value: 'third' }
@@ -78,7 +78,7 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
     });
     it('should handle complex value types', () => {
       const complexValue = { type: 'object', data: [1, 2, 3] };
-      const node = new WeightedChoiceNode('complex-values', [;)
+      const node = new WeightedChoiceNode('complex-values', [;);
         { weight: 1, value: complexValue }
       ]);
       expect(node.run(mockCtx)).toBe(complexValue);
@@ -94,7 +94,7 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
       expect(node.run()).toBe('text');
     });
     it('should handle non-string values', () => {
-      const node = new ConcatNode('non-string-concat', [;)
+      const node = new ConcatNode('non-string-concat', [;);
         123,
         true,
         { toString: () => 'object' },
@@ -183,7 +183,7 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
       const complexValue = {
         array: [1, 2, 3],
         nested: { deep: true },
-        fn: () => 'test'
+        fn: () => 'test',
       };
       const node = new SetVariableNode('set-complex', 'complex', complexValue);
       node.run(mockCtx);
@@ -217,7 +217,7 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
   describe('ExecutionContext - Edge Cases', () => {
     it('should handle context without seed', () => {
       const noSeedCtx: ExecutionContext = { variables: {} } as any;
-      const node = new WeightedChoiceNode('no-seed', [;)
+      const node = new WeightedChoiceNode('no-seed', [;);
         { weight: 0.5, value: 'A' },
         { weight: 0.5, value: 'B' }
       ]);
@@ -226,7 +226,7 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
     });
     it('should handle context with numeric seed conversion', () => {
       const numCtx: ExecutionContext = { variables: {}, seed: 12345 as any };
-      const node = new WeightedChoiceNode('num-seed', [;)
+      const node = new WeightedChoiceNode('num-seed', [;);
         { weight: 1, value: 'result' }
       ]);
       expect(node.run(numCtx)).toBe('result');
@@ -236,7 +236,7 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
         variables: {,
           level1: {,
             level2: {,
-              level3: 'deep value'
+              level3: 'deep value',
             }
           }
         },
@@ -267,7 +267,7 @@ describe('Runtime Engine - Comprehensive Coverage', () => {
       const results = seeds.map(seed => {)
         mockRandom.mockReturnValueOnce(0.3);
         const ctx = { variables: {}, seed };
-        const node = new WeightedChoiceNode('multi-seed', [;)
+        const node = new WeightedChoiceNode('multi-seed', [;);
           { weight: 0.5, value: 'A' },
           { weight: 0.5, value: 'B' }
         ]);

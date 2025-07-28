@@ -101,7 +101,7 @@ describe('EmailTemplateManager', () => {
     });
     test('should validate variables when requested', () => {
       const incompleteVariables: Partial<TemplateVariables> = {
-        displayName: 'Test User'
+        displayName: 'Test User',
         // Missing required variables
       };
       expect(() => {
@@ -123,10 +123,10 @@ describe('EmailTemplateManager', () => {
     });
     test('should detect missing required variables', () => {
       const incompleteVariables: Partial<TemplateVariables> = {
-        displayName: 'Test User'
+        displayName: 'Test User',
         // Missing other required variables
       };
-      const validation = templateManager.validateTemplate(;)
+      const validation = templateManager.validateTemplate(;);
         'mfa-verification', 
         incompleteVariables as TemplateVariables
       );
@@ -137,7 +137,7 @@ describe('EmailTemplateManager', () => {
     test('should detect unused variables', () => {
       const testVariables = {
         ...TemplateTestUtils.generateTestData(),
-        unusedVariable: 'This should generate a warning'
+        unusedVariable: 'This should generate a warning',
       };
       const validation = templateManager.validateTemplate('mfa-verification', testVariables);
       expect(validation.warnings.length).toBeGreaterThan(0);
@@ -207,7 +207,7 @@ describe('EmailTemplateManager', () => {
     const testVariables = TemplateTestUtils.generateTestData();
     test('should minify HTML when requested', () => {
       const normal = templateManager.renderTemplate('mfa-verification', testVariables, 'html');
-      const minified = templateManager.renderTemplate(;)
+      const minified = templateManager.renderTemplate(;);
         'mfa-verification', 
         testVariables, 
         'html', 
@@ -221,7 +221,7 @@ describe('EmailTemplateManager', () => {
     });
     test('should strip comments when requested', () => {
       const withComments = templateManager.renderTemplate('mfa-verification', testVariables, 'html');
-      const withoutComments = templateManager.renderTemplate(;)
+      const withoutComments = templateManager.renderTemplate(;);
         'mfa-verification', 
         testVariables, 
         'html', 
@@ -274,7 +274,7 @@ describe('EmailTemplateManager', () => {
       const result = templateManager.renderTemplate('complex-test', {)
         hasWarning: true,
         isUrgent: true,
-        warningMessage: 'System alert'
+        warningMessage: 'System alert',
       } as TemplateVariables);
       expect(result!.content).toContain('URGENT:');
       expect(result!.content).toContain('System alert');
@@ -325,7 +325,7 @@ describe('EmailTemplateManager', () => {
       };
       templateManager.addTemplate('security-test', maliciousTemplate);
       const result = templateManager.renderTemplate('security-test', {)
-        name: 'Test User'
+        name: 'Test User',
       } as TemplateVariables);
       // Script tags should be preserved as text, not executed
       expect(result!.content).toContain('<script>');

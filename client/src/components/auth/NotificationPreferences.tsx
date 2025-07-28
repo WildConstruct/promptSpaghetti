@@ -1,51 +1,48 @@
 // Epic 11.2 Notification Preferences Component
 // Comprehensive notification preferences with multi-channel support
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-
 interface NotificationPreferences {
-  email: {
+  email: {,
     enabled: boolean;
     frequency: 'immediate' | 'daily' | 'weekly' | 'never';
-    types: {
+    types: {,
       security: boolean;
       system: boolean;
       updates: boolean;
       marketing: boolean;
     };
   };
-  inApp: {
+  inApp: {,
     enabled: boolean;
-    types: {
+    types: {,
       security: boolean;
       system: boolean;
       updates: boolean;
       mentions: boolean;
     };
   };
-  push: {
+  push: {,
     enabled: boolean;
-    types: {
+    types: {,
       security: boolean;
       system: boolean;
       updates: boolean;
       mentions: boolean;
     };
   };
-  quietHours: {
+  quietHours: {,
     enabled: boolean;
     start: string;
     end: string;
     timezone: string;
   };
 }
-
 interface NotificationPreferencesProps {
   onPreferencesUpdate?: (preferences: NotificationPreferences) => void;
 }
 
-export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({
+export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({)
   onPreferencesUpdate
 }) => {
   const { user } = useAuth();
@@ -53,8 +50,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const timezones = [
+  const timezones = [;
     'UTC',
     'America/New_York',
     'America/Los_Angeles',
@@ -67,26 +63,22 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     'Asia/Mumbai',
     'Australia/Sydney'
   ];
-
   useEffect(() => {
     if (user) {
       fetchPreferences();
     }
   }, [user]);
-
   const fetchPreferences = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/auth/preferences/notifications', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      const response = await fetch('/api/auth/preferences/notifications', {)
+        headers: {,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
         }
       });
-
       if (!response.ok) {
         throw new Error('Failed to fetch notification preferences');
       }
-
       const data = await response.json();
       setPreferences(data.preferences);
     } catch (error) {
@@ -96,29 +88,23 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
       setLoading(false);
     }
   };
-
   const updatePreferences = async (updates: Partial<NotificationPreferences>) => {
     if (!preferences) return;
-
     try {
       setSaving(true);
       setError(null);
-
       const newPreferences = { ...preferences, ...updates };
-
-      const response = await fetch('/api/auth/preferences/notifications', {
+      const response = await fetch('/api/auth/preferences/notifications', {)
         method: 'PUT',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`}
         },
-        body: JSON.stringify(newPreferences)
+        body: JSON.stringify(newPreferences),
       });
-
       if (!response.ok) {
         throw new Error('Failed to update notification preferences');
       }
-
       const data = await response.json();
       setPreferences(data.preferences);
       onPreferencesUpdate?.(data.preferences);
@@ -129,86 +115,73 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
       setSaving(false);
     }
   };
-
   const handleChannelToggle = (channel: keyof NotificationPreferences, enabled: boolean) => {
     if (!preferences) return;
-
-    updatePreferences({
+    updatePreferences({)
       [channel]: {
         ...preferences[channel],
         enabled
       }
     });
   };
-
-  const handleTypeToggle = (
+  const handleTypeToggle = (;)
     channel: keyof NotificationPreferences,
     type: string,
-    enabled: boolean
+    enabled: boolean,
   ) => {
     if (!preferences) return;
-
-    updatePreferences({
+    updatePreferences({)
       [channel]: {
         ...preferences[channel],
-        types: {
+        types: {,
           ...preferences[channel].types,
           [type]: enabled
         }
       }
     });
   };
-
   const handleFrequencyChange = (frequency: 'immediate' | 'daily' | 'weekly' | 'never') => {
     if (!preferences) return;
-
-    updatePreferences({
-      email: {
+    updatePreferences({)
+      email: {,
         ...preferences.email,
         frequency
       }
     });
   };
-
   const handleQuietHoursToggle = (enabled: boolean) => {
     if (!preferences) return;
-
-    updatePreferences({
-      quietHours: {
+    updatePreferences({)
+      quietHours: {,
         ...preferences.quietHours,
         enabled
       }
     });
   };
-
   const handleQuietHoursChange = (field: string, value: string) => {
     if (!preferences) return;
-
-    updatePreferences({
-      quietHours: {
+    updatePreferences({)
+      quietHours: {,
         ...preferences.quietHours,
         [field]: value
       }
     });
   };
-
   if (loading) {
-    return (
+    return ()
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
-
   if (!preferences) {
-    return (
+    return ()
       <div className="text-center py-8">
         <div className="text-gray-600">Failed to load notification preferences</div>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div className="bg-white rounded-lg shadow-md p-6">
@@ -217,9 +190,8 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
           Manage how and when you receive notifications across different channels.
         </p>
       </div>
-
       {/* Error Message */}
-      {error && (
+      {error && ()
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex items-center text-red-700">
             <span className="mr-2">❌</span>
@@ -227,7 +199,6 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
           </div>
         </div>
       )}
-
       {/* Email Notifications */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between mb-4">
@@ -246,8 +217,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
           </label>
         </div>
-
-        {preferences.email.enabled && (
+        {preferences.email.enabled && ()
           <div className="space-y-4">
             {/* Frequency */}
             <div>
@@ -266,14 +236,13 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                 <option value="never">Never</option>
               </select>
             </div>
-
             {/* Notification Types */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Email Types
               </label>
               <div className="space-y-2">
-                {Object.entries(preferences.email.types).map(([type, enabled]) => (
+                {Object.entries(preferences.email.types).map(([type, enabled]) => ()
                   <label key={type} className="flex items-center space-x-2">
                     <input
                       type="checkbox"
@@ -292,7 +261,6 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
           </div>
         )}
       </div>
-
       {/* In-App Notifications */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between mb-4">
@@ -311,14 +279,13 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
           </label>
         </div>
-
-        {preferences.inApp.enabled && (
+        {preferences.inApp.enabled && ()
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               In-App Types
             </label>
             <div className="space-y-2">
-              {Object.entries(preferences.inApp.types).map(([type, enabled]) => (
+              {Object.entries(preferences.inApp.types).map(([type, enabled]) => ()
                 <label key={type} className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -336,7 +303,6 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
           </div>
         )}
       </div>
-
       {/* Push Notifications */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between mb-4">
@@ -355,14 +321,13 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
           </label>
         </div>
-
-        {preferences.push.enabled && (
+        {preferences.push.enabled && ()
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Push Types
             </label>
             <div className="space-y-2">
-              {Object.entries(preferences.push.types).map(([type, enabled]) => (
+              {Object.entries(preferences.push.types).map(([type, enabled]) => ()
                 <label key={type} className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -380,7 +345,6 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
           </div>
         )}
       </div>
-
       {/* Quiet Hours */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between mb-4">
@@ -399,8 +363,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
             <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
           </label>
         </div>
-
-        {preferences.quietHours.enabled && (
+        {preferences.quietHours.enabled && ()
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -436,7 +399,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={saving}
               >
-                {timezones.map(tz => (
+                {timezones.map(tz => ()
                   <option key={tz} value={tz}>{tz}</option>
                 ))}
               </select>
@@ -444,9 +407,8 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
           </div>
         )}
       </div>
-
       {/* Save Status */}
-      {saving && (
+      {saving && ()
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <div className="flex items-center text-blue-700">
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-700 mr-2"></div>

@@ -26,7 +26,7 @@ export const ConsentType = {
   ADVERTISING: 'advertising' as const,
   SOCIAL_MEDIA: 'social_media' as const,
   FUNCTIONAL: 'functional' as const,
-  PERFORMANCE: 'performance' as const
+  PERFORMANCE: 'performance' as const,
 } as const;
 
 export type ConsentStatus = 
@@ -42,7 +42,7 @@ export const ConsentStatus = {
   DENIED: 'denied' as const,
   PENDING: 'pending' as const,
   WITHDRAWN: 'withdrawn' as const,
-  EXPIRED: 'expired' as const
+  EXPIRED: 'expired' as const,
 } as const;
 
 export type LegalBasis = 
@@ -60,7 +60,7 @@ export const LegalBasis = {
   CONTRACT: 'contract' as const,
   LEGAL_OBLIGATION: 'legal_obligation' as const,
   VITAL_INTERESTS: 'vital_interests' as const,
-  PUBLIC_TASK: 'public_task' as const
+  PUBLIC_TASK: 'public_task' as const,
 } as const;
 
 // Consent record structure
@@ -296,7 +296,7 @@ export interface ConsentExport {
   sessionId: string;
   exportedAt: Date;
   version: string;
-  data: {
+  data: {,
     consents: ConsentRecord[];
     preferences: ConsentPreferences;
     interactions: ConsentInteraction[];

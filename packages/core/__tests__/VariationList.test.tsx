@@ -4,7 +4,7 @@ import { VariationList } from '../components/Inspector/VariationList';
 
 // Mock the graph store
 jest.mock('../graphStore', () => ({)
-  useGraphStore: () => ({)
+  useGraphStore: () => ({),
     addVariation: jest.fn(),
     removeVariation: jest.fn(),
     updateVariation: jest.fn(),

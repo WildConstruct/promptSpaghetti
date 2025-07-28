@@ -207,7 +207,7 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({)
       else if (event.type === 'blur') hideTooltip();
     }
   }, [trigger, isVisible, showTooltip, hideTooltip]);
-  return ()
+  return ();
     <>
       <div 
         ref={triggerRef}
@@ -314,7 +314,7 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({)
     onFeedback?.(contentId, helpful);
   }, [onFeedback]);
   if (isCollapsed && collapsible) {
-    return ()
+    return ();
       <div className={`help-panel help-panel-collapsed help-panel-${position} ${className}`}>}
         <Button
           variant="ghost"
@@ -328,7 +328,7 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`help-panel help-panel-${position} ${className}`}>}
       <CardHeader className="help-panel-header">
         <div className="help-panel-header-content">
@@ -589,7 +589,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({)
     return () => clearTimeout(timer);
   }, [isPlaying, isActive, nextStep, currentStepIndex]);
   if (!isActive || !currentStep) return null;
-  return ()
+  return ();
     <>
       {/* Overlay for highlighting */}
       <div ref={overlayRef} className="tour-overlay" style={{ display: 'none' }} />
@@ -724,13 +724,13 @@ export const HelpHub: React.FC<HelpHubProps> = ({)
   const suggestedContent = useMemo(() => {
     return content.filter(item => {)
       const matchesExperience = !context.userExperience || item.difficulty === context.userExperience;
-      const isRelevant = item.tags.some(tag => ;)
+      const isRelevant = item.tags.some(tag => ;);
         tag.toLowerCase().includes(context.currentPage.toLowerCase())
       );
       return matchesExperience && (isRelevant || item.category === 'getting-started');
     }).slice(0, 6);
   }, [content, context]);
-  return ()
+  return ();
     <div className={`help-hub ${className}`}>}
       <Card className="help-hub-card">
         <CardHeader>
@@ -948,7 +948,7 @@ export const QuickHelp: React.FC<QuickHelpProps> = ({)
   className = ''
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  return ()
+  return ();
     <div className={`quick-help ${className}`}>}
       <Button
         variant="primary"

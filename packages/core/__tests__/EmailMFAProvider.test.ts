@@ -28,7 +28,7 @@ class MockEmailService {
     const result = {
       messageId: crypto.randomUUID(),
       status: 'sent' as const,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
     this.sentEmails.push({ to, template, variables, result });
     return result;
@@ -141,7 +141,7 @@ describe('EmailMFAProvider', () => {
     encryption: {,
       algorithm: 'aes-256-gcm' as const,
       keyDerivation: 'pbkdf2' as const,
-      iterations: 100000 as const
+      iterations: 100000 as const,
     },
     templates: {,
       verificationCode: 'Your code is {{code}}',
@@ -628,7 +628,7 @@ describe('EmailMFAProvider', () => {
       const highRiskContext = {
         ipAddress: '192.168.1.1',
         userAgent: 'Suspicious Browser',
-        previousAttempts: 5 // High attempt count
+        previousAttempts: 5 // High attempt count,
         // Missing location and device fingerprint
       };
       mockEmailService.reset();

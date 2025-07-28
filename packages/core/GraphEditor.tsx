@@ -294,7 +294,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
   // Demo encryption state - in a real implementation, this would be managed by a security service
   const [encryptionState, setEncryptionState] = useState<EncryptionState>({)
     status: 'not_encrypted',
-    dataSize: 1024 * 512 // 512KB demo graph
+    dataSize: 1024 * 512 // 512KB demo graph,
   });
   const correctionsEnabled = useCorrectionsEnabled();
   const reactFlowInstance = useReactFlow();
@@ -313,7 +313,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
   } = useUnsavedChanges({)
     hasUnsavedChanges,
     projectName: currentProject?.name,
-    onSave: async () => {
+    onSave: async () => {,
       // Trigger save dialog and wait for result
       return new Promise((resolve) => {
         setSaveDialogOpen(true);
@@ -342,7 +342,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
       // Wrap with smooth animations if performance is good
       if (isPerformanceGood) {
         const InnerNode = shouldUseVariablePorts ? VariablePortNodeRenderer : NodeRenderer;
-        return ()
+        return ();
           <SmoothNodeWrapper
             id={props.id}
             data={props.data}
@@ -364,7 +364,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
       }
       // Fallback to standard rendering for performance
       if (shouldUseVariablePorts) {
-        return ()
+        return ();
           <VariablePortNodeRenderer
             id={props.id}
             data={props.data}
@@ -375,7 +375,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
           />
         );
       }
-      return ()
+      return ();
         <NodeRenderer
           id={props.id}
           data={props.data}
@@ -453,7 +453,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
   };
   // Enhanced drop handler with smooth node creation animation
   const { addNode, updateNode } = useGraphStore();
-  const handleDrop = useCallback(;)
+  const handleDrop = useCallback(;);
     async (event: React.DragEvent) => {
       event.preventDefault();
       // Check if files are being dropped (Story 6.1 - drag and drop .psg files)
@@ -634,7 +634,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
     setEncryptionState(prev => ({)
       ...prev,
       algorithm: algorithm as EncryptionAlgorithm,
-      strength: algorithm.includes('256') || algorithm.includes('4096') ? 'strong' :
+      strength: algorithm.includes('256') || algorithm.includes('4096') ? 'strong' :,
         algorithm.includes('128') || algorithm.includes('2048') ? 'medium' : 'weak'
     }));
     setStatusMessage(`Encryption algorithm changed to ${algorithm}`);}
@@ -854,7 +854,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [handleSaveProject, handleLoadProject]);
-  return ()
+  return ();
     <DemoModeManager
       initialConfig={{
         brandingVisible: true,
@@ -966,7 +966,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
                   type: 'arrow', 
                   color: isPerformanceGood ? '#ff7c00' : '#666',
                   width: isPerformanceGood ? 16 : 12,
-                  height: isPerformanceGood ? 16 : 12
+                  height: isPerformanceGood ? 16 : 12,
                 }
               }}
               // Professional zoom/pan settings with smooth transitions
@@ -1016,7 +1016,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
                 setNodes(prevNodes => )
                   prevNodes.map(node => ({)
                     ...node,
-                    selected: selectedNodes.some(s => s.id === node.id)
+                    selected: selectedNodes.some(s => s.id === node.id),
                   }))
                 );
               }}
@@ -1024,7 +1024,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
                 setEdges(prevEdges => )
                   prevEdges.map(edge => ({)
                     ...edge,
-                    selected: selectedEdges.some(s => s.id === edge.id)
+                    selected: selectedEdges.some(s => s.id === edge.id),
                   }))
                 );
               }}
@@ -1351,7 +1351,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
             }
           }}
           onSaveJson={() => {
-            const blob = new Blob([;)
+            const blob = new Blob([;);
               JSON.stringify({ nodes, edges }, null, 2)
             ], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -1637,7 +1637,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
               height: 100,
               background: 'radial-gradient(circle, rgba(255, 124, 0, 0.3), transparent)',
               borderRadius: 12,
-              animation: 'nodeCreatePulse 0.6s ease-out'
+              animation: 'nodeCreatePulse 0.6s ease-out',
             }}
           />
         )}
@@ -1667,7 +1667,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({)
 
 // Wrapper component with ReactFlowProvider
 export const GraphEditor: React.FC<GraphEditorProps> = (props) => {
-  return ()
+  return ();
     <ReactFlowProvider>
       <GraphEditorInner {...props} />
     </ReactFlowProvider>

@@ -118,7 +118,7 @@ class MemoryFallbackStore {
   set(key: string, data: RateLimitData, ttlMs: number): void {
     this.store.set(key, {)
       data,
-      expiry: Date.now() + ttlMs
+      expiry: Date.now() + ttlMs,
     });
   }
   get(key: string): RateLimitData | null {
@@ -196,7 +196,7 @@ export class RedisRateLimitStore implements RateLimitStore {
           return {
             hits: Number(hits),
             resetTime: Date.now() + Number(ttl),
-            windowStart: Date.now() - (this.config.connectionTimeout! - Number(ttl))
+            windowStart: Date.now() - (this.config.connectionTimeout! - Number(ttl)),
           };
         }
       } else {
@@ -208,7 +208,7 @@ export class RedisRateLimitStore implements RateLimitStore {
         return {
           hits,
           resetTime: Date.now() + (ttl * 1000),
-          windowStart: Date.now() - (this.config.connectionTimeout! - (ttl * 1000))
+          windowStart: Date.now() - (this.config.connectionTimeout! - (ttl * 1000)),
         };
       }
     } catch (error) {
@@ -264,13 +264,12 @@ export class RedisRateLimitStore implements RateLimitStore {
             RedisLuaScripts.INCREMENT_WITH_EXPIRY,
             [fullKey],
             [windowMs.toString(), currentTime.toString()]
-          )
         );
         if (Array.isArray(result) && result.length === 2) {
           const [hits, resetTime] = result;
           const response = {
             hits: Number(hits),
-            resetTime: new Date(Number(resetTime))
+            resetTime: new Date(Number(resetTime)),
           };
           // Update fallback store if available
           if (this.fallbackStore) {
@@ -388,7 +387,7 @@ export class RedisRateLimitStore implements RateLimitStore {
     return {
       redisAvailable: this.isRedisAvailable,
       totalKeys,
-      fallbackKeys: this.fallbackStore?.size() || 0
+      fallbackKeys: this.fallbackStore?.size() || 0,
     };
   }
   /**
@@ -457,7 +456,6 @@ export class RedisRateLimitStore implements RateLimitStore {
           operation(),
           new Promise<never>((_, reject) => 
             setTimeout(() => reject(new Error('Operation timeout')), this.config.connectionTimeout)
-          )
         ]);
       } catch (error) {
         lastError = error as Error;

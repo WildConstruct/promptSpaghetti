@@ -80,7 +80,7 @@ export declare class ProjectTemplateManager {
     private categories;
     private analytics;
     constructor(apiClient: any);
-    createTemplate()
+    createTemplate();
       template: Omit<ProjectTemplate,
       'id' | 'created_at' | 'updated_at' | 'usage_count' | 'rating'>
     ): Promise<ProjectTemplate>;

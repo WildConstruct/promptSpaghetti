@@ -112,7 +112,7 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
     conversionTracker.trackEvent('advanced_feature_used', {)
       feature_name: featureName,
       feature_context: featureContext,
-      user_level: 'director' // Could be dynamic based on user profile
+      user_level: 'director' // Could be dynamic based on user profile,
     });
     trackDirectorAction('advanced-feature-used', {)
       feature: featureName,
@@ -132,7 +132,7 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
       graph_size: projectData.nodeCount + projectData.edgeCount,
       node_count: projectData.nodeCount,
       edge_count: projectData.edgeCount,
-      is_first_save: projectData.isFirstSave || false
+      is_first_save: projectData.isFirstSave || false,
     });
   }, []);
   // Track help system interactions
@@ -166,7 +166,7 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
     trackDirectorAction('export-generated', exportData);
   }, [trackDirectorAction]);
   // Track business events (subscription, payment, etc.)
-  const trackBusinessEvent = useCallback((;)
+  const trackBusinessEvent = useCallback((;);
     eventType: 'trial_started' | 'subscription_upgraded' | 'payment_completed',
     value: number,
     metadata: Record<string, any> = {}
@@ -186,11 +186,11 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
     conversionTracker.trackEvent('template_used', {)
       template_id: templateData.templateId,
       template_category: templateData.templateCategory,
-      is_first_template: templateData.isFirstTemplate || false
+      is_first_template: templateData.isFirstTemplate || false,
     });
   }, []);
   // A/B testing integration
-  const trackExperimentEvent = useCallback((;)
+  const trackExperimentEvent = useCallback((;);
     eventType: ConversionEventType,
     properties: Record<string, any> = {}
   ) => {
@@ -209,9 +209,8 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
       nodeCount: nodes.length,
       edgeCount: edges.length,
       nodeTypes: [...new Set(nodes.map(n => n.data?.nodeType || 'unknown'))],
-      hasAdvancedNodes: nodes.some(n => )
+      hasAdvancedNodes: nodes.some(n => ),
         ['Conditional', 'Sequential', 'Markov', 'WeightedAdvanced'].includes(n.data?.nodeType)
-      )
     };
     // Track graph milestones
     if (graphComplexity.nodeCount === 1) {
@@ -223,9 +222,8 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
     }
     if (graphComplexity.hasAdvancedNodes) {
       trackAdvancedFeature('advanced_nodes', {)
-        advanced_node_types: graphComplexity.nodeTypes.filter(t => )
+        advanced_node_types: graphComplexity.nodeTypes.filter(t => ),
           ['Conditional', 'Sequential', 'Markov', 'WeightedAdvanced'].includes(t)
-        )
       });
     }
   }, [trackDirectorAction, trackAdvancedFeature]);
@@ -240,7 +238,7 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
         conversionTracker.trackEngagement('feature_usage', {)
           interaction_type: 'button_click',
           button_text: buttonText,
-          element_id: target.id || undefined
+          element_id: target.id || undefined,
         });
       }
     };

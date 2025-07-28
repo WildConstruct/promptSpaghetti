@@ -203,7 +203,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
         dataId: data.id,
         result: enhancedResult,
         context,
-        processingTime: Date.now() - startTime
+        processingTime: Date.now() - startTime,
       });
       return enhancedResult;
     } catch (error) {
@@ -225,7 +225,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
     const results = this.classifyStreamInternal(dataStream, context);
     this.emit('streamClassificationStarted', {)
       source: context.source,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     return results;
   }
@@ -245,20 +245,20 @@ export class AdvancedClassificationEngine extends EventEmitter {
         if (processedCount % 100 === 0) {
           this.emit('streamProgress', {)
             processed: processedCount,
-            timestamp: new Date()
+            timestamp: new Date(),
           });
         }
       } catch (error) {
         this.emit('streamElementError', {)
           dataId: dataElement.id,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
       }
     }
     this.emit('streamClassificationComplete', {)
       totalProcessed: processedCount,
       results: batchResults,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   /**
@@ -345,13 +345,13 @@ export class AdvancedClassificationEngine extends EventEmitter {
         workflowId,
         result: 'success',
         actionsExecuted: workflow.actions.length,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     } catch (error) {
       this.emit('workflowExecutionError', {)
         workflowId,
         error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -385,7 +385,6 @@ export class AdvancedClassificationEngine extends EventEmitter {
       timestamp: Date;
     }>;
     recommendations: string[];
-  } {
     // This would analyze classifications within the date range
     // For now, return a mock report structure
     return {
@@ -440,7 +439,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
       factors.push({)
         factor: 'user_clearance_mismatch',
         impact: 0.8,
-        description: 'User has low clearance but data is RESTRICTED'
+        description: 'User has low clearance but data is RESTRICTED',
       });
     }
     // Analyze environment context
@@ -449,7 +448,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
       factors.push({)
         factor: 'network_exposure_risk',
         impact: 0.9,
-        description: 'Sensitive data on public network'
+        description: 'Sensitive data on public network',
       });
     }
     // Analyze data flow
@@ -459,7 +458,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
       factors.push({)
         factor: 'unencrypted_sensitive_data',
         impact: 0.95,
-        description: 'Sensitive data transmitted without encryption'
+        description: 'Sensitive data transmitted without encryption',
       });
     }
     // Cross-border data transfer
@@ -468,7 +467,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
       factors.push({)
         factor: 'cross_border_pii',
         impact: 0.7,
-        description: 'PII data crossing international boundaries'
+        description: 'PII data crossing international boundaries',
       });
     }
     return factors;
@@ -694,7 +693,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
       subject: `Classification Alert: ${result.level} data detected`,}
       message: `Data with classification ${result.level} (risk score: ${result.riskScore}) detected in ${context.source}`,}
       priority: action.parameters.priority || 'medium',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   private async executeEncryptAction()
@@ -706,7 +705,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
       dataId: context.source,
       encryptionType: action.parameters.type || 'aes-256-gcm',
       keyRotation: action.parameters.keyRotation || '90-days',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   private async executeQuarantineAction()
@@ -718,7 +717,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
       dataId: context.source,
       quarantineLocation: action.parameters.location || 'secure-vault',
       reason: `High risk classification: ${result.level}`,}
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   private async executeAuditLogAction()
@@ -746,7 +745,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
       classification: result.level,
       riskScore: result.riskScore,
       assignee: action.parameters.assignee || 'security-manager',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
   private async executeAutoRemediateAction()
@@ -761,7 +760,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
           action: remediation.action,
           description: remediation.description,
           dataId: context.source,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     }
@@ -793,7 +792,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
       accuracy,
       precision: accuracy * 0.95,
       recall: accuracy * 0.9,
-      f1Score: accuracy * 0.925
+      f1Score: accuracy * 0.925,
     };
   }
   private extractModelFeatures()
@@ -913,7 +912,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
       averageConfidence: 0,
       topRiskPatterns: [],
       temporalTrends: [],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
   }
   private initializeDefaultWorkflows(): void {

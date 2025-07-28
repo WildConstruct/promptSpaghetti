@@ -1,5 +1,4 @@
 // Epic 17.1.5 - Recurrence Editor Component
-
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -32,22 +31,19 @@ export interface RecurrenceData {
   maxOccurrences?: number;
   endDate?: Date;
 }
-
 interface RecurrenceEditorProps {
   value?: RecurrenceData;
   onChange: (recurrence: RecurrenceData | undefined) => void;
   error?: string;
 }
-
-const RECURRENCE_TYPES = [
+const RECURRENCE_TYPES = [;
   { value: 'daily', label: 'Daily', description: 'Repeat every day(s)' },
   { value: 'weekly', label: 'Weekly', description: 'Repeat every week(s)' },
   { value: 'monthly', label: 'Monthly', description: 'Repeat every month(s)' },
   { value: 'yearly', label: 'Yearly', description: 'Repeat every year(s)' },
   { value: 'custom', label: 'Custom', description: 'Use cron expression' }
 ];
-
-const DAYS_OF_WEEK = [
+const DAYS_OF_WEEK = [;
   { value: 0, label: 'Sun', fullLabel: 'Sunday' },
   { value: 1, label: 'Mon', fullLabel: 'Monday' },
   { value: 2, label: 'Tue', fullLabel: 'Tuesday' },
@@ -56,8 +52,7 @@ const DAYS_OF_WEEK = [
   { value: 5, label: 'Fri', fullLabel: 'Friday' },
   { value: 6, label: 'Sat', fullLabel: 'Saturday' }
 ];
-
-const MONTHS_OF_YEAR = [
+const MONTHS_OF_YEAR = [;
   { value: 1, label: 'Jan', fullLabel: 'January' },
   { value: 2, label: 'Feb', fullLabel: 'February' },
   { value: 3, label: 'Mar', fullLabel: 'March' },
@@ -73,28 +68,24 @@ const MONTHS_OF_YEAR = [
 ];
 
 export 
-  const [endType, setEndType] = useState<'never' | 'after' | 'on'>(
+  const [endType, setEndType] = useState<'never' | 'after' | 'on'>()
     value?.maxOccurrences ? 'after' : value?.endDate ? 'on' : 'never'
   );
-
   useEffect(() => {
     if (value) {
       setRecurrenceData(value);
-      setEndType(
+      setEndType()
         value.maxOccurrences ? 'after' : value.endDate ? 'on' : 'never'
       );
     }
   }, [value]);
-
   const handleChange = (updates: Partial<RecurrenceData>) => {
     const newData = { ...recurrenceData, ...updates };
     setRecurrenceData(newData);
     onChange(newData);
   };
-
   const handleEndTypeChange = (type: 'never' | 'after' | 'on') => {
     setEndType(type);
-    
     const updates: Partial<RecurrenceData> = {};
     if (type === 'never') {
       updates.maxOccurrences = undefined;
@@ -110,96 +101,82 @@ export
         updates.endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
       }
     }
-    
     handleChange(updates);
   };
-
   const handleDayOfWeekToggle = (day: number) => {
     const current = recurrenceData.daysOfWeek || [];
-    const updated = current.includes(day)
+    const updated = current.includes(day);
       ? current.filter(d => d !== day)
       : [...current, day].sort();
-    
     handleChange({ daysOfWeek: updated });
   };
-
   const handleDayOfMonthToggle = (day: number) => {
     const current = recurrenceData.daysOfMonth || [];
-    const updated = current.includes(day)
+    const updated = current.includes(day);
       ? current.filter(d => d !== day)
       : [...current, day].sort();
-    
     handleChange({ daysOfMonth: updated });
   };
-
   const handleMonthToggle = (month: number) => {
     const current = recurrenceData.monthsOfYear || [];
-    const updated = current.includes(month)
+    const updated = current.includes(month);
       ? current.filter(m => m !== month)
       : [...current, month].sort();
-    
     handleChange({ monthsOfYear: updated });
   };
-
   // Generate recurrence description
   const getRecurrenceDescription = (): string => {
     const { type, interval, daysOfWeek, daysOfMonth, monthsOfYear } = recurrenceData;
-    
     let description = '';
-    
     switch (type) {
     case 'daily':
-      description = interval === 1 ? 'Every day' : `Every ${interval} days`;
+      description = interval === 1 ? 'Every day' : `Every ${interval} days`;}
       break;
     case 'weekly':
       if (daysOfWeek && daysOfWeek.length > 0) {
         const dayNames = daysOfWeek.map(d => DAYS_OF_WEEK[d].label).join(', ');
         description = interval === 1 
-          ? `Every week on ${dayNames}` 
-          : `Every ${interval} weeks on ${dayNames}`;
+          ? `Every week on ${dayNames}` }
+          : `Every ${interval} weeks on ${dayNames}`;}
       } else {
-        description = interval === 1 ? 'Every week' : `Every ${interval} weeks`;
+        description = interval === 1 ? 'Every week' : `Every ${interval} weeks`;}
       }
       break;
     case 'monthly':
       if (daysOfMonth && daysOfMonth.length > 0) {
         const dayList = daysOfMonth.join(', ');
         description = interval === 1 
-          ? `Every month on day ${dayList}` 
-          : `Every ${interval} months on day ${dayList}`;
+          ? `Every month on day ${dayList}` }
+          : `Every ${interval} months on day ${dayList}`;}
       } else {
-        description = interval === 1 ? 'Every month' : `Every ${interval} months`;
+        description = interval === 1 ? 'Every month' : `Every ${interval} months`;}
       }
       break;
     case 'yearly':
       if (monthsOfYear && monthsOfYear.length > 0) {
         const monthNames = monthsOfYear.map(m => MONTHS_OF_YEAR[m - 1].label).join(', ');
         description = interval === 1 
-          ? `Every year in ${monthNames}` 
-          : `Every ${interval} years in ${monthNames}`;
+          ? `Every year in ${monthNames}` }
+          : `Every ${interval} years in ${monthNames}`;}
       } else {
-        description = interval === 1 ? 'Every year' : `Every ${interval} years`;
+        description = interval === 1 ? 'Every year' : `Every ${interval} years`;}
       }
       break;
     case 'custom':
       description = recurrenceData.cronExpression || 'Custom schedule';
       break;
     }
-
     // Add end condition
     if (endType === 'after' && recurrenceData.maxOccurrences) {
-      description += `, ${recurrenceData.maxOccurrences} times total`;
+      description += `, ${recurrenceData.maxOccurrences} times total`;}
     } else if (endType === 'on' && recurrenceData.endDate) {
-      description += `, until ${recurrenceData.endDate.toLocaleDateString()}`;
+      description += `, until ${recurrenceData.endDate.toLocaleDateString()}`;}
     }
-
     return description;
   };
-
-  return (
+  return ()
     <Box>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      
       <Grid container spacing={3}>
         {/* Recurrence Type */}
         <Grid item xs={12}>
@@ -210,7 +187,7 @@ export
               onChange={(e) => handleChange({ type: e.target.value as RecurrenceData['type'] })}
               label="Recurrence Type"
             >
-              {RECURRENCE_TYPES.map(type => (
+              {RECURRENCE_TYPES.map(type => ()
                 <MenuItem key={type.value} value={type.value}>
                   <Box>
                     <Typography variant="body1">{type.label}</Typography>
@@ -223,9 +200,8 @@ export
             </Select>
           </FormControl>
         </Grid>
-
         {/* Interval */}
-        {recurrenceData.type !== 'custom' && (
+        {recurrenceData.type !== 'custom' && ()
           <Grid item xs={6}>
             <TextField
               fullWidth
@@ -237,15 +213,14 @@ export
             />
           </Grid>
         )}
-
         {/* Days of Week (for weekly) */}
-        {recurrenceData.type === 'weekly' && (
+        {recurrenceData.type === 'weekly' && ()
           <Grid item xs={12}>
             <Typography variant="subtitle2" gutterBottom>
               Days of Week
             </Typography>
             <Box display="flex" gap={1} flexWrap="wrap">
-              {DAYS_OF_WEEK.map(day => (
+              {DAYS_OF_WEEK.map(day => ()
                 <ToggleButton
                   key={day.value}
                   value={day.value}
@@ -258,22 +233,21 @@ export
                 </ToggleButton>
               ))}
             </Box>
-            {recurrenceData.daysOfWeek && recurrenceData.daysOfWeek.length === 0 && (
+            {recurrenceData.daysOfWeek && recurrenceData.daysOfWeek.length === 0 && ()
               <Typography variant="caption" color="text.secondary">
                 No days selected (will use the day of the start time)
               </Typography>
             )}
           </Grid>
         )}
-
         {/* Days of Month (for monthly) */}
-        {recurrenceData.type === 'monthly' && (
+        {recurrenceData.type === 'monthly' && ()
           <Grid item xs={12}>
             <Typography variant="subtitle2" gutterBottom>
               Days of Month
             </Typography>
             <Box display="flex" gap={0.5} flexWrap="wrap" maxWidth="100%">
-              {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
+              {Array.from({ length: 31 }, (_, i) => i + 1).map(day => ()
                 <ToggleButton
                   key={day}
                   value={day}
@@ -291,15 +265,14 @@ export
             </Typography>
           </Grid>
         )}
-
         {/* Months of Year (for yearly) */}
-        {recurrenceData.type === 'yearly' && (
+        {recurrenceData.type === 'yearly' && ()
           <Grid item xs={12}>
             <Typography variant="subtitle2" gutterBottom>
               Months
             </Typography>
             <Box display="flex" gap={1} flexWrap="wrap">
-              {MONTHS_OF_YEAR.map(month => (
+              {MONTHS_OF_YEAR.map(month => ()
                 <ToggleButton
                   key={month.value}
                   value={month.value}
@@ -317,9 +290,8 @@ export
             </Typography>
           </Grid>
         )}
-
         {/* Cron Expression (for custom) */}
-        {recurrenceData.type === 'custom' && (
+        {recurrenceData.type === 'custom' && ()
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -339,11 +311,9 @@ export
             </Alert>
           </Grid>
         )}
-
         <Grid item xs={12}>
           <Divider />
         </Grid>
-
         {/* End Condition */}
         <Grid item xs={12}>
           <Typography variant="subtitle2" gutterBottom>
@@ -360,8 +330,7 @@ export
             <ToggleButton value="on">On Date</ToggleButton>
           </ToggleButtonGroup>
         </Grid>
-
-        {endType === 'after' && (
+        {endType === 'after' && ()
           <Grid item xs={6}>
             <TextField
               fullWidth
@@ -374,8 +343,7 @@ export
             />
           </Grid>
         )}
-
-        {endType === 'on' && (
+        {endType === 'on' && ()
           <Grid item xs={6}>
             <DatePicker
               label="End Date"
@@ -387,7 +355,6 @@ export
             />
           </Grid>
         )}
-
         {/* Preview */}
         <Grid item xs={12}>
           <Box 

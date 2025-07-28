@@ -95,7 +95,7 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({)
     onClose();
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
@@ -147,7 +147,7 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({)
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {lockTypes.map((type) => {
                 const Icon = type.icon;
-                return ()
+                return ();
                   <div key={type.value}>
                     <label className="flex items-start space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                       <input

@@ -106,10 +106,9 @@ export class CollaborativeSync extends EventEmitter {
   private pendingOperations: Map<string, GraphOperation> = new Map();
   private operationQueue: GraphOperation[] = [];
   private isProcessingQueue = false;
-  constructor()
+  constructor();
     private webSocketService: WebSocketService,
     private config: MutationEngineConfig
-  ) {
     super();
     this.conflictResolver = new ConflictResolver(config.conflictResolution);
     this.setupWebSocketHandlers();
@@ -161,7 +160,7 @@ export class CollaborativeSync extends EventEmitter {
         operation,
         timestamp: new Date(),
         userId: this.currentUser?.userId || 'anonymous',
-        sessionId: operation.sessionId || this.generateSessionId()
+        sessionId: operation.sessionId || this.generateSessionId(),
       };
       await this.webSocketService.broadcast(message);
       // Track pending operation for conflict detection
@@ -182,7 +181,7 @@ export class CollaborativeSync extends EventEmitter {
     this.currentUser = {
       ...this.currentUser,
       ...presence,
-      lastActivity: new Date()
+      lastActivity: new Date(),
     };
     await this.broadcastPresence();
   }
@@ -273,7 +272,7 @@ export class CollaborativeSync extends EventEmitter {
         });
         if (this.config.conflictResolution.autoResolve && conflictResult.canAutoResolve) {
           // Resolve conflicts automatically
-          const resolvedOperation = await this.conflictResolver.resolve(;)
+          const resolvedOperation = await this.conflictResolver.resolve(;);
             message.operation,
             conflictResult
           );
@@ -361,7 +360,7 @@ export class CollaborativeSync extends EventEmitter {
         user: {,
           ...this.currentUser,
           isActive,
-          lastActivity: new Date()
+          lastActivity: new Date(),
         }
       }
     };

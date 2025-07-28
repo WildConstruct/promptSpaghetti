@@ -5,13 +5,12 @@ import { ReportCard } from './ReportCard';
 import { ExportManager } from './ExportManager';
 import { analyticsService } from '../../../services/analyticsService';
 import './ReportsManager.css';
-
 interface ReportsManagerProps {
   creatorId: string;
   className?: string;
 }
 
-export const ReportsManager: React.FC<ReportsManagerProps> = ({
+export const ReportsManager: React.FC<ReportsManagerProps> = ({)
   creatorId,
   className = ''
 }) => {
@@ -25,13 +24,11 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'name' | 'created_at' | 'updated_at'>('updated_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-
   // Load reports
   const loadReports = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      
       const reportsData = await analyticsService.getCustomReports(creatorId);
       setReports(reportsData);
     } catch (err) {
@@ -41,34 +38,29 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
       setLoading(false);
     }
   }, [creatorId]);
-
   // Load reports on mount
   useEffect(() => {
     loadReports();
   }, [loadReports]);
-
   // Handle report save
   const handleReportSave = (report: CustomReport) => {
     if (selectedReport) {
       // Update existing report
-      setReports(prev => 
+      setReports(prev => )
         prev.map(r => r.id === report.id ? report : r)
       );
     } else {
       // Add new report
       setReports(prev => [report, ...prev]);
     }
-    
     setShowBuilder(false);
     setSelectedReport(null);
   };
-
   // Handle report delete
   const handleReportDelete = async (reportId: string) => {
     if (!confirm('Are you sure you want to delete this report?')) {
       return;
     }
-
     try {
       await analyticsService.deleteCustomReport(reportId);
       setReports(prev => prev.filter(r => r.id !== reportId));
@@ -77,20 +69,18 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
       alert('Failed to delete report. Please try again.');
     }
   };
-
   // Handle report generation
   const handleGenerateReport = async (reportId: string) => {
     try {
       const reportData = await analyticsService.generateReport(reportId);
-      
       // Create download link
       const blob = new Blob([JSON.stringify(reportData, null, 2)], {
-        type: 'application/json'
+        type: 'application/json',
       });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `report_${reportId}_${new Date().toISOString().split('T')[0]}.json`;
+      link.download = `report_${reportId}_${new Date().toISOString().split('T')[0]}.json`;}
       link.click();
       URL.revokeObjectURL(url);
     } catch (err) {
@@ -98,16 +88,13 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
       alert('Failed to generate report. Please try again.');
     }
   };
-
   // Filter and sort reports
-  const filteredAndSortedReports = reports
-    .filter(report =>
+  const filteredAndSortedReports = reports;
+    .filter(report =>)
       report.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (report.description && report.description.toLowerCase().includes(searchQuery.toLowerCase()))
-    )
     .sort((a, b) => {
       let aValue: Error, bValue: Error;
-
       switch (sortBy) {
       case 'name':
         aValue = a.name.toLowerCase();
@@ -124,16 +111,14 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
       default:
         return 0;
       }
-
       if (sortOrder === 'asc') {
         return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
       } else {
         return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
       }
     });
-
   if (showBuilder) {
-    return (
+    return ()
       <ReportBuilder
         creatorId={creatorId}
         existingReport={selectedReport || undefined}
@@ -146,9 +131,8 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
       />
     );
   }
-
   if (showExportManager) {
-    return (
+    return ()
       <ExportManager
         creatorId={creatorId}
         onClose={() => setShowExportManager(false)}
@@ -156,16 +140,14 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
       />
     );
   }
-
-  return (
-    <div className={`reports-manager ${className}`}>
+  return ()
+    <div className={`reports-manager ${className}`}>}
       <div className="reports-header">
         <div className="header-content">
           <div className="title-section">
             <h2>Custom Reports</h2>
             <p>Create, manage, and export your analytics reports</p>
           </div>
-          
           <div className="header-actions">
             <button
               className="export-button"
@@ -174,7 +156,6 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
               <span className="button-icon">📊</span>
               Export Data
             </button>
-            
             <button
               className="create-button"
               onClick={() => setShowBuilder(true)}
@@ -184,7 +165,6 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
             </button>
           </div>
         </div>
-
         {/* Controls */}
         <div className="reports-controls">
           <div className="search-section">
@@ -199,7 +179,6 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
               />
             </div>
           </div>
-
           <div className="filter-section">
             <select
               value={sortBy}
@@ -210,7 +189,6 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
               <option value="created_at">Sort by Created</option>
               <option value="name">Sort by Name</option>
             </select>
-
             <button
               className={`sort-order-button ${sortOrder}`}
               onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
@@ -218,7 +196,6 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
             >
               {sortOrder === 'asc' ? '↑' : '↓'}
             </button>
-
             <div className="view-mode-buttons">
               <button
                 className={`view-mode-button ${viewMode === 'grid' ? 'active' : ''}`}
@@ -238,14 +215,13 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
           </div>
         </div>
       </div>
-
       <div className="reports-content">
-        {loading ? (
+        {loading ? ()
           <div className="loading-state">
             <div className="loading-spinner"></div>
             <p>Loading reports...</p>
           </div>
-        ) : error ? (
+        ) : error ? ()
           <div className="error-state">
             <div className="error-icon">⚠️</div>
             <h3>Failed to Load Reports</h3>
@@ -254,9 +230,9 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
               Try Again
             </button>
           </div>
-        ) : filteredAndSortedReports.length === 0 ? (
+        ) : filteredAndSortedReports.length === 0 ? ()
           <div className="empty-state">
-            {searchQuery ? (
+            {searchQuery ? ()
               <>
                 <div className="empty-icon">🔍</div>
                 <h3>No Reports Found</h3>
@@ -268,7 +244,7 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
                   Clear Search
                 </button>
               </>
-            ) : (
+            ) : ()
               <>
                 <div className="empty-icon">📊</div>
                 <h3>No Reports Yet</h3>
@@ -282,9 +258,9 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
               </>
             )}
           </div>
-        ) : (
-          <div className={`reports-grid ${viewMode}`}>
-            {filteredAndSortedReports.map(report => (
+        ) : ()
+          <div className={`reports-grid ${viewMode}`}>}
+            {filteredAndSortedReports.map(report => ()
               <ReportCard
                 key={report.id}
                 report={report}
@@ -300,23 +276,20 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
           </div>
         )}
       </div>
-
       {/* Reports Summary */}
-      {!loading && !error && reports.length > 0 && (
+      {!loading && !error && reports.length > 0 && ()
         <div className="reports-summary">
           <div className="summary-stats">
             <div className="stat-item">
               <span className="stat-value">{reports.length}</span>
               <span className="stat-label">Total Reports</span>
             </div>
-            
             <div className="stat-item">
               <span className="stat-value">
                 {reports.filter(r => r.is_scheduled).length}
               </span>
               <span className="stat-label">Scheduled</span>
             </div>
-            
             <div className="stat-item">
               <span className="stat-value">
                 {filteredAndSortedReports.length}

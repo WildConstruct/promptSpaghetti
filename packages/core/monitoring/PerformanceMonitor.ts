@@ -153,7 +153,7 @@ export class PerformanceMonitor extends EventEmitter {
   /**
    * End monitoring a node execution
    */
-  endExecution()
+  endExecution();
     trackingId: string, 
     context: AdvancedExecutionContext, 
     result?: any, 
@@ -179,13 +179,13 @@ export class PerformanceMonitor extends EventEmitter {
         before: execution.initialMemory,
         after: currentMemory,
         peak: Math.max(execution.initialMemory, currentMemory),
-        delta: currentMemory - execution.initialMemory
+        delta: currentMemory - execution.initialMemory,
       },
       contextSize: this.analyzeContextSize(context),
       cacheHit: this.determineCacheHit(context, result),
       errors: error ? [error.message] : [],
       warnings: [],
-      customMetrics: new Map()
+      customMetrics: new Map(),
     };
     // Analyze performance and add warnings
     this.analyzePerformance(metrics);
@@ -247,7 +247,6 @@ export class PerformanceMonitor extends EventEmitter {
     activeAlerts: number;
     topPerformingTypes: string[];
     underperformingTypes: string[];
-    } {
     const allMetrics = Array.from(this.metrics.values());
     const totalExecutions = allMetrics.length;
     const activeExecutions = this.activeExecutions.size;
@@ -266,7 +265,7 @@ export class PerformanceMonitor extends EventEmitter {
     }
     const totalDuration = allMetrics.reduce((sum, m) => sum + m.duration, 0);
     const averageExecutionTime = totalDuration / totalExecutions;
-    const slowExecutions = allMetrics.filter(m => ;)
+    const slowExecutions = allMetrics.filter(m => ;);
       m.duration > this.config.slowExecutionThreshold
     ).length;
     const errorCount = allMetrics.filter(m => m.errors.length > 0).length;
@@ -287,7 +286,7 @@ export class PerformanceMonitor extends EventEmitter {
     // Calculate averages and sort
     const typeAverages = Array.from(typePerformance.entries()).map(([type, total]) => ({)
       type,
-      avgDuration: total / (typeCounts.get(type) || 1)
+      avgDuration: total / (typeCounts.get(type) || 1),
     }));
     typeAverages.sort((a, b) => a.avgDuration - b.avgDuration);
     return {
@@ -299,7 +298,7 @@ export class PerformanceMonitor extends EventEmitter {
       memoryPressure,
       activeAlerts: this.getAlerts(false).length,
       topPerformingTypes: typeAverages.slice(0, 3).map(t => t.type),
-      underperformingTypes: typeAverages.slice(-3).map(t => t.type)
+      underperformingTypes: typeAverages.slice(-3).map(t => t.type),
     };
   }
   /**
@@ -494,7 +493,7 @@ export class PerformanceMonitor extends EventEmitter {
     const averageMemoryDelta = memoryDeltas.reduce((sum, d) => sum + d, 0) / memoryDeltas.length;
     const peakMemoryUsage = Math.max(...metrics.map(m => m.memoryUsage.peak));
     // Context size calculations
-    const contextSizes = metrics.map(m => ;)
+    const contextSizes = metrics.map(m => ;);
       m.contextSize.variableCount + m.contextSize.stateCount + m.contextSize.cacheSize
     );
     const averageContextSize = contextSizes.reduce((sum, s) => sum + s, 0) / contextSizes.length;

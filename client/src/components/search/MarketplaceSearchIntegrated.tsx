@@ -5,12 +5,10 @@
  * Provides a complete search interface for the template marketplace with
  * autocomplete, filtering, sorting, and analytics tracking.
  */
-
 import React, { useCallback, useState } from 'react';
 import { UnifiedSearchSystem } from './UnifiedSearchSystem';
 import { SearchQuery, SearchResult } from './SearchContext';
 import { searchApiService, Template } from '../../services/searchApiService';
-
 interface MarketplaceSearchProps {
   // UI customization
   placeholder?: string;
@@ -19,28 +17,24 @@ interface MarketplaceSearchProps {
   showPagination?: boolean;
   itemsPerPage?: number;
   defaultViewMode?: 'list' | 'grid' | 'table';
-  
   // Event handlers
   onTemplateClick?: (template: Template, index: number) => void;
   onTemplateDoubleClick?: (template: Template, index: number) => void;
   onSearchComplete?: (results: SearchResult<Template>) => void;
-  
   // Custom renderers
   renderTemplate?: (template: Template, index: number) => React.ReactNode;
   renderEmptyState?: () => React.ReactNode;
-  
   className?: string;
 }
 
 // Default template renderer
-const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {
+const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {)
   template: Template;
   index: number;
   onClick?: (template: Template, index: number) => void;
   onDoubleClick?: (template: Template, index: number) => void;
 }) => {
   const [searchQuery] = useState('');
-
   const handleClick = () => {
     onClick?.(template, index);
     // Track click for analytics
@@ -48,12 +42,10 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {
       searchApiService.trackClick(template.id, searchQuery, index + 1);
     }
   };
-
   const handleDoubleClick = () => {
     onDoubleClick?.(template, index);
   };
-
-  return (
+  return ()
     <div 
       style={{
         border: '1px solid #e2e8f0',
@@ -84,41 +76,40 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {
             fontSize: '18px', 
             fontWeight: '600', 
             color: '#1a202c',
-            lineHeight: '1.3'
+            lineHeight: '1.3',
           }}>
             {template.title}
           </h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#718096' }}>
             <span>by {template.owner_name}</span>
-            {template.owner_verified && (
+            {template.owner_verified && ()
               <span style={{ color: '#38a169', fontSize: '12px' }}>✓ Verified</span>
             )}
-            {template.is_ai_generated && (
+            {template.is_ai_generated && ()
               <span style={{ 
                 backgroundColor: '#e6fffa', 
                 color: '#00a693', 
                 padding: '2px 6px', 
                 borderRadius: '4px', 
                 fontSize: '11px',
-                fontWeight: '500'
+                fontWeight: '500',
               }}>
                 AI Generated
               </span>
             )}
           </div>
         </div>
-        
         <div style={{ textAlign: 'right' }}>
-          {template.price_cents > 0 ? (
+          {template.price_cents > 0 ? ()
             <div style={{ fontSize: '16px', fontWeight: '600', color: '#1a202c' }}>
               ${(template.price_cents / 100).toFixed(2)}
             </div>
-          ) : (
+          ) : ()
             <div style={{ fontSize: '16px', fontWeight: '600', color: '#38a169' }}>
               Free
             </div>
           )}
-          {template.featured_at && (
+          {template.featured_at && ()
             <div style={{ 
               backgroundColor: '#fef5e7', 
               color: '#d69e2e', 
@@ -126,14 +117,13 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {
               borderRadius: '4px', 
               fontSize: '11px',
               fontWeight: '500',
-              marginTop: '4px'
+              marginTop: '4px',
             }}>
               Featured
             </div>
           )}
         </div>
       </div>
-
       {/* Description */}
       <p style={{
         margin: '0 0 12px 0',
@@ -143,15 +133,14 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {
         display: '-webkit-box',
         WebkitLineClamp: 2,
         WebkitBoxOrient: 'vertical',
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}>
         {template.description}
       </p>
-
       {/* Tags */}
-      {template.tags?.length && (
+      {template.tags?.length && ()
         <div style={{ marginBottom: '12px' }}>
-          {template.tags.slice(0, 5).map((tag, idx) => (
+          {template.tags.slice(0, 5).map((tag, idx) => ()
             <span
               key={idx}
               style={{
@@ -162,20 +151,19 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {
                 borderRadius: '12px',
                 fontSize: '12px',
                 marginRight: '6px',
-                marginBottom: '4px'
+                marginBottom: '4px',
               }}
             >
               {tag}
             </span>
           ))}
-          {(template.tags?.length ?? 0) > 5 && (
+          {(template.tags?.length ?? 0) > 5 && ()
             <span style={{ fontSize: '12px', color: '#a0aec0' }}>
               +{(template.tags?.length ?? 0) - 5} more
             </span>
           )}
         </div>
       )}
-
       {/* Footer */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '13px', color: '#718096' }}>
@@ -185,26 +173,23 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {
             <span>{template.avg_rating.toFixed(1)}</span>
             <span>({template.total_reviews})</span>
           </div>
-          
           {/* Purchase count */}
           <div>
             {template.total_purchases} {template.total_purchases === 1 ? 'purchase' : 'purchases'}
           </div>
-          
           {/* Categories */}
-          {template.categories?.length && (
+          {template.categories?.length && ()
             <div>
               {template.categories[0]}
               {(template.categories?.length ?? 0) > 1 && ` +${(template.categories?.length ?? 0) - 1}`}
             </div>
           )}
         </div>
-
         {/* Claude compatibility */}
-        {template.claude_compat?.length && (
+        {template.claude_compat?.length && ()
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
             <span style={{ fontSize: '12px', color: '#718096' }}>Claude:</span>
-            {template.claude_compat.slice(0, 2).map((model, idx) => (
+            {template.claude_compat.slice(0, 2).map((model, idx) => ()
               <span
                 key={idx}
                 style={{
@@ -213,13 +198,13 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {
                   padding: '2px 6px',
                   borderRadius: '4px',
                   fontSize: '11px',
-                  fontWeight: '500'
+                  fontWeight: '500',
                 }}
               >
                 {model}
               </span>
             ))}
-            {(template.claude_compat?.length ?? 0) > 2 && (
+            {(template.claude_compat?.length ?? 0) > 2 && ()
               <span style={{ fontSize: '11px', color: '#a0aec0' }}>
                 +{(template.claude_compat?.length ?? 0) - 2}
               </span>
@@ -232,11 +217,11 @@ const DefaultTemplateRenderer = ({ template, index, onClick, onDoubleClick }: {
 };
 
 // Default empty state renderer
-const DefaultEmptyStateRenderer = () => (
+const DefaultEmptyStateRenderer = () => (;)
   <div style={{
     textAlign: 'center',
     padding: '48px 24px',
-    color: '#718096'
+    color: '#718096',
   }}>
     <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
     <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', color: '#4a5568' }}>
@@ -248,7 +233,7 @@ const DefaultEmptyStateRenderer = () => (
   </div>
 );
 
-export const MarketplaceSearchIntegrated: React.FC<MarketplaceSearchProps> = ({
+export const MarketplaceSearchIntegrated: React.FC<MarketplaceSearchProps> = ({)
   placeholder = "Search templates...",
   showFilterPanel = true,
   showViewModeToggle = true,
@@ -268,12 +253,11 @@ export const MarketplaceSearchIntegrated: React.FC<MarketplaceSearchProps> = ({
     return {
       items: result.items,
       totalCount: result.totalCount,
-      facets: result.facets
+      facets: result.facets,
     };
   }, [itemsPerPage]);
-
   // Available fields for filtering
-  const availableFields = [
+  const availableFields = [;
     { key: 'categories', label: 'Categories', type: 'select' as const, options: [] },
     { key: 'tags', label: 'Tags', type: 'select' as const, options: [] },
     { key: 'complexity', label: 'Complexity', type: 'select' as const, options: ['beginner', 'intermediate', 'advanced'] },
@@ -283,14 +267,12 @@ export const MarketplaceSearchIntegrated: React.FC<MarketplaceSearchProps> = ({
     { key: 'featured', label: 'Featured Templates Only', type: 'boolean' as const },
     { key: 'date', label: 'Date Range', type: 'date' as const }
   ];
-
   // Custom template renderer
   const templateRenderer = useCallback((template: Template, index: number) => {
     if (renderTemplate) {
       return renderTemplate(template, index);
     }
-    
-    return (
+    return ()
       <DefaultTemplateRenderer
         template={template}
         index={index}
@@ -299,18 +281,15 @@ export const MarketplaceSearchIntegrated: React.FC<MarketplaceSearchProps> = ({
       />
     );
   }, [renderTemplate, onTemplateClick, onTemplateDoubleClick]);
-
   // Custom empty state renderer
   const emptyStateRenderer = useCallback(() => {
     if (renderEmptyState) {
       return renderEmptyState();
     }
-    
     return <DefaultEmptyStateRenderer />;
   }, [renderEmptyState]);
-
-  return (
-    <div className={`marketplace-search-integrated ${className}`}>
+  return ()
+    <div className={`marketplace-search-integrated ${className}`}>}
       <UnifiedSearchSystem<Template>
         searchFunction={searchFunction}
         availableFields={availableFields}

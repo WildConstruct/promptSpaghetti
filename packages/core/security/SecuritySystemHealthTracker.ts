@@ -489,7 +489,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
         health_impact: {,
           weight: check.weight,
           contribution_to_health_score: success ? check.weight * 100 : 0,
-          severity: success ? 'info' : (check.weight > 0.5 ? 'critical' : 'warning')
+          severity: success ? 'info' : (check.weight > 0.5 ? 'critical' : 'warning'),
         }
       };
     } catch (error) {
@@ -507,7 +507,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
         health_impact: {,
           weight: check.weight,
           contribution_to_health_score: 0,
-          severity: check.weight > 0.5 ? 'critical' : 'warning'
+          severity: check.weight > 0.5 ? 'critical' : 'warning',
         }
       };
     }
@@ -640,7 +640,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
   }
   private async calculateAvailability(systemId: string, startTime: number, endTime: number): Promise<number> {
     const results = this.healthCheckResults.get(systemId) || [];
-    const relevantResults = results.filter(r => ;)
+    const relevantResults = results.filter(r => ;);
       r.executed_at >= startTime && r.executed_at <= endTime
     );
     if (relevantResults.length === 0) return 0;
@@ -814,7 +814,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
       throw new Error(`System ${systemId} not found`);}
     }
     const results = this.healthCheckResults.get(systemId) || [];
-    const relevantResults = results.filter(r => ;)
+    const relevantResults = results.filter(r => ;);
       r.executed_at >= startTime && r.executed_at <= endTime
     );
     const totalChecks = relevantResults.length;
@@ -843,7 +843,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
         downtime_minutes: (failedChecks / totalChecks) * durationHours * 60,
         availability_percent: availabilityPercent,
         target_availability_percent: system.availability.target_uptime_percent,
-        sla_compliance: availabilityPercent >= system.availability.target_uptime_percent
+        sla_compliance: availabilityPercent >= system.availability.target_uptime_percent,
       },
       downtime_incidents: [], // Would be populated from actual incident tracking
       performance_summary: {,
@@ -859,7 +859,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
         availability_trend: 'stable', // Would be calculated from historical data
         performance_trend: 'stable',
         reliability_score: Math.max(0, Math.min(100, availabilityPercent)),
-        recommendation_priority: availabilityPercent < 95 ? 'high' : 'low'
+        recommendation_priority: availabilityPercent < 95 ? 'high' : 'low',
       }
     };
   }
@@ -904,7 +904,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
         healthy_systems: healthySystems,
         warning_systems: warningSystems,
         critical_systems: criticalSystems,
-        overall_health_percentage: totalSystems > 0 ? (healthySystems / totalSystems) * 100 : 0
+        overall_health_percentage: totalSystems > 0 ? (healthySystems / totalSystems) * 100 : 0,
       },
       systems: systemsHealth,
     };
@@ -968,7 +968,7 @@ export class SecuritySystemHealthTracker extends EventEmitter {
     for (const [systemId, alerts] of this.activeAlerts.entries()) {
       const retentionMs = this.config.data_retention.alert_history_days * 24 * 60 * 60 * 1000;
       const cutoffTime = now - retentionMs;
-      const filteredAlerts = alerts.filter(a => ;)
+      const filteredAlerts = alerts.filter(a => ;);
         a.detected_at > cutoffTime || !a.resolution.resolved
       );
       this.activeAlerts.set(systemId, filteredAlerts);

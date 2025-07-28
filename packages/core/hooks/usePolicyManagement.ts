@@ -74,7 +74,7 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
     }
   }, [policyManager]);
   // Create new policy
-  const createPolicy = useCallback(async (;)
+  const createPolicy = useCallback(async (;);
     policyData: Omit<UnifiedPolicy, 'id' | 'metadata'>,
     createdBy: string,
   ) => {
@@ -92,7 +92,7 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
     }
   }, [policyManager, loadPolicies]);
   // Update existing policy
-  const updatePolicy = useCallback(async (;)
+  const updatePolicy = useCallback(async (;);
     policyId: string,
     updates: Partial<UnifiedPolicy>,
     updatedBy: string,
@@ -125,7 +125,7 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
     }
   }, [policyManager, loadPolicies]);
   // Evaluate policies for a given context
-  const evaluatePolicies = useCallback(async (;)
+  const evaluatePolicies = useCallback(async (;);
     evaluationOptions: PolicyEvaluationOptions,
   ): Promise<PolicyEvaluationResult[]> => {
     try {
@@ -146,7 +146,7 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
         operation: {,
           type: evaluationOptions.operation.type,
           parameters: evaluationOptions.operation.parameters,
-          riskLevel: evaluationOptions.operation.riskLevel || 'MEDIUM'
+          riskLevel: evaluationOptions.operation.riskLevel || 'MEDIUM',
         },
         contentContext: evaluationOptions.contentContext,
         additionalContext: evaluationOptions.additionalContext || {}
@@ -163,11 +163,11 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
     }
   }, [policyManager]);
   // Quick policy check for specific scenarios
-  const checkVFXHistoricalAccuracy = useCallback(async (;)
+  const checkVFXHistoricalAccuracy = useCallback(async (;);
     templateId: string,
     historicalPeriod: string,
     culturalContext: string,
-    expertReviewed: boolean = false
+    expertReviewed: boolean = false,
   ): Promise<{ allowed: boolean; violations: string[]; reviewRequired: boolean }> => {
     const results = await evaluatePolicies({)
       entityType: 'TEMPLATE',
@@ -192,7 +192,7 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
     };
   }, [evaluatePolicies]);
   // Check data protection compliance
-  const checkDataProtectionCompliance = useCallback(async (;)
+  const checkDataProtectionCompliance = useCallback(async (;);
     userId: string,
     dataType: string,
     operation: string,
@@ -209,10 +209,10 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
       }
     });
     const nonCompliant = results.filter(r => r.result === 'DENY');
-    const frameworks = results.flatMap(r => ;)
+    const frameworks = results.flatMap(r => ;);
       r.complianceStatus.frameworks.map(f => f.framework)
     );
-    const actions = results.flatMap(r => ;)
+    const actions = results.flatMap(r => ;);
       r.triggeredActions.map(a => a.actionType)
     );
     return {
@@ -252,7 +252,7 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
         totalEvaluations: evaluationResults.length,
         deniedRequests: evaluationResults.filter(r => r.result === 'DENY').length,
         restrictedRequests: evaluationResults.filter(r => r.result === 'RESTRICT').length,
-        averageEvaluationTime: evaluationResults.length > 0 ? 
+        averageEvaluationTime: evaluationResults.length > 0 ? ,
           evaluationResults.reduce((sum, r) => sum + r.performance.evaluationTimeMs, 0) / evaluationResults.length : 0
       }
     };
@@ -405,7 +405,7 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
     unresolvedViolationCount: violations.filter(v => !v.response.resolved).length,
     // Helper functions
     getPolicyById: (id: string) => policies.find(p => p.id === id),
-    isPolicyActive: (policyId: string) => {
+    isPolicyActive: (policyId: string) => {,
       const policy = policies.find(p => p.id === policyId);
       return policy?.status === PolicyStatus.ACTIVE;
     },

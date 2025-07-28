@@ -653,7 +653,7 @@ export namespace StorageExtensionHelpers {
       description: config.description || 'A custom storage provider',
       version: config.version || '1.0.0',
       type: config.type || StorageType.CUSTOM,
-      providerClass: config.providerClass || class implements StorageProvider {
+      providerClass: config.providerClass || class implements StorageProvider {,
         id = config.id || 'custom-storage';
         name = config.name || 'Custom Storage';
         type = config.type || StorageType.CUSTOM;
@@ -690,7 +690,7 @@ export namespace StorageExtensionHelpers {
       configSchema: config.configSchema || z.object({}),
       ui: config.ui || {},
       runtime: config.runtime || {},
-      capabilities: config.capabilities || {
+      capabilities: config.capabilities || {,
         get: true,
         set: true,
         delete: true,
@@ -713,7 +713,7 @@ export namespace StorageExtensionHelpers {
         backup: false,
         restore: false,
       },
-      metadata: config.metadata || {
+      metadata: config.metadata || {,
         author: 'Unknown',
         license: 'MIT',
       }

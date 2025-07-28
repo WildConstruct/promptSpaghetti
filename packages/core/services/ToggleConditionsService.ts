@@ -296,7 +296,7 @@ export class ToggleConditionsService {
       ...condition,
       id,
       created: new Date(),
-      lastModified: new Date()
+      lastModified: new Date(),
     };
     // Validate condition
     const validation = await this.validateCondition(fullCondition);
@@ -604,7 +604,7 @@ export class ToggleConditionsService {
     }, context);
     return {
       included: percentageResult.included,
-      variant: percentageResult.included ? experiment.variant : 'control'
+      variant: percentageResult.included ? experiment.variant : 'control',
     };
   }
   private evaluateMultivariate(condition: ToggleCondition, context: EvaluationContext): { included: boolean; variant: string } {
@@ -756,7 +756,7 @@ export class ToggleConditionsService {
       segment: context.user?.segment,
       country: context.request?.country,
       device: context.request?.device?.type,
-      timestamp: Math.floor((context.timestamp?.getTime() || Date.now()) / 60000) // minute precision
+      timestamp: Math.floor((context.timestamp?.getTime() || Date.now()) / 60000) // minute precision,
     });
     return this.generateHash(hashInput);
   }

@@ -194,7 +194,7 @@ export class PasswordResetTokenManager extends EventEmitter {
       const salt = randomBytes(32).toString('hex');
       const hashedToken = this.hashToken(rawToken, salt);
       // Calculate expiration
-      const expirationMs = this.calculateExpiration(;)
+      const expirationMs = this.calculateExpiration(;);
         request.expirationMinutes,
         request.securityLevel || this.config.securityLevel
       );
@@ -307,7 +307,7 @@ export class PasswordResetTokenManager extends EventEmitter {
       if (!validation.valid || !validation.token) {
         return {
           success: false,
-          reason: validation.reason || 'invalid_token'
+          reason: validation.reason || 'invalid_token',
         };
       }
       const token = validation.token;
@@ -335,7 +335,7 @@ export class PasswordResetTokenManager extends EventEmitter {
       };
     } catch (error) {
       this.logSecurityEvent(SecurityEvent.SUSPICIOUS_ACTIVITY, {)
-        error: error instanceof Error ? error.message : 'Token usage error'
+        error: error instanceof Error ? error.message : 'Token usage error',
       }, ipAddress, userAgent);
       return {
         success: false,
@@ -350,7 +350,7 @@ export class PasswordResetTokenManager extends EventEmitter {
     tokenId: string,
     reason: string,
     ipAddress: string = 'system',
-    userAgent: string = 'system'
+    userAgent: string = 'system',
   ): Promise<boolean> {
     const token = this.tokens.get(tokenId);
     if (!token || token.status !== TokenStatus.ACTIVE) {
@@ -380,7 +380,7 @@ export class PasswordResetTokenManager extends EventEmitter {
   public async revokeUserTokens()
     userId: string,
     type?: TokenType,
-    reason: string = 'user_requested'
+    reason: string = 'user_requested',
   ): Promise<number> {
     let revokedCount = 0;
     for (const [tokenId, token] of this.tokens) {
@@ -688,7 +688,7 @@ export class PasswordResetTokenManager extends EventEmitter {
           count: 1,
           resetTime,
           lastRequest: new Date(),
-          violationCount: existing?.violationCount || 0
+          violationCount: existing?.violationCount || 0,
         });
       } else {
         existing.count++;
@@ -708,7 +708,7 @@ export class PasswordResetTokenManager extends EventEmitter {
     event: SecurityEvent,
     details: Record<string, any>,
     ipAddress: string = 'system',
-    userAgent: string = 'system'
+    userAgent: string = 'system',
   ): void {
     if (!this.config.enableAuditLogging) return;
     const logEntry: AuditLogEntry = {
@@ -720,7 +720,7 @@ export class PasswordResetTokenManager extends EventEmitter {
       ipAddress,
       userAgent,
       details,
-      riskScore: details.riskScore || 0
+      riskScore: details.riskScore || 0,
     };
     this.auditLog.push(logEntry);
     this.emit('securityEvent', logEntry);
@@ -741,7 +741,7 @@ export class PasswordResetTokenManager extends EventEmitter {
     let auditLogsRemoved = 0;
     // Clean up expired and used tokens
     for (const [tokenId, token] of this.tokens) {
-      const shouldCleanup = (;)
+      const shouldCleanup = (;);
         token.status === TokenStatus.EXPIRED || 
         token.status === TokenStatus.USED ||
         token.status === TokenStatus.REVOKED

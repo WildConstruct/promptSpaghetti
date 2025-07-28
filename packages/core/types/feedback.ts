@@ -405,7 +405,7 @@ export const FEEDBACK_TYPE_DESCRIPTIONS = {
   report: 'Report inappropriate content',
   suggestion: 'Improvement suggestion',
   bug_report: 'Bug or technical issue',
-  feature_request: 'Request for new features'
+  feature_request: 'Request for new features',
 } as const;
 
 export const FEEDBACK_CATEGORY_DESCRIPTIONS = {
@@ -416,7 +416,7 @@ export const FEEDBACK_CATEGORY_DESCRIPTIONS = {
   pricing: 'Pricing and billing',
   support: 'Customer support experience',
   technical: 'Technical issues and bugs',
-  content_quality: 'Quality of content and templates'
+  content_quality: 'Quality of content and templates',
 } as const;
 
 export const REPORT_REASON_DESCRIPTIONS = {
@@ -428,7 +428,7 @@ export const REPORT_REASON_DESCRIPTIONS = {
   low_quality: 'Low quality or poorly written content',
   duplicate_content: 'Duplicate or copied content',
   terms_violation: 'Violates terms of service',
-  other: 'Other reason (specify in description)'
+  other: 'Other reason (specify in description)',
 } as const;
 
 export const FEEDBACK_DEFAULTS = {

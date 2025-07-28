@@ -91,7 +91,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
       setEditMode(false);
     } catch (err) {
       setErrors({ )
-        save: err instanceof Error ? err.message : 'Failed to save profile' 
+        save: err instanceof Error ? err.message : 'Failed to save profile' ,
       });
     } finally {
       setSaving(false);
@@ -144,7 +144,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
     return styles[level] || styles.newcomer;
   };
   const levelStyle = getLevelBadgeStyle(profile.level);
-  return ()
+  return ();
     <div className={`contributor-profile-manager ${className}`}>}
       {/* Profile Header */}
       <div className="profile-header">

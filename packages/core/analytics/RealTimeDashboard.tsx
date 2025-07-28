@@ -369,7 +369,7 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
         .map(([source, count]) => ({)
           source,
           count,
-          percentage: totalSourceEvents > 0 ? (count / totalSourceEvents) * 100 : 0
+          percentage: totalSourceEvents > 0 ? (count / totalSourceEvents) * 100 : 0,
         }))
         .sort((a, b) => b.count - a.count)
         .slice(0, 10);
@@ -419,18 +419,17 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
         widget.type === WidgetType.TIME_SERIES_CHART ||
         widget.type === WidgetType.PERFORMANCE_METRICS ||
         widget.type === WidgetType.ERROR_RATE
-      )
       .map(async widget => {)
         try {
           const widgetFilter = { ...filter, ...widget.filter };
-          const data = await eventRepository.getTimeSeriesData(;)
+          const data = await eventRepository.getTimeSeriesData(;);
             'count',
             widget.timeGranularity || 'hour',
             widgetFilter
           );
           return {
             widgetId: widget.id,
-            data: data.map(point => ({)
+            data: data.map(point => ({),
               timestamp: point.timestamp,
               value: point.value,
               label: widget.title,
@@ -484,7 +483,7 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
    * Render loading state
    */
   if (loading) {
-    return ()
+    return ();
       <div className="dashboard-loading">
         <div className="loading-spinner" />
         <p>Loading dashboard...</p>
@@ -495,7 +494,7 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
    * Render error state
    */
   if (error) {
-    return ()
+    return ();
       <div className="dashboard-error">
         <h3>Dashboard Error</h3>
         <p>{error}</p>
@@ -511,7 +510,7 @@ export const RealTimeDashboard: React.FC<RealTimeDashboardProps> = ({)
   /**
    * Main dashboard render
    */
-  return ()
+  return ();
     <div className={`real-time-dashboard theme-${config.theme}`}>}
       {/* Dashboard Header */}
       <DashboardHeader
@@ -639,7 +638,7 @@ const DashboardWidget: React.FC<{
       return <div className="widget-error">Error loading widget</div>;
     }
   };
-  return ()
+  return ();
     <div 
       className={`dashboard-widget ${config.collapsed ? 'collapsed' : ''}`}
       style={{

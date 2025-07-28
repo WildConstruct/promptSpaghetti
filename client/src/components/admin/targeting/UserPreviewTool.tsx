@@ -1,5 +1,4 @@
 // Epic 17.1.4 - User Preview Tool Component
-
 import React, { useState } from 'react';
 import { 
   User, 
@@ -16,7 +15,6 @@ import {
 } from 'lucide-react';
 import { Badge } from '../../common/Badge';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
-
 interface UserPreview {
   id: string;
   email: string;
@@ -33,7 +31,6 @@ interface UserPreview {
   customAttributes: Record<string, unknown>;
   orgId?: string;
 }
-
 interface TogglePreview {
   key: string;
   name: string;
@@ -42,7 +39,6 @@ interface TogglePreview {
   reason: string;
   segmentMatched?: string;
 }
-
 interface UserPreviewToolProps {
   isOpen: boolean;
   onClose: () => void;
@@ -55,24 +51,20 @@ interface UserPreviewToolProps {
   }>;
 }
 
-export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
+export const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
   const [loading, setLoading] = useState(false);
   const [searching, setSearching] = useState(false);
   const [evaluating, setEvaluating] = useState(false);
-
   if (!isOpen) return null;
-
   const searchUsers = async (query: string) => {
     if (!query.trim()) return;
-
     setSearching(true);
     try {
       // Mock implementation - replace with actual API call
       await new Promise(resolve => setTimeout(resolve, 800));
-      
       const mockUser: UserPreview = {
         id: 'user_123',
-        email: query.includes('@') ? query : `${query}@example.com`,
+        email: query.includes('@') ? query : `${query}@example.com`,}
         name: 'John Doe',
         userType: 'beta_tester',
         subscriptionTier: 'pro',
@@ -83,14 +75,13 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
         loginCount: 142,
         featureUsage: 89,
         experimentGroup: 'variant_a',
-        customAttributes: {
+        customAttributes: {,
           department: 'engineering',
           seniority: 'senior',
-          team_size: 8
+          team_size: 8,
         },
-        orgId: 'org_456'
+        orgId: 'org_456',
       };
-      
       setSelectedUser(mockUser);
       await evaluateUserToggles(mockUser);
     } catch (error) {
@@ -99,14 +90,12 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
       setSearching(false);
     }
   };
-
   const evaluateUserToggles = async (user: UserPreview) => {
     setEvaluating(true);
     try {
       // Mock implementation - replace with actual API call
       console.log('Evaluating toggles for user:', user.id);
       await new Promise(resolve => setTimeout(resolve, 600));
-      
       const mockToggles: TogglePreview[] = [
         {
           key: 'new_ui_design',
@@ -114,7 +103,7 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
           enabled: true,
           value: true,
           reason: 'User is in beta_tester segment',
-          segmentMatched: 'Beta Users'
+          segmentMatched: 'Beta Users',
         },
         {
           key: 'advanced_features',
@@ -122,24 +111,23 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
           enabled: true,
           value: true,
           reason: 'User has pro subscription',
-          segmentMatched: 'Premium Users'
+          segmentMatched: 'Premium Users',
         },
         {
           key: 'experimental_ai',
           name: 'Experimental AI Features',
           enabled: false,
           value: false,
-          reason: 'Feature disabled for user type'
+          reason: 'Feature disabled for user type',
         },
         {
           key: 'claude_model_v2',
           name: 'Claude Model V2',
           enabled: true,
           value: 'sonnet-4',
-          reason: 'Percentage rollout (user in 25%)'
+          reason: 'Percentage rollout (user in 25%)',
         }
       ];
-      
       setUserToggles(mockToggles);
     } catch (error) {
       console.error('Failed to evaluate toggles:', error);
@@ -147,10 +135,8 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
       setEvaluating(false);
     }
   };
-
   const refreshUserData = async () => {
     if (!selectedUser) return;
-    
     setLoading(true);
     try {
       await evaluateUserToggles(selectedUser);
@@ -160,14 +146,12 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
       setLoading(false);
     }
   };
-
   const formatAttributeValue = (value: Error): string => {
     if (value === null || value === undefined) return 'N/A';
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
     if (typeof value === 'object') return JSON.stringify(value);
     return String(value);
   };
-
   const getUserTypeColor = (userType: string): string => {
     switch (userType) {
     case 'admin': return 'red';
@@ -176,7 +160,6 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
     default: return 'blue';
     }
   };
-
   const getSubscriptionColor = (tier: string): string => {
     switch (tier) {
     case 'enterprise': return 'purple';
@@ -184,8 +167,7 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
     default: return 'gray';
     }
   };
-
-  return (
+  return ()
     <div className="modal-overlay">
       <div className="modal-content user-preview-modal">
         <div className="modal-header">
@@ -197,7 +179,6 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
             <X size={20} />
           </button>
         </div>
-
         <div className="modal-body">
           {/* User Search */}
           <div className="user-search-section">
@@ -223,9 +204,8 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
               </button>
             </div>
           </div>
-
           {/* User Details */}
-          {selectedUser && (
+          {selectedUser && ()
             <div className="user-details-section">
               <div className="section-header">
                 <h3>
@@ -241,7 +221,6 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
                   Refresh
                 </button>
               </div>
-
               <div className="user-info-grid">
                 <div className="user-basic-info">
                   <div className="user-avatar">
@@ -260,7 +239,6 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
                     </div>
                   </div>
                 </div>
-
                 <div className="user-attributes">
                   <div className="attribute-group">
                     <h5>Account Information</h5>
@@ -282,7 +260,6 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
                       </div>
                     </div>
                   </div>
-
                   <div className="attribute-group">
                     <h5>Location & Language</h5>
                     <div className="attribute-list">
@@ -297,7 +274,6 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
                       </div>
                     </div>
                   </div>
-
                   <div className="attribute-group">
                     <h5>Activity</h5>
                     <div className="attribute-list">
@@ -325,12 +301,11 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
                       </div>
                     </div>
                   </div>
-
-                  {Object.keys(selectedUser.customAttributes).length > 0 && (
+                  {Object.keys(selectedUser.customAttributes).length > 0 && ()
                     <div className="attribute-group">
                       <h5>Custom Attributes</h5>
                       <div className="attribute-list">
-                        {Object.entries(selectedUser.customAttributes).map(([key, value]) => (
+                        {Object.entries(selectedUser.customAttributes).map(([key, value]) => ()
                           <div key={key} className="attribute-item">
                             <span className="label">{key}:</span>
                             <span className="value">{formatAttributeValue(value)}</span>
@@ -343,9 +318,8 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
               </div>
             </div>
           )}
-
           {/* Feature Toggle Evaluation */}
-          {selectedUser && (
+          {selectedUser && ()
             <div className="toggle-evaluation-section">
               <div className="section-header">
                 <h3>
@@ -354,14 +328,13 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
                 </h3>
                 {evaluating && <LoadingSpinner size={16} />}
               </div>
-
-              {toggleId && rules.length > 0 && (
+              {toggleId && rules.length > 0 && ()
                 <div className="current-toggle-eval">
                   <h4>Current Toggle Rules</h4>
                   <div className="rules-preview">
-                    {rules.map((rule, index) => (
+                    {rules.map((rule, index) => ()
                       <div key={index} className="rule-item">
-                        {index > 0 && (
+                        {index > 0 && ()
                           <span className="rule-operator">{rule.logicalOperator}</span>
                         )}
                         <code>
@@ -370,7 +343,6 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
                       </div>
                     ))}
                   </div>
-                  
                   {/* TODO: Evaluate current rules against user */}
                   <div className="evaluation-result">
                     <CheckCircle size={16} />
@@ -378,9 +350,8 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
                   </div>
                 </div>
               )}
-
               <div className="toggles-list">
-                {userToggles.map(toggle => (
+                {userToggles.map(toggle => ()
                   <div key={toggle.key} className="toggle-result">
                     <div className="toggle-header">
                       <div className="toggle-info">
@@ -393,19 +364,16 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
                         </Badge>
                       </div>
                     </div>
-                    
                     <div className="toggle-details">
                       <div className="toggle-value">
                         <span className="label">Value:</span>
                         <code>{formatAttributeValue(toggle.value)}</code>
                       </div>
-                      
                       <div className="toggle-reason">
                         <span className="label">Reason:</span>
                         <span>{toggle.reason}</span>
                       </div>
-                      
-                      {toggle.segmentMatched && (
+                      {toggle.segmentMatched && ()
                         <div className="toggle-segment">
                           <span className="label">Segment:</span>
                           <Badge color="blue">{toggle.segmentMatched}</Badge>
@@ -417,8 +385,7 @@ export   const [userToggles, setUserToggles] = useState<TogglePreview[]>([]);
               </div>
             </div>
           )}
-
-          {!selectedUser && (
+          {!selectedUser && ()
             <div className="empty-state">
               <User size={48} />
               <h3>Search for a User</h3>

@@ -756,7 +756,7 @@ export const [error, setError] = useState<string | null>(null);
       };
       const result = await analyticsInfrastructure.executeQuery(query);
       if (result.success && result.data) {
-        const predictiveData = await processPredictiveData(;)
+        const predictiveData = await processPredictiveData(;);
           result.data,
           modelConfig,
           selectedHorizon
@@ -784,7 +784,7 @@ export const [error, setError] = useState<string | null>(null);
     }
   }, [funnelDefinition, analyticsInfrastructure, timeRange, segments, cohorts, modelConfig, selectedHorizon, onPredictionUpdate]);
   // Process predictive data
-  const processPredictiveData = async (;)
+  const processPredictiveData = async (;);
     rawData: unknown,
     config: PredictiveModelConfiguration,
     horizon: ForecastHorizon,
@@ -804,7 +804,7 @@ export const [error, setError] = useState<string | null>(null);
     };
   };
   // Generate performance forecasts
-  const generatePerformanceForecasts = (;)
+  const generatePerformanceForecasts = (;);
     models: PredictiveModelType[],
     horizon: ForecastHorizon,
   ): PerformanceForecast[] => {
@@ -822,14 +822,14 @@ export const [error, setError] = useState<string | null>(null);
             predictedValue: 0.15 + Math.sin(i / 7) * 0.02 + Math.random() * 0.01,
             confidence: { lower: 0.12, upper: 0.18, level: 0.95 },
             trend: 'stable' as TrendDirection,
-            volatility: Math.random() * 0.1
+            volatility: Math.random() * 0.1,
           },
           {
             metric: 'revenue',
             predictedValue: 50000 + Math.sin(i / 7) * 5000 + Math.random() * 2000,
             confidence: { lower: 45000, upper: 55000, level: 0.95 },
             trend: 'increasing' as TrendDirection,
-            volatility: Math.random() * 0.15
+            volatility: Math.random() * 0.15,
           }
         ],
         confidence: Math.random() * 0.2 + 0.8,
@@ -935,7 +935,7 @@ export const [error, setError] = useState<string | null>(null);
         rmse: 0.025,
         r2: 0.85,
         accuracy: 0.88,
-        lastValidation: Date.now() - 24 * 60 * 60 * 1000
+        lastValidation: Date.now() - 24 * 60 * 60 * 1000,
       },
       lastUpdated: Date.now(),
     }));
@@ -974,7 +974,7 @@ export const [error, setError] = useState<string | null>(null);
           probability: Math.random() * 0.9 + 0.1,
           expectedTimestamp: Date.now() + Math.random() * 24 * 60 * 60 * 1000,
           value: Math.random() * 10,
-          confidence: Math.random() * 0.2 + 0.8
+          confidence: Math.random() * 0.2 + 0.8,
         }
       ],
       engagement: {,
@@ -991,12 +991,12 @@ export const [error, setError] = useState<string | null>(null);
         confidence: Math.random() * 0.3 + 0.7,
         timeToConversion: Math.floor(Math.random() * 14 + 1),
         conversionValue: Math.floor(Math.random() * 500 + 100),
-        steps: funnelDefinition.steps.map(step => ({)
+        steps: funnelDefinition.steps.map(step => ({),
           stepId: step.id,
           stepName: step.name,
           probability: Math.random() * 0.8 + 0.2,
           bottleneck: Math.random() > 0.8,
-          optimizationPotential: Math.random() * 0.3
+          optimizationPotential: Math.random() * 0.3,
         })),
         factors: [,
           { factor: 'historical_behavior', weight: 0.4, direction: 'positive', controllable: false },
@@ -1014,7 +1014,7 @@ export const [error, setError] = useState<string | null>(null);
             effectiveness: Math.random() * 0.5 + 0.3,
             cost: Math.floor(Math.random() * 50 + 10),
             urgency: (['immediate', 'high', 'medium', 'low'] as const)[Math.floor(Math.random() * 4)],
-            implementation: 'Email marketing team'
+            implementation: 'Email marketing team',
           }
         ]
       },
@@ -1123,7 +1123,7 @@ export const [error, setError] = useState<string | null>(null);
             actualValue: 45000,
             deviation: -0.18,
             significance: 'high',
-            explanation: 'System outage during peak hours'
+            explanation: 'System outage during peak hours',
           }
         ],
         recommendations: [,
@@ -1167,7 +1167,7 @@ export const [error, setError] = useState<string | null>(null);
             preparationTime: 7,
             resources: ['Marketing Team', 'Data Analyst'],
             expectedBenefit: 8000,
-            riskMitigation: 'Weekly performance reviews'
+            riskMitigation: 'Weekly performance reviews',
           }
         ]
       }
@@ -1218,7 +1218,7 @@ export const [error, setError] = useState<string | null>(null);
             impact: 0.2,
             probability: 0.8,
             timeframe: 30,
-            intervention: 'Feature education campaign'
+            intervention: 'Feature education campaign',
           }
         ]
       },
@@ -1246,7 +1246,7 @@ export const [error, setError] = useState<string | null>(null);
         recall: Math.random() * 0.25 + 0.7,
         f1Score: Math.random() * 0.2 + 0.75,
         auc: Math.random() * 0.15 + 0.85,
-        calibration: Math.random() * 0.2 + 0.8
+        calibration: Math.random() * 0.2 + 0.8,
       },
       performance: [,
         { metric: 'mae', value: Math.random() * 0.05 + 0.02, benchmark: 0.05, percentile: 85 },
@@ -1258,7 +1258,7 @@ export const [error, setError] = useState<string | null>(null);
         testSize: Math.floor(Math.random() * 5000 + 1000),
         features: Math.floor(Math.random() * 50 + 10),
         trainingTime: Math.floor(Math.random() * 3600 + 300),
-        convergence: Math.random() * 0.2 + 0.8
+        convergence: Math.random() * 0.2 + 0.8,
       },
       drift: {,
         detected: Math.random() > 0.8,
@@ -1272,9 +1272,9 @@ export const [error, setError] = useState<string | null>(null);
           }
         ],
         recommendation: 'Monitor feature drift and retrain if necessary',
-        lastCheck: Date.now() - Math.random() * 24 * 60 * 60 * 1000
+        lastCheck: Date.now() - Math.random() * 24 * 60 * 60 * 1000,
       },
-      lastUpdate: Date.now() - Math.random() * 24 * 60 * 60 * 1000
+      lastUpdate: Date.now() - Math.random() * 24 * 60 * 60 * 1000,
     }));
   };
   // Generate prediction history
@@ -1284,7 +1284,7 @@ export const [error, setError] = useState<string | null>(null);
       prediction: { value: Math.random() * 100 + 50 },
       actual: Math.random() > 0.1 ? { value: Math.random() * 100 + 50 } : undefined,
       accuracy: Math.random() * 0.3 + 0.7,
-      model: modelConfig.models[Math.floor(Math.random() * modelConfig.models.length)]
+      model: modelConfig.models[Math.floor(Math.random() * modelConfig.models.length)],
     }));
   };
   // Generate uncertainty analysis
@@ -1365,7 +1365,7 @@ export const [error, setError] = useState<string | null>(null);
     onExport(exportData);
   }, [modelingData, modelConfig, onExport]);
   if (loading) {
-    return ()
+    return ();
       <div className="funnel-predictive-modeling-loading">
         <div className="loading-spinner"></div>
         <p>Loading predictive modeling data...</p>
@@ -1373,7 +1373,7 @@ export const [error, setError] = useState<string | null>(null);
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className="funnel-predictive-modeling-error">
         <h3>Error Loading Predictive Modeling</h3>
         <p className="error-message">{error}</p>
@@ -1386,7 +1386,7 @@ export const [error, setError] = useState<string | null>(null);
   if (!modelingData) {
     return <div className="funnel-predictive-modeling-error">No data available</div>;
   }
-  return ()
+  return ();
     <div className="funnel-predictive-modeling">
       <div className="modeling-header">
         <div className="modeling-info">

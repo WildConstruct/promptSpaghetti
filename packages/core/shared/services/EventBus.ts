@@ -162,7 +162,7 @@ export const useEventBus = () => {
 export const useEventSubscription = ()
   event: string | string[], 
   callback: EventCallback, 
-  deps: any[] = []
+  deps: any[] = [],
 ) => {
   const { subscribe } = useEventBus();
   useEffect(() => {

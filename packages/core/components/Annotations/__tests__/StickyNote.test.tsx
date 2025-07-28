@@ -26,7 +26,7 @@ describe('StickyNote Component', () => {
   });
   describe('Rendering', () => {
     test('renders note with correct content and styling', () => {
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -36,11 +36,11 @@ describe('StickyNote Component', () => {
       expect(screen.getByText('Test sticky note content')).toBeInTheDocument();
       expect(screen.getByTestId('sticky-note')).toHaveStyle({)
         backgroundColor: '#fef3c7',
-        border: '2px solid #f59e0b'
+        border: '2px solid #f59e0b',
       });
     });
     test('applies correct positioning and sizing', () => {
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -56,7 +56,7 @@ describe('StickyNote Component', () => {
       });
     });
     test('shows selected state when selected prop is true', () => {
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -69,7 +69,7 @@ describe('StickyNote Component', () => {
     });
     test('renders in editing mode when isEditing is true', () => {
       const editingNote = { ...mockNote, isEditing: true };
-      render()
+      render();
         <StickyNote
           note={editingNote}
           onAction={mockOnAction}
@@ -82,7 +82,7 @@ describe('StickyNote Component', () => {
   });
   describe('Drag and Drop', () => {
     test('handles drag start correctly', () => {
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -95,7 +95,7 @@ describe('StickyNote Component', () => {
       expect(noteElement).toHaveClass('dragging');
     });
     test('prevents drag when canMove is false', () => {
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -108,7 +108,7 @@ describe('StickyNote Component', () => {
       expect(noteElement).not.toHaveClass('dragging');
     });
     test('calls onAction with move action during drag', () => {
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -132,7 +132,7 @@ describe('StickyNote Component', () => {
   });
   describe('Resizing', () => {
     test('shows resize handles when canResize is true', () => {
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -143,7 +143,7 @@ describe('StickyNote Component', () => {
       expect(screen.getByTestId('resize-handle-se')).toBeInTheDocument();
     });
     test('hides resize handles when canResize is false', () => {
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -154,7 +154,7 @@ describe('StickyNote Component', () => {
       expect(screen.queryByTestId('resize-handle-se')).not.toBeInTheDocument();
     });
     test('handles resize correctly', () => {
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -179,7 +179,7 @@ describe('StickyNote Component', () => {
   describe('Editing', () => {
     test('enters editing mode on double click when canEdit is true', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -196,7 +196,7 @@ describe('StickyNote Component', () => {
     });
     test('prevents editing when canEdit is false', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -213,7 +213,7 @@ describe('StickyNote Component', () => {
     test('saves content on blur during editing', async () => {
       const user = userEvent.setup();
       const editingNote = { ...mockNote, isEditing: true };
-      render()
+      render();
         <StickyNote
           note={editingNote}
           onAction={mockOnAction}
@@ -228,13 +228,13 @@ describe('StickyNote Component', () => {
       expect(mockOnAction).toHaveBeenCalledWith({)
         type: 'updateContent',
         noteId: mockNote.id,
-        content: 'Updated content'
+        content: 'Updated content',
       });
     });
     test('saves content on Enter key during editing', async () => {
       const user = userEvent.setup();
       const editingNote = { ...mockNote, isEditing: true };
-      render()
+      render();
         <StickyNote
           note={editingNote}
           onAction={mockOnAction}
@@ -248,13 +248,13 @@ describe('StickyNote Component', () => {
       expect(mockOnAction).toHaveBeenCalledWith({)
         type: 'updateContent',
         noteId: mockNote.id,
-        content: 'New content'
+        content: 'New content',
       });
     });
   });
   describe('Context Menu', () => {
     test('calls onContextMenu on right click', () => {
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -278,7 +278,7 @@ describe('StickyNote Component', () => {
   });
   describe('Delete Functionality', () => {
     test('shows delete button when canDelete is true', () => {
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -289,7 +289,7 @@ describe('StickyNote Component', () => {
       expect(screen.getByTestId('delete-button')).toBeInTheDocument();
     });
     test('hides delete button when canDelete is false', () => {
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -301,7 +301,7 @@ describe('StickyNote Component', () => {
     });
     test('calls delete action when delete button is clicked', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -327,7 +327,7 @@ describe('StickyNote Component', () => {
     colorTests.forEach(({ color, expectedBg, expectedBorder }) => {
       test(`renders ${color} color variant correctly`, () => {}
         const coloredNote = { ...mockNote, color };
-        render()
+        render();
           <StickyNote
             note={coloredNote}
             onAction={mockOnAction}
@@ -343,7 +343,7 @@ describe('StickyNote Component', () => {
   });
   describe('Accessibility', () => {
     test('has proper ARIA attributes', () => {
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -357,7 +357,7 @@ describe('StickyNote Component', () => {
     });
     test('supports keyboard navigation', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <StickyNote
           note={mockNote}
           onAction={mockOnAction}
@@ -382,7 +382,7 @@ describe('StickyNote Component', () => {
       const renderSpy = jest.fn<unknown[], unknown>();
       const TestWrapper = ({ note }: { note: StickyNoteType }) => {
         renderSpy();
-        return ()
+        return ();
           <StickyNote
             note={note}
             onAction={mockOnAction}

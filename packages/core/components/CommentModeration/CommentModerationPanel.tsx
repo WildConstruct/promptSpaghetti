@@ -193,31 +193,31 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
       label: '✅ Approve', 
       color: '#059669',
       permission: 'moderation:approve',
-      show: selectedCount > 0
+      show: selectedCount > 0,
     },
     { 
       type: 'reject' as const, 
       label: '❌ Reject', 
       color: '#dc2626',
       permission: 'moderation:reject',
-      show: selectedCount > 0
+      show: selectedCount > 0,
     },
     { 
       type: 'flag' as const, 
       label: '🚩 Flag', 
       color: '#d97706',
       permission: 'moderation:flag',
-      show: selectedCount > 0
+      show: selectedCount > 0,
     },
     { 
       type: 'hide' as const, 
       label: '👁️ Hide', 
       color: '#6b7280',
       permission: 'moderation:hide',
-      show: selectedCount > 0
+      show: selectedCount > 0,
     }
   ].filter(action => action.show && hasPermission(action.permission)), [selectedCount, hasPermission]);
-  return ()
+  return ();
     <div className={`comment-moderation-panel ${className}`} style={{}
       backgroundColor: '#ffffff',
       border: '1px solid #e5e7eb',
@@ -285,7 +285,7 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
               fontSize: '12px',
               fontWeight: '500',
               cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1
+              opacity: loading ? 0.6 : 1,
             }}
           >
             {loading ? '🔄' : '↻'} Refresh
@@ -582,11 +582,11 @@ const CommentModerationItem: React.FC<CommentModerationItemProps> = ({)
     toxicity: Math.random() * 0.3, // 0-30% toxicity
     sentiment: 'neutral' as const,
     reports: Math.floor(Math.random() * 3),
-    autoFlag: Math.random() > 0.8
+    autoFlag: Math.random() > 0.8,
   };
   const toxicityColor = moderationData.toxicity > 0.2 ? '#dc2626' : ;
     moderationData.toxicity > 0.1 ? '#d97706' : '#059669';
-  return ()
+  return ();
     <div
       style={{
         border: `1px solid ${selected ? '#3b82f6' : '#e5e7eb'}`,}
@@ -781,17 +781,17 @@ function generateMockScore(): unknown {
       trendingScore: Math.random() * 100,
       engagementScore: Math.random() * 100,
       qualityScore: Math.random() * 100,
-      controversyScore: Math.random() * 100
+      controversyScore: Math.random() * 100,
     },
     metrics: {,
       totalLikes: Math.floor(Math.random() * 50),
       totalReplies: Math.floor(Math.random() * 20),
       totalShares: Math.floor(Math.random() * 10),
       totalHelpfulVotes: Math.floor(Math.random() * 15),
-      totalReports: Math.floor(Math.random() * 5)
+      totalReports: Math.floor(Math.random() * 5),
     },
     trends: {,
-      velocityTrend: 'steady' as const
+      velocityTrend: 'steady' as const,
     }
   };
 }
@@ -806,7 +806,7 @@ function calculateMockStats(comments: TrendingComment[]): CommentModerationStats
     totalReports: Math.floor(comments.length * 0.1),
     avgToxicity: Math.random() * 0.2,
     avgQuality: 70 + Math.random() * 20,
-    lastProcessed: new Date()
+    lastProcessed: new Date(),
   };
 }
 

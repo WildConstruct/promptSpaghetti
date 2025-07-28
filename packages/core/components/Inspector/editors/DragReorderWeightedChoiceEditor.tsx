@@ -118,7 +118,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
     return {
       totalWeight,
       mostLikely: sortedChoices[0],
-      leastLikely: sortedChoices[sortedChoices.length - 1]
+      leastLikely: sortedChoices[sortedChoices.length - 1],
     };
   }, [data.choices]);
   // Theme styles
@@ -158,7 +158,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
     return themes[theme];
   };
   const styles = getThemeStyles();
-  return ()
+  return ();
     <div className="drag-reorder-weighted-choice-editor">
       {/* BASIC LEVEL: Essential drag-and-drop choice management */}
       <ProgressiveDisclosureSection
@@ -335,7 +335,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
                   fontSize: '14px',
                   fontWeight: 600,
                   cursor: newChoiceText.trim() ? 'pointer' : 'not-allowed',
-                  opacity: newChoiceText.trim() ? 1 : 0.5
+                  opacity: newChoiceText.trim() ? 1 : 0.5,
                 }}
               >
               Add

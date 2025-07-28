@@ -191,7 +191,7 @@ describe('ConversionTrackingSDK', () => {
           influence: 0.8,
         }
       ];
-      const result = await sdk.trackConversionEvent(;)
+      const result = await sdk.trackConversionEvent(;);
         'template_purchased',
         { templateId: 'tpl-001' },
         25.00,
@@ -300,7 +300,7 @@ describe('ConversionTrackingSDK', () => {
             field: 'value',
             type: 'range',
             value: { min: 0, max: 1000 },
-            errorMessage: 'Value must be between 0 and 1000'
+            errorMessage: 'Value must be between 0 and 1000',
           }
         ]
       };
@@ -506,7 +506,7 @@ describe('ConversionTrackingSDK', () => {
         '/api/errors',
         expect.objectContaining({)
           method: 'POST',
-          body: expect.stringContaining('Test error')
+          body: expect.stringContaining('Test error'),
         })
       );
     });

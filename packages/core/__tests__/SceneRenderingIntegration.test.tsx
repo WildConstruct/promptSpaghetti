@@ -19,13 +19,13 @@ jest.mock('reactflow', () => {
     zoomIn: jest.fn(),
     zoomOut: jest.fn(),
     getNodes: () => [],
-    getEdges: () => []
+    getEdges: () => [],
   };
   return {
     ...jest.requireActual('reactflow'),
     ReactFlow: ({ children, nodes, edges, onNodesChange, onEdgesChange, onConnect, viewport, onViewportChange, ...props }: any) => {
       const [currentViewport, setCurrentViewport] = React.useState(viewport || { x: 0, y: 0, zoom: 1 });
-      return ()
+      return ();
         <div 
           data-testid="scene-renderer"
           data-node-count={nodes?.length || 0}
@@ -54,7 +54,7 @@ jest.mock('reactflow', () => {
                   top: node.position.y,
                   transform: node.data?.transform || 'none',
                   opacity: node.data?.opacity || 1,
-                  zIndex: node.data?.zIndex || 1
+                  zIndex: node.data?.zIndex || 1,
                 }}
                 onClick={() => props.onNodeClick?.(node)}
               >
@@ -78,7 +78,7 @@ jest.mock('reactflow', () => {
               const y1 = sourceNode.position.y + 40;
               const x2 = targetNode.position.x + 80;
               const y2 = targetNode.position.y + 40;
-              return ()
+              return ();
                 <svg 
                   key={edge.id}
                   data-testid={`scene-edge-${edge.id}`}
@@ -150,16 +150,16 @@ describe('Scene Rendering Integration', () => {
         type: baseData.nodeType,
         position: {,
           x: (i % 3) * 200 + Math.random() * 50,
-          y: Math.floor(i / 3) * 150 + Math.random() * 30
+          y: Math.floor(i / 3) * 150 + Math.random() * 30,
         },
         data: {,
           ...baseData,
           ...(withTransforms && {)
             transform: i % 2 === 0 ? 'rotate(5deg)' : 'scale(1.1)',
-            opacity: 0.8 + (i * 0.04)
+            opacity: 0.8 + (i * 0.04),
           }),
           ...(withLayering && {)
-            zIndex: i + 1
+            zIndex: i + 1,
           })
         }
       };
@@ -171,7 +171,7 @@ describe('Scene Rendering Integration', () => {
       animated: withAnimations && i % 2 === 0,
       data: {,
         color: withAnimations ? '#38a169' : '#cbd5e0',
-        strokeWidth: withAnimations ? 3 : 2
+        strokeWidth: withAnimations ? 3 : 2,
       }
     }));
     return { nodes, edges };
@@ -297,7 +297,7 @@ describe('Scene Rendering Integration', () => {
       const initialLine = initialEdge.querySelector('line');
       const initialX2 = initialLine?.getAttribute('x2');
       // Move target node
-      const updatedNodes = nodes.map(node => ;)
+      const updatedNodes = nodes.map(node => ;);
         node.id === 'scene-2' 
           ? { ...node, position: { x: node.position.x + 200, y: node.position.y } }
           : node
@@ -404,7 +404,7 @@ describe('Scene Rendering Integration', () => {
     it('handles mouse interactions within scene coordinate system', async () => {
       const { nodes, edges } = createSceneGraph({ nodeCount: 3, edgeCount: 2 });
       const onNodeSelect = jest.fn();
-      render()
+      render();
         <GraphEditor 
           initialNodes={nodes} 
           initialEdges={edges}
@@ -420,7 +420,7 @@ describe('Scene Rendering Integration', () => {
     });
     it('maintains interaction accuracy during zoom', async () => {
       const { nodes, edges } = createSceneGraph({ nodeCount: 2, edgeCount: 1 });
-      render()
+      render();
         <GraphEditor 
           initialNodes={nodes} 
           initialEdges={edges}

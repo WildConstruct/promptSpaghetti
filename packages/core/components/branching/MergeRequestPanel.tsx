@@ -78,7 +78,7 @@ const MergeRequestItem: React.FC<MergeRequestItemProps> = ({ )
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString();
   };
-  const menu = (;)
+  const menu = (;);
     <Menu>
       <Menu.Item key="view" icon={<EyeOutlined />} onClick={() => onView(mergeRequest)}>
         View Details
@@ -95,7 +95,7 @@ const MergeRequestItem: React.FC<MergeRequestItemProps> = ({ )
       )}
     </Menu>
   );
-  return ()
+  return ();
     <Card size="small" style={{ marginBottom: '8px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div style={{ flex: 1 }}>
@@ -200,7 +200,7 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({)
         allowSquashMerge: values.allowSquashMerge !== false,
         allowMergeCommit: values.allowMergeCommit !== false,
         allowRebaseMerge: values.allowRebaseMerge || false,
-        deleteSourceBranch: values.deleteSourceBranch || false
+        deleteSourceBranch: values.deleteSourceBranch || false,
       };
       await createMergeRequest(request);
       setShowCreateModal(false);
@@ -229,7 +229,7 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({)
   const handleViewMergeRequest = (mergeRequest: BranchMergeRequest) => {
     setSelectedMergeRequest(mergeRequest);
   };
-  return ()
+  return ();
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <Title level={4} style={{ margin: 0 }}>

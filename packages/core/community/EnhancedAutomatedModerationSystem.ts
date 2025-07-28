@@ -548,13 +548,12 @@ export class EnhancedModerationServiceImpl implements EnhancedModerationService 
   private contributionService: ContributionManagementService;
   private analyticsService: LearningAnalyticsServiceImpl;
   private apiClient: any;
-  constructor()
+  constructor();
     baseModerationService: AutomatedModerationService,
     contentFilteringService: MarketplaceContentFilteringServiceImpl,
     contributionService: ContributionManagementService,
     analyticsService: LearningAnalyticsServiceImpl,
     apiClient: any,
-  ) {
     this.baseModerationService = baseModerationService;
     this.contentFilteringService = contentFilteringService;
     this.contributionService = contributionService;
@@ -575,19 +574,19 @@ export class EnhancedModerationServiceImpl implements EnhancedModerationService 
       // Step 3: Analyze business impact
       const businessImpactAssessment = await this.assessBusinessImpact(request, baseModerationResult, filteringResult);
       // Step 4: Generate workflow recommendations
-      const workflowRecommendations = await this.generateWorkflowRecommendations(;)
+      const workflowRecommendations = await this.generateWorkflowRecommendations(;);
         request,
         baseModerationResult,
         filteringResult
       );
       // Step 5: Perform escalation analysis
-      const escalationAnalysis = await this.performEscalationAnalysis(;)
+      const escalationAnalysis = await this.performEscalationAnalysis(;);
         request,
         baseModerationResult,
         businessImpactAssessment
       );
       // Step 6: Context-specific moderation
-      const contextSpecificResults = await this.performContextSpecificModeration(;)
+      const contextSpecificResults = await this.performContextSpecificModeration(;);
         request,
         baseModerationResult,
         filteringResult
@@ -597,13 +596,13 @@ export class EnhancedModerationServiceImpl implements EnhancedModerationService 
       // Step 8: Analyze patterns
       const patternAnalysis = await this.analyzePatterns(request, baseModerationResult);
       // Step 9: Determine follow-up actions
-      const followUpActions = await this.determineFollowUpActions(;)
+      const followUpActions = await this.determineFollowUpActions(;);
         request,
         baseModerationResult,
         businessImpactAssessment
       );
       // Step 10: Define monitoring requirements
-      const monitoringRequirements = await this.defineMonitoringRequirements(;)
+      const monitoringRequirements = await this.defineMonitoringRequirements(;);
         request,
         baseModerationResult,
         escalationAnalysis
@@ -623,7 +622,7 @@ export class EnhancedModerationServiceImpl implements EnhancedModerationService 
         predictive_insights: predictiveInsights,
         pattern_analysis: patternAnalysis,
         processing_breakdown: this.generateProcessingBreakdown(startTime),
-        resource_utilization: await this.calculateResourceUtilization()
+        resource_utilization: await this.calculateResourceUtilization(),
       };
       // Track enhanced moderation event
       await this.trackEnhancedModerationEvent(request, enhancedResult);
@@ -664,7 +663,7 @@ export class EnhancedModerationServiceImpl implements EnhancedModerationService 
       },
       author: {,
         userId: contribution.submission.submitted_by,
-        trustScore: 75 // Would be fetched from user service
+        trustScore: 75 // Would be fetched from user service,
       },
       context: {,
         source: 'contribution_submission',
@@ -707,7 +706,7 @@ export class EnhancedModerationServiceImpl implements EnhancedModerationService 
       },
       context: {,
         source: 'template_submission',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       moderation_context: 'marketplace_template',
       workflow_type: 'enhanced_review',
@@ -745,7 +744,7 @@ export class EnhancedModerationServiceImpl implements EnhancedModerationService 
       },
       context: {,
         source: 'tutorial_submission',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       moderation_context: 'tutorial_content',
       workflow_type: 'expert_review',
@@ -778,11 +777,11 @@ export class EnhancedModerationServiceImpl implements EnhancedModerationService 
       },
       author: {,
         userId: communityData.author_id || 'unknown',
-        trustScore: communityData.author_reputation || 50
+        trustScore: communityData.author_reputation || 50,
       },
       context: {,
         source: 'community_content',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       moderation_context: 'community_discussion',
       workflow_type: 'community_moderation',
@@ -792,7 +791,7 @@ export class EnhancedModerationServiceImpl implements EnhancedModerationService 
       },
       community_context: {,
         community_role: 'member',
-        reputation_score: communityData.author_reputation || 50
+        reputation_score: communityData.author_reputation || 50,
       },
       enhanced_user_context: {,
         user_tier: 'verified',

@@ -24,7 +24,7 @@ describe('SafeExpressionEvaluator', () => {
     endsWith: (str: string, suffix: string) => str.endsWith(suffix),
     includes: (str: string, substring: string) => str.includes(substring),
     length: (value: any) => value.length,
-    getType: (value: any) => typeof value
+    getType: (value: any) => typeof value,
   });
   describe('Basic Expression Evaluation', () => {
     it('should evaluate numeric literals', () => {
@@ -202,7 +202,7 @@ describe('SafeExpressionEvaluator', () => {
     it('should only allow whitelisted functions', () => {
       const context = { 
         ...createSafeContext(),
-        unauthorizedFunction: () => 'should not be callable'
+        unauthorizedFunction: () => 'should not be callable',
       };
       // Functions not explicitly in the context should not be callable
       expect(() => SafeExpressionEvaluator.evaluate('unauthorizedFunction()', context))

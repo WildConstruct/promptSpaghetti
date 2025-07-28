@@ -36,7 +36,7 @@ export const SimpleVariationList: React.FC<SimpleVariationListProps> = ({)
       handleAdd();
     }
   };
-  return ()
+  return ();
     <div style={{ marginBottom: 12 }}>
       {variations.length === 0 ? ()
         <div style={{
@@ -67,7 +67,7 @@ export const SimpleVariationList: React.FC<SimpleVariationListProps> = ({)
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
-                marginBottom: index < variations.length - 1 ? 8 : 0
+                marginBottom: index < variations.length - 1 ? 8 : 0,
               }}
             >
               <input

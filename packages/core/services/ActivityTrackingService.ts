@@ -90,10 +90,9 @@ export class ActivityTrackingService {
     // Add to pending batch
     this.pendingActivities.push(fullActivity);
     // Check if we should flush immediately
-    if ()
+    if ();
       this.pendingActivities.length >= (this.config.maxBatchSize || 100) ||
       fullActivity.severity === 'critical'
-    ) {
       await this.flush();
     }
     // Real-time streaming
@@ -287,7 +286,7 @@ export class ActivityTrackingService {
   }
   async subscribeToActivityStream()
     subscriptionId: string, 
-    callback: (event: ActivityStreamEvent) => void
+    callback: (event: ActivityStreamEvent) => void,
   ): Promise<void> {
     if (!this.config.streaming) {
       throw new Error('Streaming is not configured');
@@ -307,7 +306,7 @@ export class ActivityTrackingService {
     const updatedActivity = await this.config.storage.update(id, {)
       ...updates,
       updatedAt: new Date().toISOString(),
-      version: (updates.version || 1) + 1
+      version: (updates.version || 1) + 1,
     });
     // Notify subscribers of update
     if (this.config.enableRealTime && this.config.streaming) {

@@ -237,7 +237,7 @@ describe('AdvancedRuntimeNode Foundation', () => {
         cacheable: false,
         stateful: true,
       };
-      const data = SerializationHelpers.createAdvancedNodeData(;)
+      const data = SerializationHelpers.createAdvancedNodeData(;);
         'test-id',
         'TestType',
         config,

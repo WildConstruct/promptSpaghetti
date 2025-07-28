@@ -171,7 +171,7 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({)
     toggleHelpHints,
     resetHelpSystem
   };
-  return ()
+  return ();
     <HelpContext.Provider value={contextValue}>
       {children}
     </HelpContext.Provider>
@@ -244,7 +244,7 @@ export
 
 // Component for managing help system settings
 export 
-  return ()
+  return ();
     <div className={`help-system-settings ${className}`} style={{}
       background: '#2d3748',
       border: '1px solid #4a5568',

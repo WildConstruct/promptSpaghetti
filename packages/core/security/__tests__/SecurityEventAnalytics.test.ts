@@ -236,7 +236,7 @@ describe('SecurityEventAnalytics', () => {
             ipAddress: '192.168.1.10',
             deviceInfo: { deviceId: 'device1' }
           },
-          timestamp: new Date(Date.now() - i * 60 * 60 * 1000) // Spread over hours
+          timestamp: new Date(Date.now() - i * 60 * 60 * 1000) // Spread over hours,
         });
       }
       await analytics.analyzeSecurityEvents();
@@ -270,7 +270,7 @@ describe('SecurityEventAnalytics', () => {
       });
       const period = {
         start: new Date(Date.now() - 24 * 60 * 60 * 1000),
-        end: new Date()
+        end: new Date(),
       };
       const report = analytics.generateExecutiveReport(period);
       expect(report).toBeDefined();
@@ -288,7 +288,7 @@ describe('SecurityEventAnalytics', () => {
     it('should include proper compliance status', async () => {
       const period = {
         start: new Date(Date.now() - 24 * 60 * 60 * 1000),
-        end: new Date()
+        end: new Date(),
       };
       const report = analytics.generateExecutiveReport(period);
       expect(report.complianceStatus).toHaveProperty(ComplianceFramework.SOX);
@@ -414,7 +414,7 @@ describe('SecurityEventAnalytics', () => {
       }
       const startTime = Date.now();
       // Run multiple operations concurrently
-      const operations = Promise.all([;)
+      const operations = Promise.all([;);
         analytics.analyzeSecurityEvents(),
         analytics.getSecurityInsights(),
         analytics.getSecurityPatterns(),

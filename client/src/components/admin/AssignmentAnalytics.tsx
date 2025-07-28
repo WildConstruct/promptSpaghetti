@@ -6,7 +6,6 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   AssignmentTargetType,
@@ -14,50 +13,48 @@ import {
   RiskLevel
 } from '../../types/PolicyAssignmentTypes';
 import './AssignmentAnalytics.css';
-
 interface AnalyticsData {
   totalAssignments: number;
   assignmentsByStatus: Record<AssignmentStatus, number>;
   assignmentsByTargetType: Record<AssignmentTargetType, number>;
   assignmentsByRiskLevel: Record<RiskLevel, number>;
   assignmentsByPolicyType: Record<string, number>;
-  trendsOverTime: {
+  trendsOverTime: {,
     date: string;
     created: number;
     revoked: number;
     expired: number;
   }[];
-  topPolicies: {
+  topPolicies: {,
     policyType: string;
     count: number;
     riskDistribution: Record<RiskLevel, number>;
   }[];
-  conflictsDetected: {
+  conflictsDetected: {,
     conflictId: string;
     type: string;
     severity: string;
     affectedAssignments: number;
   }[];
-  inheritanceChains: {
+  inheritanceChains: {,
     rootTargetType: AssignmentTargetType;
     rootTargetId: string;
     depth: number;
     totalAssignments: number;
   }[];
-  complianceMetrics: {
+  complianceMetrics: {,
     averageApprovalTime: number;
     pendingApprovals: number;
     expiredAssignments: number;
     reviewOverdue: number;
   };
-  performanceMetrics: {
+  performanceMetrics: {,
     averageProcessingTime: number;
     successRate: number;
     errorRate: number;
     systemLoad: number;
   };
 }
-
 interface ChartData {
   labels: string[];
   values: number[];
@@ -67,23 +64,20 @@ interface ChartData {
 export const AssignmentAnalytics: React.FC = () => {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [dateRange, setDateRange] = useState({
+  const [dateRange, setDateRange] = useState({)
     startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    endDate: new Date().toISOString().split('T')[0]
+    endDate: new Date().toISOString().split('T')[0],
   });
   const [selectedMetric, setSelectedMetric] = useState<'assignments' | 'conflicts' | 'performance' | 'compliance'>('assignments');
-
   const loadAnalytics = useCallback(async () => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams({
+      const params = new URLSearchParams({)
         startDate: dateRange.startDate,
-        endDate: dateRange.endDate
+        endDate: dateRange.endDate,
       });
-
-      const response = await fetch(`/api/policy-assignments/assignments/analytics?${params}`);
+      const response = await fetch(`/api/policy-assignments/assignments/analytics?${params}`);}
       const data = await response.json();
-      
       if (data.success) {
         setAnalyticsData(data.data);
       }
@@ -95,14 +89,12 @@ export const AssignmentAnalytics: React.FC = () => {
       setIsLoading(false);
     }
   }, [dateRange]);
-
   useEffect(() => {
     loadAnalytics();
   }, [dateRange, loadAnalytics]);
-
-  const createMockAnalytics = (): AnalyticsData => ({
+  const createMockAnalytics = (): AnalyticsData => ({)
     totalAssignments: 1247,
-    assignmentsByStatus: {
+    assignmentsByStatus: {,
       [AssignmentStatus.ACTIVE]: 892,
       [AssignmentStatus.PENDING_APPROVAL]: 45,
       [AssignmentStatus.DRAFT]: 23,
@@ -110,7 +102,7 @@ export const AssignmentAnalytics: React.FC = () => {
       [AssignmentStatus.EXPIRED]: 189,
       [AssignmentStatus.REVOKED]: 86
     },
-    assignmentsByTargetType: {
+    assignmentsByTargetType: {,
       [AssignmentTargetType.USER]: 456,
       [AssignmentTargetType.ROLE]: 234,
       [AssignmentTargetType.TEAM]: 189,
@@ -120,13 +112,13 @@ export const AssignmentAnalytics: React.FC = () => {
       [AssignmentTargetType.DATA_TYPE]: 56,
       [AssignmentTargetType.SYSTEM]: 33
     },
-    assignmentsByRiskLevel: {
+    assignmentsByRiskLevel: {,
       [RiskLevel.LOW]: 567,
       [RiskLevel.MEDIUM]: 445,
       [RiskLevel.HIGH]: 189,
       [RiskLevel.CRITICAL]: 46
     },
-    assignmentsByPolicyType: {
+    assignmentsByPolicyType: {,
       'ACCESS_CONTROL': 345,
       'DATA_FILTERING': 289,
       'ENCRYPTION': 234,
@@ -134,17 +126,17 @@ export const AssignmentAnalytics: React.FC = () => {
       'ANONYMIZATION': 123,
       'AUDIT_LOGGING': 78
     },
-    trendsOverTime: Array.from({ length: 30 }, (_, i) => ({
+    trendsOverTime: Array.from({ length: 30 }, (_, i) => ({)
       date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       created: Math.floor(Math.random() * 20) + 5,
       revoked: Math.floor(Math.random() * 8) + 1,
-      expired: Math.floor(Math.random() * 12) + 2
+      expired: Math.floor(Math.random() * 12) + 2,
     })),
-    topPolicies: [
+    topPolicies: [,
       {
         policyType: 'ACCESS_CONTROL',
         count: 345,
-        riskDistribution: {
+        riskDistribution: {,
           [RiskLevel.LOW]: 123,
           [RiskLevel.MEDIUM]: 134,
           [RiskLevel.HIGH]: 67,
@@ -154,7 +146,7 @@ export const AssignmentAnalytics: React.FC = () => {
       {
         policyType: 'DATA_FILTERING',
         count: 289,
-        riskDistribution: {
+        riskDistribution: {,
           [RiskLevel.LOW]: 145,
           [RiskLevel.MEDIUM]: 89,
           [RiskLevel.HIGH]: 45,
@@ -162,44 +154,40 @@ export const AssignmentAnalytics: React.FC = () => {
         }
       }
     ],
-    conflictsDetected: [
+    conflictsDetected: [,
       { conflictId: 'C001', type: 'POLICY_OVERLAP', severity: 'HIGH', affectedAssignments: 12 },
       { conflictId: 'C002', type: 'INHERITANCE_CONFLICT', severity: 'MEDIUM', affectedAssignments: 8 },
       { conflictId: 'C003', type: 'PRIORITY_CONFLICT', severity: 'LOW', affectedAssignments: 15 }
     ],
-    inheritanceChains: [
+    inheritanceChains: [,
       { rootTargetType: AssignmentTargetType.ORG_UNIT, rootTargetId: 'OU001', depth: 4, totalAssignments: 67 },
       { rootTargetType: AssignmentTargetType.DEPARTMENT, rootTargetId: 'DEPT001', depth: 3, totalAssignments: 45 }
     ],
-    complianceMetrics: {
+    complianceMetrics: {,
       averageApprovalTime: 2.3,
       pendingApprovals: 45,
       expiredAssignments: 189,
-      reviewOverdue: 23
+      reviewOverdue: 23,
     },
-    performanceMetrics: {
+    performanceMetrics: {,
       averageProcessingTime: 1.2,
       successRate: 97.8,
       errorRate: 2.2,
-      systemLoad: 68.5
+      systemLoad: 68.5,
     }
   });
-
-  const createChartFromRecord = (data: Record<string, number>, colors?: string[]): ChartData => ({
+  const createChartFromRecord = (data: Record<string, number>, colors?: string[]): ChartData => ({)
     labels: Object.keys(data),
     values: Object.values(data),
     colors
   });
-
   const renderChart = (chartData: ChartData, title: string, type: 'bar' | 'pie' | 'line' = 'bar') => {
     const maxValue = Math.max(...chartData.values);
     const colors = chartData.colors || ['#3182ce', '#38a169', '#ed8936', '#e53e3e', '#9f7aea'];
-
     if (type === 'pie') {
       const total = chartData.values.reduce((sum, value) => sum + value, 0);
       let currentAngle = 0;
-
-      return (
+      return ()
         <div className="chart-container">
           <h3 className="chart-title">{title}</h3>
           <div className="pie-chart">
@@ -211,11 +199,9 @@ export const AssignmentAnalytics: React.FC = () => {
                 const x2 = 100 + 80 * Math.cos((currentAngle + angle - 90) * Math.PI / 180);
                 const y2 = 100 + 80 * Math.sin((currentAngle + angle - 90) * Math.PI / 180);
                 const largeArc = angle > 180 ? 1 : 0;
-                
-                const path = `M 100 100 L ${x1} ${y1} A 80 80 0 ${largeArc} 1 ${x2} ${y2} Z`;
+                const path = `M 100 100 L ${x1} ${y1} A 80 80 0 ${largeArc} 1 ${x2} ${y2} Z`;}
                 currentAngle += angle;
-                
-                return (
+                return ()
                   <path
                     key={index}
                     d={path}
@@ -226,7 +212,7 @@ export const AssignmentAnalytics: React.FC = () => {
               })}
             </svg>
             <div className="pie-legend">
-              {chartData.labels.map((label, index) => (
+              {chartData.labels.map((label, index) => ()
                 <div key={index} className="legend-item">
                   <span 
                     className="legend-color" 
@@ -241,20 +227,19 @@ export const AssignmentAnalytics: React.FC = () => {
         </div>
       );
     }
-
-    return (
+    return ()
       <div className="chart-container">
         <h3 className="chart-title">{title}</h3>
         <div className="bar-chart">
-          {chartData.labels.map((label, index) => (
+          {chartData.labels.map((label, index) => ()
             <div key={index} className="bar-item">
               <div className="bar-label">{label}</div>
               <div className="bar-container">
                 <div 
                   className="bar-fill" 
                   style={{ 
-                    width: `${(chartData.values[index] / maxValue) * 100}%`,
-                    backgroundColor: colors[index % colors.length]
+                    width: `${(chartData.values[index] / maxValue) * 100}%`,}
+                    backgroundColor: colors[index % colors.length],
                   }}
                 />
                 <span className="bar-value">{chartData.values[index]}</span>
@@ -265,17 +250,16 @@ export const AssignmentAnalytics: React.FC = () => {
       </div>
     );
   };
-
-  const renderMetricCard = (
+  const renderMetricCard = (;)
     title: string,
     value: string | number,
     subtitle?: string,
     trend?: 'up' | 'down' | 'neutral'
-  ) => (
+  ) => ()
     <div className="metric-card">
       <div className="metric-header">
         <h4>{title}</h4>
-        {trend && <span className={`trend-indicator trend-${trend}`}>
+        {trend && <span className={`trend-indicator trend-${trend}`}>}
           {trend === 'up' ? '↗' : trend === 'down' ? '↘' : '→'}
         </span>}
       </div>
@@ -283,11 +267,9 @@ export const AssignmentAnalytics: React.FC = () => {
       {subtitle && <div className="metric-subtitle">{subtitle}</div>}
     </div>
   );
-
   const renderTrendsChart = () => {
     if (!analyticsData?.trendsOverTime) return null;
-
-    return (
+    return ()
       <div className="chart-container trends-chart">
         <h3 className="chart-title">Assignment Trends (30 Days)</h3>
         <div className="trend-lines">
@@ -306,12 +288,12 @@ export const AssignmentAnalytics: React.FC = () => {
             </div>
           </div>
           <div className="trend-data">
-            {analyticsData.trendsOverTime.map((point, index) => (
+            {analyticsData.trendsOverTime.map((point, index) => ()
               <div key={index} className="trend-point">
                 <div className="trend-values">
-                  <div className="trend-bar created" style={{ height: `${point.created * 3}px` }} />
-                  <div className="trend-bar revoked" style={{ height: `${point.revoked * 3}px` }} />
-                  <div className="trend-bar expired" style={{ height: `${point.expired * 3}px` }} />
+                  <div className="trend-bar created" style={{ height: `${point.created * 3}px` }} />}
+                  <div className="trend-bar revoked" style={{ height: `${point.revoked * 3}px` }} />}
+                  <div className="trend-bar expired" style={{ height: `${point.expired * 3}px` }} />}
                 </div>
                 <div className="trend-date">{new Date(point.date).getDate()}</div>
               </div>
@@ -321,26 +303,23 @@ export const AssignmentAnalytics: React.FC = () => {
       </div>
     );
   };
-
   if (isLoading) {
-    return (
+    return ()
       <div className="analytics-loading">
         <div className="loading-spinner" />
         <p>Loading analytics...</p>
       </div>
     );
   }
-
   if (!analyticsData) {
-    return (
+    return ()
       <div className="analytics-error">
         <p>Failed to load analytics data. Please try again.</p>
         <button onClick={loadAnalytics} className="btn btn-primary">Retry</button>
       </div>
     );
   }
-
-  return (
+  return ()
     <div className="assignment-analytics">
       <div className="analytics-header">
         <h2>Assignment Analytics</h2>
@@ -358,7 +337,6 @@ export const AssignmentAnalytics: React.FC = () => {
           />
         </div>
       </div>
-
       <div className="analytics-tabs">
         <button 
           className={`analytics-tab ${selectedMetric === 'assignments' ? 'active' : ''}`}
@@ -385,39 +363,37 @@ export const AssignmentAnalytics: React.FC = () => {
           Compliance
         </button>
       </div>
-
       <div className="analytics-content">
-        {selectedMetric === 'assignments' && (
+        {selectedMetric === 'assignments' && ()
           <>
             <div className="metrics-grid">
               {renderMetricCard('Total Assignments', analyticsData.totalAssignments.toLocaleString(), undefined, 'up')}
-              {renderMetricCard(
+              {renderMetricCard()
                 'Active Assignments',
-                analyticsData.assignmentsByStatus[AssignmentStatus.ACTIVE].toLocaleString(
+                analyticsData.assignmentsByStatus[AssignmentStatus.ACTIVE].toLocaleString()
                 ), undefined, 'up')}
-              {renderMetricCard(
+              {renderMetricCard()
                 'Pending Approvals',
-                analyticsData.assignmentsByStatus[AssignmentStatus.PENDING_APPROVAL].toLocaleString(
+                analyticsData.assignmentsByStatus[AssignmentStatus.PENDING_APPROVAL].toLocaleString()
                 ), undefined, 'neutral')}
-              {renderMetricCard(
+              {renderMetricCard()
                 'Expired Assignments',
-                analyticsData.assignmentsByStatus[AssignmentStatus.EXPIRED].toLocaleString(
+                analyticsData.assignmentsByStatus[AssignmentStatus.EXPIRED].toLocaleString()
                 ), undefined, 'down')}
             </div>
-
             <div className="charts-grid">
-              {renderChart(
+              {renderChart()
                 createChartFromRecord(analyticsData.assignmentsByStatus), 
                 'Assignments by Status',
                 'bar'
               )}
-              {renderChart(
+              {renderChart()
                 createChartFromRecord(analyticsData.assignmentsByTargetType), 
                 'Assignments by Target Type',
                 'pie'
               )}
-              {renderChart(
-                createChartFromRecord(
+              {renderChart()
+                createChartFromRecord()
                   analyticsData.assignmentsByRiskLevel,
                   ['#22543d',
                     '#ed8936',
@@ -431,37 +407,35 @@ export const AssignmentAnalytics: React.FC = () => {
             </div>
           </>
         )}
-
-        {selectedMetric === 'conflicts' && (
+        {selectedMetric === 'conflicts' && ()
           <>
             <div className="metrics-grid">
-              {renderMetricCard(
+              {renderMetricCard()
                 'Total Conflicts',
-                analyticsData.conflictsDetected.length.toString(
+                analyticsData.conflictsDetected.length.toString()
                 ), undefined, 'down')}
-              {renderMetricCard(
+              {renderMetricCard()
                 'High Severity',
-                analyticsData.conflictsDetected.filter(c => c.severity === 'HIGH'
+                analyticsData.conflictsDetected.filter(c => c.severity === 'HIGH')
                 ).length.toString(), undefined, 'down')}
-              {renderMetricCard(
+              {renderMetricCard()
                 'Affected Assignments',
-                analyticsData.conflictsDetected.reduce((sum,
+                analyticsData.conflictsDetected.reduce((sum,)
                   c
                 ) => sum + c.affectedAssignments, 0).toString(), undefined, 'neutral')}
-              {renderMetricCard(
+              {renderMetricCard()
                 'Inheritance Chains',
-                analyticsData.inheritanceChains.length.toString(
+                analyticsData.inheritanceChains.length.toString()
                 ), undefined, 'up')}
             </div>
-
             <div className="conflicts-list">
               <h3>Active Conflicts</h3>
-              {analyticsData.conflictsDetected.map(conflict => (
+              {analyticsData.conflictsDetected.map(conflict => ()
                 <div key={conflict.conflictId} className="conflict-summary">
                   <div className="conflict-id">{conflict.conflictId}</div>
                   <div className="conflict-info">
                     <div className="conflict-type">{conflict.type}</div>
-                    <div className={`conflict-severity severity-${conflict.severity.toLowerCase()}`}>
+                    <div className={`conflict-severity severity-${conflict.severity.toLowerCase()}`}>}
                       {conflict.severity}
                     </div>
                   </div>
@@ -471,13 +445,12 @@ export const AssignmentAnalytics: React.FC = () => {
             </div>
           </>
         )}
-
-        {selectedMetric === 'performance' && (
+        {selectedMetric === 'performance' && ()
           <>
             <div className="metrics-grid">
-              {renderMetricCard(
+              {renderMetricCard()
                 'Processing Time',
-                `${analyticsData.performanceMetrics.averageProcessingTime}s`,
+                `${analyticsData.performanceMetrics.averageProcessingTime}s`,}
                 'average',
                 'up'
               )}
@@ -487,27 +460,26 @@ export const AssignmentAnalytics: React.FC = () => {
             </div>
           </>
         )}
-
-        {selectedMetric === 'compliance' && (
+        {selectedMetric === 'compliance' && ()
           <>
             <div className="metrics-grid">
-              {renderMetricCard(
+              {renderMetricCard()
                 'Approval Time',
-                `${analyticsData.complianceMetrics.averageApprovalTime} days`,
+                `${analyticsData.complianceMetrics.averageApprovalTime} days`,}
                 'average',
                 'down'
               )}
-              {renderMetricCard(
+              {renderMetricCard()
                 'Pending Approvals',
-                analyticsData.complianceMetrics.pendingApprovals.toString(
+                analyticsData.complianceMetrics.pendingApprovals.toString()
                 ), undefined, 'neutral')}
-              {renderMetricCard(
+              {renderMetricCard()
                 'Expired Assignments',
-                analyticsData.complianceMetrics.expiredAssignments.toString(
+                analyticsData.complianceMetrics.expiredAssignments.toString()
                 ), undefined, 'down')}
-              {renderMetricCard(
+              {renderMetricCard()
                 'Overdue Reviews',
-                analyticsData.complianceMetrics.reviewOverdue.toString(
+                analyticsData.complianceMetrics.reviewOverdue.toString()
                 ), undefined, 'down')}
             </div>
           </>

@@ -542,7 +542,7 @@ export class SecurityCostOptimizer extends EventEmitter {
         network_utilization: 40 + Math.random() * 35,
         peak_utilization: 85 + Math.random() * 15,
         average_utilization: 65 + Math.random() * 20,
-        idle_resource_cost: totalCost * (0.1 + Math.random() * 0.2)
+        idle_resource_cost: totalCost * (0.1 + Math.random() * 0.2),
       },
       efficiency: {,
         cost_per_request: totalCost / (1000 + Math.random() * 5000),
@@ -550,14 +550,14 @@ export class SecurityCostOptimizer extends EventEmitter {
         cost_per_gb_processed: totalCost / (500 + Math.random() * 2000),
         cost_per_alert_generated: totalCost / (50 + Math.random() * 200),
         efficiency_score: this.calculateEfficiencyScore(totalCost, costCenter),
-        waste_percentage: 5 + Math.random() * 15
+        waste_percentage: 5 + Math.random() * 15,
       },
       trends: {,
         cost_trend_percentage: -5 + Math.random() * 20,
         utilization_trend_percentage: -10 + Math.random() * 25,
         efficiency_trend_percentage: -5 + Math.random() * 15,
         forecasted_monthly_cost: totalCost * 24 * 30,
-        forecasted_yearly_cost: totalCost * 24 * 365
+        forecasted_yearly_cost: totalCost * 24 * 365,
       },
       services: this.generateServiceBreakdown(totalCost),
       collected_at: Date.now(),
@@ -636,7 +636,7 @@ export class SecurityCostOptimizer extends EventEmitter {
         percentage,
         utilization: 50 + Math.random() * 40,
         instances,
-        cost_per_instance: cost / instances
+        cost_per_instance: cost / instances,
       };
     });
   }
@@ -654,7 +654,7 @@ export class SecurityCostOptimizer extends EventEmitter {
         user_id: user,
         cost,
         requests,
-        cost_per_request: cost / requests
+        cost_per_request: cost / requests,
       };
     });
   }
@@ -672,7 +672,7 @@ export class SecurityCostOptimizer extends EventEmitter {
         project_id: project,
         cost,
         resources,
-        cost_per_resource: cost / resources
+        cost_per_resource: cost / resources,
       };
     });
   }
@@ -868,7 +868,7 @@ export class SecurityCostOptimizer extends EventEmitter {
     }
     // Check execution limits
     if (action.parameters.max_executions_per_day) {
-      const todayExecutions = this.optimizationHistory.filter(h => ;)
+      const todayExecutions = this.optimizationHistory.filter(h => ;);
         h.action_id === action.id && 
         Date.now() - h.executed_at < 24 * 60 * 60 * 1000
       ).length;
@@ -1032,7 +1032,7 @@ export class SecurityCostOptimizer extends EventEmitter {
         estimated_savings_monthly: monthlySavings,
         estimated_savings_yearly: monthlySavings * 12,
         savings_percentage: ((currentCost - rightsizedCost) / currentCost) * 100,
-        payback_period_months: 0 // Immediate savings
+        payback_period_months: 0 // Immediate savings,
       },
       implementation: {,
         complexity: 'medium',
@@ -1047,14 +1047,14 @@ export class SecurityCostOptimizer extends EventEmitter {
           'Monitor performance impact'
         ],
         risks: ['Temporary performance impact', 'Application compatibility issues'],
-        rollback_plan: 'Restore original instance sizes within 1 hour'
+        rollback_plan: 'Restore original instance sizes within 1 hour',
       },
       impact: {,
         performance_impact: 'neutral',
         availability_impact: 'neutral',
         security_impact: 'neutral',
         operational_impact: 'positive',
-        impact_details: 'Better resource utilization without affecting functionality'
+        impact_details: 'Better resource utilization without affecting functionality',
       },
       validation: {,
         testing_required: true,
@@ -1096,14 +1096,14 @@ export class SecurityCostOptimizer extends EventEmitter {
           'Monitor storage utilization'
         ],
         risks: ['Data retrieval delays for archived data'],
-        rollback_plan: 'Restore all data to standard tier'
+        rollback_plan: 'Restore all data to standard tier',
       },
       impact: {,
         performance_impact: 'neutral',
         availability_impact: 'neutral',
         security_impact: 'positive',
         operational_impact: 'positive',
-        impact_details: 'Automated storage management reduces manual overhead'
+        impact_details: 'Automated storage management reduces manual overhead',
       },
       validation: {,
         testing_required: false,
@@ -1131,7 +1131,7 @@ export class SecurityCostOptimizer extends EventEmitter {
         estimated_savings_monthly: monthlySavings,
         estimated_savings_yearly: monthlySavings * 12,
         savings_percentage: 35,
-        payback_period_months: 0 // Immediate savings
+        payback_period_months: 0 // Immediate savings,
       },
       implementation: {,
         complexity: 'low',
@@ -1145,14 +1145,14 @@ export class SecurityCostOptimizer extends EventEmitter {
           'Monitor utilization and savings'
         ],
         risks: ['Commitment to fixed capacity', 'Technology changes may affect utilization'],
-        rollback_plan: 'Sell unused reservations on marketplace'
+        rollback_plan: 'Sell unused reservations on marketplace',
       },
       impact: {,
         performance_impact: 'neutral',
         availability_impact: 'neutral',
         security_impact: 'neutral',
         operational_impact: 'positive',
-        impact_details: 'Reduced costs without operational changes'
+        impact_details: 'Reduced costs without operational changes',
       },
       validation: {,
         testing_required: false,
@@ -1195,14 +1195,14 @@ export class SecurityCostOptimizer extends EventEmitter {
           'Monitor ongoing usage'
         ],
         risks: ['Contract renegotiation may take time', 'Vendor relationship impact'],
-        rollback_plan: 'Maintain current licensing terms if negotiations fail'
+        rollback_plan: 'Maintain current licensing terms if negotiations fail',
       },
       impact: {,
         performance_impact: 'neutral',
         availability_impact: 'neutral',
         security_impact: 'neutral',
         operational_impact: 'positive',
-        impact_details: 'Better license utilization and vendor relationships'
+        impact_details: 'Better license utilization and vendor relationships',
       },
       validation: {,
         testing_required: false,
@@ -1224,7 +1224,7 @@ export class SecurityCostOptimizer extends EventEmitter {
     const id = `report_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     // Get metrics for the period
     const centerMetrics = this.metrics.get(costCenterId) || [];
-    const periodMetrics = centerMetrics.filter(m => ;)
+    const periodMetrics = centerMetrics.filter(m => ;);
       m.collected_at >= period.start && m.collected_at <= period.end
     );
     if (periodMetrics.length === 0) {
@@ -1248,7 +1248,7 @@ export class SecurityCostOptimizer extends EventEmitter {
         efficiency_score: latestMetrics.efficiency.efficiency_score,
         top_cost_drivers: latestMetrics.services.slice(0, 3).map(s => s.service_name),
         key_insights: this.generateReportInsights(latestMetrics),
-        critical_recommendations: centerRecommendations.filter(r => r.priority === 'critical').length
+        critical_recommendations: centerRecommendations.filter(r => r.priority === 'critical').length,
       },
       analysis: {,
         cost_breakdown: this.generateCostBreakdownAnalysis(periodMetrics),
@@ -1274,7 +1274,7 @@ export class SecurityCostOptimizer extends EventEmitter {
         variance_amount: monthlyActual - budget.budget.amount,
         variance_percentage: ((monthlyActual - budget.budget.amount) / budget.budget.amount) * 100,
         projected_year_end: monthlyActual * 12,
-        budget_health: monthlyActual > budget.budget.amount * 1.1 ? 'over_budget' : 
+        budget_health: monthlyActual > budget.budget.amount * 1.1 ? 'over_budget' : ,
                       monthlyActual > budget.budget.amount * 0.9 ? 'at_risk' : 'on_track'
       };
     }
@@ -1321,28 +1321,28 @@ export class SecurityCostOptimizer extends EventEmitter {
         current_cost: latest.costs.compute_cost,
         previous_cost: previous.costs.compute_cost,
         change_amount: latest.costs.compute_cost - previous.costs.compute_cost,
-        change_percentage: ((latest.costs.compute_cost - previous.costs.compute_cost) / previous.costs.compute_cost) * 100
+        change_percentage: ((latest.costs.compute_cost - previous.costs.compute_cost) / previous.costs.compute_cost) * 100,
       },
       {
         category: 'Storage',
         current_cost: latest.costs.storage_cost,
         previous_cost: previous.costs.storage_cost,
         change_amount: latest.costs.storage_cost - previous.costs.storage_cost,
-        change_percentage: ((latest.costs.storage_cost - previous.costs.storage_cost) / previous.costs.storage_cost) * 100
+        change_percentage: ((latest.costs.storage_cost - previous.costs.storage_cost) / previous.costs.storage_cost) * 100,
       },
       {
         category: 'Network',
         current_cost: latest.costs.network_cost,
         previous_cost: previous.costs.network_cost,
         change_amount: latest.costs.network_cost - previous.costs.network_cost,
-        change_percentage: ((latest.costs.network_cost - previous.costs.network_cost) / previous.costs.network_cost) * 100
+        change_percentage: ((latest.costs.network_cost - previous.costs.network_cost) / previous.costs.network_cost) * 100,
       },
       {
         category: 'Licensing',
         current_cost: latest.costs.licensing_cost,
         previous_cost: previous.costs.licensing_cost,
         change_amount: latest.costs.licensing_cost - previous.costs.licensing_cost,
-        change_percentage: ((latest.costs.licensing_cost - previous.costs.licensing_cost) / previous.costs.licensing_cost) * 100
+        change_percentage: ((latest.costs.licensing_cost - previous.costs.licensing_cost) / previous.costs.licensing_cost) * 100,
       }
     ];
   }
@@ -1384,14 +1384,14 @@ export class SecurityCostOptimizer extends EventEmitter {
         current_value: latest.efficiency.efficiency_score,
         trend_direction: latest.efficiency.efficiency_score > 70 ? 'up' : latest.efficiency.efficiency_score > 50 ? 'stable' : 'down',
         trend_percentage: latest.trends.efficiency_trend_percentage,
-        forecasted_value: latest.efficiency.efficiency_score * (1 + latest.trends.efficiency_trend_percentage / 100)
+        forecasted_value: latest.efficiency.efficiency_score * (1 + latest.trends.efficiency_trend_percentage / 100),
       },
       {
         metric: 'Resource Utilization',
         current_value: latest.utilization.average_utilization,
         trend_direction: latest.utilization.average_utilization > 70 ? 'up' : 'stable',
         trend_percentage: latest.trends.utilization_trend_percentage,
-        forecasted_value: latest.utilization.average_utilization * (1 + latest.trends.utilization_trend_percentage / 100)
+        forecasted_value: latest.utilization.average_utilization * (1 + latest.trends.utilization_trend_percentage / 100),
       }
     ];
   }
@@ -1499,7 +1499,6 @@ View Full Report: /cost-optimizer/reports/${report.id}
     efficiency_score: number;
     recent_events: CostEvent[];
     top_cost_drivers: Array<{ name: string; cost: number; percentage: number }>;
-  } {
     const activeCostCenters = Array.from(this.costCenters.values()).filter(cc => cc.active);
     const activeAlerts = Array.from(this.costAlerts.values()).filter(a => a.enabled).length;
     // Calculate totals across all cost centers
@@ -1724,7 +1723,7 @@ View Full Report: /cost-optimizer/reports/${report.id}
     this.emit('system_metrics_updated', {)
       total_optimization_savings: totalOptimizationSavings,
       optimization_actions_executed: this.optimizationHistory.length,
-      active_recommendations: Array.from(this.recommendations.values()).filter(r => r.status === 'identified').length
+      active_recommendations: Array.from(this.recommendations.values()).filter(r => r.status === 'identified').length,
     });
   }
   private async runOptimizationAnalysis(): Promise<void> {
@@ -1813,7 +1812,7 @@ View Full Report: /cost-optimizer/reports/${report.id}
       this.emit('configuration_imported', {)
         cost_centers_imported: config.cost_centers?.length || 0,
         alerts_imported: config.cost_alerts?.length || 0,
-        actions_imported: config.optimization_actions?.length || 0
+        actions_imported: config.optimization_actions?.length || 0,
       });
     } catch (error) {
       throw new Error(`Failed to import configuration: ${error}`);}

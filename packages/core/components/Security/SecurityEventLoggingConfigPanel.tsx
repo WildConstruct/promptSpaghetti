@@ -193,7 +193,7 @@ export const SecurityEventLoggingConfigPanel: React.FC = () => {
       setLoading(false);
     }
   };
-  const renderOverviewTab = () => (;)
+  const renderOverviewTab = () => (;);
     <div className="config-overview">
       <div className="overview-header">
         <h2>Security Event Logging Overview</h2>
@@ -280,43 +280,43 @@ export const SecurityEventLoggingConfigPanel: React.FC = () => {
       </Card>
     </div>
   );
-  const renderDestinationsTab = () => (;)
+  const renderDestinationsTab = () => (;);
     <LogDestinationManager
       destinations={config.destinations}
       onDestinationsChange={(destinations) => handleConfigChange({ destinations })}
     />
   );
-  const renderEventTypesTab = () => (;)
+  const renderEventTypesTab = () => (;);
     <EventTypeSelector
       selectedTypes={config.event_types}
       onSelectionChange={(event_types) => handleConfigChange({ event_types })}
     />
   );
-  const renderAlertsTab = () => (;)
+  const renderAlertsTab = () => (;);
     <AlertRuleBuilder
       alertRules={config.alert_rules}
       onRulesChange={(alert_rules) => handleConfigChange({ alert_rules })}
     />
   );
-  const renderRetentionTab = () => (;)
+  const renderRetentionTab = () => (;);
     <RetentionPolicyEditor
       policies={config.retention_policies}
       onPoliciesChange={(retention_policies) => handleConfigChange({ retention_policies })}
     />
   );
-  const renderPerformanceTab = () => (;)
+  const renderPerformanceTab = () => (;);
     <PerformanceSettingsPanel
       settings={config.performance_settings}
       onSettingsChange={(performance_settings) => handleConfigChange({ performance_settings })}
     />
   );
-  const renderComplianceTab = () => (;)
+  const renderComplianceTab = () => (;);
     <ComplianceFrameworkSettings
       settings={config.compliance_settings}
       onSettingsChange={(compliance_settings) => handleConfigChange({ compliance_settings })}
     />
   );
-  return ()
+  return ();
     <div className="security-logging-config">
       <div className="config-header">
         <div className="header-content">
@@ -448,7 +448,7 @@ const LogDestinationManager: React.FC<{
     setShowAddDialog(false);
   };
   const _handleUpdateDestination = (updated: LoggingDestination) => {
-    const updatedDestinations = destinations.map(dest => ;)
+    const updatedDestinations = destinations.map(dest => ;);
       dest.id === updated.id ? updated : dest
     );
     onDestinationsChange(updatedDestinations);
@@ -458,7 +458,7 @@ const LogDestinationManager: React.FC<{
     const filtered = destinations.filter(dest => dest.id !== id);
     onDestinationsChange(filtered);
   };
-  return ()
+  return ();
     <div className="destination-manager">
       <div className="manager-header">
         <h2>Logging Destinations</h2>
@@ -592,7 +592,7 @@ const EventTypeSelector: React.FC<{
       onSelectionChange(newTypes);
     }
   };
-  return ()
+  return ();
     <div className="event-type-selector">
       <div className="selector-header">
         <h2>Security Event Types</h2>
@@ -606,7 +606,7 @@ const EventTypeSelector: React.FC<{
       {Object.entries(eventTypeCategories).map(([category, types]) => {
         const selectedCount = types.filter(type => selectedTypes.includes(type)).length;
         const allSelected = selectedCount === types.length;
-        return ()
+        return ();
           <Card key={category} className="category-card">
             <div className="category-header">
               <Checkbox
@@ -672,7 +672,7 @@ const RetentionPolicyEditor: React.FC<{
   const deletePolicy = (framework: ComplianceFramework) => {
     onPoliciesChange(policies.filter(p => p.framework !== framework));
   };
-  return ()
+  return ();
     <div className="retention-policy-editor">
       <div className="editor-header">
         <h2>Data Retention Policies</h2>
@@ -817,7 +817,7 @@ const PerformanceSettingsPanel: React.FC<{
   const updateSetting = (key: keyof PerformanceSettings, value: Error) => {
     onSettingsChange({ ...settings, [key]: value });
   };
-  return ()
+  return ();
     <div className="performance-settings">
       <div className="settings-header">
         <h2>Performance Settings</h2>
@@ -952,7 +952,7 @@ const ComplianceFrameworkSettings: React.FC<{
     const updatedRules = settings.validation_rules.filter((_, i) => i !== index);
     onSettingsChange({ ...settings, validation_rules: updatedRules });
   };
-  return ()
+  return ();
     <div className="compliance-settings">
       <div className="settings-header">
         <h2>Compliance Framework Settings</h2>

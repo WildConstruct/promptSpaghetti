@@ -224,7 +224,7 @@ export class AnalyticsAuthorizationService {
       if (!this.hasPermission(authContext, AnalyticsPermission.PUBLISH_EVENTS)) {
         return {
           allowed: false,
-          reason: 'Insufficient permissions to publish analytics events'
+          reason: 'Insufficient permissions to publish analytics events',
         };
       }
       // Apply authorization policies
@@ -269,7 +269,7 @@ export class AnalyticsAuthorizationService {
       if (!this.hasPermission(authContext, AnalyticsPermission.VIEW_EVENTS)) {
         return {
           allowed: false,
-          reason: 'Insufficient permissions to view analytics events'
+          reason: 'Insufficient permissions to view analytics events',
         };
       }
       // Apply authorization policies
@@ -293,7 +293,7 @@ export class AnalyticsAuthorizationService {
       if (!this.hasPermission(authContext, AnalyticsPermission.VIEW_ANALYTICS)) {
         return {
           allowed: false,
-          reason: 'Insufficient permissions to query analytics data'
+          reason: 'Insufficient permissions to query analytics data',
         };
       }
       // Apply user/organization restrictions
@@ -337,7 +337,7 @@ export class AnalyticsAuthorizationService {
         system: [AnalyticsPermission.VIEW_SYSTEM_METRICS],
       };
       const permissions = requiredPermissions[dashboardType];
-      const hasAccess = permissions.every(permission => ;)
+      const hasAccess = permissions.every(permission => ;);
         this.hasPermission(authContext, permission)
       );
       return {
@@ -448,14 +448,14 @@ export class AnalyticsAuthorizationService {
     }
     // Check required permissions
     if (condition.requiredPermissions) {
-      const hasAllPermissions = condition.requiredPermissions.every(permission =>;)
+      const hasAllPermissions = condition.requiredPermissions.every(permission =>;);
         this.hasPermission(authContext, permission)
       );
       if (!hasAllPermissions) return false;
     }
     // Check required roles
     if (condition.requiredRoles) {
-      const hasRequiredRole = condition.requiredRoles.some(role =>;)
+      const hasRequiredRole = condition.requiredRoles.some(role =>;);
         authContext.roles.includes(role)
       );
       if (!hasRequiredRole) return false;
@@ -490,7 +490,7 @@ export class AnalyticsAuthorizationService {
     event: Record<string,
     unknown>,
     fields: string[],
-    mode: 'allow' | 'deny'
+    mode: 'allow' | 'deny',
   ): Record<string, unknown> {
     // Simplified implementation - in practice would need more sophisticated field filtering
     if (mode === 'deny') {
@@ -582,7 +582,6 @@ export class AnalyticsAuthorizationService {
       canViewAdminDashboard: boolean;
       canManageAnalytics: boolean;
     };
-  } {
     return {
       userId: authContext.userId,
       organizationId: authContext.organizationId,

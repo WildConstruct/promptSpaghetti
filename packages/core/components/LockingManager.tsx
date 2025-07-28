@@ -114,14 +114,14 @@ export const LockingManager: React.FC<LockingManagerProps> = ({)
   });
   const unreadNotifications = notifications.filter(n => !n.read_at).length;
   if (isLoading) {
-    return ()
+    return ();
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <span className="ml-2 text-gray-600">Loading lock information...</span>
       </div>
     );
   }
-  return ()
+  return ();
     <div className="bg-white rounded-lg shadow-lg">
       {/* Header */}
       <div className="border-b border-gray-200 px-6 py-4">

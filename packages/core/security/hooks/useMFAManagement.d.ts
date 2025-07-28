@@ -95,7 +95,7 @@ export interface UseMFAManagementReturn {
     operationTimeout: boolean;
     enableMethod: (methodId: string) => Promise<void>;
     disableMethod: (methodId: string) => Promise<void>;
-    setupTOTP: (userId: string) => Promise<{
+    setupTOTP: (userId: string) => Promise<{,
         secret: string;
         qrCode: string;
     }>;

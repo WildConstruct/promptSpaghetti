@@ -97,7 +97,7 @@ export declare class SecurityEventMonitor extends EventEmitter {
     /**
      * Record validation failure event
      */
-    recordValidationFailure()
+    recordValidationFailure();
       input: string,
       inputType: string,
       source: string,
@@ -107,7 +107,7 @@ export declare class SecurityEventMonitor extends EventEmitter {
     /**
      * Record injection attempt
      */
-    recordInjectionAttempt()
+    recordInjectionAttempt();
       input: string,
       inputType: string,
       source: string,
@@ -117,7 +117,7 @@ export declare class SecurityEventMonitor extends EventEmitter {
     /**
      * Record anomalous activity
      */
-    recordAnomaly()
+    recordAnomaly();
       description: string,
       source: string,
       riskScore: number,

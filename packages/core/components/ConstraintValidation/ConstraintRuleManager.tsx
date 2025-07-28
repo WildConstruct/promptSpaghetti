@@ -56,7 +56,7 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({)
       enforcement: 'warning',
       message: 'New constraint rule',
       description: 'Custom constraint description',
-      historical_basis: 'Historical basis for this constraint'
+      historical_basis: 'Historical basis for this constraint',
     };
     setEditingConstraint(newConstraint);
     setIsCreating(true);
@@ -131,7 +131,7 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({)
     default: return <Settings size={16} />;
     }
   };
-  return ()
+  return ();
     <div className="constraint-rule-manager">
       <div className="rule-manager-header">
         <h2>Constraint Rule Management</h2>
@@ -244,7 +244,7 @@ const ConstraintRuleItem: React.FC<ConstraintRuleItemProps> = ({)
     default: return <Settings size={14} />;
     }
   };
-  return ()
+  return ();
     <div className="constraint-rule-item">
       <div className="rule-header">
         <div className="rule-title">
@@ -321,7 +321,7 @@ const ConstraintEditor: React.FC<ConstraintEditorProps> = ({)
       : current.filter(c => c !== className);
     updateConstraint({ social_classes: updated.length > 0 ? updated : undefined });
   };
-  return ()
+  return ();
     <div className="constraint-editor-overlay">
       <div className="constraint-editor">
         <div className="editor-header">
@@ -447,7 +447,7 @@ function getDefaultConstraints(): HistoricalConstraint[] {
       enforcement: 'strict',
       message: 'Medieval and modern items should not be mixed',
       description: 'Prevents inappropriate mixing of medieval and modern elements',
-      historical_basis: 'Medieval technology and materials were fundamentally different from modern equivalents'
+      historical_basis: 'Medieval technology and materials were fundamentally different from modern equivalents',
     },
     {
       id: 'silk-availability-medieval',
@@ -457,7 +457,7 @@ function getDefaultConstraints(): HistoricalConstraint[] {
       enforcement: 'warning',
       message: 'Silk was extremely rare in early medieval Northern Europe',
       description: 'Warns when silk is used in contexts where it would have been extremely expensive or unavailable',
-      historical_basis: 'Silk trade routes were disrupted and silk was primarily available to royalty and high clergy'
+      historical_basis: 'Silk trade routes were disrupted and silk was primarily available to royalty and high clergy',
     },
     {
       id: 'social-class-clothing',
@@ -467,7 +467,7 @@ function getDefaultConstraints(): HistoricalConstraint[] {
       enforcement: 'warning',
       message: 'Elaborate clothing inappropriate for peasant social class',
       description: 'Ensures clothing matches the economic and legal constraints of social classes',
-      historical_basis: 'Sumptuary laws regulated clothing by social class in medieval Europe'
+      historical_basis: 'Sumptuary laws regulated clothing by social class in medieval Europe',
     }
   ];
 }

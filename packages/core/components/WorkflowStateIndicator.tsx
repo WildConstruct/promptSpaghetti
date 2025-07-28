@@ -50,7 +50,7 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
     return 'Active state';
   };
   if (compact) {
-    return ()
+    return ();
       <div 
         className="flex items-center space-x-2 px-2 py-1 rounded-md text-sm"
         style={{ 
@@ -70,7 +70,7 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
@@ -146,9 +146,9 @@ export const WorkflowStateBadge: React.FC<{
   const sizeClasses = {
     sm: 'px-2 py-1 text-xs',
     md: 'px-3 py-1 text-sm',
-    lg: 'px-4 py-2 text-base'
+    lg: 'px-4 py-2 text-base',
   };
-  return ()
+  return ();
     <div 
       className={`inline-flex items-center space-x-2 rounded-full font-medium ${sizeClasses[size]}`}
       style={{ 

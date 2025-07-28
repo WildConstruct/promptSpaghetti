@@ -106,7 +106,7 @@ export interface SegmentCondition {
   id: string;
   type: 'attribute' | 'behavior' | 'demographic' | 'geographic' | 'temporal' | 'cohort' | 'custom';
   field: string;
-  operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 
+  operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | ,
            'greater_equal' | 'less_equal' | 'contains' | 'not_contains' | 'starts_with' | 
            'ends_with' | 'regex' | 'exists' | 'not_exists' | 'between' | 'not_between' |
            'within_days' | 'not_within_days' | 'relative_to_now' | 'percentile' | 
@@ -147,7 +147,7 @@ export interface UserSegment {
   color: string;
   icon?: string;
   tags: string[];
-  category: 'behavioral' | 'demographic' | 'geographic' | 'engagement' | 
+  category: 'behavioral' | 'demographic' | 'geographic' | 'engagement' | ,
            'revenue' | 'lifecycle' | 'experimental' | 'custom';
   // Segment metrics
   userCount: number;
@@ -341,7 +341,7 @@ export interface SegmentRule {
 
 export interface SegmentAction {
   id: string;
-  type: 'add_to_segment' | 'remove_from_segment' | 'send_notification' | 
+  type: 'add_to_segment' | 'remove_from_segment' | 'send_notification' | ,
         'trigger_webhook' | 'update_attribute' | 'log_event' | 'custom';
   parameters: Record<string, any>;
   // Conditional execution
@@ -553,7 +553,6 @@ export class SegmentUtils {
     matches: boolean;
     matchingConditions: string[];
     score: number;
-  } {
     const matchingConditions: string[] = [];
     let totalWeight = 0;
     let matchingWeight = 0;
@@ -696,7 +695,7 @@ export class SegmentUtils {
         description: `This segment is growing rapidly at ${analytics.growthRate.toFixed(1)}% rate`,}
         severity: 'medium',
         actionable: true,
-        generatedAt: new Date()
+        generatedAt: new Date(),
       });
     }
     // Churn risk analysis
@@ -707,7 +706,7 @@ export class SegmentUtils {
         description: `Churn rate of ${(segment.churnRate * 100).toFixed(1)}% is above healthy threshold`,}
         severity: 'high',
         actionable: true,
-        generatedAt: new Date()
+        generatedAt: new Date(),
       });
     }
     // Revenue opportunity
@@ -718,7 +717,7 @@ export class SegmentUtils {
         description: 'Users in this segment have high near-term revenue potential',
         severity: 'medium',
         actionable: true,
-        generatedAt: new Date()
+        generatedAt: new Date(),
       });
     }
     return insights;

@@ -80,7 +80,7 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
       onChange(newValue);
     }
   }, [disabled, step, value, min, max, onChange]);
-  return ()
+  return ();
     <div className={`weight-slider ${className}`} style={{ marginBottom: 8 }}>}
       {label && ()
         <label 
@@ -102,7 +102,7 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
           position: 'relative',
           display: 'flex',
           alignItems: 'center',
-          gap: showNumeric ? 8 : 0
+          gap: showNumeric ? 8 : 0,
         }}
       >
         {/* Main slider track */}
@@ -165,7 +165,7 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
                   : '0 2px 4px rgba(0,0,0,0.2)',
               transition: isDragging ? 'none' : 'all 0.1s ease',
               outline: 'none',
-              scale: isDragging ? 1.1 : 1
+              scale: isDragging ? 1.1 : 1,
             }}
             onFocus={() => setShowTooltip(true)}
             onBlur={() => setShowTooltip(false)}
@@ -203,7 +203,7 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
                   height: 0,
                   borderLeft: '4px solid transparent',
                   borderRight: '4px solid transparent',
-                  borderTop: '4px solid #1a202c'
+                  borderTop: '4px solid #1a202c',
                 }}
               />
             </div>

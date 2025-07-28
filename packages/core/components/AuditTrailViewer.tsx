@@ -143,14 +143,14 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({)
     }
   };
   if (loading) {
-    return ()
+    return ();
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
   }
   if (error) {
-    return ()
+    return ();
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <div className="flex items-center">
           <XCircleIcon className="h-5 w-5 text-red-600 mr-2" />
@@ -159,7 +159,7 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
       <div className="border-b border-gray-200 p-4">

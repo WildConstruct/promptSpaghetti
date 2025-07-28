@@ -238,7 +238,7 @@ export const createDefaultShortcuts = (actions: {)
       cmd: true,
       shift: true,
       description: 'Show keyboard shortcuts help',
-      action: () => {
+      action: () => {,
         // This could open a help modal
         console.log('Keyboard shortcuts help');
       }

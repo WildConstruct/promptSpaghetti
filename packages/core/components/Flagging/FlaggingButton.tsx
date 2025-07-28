@@ -213,7 +213,7 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({)
         metadata: {,
           severity: reason?.severity,
           category: reason?.category,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         }
       };
       if (onFlag) {
@@ -305,9 +305,9 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({)
       fontWeight: '500',
       textDecoration: variant === 'link' ? 'underline' : 'none',
       opacity: (disabled || status.userHasFlagged) ? 0.6 : 1,
-      transition: 'all 0.2s ease'
+      transition: 'all 0.2s ease',
     };
-    return ()
+    return ();
       <button
         onClick={handleFlagClick}
         disabled={disabled || status.userHasFlagged}
@@ -339,7 +339,7 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({)
       </button>
     );
   };
-  return ()
+  return ();
     <>
       {renderButton()}
       {/* Flagging Modal */}
@@ -373,7 +373,7 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({)
               alignItems: 'center',
               marginBottom: '20px',
               paddingBottom: '12px',
-              borderBottom: '1px solid #e5e7eb'
+              borderBottom: '1px solid #e5e7eb',
             }}>
               <h3 style={{
                 margin: 0,
@@ -460,7 +460,7 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({)
                           border: selectedReason === reason.id ? '2px solid #3b82f6' : '1px solid #e5e7eb',
                           borderRadius: '6px',
                           cursor: 'pointer',
-                          backgroundColor: selectedReason === reason.id ? '#eff6ff' : 'white'
+                          backgroundColor: selectedReason === reason.id ? '#eff6ff' : 'white',
                         }}
                       >
                         <input
@@ -484,7 +484,7 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({)
                               fontSize: '10px',
                               padding: '1px 4px',
                               borderRadius: '4px',
-                              backgroundColor: reason.severity === 'critical' ? '#dc2626' :
+                              backgroundColor: reason.severity === 'critical' ? '#dc2626' :,
                                 reason.severity === 'high' ? '#d97706' :
                                   reason.severity === 'medium' ? '#3b82f6' : '#6b7280',
                               color: 'white',
@@ -538,7 +538,7 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({)
                   justifyContent: 'flex-end',
                   gap: '8px',
                   paddingTop: '16px',
-                  borderTop: '1px solid #e5e7eb'
+                  borderTop: '1px solid #e5e7eb',
                 }}>
                   <button
                     onClick={handleCancel}
@@ -552,7 +552,7 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({)
                       fontWeight: '500',
                       color: '#374151',
                       cursor: loading ? 'not-allowed' : 'pointer',
-                      opacity: loading ? 0.6 : 1
+                      opacity: loading ? 0.6 : 1,
                     }}
                   >
                     Cancel
@@ -581,7 +581,7 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({)
                         border: '2px solid white',
                         borderTop: '2px solid transparent',
                         borderRadius: '50%',
-                        animation: 'spin 1s linear infinite'
+                        animation: 'spin 1s linear infinite',
                       }} />
                     )}
                     Submit Flag

@@ -375,7 +375,7 @@ export function createAuditedSafeMathContext(contextName: string = 'default'): R
  * Utility to check if a value is within safe numeric range
  */
 export function isInSafeRange(value: number): boolean {
-  return ()
+  return ();
     typeof value === 'number' &&
     !isNaN(value) &&
     isFinite(value) &&

@@ -19,7 +19,7 @@ describe('WeightVisualizationPanel', () => {
     expect(screen.getByText(/Weight Distribution/)).toBeInTheDocument();
   });
   it('renders with custom title', () => {
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions} 
         title="Custom Weight Chart"
@@ -28,7 +28,7 @@ describe('WeightVisualizationPanel', () => {
     expect(screen.getByText(/Custom Weight Chart/)).toBeInTheDocument();
   });
   it('renders chart type selector when showChartControls is true', () => {
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions} 
         showChartControls={true}
@@ -39,7 +39,7 @@ describe('WeightVisualizationPanel', () => {
     expect(screen.getByText('Bar')).toBeInTheDocument();
   });
   it('hides chart controls when showChartControls is false', () => {
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions} 
         showChartControls={false}
@@ -50,7 +50,7 @@ describe('WeightVisualizationPanel', () => {
     expect(screen.queryByText('Bar')).not.toBeInTheDocument();
   });
   it('switches chart types when buttons are clicked', () => {
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions} 
         showChartControls={true}
@@ -62,7 +62,7 @@ describe('WeightVisualizationPanel', () => {
     expect(donutButton).toBeInTheDocument();
   });
   it('renders color scheme selector', () => {
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions} 
         showChartControls={true}
@@ -73,7 +73,7 @@ describe('WeightVisualizationPanel', () => {
     expect(selector).toBeInTheDocument();
   });
   it('changes color scheme when selector is used', () => {
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions} 
         showChartControls={true}
@@ -84,7 +84,7 @@ describe('WeightVisualizationPanel', () => {
     expect(selector).toHaveValue('professional');
   });
   it('renders display options checkboxes', () => {
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions} 
         showChartControls={true}
@@ -94,7 +94,7 @@ describe('WeightVisualizationPanel', () => {
     expect(screen.getByText('Show Percentages')).toBeInTheDocument();
   });
   it('toggles display options when checkboxes are clicked', () => {
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions} 
         showChartControls={true}
@@ -108,7 +108,7 @@ describe('WeightVisualizationPanel', () => {
     expect(labelsCheckbox.checked).toBe(false);
   });
   it('renders statistics when showStatistics is true', () => {
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions} 
         showStatistics={true}
@@ -120,7 +120,7 @@ describe('WeightVisualizationPanel', () => {
     expect(screen.getByText(/Dominant Option:/)).toBeInTheDocument();
   });
   it('hides statistics when showStatistics is false', () => {
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions} 
         showStatistics={false}
@@ -135,7 +135,7 @@ describe('WeightVisualizationPanel', () => {
       { id: '3', text: 'C', weight: 2 },
       { id: '4', text: 'D', weight: 2 }
     ];
-    render()
+    render();
       <WeightVisualizationPanel 
         options={balancedOptions} 
         showStatistics={true}
@@ -150,7 +150,7 @@ describe('WeightVisualizationPanel', () => {
       { id: '2', text: 'B', weight: 1 },
       { id: '3', text: 'C', weight: 1 }
     ];
-    render()
+    render();
       <WeightVisualizationPanel 
         options={unbalancedOptions} 
         showStatistics={true}
@@ -161,7 +161,7 @@ describe('WeightVisualizationPanel', () => {
   });
   it('handles collapsible state', () => {
     const mockOnCollapseChange = jest.fn<unknown[], unknown>();
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions}
         collapsed={false}
@@ -173,7 +173,7 @@ describe('WeightVisualizationPanel', () => {
   });
   it('handles option hover events', () => {
     const mockOnHover = jest.fn<unknown[], unknown>();
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions}
         onOptionHover={mockOnHover}
@@ -184,7 +184,7 @@ describe('WeightVisualizationPanel', () => {
   });
   it('handles option click events', () => {
     const mockOnClick = jest.fn<unknown[], unknown>();
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions}
         onOptionClick={mockOnClick}
@@ -194,7 +194,7 @@ describe('WeightVisualizationPanel', () => {
     expect(screen.getByText(/Weight Distribution/)).toBeInTheDocument();
   });
   it('renders non-collapsible version when no onCollapseChange provided', () => {
-    render()
+    render();
       <WeightVisualizationPanel 
         options={mockOptions}
       />
@@ -203,7 +203,7 @@ describe('WeightVisualizationPanel', () => {
     expect(screen.getByText(/Weight Distribution/)).toBeInTheDocument();
   });
   it('handles empty options gracefully', () => {
-    render()
+    render();
       <WeightVisualizationPanel 
         options={[]}
         showStatistics={true}
@@ -221,7 +221,7 @@ describe('WeightVisualizationPanel Statistics', () => {
       { id: '3', text: 'C', weight: 1 },
       { id: '4', text: 'D', weight: 1 }
     ];
-    render()
+    render();
       <WeightVisualizationPanel 
         options={balancedOptions} 
         showStatistics={true}
@@ -237,7 +237,7 @@ describe('WeightVisualizationPanel Statistics', () => {
       { id: '2', text: 'Minor', weight: 1 },
       { id: '3', text: 'Minor2', weight: 1 }
     ];
-    render()
+    render();
       <WeightVisualizationPanel 
         options={dominantOptions} 
         showStatistics={true}

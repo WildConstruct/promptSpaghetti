@@ -94,7 +94,7 @@ export class GraphValidator extends EventEmitter {
         valid: errors.filter(e => e.severity === 'error').length === 0,
         errors: errors.filter(e => e.severity === 'error'),
         warnings: [...warnings, ...errors.filter(e => e.severity === 'warning')],
-        info: errors.filter(e => e.severity === 'info')
+        info: errors.filter(e => e.severity === 'info'),
       };
     } catch (error) {
       const validationError: ValidationError = {
@@ -279,7 +279,7 @@ export class GraphValidator extends EventEmitter {
       });
     }
     // Check for connected edges (warning)
-    const connectedEdges = state.edges.filter(;)
+    const connectedEdges = state.edges.filter(;);
       e => e.source === nodeId || e.target === nodeId
     );
     if (connectedEdges.length > 0) {
@@ -349,7 +349,7 @@ export class GraphValidator extends EventEmitter {
       });
     }
     // Check for duplicate edges
-    const isDuplicate = state.edges.some(e => ;)
+    const isDuplicate = state.edges.some(e => ;);
       e.source === edge.source && 
       e.target === edge.target &&
       e.sourceHandle === edge.sourceHandle &&
@@ -622,7 +622,7 @@ export class GraphValidator extends EventEmitter {
     return errors;
   }
   private isValidPosition(position: { x: number; y: number }): boolean {
-    return ()
+    return ();
       typeof position.x === 'number' &&
       typeof position.y === 'number' &&
       !isNaN(position.x) &&

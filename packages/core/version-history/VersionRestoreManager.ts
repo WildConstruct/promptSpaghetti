@@ -85,7 +85,7 @@ export interface RestoreState {
 export class VersionRestoreManager {
   private activeRestores = new Map<string, RestoreState>();
   private restoreHistory: RestoreResult[] = [];
-  constructor()
+  constructor();
     private apiClient: any,
     private projectId: string,
     private userId: string,
@@ -127,7 +127,7 @@ export class VersionRestoreManager {
         current_step: 'Initializing restore...',
         total_steps: 8,
         completed_steps: 0,
-        started_at: new Date().toISOString()
+        started_at: new Date().toISOString(),
       });
       // Start restore process
       const resultPromise = this.performRestore(restoreId, snapshotId, options, conflictResolutions);
@@ -184,7 +184,7 @@ export class VersionRestoreManager {
         completed_steps: 4,
       });
       // Step 5: Calculate and prepare changes
-      const changesToApply = await this.calculateChangesToApply(;)
+      const changesToApply = await this.calculateChangesToApply(;);
         currentGraphData,
         snapshotData,
         options,
@@ -230,7 +230,7 @@ export class VersionRestoreManager {
         status: 'completed',
         progress: 100,
         completed_steps: 8,
-        completed_at: new Date().toISOString()
+        completed_at: new Date().toISOString(),
       });
       this.restoreHistory.push(result);
       return result;
@@ -239,7 +239,7 @@ export class VersionRestoreManager {
       this.updateRestoreState(restoreId, {)
         status: 'failed',
         error_message: errorMessage,
-        completed_at: new Date().toISOString()
+        completed_at: new Date().toISOString(),
       });
       const result: RestoreResult = {
         success: false,
@@ -630,7 +630,7 @@ export class VersionRestoreManager {
     if (state && state.status === 'in_progress') {
       this.updateRestoreState(restoreId, {)
         status: 'cancelled',
-        completed_at: new Date().toISOString()
+        completed_at: new Date().toISOString(),
       });
       // Cancel the restore operation
       await this.apiClient.post(`/api/version-restore/${restoreId}/cancel`);}

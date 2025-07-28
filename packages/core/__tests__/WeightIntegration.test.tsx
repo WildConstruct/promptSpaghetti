@@ -10,7 +10,7 @@ import { useWeightControlIntegration } from '../components/Inspector/WeightContr
 
 // Mock the hooks to test integration
 jest.mock('../hooks/useRealTimePreview', () => ({)
-  useRealTimePreview: () => ({)
+  useRealTimePreview: () => ({),
     variants: [],
     isGenerating: false,
     performance: { averageExecutionTime: 50, totalGenerations: 0, successRate: 100 },
@@ -19,17 +19,17 @@ jest.mock('../hooks/useRealTimePreview', () => ({)
     forcePreview: jest.fn<unknown[], unknown>(),
     refreshVariant: jest.fn<unknown[], unknown>(),
     clearVariants: jest.fn<unknown[], unknown>(),
-    getPerformanceInsights: () => []
+    getPerformanceInsights: () => [],
   })
 }));
 jest.mock('../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({)
+  useUISettingsStore: () => ({),
     complexityLevel: 'advanced',
-    shouldShowTechnicalFields: () => true
+    shouldShowTechnicalFields: () => true,
   })
 }));
 jest.mock('../graphStore', () => ({)
-  useGraphStore: () => ({)
+  useGraphStore: () => ({),
     nodes: [],
     edges: [],
   })
@@ -47,7 +47,7 @@ describe('Epic 8.5 Task 6: Weight Integration', () => {
     jest.clearAllMocks();
   });
   test('should render Epic 8.5 Task 6 integration status', () => {
-    render()
+    render();
       <WeightedChoiceEditor
         nodeData={mockNodeData}
         onChange={mockOnChange}
@@ -59,7 +59,7 @@ describe('Epic 8.5 Task 6: Weight Integration', () => {
     expect(screen.getByText(/Weight changes automatically trigger debounced/)).toBeInTheDocument();
   });
   test('should show real-time status indicators', () => {
-    render()
+    render();
       <WeightedChoiceEditor
         nodeData={mockNodeData}
         onChange={mockOnChange}
@@ -76,7 +76,7 @@ describe('Epic 8.5 Task 6: Weight Integration', () => {
     ];
     const TestComponent = () => {
       const { handleOptionsChange } = useWeightControlIntegration(options, mockPreviewRequest);
-      return ()
+      return ();
         <button onClick={() => handleOptionsChange(options)}>
           Trigger Weight Change
         </button>
@@ -101,7 +101,7 @@ describe('Epic 8.5 Task 6: Weight Integration', () => {
       ...mockNodeData,
       weights: [70, 20, 10] // Varied weights for testing
     };
-    render()
+    render();
       <WeightedChoiceEditor
         nodeData={nodeDataWithWeights}
         onChange={mockOnChange}
@@ -126,7 +126,7 @@ describe('Epic 8.5 Task 6: Weight Integration', () => {
       ...mockNodeData,
       weights: [2, 2, 2] // Changed weights
     };
-    rerender()
+    rerender();
       <WeightedChoiceEditor
         nodeData={updatedNodeData}
         onChange={mockOnChange}

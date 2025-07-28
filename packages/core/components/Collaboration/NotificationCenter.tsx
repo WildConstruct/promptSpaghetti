@@ -50,7 +50,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({ )
   };
   // Real-time connection status indicator
   const connectionStatus = realTimeConnection?.status || 'disconnected';
-  return ()
+  return ();
     <div className={`relative ${className}`}>}
       {/* Notification Bell Button */}
       <button

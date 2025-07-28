@@ -4,14 +4,12 @@ import { PriceDisplay } from './PriceDisplay';
 import { Badge } from '../common/Badge';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import './PurchaseModal.css';
-
 interface PurchaseModalProps {
   template: Error;
   onClose: () => void;
   onComplete: (success: boolean) => void;
   className?: string;
 }
-
 interface PaymentMethod {
   id: string;
   type: 'card' | 'paypal';
@@ -20,7 +18,7 @@ interface PaymentMethod {
   is_default: boolean;
 }
 
-export const PurchaseModal: React.FC<PurchaseModalProps> = ({
+export const PurchaseModal: React.FC<PurchaseModalProps> = ({)
   template,
   onClose,
   onComplete,
@@ -32,26 +30,22 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
   const [/*_loading*/, setLoading] = useState(false); // Commented out unused variable
   const [error, setError] = useState<string | null>(null);
   const [/*_purchaseId*/, setPurchaseId] = useState<string | null>(null); // Commented out unused variable
-
   useEffect(() => {
     if (template.price_cents > 0) {
       loadPaymentMethods();
     }
   }, [template.price_cents]);
-
   const loadPaymentMethods = async () => {
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch('/api/payment/methods', {
-        headers: {
-          'Authorization': `Bearer ${token}`
+      const response = await fetch('/api/payment/methods', {)
+        headers: {,
+          'Authorization': `Bearer ${token}`}
         }
       });
-
       if (response.ok) {
         const methods = await response.json();
         setPaymentMethods(methods);
-        
         // Auto-select default payment method
         const defaultMethod = methods.find((method: PaymentMethod) => method.is_default);
         if (defaultMethod) {
@@ -64,7 +58,6 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       console.error('Failed to load payment methods:', error);
     }
   };
-
   const handleConfirm = () => {
     if (template.price_cents === 0) {
       // Free template, proceed directly to purchase
@@ -74,31 +67,27 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       setStep('payment');
     }
   };
-
   const handlePurchase = async () => {
     setLoading(true);
     setError(null);
     setStep('processing');
-
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch('/api/marketplace/purchases', {
+      const response = await fetch('/api/marketplace/purchases', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`}
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           template_id: template.id,
           version_id: template.current_version_id,
-          payment_method_id: template.price_cents > 0 ? selectedPaymentMethod : undefined
+          payment_method_id: template.price_cents > 0 ? selectedPaymentMethod : undefined,
         })
       });
-
       if (response.ok) {
         const purchase = await response.json();
         setPurchaseId(purchase.id);
-        
         if (template.price_cents === 0 || purchase.status === 'succeeded') {
           setStep('success');
           setTimeout(() => {
@@ -122,16 +111,13 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       setLoading(false);
     }
   };
-
   const processPayment = async (_purchase: unknown) => { 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     console.debug('Processing payment for purchase:', _purchase);
     // This would integrate with Stripe or other payment processor
     // For now, we'll simulate payment processing
-    
     try {
       await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate processing time
-      
       // In a real implementation, this would handle Stripe confirmation
       setStep('success');
       setTimeout(() => {
@@ -144,27 +130,23 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       setStep('error');
     }
   };
-
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       onClose();
     }
   };
-
   const formatCardInfo = (method: PaymentMethod) => {
     if (method.type === 'card') {
-      return `•••• •••• •••• ${method.last4} (${method.brand?.toUpperCase()})`;
+      return `•••• •••• •••• ${method.last4} (${method.brand?.toUpperCase()})`;}
     }
     return 'PayPal';
   };
-
-  const renderConfirmStep = () => (
+  const renderConfirmStep = () => (;)
     <div className="purchase-step">
       <div className="step-header">
         <h3>Confirm Purchase</h3>
         <p>You&apos;re about to {template.price_cents === 0 ? 'get' : 'purchase'} this template:</p>
       </div>
-
       <div className="template-summary">
         <div className="template-info">
           <h4>{template.title}</h4>
@@ -174,12 +156,10 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
             {template.is_ai_generated && <Badge variant="ai">AI Generated</Badge>}
           </div>
         </div>
-        
         <div className="price-section">
           <PriceDisplay priceCents={template.price_cents} size="large" />
         </div>
       </div>
-
       <div className="purchase-details">
         <div className="detail-row">
           <span>Template:</span>
@@ -198,7 +178,6 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
           <PriceDisplay priceCents={template.price_cents} />
         </div>
       </div>
-
       <div className="step-actions">
         <button onClick={onClose} className="cancel-button">
           Cancel
@@ -209,17 +188,15 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       </div>
     </div>
   );
-
-  const renderPaymentStep = () => (
+  const renderPaymentStep = () => (;)
     <div className="purchase-step">
       <div className="step-header">
         <h3>Payment Information</h3>
         <p>Select your payment method:</p>
       </div>
-
-      {paymentMethods.length > 0 ? (
+      {paymentMethods.length > 0 ? ()
         <div className="payment-methods">
-          {paymentMethods.map((method) => (
+          {paymentMethods.map((method) => ()
             <label key={method.id} className="payment-method">
               <input
                 type="radio"
@@ -238,7 +215,6 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
               </div>
             </label>
           ))}
-          
           <button className="add-payment-method">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
               <path
@@ -251,7 +227,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
             Add New Payment Method
           </button>
         </div>
-      ) : (
+      ) : ()
         <div className="no-payment-methods">
           <p>No payment methods found. Please add a payment method to continue.</p>
           <button className="add-payment-method primary">
@@ -259,7 +235,6 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
           </button>
         </div>
       )}
-
       <div className="purchase-summary">
         <div className="summary-row">
           <span>Subtotal:</span>
@@ -274,7 +249,6 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
           <PriceDisplay priceCents={template.price_cents} />
         </div>
       </div>
-
       <div className="step-actions">
         <button onClick={() => setStep('confirm')} className="back-button">
           Back
@@ -289,8 +263,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       </div>
     </div>
   );
-
-  const renderProcessingStep = () => (
+  const renderProcessingStep = () => (;)
     <div className="purchase-step processing">
       <div className="processing-content">
         <LoadingSpinner size="large" />
@@ -299,8 +272,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       </div>
     </div>
   );
-
-  const renderSuccessStep = () => (
+  const renderSuccessStep = () => (;)
     <div className="purchase-step success">
       <div className="success-content">
         <div className="success-icon">
@@ -333,8 +305,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       </div>
     </div>
   );
-
-  const renderErrorStep = () => (
+  const renderErrorStep = () => (;)
     <div className="purchase-step error">
       <div className="error-content">
         <div className="error-icon">
@@ -361,9 +332,8 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       </div>
     </div>
   );
-
-  return (
-    <div className={`purchase-modal-overlay ${className}`} onClick={onClose} onKeyDown={handleKeyPress}>
+  return ()
+    <div className={`purchase-modal-overlay ${className}`} onClick={onClose} onKeyDown={handleKeyPress}>}
       <div className="purchase-modal" onClick={(e) => e.stopPropagation()}>
         <header className="modal-header">
           <h2>
@@ -373,7 +343,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
             {step === 'success' && 'Success'}
             {step === 'error' && 'Error'}
           </h2>
-          {step !== 'processing' && (
+          {step !== 'processing' && ()
             <button onClick={onClose} className="close-button" aria-label="Close">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path
@@ -387,7 +357,6 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
             </button>
           )}
         </header>
-
         <div className="modal-content">
           {step === 'confirm' && renderConfirmStep()}
           {step === 'payment' && renderPaymentStep()}

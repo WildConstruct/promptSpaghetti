@@ -1,7 +1,6 @@
 // Epic 17.1.2 - Admin Layout Component
 // AUTH-985114-AF38: Updated for authentication integration
 // Task: E17-1753114396757-764E97 - Implement alert indicators
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
@@ -26,14 +25,12 @@ import {
   createEmptyAlertCount,
   AlertCount
 } from './AlertIndicators';
-
 interface AdminLayoutProps {
   children: React.ReactNode;
   currentSection: string;
   onSectionChange: (section: string) => void;
 }
-
-const adminSections = [
+const adminSections = [;
   {
     id: 'feature-toggles',
     label: 'Feature Toggles',
@@ -98,14 +95,12 @@ const adminSections = [
     requiredRoles: ['admin', 'administrator', 'privacy-officer', 'compliance-admin']
   }
 ];
-
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onSectionChange }) => {
   const [alertCounts, setAlertCounts] = useState<AlertCount>(createEmptyAlertCount());
   const [lastAlertUpdate, setLastAlertUpdate] = useState<Date>(new Date());
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
-
   // Mock alert data - in real implementation, this would come from API
   useEffect(() => {
     const mockAlertData: AlertCount = {
@@ -113,53 +108,42 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
       high: 5,
       medium: 8,
       low: 3,
-      info: 1
+      info: 1,
     };
-    
     setAlertCounts(mockAlertData);
     setLastAlertUpdate(new Date());
-    
     // Simulate real-time updates
     const interval = setInterval(() => {
       setLastAlertUpdate(new Date());
     }, 30000); // Update every 30 seconds
-    
     return () => clearInterval(interval);
   }, []);
-
   // Handle alert indicator clicks
   const handleViewAlerts = () => {
     // Navigate to alerts management or open alerts panel
     console.log('Navigate to alerts management');
   };
-
   const currentSectionData = adminSections.find(s => s.id === currentSection);
-
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
-
   const handleBackToApp = () => {
     navigate('/');
   };
-
   // Get user display information
-  const displayName = user 
-    ? (user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email.split('@')[0])
+  const displayName = user ;
+    ? (user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email.split('@')[0])}
     : 'Admin User';
-    
-  const userInitials = user && user.firstName && user.lastName
-    ? `${user.firstName[0]}${user.lastName[0]}`
+  const userInitials = user && user.firstName && user.lastName;
+    ? `${user.firstName[0]}${user.lastName[0]}`}
     : (displayName.slice(0, 2));
-
   // Filter sections based on user roles
-  const availableSections = adminSections.filter(section => {
+  const availableSections = adminSections.filter(section => {)
     if (!user || !user.roles) return false;
     return section.requiredRoles.some(role => user.roles.includes(role));
   });
-
-  return (
+  return ()
     <div className="admin-layout">
       {/* Skip Navigation Link */}
       <a 
@@ -181,13 +165,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
         >
           {sidebarOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
         </button>
-        
         <div className="mobile-header-content">
           <Shield size={20} aria-hidden="true" />
           <h1 className="sr-only">Admin Panel</h1>
           <span aria-hidden="true">Admin Panel</span>
         </div>
-        
         <div className="mobile-header-actions">
           {/* Alert Status Indicator */}
           <AlertStatusIndicator
@@ -196,7 +178,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
             size="sm"
             onClick={handleViewAlerts}
           />
-          
           {/* Alert Count Badge */}
           <AlertIndicatorBadge
             alertCounts={alertCounts}
@@ -204,7 +185,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
             onClick={handleViewAlerts}
             animate={true}
           />
-          
           <button 
             className="mobile-logout-btn"
             onClick={handleLogout}
@@ -214,7 +194,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
           </button>
         </div>
       </header>
-
       {/* Sidebar */}
       <aside 
         id="admin-sidebar"
@@ -227,7 +206,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
           <div className="sidebar-logo">
             <Shield size={24} aria-hidden="true" />
             <span>Admin Panel</span>
-            
             {/* Alert Status in Sidebar */}
             <div className="sidebar-alert-status">
               <AlertStatusIndicator
@@ -251,18 +229,16 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
               borderRadius: '4px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
           >
             <ArrowLeft size={18} aria-hidden="true" />
           </button>
         </div>
-
         <nav className="sidebar-nav" role="navigation" aria-label="Admin sections">
           {availableSections.map((section) => {
             const Icon = section.icon;
             const isActive = section.id === currentSection;
-            
             // Mock section-specific alert counts (in real implementation, this would be calculated)
             const getSectionAlertCounts = (sectionId: string): AlertCount => {
               const mockSectionAlerts: Record<string, AlertCount> = {
@@ -275,11 +251,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
               };
               return mockSectionAlerts[sectionId] || createEmptyAlertCount();
             };
-            
             const sectionAlerts = getSectionAlertCounts(section.id);
             const hasSectionAlerts = Object.values(sectionAlerts).some(count => count > 0);
-            
-            return (
+            return ()
               <button
                 key={section.id}
                 className={`nav-item ${isActive ? 'active' : ''}`}
@@ -294,7 +268,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
                 <div className="nav-item-content">
                   <div className="nav-item-header">
                     <span className="nav-item-label">{section.label}</span>
-                    {hasSectionAlerts && (
+                    {hasSectionAlerts && ()
                       <AlertIndicatorBadge
                         alertCounts={sectionAlerts}
                         size="sm"
@@ -313,7 +287,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
             );
           })}
         </nav>
-
         <div className="sidebar-footer">
           <div className="user-info">
             <div 
@@ -326,7 +299,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
                 justifyContent: 'center',
                 backgroundColor: '#3b82f6',
                 color: 'white',
-                fontWeight: '600'
+                fontWeight: '600',
               }}
             >
               {userInitials.toUpperCase()}
@@ -341,7 +314,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
               </div>
             </div>
           </div>
-          
           <button 
             className="logout-btn"
             onClick={handleLogout}
@@ -352,9 +324,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
           </button>
         </div>
       </aside>
-
       {/* Sidebar Overlay for Mobile */}
-      {sidebarOpen && (
+      {sidebarOpen && ()
         <div 
           className="sidebar-overlay"
           onClick={() => setSidebarOpen(false)}
@@ -367,7 +338,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
           role="presentation"
         />
       )}
-
       {/* Main Content */}
       <main id="main-content" className="admin-main" role="main">
         {/* Breadcrumb */}
@@ -382,7 +352,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
             </li>
           </ol>
         </nav>
-
         {/* Content */}
         <div className="admin-content" role="region" aria-label="Admin section content">
           {children}

@@ -31,7 +31,7 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({)
   const [filterOptions, setFilterOptions] = useState({)
     status: 'all' as 'all' | 'enabled' | 'disabled',
     type: 'all' as 'all' | 'node' | 'ui' | 'transform' | 'storage',
-    sortBy: 'name' as 'name' | 'version' | 'lastUpdated' | 'size'
+    sortBy: 'name' as 'name' | 'version' | 'lastUpdated' | 'size',
   });
   const {
     installedExtensions,
@@ -149,7 +149,7 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({)
     setSelectedExtension(extension);
     setShowConfigPanel(true);
   };
-  return ()
+  return ();
     <div className={`extension-manager-panel ${className}`}>}
       {/* Header */}
       <div className="extension-manager-header">

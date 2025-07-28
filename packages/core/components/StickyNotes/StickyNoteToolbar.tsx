@@ -77,7 +77,7 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
   };
   const sectionStyle: React.CSSProperties = {
     padding: '8px 12px',
-    borderBottom: '1px solid #F3F4F6'
+    borderBottom: '1px solid #F3F4F6',
   };
   const buttonStyle: React.CSSProperties = {
     background: 'none',
@@ -91,7 +91,7 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
     display: 'flex',
     alignItems: 'center',
     gap: 4,
-    transition: 'background-color 0.15s ease'
+    transition: 'background-color 0.15s ease',
   };
   const colorButtonStyle: React.CSSProperties = {
     width: 24,
@@ -99,9 +99,9 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
     borderRadius: 4,
     border: '2px solid transparent',
     cursor: 'pointer',
-    transition: 'border-color 0.15s ease'
+    transition: 'border-color 0.15s ease',
   };
-  return ()
+  return ();
     <div className={`sticky-note-toolbar ${className}`} style={toolbarStyle}>}
       {/* Main controls */}
       <div style={sectionStyle}>
@@ -110,7 +110,7 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
           <button
             style={{
               ...buttonStyle,
-              background: expanded ? '#F3F4F6' : 'transparent'
+              background: expanded ? '#F3F4F6' : 'transparent',
             }}
             onClick={() => setExpanded(!expanded)}
             title="Toggle sticky notes toolbar"
@@ -129,7 +129,7 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
           <button
             style={{
               ...buttonStyle,
-              background: showTemplates ? '#F3F4F6' : 'transparent'
+              background: showTemplates ? '#F3F4F6' : 'transparent',
             }}
             onClick={() => setShowTemplates(!showTemplates)}
             title="Quick templates"
@@ -140,7 +140,7 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
           <button
             style={{
               ...buttonStyle,
-              background: showSettings ? '#F3F4F6' : 'transparent'
+              background: showSettings ? '#F3F4F6' : 'transparent',
             }}
             onClick={() => setShowSettings(!showSettings)}
             title="Settings"
@@ -177,7 +177,7 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
                   style={{
                     ...colorButtonStyle,
                     backgroundColor: color.bg,
-                    borderColor: hasSelection ? color.border : 'transparent'
+                    borderColor: hasSelection ? color.border : 'transparent',
                   }}
                   onClick={() => onColorChange(color.value)}
                   title={`${color.label} notes`}
@@ -203,7 +203,7 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
                   style={{
                     ...buttonStyle,
                     fontSize: 11,
-                    background: hasSelection && selectedNotes.every(n => n.appearance.category === category.value) 
+                    background: hasSelection && selectedNotes.every(n => n.appearance.category === category.value) ,
                       ? '#EBF8FF' 
                       : 'transparent'
                   }}
@@ -240,7 +240,7 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
                 style={{
                   ...buttonStyle,
                   justifyContent: 'flex-start',
-                  padding: '8px 12px'
+                  padding: '8px 12px',
                 }}
                 onClick={() => {
                   onCreate(template.color, template.category, template.content);
@@ -323,7 +323,7 @@ export const StickyNoteToolbar: React.FC<StickyNoteToolbarProps> = ({)
           backgroundColor: '#F9FAFB',
           fontSize: 10,
           color: '#6B7280',
-          borderTop: '1px solid #F3F4F6'
+          borderTop: '1px solid #F3F4F6',
         }}>
           <div>⌘N New • ⌘D Duplicate • Del Delete • Esc Deselect</div>
         </div>

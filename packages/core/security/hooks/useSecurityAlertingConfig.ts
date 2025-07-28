@@ -79,7 +79,7 @@ export interface UseSecurityAlertingConfigReturn {
   };
   utils: {,
     getConfigDiff: () => Partial<SecurityAlertingConfig>;
-    getValidationSummary: () => {
+    getValidationSummary: () => {,
       hasErrors: boolean;
       hasWarnings: boolean;
       errorCount: number;
@@ -189,7 +189,7 @@ export const useSecurityAlertingConfig = ()
           field,
           oldValue,
           newValue,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         }
       });
     }
@@ -321,7 +321,7 @@ export const useSecurityAlertingConfig = ()
         ...prev,
         config: newConfig,
         hasUnsavedChanges: hasChanges,
-        configVersion: prev.configVersion + 1
+        configVersion: prev.configVersion + 1,
       };
     });
     // Trigger change callback
@@ -349,7 +349,7 @@ export const useSecurityAlertingConfig = ()
   // Remove correlation rule
   const removeCorrelationRule = useCallback((ruleId: string) => {
     updateConfig({)
-      correlationRules: state.config.correlationRules.filter(rule => rule.id !== ruleId)
+      correlationRules: state.config.correlationRules.filter(rule => rule.id !== ruleId),
     });
   }, [state.config.correlationRules, updateConfig]);
   // Update response automation
@@ -380,7 +380,7 @@ export const useSecurityAlertingConfig = ()
           details: {,
             configId,
             configVersion: state.configVersion,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           }
         });
       }
@@ -447,7 +447,7 @@ export const useSecurityAlertingConfig = ()
           ...prev,
           config: { ...DEFAULT_CONFIG, ...imported.config },
           hasUnsavedChanges: true,
-          configVersion: prev.configVersion + 1
+          configVersion: prev.configVersion + 1,
         }));
         return true;
       }

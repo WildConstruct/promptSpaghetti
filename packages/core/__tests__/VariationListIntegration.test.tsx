@@ -4,7 +4,7 @@ import { WeightedChoiceEditor } from '../components/Inspector/editors/WeightedCh
 
 // Mock the graph store
 jest.mock('../graphStore', () => ({)
-  useGraphStore: () => ({)
+  useGraphStore: () => ({),
     addVariation: jest.fn(),
     removeVariation: jest.fn(),
     updateVariation: jest.fn(),
@@ -25,7 +25,7 @@ describe('VariationList Integration with Editors', () => {
     jest.clearAllMocks();
   });
   it('renders WeightedChoiceEditor with enhanced VariationList', () => {
-    render()
+    render();
       <WeightedChoiceEditor
         nodeId={mockNodeData.id}
         nodeData={mockNodeData}
@@ -41,7 +41,7 @@ describe('VariationList Integration with Editors', () => {
     expect(screen.getByRole('button', { name: /quick/i })).toBeInTheDocument();
   });
   it('supports adding new choices via the enhanced interface', () => {
-    render()
+    render();
       <WeightedChoiceEditor
         nodeId={mockNodeData.id}
         nodeData={mockNodeData}
@@ -62,7 +62,7 @@ describe('VariationList Integration with Editors', () => {
     });
   });
   it('supports quick entry mode toggle', () => {
-    render()
+    render();
       <WeightedChoiceEditor
         nodeId={mockNodeData.id}
         nodeData={mockNodeData}
@@ -83,7 +83,7 @@ describe('VariationList Integration with Editors', () => {
       choices: ['A', 'B', 'C'],
       weights: [1, 1, 1]
     };
-    render()
+    render();
       <WeightedChoiceEditor
         nodeId={nodeDataWithChoices.id}
         nodeData={nodeDataWithChoices}

@@ -6,19 +6,16 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-
 import React, { useState, useEffect } from 'react';
 import { 
   PolicyConflict, 
   ConflictResolutionStrategy
 } from '../../types/PolicyAssignmentTypes';
 import './AssignmentConflictResolver.css';
-
 interface AssignmentConflictResolverProps {
   conflicts: PolicyConflict[];
   onResolve: () => void;
 }
-
 interface ConflictResolution {
   conflictId: string;
   strategy: ConflictResolutionStrategy;
@@ -26,39 +23,36 @@ interface ConflictResolution {
   manualOverride?: boolean;
   notes?: string;
 }
-
 interface ConflictGroup {
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
   conflicts: PolicyConflict[];
 }
 
-export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProps> = ({
+export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProps> = ({)
   conflicts,
   onResolve
 }) => {
   const [resolutions, setResolutions] = useState<Record<string, ConflictResolution>>({});
   const [selectedConflict, setSelectedConflict] = useState<PolicyConflict | null>(null);
   const [isResolving, setIsResolving] = useState(false);
-  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({)
     CRITICAL: true,
     HIGH: true,
     MEDIUM: false,
-    LOW: false
+    LOW: false,
   });
-
   useEffect(() => {
     // Initialize resolutions for all conflicts
     const initialResolutions: Record<string, ConflictResolution> = {};
-    conflicts.forEach(conflict => {
+    conflicts.forEach(conflict => {)
       initialResolutions[conflict.conflictId] = {
         conflictId: conflict.conflictId,
         strategy: ConflictResolutionStrategy.MOST_RESTRICTIVE,
-        manualOverride: false
+        manualOverride: false,
       };
     });
     setResolutions(initialResolutions);
   }, [conflicts]);
-
   const groupConflictsBySeverity = (): ConflictGroup[] => {
     const groups: ConflictGroup[] = [
       { severity: 'CRITICAL', conflicts: [] },
@@ -66,19 +60,16 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
       { severity: 'MEDIUM', conflicts: [] },
       { severity: 'LOW', conflicts: [] }
     ];
-
-    conflicts.forEach(conflict => {
+    conflicts.forEach(conflict => {)
       const group = groups.find(g => g.severity === conflict.severity);
       if (group) {
         group.conflicts.push(conflict);
       }
     });
-
     return groups.filter(group => group.conflicts.length > 0);
   };
-
   const updateResolution = (conflictId: string, updates: Partial<ConflictResolution>) => {
-    setResolutions(prev => ({
+    setResolutions(prev => ({)
       ...prev,
       [conflictId]: {
         ...prev[conflictId],
@@ -86,17 +77,15 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
       }
     }));
   };
-
   const handleResolveAll = async () => {
     setIsResolving(true);
     try {
       // In a real implementation, this would send the resolutions to the backend
-      const response = await fetch('/api/policy-assignments/conflicts/resolve', {
+      const response = await fetch('/api/policy-assignments/conflicts/resolve', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resolutions: Object.values(resolutions) })
       });
-
       if (response.ok) {
         onResolve();
       }
@@ -106,10 +95,9 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
       setIsResolving(false);
     }
   };
-
   const handleBulkStrategy = (strategy: ConflictResolutionStrategy) => {
     const updates: Record<string, ConflictResolution> = {};
-    conflicts.forEach(conflict => {
+    conflicts.forEach(conflict => {)
       updates[conflict.conflictId] = {
         ...resolutions[conflict.conflictId],
         strategy
@@ -117,14 +105,12 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
     });
     setResolutions(prev => ({ ...prev, ...updates }));
   };
-
   const toggleGroup = (severity: string) => {
-    setExpandedGroups(prev => ({
+    setExpandedGroups(prev => ({)
       ...prev,
       [severity]: !prev[severity]
     }));
   };
-
   const getSeverityColor = (severity: string) => {
     switch (severity) {
     case 'CRITICAL': return '#c53030';
@@ -134,7 +120,6 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
     default: return '#718096';
     }
   };
-
   const getStrategyDescription = (strategy: ConflictResolutionStrategy) => {
     switch (strategy) {
     case ConflictResolutionStrategy.MOST_RESTRICTIVE:
@@ -151,11 +136,9 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
       return 'Unknown strategy';
     }
   };
-
   const renderConflictDetails = (conflict: PolicyConflict) => {
     const resolution = resolutions[conflict.conflictId];
-    
-    return (
+    return ()
       <div key={conflict.conflictId} className="conflict-item">
         <div className="conflict-header">
           <div className="conflict-info">
@@ -171,25 +154,23 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
             </button>
           </div>
         </div>
-
         <div className="conflict-assignments">
           <h5>Conflicting Assignments:</h5>
           <div className="assignment-list">
-            {conflict.conflictingAssignments.map((assignmentId: string) => (
+            {conflict.conflictingAssignments.map((assignmentId: string) => ()
               <div key={assignmentId} className="assignment-ref">
                 <code>{assignmentId}</code>
               </div>
             ))}
           </div>
         </div>
-
         <div className="resolution-controls">
           <div className="strategy-selection">
             <label>Resolution Strategy:</label>
             <select
               value={resolution.strategy}
-              onChange={(e) => updateResolution(conflict.conflictId, {
-                strategy: e.target.value as ConflictResolutionStrategy
+              onChange={(e) => updateResolution(conflict.conflictId, {)
+                strategy: e.target.value as ConflictResolutionStrategy,
               })}
             >
               <option value={ConflictResolutionStrategy.MOST_RESTRICTIVE}>Most Restrictive</option>
@@ -199,18 +180,17 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
               <option value={ConflictResolutionStrategy.MANUAL_REVIEW}>Manual Review</option>
             </select>
           </div>
-
-          {resolution.strategy === ConflictResolutionStrategy.EXPLICIT_OVERRIDE && (
+          {resolution.strategy === ConflictResolutionStrategy.EXPLICIT_OVERRIDE && ()
             <div className="assignment-selection">
               <label>Select Assignment:</label>
               <select
                 value={resolution.selectedAssignmentId || ''}
-                onChange={(e) => updateResolution(conflict.conflictId, {
-                  selectedAssignmentId: e.target.value
+                onChange={(e) => updateResolution(conflict.conflictId, {)
+                  selectedAssignmentId: e.target.value,
                 })}
               >
                 <option value="">Choose assignment...</option>
-                {conflict.conflictingAssignments.map((assignmentId: string) => (
+                {conflict.conflictingAssignments.map((assignmentId: string) => ()
                   <option key={assignmentId} value={assignmentId}>
                     {assignmentId}
                   </option>
@@ -218,24 +198,21 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
               </select>
             </div>
           )}
-
           <div className="resolution-notes">
             <label>Resolution Notes:</label>
             <textarea
               value={resolution.notes || ''}
-              onChange={(e) => updateResolution(conflict.conflictId, {
-                notes: e.target.value
+              onChange={(e) => updateResolution(conflict.conflictId, {)
+                notes: e.target.value,
               })}
               placeholder="Add notes about this resolution decision..."
               rows={2}
             />
           </div>
-
           <div className="strategy-description">
             <small>{getStrategyDescription(resolution.strategy)}</small>
           </div>
-
-          {conflict.resolutionSuggestion && (
+          {conflict.resolutionSuggestion && ()
             <div className="suggested-resolution">
               <strong>Suggested:</strong> {conflict.resolutionSuggestion}
             </div>
@@ -244,11 +221,9 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
       </div>
     );
   };
-
   const renderConflictModal = () => {
     if (!selectedConflict) return null;
-
-    return (
+    return ()
       <div className="modal-overlay">
         <div className="conflict-modal">
           <div className="modal-header">
@@ -257,18 +232,15 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
               ×
             </button>
           </div>
-
           <div className="modal-content">
             <div className="conflict-detail-section">
               <h4>Conflict Type</h4>
               <p>{selectedConflict.type}</p>
             </div>
-
             <div className="conflict-detail-section">
               <h4>Description</h4>
               <p>{selectedConflict.description}</p>
             </div>
-
             <div className="conflict-detail-section">
               <h4>Severity</h4>
               <span 
@@ -278,11 +250,10 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
                 {selectedConflict.severity}
               </span>
             </div>
-
             <div className="conflict-detail-section">
               <h4>Conflicting Assignments</h4>
               <div className="assignment-details">
-                {selectedConflict.conflictingAssignments.map((assignmentId: string) => (
+                {selectedConflict.conflictingAssignments.map((assignmentId: string) => ()
                   <div key={assignmentId} className="assignment-detail">
                     <code>{assignmentId}</code>
                     {/* In a real implementation, you would fetch and display full assignment details */}
@@ -290,15 +261,13 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
                 ))}
               </div>
             </div>
-
-            {selectedConflict.resolutionSuggestion && (
+            {selectedConflict.resolutionSuggestion && ()
               <div className="conflict-detail-section">
                 <h4>Suggested Resolution</h4>
                 <p className="resolution-suggestion">{selectedConflict.resolutionSuggestion}</p>
               </div>
             )}
           </div>
-
           <div className="modal-footer">
             <button onClick={() => setSelectedConflict(null)} className="btn btn-primary">
               Close
@@ -308,9 +277,8 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
       </div>
     );
   };
-
   if (conflicts.length === 0) {
-    return (
+    return ()
       <div className="conflict-resolver">
         <div className="no-conflicts">
           <div className="no-conflicts-icon">✅</div>
@@ -320,20 +288,17 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
       </div>
     );
   }
-
   const conflictGroups = groupConflictsBySeverity();
-  const totalUnresolved = Object.values(resolutions).filter(r => 
+  const totalUnresolved = Object.values(resolutions).filter(r => ;)
     r.strategy === ConflictResolutionStrategy.MANUAL_REVIEW
   ).length;
-
-  return (
+  return ()
     <div className="conflict-resolver">
       <div className="resolver-header">
         <div className="header-info">
           <h2>Conflict Resolution</h2>
           <p>{conflicts.length} conflicts detected, {totalUnresolved} require manual review</p>
         </div>
-        
         <div className="bulk-actions">
           <div className="bulk-strategy">
             <label>Apply strategy to all:</label>
@@ -345,7 +310,6 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
               <option value={ConflictResolutionStrategy.MANUAL_REVIEW}>Manual Review</option>
             </select>
           </div>
-          
           <button 
             onClick={handleResolveAll}
             disabled={isResolving}
@@ -355,9 +319,8 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
           </button>
         </div>
       </div>
-
       <div className="conflict-groups">
-        {conflictGroups.map(group => (
+        {conflictGroups.map(group => ()
           <div key={group.severity} className="conflict-group">
             <div 
               className="group-header"
@@ -370,12 +333,11 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
                 />
                 {group.severity} ({group.conflicts.length})
               </h3>
-              <span className={`expand-icon ${expandedGroups[group.severity] ? 'expanded' : ''}`}>
+              <span className={`expand-icon ${expandedGroups[group.severity] ? 'expanded' : ''}`}>}
                 ▼
               </span>
             </div>
-
-            {expandedGroups[group.severity] && (
+            {expandedGroups[group.severity] && ()
               <div className="group-content">
                 {group.conflicts.map(conflict => renderConflictDetails(conflict))}
               </div>
@@ -383,7 +345,6 @@ export const AssignmentConflictResolver: React.FC<AssignmentConflictResolverProp
           </div>
         ))}
       </div>
-
       {renderConflictModal()}
     </div>
   );

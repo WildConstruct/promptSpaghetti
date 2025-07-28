@@ -64,7 +64,7 @@ describe('NetworkResilienceManager', () => {
         notifyOnSyncComplete: true,
       },
       persistence: {,
-        enabled: false // Disable for tests
+        enabled: false // Disable for tests,
       },
       performance: {,
         enableMetrics: true,
@@ -374,7 +374,7 @@ describe('NetworkResilienceManager', () => {
       const mockWs = manager as any;
       if (mockWs.websocket && mockWs.websocket.onmessage) {
         const malformedEvent = new MessageEvent('message', {)
-          data: 'invalid json'
+          data: 'invalid json',
         });
         // Should not throw an error
         expect(() => {

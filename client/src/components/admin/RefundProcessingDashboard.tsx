@@ -7,7 +7,6 @@
  * Part of Epic 17 - Backstage Admin Controls
  * Task: E17-1753114397360-84B238 - Create refund processing
  */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -35,7 +34,6 @@ import {
   Eye,
   MessageCircle
 } from 'lucide-react';
-
 interface RefundRequest {
   refundId: string;
   purchaseId: string;
@@ -48,7 +46,7 @@ interface RefundRequest {
   status: string;
   priority: 'low' | 'medium' | 'high' | 'urgent';
   assignedTo?: string;
-  originalPurchase: {
+  originalPurchase: {,
     customerId: string;
     creatorId: string;
     templateId: string;
@@ -62,7 +60,6 @@ interface RefundRequest {
   workflowHistory: unknown[];
   notes: unknown[];
 }
-
 interface RefundStats {
   totalRequests: number;
   pendingRequests: number;
@@ -71,12 +68,12 @@ interface RefundStats {
   averageProcessingTime: number;
   byReason: Record<string, number>;
   byStatus: Record<string, number>;
-  creatorImpact: {
+  creatorImpact: {,
     creatorsAffected: number;
     totalCreatorDeductions: number;
     avgDeductionAmount: number;
   };
-  performance: {
+  performance: {,
     approvalRate: number;
     avgResolutionTime: number;
     escalationRate: number;
@@ -88,17 +85,15 @@ export interface RefundProcessingDashboardProps {
   className?: string;
 }
 
-export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps> = ({
+export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps> = ({)
   className
 }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
   // Data state
   const [stats, setStats] = useState<RefundStats | null>(null);
   const [refunds, setRefunds] = useState<RefundRequest[]>([]);
   const [pendingApprovals, setPendingApprovals] = useState<RefundRequest[]>([]);
-  
   // UI state
   const [activeTab, setActiveTab] = useState('overview');
   const [searchQuery, setSearchQuery] = useState('');
@@ -106,39 +101,32 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
   const [selectedPriority, setSelectedPriority] = useState('');
   const [, setSelectedReason] = useState('');
   const [dateRange, setDateRange] = useState('7d');
-  
   // Manual refund state
-  const [manualRefundData, setManualRefundData] = useState({
+  const [manualRefundData, setManualRefundData] = useState({)
     purchaseId: '',
     reason: '',
     amount: '',
     description: '',
-    priority: 'medium'
+    priority: 'medium',
   });
-  
   // Bulk operations
   const [selectedRefunds, setSelectedRefunds] = useState<Set<string>>(new Set());
   const [bulkAction, setBulkAction] = useState('');
-
   // Load refund data
   const loadRefundData = useCallback(async () => {
     try {
       setLoading(true);
-      
-      const [statsResponse, refundsResponse, approvalsResponse] = await Promise.all([
-        fetch(`/api/admin/refunds/stats?dateRange=${dateRange}`),
+      const [statsResponse, refundsResponse, approvalsResponse] = await Promise.all([)
+        fetch(`/api/admin/refunds/stats?dateRange=${dateRange}`),}
         fetch('/api/admin/refunds?limit=50'),
         fetch('/api/admin/refunds?status=pending&status=reviewing&limit=20')
       ]);
-
       const statsResult = await statsResponse.json();
       const refundsResult = await refundsResponse.json();
       const approvalsResult = await approvalsResponse.json();
-
       if (statsResult.success) setStats(statsResult.data);
       if (refundsResult.success) setRefunds(refundsResult.data);
       if (approvalsResult.success) setPendingApprovals(approvalsResult.data);
-      
     } catch (err) {
       setError('Failed to load refund data');
       console.error('Error loading refund data:', err);
@@ -146,16 +134,14 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
       setLoading(false);
     }
   }, [dateRange, setLoading, setStats, setRefunds, setPendingApprovals, setError]);
-
   // Approve refund
   const approveRefund = async (refundId: string, notes?: string) => {
     try {
-      const response = await fetch(`/api/admin/refunds/${refundId}/approve`, {
+      const response = await fetch(`/api/admin/refunds/${refundId}/approve`, {)}
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notes })
       });
-      
       if (response.ok) {
         await loadRefundData();
       } else {
@@ -167,16 +153,14 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
       console.error('Error approving refund:', err);
     }
   };
-
   // Reject refund
   const rejectRefund = async (refundId: string, reason: string) => {
     try {
-      const response = await fetch(`/api/admin/refunds/${refundId}/reject`, {
+      const response = await fetch(`/api/admin/refunds/${refundId}/reject`, {)}
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason })
       });
-      
       if (response.ok) {
         await loadRefundData();
       } else {
@@ -188,7 +172,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
       console.error('Error rejecting refund:', err);
     }
   };
-
   // Create manual refund
   const createManualRefund = async () => {
     try {
@@ -196,25 +179,23 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
         setError('Purchase ID and reason are required');
         return;
       }
-
-      const response = await fetch('/api/admin/refunds', {
+      const response = await fetch('/api/admin/refunds', {)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           ...manualRefundData,
           amount: manualRefundData.amount ? parseInt(manualRefundData.amount) : undefined,
-          requesterType: 'admin'
+          requesterType: 'admin',
         })
       });
-      
       if (response.ok) {
         // Clear form
-        setManualRefundData({
+        setManualRefundData({)
           purchaseId: '',
           reason: '',
           amount: '',
           description: '',
-          priority: 'medium'
+          priority: 'medium',
         });
         await loadRefundData();
       } else {
@@ -226,24 +207,20 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
       console.error('Error creating refund:', err);
     }
   };
-
   // Bulk operations
   const executeBulkAction = async () => {
     if (selectedRefunds.size === 0 || !bulkAction) return;
-    
     try {
       const refundIds = Array.from(selectedRefunds);
       const endpoint = bulkAction === 'approve' ? 'bulk-approve' : 'bulk-reject';
-      
-      const response = await fetch(`/api/admin/refunds/${endpoint}`, {
+      const response = await fetch(`/api/admin/refunds/${endpoint}`, {)}
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({ ),
           refundIds,
-          reason: bulkAction === 'reject' ? 'Bulk rejection' : undefined
+          reason: bulkAction === 'reject' ? 'Bulk rejection' : undefined,
         })
       });
-      
       if (response.ok) {
         setSelectedRefunds(new Set());
         setBulkAction('');
@@ -254,17 +231,14 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
       console.error('Error with bulk action:', err);
     }
   };
-
   useEffect(() => {
     loadRefundData();
     // Auto-refresh every 30 seconds
     const interval = setInterval(loadRefundData, 30000);
     return () => clearInterval(interval);
   }, [loadRefundData]);
-
   // Helper functions
-  const formatAmount = (cents: number) => `$${(cents / 100).toFixed(2)}`;
-  
+  const formatAmount = (cents: number) => `$${(cents / 100).toFixed(2)}`;}
   const getStatusColor = (status: string) => {
     switch (status) {
     case 'completed': return 'bg-green-100 text-green-800';
@@ -275,7 +249,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-  
   const getPriorityColor = (priority: string) => {
     switch (priority) {
     case 'urgent': return 'bg-red-100 text-red-800';
@@ -285,9 +258,8 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   if (loading && !stats) {
-    return (
+    return ()
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
           <div className="animate-pulse">Loading refund processing dashboard...</div>
@@ -295,15 +267,14 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
       </Card>
     );
   }
-
-  return (
+  return ()
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <DollarSign className="w-5 h-5" />
           Refund Processing Dashboard
           <Badge variant="secondary">Epic 17</Badge>
-          {error && (
+          {error && ()
             <Badge variant="destructive" className="ml-auto">
               <AlertTriangle className="w-3 h-3 mr-1" />
               Error
@@ -311,7 +282,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
           )}
         </CardTitle>
       </CardHeader>
-      
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-6">
@@ -322,10 +292,9 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
             <TabsTrigger value="manual">Manual</TabsTrigger>
             <TabsTrigger value="policies">Policies</TabsTrigger>
           </TabsList>
-
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-4">
-            {stats && (
+            {stats && ()
               <>
                 {/* Key Metrics */}
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -336,7 +305,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                       {stats.approvedToday} approved today
                     </div>
                   </div>
-                  
                   <div className="border rounded-lg p-4 text-center">
                     <div className="text-2xl font-bold text-orange-600">{stats.pendingRequests}</div>
                     <div className="text-sm text-gray-600">Pending Approval</div>
@@ -344,7 +312,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                       Require attention
                     </div>
                   </div>
-                  
                   <div className="border rounded-lg p-4 text-center">
                     <div className="text-2xl font-bold text-green-600">
                       {formatAmount(stats.totalRefunded)}
@@ -354,7 +321,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                       This period
                     </div>
                   </div>
-                  
                   <div className="border rounded-lg p-4 text-center">
                     <div className="text-2xl font-bold text-purple-600">
                       {stats.averageProcessingTime}h
@@ -364,7 +330,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                       Time to completion
                     </div>
                   </div>
-                  
                   <div className="border rounded-lg p-4 text-center">
                     <div className="text-2xl font-bold text-red-600">
                       {Math.round(stats.performance.approvalRate * 100)}%
@@ -375,7 +340,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                     </div>
                   </div>
                 </div>
-
                 {/* Status & Reason Breakdown */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Card>
@@ -384,7 +348,7 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {Object.entries(stats.byStatus).map(([status, count]) => (
+                        {Object.entries(stats.byStatus).map(([status, count]) => ()
                           <div key={status} className="flex justify-between items-center">
                             <span className="capitalize">{status.replace('_', ' ')}</span>
                             <Badge className={getStatusColor(status)}>{count}</Badge>
@@ -393,14 +357,13 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                       </div>
                     </CardContent>
                   </Card>
-
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-lg">Refund Reasons</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {Object.entries(stats.byReason).map(([reason, count]) => (
+                        {Object.entries(stats.byReason).map(([reason, count]) => ()
                           <div key={reason} className="flex justify-between items-center">
                             <span className="capitalize text-sm">{reason.replace(/_/g, ' ')}</span>
                             <Badge variant="secondary">{count}</Badge>
@@ -410,7 +373,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                     </CardContent>
                   </Card>
                 </div>
-
                 {/* Creator Impact */}
                 <Card>
                   <CardHeader>
@@ -440,7 +402,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
               </>
             )}
           </TabsContent>
-
           {/* Approvals Tab */}
           <TabsContent value="approvals" className="space-y-4">
             <div className="flex justify-between items-center">
@@ -452,7 +413,7 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                   <RefreshCw className="w-4 h-4 mr-1" />
                   Refresh
                 </Button>
-                {selectedRefunds.size > 0 && (
+                {selectedRefunds.size > 0 && ()
                   <div className="flex gap-1">
                     <Select value={bulkAction} onValueChange={setBulkAction}>
                       <SelectTrigger className="w-32">
@@ -470,9 +431,8 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                 )}
               </div>
             </div>
-
             <div className="space-y-3">
-              {pendingApprovals.map((refund) => (
+              {pendingApprovals.map((refund) => ()
                 <Card key={refund.refundId} className="border-orange-200 bg-orange-50">
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">
@@ -501,7 +461,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                               {formatAmount(refund.amount)} {refund.refundType}
                             </Badge>
                           </div>
-                          
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm mb-2">
                             <div>
                               <span className="font-medium">Purchase:</span> {refund.purchaseId}
@@ -516,12 +475,10 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                               <span className="font-medium">Created:</span> {new Date(refund.createdAt).toLocaleDateString()}
                             </div>
                           </div>
-                          
-                          {refund.description && (
+                          {refund.description && ()
                             <p className="text-sm text-gray-700 mb-2">{refund.description}</p>
                           )}
-                          
-                          {refund.dueDate && new Date(refund.dueDate) < new Date() && (
+                          {refund.dueDate && new Date(refund.dueDate) < new Date() && ()
                             <Badge variant="destructive" className="text-xs">
                               <Clock className="w-3 h-3 mr-1" />
                               Overdue
@@ -529,7 +486,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                           )}
                         </div>
                       </div>
-                      
                       <div className="flex gap-2">
                         <Button 
                           size="sm" 
@@ -560,8 +516,7 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                   </CardContent>
                 </Card>
               ))}
-              
-              {pendingApprovals.length === 0 && (
+              {pendingApprovals.length === 0 && ()
                 <div className="text-center py-8 text-gray-500">
                   <CheckCircle className="w-8 h-8 mx-auto mb-2" />
                   All refunds have been reviewed
@@ -569,7 +524,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
               )}
             </div>
           </TabsContent>
-
           {/* All Refunds Tab */}
           <TabsContent value="refunds" className="space-y-4">
             {/* Search and Filters */}
@@ -616,10 +570,9 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                 </Button>
               </div>
             </div>
-
             {/* Refunds List */}
             <div className="space-y-2">
-              {refunds.map((refund) => (
+              {refunds.map((refund) => ()
                 <Card key={refund.refundId}>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">
@@ -636,7 +589,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                             {formatAmount(refund.amount)}
                           </Badge>
                         </div>
-                        
                         <div className="grid grid-cols-3 md:grid-cols-6 gap-2 text-sm text-gray-600">
                           <div>Purchase: {refund.purchaseId}</div>
                           <div>Customer: {refund.originalPurchase.customerId}</div>
@@ -648,7 +600,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                           </div>
                         </div>
                       </div>
-                      
                       <div className="flex gap-2">
                         <Button size="sm" variant="ghost">
                           <MessageCircle className="w-4 h-4" />
@@ -663,7 +614,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
               ))}
             </div>
           </TabsContent>
-
           {/* Analytics Tab */}
           <TabsContent value="analytics" className="space-y-4">
             <div className="flex justify-between items-center">
@@ -679,8 +629,7 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                 </SelectContent>
               </Select>
             </div>
-
-            {stats && (
+            {stats && ()
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Card>
                   <CardHeader>
@@ -708,7 +657,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                     </div>
                   </CardContent>
                 </Card>
-
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg">Trends</CardTitle>
@@ -733,7 +681,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
               </div>
             )}
           </TabsContent>
-
           {/* Manual Refund Tab */}
           <TabsContent value="manual" className="space-y-4">
             <Card>
@@ -750,7 +697,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                       placeholder="Enter purchase ID"
                     />
                   </div>
-                  
                   <div className="space-y-2">
                     <label className="font-medium">Amount (cents, optional)</label>
                     <Input
@@ -761,7 +707,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                     />
                   </div>
                 </div>
-                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="font-medium">Reason</label>
@@ -781,7 +726,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                       </SelectContent>
                     </Select>
                   </div>
-                  
                   <div className="space-y-2">
                     <label className="font-medium">Priority</label>
                     <Select 
@@ -800,7 +744,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                     </Select>
                   </div>
                 </div>
-                
                 <div className="space-y-2">
                   <label className="font-medium">Description</label>
                   <Textarea
@@ -810,7 +753,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                     rows={3}
                   />
                 </div>
-                
                 <div className="flex gap-2">
                   <Button 
                     onClick={createManualRefund}
@@ -821,12 +763,12 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                   </Button>
                   <Button 
                     variant="outline" 
-                    onClick={() => setManualRefundData({
+                    onClick={() => setManualRefundData({)
                       purchaseId: '',
                       reason: '',
                       amount: '',
                       description: '',
-                      priority: 'medium'
+                      priority: 'medium',
                     })}
                   >
                     Clear Form
@@ -834,7 +776,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                 </div>
               </CardContent>
             </Card>
-
             {/* Quick Actions */}
             <Card>
               <CardHeader>
@@ -862,7 +803,6 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
               </CardContent>
             </Card>
           </TabsContent>
-
           {/* Policies Tab */}
           <TabsContent value="policies" className="space-y-4">
             <Card>
@@ -879,14 +819,12 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
                       </div>
                       <Switch defaultChecked />
                     </div>
-                    
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>Time limit: 7 days</div>
                       <div>Auto-approve threshold: $50</div>
                       <div>Creator liability: 80%</div>
                       <div>Manager approval: No</div>
                     </div>
-                    
                     <div className="mt-3">
                       <Button size="sm" variant="outline">
                         Edit Policy
@@ -898,9 +836,8 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
             </Card>
           </TabsContent>
         </Tabs>
-
         {/* Error Display */}
-        {error && (
+        {error && ()
           <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-800 text-sm">
             <AlertTriangle className="w-4 h-4 inline mr-2" />
             {error}

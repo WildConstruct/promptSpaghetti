@@ -68,7 +68,7 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
     };
   }, [options]);
   // Chart type controls
-  const ChartTypeSelector = () => (;)
+  const ChartTypeSelector = () => (;);
     <div style={{ display: 'flex', gap: 4, marginBottom: 12 }}>
       {[
         { type: 'pie' as ChartType, icon: '◯', label: 'Pie' },
@@ -112,7 +112,7 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
     </div>
   );
   // Color scheme selector
-  const ColorSchemeSelector = () => (;)
+  const ColorSchemeSelector = () => (;);
     <div style={{ marginBottom: 12 }}>
       <label style={{ fontSize: 11, color: '#9ca3af', marginBottom: 6, display: 'block' }}>
         Color Scheme
@@ -139,7 +139,7 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
     </div>
   );
   // Display options
-  const DisplayOptions = () => (;)
+  const DisplayOptions = () => (;);
     <div style={{ marginBottom: 12 }}>
       <label style={{ fontSize: 11, color: '#9ca3af', marginBottom: 6, display: 'block' }}>
         Display Options
@@ -169,7 +169,7 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
   // Statistics display
   const StatisticsDisplay = () => {
     if (!statistics || !showStatistics) return null;
-    return ()
+    return ();
       <div
         style={{
           marginTop: 16,
@@ -222,7 +222,7 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
       </div>
     );
   };
-  const content = (;)
+  const content = (;);
     <div style={{ padding: '0 4px' }}>
       {/* Chart Controls */}
       {showChartControls && ()
@@ -252,7 +252,7 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
   );
   // If no onCollapseChange provided, render non-collapsible version
   if (!onCollapseChange) {
-    return ()
+    return ();
       <div className={className} style={style}>
         <div style={{ 
           marginBottom: 12,
@@ -276,7 +276,7 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
     );
   }
   // Collapsible version
-  return ()
+  return ();
     <div className={className} style={style}>
       <CollapsibleSection
         title={`📊 ${title}`}

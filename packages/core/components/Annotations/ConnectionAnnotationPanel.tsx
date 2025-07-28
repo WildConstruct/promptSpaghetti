@@ -51,7 +51,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
   const visibleLabelsCount = getVisibleLabelsCount();
   const handleQuickAddLabel = useCallback(() => {
     if (!selectedEdgeId || !quickLabelInput.trim()) return;
-    onAddLabel()
+    onAddLabel();
       selectedEdgeId, 
       quickLabelInput.trim(),
       connectionAnnotationPresets[selectedPreset]
@@ -67,7 +67,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
   const handleTemplateSelect = useCallback((template: string) => {
     setQuickLabelInput(template);
   }, []);
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 80,
@@ -158,7 +158,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
               color: 'white',
               fontSize: 11,
               cursor: smartPositioning ? 'pointer' : 'not-allowed',
-              opacity: smartPositioning ? 1 : 0.5
+              opacity: smartPositioning ? 1 : 0.5,
             }}
           >
             Optimize
@@ -214,7 +214,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
           <h4 style={{ 
             color: '#e2e8f0', 
             fontSize: 12, 
-            margin: '0 0 8px 0' 
+            margin: '0 0 8px 0' ,
           }}>
             Add Label to Selected Connection
           </h4>
@@ -311,7 +311,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
                 borderRadius: 4,
                 color: 'white',
                 fontSize: 11,
-                cursor: quickLabelInput.trim() ? 'pointer' : 'not-allowed'
+                cursor: quickLabelInput.trim() ? 'pointer' : 'not-allowed',
               }}
             >
               Add Label
@@ -352,7 +352,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
             fontSize: 11, 
             fontStyle: 'italic',
             textAlign: 'center',
-            padding: '16px 8px'
+            padding: '16px 8px',
           }}>
             No labeled connections.{' '}
             {edges.length > 0 ? 'Select a connection to add labels.' : 'Create connections first.'}
@@ -391,7 +391,7 @@ export const ConnectionAnnotationPanel: React.FC<ConnectionAnnotationPanelProps>
                   </div>
                   <div style={{ 
                     fontSize: 9, 
-                    color: edge.showLabel ? '#48bb78' : '#a0aec0'
+                    color: edge.showLabel ? '#48bb78' : '#a0aec0',
                   }}>
                     {edge.showLabel ? 'Visible' : 'Hidden'}
                   </div>
@@ -472,7 +472,7 @@ export const ConnectionAnnotationToolbar: React.FC<{
   visibleLabelsCount,
   totalLabelsCount
 }) => {
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 20,

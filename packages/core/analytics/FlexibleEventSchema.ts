@@ -411,7 +411,7 @@ export class FlexibleEventSchemaManager {
   public async transformEvent()
     event: FlexibleConversionEvent,
     schemaId: string,
-    stage: 'pre_validation' | 'post_validation' | 'pre_storage' | 'post_retrieval' = 'pre_validation'
+    stage: 'pre_validation' | 'post_validation' | 'pre_storage' | 'post_retrieval' = 'pre_validation',
   ): Promise<FlexibleConversionEvent> {
     const schema = this.getSchema(schemaId);
     if (!schema) {
@@ -580,7 +580,7 @@ export class FlexibleEventSchemaManager {
     options: ValidationOptions,
   ): Promise<void> {
     for (const [propertyName, propertyDef] of schema.properties.entries()) {
-      const fieldResult = await this.validateProperty(;)
+      const fieldResult = await this.validateProperty(;);
         event.flexibleProperties[propertyName],
         propertyDef,
         propertyName,
@@ -718,7 +718,7 @@ export class FlexibleEventSchemaManager {
             propertyPath: result.fieldName,
             issue: rule.id,
             message: error.message,
-            impact: 'Custom rule violation'
+            impact: 'Custom rule violation',
           });
         }
         result.score -= ruleResult.score * 10;
@@ -739,7 +739,7 @@ export class FlexibleEventSchemaManager {
             propertyPath: 'global',
             constraint: constraint.id,
             message: constraintResult.message || `Global constraint '${constraint.name}' violated`,}
-            severity: constraint.severity === 'error' ? 'critical' : 'major'
+            severity: constraint.severity === 'error' ? 'critical' : 'major',
           };
           if (constraint.severity === 'error') {
             result.errors.push(error);
@@ -748,7 +748,7 @@ export class FlexibleEventSchemaManager {
               propertyPath: 'global',
               issue: constraint.id,
               message: error.message,
-              impact: 'Global constraint violation'
+              impact: 'Global constraint violation',
             });
           }
         }
@@ -763,7 +763,7 @@ export class FlexibleEventSchemaManager {
     // Validate property relationships
     for (const [propertyName, propertyDef] of schema.properties.entries()) {
       for (const relationship of propertyDef.relationships) {
-        const relationshipResult = await this.validateRelationship(;)
+        const relationshipResult = await this.validateRelationship(;);
           event,
           propertyName,
           relationship
@@ -776,7 +776,7 @@ export class FlexibleEventSchemaManager {
               propertyPath: propertyName,
               issue: 'relationship_violation',
               message: relationshipResult.message || `Relationship violation with ${relationship.targetProperty}`,}
-              impact: 'Data consistency issue'
+              impact: 'Data consistency issue',
             });
           }
         }
@@ -900,7 +900,7 @@ export class FlexibleEventSchemaManager {
         passed,
         score: passed ? 1 : 0,
         executionTime: Date.now() - startTime,
-        message: passed ? undefined : rule.rule.errorMessage
+        message: passed ? undefined : rule.rule.errorMessage,
       };
     } catch (error) {
       return {
@@ -1103,7 +1103,7 @@ export class FlexibleEventSchemaManager {
         optionalFields: ['value', 'properties'],
         forbiddenFields: ['__proto__', 'constructor']
       },
-      properties: new Map([)
+      properties: new Map([),
         ['templateId', {
           id: 'templateId',
           name: 'Template ID',
@@ -1141,7 +1141,7 @@ export class FlexibleEventSchemaManager {
               {
                 description: 'Valid template ID',
                 validExample: 'tpl-character-dev-001',
-                explanation: 'Follows the required pattern'
+                explanation: 'Follows the required pattern',
               }
             ]
           }

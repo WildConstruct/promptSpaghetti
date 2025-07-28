@@ -141,7 +141,7 @@ export class PasswordRules {
       weight: 8,
       category: 'length',
       severity: 'error',
-      validate: (password: string): PasswordRuleResult => {
+      validate: (password: string): PasswordRuleResult => {,
         const passed = password.length >= minLength;
         const score = Math.min(10, (password.length / minLength) * 6);
         return {
@@ -172,7 +172,7 @@ export class PasswordRules {
       weight: 2,
       category: 'length',
       severity: 'error',
-      validate: (password: string): PasswordRuleResult => {
+      validate: (password: string): PasswordRuleResult => {,
         const passed = password.length <= maxLength;
         return {
           passed,
@@ -202,7 +202,7 @@ export class PasswordRules {
       weight: 6,
       category: 'character',
       severity: 'error',
-      validate: (password: string): PasswordRuleResult => {
+      validate: (password: string): PasswordRuleResult => {,
         const uppercaseCount = (password.match(/[A-Z]/g) || []).length;
         const passed = uppercaseCount >= minCount;
         const score = Math.min(10, (uppercaseCount / minCount) * 7);
@@ -235,7 +235,7 @@ export class PasswordRules {
       weight: 6,
       category: 'character',
       severity: 'error',
-      validate: (password: string): PasswordRuleResult => {
+      validate: (password: string): PasswordRuleResult => {,
         const lowercaseCount = (password.match(/[a-z]/g) || []).length;
         const passed = lowercaseCount >= minCount;
         const score = Math.min(10, (lowercaseCount / minCount) * 7);
@@ -268,7 +268,7 @@ export class PasswordRules {
       weight: 6,
       category: 'character',
       severity: 'error',
-      validate: (password: string): PasswordRuleResult => {
+      validate: (password: string): PasswordRuleResult => {,
         const digitCount = (password.match(/[0-9]/g) || []).length;
         const passed = digitCount >= minCount;
         const score = Math.min(10, (digitCount / minCount) * 7);
@@ -302,7 +302,7 @@ export class PasswordRules {
       weight: 7,
       category: 'character',
       severity: 'error',
-      validate: (password: string): PasswordRuleResult => {
+      validate: (password: string): PasswordRuleResult => {,
         const specialCharPattern = new RegExp(`[${specialChars.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}]`, 'g');}
         const specialCharCount = (password.match(specialCharPattern) || []).length;
         const passed = specialCharCount >= minCount;
@@ -336,7 +336,7 @@ export class PasswordRules {
       weight: 4,
       category: 'pattern',
       severity: 'warning',
-      validate: (password: string): PasswordRuleResult => {
+      validate: (password: string): PasswordRuleResult => {,
         const consecutivePattern = new RegExp(`(.)\\1{${maxCount},}`, 'g');}
         const matches = password.match(consecutivePattern);
         const passed = !matches;
@@ -349,7 +349,7 @@ export class PasswordRules {
           suggestion: passed ? undefined : 'Replace consecutive identical characters with varied characters',
           details: {,
             expected: `Max ${maxCount} consecutive`,}
-            actual: matches?.length || 0
+            actual: matches?.length || 0,
           }
         };
       }
@@ -375,7 +375,7 @@ export class PasswordRules {
       weight: 5,
       category: 'pattern',
       severity: 'warning',
-      validate: (password: string): PasswordRuleResult => {
+      validate: (password: string): PasswordRuleResult => {,
         const lowerPassword = password.toLowerCase();
         const foundSequences = sequences.filter(seq => lowerPassword.includes(seq));
         const passed = foundSequences.length === 0;
@@ -412,7 +412,7 @@ export class PasswordRules {
           return {
             passed: true,
             score: 10,
-            message: 'No personal information to check against'
+            message: 'No personal information to check against',
           };
         }
         const lowerPassword = password.toLowerCase();
@@ -424,7 +424,7 @@ export class PasswordRules {
           context.organizationName,
           ...(context.personalInfo || [])
         ].filter(Boolean).map(info => info!.toLowerCase());
-        const foundInfo = personalInfo.filter(info => ;)
+        const foundInfo = personalInfo.filter(info => ;);
           info.length >= 3 && lowerPassword.includes(info)
         );
         const passed = foundInfo.length === 0;
@@ -456,7 +456,7 @@ export class PasswordRules {
       weight: 9,
       category: 'entropy',
       severity: 'warning',
-      validate: (password: string): PasswordRuleResult => {
+      validate: (password: string): PasswordRuleResult => {,
         const entropy = PasswordComplexityValidator.calculateEntropy(password);
         const passed = entropy >= minEntropy;
         const score = Math.min(10, (entropy / minEntropy) * 10);
@@ -469,7 +469,7 @@ export class PasswordRules {
           suggestion: passed ? undefined : 'Increase randomness by mixing character types and avoiding patterns',
           details: {,
             expected: minEntropy,
-            actual: Math.round(entropy * 10) / 10
+            actual: Math.round(entropy * 10) / 10,
           }
         };
       }
@@ -493,7 +493,7 @@ export class PasswordRules {
           return {
             passed: true,
             score: 10,
-            message: 'No password history to check against'
+            message: 'No password history to check against',
           };
         }
         const recentPasswords = context.previousPasswords.slice(0, historyCount);
@@ -507,7 +507,7 @@ export class PasswordRules {
           suggestion: isReused ? 'Choose a password you have not used recently' : undefined,
           details: {,
             expected: `Not in last ${historyCount} passwords`,}
-            actual: isReused ? 'Found in history' : 'Not in history'
+            actual: isReused ? 'Found in history' : 'Not in history',
           }
         };
       }
@@ -748,7 +748,6 @@ export class PasswordComplexityValidator {
     offline: string;
     online: string;
     unit: string;
-  } {
     const combinations = Math.pow(2, entropy);
     const avgCombinations = combinations / 2;
     // Offline cracking (1 billion guesses per second)
@@ -765,7 +764,7 @@ export class PasswordComplexityValidator {
     return {
       offline: formatTime(offlineSeconds),
       online: formatTime(onlineSeconds),
-      unit: 'average time'
+      unit: 'average time',
     };
   }
   /**

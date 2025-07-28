@@ -770,7 +770,7 @@ export class ConversionDataRelationshipManager {
    */
   public async enrichConversionEvent()
     baseEvent: EnhancedConversionEvent,
-    includeRelatedData: boolean = true
+    includeRelatedData: boolean = true,
   ): Promise<FlexibleConversionEvent> {
     const userEntity = await this.getUserEntity(baseEvent.userId);
     const templateEntity = baseEvent.properties?.templateId ;
@@ -887,7 +887,7 @@ export class ConversionDataRelationshipManager {
       riskScore: user.segmentation.riskScore,
       engagementScore: user.segmentation.engagementScore,
       profileCompleteness: this.calculateProfileCompleteness(user),
-      lastActivity: Math.max(...user.behavior.locationHistory.map(l => l.coordinates?.accuracy || 0))
+      lastActivity: Math.max(...user.behavior.locationHistory.map(l => l.coordinates?.accuracy || 0)),
     };
   }
   private buildTemplateContext(template: TemplateEntity) {
@@ -910,13 +910,12 @@ export class ConversionDataRelationshipManager {
       previousConversions: user.conversionHistory.totalConversions,
       referrerCategory: this.categorizeReferrer(event.metadata?.referrer || ''),
       deviceFingerprint: event.deviceFingerprint || '',
-      locationData: user.behavior.locationHistory[0] // Most recent location
+      locationData: user.behavior.locationHistory[0] // Most recent location,
     };
   }
   private async validateFlexibleEvent()
     event: EnhancedConversionEvent,
     properties: Record<string, FlexibleProperty>
-  ) {
     // Simplified validation for demo
     return {
       isValid: true,

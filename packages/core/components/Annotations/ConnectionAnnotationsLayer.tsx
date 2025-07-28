@@ -63,11 +63,11 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
     // Calculate connection path points
     const sourceCenter = {
       x: sourceNode.position.x + (sourceNode.width || 150) / 2,
-      y: sourceNode.position.y + (sourceNode.height || 40) / 2
+      y: sourceNode.position.y + (sourceNode.height || 40) / 2,
     };
     const targetCenter = {
       x: targetNode.position.x + (targetNode.width || 150) / 2,
-      y: targetNode.position.y + (targetNode.height || 40) / 2
+      y: targetNode.position.y + (targetNode.height || 40) / 2,
     };
     return {
       source: sourceCenter,
@@ -76,10 +76,10 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
     };
   }, [edges, reactFlowInstance]);
   // Calculate position along connection path
-  const calculateLabelPosition = useCallback((;)
+  const calculateLabelPosition = useCallback((;);
     connectionId: string,
     positionType: ConnectionLabelPosition,
-    offset: number = 0.5
+    offset: number = 0.5,
   ) => {
     const pathData = getConnectionPath(connectionId);
     if (!pathData) return { x: 0, y: 0 };
@@ -109,7 +109,7 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
     switch (action.type) {
       case 'create':
         if (action.connectionId && action.content) {
-          const position = calculateLabelPosition(;)
+          const position = calculateLabelPosition(;);
             action.connectionId,
             'middle',
             0.5
@@ -125,7 +125,7 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
             visible: true,
             author: 'Current User',
             timestamp: new Date().toISOString(),
-            lastModified: new Date().toISOString()
+            lastModified: new Date().toISOString(),
           };
           addConnectionLabel(newLabel);
         }
@@ -145,7 +145,7 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
           updateConnectionLabel(action.labelId, {)
             position: action.position,
             positionType: 'custom',
-            lastModified: new Date().toISOString()
+            lastModified: new Date().toISOString(),
           });
         }
         break;
@@ -183,7 +183,7 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
         handleLabelAction({)
           type: 'create',
           connectionId,
-          content: 'New Label'
+          content: 'New Label',
         });
         break;
       case 'highlight':
@@ -214,7 +214,7 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
           handleLabelAction({)
             type: 'create',
             connectionId: highlightedConnection,
-            content: 'New Label'
+            content: 'New Label',
           });
         }
       }
@@ -234,7 +234,7 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
     }
   }, [selectedAnnotations, onSelectionChange]);
   if (!visible) return null;
-  return ()
+  return ();
     <div
       ref={layerRef}
       data-testid="connection-annotations-layer"
@@ -284,7 +284,7 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
           const annotation = annotations.connectionAnnotations?.find(a => a.connectionId === edge.id);
           const isHighlighted = highlightedConnection === edge.id;
           if (!pathData || !annotation) return null;
-          return ()
+          return ();
             <g key={`enhanced-${edge.id}`}>}
               {/* Enhanced connection line */}
               <path
@@ -443,7 +443,7 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
             Right-click on connections to add labels and visual enhancements
           </div>
           <div style={{ fontSize: '12px', color: '#9ca3af', marginTop: '8px' }}>
-            Keyboard: Ctrl+L to add label
+            Keyboard: Ctrl+L to add label,
           </div>
         </div>
       )}

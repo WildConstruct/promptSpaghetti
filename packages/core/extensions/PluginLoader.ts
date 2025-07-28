@@ -135,7 +135,7 @@ export class PluginLoader {
     // Load plugins in dependency order
     const result = new Map<string, LoadedPlugin>();
     for (const pluginId of loadOrder) {
-      const source = sources.find(s => ;)
+      const source = sources.find(s => ;);
         s.location.includes(pluginId) || s.location.endsWith(pluginId)
       );
       if (source) {
@@ -156,7 +156,7 @@ export class PluginLoader {
             loadedAt: new Date(),
             dependencies: [],
             status: 'error',
-            error: error as Error
+            error: error as Error,
           };
           result.set(pluginId, errorPlugin);
         }
@@ -378,7 +378,7 @@ export class PluginLoader {
     if (manifest.permissions) {
       // Check dangerous permissions
       const dangerousPermissions = ['fs:write', 'network:external', 'process:spawn'];
-      const requestedDangerous = manifest.permissions.filter(p => ;)
+      const requestedDangerous = manifest.permissions.filter(p => ;);
         dangerousPermissions.some(d => p.startsWith(d))
       );
       if (requestedDangerous.length > 0 && !this.options.developmentMode) {

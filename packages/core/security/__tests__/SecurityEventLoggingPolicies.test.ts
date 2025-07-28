@@ -126,7 +126,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         tags: ['authentication', 'brute_force'],
         related_events: [],
         created_by: 'security_system',
-        created_at: new Date()
+        created_at: new Date(),
       };
       const result = policyEngine.processSecurityEvent(authEvent);
       expect(result.matched_policies).toContain('APPSEC_001');
@@ -166,7 +166,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         forensic_artifacts: ['request_payload', 'response_headers'],
         tags: ['injection', 'sql', 'critical'],
         created_by: 'waf_system',
-        created_at: new Date()
+        created_at: new Date(),
       };
       const result = policyEngine.processSecurityEvent(injectionEvent);
       expect(result.matched_policies).toContain('APPSEC_002');
@@ -202,7 +202,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         forensic_artifacts: ['deployment_logs', 'change_requests'],
         tags: ['sox', 'change_management', 'violation'],
         created_by: 'compliance_monitor',
-        created_at: new Date()
+        created_at: new Date(),
       };
       const result = policyEngine.processSecurityEvent(soxEvent);
       expect(result.matched_policies).toContain('SOX_001');
@@ -236,7 +236,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         evidence_preserved: true,
         tags: ['gdpr', 'data_access', 'article_15'],
         created_by: 'privacy_system',
-        created_at: new Date()
+        created_at: new Date(),
       };
       const result = policyEngine.processSecurityEvent(gdprEvent);
       expect(result.matched_policies).toContain('GDPR_001');
@@ -268,7 +268,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         evidence_preserved: true,
         tags: ['anomaly', 'behavior', 'user_activity'],
         created_by: 'ml_analytics',
-        created_at: new Date()
+        created_at: new Date(),
       };
       const result = policyEngine.processSecurityEvent(behaviorEvent);
       expect(result.matched_policies).toContain('BEHAVIOR_001');
@@ -293,7 +293,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
           compliance_frameworks: [ComplianceFramework.SOX],
           regulatory_impact: true,
           created_by: 'system',
-          created_at: new Date()
+          created_at: new Date(),
         },
         {
           event_id: crypto.randomUUID(),
@@ -307,7 +307,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
           compliance_frameworks: [ComplianceFramework.GDPR],
           regulatory_impact: true,
           created_by: 'system',
-          created_at: new Date()
+          created_at: new Date(),
         }
       ];
       // Process sample events
@@ -330,7 +330,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
       });
     });
     it('should generate SOX compliance report', () => {
-      const report = policyEngine.generateComplianceReport(;)
+      const report = policyEngine.generateComplianceReport(;);
         ComplianceFramework.SOX,
         new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
         new Date()
@@ -342,7 +342,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
       expect(Array.isArray(report.recommendations)).toBe(true);
     });
     it('should generate GDPR compliance report', () => {
-      const report = policyEngine.generateComplianceReport(;)
+      const report = policyEngine.generateComplianceReport(;);
         ComplianceFramework.GDPR,
         new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
         new Date()
@@ -352,7 +352,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
       expect(report.events_by_severity[SecurityEventSeverity.MEDIUM]).toBeGreaterThanOrEqual(1);
     });
     it('should provide appropriate recommendations', () => {
-      const report = policyEngine.generateComplianceReport(;)
+      const report = policyEngine.generateComplianceReport(;);
         ComplianceFramework.SOX,
         new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
         new Date()
@@ -386,7 +386,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         tags: ['auth'],
         related_events: [],
         created_by: 'system',
-        created_at: new Date()
+        created_at: new Date(),
       };
       // Process the same event multiple times to build metrics
       for (let i = 0; i < 5; i++) {
@@ -423,7 +423,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         tags: [],
         related_events: [],
         created_by: '',
-        created_at: new Date()
+        created_at: new Date(),
       };
       // This should not throw an error but handle gracefully
       expect(() => {
@@ -468,7 +468,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
         tags: ['network', 'intrusion'],
         related_events: [],
         created_by: 'network_ids',
-        created_at: new Date()
+        created_at: new Date(),
       };
       const result = processSecurityEvent(testEvent);
       expect(result.matched_policies.length).toBeGreaterThan(0);
@@ -511,7 +511,7 @@ describe('SecurityEventLoggingPolicyEngine', () => {
       expect(retrievedPolicy?.policy_name).toBe('Utility Test Policy');
     });
     it('should work with compliance report generation utility', () => {
-      const report = generateSecurityComplianceReport(;)
+      const report = generateSecurityComplianceReport(;);
         ComplianceFramework.NIST,
         new Date(Date.now() - 24 * 60 * 60 * 1000),
         new Date()
@@ -537,7 +537,7 @@ describe('Security Event Logging Policy Utilities', () => {
         SecurityEventType.SECURITY_INCIDENT_DETECTED
       ];
       for (const eventType of criticalEventTypes) {
-        const hasPolicy = policies.some(policy => ;)
+        const hasPolicy = policies.some(policy => ;);
           policy.event_types.includes(eventType)
         );
         expect(hasPolicy).toBe(true);
@@ -556,7 +556,7 @@ describe('Security Event Logging Policy Utilities', () => {
         ComplianceFramework.NIST
       ];
       for (const framework of supportedFrameworks) {
-        const report = generateSecurityComplianceReport(;)
+        const report = generateSecurityComplianceReport(;);
           framework,
           new Date(Date.now() - 24 * 60 * 60 * 1000),
           new Date()

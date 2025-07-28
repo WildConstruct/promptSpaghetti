@@ -53,7 +53,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({)
       cursor: disabled ? 'not-allowed' : 'pointer',
       fontWeight: '500',
       transition: 'all 0.2s ease',
-      opacity: disabled ? 0.5 : 1
+      opacity: disabled ? 0.5 : 1,
     };
     const sizeStyles = {
       small: { padding: '4px 8px', fontSize: '12px' },
@@ -98,7 +98,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({)
     default: return '16px';
     }
   };
-  const ShareIcon = () => (;)
+  const ShareIcon = () => (;);
     <svg
       width={getIconSize()}
       height={getIconSize()}
@@ -116,7 +116,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({)
       <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
     </svg>
   );
-  return ()
+  return ();
     <>
       <button
         onClick={handleOpenModal}

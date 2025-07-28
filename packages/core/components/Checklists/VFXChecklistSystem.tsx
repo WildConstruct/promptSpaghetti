@@ -353,7 +353,7 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
     const review = checklist.items.filter(item => item.status === 'review').length;
     const blocked = checklist.items.filter(item => item.status === 'blocked').length;
     const critical = checklist.items.filter(item => item.priority === 'critical').length;
-    const overdue = checklist.items.filter(item => ;)
+    const overdue = checklist.items.filter(item => ;);
       item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved'
     ).length;
     const totalEstimated = checklist.items.reduce((sum, item) => sum + (item.estimatedHours || 0), 0);
@@ -370,14 +370,14 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
       totalEstimated,
       totalActual,
       avgProgress,
-      efficiency: totalEstimated > 0 ? ((totalEstimated - totalActual) / totalEstimated) * 100 : 0
+      efficiency: totalEstimated > 0 ? ((totalEstimated - totalActual) / totalEstimated) * 100 : 0,
     };
   }, [checklist.items]);
   // Handle item status change
   const handleStatusChange = useCallback((itemId: string, newStatus: VFXChecklistItem['status']) => {
     const updates: Partial<VFXChecklistItem> = { 
       status: newStatus,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
     // Auto-complete when approved
     if (newStatus === 'approved') {
@@ -389,7 +389,7 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
   const handlePriorityChange = useCallback((itemId: string, newPriority: VFXChecklistItem['priority']) => {
     onItemUpdate(itemId, { )
       priority: newPriority,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     });
   }, [onItemUpdate]);
   // Handle assignee change
@@ -397,14 +397,14 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
     const assignee = checklist.team.find(member => member.id === assigneeId);
     onItemUpdate(itemId, { )
       assignee,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     });
   }, [checklist.team, onItemUpdate]);
   // Handle progress change
   const handleProgressChange = useCallback((itemId: string, completion: number) => {
     const updates: Partial<VFXChecklistItem> = { 
       completion,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
     // Auto-approve when 100% complete
     if (completion === 100 && currentUser.permissions.canApprove) {
@@ -427,7 +427,7 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
       qualityGates: [],
       comments: [],
       dependencies: newItemTemplate.dependencies || [],
-      tags: newItemTemplate.tags || []
+      tags: newItemTemplate.tags || [],
     } as Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'>;
     onItemCreate(newItem);
     setIsCreating(false);
@@ -442,7 +442,7 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
       dependencies: [],
     });
   }, [newItemTemplate, currentUser, onItemCreate]);
-  return ()
+  return ();
     <div className={`vfx-checklist-system ${className}`}>}
       <Card>
         <CardHeader>
@@ -812,7 +812,7 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({)
     });
     setNewComment('');
   }, [newComment, item.id, currentUser, onCommentCreate]);
-  return ()
+  return ();
     <Card className={`checklist-item ${isSelected ? 'ring-2 ring-blue-500' : ''} ${isOverdue ? 'border-red-300' : ''}`}>}
       <CardContent className="p-4">
         <div className="flex items-start gap-4">
@@ -926,7 +926,7 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({)
                         type="checkbox"
                         checked={subtask.completed}
                         onChange={() => {
-                          const updatedSubtasks = item.subtasks.map(st => ;)
+                          const updatedSubtasks = item.subtasks.map(st => ;);
                             st.id === subtask.id ? { ...st, completed: !st.completed } : st
                           );
                           onItemUpdate(item.id, { subtasks: updatedSubtasks });

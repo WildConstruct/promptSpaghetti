@@ -26,7 +26,7 @@ describe('NodeLabel Component', () => {
   });
   describe('Rendering', () => {
     test('renders label with custom text', () => {
-      render()
+      render();
         <NodeLabel
           config={mockConfig}
           nodeId="node-1"
@@ -37,7 +37,7 @@ describe('NodeLabel Component', () => {
     });
     test('falls back to node label when no custom label', () => {
       const configWithoutCustomLabel = { ...mockConfig, customLabel: '' };
-      render()
+      render();
         <NodeLabel
           config={configWithoutCustomLabel}
           nodeId="node-1"
@@ -49,7 +49,7 @@ describe('NodeLabel Component', () => {
     });
     test('falls back to node ID when no labels', () => {
       const configWithoutCustomLabel = { ...mockConfig, customLabel: '' };
-      render()
+      render();
         <NodeLabel
           config={configWithoutCustomLabel}
           nodeId="node-1"
@@ -72,7 +72,7 @@ describe('NodeLabel Component', () => {
         left: '50%',
         transform: 'translateX(-50%)',
       });
-      rerender()
+      rerender();
         <NodeLabel
           config={{ ...mockConfig, position: 'right' }}
           nodeId="node-1"
@@ -87,7 +87,7 @@ describe('NodeLabel Component', () => {
       });
     });
     test('applies correct label styles', () => {
-      render()
+      render();
         <NodeLabel
           config={{ ...mockConfig, style: 'professional' }}
           nodeId="node-1"
@@ -104,7 +104,7 @@ describe('NodeLabel Component', () => {
       });
     });
     test('shows icon when configured', () => {
-      render()
+      render();
         <NodeLabel
           config={{ ...mockConfig, showIcon: true }}
           nodeId="node-1"
@@ -114,7 +114,7 @@ describe('NodeLabel Component', () => {
       expect(screen.getByText('🏷️')).toBeInTheDocument();
     });
     test('shows edit indicator when editable', () => {
-      render()
+      render();
         <NodeLabel
           config={mockConfig}
           nodeId="node-1"
@@ -125,7 +125,7 @@ describe('NodeLabel Component', () => {
       expect(screen.getByText('✏️')).toBeInTheDocument();
     });
     test('shows delete button for custom labels', () => {
-      render()
+      render();
         <NodeLabel
           config={mockConfig}
           nodeId="node-1"
@@ -138,7 +138,7 @@ describe('NodeLabel Component', () => {
   });
   describe('Display Mode Visibility', () => {
     test('always mode shows label', () => {
-      render()
+      render();
         <NodeLabel
           config={{ ...mockConfig, displayMode: 'always' }}
           nodeId="node-1"
@@ -157,7 +157,7 @@ describe('NodeLabel Component', () => {
         />
       );
       expect(screen.queryByTestId('node-label-node-1')).not.toBeInTheDocument();
-      rerender()
+      rerender();
         <NodeLabel
           config={{ ...mockConfig, displayMode: 'hover' }}
           nodeId="node-1"
@@ -177,7 +177,7 @@ describe('NodeLabel Component', () => {
         />
       );
       expect(screen.queryByTestId('node-label-node-1')).not.toBeInTheDocument();
-      rerender()
+      rerender();
         <NodeLabel
           config={{ ...mockConfig, displayMode: 'selected' }}
           nodeId="node-1"
@@ -188,7 +188,7 @@ describe('NodeLabel Component', () => {
       expect(screen.getByTestId('node-label-node-1')).toBeInTheDocument();
     });
     test('never mode hides label', () => {
-      render()
+      render();
         <NodeLabel
           config={{ ...mockConfig, displayMode: 'never' }}
           nodeId="node-1"
@@ -201,7 +201,7 @@ describe('NodeLabel Component', () => {
   describe('Inline Editing', () => {
     test('enters edit mode on double-click', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <NodeLabel
           config={mockConfig}
           nodeId="node-1"
@@ -219,7 +219,7 @@ describe('NodeLabel Component', () => {
     });
     test('prevents editing when canEdit is false', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <NodeLabel
           config={mockConfig}
           nodeId="node-1"
@@ -234,7 +234,7 @@ describe('NodeLabel Component', () => {
       );
     });
     test('shows input field when editing', () => {
-      render()
+      render();
         <NodeLabel
           config={{ ...mockConfig, isEditing: true }}
           nodeId="node-1"
@@ -247,7 +247,7 @@ describe('NodeLabel Component', () => {
     });
     test('saves on Enter key', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <NodeLabel
           config={{ ...mockConfig, isEditing: true }}
           nodeId="node-1"
@@ -270,7 +270,7 @@ describe('NodeLabel Component', () => {
     });
     test('cancels on Escape key', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <NodeLabel
           config={{ ...mockConfig, isEditing: true }}
           nodeId="node-1"
@@ -288,7 +288,7 @@ describe('NodeLabel Component', () => {
     });
     test('saves on blur', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <NodeLabel
           config={{ ...mockConfig, isEditing: true }}
           nodeId="node-1"
@@ -313,7 +313,7 @@ describe('NodeLabel Component', () => {
     test('respects character limit', async () => {
       const user = userEvent.setup();
       const configWithLimit = { ...mockConfig, truncateLength: 10, isEditing: true };
-      render()
+      render();
         <NodeLabel
           config={configWithLimit}
           nodeId="node-1"
@@ -329,7 +329,7 @@ describe('NodeLabel Component', () => {
   describe('Delete Functionality', () => {
     test('deletes label when delete button clicked', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <NodeLabel
           config={mockConfig}
           nodeId="node-1"
@@ -348,7 +348,7 @@ describe('NodeLabel Component', () => {
     test('delete button prevents event propagation', async () => {
       const user = userEvent.setup();
       const mockStopPropagation = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <NodeLabel
           config={mockConfig}
           nodeId="node-1"
@@ -368,7 +368,7 @@ describe('NodeLabel Component', () => {
   });
   describe('Custom Styling', () => {
     test('applies custom color', () => {
-      render()
+      render();
         <NodeLabel
           config={{ ...mockConfig, color: '#ff0000' }}
           nodeId="node-1"
@@ -379,7 +379,7 @@ describe('NodeLabel Component', () => {
       expect(labelText).toHaveStyle({ color: '#ff0000' });
     });
     test('applies custom background color', () => {
-      render()
+      render();
         <NodeLabel
           config={{ ...mockConfig, backgroundColor: '#00ff00' }}
           nodeId="node-1"
@@ -390,7 +390,7 @@ describe('NodeLabel Component', () => {
       expect(labelText).toHaveStyle({ background: '#00ff00' });
     });
     test('applies custom font size', () => {
-      render()
+      render();
         <NodeLabel
           config={{ ...mockConfig, fontSize: 16 }}
           nodeId="node-1"
@@ -401,7 +401,7 @@ describe('NodeLabel Component', () => {
       expect(labelText).toHaveStyle({ fontSize: '16px' });
     });
     test('applies custom font weight', () => {
-      render()
+      render();
         <NodeLabel
           config={{ ...mockConfig, fontWeight: 'bold' }}
           nodeId="node-1"
@@ -414,7 +414,7 @@ describe('NodeLabel Component', () => {
   });
   describe('Accessibility', () => {
     test('has proper test id', () => {
-      render()
+      render();
         <NodeLabel
           config={mockConfig}
           nodeId="node-1"
@@ -424,7 +424,7 @@ describe('NodeLabel Component', () => {
       expect(screen.getByTestId('node-label-node-1')).toBeInTheDocument();
     });
     test('shows tooltip when enabled', () => {
-      render()
+      render();
         <NodeLabel
           config={mockConfig}
           nodeId="node-1"
@@ -436,7 +436,7 @@ describe('NodeLabel Component', () => {
       expect(labelContainer).toHaveAttribute('title', 'Test Label');
     });
     test('hides tooltip when disabled', () => {
-      render()
+      render();
         <NodeLabel
           config={mockConfig}
           nodeId="node-1"
@@ -448,7 +448,7 @@ describe('NodeLabel Component', () => {
       expect(labelContainer).not.toHaveAttribute('title');
     });
     test('input has proper placeholder and maxlength', () => {
-      render()
+      render();
         <NodeLabel
           config={{ ...mockConfig, isEditing: true, truncateLength: 25 }}
           nodeId="node-1"
@@ -464,7 +464,7 @@ describe('NodeLabel Component', () => {
       const renderSpy = jest.fn<unknown[], unknown>();
       const TestWrapper = ({ config }: { config: NodeLabelConfig }) => {
         renderSpy();
-        return ()
+        return ();
           <NodeLabel
             config={config}
             nodeId="node-1"
@@ -496,7 +496,7 @@ describe('NodeLabel Component', () => {
         timestamp: '2024-01-01T12:00:00Z',
       };
       expect(() => {
-        render()
+        render();
           <NodeLabel
             config={incompleteConfig}
             nodeId="node-1"
@@ -507,7 +507,7 @@ describe('NodeLabel Component', () => {
     });
     test('handles null onAction gracefully', () => {
       expect(() => {
-        render()
+        render();
           <NodeLabel
             config={mockConfig}
             nodeId="node-1"

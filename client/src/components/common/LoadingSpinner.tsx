@@ -1,7 +1,6 @@
 // Common Loading Spinner Component
 import React from 'react';
 import './LoadingSpinner.css';
-
 interface LoadingSpinnerProps {
   size?: 'small' | 'medium' | 'large';
   variant?: 'default' | 'dots' | 'pulse';
@@ -9,7 +8,7 @@ interface LoadingSpinnerProps {
   className?: string;
 }
 
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({)
   size = 'medium',
   variant = 'default',
   message,
@@ -18,25 +17,23 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   const renderSpinner = () => {
     switch (variant) {
     case 'dots':
-      return (
+      return ()
         <div className="spinner-dots">
           <div className="dot"></div>
           <div className="dot"></div>
           <div className="dot"></div>
         </div>
       );
-      
     case 'pulse':
-      return (
+      return ()
         <div className="spinner-pulse">
           <div className="pulse-ring"></div>
           <div className="pulse-ring"></div>
           <div className="pulse-ring"></div>
         </div>
       );
-      
     default:
-      return (
+      return ()
         <div className="spinner-circle">
           <svg className="circular" viewBox="25 25 50 50">
             <circle
@@ -53,11 +50,10 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       );
     }
   };
-
-  return (
-    <div className={`loading-spinner ${size} ${variant} ${className}`} role="status" aria-live="polite">
+  return ()
+    <div className={`loading-spinner ${size} ${variant} ${className}`} role="status" aria-live="polite">}
       {renderSpinner()}
-      {message && (
+      {message && ()
         <span className="loading-message" aria-label={message}>
           {message}
         </span>

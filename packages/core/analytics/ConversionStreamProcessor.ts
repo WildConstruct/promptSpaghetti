@@ -102,16 +102,16 @@ export class ConversionStreamProcessor extends EventEmitter {
       streamName: config.streamName || 'conversion-events',
       batchSize: config.batchSize || 100,
       flushInterval: config.flushInterval || 5000,
-      retryPolicy: config.retryPolicy || {
+      retryPolicy: config.retryPolicy || {,
         maxRetries: 3,
         backoffMultiplier: 2,
         maxBackoffTime: 30000,
       },
-      deadLetterQueue: config.deadLetterQueue || {
+      deadLetterQueue: config.deadLetterQueue || {,
         enabled: true,
         maxAge: 24,
       },
-      partitioning: config.partitioning || {
+      partitioning: config.partitioning || {,
         strategy: 'user_id',
         partitionCount: 10,
       }
@@ -216,7 +216,7 @@ export class ConversionStreamProcessor extends EventEmitter {
   public registerConsumer()
     consumerId: string,
     groupId: string,
-    partitions: number[] = []
+    partitions: number[] = [],
   ): StreamConsumer {
     // Auto-assign partitions if not specified
     const assignedPartitions = partitions.length > 0 ;
@@ -271,7 +271,7 @@ export class ConversionStreamProcessor extends EventEmitter {
    * Process all partitions
    */
   private async processAllPartitions(): Promise<void> {
-    const promises = Array.from(this.partitions.keys()).map(partitionId => ;)
+    const promises = Array.from(this.partitions.keys()).map(partitionId => ;);
       this.processPartition(partitionId)
     );
     await Promise.allSettled(promises);
@@ -301,7 +301,7 @@ export class ConversionStreamProcessor extends EventEmitter {
     const startTime = Date.now();
     try {
       // Process with all registered processors
-      const processingPromises = Array.from(this.processors.entries()).map(;)
+      const processingPromises = Array.from(this.processors.entries()).map(;);
         async ([name, processor]) => {
           try {
             const result = await processor(event);
@@ -351,7 +351,7 @@ export class ConversionStreamProcessor extends EventEmitter {
     event.retryCount++;
     if (event.retryCount <= this.config.retryPolicy.maxRetries) {
       // Calculate backoff delay
-      const delay = Math.min(;)
+      const delay = Math.min(;);
         this.config.retryPolicy.backoffMultiplier ** event.retryCount * 1000,
         this.config.retryPolicy.maxBackoffTime
       );

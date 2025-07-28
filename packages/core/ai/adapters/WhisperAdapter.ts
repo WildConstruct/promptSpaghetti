@@ -112,7 +112,7 @@ export class WhisperAdapter extends BaseAIModel {
         tokensPerMinute: 10000,
       },
       tags: ['speech-to-text', 'transcription', 'multilingual', 'whisper'],
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
     const capabilities: ModelCapabilities = {
       inputTypes: ['audio', 'video'],
@@ -125,7 +125,7 @@ export class WhisperAdapter extends BaseAIModel {
       customParameters: {,
         language: { ,
           type: 'string', 
-          description: 'ISO-639-1 language code (auto-detected if not specified)' 
+          description: 'ISO-639-1 language code (auto-detected if not specified)' ,
         },
         temperature: { type: 'number', min: 0, max: 1, default: 0 },
         response_format: {,
@@ -354,7 +354,7 @@ export class WhisperAdapter extends BaseAIModel {
           ...(this.config.organization && { 'OpenAI-Organization': this.config.organization })
         },
         body: formData,
-        signal: AbortSignal.timeout(this.config.timeout || 10000)
+        signal: AbortSignal.timeout(this.config.timeout || 10000),
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
@@ -486,7 +486,7 @@ export class WhisperAdapter extends BaseAIModel {
           method: 'POST',
           headers,
           body: formData,
-          signal: AbortSignal.timeout(this.config.timeout || 300000) // 5 minutes for large files
+          signal: AbortSignal.timeout(this.config.timeout || 300000) // 5 minutes for large files,
         });
         if (!response.ok) {
           const errorData = await response.json().catch(() => null);

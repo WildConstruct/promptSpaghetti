@@ -655,7 +655,7 @@ export const CohortFunnelAnalysis: React.FC<CohortFunnelAnalysisProps> = ({)
           'cohort_lifecycle'
         ],
         groupBy: ['funnel_step', 'cohort', 'time_period'],
-        filters: selectedCohortIds.map(cohortId => ({)
+        filters: selectedCohortIds.map(cohortId => ({),
           field: 'userContext.cohortIds',
           operator: 'contains',
           value: cohortId,
@@ -663,7 +663,7 @@ export const CohortFunnelAnalysis: React.FC<CohortFunnelAnalysisProps> = ({)
         aggregation: { interval: 'day' }
       };
       const results = await analyticsInfrastructure.queryMetrics(query);
-      const processedData = await processCohortAnalysisData(;)
+      const processedData = await processCohortAnalysisData(;);
         funnelDefinition,
         results,
         selectedCohorts,
@@ -722,14 +722,14 @@ export const CohortFunnelAnalysis: React.FC<CohortFunnelAnalysisProps> = ({)
     return <CohortAnalysisLoadingState />;
   }
   if (error || !analysisData) {
-    return ()
+    return ();
       <CohortAnalysisErrorState 
         error={error || 'No data available'} 
         onRetry={loadAnalysisData} 
       />
     );
   }
-  return ()
+  return ();
     <div className="cohort-funnel-analysis" ref={analysisRef}>
       <CohortAnalysisHeader
         funnelDefinition={funnelDefinition}
@@ -815,7 +815,7 @@ const CohortAnalysisHeader: React.FC<CohortAnalysisHeaderProps> = ({)
     ? analysisData.healthScores.reduce((sum, h) => sum + h.overallScore, 0) / analysisData.healthScores.length
     : 0;
   const criticalInsights = analysisData.insights.filter(i => i.severity === 'critical').length;
-  return ()
+  return ();
     <div className="cohort-analysis-header">
       <div className="header-info">
         <h3>Cohort Analysis: {funnelDefinition.name}</h3>
@@ -879,7 +879,7 @@ const ComparativeAnalysisView: React.FC<ComparativeAnalysisViewProps> = ({)
   comparativeAnalysis,
   funnelDefinition
 }) => {
-  return ()
+  return ();
     <div className="comparative-analysis-view">
       <div className="performance-comparison">
         <h4>Cohort Performance Comparison</h4>
@@ -947,12 +947,12 @@ const StepComparisonChart: React.FC<StepComparisonChartProps> = ({)
   const chartWidth = 800;
   const chartHeight = 300;
   const stepWidth = chartWidth / funnelSteps.length;
-  return ()
+  return ();
     <div className="step-comparison-chart">
       <svg width={chartWidth} height={chartHeight}>
         {funnelSteps.map((step, stepIndex) => {
           const x = stepIndex * stepWidth;
-          return ()
+          return ();
             <g key={step.id}>
               {/* Step label */}
               <text
@@ -972,7 +972,7 @@ const StepComparisonChart: React.FC<StepComparisonChartProps> = ({)
                 const barWidth = (stepWidth - 20) / cohortPerformance.length;
                 const barX = x + 10 + cohortIndex * barWidth;
                 const barY = chartHeight - 30 - barHeight;
-                return ()
+                return ();
                   <g key={`${step.id}-${cohort.cohortId}`}>}
                     <rect
                       x={barX}
@@ -1030,7 +1030,7 @@ interface CohortDifferenceCardProps {
   difference: CohortDifference;
 }
 const CohortDifferenceCard: React.FC<CohortDifferenceCardProps> = ({ difference }) => {
-  return ()
+  return ();
     <div className="cohort-difference-card">
       <div className="difference-header">
         <h5>{difference.metric.replace('_', ' ')}</h5>
@@ -1074,7 +1074,7 @@ interface RetentionAnalysisViewProps {
   retentionAnalysis: CohortRetentionAnalysis[];
 }
 const RetentionAnalysisView: React.FC<RetentionAnalysisViewProps> = ({ retentionAnalysis }) => {
-  return ()
+  return ();
     <div className="retention-analysis-view">
       <div className="retention-overview">
         <h4>Cohort Retention Overview</h4>
@@ -1101,7 +1101,7 @@ interface RetentionMetricsCardProps {
   analysis: CohortRetentionAnalysis;
 }
 const RetentionMetricsCard: React.FC<RetentionMetricsCardProps> = ({ analysis }) => {
-  return ()
+  return ();
     <div className="retention-metrics-card">
       <h5>{analysis.cohortName}</h5>
       <div className="retention-stats">
@@ -1160,19 +1160,18 @@ const RetentionCurvesChart: React.FC<RetentionCurvesChartProps> = ({ retentionAn
   const innerWidth = chartWidth - margin.left - margin.right;
   const innerHeight = chartHeight - margin.top - margin.bottom;
   // Find max period across all cohorts
-  const maxPeriod = Math.max(;)
+  const maxPeriod = Math.max(;);
     ...retentionAnalysis.map(analysis => )
       Math.max(...analysis.retentionCurve.map(point => point.period))
-    )
   );
-  return ()
+  return ();
     <div className="retention-curves-chart">
       <svg width={chartWidth} height={chartHeight}>
         <g transform={`translate(${margin.left}, ${margin.top})`}>}
           {/* Grid lines */}
           {[0, 25, 50, 75, 100].map(tick => {)
             const y = ((100 - tick) / 100) * innerHeight;
-            return ()
+            return ();
               <g key={tick}>
                 <line
                   x1={0}
@@ -1197,7 +1196,7 @@ const RetentionCurvesChart: React.FC<RetentionCurvesChartProps> = ({ retentionAn
           {/* X-axis labels */}
           {Array.from({ length: Math.min(maxPeriod + 1, 11) }, (_, i) => i * Math.ceil(maxPeriod / 10)).map(period => {)
             const x = (period / maxPeriod) * innerWidth;
-            return ()
+            return ();
               <g key={period}>
                 <text
                   x={x}
@@ -1215,7 +1214,7 @@ const RetentionCurvesChart: React.FC<RetentionCurvesChartProps> = ({ retentionAn
           {retentionAnalysis.map((analysis, index) => {
             const color = getCohortColor(index);
             const points = analysis.retentionCurve.slice(0, 50); // Limit points for performance;
-            return ()
+            return ();
               <g key={analysis.cohortId}>
                 {/* Line */}
                 <path
@@ -1232,7 +1231,7 @@ const RetentionCurvesChart: React.FC<RetentionCurvesChartProps> = ({ retentionAn
                 {points.filter((_, i) => i % 5 === 0).map(point => {)
                   const x = (point.period / maxPeriod) * innerWidth;
                   const y = ((100 - point.retentionRate) / 100) * innerHeight;
-                  return ()
+                  return ();
                     <circle
                       key={point.period}
                       cx={x}
@@ -1284,7 +1283,7 @@ const LifecycleAnalysisView: React.FC<LifecycleAnalysisViewProps> = ({)
   lifecycleAnalysis,
   healthScores
 }) => {
-  return ()
+  return ();
     <div className="lifecycle-analysis-view">
       <div className="lifecycle-overview">
         <h4>Cohort Lifecycle Analysis</h4>
@@ -1312,7 +1311,7 @@ interface LifecycleCardProps {
   analysis: CohortLifecycleAnalysis;
 }
 const LifecycleCard: React.FC<LifecycleCardProps> = ({ analysis }) => {
-  return ()
+  return ();
     <div className="lifecycle-card">
       <h5>{analysis.cohortName}</h5>
       <div className="lifecycle-stages">
@@ -1357,7 +1356,7 @@ interface HealthScoreCardProps {
   healthScore: CohortHealthScore;
 }
 const HealthScoreCard: React.FC<HealthScoreCardProps> = ({ healthScore }) => {
-  return ()
+  return ();
     <div className="health-score-card">
       <div className="score-header">
         <h5>{healthScore.cohortName}</h5>
@@ -1410,7 +1409,7 @@ interface BehaviorAnalysisViewProps {
   behaviorPatterns: CohortBehaviorPattern[];
 }
 const BehaviorAnalysisView: React.FC<BehaviorAnalysisViewProps> = ({ behaviorPatterns }) => {
-  return ()
+  return ();
     <div className="behavior-analysis-view">
       <h4>Cohort Behavior Patterns</h4>
       <div className="behavior-patterns-grid">
@@ -1428,7 +1427,7 @@ interface BehaviorPatternCardProps {
   pattern: CohortBehaviorPattern;
 }
 const BehaviorPatternCard: React.FC<BehaviorPatternCardProps> = ({ pattern }) => {
-  return ()
+  return ();
     <div className="behavior-pattern-card">
       <h5>{pattern.cohortName}</h5>
       <div className="top-patterns">
@@ -1466,7 +1465,7 @@ interface PredictiveAnalysisViewProps {
   predictiveModels: CohortPredictiveModel[];
 }
 const PredictiveAnalysisView: React.FC<PredictiveAnalysisViewProps> = ({ predictiveModels }) => {
-  return ()
+  return ();
     <div className="predictive-analysis-view">
       <h4>Predictive Models</h4>
       <div className="predictive-models-grid">
@@ -1484,7 +1483,7 @@ interface PredictiveModelCardProps {
   model: CohortPredictiveModel;
 }
 const PredictiveModelCard: React.FC<PredictiveModelCardProps> = ({ model }) => {
-  return ()
+  return ();
     <div className="predictive-model-card">
       <div className="model-header">
         <h5>{model.cohortName}</h5>
@@ -1525,7 +1524,7 @@ interface ValueAnalysisViewProps {
   valueAnalysis: CohortValueAnalysis[];
 }
 const ValueAnalysisView: React.FC<ValueAnalysisViewProps> = ({ valueAnalysis }) => {
-  return ()
+  return ();
     <div className="value-analysis-view">
       <h4>Cohort Value Analysis</h4>
       <p>Value analysis view - Implementation needed</p>
@@ -1541,7 +1540,7 @@ interface CohortInsightsPanelProps {
 }
 const CohortInsightsPanel: React.FC<CohortInsightsPanelProps> = ({ insights, healthScores }) => {
   const criticalInsights = insights.filter(i => i.severity === 'critical' || i.severity === 'high');
-  return ()
+  return ();
     <div className="cohort-insights-panel">
       <h4>Key Insights & Recommendations</h4>
       <div className="insights-list">
@@ -1651,7 +1650,7 @@ async function processCohortAnalysisData()
       completionRate: 85 + (Math.random() * 10),
       dropOffRate: 15 - (index * 2),
       retentionRate: 75 + (index * 5),
-      reactivationRate: 12 + (Math.random() * 8)
+      reactivationRate: 12 + (Math.random() * 8),
     },
     stepPerformance: funnelDefinition.steps.map((step, stepIndex) => ({)
       stepId: step.id,
@@ -1671,7 +1670,7 @@ async function processCohortAnalysisData()
           frequency: 35 + (Math.random() * 20),
           impact: 12 + (Math.random() * 8),
           uniqueness: 0.7 + (Math.random() * 0.2),
-          description: 'Users spend more time evaluating options'
+          description: 'Users spend more time evaluating options',
         }
       ]
     })),
@@ -1684,7 +1683,7 @@ async function processCohortAnalysisData()
       retentionRate: 80 + (Math.random() * 15),
       reactivationCount: Math.floor(Math.random() * 5),
       valueGenerated: 500 + Math.random() * 300,
-      trendDirection: Math.random() > 0.5 ? 'improving' : 'stable'
+      trendDirection: Math.random() > 0.5 ? 'improving' : 'stable',
     })),
     progressionMetrics: {,
       progressionRate: 75 + (Math.random() * 20),
@@ -1724,7 +1723,7 @@ async function processCohortAnalysisData()
         benchmarkValue: 15,
         percentile: 70 + (index * 10),
         performance: 'good',
-        improvementPotential: 5 + (Math.random() * 10)
+        improvementPotential: 5 + (Math.random() * 10),
       },
       stepComparisons: [],
       peerCohorts: [],
@@ -1761,7 +1760,7 @@ async function processCohortAnalysisData()
     comparativeAnalysis: {,
       crossCohortMetrics: [],
       performanceRankings: [],
-      significantDifferences: selectedCohorts.length > 1 ? [
+      significantDifferences: selectedCohorts.length > 1 ? [,
         {
           metric: 'conversion_rate',
           cohortA: { id: selectedCohorts[0].id, name: selectedCohorts[0].name, value: 21.5 },
@@ -1782,7 +1781,7 @@ async function processCohortAnalysisData()
       convergenceAnalysis: [],
       outlierAnalysis: [],
     },
-    retentionAnalysis: selectedCohorts.map(cohort => ({)
+    retentionAnalysis: selectedCohorts.map(cohort => ({),
       cohortId: cohort.id,
       cohortName: cohort.name,
       retentionCurve: Array.from({ length: 30 }, (_, day) => ({)
@@ -1810,7 +1809,7 @@ async function processCohortAnalysisData()
           impact: 25,
           correlation: 0.82,
           actionability: 'high',
-          description: 'Users who engage within first 24 hours show higher retention'
+          description: 'Users who engage within first 24 hours show higher retention',
         }
       ],
       churnAnalysis: {,
@@ -1828,7 +1827,7 @@ async function processCohortAnalysisData()
         reactivationROI: 3.2,
       }
     })),
-    lifecycleAnalysis: selectedCohorts.map(cohort => ({)
+    lifecycleAnalysis: selectedCohorts.map(cohort => ({),
       cohortId: cohort.id,
       cohortName: cohort.name,
       lifecycleStages: [,
@@ -1902,7 +1901,7 @@ async function processCohortAnalysisData()
         opportunityAreas: [],
       }
     })),
-    behaviorPatterns: selectedCohorts.map(cohort => ({)
+    behaviorPatterns: selectedCohorts.map(cohort => ({),
       cohortId: cohort.id,
       cohortName: cohort.name,
       patterns: [,
@@ -1913,7 +1912,7 @@ async function processCohortAnalysisData()
           valueImpact: 25,
           temporalPattern: 'Weekday evenings',
           predictability: 0.75,
-          description: 'Users spend additional time comparing options before converting'
+          description: 'Users spend additional time comparing options before converting',
         }
       ],
       uniqueBehaviors: [,
@@ -1923,14 +1922,14 @@ async function processCohortAnalysisData()
           cohortSpecific: true,
           competitiveAdvantage: true,
           replicability: 'medium',
-          description: 'Early adoption of complex features'
+          description: 'Early adoption of complex features',
         }
       ],
       behaviorEvolution: [],
       crossCohortComparison: [],
     })),
     valueAnalysis: [],
-    predictiveModels: selectedCohorts.map(cohort => ({)
+    predictiveModels: selectedCohorts.map(cohort => ({),
       cohortId: cohort.id,
       cohortName: cohort.name,
       modelType: 'conversion',
@@ -1973,7 +1972,7 @@ async function processCohortAnalysisData()
       scenarioAnalysis: [],
     })),
     insights,
-    healthScores: selectedCohorts.map(cohort => ({)
+    healthScores: selectedCohorts.map(cohort => ({),
       cohortId: cohort.id,
       cohortName: cohort.name,
       overallScore: 75 + (Math.random() * 20),

@@ -124,7 +124,7 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
   const refreshExamples = () => {
     setSeed(Math.floor(Math.random() * 100000));
   };
-  return ()
+  return ();
     <CollapsibleSection
       title="Preview"
       collapsed={previewCollapsed}
@@ -218,7 +218,7 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
                       padding: '2px 6px',
                       borderRadius: 3,
                       display: 'inline-block',
-                      border: '1px solid #f59e0b'
+                      border: '1px solid #f59e0b',
                     }}>
                       Variation {example.highlightInfo.selectedIndex + 1} of {example.highlightInfo.totalVariations}
                     </div>

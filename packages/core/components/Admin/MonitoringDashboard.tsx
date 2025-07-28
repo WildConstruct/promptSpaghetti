@@ -232,7 +232,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
                 cpu: Math.random() * 40 + 30,
                 memory: Math.random() * 30 + 50,
                 disk: Math.random() * 20 + 60,
-                network: Math.random() * 25 + 35
+                network: Math.random() * 25 + 35,
               }
             };
             break;
@@ -242,7 +242,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
                 requestsPerSecond: Math.floor(Math.random() * 500) + 200,
                 averageLatency: Math.floor(Math.random() * 100) + 50,
                 errorRate: Math.random() * 2 + 0.1,
-                activeConnections: Math.floor(Math.random() * 1000) + 500
+                activeConnections: Math.floor(Math.random() * 1000) + 500,
               }
             };
             break;
@@ -343,7 +343,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
     setIsLoading(true);
   }, []);
   // Dashboard Header
-  const DashboardHeader = () => (;)
+  const DashboardHeader = () => (;);
     <div style={{
       display: 'flex',
       alignItems: 'center',
@@ -361,7 +361,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
         <p style={{ margin: 0, fontSize: '14px', color: '#6b7280' }}>
           {currentLayout?.description} • 
           Refreshes every {currentLayout?.refreshInterval ? Math.floor(currentLayout.refreshInterval / 1000) : 60}s • 
-          Status: <span style={{ 
+          Status: <span style={{ ,
             color: connectionStatus === 'connected' ? '#10b981' : '#ef4444',
             fontWeight: '500',
           }}>
@@ -426,7 +426,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
   );
   // Loading State
   if (isLoading && Object.keys(widgetData).length === 0) {
-    return ()
+    return ();
       <div className={`monitoring-dashboard loading ${className}`} style={{}
         padding: '20px',
         backgroundColor: '#f9fafb',
@@ -450,7 +450,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
               borderTopColor: '#3b82f6',
               borderRadius: '50%',
               animation: 'spin 1s linear infinite',
-              margin: '0 auto 16px'
+              margin: '0 auto 16px',
             }} />
             <div style={{ fontSize: '14px', color: '#6b7280' }}>Loading dashboard...</div>
           </div>
@@ -459,7 +459,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
     );
   }
   if (!currentLayout) {
-    return ()
+    return ();
       <div className={`monitoring-dashboard error ${className}`} style={{}
         padding: '20px',
         backgroundColor: '#f9fafb',
@@ -484,7 +484,7 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`monitoring-dashboard ${className}`} style={{}
       padding: '20px',
       backgroundColor: '#f9fafb',

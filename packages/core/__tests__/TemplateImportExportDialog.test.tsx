@@ -37,7 +37,7 @@ jest.mock('react-icons/fi', () => ({)
   FiClock: () => <div data-testid="clock-icon">Clock</div>,
   FiTag: () => <div data-testid="tag-icon">Tag</div>,
   FiArrowRight: () => <div data-testid="arrow-right-icon">Arrow</div>,
-  FiRefreshCw: () => <div data-testid="refresh-icon">Refresh</div>
+  FiRefreshCw: () => <div data-testid="refresh-icon">Refresh</div>,
 }));
 import { TemplateImportExportDialog } from '../components/templates/TemplateImportExportDialog';
 
@@ -166,7 +166,7 @@ describe('TemplateImportExportDialog', () => {
   });
   describe('Export Mode', () => {
     it('renders export configuration options', () => {
-      render()
+      render();
         <TemplateImportExportDialog 
           {...defaultProps} 
           mode="export" 
@@ -178,7 +178,7 @@ describe('TemplateImportExportDialog', () => {
     it('handles missing template in export mode', () => {
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
       expect(() => {
-        render()
+        render();
           <TemplateImportExportDialog 
             {...defaultProps} 
             mode="export" 
@@ -192,7 +192,7 @@ describe('TemplateImportExportDialog', () => {
   describe('Edge Cases', () => {
     it('handles undefined callbacks gracefully', () => {
       expect(() => {
-        render()
+        render();
           <TemplateImportExportDialog 
             {...defaultProps}
             onImportComplete={undefined}

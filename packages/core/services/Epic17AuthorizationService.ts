@@ -425,7 +425,7 @@ export class Epic17AuthorizationService extends EventEmitter {
   ): Promise<boolean> {
     const context: AuthorizationContext = {
       user,
-      resource: resourceId ? {
+      resource: resourceId ? {,
         type: resource,
         id: resourceId,
         attributes: {},
@@ -578,7 +578,7 @@ export class Epic17AuthorizationService extends EventEmitter {
     if (!userMatch && !roleMatch) return false;
     // Check resource targeting
     if (context.resource && target.resources.length > 0) {
-      const resourceMatch = target.resources.some(selector => ;)
+      const resourceMatch = target.resources.some(selector => ;);
         this.matchesResourceSelector(context.resource!, selector)
       );
       if (!resourceMatch) return false;
@@ -657,7 +657,7 @@ export class Epic17AuthorizationService extends EventEmitter {
         result,
         value,
         reason,
-        evaluationTime: Date.now() - startTime
+        evaluationTime: Date.now() - startTime,
       });
     }
     return results;

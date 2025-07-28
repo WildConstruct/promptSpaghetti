@@ -136,7 +136,7 @@ export interface PolicyRule {
   // Rule Logic
   logic: {,
     field: string;
-    operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'NOT_CONTAINS' | 
+    operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'NOT_CONTAINS' | ,
              'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN' | 'REGEX' | 'CUSTOM';
     value: any;
     customFunction?: string;
@@ -388,10 +388,9 @@ export class PolicyManagement extends EventEmitter {
   // Integrated Services
   private securityDashboardPolicies: SecurityDashboardPolicies;
   private automatedEnforcementService: AutomatedEnforcementService;
-  constructor()
+  constructor();
     securityDashboardPolicies?: SecurityDashboardPolicies,
     automatedEnforcementService?: AutomatedEnforcementService
-  ) {
     super();
     this.securityDashboardPolicies = securityDashboardPolicies || new SecurityDashboardPolicies();
     this.automatedEnforcementService = automatedEnforcementService || this.createMockEnforcementService();
@@ -420,7 +419,7 @@ export class PolicyManagement extends EventEmitter {
         updatedAt: new Date(),
         evaluationCount: 0,
         violationCount: 0,
-        tags: policyData.metadata?.tags || []
+        tags: policyData.metadata?.tags || [],
       }
     };
     // Validate policy
@@ -457,7 +456,7 @@ export class PolicyManagement extends EventEmitter {
         ...existingPolicy.metadata,
         ...updates.metadata,
         version: existingPolicy.metadata.version + 1,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       }
     };
     // Validate updated policy
@@ -593,7 +592,7 @@ export class PolicyManagement extends EventEmitter {
       // 2. Evaluate conditions
       const conditionResults = await this.evaluateConditions(policy, context);
       result.conditionResults = conditionResults;
-      const criticalConditionsFailed = conditionResults.some(;)
+      const criticalConditionsFailed = conditionResults.some(;);
         cr => cr.result === 'NOT_MET' && policy.configuration.conditions.find(c => c.id === cr.conditionId)?.critical
       );
       if (criticalConditionsFailed) {
@@ -636,7 +635,7 @@ export class PolicyManagement extends EventEmitter {
     for (const rule of policy.configuration.rules) {
       if (!rule.enabled) continue;
       // Check if rule is exempted by exception
-      const isExempt = exceptions.some(e => ;)
+      const isExempt = exceptions.some(e => ;);
         e.scope.includes('rules') && e.scope.includes(rule.id)
       );
       if (isExempt) {
@@ -863,7 +862,7 @@ export class PolicyManagement extends EventEmitter {
     const contentContext = context.contentContext;
     // Check geopolitical context for content accuracy
     if (rule.geopoliticalContext && contentContext?.culturalContext) {
-      const validRegions = rule.regions.filter(region => ;)
+      const validRegions = rule.regions.filter(region => ;);
         contentContext.culturalContext?.includes(region)
       );
       if (validRegions.length === 0) {
@@ -1138,17 +1137,17 @@ export class PolicyManagement extends EventEmitter {
    * Generate compliance report
    */
   async generateComplianceReport(framework: ComplianceFramework): Promise<any> {
-    const frameworkPolicies = this.getPolicies().filter(p =>;)
+    const frameworkPolicies = this.getPolicies().filter(p =>;);
       p.compliance.frameworks.includes(framework)
     );
     return {
       framework,
       totalPolicies: frameworkPolicies.length,
       activePolicies: frameworkPolicies.filter(p => p.status === PolicyStatus.ACTIVE).length,
-      violations: Array.from(this.violations.values()).filter(v =>)
+      violations: Array.from(this.violations.values()).filter(v =>),
         frameworkPolicies.some(p => p.id === v.policyId)
       ).length,
-      generatedAt: new Date()
+      generatedAt: new Date(),
     };
   }
   // Placeholder implementations for missing methods

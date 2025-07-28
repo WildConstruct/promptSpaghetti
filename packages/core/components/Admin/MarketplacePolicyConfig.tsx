@@ -99,7 +99,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
         },
         timeframes: {,
           evaluationPeriod: 7, // days
-          warningCooldown: 24 // hours
+          warningCooldown: 24 // hours,
         },
         actions: ['suspend_marketplace_access', 'restrict_new_uploads', 'require_verification', 'send_warning_notification']
       }
@@ -135,11 +135,11 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
         thresholds: {,
           minQualityScore: 3.5,
           minReviews: 5,
-          maxRefundRate: 10 // percentage
+          maxRefundRate: 10 // percentage,
         },
         timeframes: {,
           evaluationPeriod: 30, // days
-          gracePeriod: 7 // days
+          gracePeriod: 7 // days,
         },
         actions: ['hide_from_marketplace', 'require_improvement', 'flag_for_review', 'flag_for_promotion']
       }
@@ -179,7 +179,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
         },
         timeframes: {,
           velocityWindow: 24, // hours
-          cooldownPeriod: 1 // hours
+          cooldownPeriod: 1 // hours,
         },
         actions: ['block_transactions', 'temporary_block', 'require_verification', 'flag_for_review']
       }
@@ -205,10 +205,10 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
       configurable: {,
         thresholds: {,
           maxDisputeRate: 15, // percentage
-          maxRefundRate: 25 // percentage
+          maxRefundRate: 25 // percentage,
         },
         timeframes: {,
-          evaluationPeriod: 90 // days
+          evaluationPeriod: 90 // days,
         },
         actions: ['require_payment_verification', 'limit_purchases', 'flag_for_review']
       }
@@ -234,16 +234,16 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
     default: return 'text-gray-600 bg-gray-100';
     }
   };
-  const filteredTemplates = policyTemplates.filter(template => ;)
+  const filteredTemplates = policyTemplates.filter(template => ;);
     selectedCategory === 'all' || template.category === selectedCategory
   );
-  const renderCategoryFilter = () => (;)
+  const renderCategoryFilter = () => (;);
     <div className="category-filter">
       <div className="filter-buttons">
         {['creator', 'buyer', 'template', 'transaction', 'system'].map(category => {)
           const Icon = getCategoryIcon(category);
           const count = policyTemplates.filter(t => t.category === category).length;
-          return ()
+          return ();
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
@@ -258,7 +258,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
       </div>
     </div>
   );
-  const renderTemplateCard = (template: MarketplacePolicyTemplate) => (;)
+  const renderTemplateCard = (template: MarketplacePolicyTemplate) => (;);
     <Card key={template.templateId} className="template-card">
       <CardHeader>
         <div className="template-header">
@@ -345,7 +345,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
   );
   const renderTemplateEditor = () => {
     if (!editingTemplate) return null;
-    return ()
+    return ();
       <div className="template-editor-overlay">
         <Card className="template-editor">
           <CardHeader>
@@ -465,7 +465,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
       </div>
     );
   };
-  return ()
+  return ();
     <div className={`marketplace-policy-config ${className}`}>}
       <div className="config-header">
         <div className="header-info">

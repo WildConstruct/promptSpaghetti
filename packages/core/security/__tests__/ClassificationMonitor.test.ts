@@ -33,7 +33,7 @@ describe('ClassificationMonitor', () => {
     timestamp: new Date(),
     ...overrides
   });
-  const createTestClassificationResult = (;)
+  const createTestClassificationResult = (;);
     overrides?: Partial<ClassificationResult>
   ): ClassificationResult => ({)
     level: ClassificationLevel.CONFIDENTIAL,
@@ -179,7 +179,7 @@ describe('ClassificationMonitor', () => {
           type: MonitoringEventType.COMPLIANCE_VIOLATION,
           metadata: expect.objectContaining({),
             framework: ComplianceFramework.GDPR,
-            violation: 'Missing data retention policy'
+            violation: 'Missing data retention policy',
           })
         })
       );
@@ -232,14 +232,14 @@ describe('ClassificationMonitor', () => {
       const dataElement = createTestDataElement();
       const result = createTestClassificationResult({)
         level: ClassificationLevel.RESTRICTED,
-        encryptionRequired: false // Should be true for restricted
+        encryptionRequired: false // Should be true for restricted,
       });
       monitor.recordClassification(dataElement, result, 20);
       const events = monitor.getRecentEvents(10, [MonitoringEventType.COMPLIANCE_VIOLATION]);
       expect(events).toHaveLength(1);
       expect(events[0].metadata).toMatchObject({)
         framework: ComplianceFramework.NIST,
-        violation: 'Restricted data must have encryption enabled'
+        violation: 'Restricted data must have encryption enabled',
       });
     });
   });
@@ -507,12 +507,12 @@ describe('ClassificationMonitor', () => {
         'Test violation'
       );
       monitor.recordPerformanceWarning('errorRate', 10, 5);
-      const classificationEvents = monitor.getRecentEvents(10, [;)
+      const classificationEvents = monitor.getRecentEvents(10, [;);
         MonitoringEventType.CLASSIFICATION_PERFORMED
       ]);
       expect(classificationEvents).toHaveLength(1);
       expect(classificationEvents[0].type).toBe(MonitoringEventType.CLASSIFICATION_PERFORMED);
-      const violationEvents = monitor.getRecentEvents(10, [;)
+      const violationEvents = monitor.getRecentEvents(10, [;);
         MonitoringEventType.COMPLIANCE_VIOLATION,
         MonitoringEventType.PERFORMANCE_WARNING
       ]);

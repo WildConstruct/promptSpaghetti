@@ -85,7 +85,7 @@ export class JSONFormatProcessor implements FormatProcessor {
         has_version_info: !!parsed.version_info,
         has_export_metadata: !!parsed.export_metadata,
         template_name: parsed.template?.name || parsed.name,
-        template_version: parsed.version_info?.version_number || 'unknown'
+        template_version: parsed.version_info?.version_number || 'unknown',
       };
     } catch (error) {
       throw new Error(`Failed to extract metadata: ${(error as Error).message}`);}
@@ -161,7 +161,7 @@ export class YAMLFormatProcessor implements FormatProcessor {
         has_version_info: !!parsed.version_info,
         has_export_metadata: !!parsed.export_metadata,
         template_name: parsed.template?.name || parsed.name,
-        template_version: parsed.version_info?.version_number || 'unknown'
+        template_version: parsed.version_info?.version_number || 'unknown',
       };
     } catch (error) {
       throw new Error(`Failed to extract metadata: ${(error as Error).message}`);}
@@ -181,7 +181,7 @@ export class BundleFormatProcessor implements FormatProcessor {
       format_version: '1.0',
       created_at: new Date().toISOString(),
       created_by: 'system', // Would be actual user ID
-      template: version || {
+      template: version || {,
         ...version,
         template_data: template,
       } as TemplateVersion,
@@ -296,7 +296,7 @@ ${template.learning_objectives.map(o => `- ${o}`).join('\n')}
       {
         name: 'Basic Configuration',
         description: 'A simple setup with default values',
-        graph_data: template.graph_data // Simplified example
+        graph_data: template.graph_data // Simplified example,
       }
     ];
   }

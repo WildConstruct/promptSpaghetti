@@ -93,7 +93,7 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
     return `${Math.floor(diff / 86400000)}d ago`;}
   };
   if (compact) {
-    return ()
+    return ();
       <div 
         className={`inline-flex items-center gap-1 cursor-pointer ${className}`}
         onClick={onClick}
@@ -113,7 +113,7 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
       </div>
     );
   }
-  return ()
+  return ();
     <div 
       className={`connection-status-indicator ${className}`}
       onClick={onClick}

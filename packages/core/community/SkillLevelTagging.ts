@@ -651,7 +651,7 @@ export const SKILL_PROGRESSION_PATTERNS = {
     level_progression: ['beginner', 'intermediate', 'advanced', 'expert'],
     overlap_percentage: 20, // How much content overlaps between levels
     reinforcement_frequency: 3, // Every 3rd piece of content reinforces previous level
-    assessment_frequency: 5 // Assessment every 5 pieces of content
+    assessment_frequency: 5 // Assessment every 5 pieces of content,
   },
   accelerated: {,
     level_progression: ['beginner', 'advanced', 'expert'],

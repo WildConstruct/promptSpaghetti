@@ -51,7 +51,7 @@ export declare class NodeFactory {
     private templates;
     private nodeCache;
     private creationHistory;
-    constructor()
+    constructor();
       framework: NodeFramework,
       validationService: NodeValidationService,
       config?: Partial<NodeFactoryConfig>
@@ -59,7 +59,7 @@ export declare class NodeFactory {
     /**
      * Create a new node with optional validation and optimization
      */
-    createNode()
+    createNode();
       type: string,
       id: string,
       config: AdvancedNodeConfig,

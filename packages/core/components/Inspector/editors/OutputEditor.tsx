@@ -90,7 +90,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
     examples: ['Plain Text: simple text', 'Markdown: formatted text', 'JSON: structured data'],
     priority: 'medium',
   });
-  return ()
+  return ();
     <div className="output-editor">
       {/* BASIC LEVEL: Essential output configuration */}
       <ProgressiveDisclosureSection
@@ -264,7 +264,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeDat
                 <div key={index} style={{
                   display: 'flex',
                   gap: 8,
-                  marginBottom: index < transformations.length - 1 ? 8 : 0
+                  marginBottom: index < transformations.length - 1 ? 8 : 0,
                 }}>
                   <input
                     type="text"

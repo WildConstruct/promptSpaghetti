@@ -212,7 +212,7 @@ describe('NodeFramework', () => {
         beforeInit: async () => hookCalls.push('global_before_init'),
         afterInit: async () => hookCalls.push('global_after_init'),
         beforeExecute: async () => hookCalls.push('global_before_execute'),
-        afterExecute: async () => hookCalls.push('global_after_execute')
+        afterExecute: async () => hookCalls.push('global_after_execute'),
       });
       const node = await framework.createNode('Test', 'hook-test', {)
         deterministic: true,
@@ -242,7 +242,7 @@ describe('NodeFramework', () => {
       const hookCalls: string[] = [];
       framework.registerLifecycleHooks('Test', {)
         beforeInit: async () => hookCalls.push('test_before_init'),
-        afterInit: async () => hookCalls.push('test_after_init')
+        afterInit: async () => hookCalls.push('test_after_init'),
       });
       await framework.createNode('Test', 'type-hook-test', {)
         deterministic: true,

@@ -18,13 +18,13 @@ import { z } from 'zod';
 const mockUpdateNodeData = jest.fn<unknown[], unknown>();
 const mockDeleteNode = jest.fn<unknown[], unknown>();
 jest.mock('../hooks/useNodeUtils', () => ({)
-  useNodeUtils: () => ({)
+  useNodeUtils: () => ({),
     updateNodeData: mockUpdateNodeData,
     deleteNode: mockDeleteNode,
   })
 }));
 jest.mock('reactflow', () => ({)
-  useReactFlow: () => ({)
+  useReactFlow: () => ({),
     getNodes: jest.fn(() => []),
     getEdges: jest.fn(() => []),
     setNodes: jest.fn<unknown[], unknown>(),
@@ -48,7 +48,7 @@ const mockGraphStore = {
   updateNode: jest.fn<unknown[], unknown>()
 };
 jest.mock('../graphStore', () => ({)
-  useGraphStore: jest.fn(() => mockGraphStore)
+  useGraphStore: jest.fn(() => mockGraphStore),
 }));
 
 // Error boundary for testing error handling
@@ -97,7 +97,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       }
     };
     it('should handle null node gracefully', () => {
-      render()
+      render();
         <InspectorPanel
           node={null}
           schema={mockSchema}
@@ -107,7 +107,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       expect(screen.getByText(/No node selected/i)).toBeInTheDocument();
     });
     it('should handle undefined node gracefully', () => {
-      render()
+      render();
         <InspectorPanel
           node={undefined as any}
           schema={mockSchema}
@@ -118,7 +118,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should call onClose when provided', () => {
       const onClose = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <InspectorPanel
           node={mockNode}
           schema={mockSchema}
@@ -137,7 +137,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       const errorOnChange = jest.fn(() => {
         throw new Error('onChange error');
       });
-      render()
+      render();
         <TestErrorBoundary onError={onError}>
           <InspectorPanel
             node={mockNode}
@@ -160,7 +160,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         throw new Error('Store access error');
       });
       const onError = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <TestErrorBoundary onError={onError}>
           <InspectorPanel
             node={mockNode}
@@ -171,7 +171,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       );
       expect(onError).toHaveBeenCalledWith()
         expect.objectContaining({)
-          message: 'Store access error'
+          message: 'Store access error',
         })
       );
       // Restore mock
@@ -179,7 +179,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should handle resize operations efficiently', async () => {
       const startTime = performance.now();
-      render()
+      render();
         <InspectorPanel
           node={mockNode}
           schema={mockSchema}
@@ -206,7 +206,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     };
     it('should handle malformed nodeData gracefully', () => {
       expect(() => {
-        render()
+        render();
           <BaseNodeEditor
             nodeId="test-node"
             nodeData={null as any}
@@ -220,7 +220,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should handle missing schema gracefully', () => {
       expect(() => {
-        render()
+        render();
           <BaseNodeEditor
             nodeId="test-node"
             nodeData={mockNodeData}
@@ -237,7 +237,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       const errorOnChange = jest.fn(() => {
         throw new Error('onChange error');
       });
-      render()
+      render();
         <TestErrorBoundary onError={onError}>
           <BaseNodeEditor
             nodeId="test-node"
@@ -263,7 +263,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     };
     it('should handle null/undefined values gracefully', () => {
       expect(() => {
-        render()
+        render();
           <TextFieldEditor
             {...mockProps}
             value={null}
@@ -271,7 +271,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         );
       }).not.toThrow();
       expect(() => {
-        render()
+        render();
           <TextFieldEditor
             {...mockProps}
             value={undefined}
@@ -281,7 +281,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should handle extremely long input values', () => {
       const longValue = 'x'.repeat(10000);
-      render()
+      render();
         <TextFieldEditor
           {...mockProps}
           value={longValue}
@@ -292,7 +292,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should handle special characters and unicode', () => {
       const specialValue = '🎉 Special chars: <>&"\'\\n\\t 中文 العربية';
-      render()
+      render();
         <TextFieldEditor
           {...mockProps}
           value={specialValue}
@@ -307,7 +307,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       });
       const user = userEvent.setup();
       const onError = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <TestErrorBoundary onError={onError}>
           <TextFieldEditor
             {...mockProps}
@@ -322,7 +322,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should handle invalid zodType gracefully', () => {
       expect(() => {
-        render()
+        render();
           <TextFieldEditor
             {...mockProps}
             zodType={null as any}
@@ -341,7 +341,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     };
     it('should handle very large text content', () => {
       const largeText = 'Line 1\\n'.repeat(1000);
-      render()
+      render();
         <TextAreaEditor
           {...mockProps}
           value={largeText}
@@ -352,7 +352,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should handle invalid rows prop gracefully', () => {
       expect(() => {
-        render()
+        render();
           <TextAreaEditor
             {...mockProps}
             rows={-5}
@@ -362,7 +362,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should handle null/undefined rows gracefully', () => {
       expect(() => {
-        render()
+        render();
           <TextAreaEditor
             {...mockProps}
             rows={null as any}
@@ -384,7 +384,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       ]
     };
     it('should handle empty options array', () => {
-      render()
+      render();
         <SelectEditor
           {...mockProps}
           options={[]}
@@ -395,7 +395,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should handle null options', () => {
       expect(() => {
-        render()
+        render();
           <SelectEditor
             {...mockProps}
             options={null as any}
@@ -411,7 +411,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         undefined
       ] as any;
       expect(() => {
-        render()
+        render();
           <SelectEditor
             {...mockProps}
             options={malformedOptions}
@@ -424,7 +424,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         { value: '<script>', label: 'Dangerous &<>&"\' content' },
         { value: '🎉', label: '🎉 Unicode 中文' }
       ];
-      render()
+      render();
         <SelectEditor
           {...mockProps}
           options={specialOptions}
@@ -437,7 +437,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
   describe('CollapsibleSection - Performance & Error Handling', () => {
     it('should handle rapid toggle operations', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <CollapsibleSection title="Test Section" defaultOpen={false}>
           <div>Content</div>
         </CollapsibleSection>
@@ -452,7 +452,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should handle null children gracefully', () => {
       expect(() => {
-        render()
+        render();
           <CollapsibleSection title="Test">
             {null}
           </CollapsibleSection>
@@ -461,7 +461,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should handle undefined children gracefully', () => {
       expect(() => {
-        render()
+        render();
           <CollapsibleSection title="Test">
             {undefined}
           </CollapsibleSection>
@@ -469,7 +469,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       }).not.toThrow();
     });
     it('should handle complex nested content', () => {
-      const complexContent = (;)
+      const complexContent = (;);
         <div>
           <input type="text" />
           <select>
@@ -479,7 +479,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
           <button>Nested Button</button>
         </div>
       );
-      render()
+      render();
         <CollapsibleSection title="Complex Section" defaultOpen={true}>
           {complexContent}
         </CollapsibleSection>
@@ -500,7 +500,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     it('should handle large number of variations efficiently', () => {
       const manyVariations = Array.from({ length: 1000 }, (_, i) => `Variation ${i}`);}
       const startTime = performance.now();
-      render()
+      render();
         <VariationList
           {...mockProps}
           value={manyVariations}
@@ -516,7 +516,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       });
       const user = userEvent.setup();
       const onError = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <TestErrorBoundary onError={onError}>
           <VariationList
             {...mockProps}
@@ -532,7 +532,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should handle null/undefined value gracefully', () => {
       expect(() => {
-        render()
+        render();
           <VariationList
             {...mockProps}
             value={null as any}
@@ -540,7 +540,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         );
       }).not.toThrow();
       expect(() => {
-        render()
+        render();
           <VariationList
             {...mockProps}
             value={undefined as any}
@@ -574,7 +574,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         }
       } as any;
       expect(() => {
-        render()
+        render();
           <WeightedChoiceEditor 
             nodeId={nodeWithMalformedChoices.id}
             nodeData={nodeWithMalformedChoices.data}
@@ -590,7 +590,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
         throw new Error('Update failed');
       });
       const onError = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <TestErrorBoundary onError={onError}>
           <WeightedChoiceEditor 
             nodeId={mockNode.id}
@@ -609,7 +609,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should handle missing nodeData gracefully', () => {
       expect(() => {
-        render()
+        render();
           <WeightedChoiceEditor 
             nodeId="test-node"
             nodeData={null as any}
@@ -629,7 +629,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       });
       const onError = jest.fn<unknown[], unknown>();
       const mockSchema = z.object({ choices: z.array(z.object({ weight: z.number(), value: z.string() })) });
-      render()
+      render();
         <TestErrorBoundary onError={onError}>
           <WeightedChoiceEditor 
             nodeId="test-node"
@@ -702,7 +702,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       const mockSchema = z.object({)
         label: z.string(),
       });
-      render()
+      render();
         <InspectorPanel
           node={{ id: 'test', type: 'Test', data: { label: 'test' } }}
           schema={mockSchema}
@@ -713,7 +713,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
       const buttons = screen.getAllByRole('button');
       buttons.forEach(button => {)
         // Should have some form of accessible name
-        expect()
+        expect();
           button.getAttribute('aria-label') || 
           button.getAttribute('title') || 
           button.textContent
@@ -722,7 +722,7 @@ describe('Inspector Components - Comprehensive Coverage with Error Handling', ()
     });
     it('should support keyboard navigation', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <TextFieldEditor
           label="Test Field"
           value=""

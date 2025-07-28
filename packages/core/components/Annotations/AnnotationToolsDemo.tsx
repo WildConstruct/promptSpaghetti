@@ -189,7 +189,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
       tags: ['color', 'creative', 'sunset'],
       visibility: 'public',
       linkedAnnotations: [],
-      assignee: TEAM_MEMBERS[2] // Artist
+      assignee: TEAM_MEMBERS[2] // Artist,
     },
     {
       id: 'node-ann-003',
@@ -265,7 +265,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
       timestamp: '2025-07-22T09:07:00Z',
       visible: true,
       locked: false,
-      text: 'NEEDS ATTENTION'
+      text: 'NEEDS ATTENTION',
     }
   ]);
   const [regionAnnotations, setRegionAnnotations] = useState<RegionAnnotation[]>([)
@@ -363,7 +363,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
     const openIssues = nodeAnnotations.filter(a => ['open', 'in_progress'].includes(a.status)).length;
     const criticalIssues = nodeAnnotations.filter(a => a.priority === 'critical').length + ;
                           regionAnnotations.filter(r => r.priority === 'critical').length;
-    const teamMembers = new Set([;)
+    const teamMembers = new Set([;);
       ...nodeAnnotations.map(a => a.author.id),
       ...drawingAnnotations.map(a => a.author.id),
       ...regionAnnotations.map(a => a.author.id)
@@ -380,7 +380,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
     };
   }, [nodeAnnotations, drawingAnnotations, regionAnnotations]);
   // Annotation handlers
-  const handleNodeAnnotationCreate = useCallback(;)
+  const handleNodeAnnotationCreate = useCallback(;);
     (annotation: Omit<NodeAnnotation,)
     'id' | 'timestamp' | 'lastModified' | 'replies'>
   ) => {
@@ -399,13 +399,12 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
         ann.id === annotationId 
           ? { ...ann, ...updates, lastModified: new Date().toISOString() }
           : ann
-      )
     );
   }, []);
   const handleNodeAnnotationDelete = useCallback((annotationId: string) => {
     setNodeAnnotations(prev => prev.filter(ann => ann.id !== annotationId));
   }, []);
-  const handleReplyCreate = useCallback(;)
+  const handleReplyCreate = useCallback(;);
     (annotationId: string,)
     reply: Omit<NodeAnnotation['replies'][0],
     'id' | 'timestamp' | 'reactions'>
@@ -421,7 +420,6 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
         ann.id === annotationId 
           ? { ...ann, replies: [...ann.replies, newReply], lastModified: new Date().toISOString() }
           : ann
-      )
     );
   }, []);
   // Export all annotations
@@ -431,7 +429,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
         exportedBy: currentUser,
         exportedAt: new Date().toISOString(),
         version: '1.0.0',
-        project: 'VFX Demo Scene'
+        project: 'VFX Demo Scene',
       },
       nodeAnnotations,
       drawingAnnotations,
@@ -456,7 +454,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
   const selectedNodeDetails = useMemo(() => {
     return selectedNode ? SAMPLE_NODES.find(node => node.id === selectedNode) : null;
   }, [selectedNode]);
-  return ()
+  return ();
     <div className={`annotation-tools-demo ${className}`}>}
       <Card>
         <CardHeader>
@@ -547,7 +545,7 @@ export const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps> = ({)
                     const userDrawings = drawingAnnotations.filter(a => a.author.id === user.id).length;
                     const userRegions = regionAnnotations.filter(a => a.author.id === user.id).length;
                     const totalContributions = userAnnotations + userDrawings + userRegions;
-                    return ()
+                    return ();
                       <div key={user.id} className="border rounded-lg p-3">
                         <div className="flex items-center gap-2 mb-2">
                           <div 

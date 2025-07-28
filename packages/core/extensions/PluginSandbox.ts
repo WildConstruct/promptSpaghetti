@@ -175,7 +175,7 @@ export class PluginSandbox {
       name: this.options.contextName,
       codeGeneration: {,
         strings: false,  // Disable eval()
-        wasm: false     // Disable WebAssembly
+        wasm: false     // Disable WebAssembly,
       }
     });
   }
@@ -183,19 +183,19 @@ export class PluginSandbox {
     const originalConsole = console;
     return {
       ...originalConsole,
-      log: (...args: any[]) => {
+      log: (...args: any[]) => {,
         this.trackAPICall('console.log');
         originalConsole.log(`[${this.manifest.id}]`, ...args);}
       },
-      error: (...args: any[]) => {
+      error: (...args: any[]) => {,
         this.trackAPICall('console.error');
         originalConsole.error(`[${this.manifest.id}]`, ...args);}
       },
-      warn: (...args: any[]) => {
+      warn: (...args: any[]) => {,
         this.trackAPICall('console.warn');
         originalConsole.warn(`[${this.manifest.id}]`, ...args);}
       },
-      info: (...args: any[]) => {
+      info: (...args: any[]) => {,
         this.trackAPICall('console.info');
         originalConsole.info(`[${this.manifest.id}]`, ...args);}
       }

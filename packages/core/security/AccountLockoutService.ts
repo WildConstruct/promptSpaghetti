@@ -221,7 +221,7 @@ export class AccountLockoutService extends EventEmitter {
     if (!adminPolicy || !adminPolicy.canUnlock) {
       return {
         success: false,
-        message: 'Insufficient permissions to unlock account'
+        message: 'Insufficient permissions to unlock account',
       };
     }
     // Check if approval is required
@@ -245,7 +245,7 @@ export class AccountLockoutService extends EventEmitter {
       this.logSecurityEvent(null, 'invalid_emergency_code', { adminId, lockoutId });
       return {
         success: false,
-        message: 'Invalid emergency override code'
+        message: 'Invalid emergency override code',
       };
     }
     const lockout = this.lockouts.get(lockoutId);
@@ -296,7 +296,7 @@ export class AccountLockoutService extends EventEmitter {
     if (!adminAction.approvalRequired) {
       return {
         success: false,
-        message: 'This action does not require approval'
+        message: 'This action does not require approval',
       };
     }
     // Update admin action
@@ -335,7 +335,7 @@ export class AccountLockoutService extends EventEmitter {
       });
       return {
         success: true,
-        message: 'Unlock request denied'
+        message: 'Unlock request denied',
       };
     }
   }
@@ -395,7 +395,6 @@ export class AccountLockoutService extends EventEmitter {
     adminUnlocks: number;
     emergencyUnlocks: number;
     topAffectedUsers: Array<{ userId: string; count: number }>;
-  } {
     let lockouts = Array.from(this.lockouts.values());
     if (dateRange) {
       lockouts = lockouts.filter(l => )
@@ -528,7 +527,7 @@ export class AccountLockoutService extends EventEmitter {
     await this.sendNotification(lockout, {)
       type: NotificationType.UNLOCK_NOTIFICATION,
       recipient: lockout.userEmail,
-      content: 'Your account has been unlocked by an administrator. You may now log in normally.'
+      content: 'Your account has been unlocked by an administrator. You may now log in normally.',
     });
     // Log security event
     this.logSecurityEvent(lockout, 'account_unlocked', {)
@@ -539,7 +538,7 @@ export class AccountLockoutService extends EventEmitter {
     this.emit('accountUnlocked', { lockout, unlockRequest });
     return {
       success: true,
-      message: 'Account successfully unlocked'
+      message: 'Account successfully unlocked',
     };
   }
   private async sendLockoutNotification(lockout: AccountLockout): Promise<void> {

@@ -228,7 +228,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
       metadata: {,
         ...file.metadata,
         title: file.metadata.title + ' Copy',
-        created: new Date()
+        created: new Date(),
       }
     };
     setFiles(prev => [duplicatedFile, ...prev]);
@@ -295,7 +295,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
       minute: '2-digit',
     }).format(new Date(date));
   };
-  return ()
+  return ();
     <div style={{
       display: 'flex',
       flexDirection: 'column',
@@ -373,7 +373,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
                   color: viewState.viewMode === mode ? styles.background : styles.textSecondary,
                   fontSize: '11px',
                   cursor: 'pointer',
-                  transition: 'all 0.15s ease'
+                  transition: 'all 0.15s ease',
                 }}
               >
                 {mode === 'list' ? '☰' : mode === 'grid' ? '⊞' : '≡'}
@@ -605,10 +605,10 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
             ) : ()
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: viewState.viewMode === 'grid' 
+                gridTemplateColumns: viewState.viewMode === 'grid' ,
                   ? 'repeat(auto-fill, minmax(200px, 1fr))'
                   : '1fr',
-                gap: viewState.viewMode === 'grid' ? '16px' : '4px'
+                gap: viewState.viewMode === 'grid' ? '16px' : '4px',
               }}>
                 {filteredAndSortedFiles.map(file => ()
                   <div
@@ -626,7 +626,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
                       display: 'flex',
                       flexDirection: viewState.viewMode === 'grid' ? 'column' : 'row',
                       alignItems: viewState.viewMode === 'grid' ? 'center' : 'center',
-                      gap: viewState.viewMode === 'grid' ? '8px' : '12px'
+                      gap: viewState.viewMode === 'grid' ? '8px' : '12px',
                     }}
                     onMouseOver={(e) => {
                       if (selectedFile?.id !== file.id) {
@@ -731,7 +731,7 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
                 style={{
                   height: '1px',
                   backgroundColor: styles.border,
-                  margin: '4px 0'
+                  margin: '4px 0',
                 }}
               />
             ) : ()
@@ -757,7 +757,6 @@ export const IntegratedFileBrowser: React.FC<IntegratedFileBrowserProps> = ({)
                 <span>{action.icon}</span>
                 {action.label}
               </button>
-            )
           ))}
         </div>
       )}

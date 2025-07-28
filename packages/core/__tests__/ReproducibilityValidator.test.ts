@@ -233,7 +233,7 @@ describe('ReproducibilityValidator', () => {
           ...mockValidExport.execution,
           randomization: {,
             ...mockValidExport.execution.randomization,
-            nodeSeed: undefined as any
+            nodeSeed: undefined as any,
           }
         }
       };
@@ -306,7 +306,7 @@ describe('ReproducibilityValidator', () => {
           nodes: [{,
             id: undefined as any,
             type: undefined as any,
-            label: 'Invalid Node'
+            label: 'Invalid Node',
           } as any]
         }
       };
@@ -340,7 +340,7 @@ describe('ReproducibilityValidator', () => {
         ...mockValidExport,
         metadata: {,
           ...mockValidExport.metadata,
-          version: undefined as any
+          version: undefined as any,
         }
       };
       const report = validator.validateReproducibility(exportWithoutVersion);
@@ -353,7 +353,7 @@ describe('ReproducibilityValidator', () => {
           ...mockValidExport.metadata,
           generator: {,
             ...mockValidExport.metadata.generator,
-            dependencies: undefined as any
+            dependencies: undefined as any,
           }
         }
       };
@@ -418,15 +418,15 @@ describe('ReproducibilityValidator', () => {
           ...mockValidExport.execution,
           randomization: {,
             ...mockValidExport.execution.randomization,
-            rngState: undefined // Only approximate reproducibility
+            rngState: undefined // Only approximate reproducibility,
           }
         }
       };
-      const reportWithApproximate = validator.validateReproducibility(;)
+      const reportWithApproximate = validator.validateReproducibility(;);
         exportWithApproximateOnly, 
         { allowApproximate: true }
       );
-      const reportWithoutApproximate = validator.validateReproducibility(;)
+      const reportWithoutApproximate = validator.validateReproducibility(;);
         exportWithApproximateOnly, 
         { allowApproximate: false }
       );

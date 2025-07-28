@@ -38,7 +38,7 @@ describe('ComplianceChecker Component', () => {
   });
   describe('Initial Rendering', () => {
     it('renders compliance checker interface', () => {
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -50,7 +50,7 @@ describe('ComplianceChecker Component', () => {
       expect(screen.getByText('Privacy Policy')).toBeInTheDocument();
     });
     it('displays selected regulations', () => {
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa', 'hipaa']}
@@ -62,7 +62,7 @@ describe('ComplianceChecker Component', () => {
       expect(screen.getByText(/HIPAA/i)).toBeInTheDocument();
     });
     it('shows document information', () => {
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr']}
@@ -74,7 +74,7 @@ describe('ComplianceChecker Component', () => {
       expect(screen.getByText('US-CA')).toBeInTheDocument();
     });
     it('enables auto-check when specified', () => {
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr']}
@@ -88,7 +88,7 @@ describe('ComplianceChecker Component', () => {
   describe('Compliance Checking Process', () => {
     it('starts compliance check when button is clicked', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -102,7 +102,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('shows progress during compliance check', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -118,7 +118,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('calls onComplianceResults when check completes', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -141,7 +141,7 @@ describe('ComplianceChecker Component', () => {
       }, { timeout: 5000 });
     });
     it('performs auto-check on component mount', async () => {
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr']}
@@ -157,7 +157,7 @@ describe('ComplianceChecker Component', () => {
   describe('Results Display', () => {
     it('displays compliance check results', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -175,7 +175,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('shows compliance status with appropriate styling', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -195,7 +195,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('displays severity indicators', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -212,7 +212,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('shows remediation suggestions for violations', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -231,7 +231,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('highlights affected sections in document', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -250,7 +250,7 @@ describe('ComplianceChecker Component', () => {
   describe('Filtering and Sorting', () => {
     it('filters results by compliance status', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -268,7 +268,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('filters results by regulation', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -287,7 +287,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('sorts results by severity', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -309,7 +309,7 @@ describe('ComplianceChecker Component', () => {
   describe('Export and Reporting', () => {
     it('allows exporting compliance report', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -328,7 +328,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('generates executive summary', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -346,7 +346,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('shows compliance score', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -363,7 +363,7 @@ describe('ComplianceChecker Component', () => {
   describe('Regulation Management', () => {
     it('allows adding regulations during check', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr']}
@@ -380,7 +380,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('allows removing regulations', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -396,7 +396,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('shows regulation details and requirements', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -413,7 +413,7 @@ describe('ComplianceChecker Component', () => {
     it('handles compliance check errors gracefully', async () => {
       const user = userEvent.setup();
       const errorDocument = { ...mockDocument, content: '' };
-      render()
+      render();
         <ComplianceChecker
           document={errorDocument}
           regulations={['gdpr']}
@@ -428,7 +428,7 @@ describe('ComplianceChecker Component', () => {
       });
     });
     it('handles unsupported regulations', () => {
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['unknown_regulation'] as any}
@@ -440,7 +440,7 @@ describe('ComplianceChecker Component', () => {
     it('shows retry option on check failure', async () => {
       const user = userEvent.setup();
       const errorDocument = { ...mockDocument, content: '' };
-      render()
+      render();
         <ComplianceChecker
           document={errorDocument}
           regulations={['gdpr']}
@@ -459,7 +459,7 @@ describe('ComplianceChecker Component', () => {
   });
   describe('Accessibility', () => {
     it('provides proper ARIA labels', () => {
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -471,7 +471,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('supports keyboard navigation', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr', 'ccpa']}
@@ -485,7 +485,7 @@ describe('ComplianceChecker Component', () => {
     });
     it('announces check progress to screen readers', async () => {
       const user = userEvent.setup();
-      render()
+      render();
         <ComplianceChecker
           document={mockDocument}
           regulations={['gdpr']}

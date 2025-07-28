@@ -86,7 +86,7 @@ export interface EventRepository {
   // Analytics queries
   getStatistics(filter?: EventFilter): Promise<EventStatistics>;
   getAggregations(groupBy: string, filter?: EventFilter): Promise<EventAggregation[]>;
-  getTimeSeriesData()
+  getTimeSeriesData();
     metric: string,
     granularity: string,
     filter?: EventFilter
@@ -145,7 +145,6 @@ export class DatabaseEventRepository implements EventRepository {
         INDEX idx_environment (environment),
         INDEX idx_stored_at (stored_at),
         INDEX idx_retention_date (retention_date)
-      )
     `;
     this.db.exec(createTableSQL);
   }
@@ -153,7 +152,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Save single event
    */
   async save(event: UnifiedAnalyticsEvent): Promise<string> {
-    const stmt = this.db.prepare(`;)
+    const stmt = this.db.prepare(`;);
       INSERT OR REPLACE INTO ${this.tableName} ()}
         id, type, category, severity, timestamp, source, version,
         session_id, user_id, organization_id, request_id, trace_id,
@@ -189,7 +188,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Save batch of events
    */
   async saveBatch(events: UnifiedAnalyticsEvent[]): Promise<string[]> {
-    const stmt = this.db.prepare(`;)
+    const stmt = this.db.prepare(`;);
       INSERT OR REPLACE INTO ${this.tableName} ()}
         id, type, category, severity, timestamp, source, version,
         session_id, user_id, organization_id, request_id, trace_id,
@@ -230,7 +229,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Find event by ID
    */
   async findById(id: string): Promise<UnifiedAnalyticsEvent | null> {
-    const stmt = this.db.prepare(`;)
+    const stmt = this.db.prepare(`;);
       SELECT * FROM ${this.tableName} WHERE id = ?}
     `);
     const row = stmt.get(id);
@@ -290,7 +289,7 @@ export class DatabaseEventRepository implements EventRepository {
     const totalStmt = this.db.prepare(`SELECT COUNT(*) as count FROM ${this.tableName} ${whereClause}`);}
     const totalResult = totalStmt.get(...params);
     // Events by type
-    const typeStmt = this.db.prepare(`;)
+    const typeStmt = this.db.prepare(`;);
       SELECT type, COUNT(*) as count 
       FROM ${this.tableName} ${whereClause}
       GROUP BY type
@@ -298,7 +297,7 @@ export class DatabaseEventRepository implements EventRepository {
     const typeResults = typeStmt.all(...params);
     const eventsByType = Object.fromEntries(typeResults.map((r: any) => [r.type, r.count]));
     // Events by category
-    const categoryStmt = this.db.prepare(`;)
+    const categoryStmt = this.db.prepare(`;);
       SELECT category, COUNT(*) as count 
       FROM ${this.tableName} ${whereClause}
       GROUP BY category
@@ -306,7 +305,7 @@ export class DatabaseEventRepository implements EventRepository {
     const categoryResults = categoryStmt.all(...params);
     const eventsByCategory = Object.fromEntries(categoryResults.map((r: any) => [r.category, r.count]));
     // Events by severity
-    const severityStmt = this.db.prepare(`;)
+    const severityStmt = this.db.prepare(`;);
       SELECT severity, COUNT(*) as count 
       FROM ${this.tableName} ${whereClause}
       GROUP BY severity
@@ -314,7 +313,7 @@ export class DatabaseEventRepository implements EventRepository {
     const severityResults = severityStmt.all(...params);
     const eventsBySeverity = Object.fromEntries(severityResults.map((r: any) => [r.severity, r.count]));
     // Events by source
-    const sourceStmt = this.db.prepare(`;)
+    const sourceStmt = this.db.prepare(`;);
       SELECT source, COUNT(*) as count 
       FROM ${this.tableName} ${whereClause}
       GROUP BY source
@@ -322,13 +321,13 @@ export class DatabaseEventRepository implements EventRepository {
     const sourceResults = sourceStmt.all(...params);
     const eventsBySource = Object.fromEntries(sourceResults.map((r: any) => [r.source, r.count]));
     // Time range
-    const timeStmt = this.db.prepare(`;)
+    const timeStmt = this.db.prepare(`;);
       SELECT MIN(timestamp) as earliest, MAX(timestamp) as latest 
       FROM ${this.tableName} ${whereClause}
     `);
     const timeResult = timeStmt.get(...params);
     // Storage size estimation
-    const sizeStmt = this.db.prepare(`;)
+    const sizeStmt = this.db.prepare(`;);
       SELECT SUM(LENGTH(data) + LENGTH(metadata) + LENGTH(tags)) as size 
       FROM ${this.tableName} ${whereClause}
     `);
@@ -341,9 +340,9 @@ export class DatabaseEventRepository implements EventRepository {
       eventsBySource,
       timeRange: {,
         earliest: timeResult.earliest || 0,
-        latest: timeResult.latest || 0
+        latest: timeResult.latest || 0,
       },
-      storageSize: sizeResult.size || 0
+      storageSize: sizeResult.size || 0,
     };
   }
   /**
@@ -424,7 +423,7 @@ export class DatabaseEventRepository implements EventRepository {
    */
   async cleanup(retentionDays: number): Promise<number> {
     const cutoffTime = Date.now() - (retentionDays * 24 * 60 * 60 * 1000);
-    const stmt = this.db.prepare(`;)
+    const stmt = this.db.prepare(`;);
       DELETE FROM ${this.tableName} }
       WHERE retention_date IS NOT NULL AND retention_date < ?
     `);
@@ -437,7 +436,7 @@ export class DatabaseEventRepository implements EventRepository {
   async archive(beforeDate: number): Promise<number> {
     // In a full implementation, this would move events to an archive table
     // For now, we'll just mark them as archived in metadata
-    const stmt = this.db.prepare(`;)
+    const stmt = this.db.prepare(`;);
       UPDATE ${this.tableName} }
       SET metadata = json_set(metadata, '$.archived', 1, '$.archivedAt', ?)
       WHERE timestamp < ? AND json_extract(metadata, '$.archived') IS NULL
@@ -683,7 +682,7 @@ class InMemoryEventRepository implements EventRepository {
         lastSeen: Math.max(...groupEvents.map(e => e.timestamp)),
         uniqueSources: new Set(groupEvents.map(e => e.source)).size,
         uniqueUsers: new Set(groupEvents.map(e => e.userId).filter(Boolean)).size,
-        uniqueSessions: new Set(groupEvents.map(e => e.sessionId).filter(Boolean)).size
+        uniqueSessions: new Set(groupEvents.map(e => e.sessionId).filter(Boolean)).size,
       }
     }));
   }

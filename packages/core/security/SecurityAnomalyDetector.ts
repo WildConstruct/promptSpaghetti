@@ -314,7 +314,7 @@ export class SecurityAnomalyDetector extends EventEmitter {
         return anomalies;
     }
     if (isAnomalous && confidence >= this.config.detectionSensitivity) {
-      const anomaly = this.createAnomaly(;)
+      const anomaly = this.createAnomaly(;);
         metric,
         baseline,
         model,
@@ -404,7 +404,7 @@ export class SecurityAnomalyDetector extends EventEmitter {
       const timeDiff = Math.abs(anomaly.timestamp.getTime() - otherAnomaly.timestamp.getTime());
       if (timeDiff <= timeWindow) {
         // Check for system overlap
-        const systemOverlap = anomaly.affectedSystems.some(system =>;)
+        const systemOverlap = anomaly.affectedSystems.some(system =>;);
           otherAnomaly.affectedSystems.includes(system)
         );
         if (systemOverlap || this.calculateCorrelationScore(anomaly, otherAnomaly) > 0.7) {
@@ -424,13 +424,13 @@ export class SecurityAnomalyDetector extends EventEmitter {
     // Similar anomaly types
     if (anomaly1.anomalyType === anomaly2.anomalyType) score += 0.4;
     // Similar metrics
-    const metricOverlap = anomaly1.affectedMetrics.filter(metric =>;)
+    const metricOverlap = anomaly1.affectedMetrics.filter(metric =>;);
       anomaly2.affectedMetrics.includes(metric)
     ).length;
     score += (metricOverlap / Math.max(anomaly1.affectedMetrics.length, 1)) * 0.3;
     // Similar severity
     const severityOrder = ['info', 'low', 'medium', 'high', 'critical'];
-    const severityDiff = Math.abs(;)
+    const severityDiff = Math.abs(;);
       severityOrder.indexOf(anomaly1.severity) - severityOrder.indexOf(anomaly2.severity)
     );
     score += (1 - severityDiff / 4) * 0.3;
@@ -507,7 +507,7 @@ export class SecurityAnomalyDetector extends EventEmitter {
     }
   }
   private scheduleEscalation(alert: SecurityAlert): void {
-    const applicableRules = this.config.escalationRules.filter(rule =>;)
+    const applicableRules = this.config.escalationRules.filter(rule =>;);
       this.evaluateEscalationConditions(rule.conditions, alert)
     );
     for (const rule of applicableRules) {
@@ -705,7 +705,7 @@ export class SecurityAnomalyDetector extends EventEmitter {
       operationalImpact: Math.min(100, baseRisk * 0.9),
       complianceRisk: Math.min(100, baseRisk * 0.6),
       cascadeRisk: Math.min(100, deviationMagnitude * 15),
-      mitigationUrgency: severity === AnomalySeverity.CRITICAL ? 'immediate' :
+      mitigationUrgency: severity === AnomalySeverity.CRITICAL ? 'immediate' :,
                         severity === AnomalySeverity.HIGH ? 'high' :
                         severity === AnomalySeverity.MEDIUM ? 'medium' : 'low',
       estimatedDowntime: Math.min(240, baseRisk * 2.4), // minutes

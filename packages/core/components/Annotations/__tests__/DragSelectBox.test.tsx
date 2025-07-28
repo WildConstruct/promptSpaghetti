@@ -136,7 +136,7 @@ describe('DragSelectBox Component', () => {
         x: 200, // 100 / 0.5
         y: 200, // 100 / 0.5
         width: 200, // 100 / 0.5
-        height: 200 // 100 / 0.5
+        height: 200 // 100 / 0.5,
       });
     });
   });

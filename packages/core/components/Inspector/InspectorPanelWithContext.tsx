@@ -66,7 +66,7 @@ export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps>
     return null;
   }
   if (!selectedNode || !selectedSchema) {
-    return ()
+    return ();
       <aside
         style={{
           width: panelCollapsed ? 40 : panelWidth,
@@ -76,7 +76,7 @@ export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps>
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          transition: panelCollapsed ? 'width 0.2s ease' : 'none'
+          transition: panelCollapsed ? 'width 0.2s ease' : 'none',
         }}
       >
         <div
@@ -137,7 +137,7 @@ export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps>
       </aside>
     );
   }
-  return ()
+  return ();
     <aside
       style={{
         width: panelCollapsed ? 40 : panelWidth,
@@ -147,7 +147,7 @@ export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps>
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        transition: panelCollapsed ? 'width 0.2s ease' : 'none'
+        transition: panelCollapsed ? 'width 0.2s ease' : 'none',
       }}
     >
       <div

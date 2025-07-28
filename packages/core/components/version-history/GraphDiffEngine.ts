@@ -107,7 +107,7 @@ export class GraphDiffEngine {
       changes,
       summary,
       visualization_data: visualizationData,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
     console.log(`Diff computation completed in ${Date.now() - startTime}ms`);}
     return diff;
@@ -204,7 +204,7 @@ export class GraphDiffEngine {
       }
     }
     // Check for data changes
-    const dataChanges = this.compareObjectProperties(;)
+    const dataChanges = this.compareObjectProperties(;);
       fromNode.data || {},
       toNode.data || {},
       'data'
@@ -218,7 +218,7 @@ export class GraphDiffEngine {
     });
     // Check for style changes
     if (!this.options.ignore_style_changes) {
-      const styleChanges = this.compareObjectProperties(;)
+      const styleChanges = this.compareObjectProperties(;);
         fromNode.style || {},
         toNode.style || {},
         'style'
@@ -241,7 +241,7 @@ export class GraphDiffEngine {
         property_path: 'type',
         old_value: fromNode.type,
         new_value: toNode.type,
-        significance: 0.8 // Type changes are significant
+        significance: 0.8 // Type changes are significant,
       });
     }
     return changes;
@@ -257,11 +257,11 @@ export class GraphDiffEngine {
         property_path: 'connection',
         old_value: { source: fromEdge.source, target: fromEdge.target },
         new_value: { source: toEdge.source, target: toEdge.target },
-        significance: 0.9 // Connection changes are very significant
+        significance: 0.9 // Connection changes are very significant,
       });
     }
     // Check for data changes
-    const dataChanges = this.compareObjectProperties(;)
+    const dataChanges = this.compareObjectProperties(;);
       fromEdge.data || {},
       toEdge.data || {},
       'data'
@@ -418,7 +418,7 @@ export class GraphDiffEngine {
       }
     }
     // Calculate similarity score
-    const totalElements = Math.max(;)
+    const totalElements = Math.max(;);
       fromGraph.nodes.length + fromGraph.edges.length,
       toGraph.nodes.length + toGraph.edges.length,
       1
@@ -491,7 +491,7 @@ export class GraphDiffEngine {
           if (sourceNode && targetNode) {
             position = {
               x: (sourceNode.position.x + targetNode.position.x) / 2,
-              y: (sourceNode.position.y + targetNode.position.y) / 2
+              y: (sourceNode.position.y + targetNode.position.y) / 2,
             };
           }
         }

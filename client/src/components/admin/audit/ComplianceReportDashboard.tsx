@@ -1,5 +1,4 @@
 // Epic 17.1.6 - Compliance Reporting Dashboard
-
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
@@ -61,14 +60,14 @@ interface ComplianceReport {
   standard: 'soc2' | 'iso27001' | 'gdpr' | 'hipaa' | 'pci_dss' | 'ccpa' | 'sox';
   startDate: Date;
   endDate: Date;
-  summary: {
+  summary: {,
     totalEvents: number;
     uniqueUsers: number;
     criticalEvents: number;
     securityIncidents: number;
     complianceViolations: number;
   };
-  violations: Array<{
+  violations: Array<{,
     eventId: string;
     violationType: string;
     description: string;
@@ -80,7 +79,6 @@ interface ComplianceReport {
   format: 'json' | 'pdf' | 'csv' | 'xml';
   status: 'pending' | 'generating' | 'completed' | 'failed';
 }
-
 interface ReportTemplate {
   id: string;
   name: string;
@@ -93,7 +91,6 @@ interface ReportTemplate {
     enabled: boolean;
   };
 }
-
 interface ComplianceMetrics {
   complianceScore: number;
   totalReports: number;
@@ -105,8 +102,7 @@ interface ComplianceMetrics {
     lastReport: Date;
   }>;
 }
-
-const COMPLIANCE_STANDARDS = [
+const COMPLIANCE_STANDARDS = [;
   { value: 'soc2', label: 'SOC 2', description: 'Service Organization Control 2' },
   { value: 'iso27001', label: 'ISO 27001', description: 'Information Security Management' },
   { value: 'gdpr', label: 'GDPR', description: 'General Data Protection Regulation' },
@@ -115,14 +111,12 @@ const COMPLIANCE_STANDARDS = [
   { value: 'ccpa', label: 'CCPA', description: 'California Consumer Privacy Act' },
   { value: 'sox', label: 'SOX', description: 'Sarbanes-Oxley Act' }
 ];
-
-const REPORT_TYPES = [
+const REPORT_TYPES = [;
   { value: 'access_report', label: 'Access Report', description: 'User access and authorization events' },
   { value: 'change_report', label: 'Change Report', description: 'Data modification and configuration changes' },
   { value: 'security_report', label: 'Security Report', description: 'Security incidents and authentication events' },
   { value: 'retention_report', label: 'Retention Report', description: 'Data retention and archival compliance' }
 ];
-
 const VIOLATION_SEVERITIES = {
   low: { color: 'info', icon: CheckCircleIcon },
   medium: { color: 'warning', icon: WarningIcon },
@@ -130,15 +124,14 @@ const VIOLATION_SEVERITIES = {
   critical: { color: 'error', icon: SecurityIcon }
 };
 
-export   const [, setTemplates] = useState<ReportTemplate[]>([]);
+export const [, setTemplates] = useState<ReportTemplate[]>([]);
   const [metrics, setMetrics] = useState<ComplianceMetrics | null>(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
   // Report Generation
   const [generateDialogOpen, setGenerateDialogOpen] = useState(false);
-  const [newReport, setNewReport] = useState({
+  const [newReport, setNewReport] = useState({)
     reportType: 'access_report',
     standard: 'soc2',
     startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
@@ -146,12 +139,9 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
     format: 'pdf',
     scope: {}
   });
-
   // Report Details
   const [selectedReport, setSelectedReport] = useState<ComplianceReport | null>(null);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
-
-
   const loadReports = useCallback(async () => {
     setLoading(true);
     try {
@@ -163,33 +153,33 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
           standard: 'soc2',
           startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
           endDate: new Date(),
-          summary: {
+          summary: {,
             totalEvents: 1543,
             uniqueUsers: 45,
             criticalEvents: 12,
             securityIncidents: 3,
-            complianceViolations: 5
+            complianceViolations: 5,
           },
-          violations: [
+          violations: [,
             {
               eventId: 'audit_123',
               violationType: 'unauthorized_access',
               description: 'User attempted to access restricted resource without proper authorization',
               severity: 'high',
-              remediation: 'Review user permissions and access controls'
+              remediation: 'Review user permissions and access controls',
             },
             {
               eventId: 'audit_456',
               violationType: 'failed_authentication',
               description: 'Multiple failed login attempts from suspicious IP address',
               severity: 'medium',
-              remediation: 'Monitor IP address and consider blocking if pattern continues'
+              remediation: 'Monitor IP address and consider blocking if pattern continues',
             }
           ],
           generatedBy: 'admin@example.com',
           generatedAt: new Date(Date.now() - 60 * 60 * 1000),
           format: 'pdf',
-          status: 'completed'
+          status: 'completed',
         },
         {
           id: 'report_2',
@@ -197,29 +187,28 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
           standard: 'gdpr',
           startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
           endDate: new Date(),
-          summary: {
+          summary: {,
             totalEvents: 234,
             uniqueUsers: 18,
             criticalEvents: 2,
             securityIncidents: 0,
-            complianceViolations: 1
+            complianceViolations: 1,
           },
-          violations: [
+          violations: [,
             {
               eventId: 'audit_789',
               violationType: 'data_retention_violation',
               description: 'Personal data retained beyond specified retention period',
               severity: 'medium',
-              remediation: 'Implement automated data purging for expired records'
+              remediation: 'Implement automated data purging for expired records',
             }
           ],
           generatedBy: 'compliance@example.com',
           generatedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
           format: 'pdf',
-          status: 'completed'
+          status: 'completed',
         }
       ];
-      
       setReports(mockReports);
     } catch (error) {
       console.error('Failed to load reports:', error);
@@ -227,7 +216,6 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
       setLoading(false);
     }
   }, []);
-
   const loadTemplates = useCallback(async () => {
     try {
       // Mock templates
@@ -238,12 +226,12 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
           description: 'Comprehensive security assessment for SOC 2 compliance',
           standard: 'soc2',
           reportType: 'security_report',
-          defaultScope: {
+          defaultScope: {,
             eventTypes: ['login_failed', 'unauthorized_access', 'security_breach_detected']
           },
-          schedule: {
+          schedule: {,
             frequency: 'monthly',
-            enabled: true
+            enabled: true,
           }
         },
         {
@@ -252,22 +240,20 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
           description: 'Data modification tracking for GDPR compliance',
           standard: 'gdpr',
           reportType: 'change_report',
-          defaultScope: {
+          defaultScope: {,
             eventTypes: ['data_exported', 'data_purged', 'user_created', 'user_deleted']
           },
-          schedule: {
+          schedule: {,
             frequency: 'weekly',
-            enabled: true
+            enabled: true,
           }
         }
       ];
-      
       setTemplates(mockTemplates);
     } catch (error) {
       console.error('Failed to load templates:', error);
     }
   }, []);
-
   const loadMetrics = useCallback(async () => {
     try {
       // Mock metrics
@@ -276,25 +262,21 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
         totalReports: 42,
         violationsThisMonth: 8,
         averageResolutionTime: 2.5, // days
-        byStandard: {
+        byStandard: {,
           soc2: { score: 92, violations: 3, lastReport: new Date(Date.now() - 24 * 60 * 60 * 1000) },
           gdpr: { score: 89, violations: 2, lastReport: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
           iso27001: { score: 85, violations: 3, lastReport: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) }
         }
       };
-      
       setMetrics(mockMetrics);
     } catch (error) {
       console.error('Failed to load metrics:', error);
     }
   }, []);
-
   const handleGenerateReport = useCallback(async () => {
     try {
       setLoading(true);
-      
       // Mock report generation
-      
       // Close dialog and refresh reports
       setGenerateDialogOpen(false);
       await loadReports();
@@ -304,12 +286,10 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
       setLoading(false);
     }
   }, [loadReports]);
-
   const handleViewReport = useCallback((report: ComplianceReport) => {
     setSelectedReport(report);
     setDetailsDialogOpen(true);
   }, []);
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleDownloadReport = useCallback(async (_reportId: string, _format: string) => {
     try {
@@ -318,23 +298,19 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
       console.error('Download failed:', error);
     }
   }, []);
-
   const getComplianceScoreColor = useCallback((score: number): string => {
     if (score >= 90) return 'success';
     if (score >= 75) return 'warning';
     return 'error';
   }, []);
-
   useEffect(() => {
     loadReports();
     loadTemplates();
     loadMetrics();
   }, [loadReports, loadTemplates, loadMetrics]);
-
   const renderMetricsCards = () => {
     if (!metrics) return null;
-
-    return (
+    return ()
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid item xs={12} sm={6} md={3}>
           <Card>
@@ -344,7 +320,7 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
                   <Typography color="textSecondary" gutterBottom>
                     Compliance Score
                   </Typography>
-                  <Typography variant="h4" color={`${getComplianceScoreColor(metrics.complianceScore)}.main`}>
+                  <Typography variant="h4" color={`${getComplianceScoreColor(metrics.complianceScore)}.main`}>}
                     {metrics.complianceScore.toFixed(1)}%
                   </Typography>
                 </Box>
@@ -353,7 +329,6 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
             </CardContent>
           </Card>
         </Grid>
-
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
@@ -371,7 +346,6 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
             </CardContent>
           </Card>
         </Grid>
-
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
@@ -389,7 +363,6 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
             </CardContent>
           </Card>
         </Grid>
-
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
@@ -410,8 +383,7 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
       </Grid>
     );
   };
-
-  const renderReportsTable = () => (
+  const renderReportsTable = () => (;)
     <Paper elevation={1}>
       <Box p={2} display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">Compliance Reports</Typography>
@@ -423,9 +395,7 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
           Generate Report
         </Button>
       </Box>
-
       {loading && <LinearProgress />}
-
       <TableContainer>
         <Table>
           <TableHead>
@@ -445,8 +415,7 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
               .map((report: ComplianceReport) => {
                 const reportType = REPORT_TYPES.find(rt => rt.value === report.reportType);
                 const standard = COMPLIANCE_STANDARDS.find(cs => cs.value === report.standard);
-                
-                return (
+                return ()
                   <TableRow key={report.id}>
                     <TableCell>
                       <Box>
@@ -484,11 +453,11 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
                       />
                     </TableCell>
                     <TableCell>
-                      {report.violations.length > 0 ? (
+                      {report.violations.length > 0 ? ()
                         <Badge badgeContent={report.violations.length} color="error">
                           <WarningIcon color="warning" />
                         </Badge>
-                      ) : (
+                      ) : ()
                         <CheckCircleIcon color="success" />
                       )}
                     </TableCell>
@@ -528,7 +497,6 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
           </TableBody>
         </Table>
       </TableContainer>
-
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
@@ -543,8 +511,7 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
       />
     </Paper>
   );
-
-  const renderGenerateReportDialog = () => (
+  const renderGenerateReportDialog = () => (;)
     <Dialog
       open={generateDialogOpen}
       onClose={() => setGenerateDialogOpen(false)}
@@ -562,7 +529,7 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
                 onChange={(e) => setNewReport(prev => ({ ...prev, reportType: e.target.value as 'access_report' | 'change_report' | 'security_report' | 'retention_report' }))}
                 label="Report Type"
               >
-                {REPORT_TYPES.map(type => (
+                {REPORT_TYPES.map(type => ()
                   <MenuItem key={type.value} value={type.value}>
                     <Box>
                       <Typography variant="body1">{type.label}</Typography>
@@ -575,7 +542,6 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
               </Select>
             </FormControl>
           </Grid>
-
           <Grid item xs={12} md={6}>
             <FormControl fullWidth>
               <InputLabel>Compliance Standard</InputLabel>
@@ -584,7 +550,7 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
                 onChange={(e) => setNewReport(prev => ({ ...prev, standard: e.target.value as string }))}
                 label="Compliance Standard"
               >
-                {COMPLIANCE_STANDARDS.map(standard => (
+                {COMPLIANCE_STANDARDS.map(standard => ()
                   <MenuItem key={standard.value} value={standard.value}>
                     <Box>
                       <Typography variant="body1">{standard.label}</Typography>
@@ -597,7 +563,6 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
               </Select>
             </FormControl>
           </Grid>
-
           <Grid item xs={12} md={6}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DateTimePicker
@@ -610,7 +575,6 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
               />
             </LocalizationProvider>
           </Grid>
-
           <Grid item xs={12} md={6}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DateTimePicker
@@ -623,7 +587,6 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
               />
             </LocalizationProvider>
           </Grid>
-
           <Grid item xs={12} md={6}>
             <FormControl fullWidth>
               <InputLabel>Format</InputLabel>
@@ -649,8 +612,7 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
       </DialogActions>
     </Dialog>
   );
-
-  const renderReportDetails = () => (
+  const renderReportDetails = () => (;)
     <Dialog
       open={detailsDialogOpen}
       onClose={() => setDetailsDialogOpen(false)}
@@ -659,7 +621,7 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
     >
       <DialogTitle>Report Details</DialogTitle>
       <DialogContent>
-        {selectedReport && (
+        {selectedReport && ()
           <Box>
             {/* Report Summary */}
             <Card sx={{ mb: 2 }}>
@@ -685,9 +647,8 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
                 </Grid>
               </CardContent>
             </Card>
-
             {/* Violations */}
-            {selectedReport.violations.length > 0 && (
+            {selectedReport.violations.length > 0 && ()
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>Compliance Violations</Typography>
@@ -695,8 +656,7 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
                     {selectedReport.violations.map((violation, index) => {
                       const severityConfig = VIOLATION_SEVERITIES[violation.severity];
                       const SeverityIcon = severityConfig.icon;
-                      
-                      return (
+                      return ()
                         <React.Fragment key={index}>
                           <ListItem>
                             <ListItemIcon>
@@ -709,7 +669,7 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
                                   <Typography variant="body2" gutterBottom>
                                     {violation.description}
                                   </Typography>
-                                  {violation.remediation && (
+                                  {violation.remediation && ()
                                     <Alert severity="info" sx={{ mt: 1 }}>
                                       <Typography variant="body2">
                                         <strong>Remediation:</strong> {violation.remediation}
@@ -733,7 +693,7 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setDetailsDialogOpen(false)}>Close</Button>
-        {selectedReport && (
+        {selectedReport && ()
           <Button
             variant="contained"
             startIcon={<DownloadIcon />}
@@ -745,8 +705,7 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
       </DialogActions>
     </Dialog>
   );
-
-  return (
+  return ()
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box>
         {/* Header */}
@@ -764,13 +723,10 @@ export   const [, setTemplates] = useState<ReportTemplate[]>([]);
             Refresh
           </Button>
         </Box>
-
         {/* Metrics Cards */}
         {renderMetricsCards()}
-
         {/* Reports Table */}
         {renderReportsTable()}
-
         {/* Dialogs */}
         {renderGenerateReportDialog()}
         {renderReportDetails()}

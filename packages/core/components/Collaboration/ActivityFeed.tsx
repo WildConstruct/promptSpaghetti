@@ -109,7 +109,7 @@ export const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month' |
   const renderActivityItem = (activity: ActivityEvent) => {
     const Icon = ACTIVITY_ICONS[activity.type] || Activity;
     const iconColor = ACTIVITY_COLORS[activity.type] || 'text-gray-500';
-    return ()
+    return ();
       <div key={activity.id} className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
         {/* Icon */}
         <div className={`flex-shrink-0 p-1 rounded-full bg-gray-100 ${iconColor}`}>}
@@ -169,7 +169,7 @@ export const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month' |
       </div>
     );
   };
-  return ()
+  return ();
     <div className={`bg-white rounded-lg border border-gray-200 ${className}`}>}
       {/* Header */}
       <div className="p-4 border-b border-gray-200">

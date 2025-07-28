@@ -204,7 +204,7 @@ export const ArticleList: React.FC<{
     default: return 'bg-gray-100 text-gray-800';
     }
   };
-  return ()
+  return ();
     <div className="space-y-4">
       {filteredAndSortedArticles.map((article) => ()
         <div
@@ -348,7 +348,7 @@ export const ArticleEditor: React.FC<{
   const handleRemoveTag = useCallback((tagToRemove: string) => {
     setFormData(prev => ({)
       ...prev,
-      tags: prev.tags?.filter(tag => tag !== tagToRemove) || []
+      tags: prev.tags?.filter(tag => tag !== tagToRemove) || [],
     }));
   }, []);
   const handleSave = useCallback(async () => {
@@ -359,7 +359,7 @@ export const ArticleEditor: React.FC<{
       setIsSaving(false);
     }
   }, [formData, onSave]);
-  return ()
+  return ();
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900">
@@ -606,7 +606,7 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({)
       console.error('Failed to duplicate article:', error);
     }
   }, [onDuplicateArticle]);
-  return ()
+  return ();
     <div className={`bg-gray-50 min-h-screen ${className}`}>}
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}

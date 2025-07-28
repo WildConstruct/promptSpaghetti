@@ -1,5 +1,4 @@
 // Epic 17.1.5 - Action Configuration Editor Component
-
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -41,15 +40,13 @@ export interface ActionConfig {
     incrementMinutes: number;
   };
 }
-
 interface ActionConfigEditorProps {
   action: string;
   value: ActionConfig;
   onChange: (config: ActionConfig) => void;
   error?: string;
 }
-
-const CONDITION_OPERATORS = [
+const CONDITION_OPERATORS = [;
   { value: 'equals', label: 'Equals', symbol: '=' },
   { value: 'not_equals', label: 'Not Equals', symbol: '≠' },
   { value: 'greater_than', label: 'Greater Than', symbol: '>' },
@@ -63,8 +60,7 @@ const CONDITION_OPERATORS = [
   { value: 'starts_with', label: 'Starts With', symbol: '⌜' },
   { value: 'ends_with', label: 'Ends With', symbol: '⌝' }
 ];
-
-const COMMON_ATTRIBUTES = [
+const COMMON_ATTRIBUTES = [;
   { value: 'user.id', label: 'User ID', type: 'string' },
   { value: 'user.email', label: 'User Email', type: 'string' },
   { value: 'user.role', label: 'User Role', type: 'string' },
@@ -84,59 +80,50 @@ const COMMON_ATTRIBUTES = [
   { value: 'custom.attribute', label: 'Custom Attribute', type: 'string' }
 ];
 
-export   const [showAdvanced, setShowAdvanced] = useState(false);
-
+export const [showAdvanced, setShowAdvanced] = useState(false);
   useEffect(() => {
     setConfig(value);
   }, [value]);
-
   const handleConfigChange = (updates: Partial<ActionConfig>) => {
     const newConfig = { ...config, ...updates };
     setConfig(newConfig);
     onChange(newConfig);
   };
-
   const handleConditionChange = (index: number, field: string, newValue: Error) => {
     const conditions = [...(config.conditions || [])];
     conditions[index] = { ...conditions[index], [field]: newValue };
     handleConfigChange({ conditions });
   };
-
   const addCondition = () => {
     const conditions = config.conditions || [];
-    conditions.push({
+    conditions.push({)
       attribute: 'user.id',
       operator: 'equals',
-      value: ''
+      value: '',
     });
     handleConfigChange({ conditions });
   };
-
   const removeCondition = (index: number) => {
     const conditions = [...(config.conditions || [])];
     conditions.splice(index, 1);
     handleConfigChange({ conditions });
   };
-
   const handleGradualRolloutChange = (field: string, newValue: number) => {
     const gradualRollout = { ...config.gradualRollout } || {
       startPercentage: 0,
       endPercentage: 100,
-      incrementMinutes: 60
+      incrementMinutes: 60,
     };
-    
-    handleConfigChange({
+    handleConfigChange({)
       gradualRollout: { ...gradualRollout, [field]: newValue }
     });
   };
-
   const renderValueInput = (condition: unknown, index: number) => {
     const attribute = COMMON_ATTRIBUTES.find(attr => attr.value === condition.attribute);
     const type = attribute?.type || 'string';
-
     switch (type) {
     case 'boolean':
-      return (
+      return ()
         <FormControlLabel
           control={
             <Switch
@@ -147,9 +134,8 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
           label={condition.value ? 'True' : 'False'}
         />
       );
-      
     case 'number':
-      return (
+      return ()
         <TextField
           type="number"
           value={condition.value || ''}
@@ -158,9 +144,8 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
           fullWidth
         />
       );
-      
     case 'date':
-      return (
+      return ()
         <TextField
           type="datetime-local"
           value={condition.value || ''}
@@ -169,10 +154,9 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
           fullWidth
         />
       );
-      
     default:
       if (['in', 'not_in'].includes(condition.operator)) {
-        return (
+        return ()
           <TextField
             value={Array.isArray(condition.value) ? condition.value.join(', ') : condition.value || ''}
             onChange={(e) => {
@@ -186,8 +170,7 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
           />
         );
       }
-        
-      return (
+      return ()
         <TextField
           value={condition.value || ''}
           onChange={(e) => handleConditionChange(index, 'value', e.target.value)}
@@ -197,7 +180,6 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
       );
     }
   };
-
   const getActionConfigHelp = () => {
     switch (action) {
     case 'enable':
@@ -213,20 +195,17 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
       return 'Configure action-specific settings.';
     }
   };
-
-  return (
+  return ()
     <Box>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      
       <Alert severity="info" sx={{ mb: 2 }}>
         <Typography variant="body2">
           {getActionConfigHelp()}
         </Typography>
       </Alert>
-
       <Grid container spacing={3}>
         {/* Target Value (for update_value action) */}
-        {action === 'update_value' && (
+        {action === 'update_value' && ()
           <Grid item xs={12}>
             <Typography variant="subtitle2" gutterBottom>
               Target Value
@@ -250,9 +229,8 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
             />
           </Grid>
         )}
-
         {/* Rollout Percentage (for modify_percentage action) */}
-        {action === 'modify_percentage' && (
+        {action === 'modify_percentage' && ()
           <Grid item xs={12}>
             <Typography variant="subtitle2" gutterBottom>
               Rollout Percentage
@@ -285,16 +263,14 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
             />
           </Grid>
         )}
-
         {/* Gradual Rollout (for activate_rollout action) */}
-        {action === 'activate_rollout' && (
+        {action === 'activate_rollout' && ()
           <Grid item xs={12}>
             <Paper elevation={1} sx={{ p: 2 }}>
               <Typography variant="subtitle2" gutterBottom>
                 <TrendingUpIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
                 Gradual Rollout Configuration
               </Typography>
-              
               <Grid container spacing={2}>
                 <Grid item xs={4}>
                   <TextField
@@ -306,7 +282,6 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
                     inputProps={{ min: 0, max: 100 }}
                   />
                 </Grid>
-                
                 <Grid item xs={4}>
                   <TextField
                     fullWidth
@@ -317,7 +292,6 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
                     inputProps={{ min: 0, max: 100 }}
                   />
                 </Grid>
-                
                 <Grid item xs={4}>
                   <TextField
                     fullWidth
@@ -328,7 +302,6 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
                     inputProps={{ min: 1 }}
                   />
                 </Grid>
-                
                 <Grid item xs={12}>
                   <Alert severity="info">
                     <Typography variant="body2">
@@ -342,7 +315,6 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
             </Paper>
           </Grid>
         )}
-
         {/* Advanced Configuration */}
         <Grid item xs={12}>
           <Box display="flex" alignItems="center" gap={1} mb={2}>
@@ -358,13 +330,11 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
             <SettingsIcon color="action" />
           </Box>
         </Grid>
-
-        {showAdvanced && (
+        {showAdvanced && ()
           <>
             <Grid item xs={12}>
               <Divider />
             </Grid>
-
             {/* Conditions */}
             <Grid item xs={12}>
               <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
@@ -379,8 +349,7 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
                   Add Condition
                 </Button>
               </Box>
-
-              {(config.conditions || []).map((condition, index) => (
+              {(config.conditions || []).map((condition, index) => ()
                 <Paper key={index} elevation={1} sx={{ p: 2, mb: 2 }}>
                   <Grid container spacing={2} alignItems="center">
                     <Grid item xs={4}>
@@ -391,7 +360,7 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
                           onChange={(e) => handleConditionChange(index, 'attribute', e.target.value)}
                           label="Attribute"
                         >
-                          {COMMON_ATTRIBUTES.map(attr => (
+                          {COMMON_ATTRIBUTES.map(attr => ()
                             <MenuItem key={attr.value} value={attr.value}>
                               <Box>
                                 <Typography variant="body2">{attr.label}</Typography>
@@ -404,7 +373,6 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
                         </Select>
                       </FormControl>
                     </Grid>
-
                     <Grid item xs={3}>
                       <FormControl fullWidth size="small">
                         <InputLabel>Operator</InputLabel>
@@ -413,7 +381,7 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
                           onChange={(e) => handleConditionChange(index, 'operator', e.target.value)}
                           label="Operator"
                         >
-                          {CONDITION_OPERATORS.map(op => (
+                          {CONDITION_OPERATORS.map(op => ()
                             <MenuItem key={op.value} value={op.value}>
                               <Box display="flex" alignItems="center" gap={1}>
                                 <Chip label={op.symbol} size="small" variant="outlined" />
@@ -424,11 +392,9 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
                         </Select>
                       </FormControl>
                     </Grid>
-
                     <Grid item xs={4}>
                       {renderValueInput(condition, index)}
                     </Grid>
-
                     <Grid item xs={1}>
                       <IconButton
                         onClick={() => removeCondition(index)}
@@ -441,8 +407,7 @@ export   const [showAdvanced, setShowAdvanced] = useState(false);
                   </Grid>
                 </Paper>
               ))}
-
-              {(config.conditions || []).length === 0 && (
+              {(config.conditions || []).length === 0 && ()
                 <Alert severity="info">
                   <Typography variant="body2">
                     No conditions defined. The action will execute for all users.

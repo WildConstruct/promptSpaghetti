@@ -41,7 +41,7 @@ export declare class LearningAnalyticsServiceImpl implements LearningAnalyticsSe
     private apiClient;
     private skillAssessmentEngine;
     private tutorialService;
-    constructor()
+    constructor();
       apiClient: unknown,
       skillAssessmentEngine: SkillAssessmentEngine,
       tutorialService: MarketplaceTutorialSystemService,
@@ -50,13 +50,13 @@ export declare class LearningAnalyticsServiceImpl implements LearningAnalyticsSe
     trackTutorialEvent(event: TutorialAnalyticsEvent): Promise<void>;
     trackKnowledgeBaseEvent(event: KnowledgeBaseAnalyticsEvent): Promise<void>;
     trackCommunityEvent(event: CommunityAnalyticsEvent): Promise<void>;
-    generateLearningEffectivenessMetrics()
+    generateLearningEffectivenessMetrics();
       contentId: string,
       timeRange: TimeRange,
     ): Promise<LearningEffectivenessMetrics>;
     generateUserLearningAnalytics(userId: string, timeRange: TimeRange): Promise<UserLearningAnalytics>;
     generateCommunityKnowledgeMetrics(communityId: string, timeRange: TimeRange): Promise<CommunityKnowledgeMetrics>;
-    generateKnowledgeBaseUsageMetrics()
+    generateKnowledgeBaseUsageMetrics();
       knowledgeBaseId: string,
       timeRange: TimeRange,
     ): Promise<KnowledgeBaseUsageMetrics>;

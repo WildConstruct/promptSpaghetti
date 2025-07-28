@@ -12,7 +12,7 @@ interface UseAutosaveReturn {
         edges: Edge[];
     } | null;
     setShowRestorePrompt: (show: boolean) => void;
-    setRestoreDraft: (draft: {)
+    setRestoreDraft: (draft: {),
         nodes: Node[];
         edges: Edge[];
     } | null) => void;

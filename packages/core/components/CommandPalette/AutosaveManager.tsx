@@ -305,7 +305,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
     if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;}
     return new Date(timestamp).toLocaleDateString();
   };
-  return ()
+  return ();
     <>
       {/* Autosave Status Indicator */}
       <div
@@ -332,7 +332,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
             height: '8px',
             borderRadius: '50%',
             background: getStatusColor(),
-            transition: 'background var(--transition-fast)'
+            transition: 'background var(--transition-fast)',
           }}
         />
         <span style={{ color: styles.text, fontWeight: '500' }}>
@@ -354,7 +354,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
               color: styles.textSecondary,
               cursor: 'pointer',
               fontSize: '14px',
-              padding: '2px 4px'
+              padding: '2px 4px',
             }}
           >
             📋
@@ -368,7 +368,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
               color: styles.textSecondary,
               cursor: 'pointer',
               fontSize: '14px',
-              padding: '2px 4px'
+              padding: '2px 4px',
             }}
           >
             💾
@@ -467,7 +467,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {availableVersions.slice().reverse().map((version, index) => {
                     const isLatest = index === 0;
-                    return ()
+                    return ();
                       <div
                         key={version.version}
                         style={{
@@ -476,7 +476,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
                           borderRadius: '8px',
                           padding: '16px',
                           cursor: 'pointer',
-                          transition: 'all var(--transition-fast)'
+                          transition: 'all var(--transition-fast)',
                         }}
                         onClick={() => handleRestore(version.version)}
                       >

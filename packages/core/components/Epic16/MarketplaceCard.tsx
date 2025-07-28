@@ -101,7 +101,7 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({)
     return stars;
   };
   if (variant === 'list') {
-    return ()
+    return ();
       <div className={`bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow ${className}`}>}
         <div className="p-4">
           <div className="flex space-x-4">
@@ -172,7 +172,7 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({)
   }
   // Grid and Featured variants
   const isFeature = variant === 'featured';
-  return ()
+  return ();
     <div className={`bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow ${isFeature ? 'col-span-2' : ''} ${className}`}>}
       {/* Thumbnail */}
       <div className={`relative ${isFeature ? 'h-48' : 'h-32'} bg-gray-100 rounded-t-lg overflow-hidden`}>}

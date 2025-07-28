@@ -89,12 +89,12 @@ export class ConnectionStateManager extends EventEmitter {
       latencyThreshold: {,
         excellent: 50,  // < 50ms
         good: 150,      // < 150ms
-        fair: 300       // < 300ms
+        fair: 300       // < 300ms,
       },
       packetLossThreshold: {,
         excellent: 0.01, // < 1%
         good: 0.05,      // < 5%
-        fair: 0.15       // < 15%
+        fair: 0.15       // < 15%,
       },
       maxHistorySize: 100,
       offlineDetectionTimeout: 15000, // 15 seconds
@@ -276,7 +276,7 @@ export class ConnectionStateManager extends EventEmitter {
         bandwidth: 0, // Would need separate bandwidth test
         jitter: Math.abs(latency - this.stateData.metrics.latency),
         lastMeasurement: Date.now(),
-        measurementCount: this.stateData.metrics.measurementCount + 1
+        measurementCount: this.stateData.metrics.measurementCount + 1,
       };
       return metrics;
     } catch (error) {
@@ -288,7 +288,7 @@ export class ConnectionStateManager extends EventEmitter {
         bandwidth: 0,
         jitter: 0,
         lastMeasurement: Date.now(),
-        measurementCount: this.stateData.metrics.measurementCount + 1
+        measurementCount: this.stateData.metrics.measurementCount + 1,
       };
     }
   }
@@ -381,7 +381,7 @@ export class ConnectionStateManager extends EventEmitter {
           effectiveType: connection.effectiveType || 'unknown',
           downlink: connection.downlink || 0,
           rtt: connection.rtt || 0,
-          saveData: connection.saveData || false
+          saveData: connection.saveData || false,
         };
         this.emit('network_info_changed', this.stateData.networkInfo);
       };
@@ -403,7 +403,7 @@ export class ConnectionStateManager extends EventEmitter {
             const navEntry = entry as PerformanceNavigationTiming;
             this.updateMetrics({)
               latency: navEntry.responseEnd - navEntry.requestStart,
-              bandwidth: navEntry.transferSize / (navEntry.loadEventEnd - navEntry.loadEventStart) * 1000
+              bandwidth: navEntry.transferSize / (navEntry.loadEventEnd - navEntry.loadEventStart) * 1000,
             });
           }
         }
@@ -526,7 +526,7 @@ export class ConnectionStateManager extends EventEmitter {
    */
   private calculateReliability(): number {
     if (this.stateData.stateHistory.length === 0) return 0;
-    const connectedCount = this.stateData.stateHistory.filter(;)
+    const connectedCount = this.stateData.stateHistory.filter(;);
       entry => entry.state === ConnectionState.CONNECTED
     ).length;
     return connectedCount / this.stateData.stateHistory.length;

@@ -69,7 +69,7 @@ export declare class RandomizerWorkflow {
     /**
      * Generate multiple variations with different parameters
      */
-    generateVariations()
+    generateVariations();
       baseParameters: RandomizerParameters,
       variationCount?: number,
       options?: WorkflowOptions

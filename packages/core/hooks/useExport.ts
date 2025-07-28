@@ -106,7 +106,7 @@ export
   const clearError = useCallback(() => {
     setError(null);
   }, [setError]);
-  const handleApiCall = useCallback(async <T>(;)
+  const handleApiCall = useCallback(async <T>(;);
     apiCall: () => Promise<T>,
     onSuccess?: (result: T) => void
   ): Promise<T> => {
@@ -183,7 +183,7 @@ export
     }, (updatedTemplate) => {
       setState(prev => ({ )
         ...prev, 
-        templates: prev.templates.map(t => t.id === id ? updatedTemplate : t) 
+        templates: prev.templates.map(t => t.id === id ? updatedTemplate : t) ,
       }));
     });
   }, [handleApiCall]);
@@ -199,7 +199,7 @@ export
     }, () => {
       setState(prev => ({ )
         ...prev, 
-        templates: prev.templates.filter(t => t.id !== id) 
+        templates: prev.templates.filter(t => t.id !== id) ,
       }));
     });
   }, [handleApiCall]);
@@ -272,7 +272,7 @@ export
     }, (updatedJob) => {
       setState(prev => ({ )
         ...prev, 
-        jobs: prev.jobs.map(j => j.id === id ? updatedJob : j) 
+        jobs: prev.jobs.map(j => j.id === id ? updatedJob : j) ,
       }));
     });
   }, [handleApiCall]);
@@ -376,7 +376,7 @@ export
     }, (updatedSchedule) => {
       setState(prev => ({ )
         ...prev, 
-        schedules: prev.schedules.map(s => s.id === id ? updatedSchedule : s) 
+        schedules: prev.schedules.map(s => s.id === id ? updatedSchedule : s) ,
       }));
     });
   }, [handleApiCall]);
@@ -392,7 +392,7 @@ export
     }, () => {
       setState(prev => ({ )
         ...prev, 
-        schedules: prev.schedules.filter(s => s.id !== id) 
+        schedules: prev.schedules.filter(s => s.id !== id) ,
       }));
     });
   }, [handleApiCall]);
@@ -456,7 +456,7 @@ export
     }, (updatedShare) => {
       setState(prev => ({ )
         ...prev, 
-        shares: prev.shares.map(s => s.id === id ? updatedShare : s) 
+        shares: prev.shares.map(s => s.id === id ? updatedShare : s) ,
       }));
     });
   }, [handleApiCall]);
@@ -472,7 +472,7 @@ export
     }, () => {
       setState(prev => ({ )
         ...prev, 
-        shares: prev.shares.filter(s => s.id !== id) 
+        shares: prev.shares.filter(s => s.id !== id) ,
       }));
     });
   }, [handleApiCall]);
@@ -668,7 +668,7 @@ export
       return data.data;
     });
   }, [handleApiCall]);
-  const updateCollaboratorRole = useCallback(;)
+  const updateCollaboratorRole = useCallback(;);
     async (templateId: string,)
     userId: string,
     role: string,
@@ -742,7 +742,7 @@ export
       fetchShares(),
       fetchAnalytics(),
       fetchFormatDefinitions(),
-      fetchStatistics()
+      fetchStatistics();
     ]);
   }, [
     fetchTemplates,

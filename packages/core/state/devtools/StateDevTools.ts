@@ -397,7 +397,7 @@ export class StateDevTools extends EventEmitter {
       warnings,
       performance: {,
         validationTime,
-        memoryImpact: memoryAfter - memoryBefore
+        memoryImpact: memoryAfter - memoryBefore,
       }
     };
     this.emit('stateValidated', { domain, result });
@@ -422,13 +422,12 @@ export class StateDevTools extends EventEmitter {
     historySize: number;
     memoryUsage: number;
     uptime: number;
-  } {
     return {
       isRecording: this.isRecording,
       isReplaying: this.isReplaying,
       historySize: this.stateHistory.length,
       memoryUsage: this.memoryTracker.getCurrentUsage(),
-      uptime: Date.now() - (this.stateHistory[0]?.timestamp || Date.now())
+      uptime: Date.now() - (this.stateHistory[0]?.timestamp || Date.now()),
     };
   }
   // Utility methods
@@ -687,7 +686,6 @@ export class StateDevTools extends EventEmitter {
     history: StateSnapshot<any>[];
     metrics: any;
     dependencyGraph: DependencyGraph;
-  } {
     return {
       config: this.config,
       history: this.stateHistory,

@@ -174,7 +174,7 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
   const openFileDialog = () => {
     fileInputRef.current?.click();
   };
-  return ()
+  return ();
     <div className={`legal-document-parser ${className}`}>}
       <style>
         {`

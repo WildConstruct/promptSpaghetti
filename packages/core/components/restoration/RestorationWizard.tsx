@@ -40,22 +40,22 @@ const wizardSteps: WizardStep[] = [
   {
     title: 'Configure',
     description: 'Set restoration options',
-    icon: <RestoreOutlined />
+    icon: <RestoreOutlined />,
   },
   {
     title: 'Preview',
     description: 'Review changes',
-    icon: <ExclamationCircleOutlined />
+    icon: <ExclamationCircleOutlined />,
   },
   {
     title: 'Confirm',
     description: 'Confirm restoration',
-    icon: <CheckCircleOutlined />
+    icon: <CheckCircleOutlined />,
   },
   {
     title: 'Progress',
     description: 'Monitor progress',
-    icon: <LoadingOutlined />
+    icon: <LoadingOutlined />,
   }
 ];
 
@@ -202,7 +202,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
   const renderStepContent = () => {
     switch (currentStep) {
     case 0:
-      return ()
+      return ();
         <Form
           form={form}
           layout="vertical"
@@ -318,7 +318,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
       return 600;
     }
   };
-  return ()
+  return ();
     <Modal
       title={getModalTitle()}
       visible={visible}

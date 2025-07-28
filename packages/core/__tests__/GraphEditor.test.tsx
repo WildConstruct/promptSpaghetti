@@ -10,7 +10,7 @@ describe('GraphEditor', () => {
   ];
   const initialEdges: Edge[] = [];
   it('renders with no errors', () => {
-    render()
+    render();
       <GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />
     );
     expect(screen.getByText('No errors')).toBeInTheDocument();
@@ -21,7 +21,7 @@ describe('GraphEditor', () => {
         ? [{ edgeId: edges[0].id, message: 'Invalid connection' }]
         : [];
     };
-    render()
+    render();
       <GraphEditor
         initialNodes={initialNodes}
         initialEdges={[]}
@@ -36,7 +36,7 @@ describe('GraphEditor', () => {
     const validateConnection = (edges: Edge[], nodes: Node[]) => {
       return edges.map((e) => ({ edgeId: e.id, message: 'Error!' }));
     };
-    render()
+    render();
       <GraphEditor
         initialNodes={initialNodes}
         initialEdges={[
@@ -46,7 +46,7 @@ describe('GraphEditor', () => {
       />
     );
     // Use a function matcher in case the text is split or rendered differently
-    expect()
+    expect();
       screen.getByText((content) => content.includes('1 error'))
     ).toBeInTheDocument();
   });

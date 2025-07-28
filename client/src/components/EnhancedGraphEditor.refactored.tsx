@@ -5,7 +5,6 @@
  * This is a streamlined version of the EnhancedGraphEditor that uses
  * externalized data templates and improved architecture.
  */
-
 import React, { useState, useCallback, useRef } from 'react';
 import ReactFlow, {
   Node,
@@ -40,17 +39,17 @@ import { TemplateSelector, useNodeFactory } from './GraphTemplates';
 
 // Professional Design System (kept from original)
 interface ProfessionalColors {
-  background: {
+  background: {,
     primary: string;
     secondary: string;
     tertiary: string;
   };
-  text: {
+  text: {,
     primary: string;
     secondary: string;
     accent: string;
   };
-  accent: {
+  accent: {,
     orange: string;
     blue: string;
     cyan: string;
@@ -58,7 +57,7 @@ interface ProfessionalColors {
     green: string;
     red: string;
   };
-  nodes: {
+  nodes: {,
     text: string;
     logic: string;
     output: string;
@@ -66,7 +65,7 @@ interface ProfessionalColors {
     advanced: string;
     transform: string;
   };
-  ui: {
+  ui: {,
     border: string;
     borderHover: string;
     borderActive: string;
@@ -74,19 +73,18 @@ interface ProfessionalColors {
     selection: string;
   };
 }
-
 const professionalColors: ProfessionalColors = {
-  background: {
+  background: {,
     primary: '#1e1e1e',
     secondary: '#2a2a2a',
     tertiary: '#353535',
   },
-  text: {
+  text: {,
     primary: '#e8e8e8',
     secondary: '#b8b8b8',
     accent: '#ff7c00',
   },
-  accent: {
+  accent: {,
     orange: '#ff7c00',
     blue: '#4a9eff',
     cyan: '#00d4ff',
@@ -94,7 +92,7 @@ const professionalColors: ProfessionalColors = {
     green: '#4ade80',
     red: '#ef4444',
   },
-  nodes: {
+  nodes: {,
     text: '#4f46e5',
     logic: '#059669',
     output: '#dc2626',
@@ -102,7 +100,7 @@ const professionalColors: ProfessionalColors = {
     advanced: '#6366f1',
     transform: '#f59e0b',
   },
-  ui: {
+  ui: {,
     border: '#404040',
     borderHover: '#5a5a5a',
     borderActive: '#ff7c00',
@@ -110,9 +108,8 @@ const professionalColors: ProfessionalColors = {
     selection: '#ff7c0040',
   }
 };
-
 const professionalShadows = {
-  node: {
+  node: {,
     default: '0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2)',
     hover: '0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25)',
     selected: '0 0 0 2px #ff7c00, 0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)',
@@ -120,7 +117,7 @@ const professionalShadows = {
 };
 
 // Node components
-const TextNode = ({ data, selected }: { data: any; selected: boolean }) => (
+const TextNode = ({ data, selected }: { data: any; selected: boolean }) => ()
   <div className={`bg-slate-800 border-2 rounded-xl p-4 min-w-[200px] transition-all duration-200 ${
     selected ? 'border-orange-500 shadow-orange-glow' : 'border-slate-600 hover:border-slate-500'
   }`} style={{ boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default }}>
@@ -130,15 +127,14 @@ const TextNode = ({ data, selected }: { data: any; selected: boolean }) => (
     <Handle type="source" position={Position.Bottom} className="w-3 h-3 bg-slate-600" />
   </div>
 );
-
-const LogicNode = ({ data, selected }: { data: any; selected: boolean }) => (
+const LogicNode = ({ data, selected }: { data: any; selected: boolean }) => ()
   <div className={`bg-emerald-900 border-2 rounded-xl p-4 min-w-[220px] transition-all duration-200 ${
     selected ? 'border-orange-500 shadow-orange-glow' : 'border-emerald-600 hover:border-emerald-500'
   }`} style={{ boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default }}>
     <Handle type="target" position={Position.Top} className="w-3 h-3 bg-emerald-600" />
     <div className="font-semibold text-emerald-100 mb-1">{data.label}</div>
     <div className="text-sm text-emerald-200 mb-2">{data.description}</div>
-    {data.options && (
+    {data.options && ()
       <div className="text-xs text-emerald-300">
         {data.options.length} options available
       </div>
@@ -146,15 +142,14 @@ const LogicNode = ({ data, selected }: { data: any; selected: boolean }) => (
     <Handle type="source" position={Position.Bottom} className="w-3 h-3 bg-emerald-600" />
   </div>
 );
-
-const TransformNode = ({ data, selected }: { data: any; selected: boolean }) => (
+const TransformNode = ({ data, selected }: { data: any; selected: boolean }) => ()
   <div className={`bg-amber-900 border-2 rounded-xl p-4 min-w-[220px] transition-all duration-200 ${
     selected ? 'border-orange-500 shadow-orange-glow' : 'border-amber-600 hover:border-amber-500'
   }`} style={{ boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default }}>
     <Handle type="target" position={Position.Top} className="w-3 h-3 bg-amber-600" />
     <div className="font-semibold text-amber-100 mb-1">{data.label}</div>
     <div className="text-sm text-amber-200 mb-2">{data.description}</div>
-    {data.options && (
+    {data.options && ()
       <div className="text-xs text-amber-300">
         {data.options.length} options available
       </div>
@@ -162,8 +157,7 @@ const TransformNode = ({ data, selected }: { data: any; selected: boolean }) => 
     <Handle type="source" position={Position.Bottom} className="w-3 h-3 bg-amber-600" />
   </div>
 );
-
-const OutputNode = ({ data, selected }: { data: any; selected: boolean }) => (
+const OutputNode = ({ data, selected }: { data: any; selected: boolean }) => ()
   <div className={`bg-red-900 border-2 rounded-xl p-4 min-w-[200px] transition-all duration-200 ${
     selected ? 'border-orange-500 shadow-orange-glow' : 'border-red-600 hover:border-red-500'
   }`} style={{ boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default }}>
@@ -172,7 +166,6 @@ const OutputNode = ({ data, selected }: { data: any; selected: boolean }) => (
     <div className="text-sm text-red-200">{data.description}</div>
   </div>
 );
-
 const nodeTypes: NodeTypes = {
   text: TextNode,
   logic: LogicNode,
@@ -181,15 +174,15 @@ const nodeTypes: NodeTypes = {
 };
 
 // Create default nodes using the modular templates
-const createDefaultNodes = (): Node[] => [
+const createDefaultNodes = (): Node[] => [;
   {
     id: "start-1",
     type: "text",
     position: { x: 200, y: 100 },
-    data: {
+    data: {,
       label: "Tech Panel Generator",
       description: "Anachronistic Tech Panel Generator - Creates retro-futuristic interface prompts",
-      category: "content"
+      category: "content",
     }
   },
   // Use the imported templates
@@ -199,10 +192,10 @@ const createDefaultNodes = (): Node[] => [
     id: "faction-4",
     type: "logic",
     position: { x: 800, y: 50 },
-    data: {
+    data: {,
       label: "Faction Alignment", 
       description: "Empire/Corporate, Rebel/Resistance, Civilian/Smuggler, etc.",
-      category: "logic"
+      category: "logic",
     }
   },
   wearLevelTemplate,
@@ -212,24 +205,23 @@ const createDefaultNodes = (): Node[] => [
     id: "screen-8",
     type: "logic",
     position: { x: 200, y: 250 },
-    data: {
+    data: {,
       label: "Screen Type",
       description: "CRT, LED Matrix, Hologram, etc.", 
-      category: "logic"
+      category: "logic",
     }
   },
   {
     id: "final-9",
     type: "output",
     position: { x: 1000, y: 200 },
-    data: {
+    data: {,
       label: "Final Prompt",
       description: "Generated tech panel description",
-      category: "output"
+      category: "output",
     }
   }
 ];
-
 const defaultEdges: Edge[] = [
   { id: 'e1-2', source: 'start-1', target: 'archetype-2' },
   { id: 'e2-3', source: 'archetype-2', target: 'aesthetic-3' },
@@ -242,7 +234,7 @@ const defaultEdges: Edge[] = [
 ];
 
 // Professional control panel component
-const ProfessionalControlPanel = ({ onRun }: { onRun: () => void }) => (
+const ProfessionalControlPanel = ({ onRun }: { onRun: () => void }) => ()
   <div className="absolute top-4 left-4 bg-slate-900 border border-slate-700 rounded-xl p-4 shadow-xl z-10">
     <div className="flex items-center space-x-3">
       <div className="flex items-center space-x-2">
@@ -264,8 +256,7 @@ interface EnhancedGraphEditorProps {
   className?: string;
   showTemplateSelector?: boolean;
 }
-
-const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({ 
+const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({ )
   className = "", 
   showTemplateSelector = false 
 }) => {
@@ -275,45 +266,38 @@ const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { getIntersectingNodes } = useReactFlow();
   const { createNode } = useNodeFactory();
-
-  const onConnect = useCallback(
+  const onConnect = useCallback(;)
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
-
   const onRun = useCallback(() => {
     setIsRunning(true);
     console.log('Running graph execution...');
-    
     // Simulate graph execution
     setTimeout(() => {
       setIsRunning(false);
       console.log('Graph execution completed');
     }, 2000);
   }, []);
-
   const onTemplateLoad = useCallback((template: any) => {
     if (template.nodes && template.edges) {
       setNodes(template.nodes);
       setEdges(template.edges);
     }
   }, [setNodes, setEdges]);
-
   const onAddNode = useCallback((nodeTemplate: any) => {
-    const newNode = createNode(nodeTemplate.id, {
+    const newNode = createNode(nodeTemplate.id, {)
       position: { x: Math.random() * 400 + 100, y: Math.random() * 300 + 100 }
     });
-    
     if (newNode) {
       setNodes((nds) => [...nds, newNode]);
     }
   }, [createNode, setNodes]);
-
-  return (
-    <div className={`w-full h-screen bg-slate-950 ${className}`}>
+  return ()
+    <div className={`w-full h-screen bg-slate-950 ${className}`}>}
       <div className="flex h-full">
         {/* Template Selector Panel */}
-        {showTemplateSelector && (
+        {showTemplateSelector && ()
           <div className="w-80 bg-slate-900 border-r border-slate-700 p-4 overflow-y-auto">
             <TemplateSelector
               onTemplateSelect={onTemplateLoad}
@@ -321,7 +305,6 @@ const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({
             />
           </div>
         )}
-
         {/* Main Graph Editor */}
         <div className="flex-1 relative" ref={reactFlowWrapper}>
           <ReactFlow
@@ -341,11 +324,9 @@ const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({
             <MiniMap />
             <Background variant={BackgroundVariant.Dots} gap={20} size={1} />
           </ReactFlow>
-
           <ProfessionalControlPanel onRun={onRun} />
-
           {/* Template selector toggle */}
-          {!showTemplateSelector && (
+          {!showTemplateSelector && ()
             <button
               onClick={() => {
                 // This would be handled by parent component state
@@ -358,9 +339,8 @@ const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({
           )}
         </div>
       </div>
-
       {/* Running indicator */}
-      {isRunning && (
+      {isRunning && ()
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-slate-800 rounded-xl p-6 text-center">
             <div className="animate-spin w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full mx-auto mb-4"></div>
@@ -374,7 +354,7 @@ const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({
 
 // Wrapper component with ReactFlowProvider
 const EnhancedGraphEditorWithProviders: React.FC<EnhancedGraphEditorProps> = (props) => {
-  return (
+  return ()
     <ReactFlowProvider>
       <EnhancedGraphEditor {...props} />
     </ReactFlowProvider>

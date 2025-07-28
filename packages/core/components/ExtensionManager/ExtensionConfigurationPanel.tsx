@@ -46,7 +46,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
       type: 'number',
       description: 'Maximum number of concurrent operations allowed',
       defaultValue: 5,
-      validation: (value) => {
+      validation: (value) => {,
         if (value < 1 || value > 20) return 'Must be between 1 and 20';
         return null;
       }
@@ -84,7 +84,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
       type: 'number',
       description: 'How long to cache results',
       defaultValue: 300,
-      validation: (value) => {
+      validation: (value) => {,
         if (value < 0) return 'Must be non-negative';
         return null;
       }
@@ -172,7 +172,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
   const renderField = (field: ConfigField) => {
     const value = config[field.key];
     const error = errors[field.key];
-    return ()
+    return ();
       <div key={field.key} className={`config-field ${error ? 'error' : ''}`}>}
         <label className="field-label">
           {field.label}
@@ -253,16 +253,16 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
       </div>
     );
   };
-  const generalFields = configSchema.filter(f => ;)
+  const generalFields = configSchema.filter(f => ;);
     ['enabled', 'maxConcurrency', 'logLevel', 'cacheTimeout'].includes(f.key)
   );
-  const advancedFields = configSchema.filter(f => ;)
+  const advancedFields = configSchema.filter(f => ;);
     ['customSettings', 'allowedDomains'].includes(f.key)
   );
-  const securityFields = configSchema.filter(f => ;)
+  const securityFields = configSchema.filter(f => ;);
     ['enableAnalytics'].includes(f.key)
   );
-  return ()
+  return ();
     <div className="extension-config-panel-overlay">
       <div className="extension-config-panel">
         <div className="config-header">
@@ -384,7 +384,7 @@ const ArrayInput: React.FC<ArrayInputProps> = ({ value, onChange, placeholder })
   const removeItem = (index: number) => {
     onChange(value.filter((_, i) => i !== index));
   };
-  return ()
+  return ();
     <div className="array-input-container">
       <div className="array-items">
         {value.map((item, index) => ()

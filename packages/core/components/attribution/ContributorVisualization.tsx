@@ -86,7 +86,7 @@ const ContributorCard: React.FC<ContributorCardProps> = ({ contributor, _____pro
   const topExpertise = contributor.expertise;
     .sort((a, b) => b.changes - a.changes)
     .slice(0, 3);
-  return ()
+  return ();
     <Card
       size="small"
       hoverable
@@ -254,7 +254,7 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
     return date.toLocaleDateString();
   };
   if (!visible) return null;
-  return ()
+  return ();
     <div style={{ padding: '16px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <Title level={4}>Change Attribution</Title>
@@ -371,7 +371,6 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
                           </div>
                         )}
                       </div>
-                    )
                   }))}
                 />
               </Card>
@@ -408,7 +407,7 @@ const ContributorDetails: React.FC<{
   contributorId: string;
   onBack: () => void;
 }> = ({ projectId, contributorId, onBack }) => {
-  return ()
+  return ();
     <div>
       <Button onClick={onBack} style={{ marginBottom: '16px' }}>
         ← Back to Overview
@@ -424,7 +423,7 @@ const ContributorAnalytics: React.FC<{
   contributors: ContributorStatsResponse | null;
   projectId: string;
 }> = ({ contributors, projectId }) => {
-  return ()
+  return ();
     <div>
       <Row gutter={16}>
         <Col span={12}>

@@ -50,7 +50,7 @@ export const LoadProjectDialog: React.FC<LoadProjectDialogProps> = ({)
     setShowUnsavedWarning(false);
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div style={{
       position: 'fixed',
       top: 0,

@@ -121,7 +121,7 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({)
   }, []);
   // Render loading state
   if (loading && !selectedPath) {
-    return ()
+    return ();
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -132,7 +132,7 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({)
   }
   // Render error state
   if (error && !selectedPath) {
-    return ()
+    return ();
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <div className="flex-shrink-0">
@@ -158,7 +158,7 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className="epic16-learning-paths h-full">
       {currentView === 'dashboard' && ()
         <div className="h-full">

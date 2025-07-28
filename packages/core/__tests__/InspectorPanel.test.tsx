@@ -26,7 +26,7 @@ const mockGraphStore = {
   updateNode: jest.fn<unknown[], unknown>()
 };
 jest.mock('../graphStore', () => ({)
-  useGraphStore: jest.fn(() => mockGraphStore)
+  useGraphStore: jest.fn(() => mockGraphStore),
 }));
 
 // Error boundary for comprehensive error testing
@@ -143,7 +143,7 @@ describe('InspectorPanel - Comprehensive Testing', () => {
       const errorOnChange = jest.fn(() => {
         throw new Error('onChange error');
       });
-      render()
+      render();
         <TestErrorBoundary onError={onError}>
           <InspectorPanel {...defaultProps} onChange={errorOnChange} />
         </TestErrorBoundary>
@@ -162,14 +162,14 @@ describe('InspectorPanel - Comprehensive Testing', () => {
         throw new Error('Store access error');
       });
       const onError = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <TestErrorBoundary onError={onError}>
           <InspectorPanel {...defaultProps} />
         </TestErrorBoundary>
       );
       expect(onError).toHaveBeenCalledWith()
         expect.objectContaining({)
-          message: 'Store access error'
+          message: 'Store access error',
         })
       );
       // Restore mock
@@ -208,7 +208,7 @@ describe('InspectorPanel - Comprehensive Testing', () => {
     });
     it('memoizes complex computations', () => {
       const complexSchema = z.object({)
-        complexField: z.string().transform((val) => {
+        complexField: z.string().transform((val) => {,
           // Simulate expensive computation
           let result = val;
           for (let i = 0; i < 1000; i++) {
@@ -225,7 +225,7 @@ describe('InspectorPanel - Comprehensive Testing', () => {
         />
       );
       // Rerender with same props - should use memoized result
-      rerender()
+      rerender();
         <InspectorPanel 
           {...defaultProps} 
           schema={complexSchema}
@@ -348,7 +348,7 @@ describe('InspectorPanel - Comprehensive Testing', () => {
         throw new Error('Store update failed');
       });
       const onError = jest.fn<unknown[], unknown>();
-      render()
+      render();
         <TestErrorBoundary onError={onError}>
           <InspectorPanel {...defaultProps} />
         </TestErrorBoundary>

@@ -411,7 +411,7 @@ export class MarketplaceMetrics {
     template.metrics.conversionRates = {
       viewToPreview: views > 0 ? (previews / views) * 100 : 0,
       previewToDownload: previews > 0 ? (downloads / previews) * 100 : 0,
-      viewToFavorite: views > 0 ? (favorites / views) * 100 : 0
+      viewToFavorite: views > 0 ? (favorites / views) * 100 : 0,
     };
   }
   private integrateWithConversionTracking(event: MarketplaceEvent): void {
@@ -467,7 +467,7 @@ export class MarketplaceMetrics {
           query,
           count: data.count,
           resultsFound: data.results,
-          ctr: data.results > 0 ? (data.clicks / data.count) * 100 : 0
+          ctr: data.results > 0 ? (data.clicks / data.count) * 100 : 0,
         }))
         .sort((a, b) => b.count - a.count)
         .slice(0, 10),
@@ -495,7 +495,7 @@ export class MarketplaceMetrics {
       const existing = categoryData.get(template.category) || { revenue: 0, growth: 0 };
       categoryData.set(template.category, {)
         revenue: existing.revenue + template.metrics.revenue.total,
-        growth: (existing.growth + template.trends.revenueGrowth) / 2
+        growth: (existing.growth + template.trends.revenueGrowth) / 2,
       });
     });
     return Array.from(categoryData.entries())
@@ -519,7 +519,7 @@ export class MarketplaceMetrics {
    */
   public getTopPerformingTemplates()
     metric: 'revenue' | 'downloads' | 'rating' = 'revenue',
-    limit: number = 10
+    limit: number = 10,
   ): TemplateMetrics[] {
     const templates = Array.from(this.templateMetrics.values());
     return templates
@@ -544,13 +544,12 @@ export class MarketplaceMetrics {
     topQueries: Array<{ query: string; count: number; ctr: number }>;
     zeroResultQueries: Array<{ query: string; count: number }>;
     averageCTR: number;
-    } {
     const queries = Array.from(this.searchQueries.entries());
     const topQueries = queries;
       .map(([query, data]) => ({)
         query,
         count: data.count,
-        ctr: data.count > 0 ? (data.clicks / data.count) * 100 : 0
+        ctr: data.count > 0 ? (data.clicks / data.count) * 100 : 0,
       }))
       .sort((a, b) => b.count - a.count);
     const averageCTR = topQueries.length > 0 ;

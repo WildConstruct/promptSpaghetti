@@ -99,7 +99,7 @@ export interface StickyNoteState {
     };
 }
 export interface StickyNoteActions {
-    createNote: (position: {)
+    createNote: (position: {),
         x: number;
         y: number;
     }, content?: string) => string;

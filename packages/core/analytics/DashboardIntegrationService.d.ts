@@ -59,7 +59,7 @@ export declare class DashboardIntegrationService {
     private legacySystems;
     private performanceMetrics;
     private integrationCache;
-    constructor()
+    constructor();
       eventBus: UnifiedEventBus,
       eventRepository: EventRepository,
       authService: AnalyticsAuthorizationService,
@@ -99,7 +99,7 @@ export declare class DashboardIntegrationService {
     /**
      * Get widget-specific performance data
      */
-    getWidgetPerformanceData()
+    getWidgetPerformanceData();
       widgetId: string,
       widgetType: string,
       filter: EventFilter,

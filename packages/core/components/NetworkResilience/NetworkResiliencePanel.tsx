@@ -58,7 +58,7 @@ export const NetworkResiliencePanel: React.FC<NetworkResiliencePanelProps> = ({)
     }
   };
   if (!isOpen) return null;
-  return ()
+  return ();
     <div className="network-resilience-panel">
       {/* Backdrop */}
       <div 

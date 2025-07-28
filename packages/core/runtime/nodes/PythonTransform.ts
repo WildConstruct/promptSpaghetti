@@ -38,7 +38,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       stateful: true,  // Track execution statistics
       performanceHints: {,
         expectedExecutionTime: 'medium' as const,
-        memoryUsage: 'medium' as const
+        memoryUsage: 'medium' as const,
       }
     };
     super(id, advancedConfig);
@@ -48,7 +48,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       this.pythonClient = new PythonExecutorClient({)
         baseUrl: config.pythonConfig.executorUrl,
         retryAttempts: config.pythonConfig.retryAttempts || 3,
-        defaultStrictMode: config.pythonConfig.strictMode ?? true
+        defaultStrictMode: config.pythonConfig.strictMode ?? true,
       });
     } else {
       this.pythonClient = pythonExecutorClient;
@@ -63,35 +63,35 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
         label: 'Input',
         dataType: 'string',
         required: true,
-        description: 'Input data to transform'
+        description: 'Input data to transform',
       })
       .addOutput({)
         id: 'output',
         label: 'Output',
         dataType: 'string',
         required: false,
-        description: 'Transformed output from Python code'
+        description: 'Transformed output from Python code',
       })
       .addOutput({)
         id: 'executionTime',
         label: 'Execution Time',
         dataType: 'number',
         required: false,
-        description: 'Execution time in seconds'
+        description: 'Execution time in seconds',
       })
       .addOutput({)
         id: 'memoryUsed',
         label: 'Memory Used',
         dataType: 'string',
         required: false,
-        description: 'Memory used during execution'
+        description: 'Memory used during execution',
       })
       .addOutput({)
         id: 'securityViolations',
         label: 'Security Violations',
         dataType: 'number',
         required: false,
-        description: 'Number of security violations detected'
+        description: 'Number of security violations detected',
       });
   }
   /**
@@ -148,7 +148,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       },
       metadata: {,
         version: '1.0.0',
-        created: new Date().toISOString()
+        created: new Date().toISOString(),
       }
     };
   }
@@ -186,7 +186,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       memory_limit: this.pythonConfig.memoryLimit || '128MB',
       allowed_modules: this.pythonConfig.allowedModules || [],
       context: this.extractContextForPython(context),
-      strict_mode: this.pythonConfig.pythonConfig?.strictMode ?? true
+      strict_mode: this.pythonConfig.pythonConfig?.strictMode ?? true,
     };
     try {
       // Execute Python code
@@ -336,7 +336,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       this.pythonClient = new PythonExecutorClient({)
         baseUrl: newConfig.pythonConfig.executorUrl,
         retryAttempts: newConfig.pythonConfig.retryAttempts || 3,
-        defaultStrictMode: newConfig.pythonConfig.strictMode ?? true
+        defaultStrictMode: newConfig.pythonConfig.strictMode ?? true,
       });
     }
   }
@@ -354,7 +354,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
     try {
       const result = await this.pythonClient.validate({)
         code: this.pythonConfig.code,
-        strict_mode: this.pythonConfig.pythonConfig?.strictMode ?? true
+        strict_mode: this.pythonConfig.pythonConfig?.strictMode ?? true,
       });
       return {
         valid: result.valid,
@@ -398,7 +398,6 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
     successRate: number;
     averageExecutionTime: number;
     securityViolations: number;
-  } {
     const state = this.getState(context) as any;
     const executions = state?.executions || [];
     if (executions.length === 0) {
@@ -411,7 +410,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
     }
     const successful = executions.filter((e: unknown) => (e as any).success).length;
     const totalTime = executions.reduce((sum: number, e: unknown) => sum + ((e as any).executionTime || 0), 0);
-    const totalViolations = executions.reduce(;)
+    const totalViolations = executions.reduce(;);
       (sum: number,)
       e: unknown,
     ) => sum + ((e as any).securityViolations || 0), 0);

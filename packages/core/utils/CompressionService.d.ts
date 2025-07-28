@@ -156,7 +156,7 @@ export declare class CompressionService {
     /**
      * Benchmark different algorithms on sample data
      */
-    benchmarkAlgorithms()
+    benchmarkAlgorithms();
       data: string | Buffer | object,
       dataType: DataType,
     ): Promise<Map<CompressionAlgorithm, CompressionResult>>;

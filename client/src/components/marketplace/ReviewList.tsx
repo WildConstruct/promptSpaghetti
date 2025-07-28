@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { StarRating } from './StarRating';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import './ReviewList.css';
-
 interface Review {
   id: string;
   buyer_id: string;
@@ -14,20 +13,18 @@ interface Review {
   helpful_count: number;
   verified_purchase: boolean;
 }
-
 interface ReviewListProps {
   reviews: Review[];
   templateId: string;
   onReviewAdded?: () => void;
   className?: string;
 }
-
 interface NewReview {
   stars: number;
   comment: string;
 }
 
-export const ReviewList: React.FC<ReviewListProps> = ({
+export const ReviewList: React.FC<ReviewListProps> = ({)
   reviews,
   templateId,
   onReviewAdded,
@@ -38,36 +35,31 @@ export const ReviewList: React.FC<ReviewListProps> = ({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'highest' | 'lowest'>('newest');
-
   const handleSubmitReview = async () => {
     if (newReview.stars < 1 || newReview.stars > 5) {
       setError('Please select a rating between 1 and 5 stars');
       return;
     }
-
     if (newReview.comment.trim().length < 10) {
       setError('Please write a review with at least 10 characters');
       return;
     }
-
     setSubmitting(true);
     setError(null);
-
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch('/api/marketplace/reviews', {
+      const response = await fetch('/api/marketplace/reviews', {)
         method: 'POST',
-        headers: {
+        headers: {,
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`}
         },
-        body: JSON.stringify({
+        body: JSON.stringify({),
           template_id: templateId,
           stars: newReview.stars,
-          comment: newReview.comment.trim()
+          comment: newReview.comment.trim(),
         })
       });
-
       if (response.ok) {
         setNewReview({ stars: 5, comment: '' });
         setShowAddReview(false);
@@ -84,7 +76,6 @@ export const ReviewList: React.FC<ReviewListProps> = ({
       setSubmitting(false);
     }
   };
-
   const sortedReviews = [...reviews].sort((a, b) => {
     switch (sortBy) {
     case 'newest':
@@ -99,31 +90,27 @@ export const ReviewList: React.FC<ReviewListProps> = ({
       return 0;
     }
   });
-
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('en-US', {)
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
-
   const calculateAverageRating = () => {
     if (reviews.length === 0) return 0;
     const total = reviews.reduce((sum, review) => sum + review.stars, 0);
     return total / reviews.length;
   };
-
   const getRatingDistribution = () => {
     const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
-    reviews.forEach(review => {
+    reviews.forEach(review => {)
       distribution[review.stars as keyof typeof distribution]++;
     });
     return distribution;
   };
-
-  return (
-    <div className={`review-list ${className}`}>
+  return ()
+    <div className={`review-list ${className}`}>}
       {/* Review Summary */}
       <div className="review-summary">
         <div className="summary-header">
@@ -135,8 +122,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({
             Write a Review
           </button>
         </div>
-
-        {reviews.length > 0 ? (
+        {reviews.length > 0 ? ()
           <div className="summary-stats">
             <div className="overall-rating">
               <div className="rating-display">
@@ -147,13 +133,12 @@ export const ReviewList: React.FC<ReviewListProps> = ({
               </div>
               <span className="review-count">Based on {reviews.length} reviews</span>
             </div>
-
             <div className="rating-breakdown">
               {Object.entries(getRatingDistribution())
                 .reverse()
                 .map(([stars, count]) => {
                   const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
-                  return (
+                  return ()
                     <div key={stars} className="rating-bar">
                       <span className="bar-label">{stars}★</span>
                       <div className="bar-container">
@@ -168,19 +153,17 @@ export const ReviewList: React.FC<ReviewListProps> = ({
                 })}
             </div>
           </div>
-        ) : (
+        ) : ()
           <div className="no-reviews">
             <p>No reviews yet. Be the first to review this template!</p>
           </div>
         )}
       </div>
-
       {/* Add Review Form */}
-      {showAddReview && (
+      {showAddReview && ()
         <div className="add-review-form">
           <h4>Write a Review</h4>
-          
-          {error && (
+          {error && ()
             <div className="error-message">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path
@@ -194,11 +177,10 @@ export const ReviewList: React.FC<ReviewListProps> = ({
               {error}
             </div>
           )}
-
           <div className="form-group">
             <label>Rating</label>
             <div className="star-selector">
-              {[1, 2, 3, 4, 5].map((star) => (
+              {[1, 2, 3, 4, 5].map((star) => ()
                 <button
                   key={star}
                   onClick={() => setNewReview({ ...newReview, stars: star })}
@@ -209,7 +191,6 @@ export const ReviewList: React.FC<ReviewListProps> = ({
               ))}
             </div>
           </div>
-
           <div className="form-group">
             <label htmlFor="comment">Your Review</label>
             <textarea
@@ -224,7 +205,6 @@ export const ReviewList: React.FC<ReviewListProps> = ({
               {newReview.comment.length}/2000 characters
             </div>
           </div>
-
           <div className="form-actions">
             <button
               onClick={() => setShowAddReview(false)}
@@ -238,21 +218,20 @@ export const ReviewList: React.FC<ReviewListProps> = ({
               className="submit-button"
               disabled={submitting || newReview.comment.trim().length < 10}
             >
-              {submitting ? (
+              {submitting ? ()
                 <>
                   <LoadingSpinner size="small" />
                   Submitting...
                 </>
-              ) : (
+              ) : ()
                 'Submit Review'
               )}
             </button>
           </div>
         </div>
       )}
-
       {/* Reviews List */}
-      {reviews.length > 0 && (
+      {reviews.length > 0 && ()
         <div className="reviews-section">
           <div className="reviews-header">
             <h4>Reviews ({reviews.length})</h4>
@@ -270,14 +249,13 @@ export const ReviewList: React.FC<ReviewListProps> = ({
               </select>
             </div>
           </div>
-
           <div className="reviews-list">
-            {sortedReviews.map((review) => (
+            {sortedReviews.map((review) => ()
               <div key={review.id} className="review-item">
                 <div className="review-header">
                   <div className="reviewer-info">
                     <span className="reviewer-name">{review.buyer_name}</span>
-                    {review.verified_purchase && (
+                    {review.verified_purchase && ()
                       <span className="verified-badge" title="Verified Purchase">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                           <path
@@ -298,13 +276,11 @@ export const ReviewList: React.FC<ReviewListProps> = ({
                     <span className="review-date">{formatDate(review.created_at)}</span>
                   </div>
                 </div>
-
-                {review.comment && (
+                {review.comment && ()
                   <div className="review-content">
                     <p>{review.comment}</p>
                   </div>
                 )}
-
                 <div className="review-footer">
                   <button 
                     className="helpful-button"

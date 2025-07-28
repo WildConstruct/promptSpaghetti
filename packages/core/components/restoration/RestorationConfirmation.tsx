@@ -74,7 +74,7 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
     return Object.entries(conflictTypes).map(([type, count]) => ({)
       type,
       count,
-      description: CONFLICT_DESCRIPTIONS[type as keyof typeof CONFLICT_DESCRIPTIONS]
+      description: CONFLICT_DESCRIPTIONS[type as keyof typeof CONFLICT_DESCRIPTIONS],
     }));
   };
   const getActionIcon = (type: string) => {
@@ -112,7 +112,7 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
     const minutes = Math.floor(seconds / 60);
     return `${minutes}m ${seconds % 60}s`;}
   };
-  return ()
+  return ();
     <div>
       {/* Risk Assessment */}
       {isHighRisk && ()
@@ -170,7 +170,7 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
               value={preview.summary.riskLevel.toUpperCase()}
               prefix={<SafetyOutlined />}
               valueStyle={{ 
-                color: preview.summary.riskLevel === 'high' ? '#ff4d4f' : 
+                color: preview.summary.riskLevel === 'high' ? '#ff4d4f' : ,
                   preview.summary.riskLevel === 'medium' ? '#fa8c16' : '#3f8600'
               }}
             />
@@ -260,22 +260,22 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
                 { 
                   text: 'Backup will be created before restoration', 
                   enabled: config.createBackup,
-                  icon: <SafetyOutlined />
+                  icon: <SafetyOutlined />,
                 },
                 { 
                   text: 'Current changes will be preserved where possible', 
                   enabled: config.preserveCurrentChanges,
-                  icon: <CheckCircleOutlined />
+                  icon: <CheckCircleOutlined />,
                 },
                 { 
                   text: 'Operation can be monitored in real-time', 
                   enabled: true,
-                  icon: <InfoCircleOutlined />
+                  icon: <InfoCircleOutlined />,
                 },
                 { 
                   text: 'Notification will be sent on completion', 
                   enabled: config.notifyOnCompletion,
-                  icon: <InfoCircleOutlined />
+                  icon: <InfoCircleOutlined />,
                 }
               ]}
               renderItem={(item) => ()

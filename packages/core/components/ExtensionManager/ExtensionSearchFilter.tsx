@@ -31,7 +31,7 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({)
       [key]: value
     });
   };
-  return ()
+  return ();
     <div className="extension-search-filter">
       {/* Search Bar */}
       <div className="search-section">

@@ -8,13 +8,12 @@ import { InsightsPanel } from './InsightsPanel';
 import { TimeRangeSelector } from './TimeRangeSelector';
 import { analyticsService } from '../../../services/analyticsService';
 import './AnalyticsDashboard.css';
-
 interface AnalyticsDashboardProps {
   creatorId: string;
   className?: string;
 }
 
-export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
+export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
   creatorId,
   className = ''
 }) => {
@@ -27,15 +26,13 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'performance' | 'traffic' | 'financial'>('overview');
-
   // Load dashboard data
   const loadDashboard = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
-      const [dashboardData, insightsData] = await Promise.all([
-        analyticsService.getCreatorDashboard(
+      const [dashboardData, insightsData] = await Promise.all([)
+        analyticsService.getCreatorDashboard()
           creatorId,
           timeRange,
           customStartDate,
@@ -43,7 +40,6 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         ),
         analyticsService.generateInsights(creatorId)
       ]);
-
       setDashboard(dashboardData);
       setInsights(insightsData);
     } catch (err) {
@@ -53,7 +49,6 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       setLoading(false);
     }
   }, [creatorId, timeRange, customStartDate, customEndDate]);
-
   // Refresh dashboard data
   const refreshDashboard = useCallback(async () => {
     try {
@@ -63,9 +58,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       setRefreshing(false);
     }
   }, [loadDashboard]);
-
   // Handle time range change
-  const handleTimeRangeChange = (
+  const handleTimeRangeChange = (;)
     newTimeRange: TimeRange,
     startDate?: Date,
     endDate?: Date
@@ -74,12 +68,10 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     setCustomStartDate(startDate);
     setCustomEndDate(endDate);
   };
-
   // Load data on mount and when time range changes
   useEffect(() => {
     loadDashboard();
   }, [loadDashboard]);
-
   // Auto-refresh every 5 minutes
   useEffect(() => {
     const interval = setInterval(() => {
@@ -87,13 +79,11 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         refreshDashboard();
       }
     }, 5 * 60 * 1000);
-
     return () => clearInterval(interval);
   }, [loading, refreshing, refreshDashboard]);
-
   if (loading) {
-    return (
-      <div className={`analytics-dashboard loading ${className}`}>
+    return ()
+      <div className={`analytics-dashboard loading ${className}`}>}
         <div className="dashboard-header">
           <div className="header-content">
             <div className="title-section">
@@ -122,10 +112,9 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       </div>
     );
   }
-
   if (error) {
-    return (
-      <div className={`analytics-dashboard error ${className}`}>
+    return ()
+      <div className={`analytics-dashboard error ${className}`}>}
         <div className="dashboard-header">
           <div className="header-content">
             <div className="title-section">
@@ -149,10 +138,9 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       </div>
     );
   }
-
   if (!dashboard) {
-    return (
-      <div className={`analytics-dashboard empty ${className}`}>
+    return ()
+      <div className={`analytics-dashboard empty ${className}`}>}
         <div className="dashboard-header">
           <div className="header-content">
             <div className="title-section">
@@ -170,9 +158,8 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       </div>
     );
   }
-
-  return (
-    <div className={`analytics-dashboard ${className}`}>
+  return ()
+    <div className={`analytics-dashboard ${className}`}>}
       <div className="dashboard-header">
         <div className="header-content">
           <div className="title-section">
@@ -181,7 +168,6 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               {dashboard.period_start.toLocaleDateString()} - {dashboard.period_end.toLocaleDateString()}
             </p>
           </div>
-          
           <div className="header-controls">
             <TimeRangeSelector
               value={timeRange}
@@ -189,7 +175,6 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               endDate={customEndDate}
               onChange={handleTimeRangeChange}
             />
-            
             <button
               className={`refresh-button ${refreshing ? 'refreshing' : ''}`}
               onClick={refreshDashboard}
@@ -201,7 +186,6 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             </button>
           </div>
         </div>
-
         <div className="dashboard-tabs">
           <button
             className={`tab-button ${activeTab === 'overview' ? 'active' : ''}`}
@@ -233,18 +217,16 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </button>
         </div>
       </div>
-
       <div className="dashboard-content">
         <div className="main-content">
-          {activeTab === 'overview' && (
+          {activeTab === 'overview' && ()
             <DashboardOverview 
               dashboard={dashboard}
               insights={insights}
               onRefresh={refreshDashboard}
             />
           )}
-          
-          {activeTab === 'performance' && (
+          {activeTab === 'performance' && ()
             <PerformanceSummary 
               performanceData={dashboard.performance_summary}
               overview={dashboard.overview}
@@ -252,16 +234,14 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
               onRefresh={refreshDashboard}
             />
           )}
-          
-          {activeTab === 'traffic' && (
+          {activeTab === 'traffic' && ()
             <TrafficMetrics 
               trafficData={dashboard.traffic_metrics}
               timeRange={timeRange}
               onRefresh={refreshDashboard}
             />
           )}
-          
-          {activeTab === 'financial' && (
+          {activeTab === 'financial' && ()
             <FinancialMetrics 
               financialData={dashboard.financial_metrics}
               timeRange={timeRange}
@@ -269,7 +249,6 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
             />
           )}
         </div>
-
         <div className="sidebar-content">
           <InsightsPanel 
             insights={insights}

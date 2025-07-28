@@ -30,18 +30,18 @@ describe('PasswordStrengthIndicator', () => {
         {
           passed: true,
           score: 8,
-          message: 'Length requirement met (12 characters)'
+          message: 'Length requirement met (12 characters)',
         },
         {
           passed: true,
           score: 7,
-          message: 'Uppercase requirement met (1 found)'
+          message: 'Uppercase requirement met (1 found)',
         },
         {
           passed: false,
           score: 0,
           message: 'Not enough special characters (0/1)',
-          suggestion: 'Add 1 special character(s)'
+          suggestion: 'Add 1 special character(s)',
         }
       ],
       errors: [],
@@ -53,7 +53,7 @@ describe('PasswordStrengthIndicator', () => {
       estimatedCrackTime: {,
         offline: '2 hours',
         online: '3 days',
-        unit: 'average time'
+        unit: 'average time',
       }
     });
   });
@@ -68,7 +68,7 @@ describe('PasswordStrengthIndicator', () => {
       expect(container.firstChild).toBeNull();
     });
     test('should render strength meter for valid password', async () => {
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           validator={mockValidator}
@@ -94,7 +94,7 @@ describe('PasswordStrengthIndicator', () => {
           totalRules: 0,
         }), 100))
       );
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           validator={mockValidator}
@@ -126,7 +126,7 @@ describe('PasswordStrengthIndicator', () => {
           passedRules: 0,
           totalRules: 0,
         });
-        render()
+        render();
           <PasswordStrengthIndicator 
             password="test" 
             validator={mockValidator}
@@ -141,7 +141,7 @@ describe('PasswordStrengthIndicator', () => {
   });
   describe('Compact Mode', () => {
     test('should render in compact mode', async () => {
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           validator={mockValidator}
@@ -155,7 +155,7 @@ describe('PasswordStrengthIndicator', () => {
       });
     });
     test('should hide details in compact mode', async () => {
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           validator={mockValidator}
@@ -172,7 +172,7 @@ describe('PasswordStrengthIndicator', () => {
   });
   describe('Detailed Display', () => {
     test('should show rule results when showDetails is true', async () => {
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           validator={mockValidator}
@@ -187,7 +187,7 @@ describe('PasswordStrengthIndicator', () => {
       });
     });
     test('should show suggestions when showSuggestions is true', async () => {
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           validator={mockValidator}
@@ -200,7 +200,7 @@ describe('PasswordStrengthIndicator', () => {
       });
     });
     test('should show entropy when showEntropy is true', async () => {
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           validator={mockValidator}
@@ -213,7 +213,7 @@ describe('PasswordStrengthIndicator', () => {
       });
     });
     test('should show crack time when showCrackTime is true', async () => {
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           validator={mockValidator}
@@ -240,7 +240,7 @@ describe('PasswordStrengthIndicator', () => {
         passedRules: 0,
         totalRules: 2,
       });
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="weak" 
           validator={mockValidator}
@@ -264,7 +264,7 @@ describe('PasswordStrengthIndicator', () => {
         passedRules: 2,
         totalRules: 2,
       });
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="Password123" 
           validator={mockValidator}
@@ -288,7 +288,7 @@ describe('PasswordStrengthIndicator', () => {
         passedRules: 2,
         totalRules: 2,
       });
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="Password123" 
           validator={mockValidator}
@@ -308,7 +308,7 @@ describe('PasswordStrengthIndicator', () => {
         firstName: 'Test',
         lastName: 'User',
       };
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           context={context}
@@ -326,7 +326,7 @@ describe('PasswordStrengthIndicator', () => {
   describe('Validation Change Callback', () => {
     test('should call onValidationChange when result updates', async () => {
       const onValidationChange = jest.fn();
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           validator={mockValidator}
@@ -346,7 +346,7 @@ describe('PasswordStrengthIndicator', () => {
   });
   describe('Theme Support', () => {
     test('should support light theme', async () => {
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           validator={mockValidator}
@@ -358,7 +358,7 @@ describe('PasswordStrengthIndicator', () => {
       });
     });
     test('should support dark theme', async () => {
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           validator={mockValidator}
@@ -373,7 +373,7 @@ describe('PasswordStrengthIndicator', () => {
       // Mock matchMedia for auto theme detection
       Object.defineProperty(window, 'matchMedia', {)
         writable: true,
-        value: jest.fn().mockImplementation(query => ({)
+        value: jest.fn().mockImplementation(query => ({),
           matches: query.includes('dark'),
           media: query,
           onchange: null,
@@ -384,7 +384,7 @@ describe('PasswordStrengthIndicator', () => {
           dispatchEvent: jest.fn(),
         }))
       });
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           validator={mockValidator}
@@ -406,14 +406,14 @@ describe('PasswordStrengthIndicator', () => {
         />
       );
       // Rapidly change password
-      rerender()
+      rerender();
         <PasswordStrengthIndicator 
           password="ab" 
           validator={mockValidator}
           debounceMs={100}
         />
       );
-      rerender()
+      rerender();
         <PasswordStrengthIndicator 
           password="abc" 
           validator={mockValidator}
@@ -432,7 +432,7 @@ describe('PasswordStrengthIndicator', () => {
       mockValidator.validatePassword.mockRejectedValue(new Error('Validation failed'));
       // Spy on console.error to suppress error logs in tests
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
           validator={mockValidator}
@@ -465,7 +465,7 @@ describe('PasswordStrengthIndicator', () => {
         passedRules: 0,
         totalRules: 6,
       });
-      render()
+      render();
         <PasswordStrengthIndicator 
           password="weak" 
           validator={mockValidator}
@@ -516,7 +516,7 @@ describe('usePasswordStrength Hook', () => {
     const TestComponent = () => {
       const { result, isValidating, isValid, score, strength, suggestions, errors } = 
         usePasswordStrength('TestPassword123!', undefined, mockValidator);
-      return ()
+      return ();
         <div>
           <div data-testid="is-validating">{isValidating.toString()}</div>
           <div data-testid="is-valid">{isValid.toString()}</div>
@@ -538,7 +538,7 @@ describe('usePasswordStrength Hook', () => {
   test('should handle empty password', () => {
     const TestComponent = () => {
       const { isValid, score, strength } = usePasswordStrength('', undefined, mockValidator);
-      return ()
+      return ();
         <div>
           <div data-testid="is-valid">{isValid.toString()}</div>
           <div data-testid="score">{score}</div>
@@ -567,7 +567,7 @@ describe('usePasswordStrength Hook', () => {
 describe('Integration Tests', () => {
   test('should work with real validator', async () => {
     const realValidator = new PasswordComplexityValidator();
-    render()
+    render();
       <PasswordStrengthIndicator 
         password="TestPassword123!" 
         validator={realValidator}
@@ -596,7 +596,7 @@ describe('Integration Tests', () => {
     // Simulate rapid typing
     const passwords = ['a', 'ab', 'abc', 'Test', 'TestP', 'TestPass', 'TestPass1', 'TestPass1!'];
     for (const password of passwords) {
-      rerender()
+      rerender();
         <PasswordStrengthIndicator 
           password={password} 
           validator={realValidator}

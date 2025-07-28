@@ -290,7 +290,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({)
     if (selectedCategory === 'all') return milestones;
     return milestones.filter(milestone => milestone.category === selectedCategory);
   };
-  const renderOverview = () => (;)
+  const renderOverview = () => (;);
     <div className="space-y-6">
       {/* Level Progress */}
       <Card>
@@ -434,7 +434,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({)
       </Card>
     </div>
   );
-  const renderMilestones = () => (;)
+  const renderMilestones = () => (;);
     <div className="space-y-4">
       {/* Category Filter */}
       <div className="flex flex-wrap gap-2">
@@ -510,7 +510,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({)
       </div>
     </div>
   );
-  const renderDetailedMetrics = () => (;)
+  const renderDetailedMetrics = () => (;);
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {/* Discovery Metrics */}
       <Card>
@@ -668,7 +668,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({)
     </div>
   );
   if (isLoading) {
-    return ()
+    return ();
       <div className="flex items-center justify-center p-8">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -678,7 +678,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({)
     );
   }
   if (variant === 'compact') {
-    return ()
+    return ();
       <Card className={className}>
         <CardHeader>
           <CardTitle className="text-lg">Progress Overview</CardTitle>
@@ -706,7 +706,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({)
     );
   }
   if (variant === 'dashboard') {
-    return ()
+    return ();
       <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ${className}`}>}
         <Card>
           <CardContent className="p-4">
@@ -744,7 +744,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({)
       </div>
     );
   }
-  return ()
+  return ();
     <div className={`max-w-6xl mx-auto p-6 ${className}`}>}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Your Progress</h1>
