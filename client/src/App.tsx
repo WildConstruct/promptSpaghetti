@@ -215,7 +215,7 @@ function MainApp(): React.ReactElement {
     // Help operations
     onKeyboardShortcuts: useCallback(() => {
   // Trigger the help by simulating ? key press
-  const event = new KeyboardEvent('keydown', {)
+  const event = new KeyboardEvent('keydown', {
   key: '?',
   shiftKey: true,
   bubbles: true,
