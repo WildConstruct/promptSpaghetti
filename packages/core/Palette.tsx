@@ -7,8 +7,10 @@ export interface NodeMeta {
   icon: React.ReactNode;
   category?: string;
   tooltip: string;
-  interface PaletteProps {
-  nodes: NodeMeta;,
+}
+
+export interface PaletteProps {
+  nodes: NodeMeta[];
   collapsed: boolean;
   onToggle: () => void;
   onDragStart?: (nodeId: string) => void;

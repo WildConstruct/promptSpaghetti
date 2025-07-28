@@ -33,10 +33,10 @@ import {
 } from './types/CollaborationTypes';
 
 export interface GraphState {
-  nodes: Node;,
-  edges: Edge;
+  nodes: Node[];
+  edges: Edge[];
   // Collaboration features (Epic 8.7)
-  stickyNotes: StickyNote;,
+  stickyNotes: StickyNote[];
   annotations: GraphAnnotations;
   // Project state
   currentProject: ProjectMetadata | null;,
