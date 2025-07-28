@@ -58,7 +58,24 @@ interface CorrectionsState {
   ) => Promise<{ success: boolean; importedCount?: number; error?: string }>;
 }
 
-export           set((state) => ({
+export const useCorrectionsStore = create<CorrectionsState>()(
+  devtools(
+    persist(
+      (set, get) => ({
+        // Initial state
+        rules: [],
+        isEnabled: true,
+        
+        // Actions
+        addRule: (rule: Omit<CorrectionRule, 'id' | 'createdAt' | 'updatedAt'>) => {
+          const newRule: CorrectionRule = {
+            ...rule,
+            id: crypto.randomUUID(),
+            createdAt: new Date(),
+            updatedAt: new Date()
+          };
+          
+          set((state) => ({
             rules: [...state.rules, newRule].sort((a, b) => a.priority - b.priority)
           }));
         },
@@ -251,7 +268,28 @@ function escapeRegExp(string: string): string {
 }
 
 // Hook to check if corrections feature is enabled
-export };
+export const useCorrectionsEnabled = () => {
+  return useCorrectionsStore((state) => state.isEnabled);
+};
 
 // Default correction rules for common issues
-export ];
+export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' | 'updatedAt'>[] = [
+  {
+    name: 'Fix double spaces',
+    description: 'Replace multiple spaces with single space',
+    findPattern: '  +',
+    replaceWith: ' ',
+    isRegex: true,
+    isActive: true,
+    priority: 1
+  },
+  {
+    name: 'Fix trailing spaces',
+    description: 'Remove spaces at end of lines',
+    findPattern: ' +$',
+    replaceWith: '',
+    isRegex: true,
+    isActive: true,
+    priority: 2
+  }
+];
