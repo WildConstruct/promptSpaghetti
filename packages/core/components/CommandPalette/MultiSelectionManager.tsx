@@ -165,6 +165,7 @@ export const MultiSelectionManager: React.FC<MultiSelectionManagerProps> = ({
         newSelection = selectedNodes.filter(n => n.id !== node.id);
       } else {
         newSelection = [...selectedNodes, node];
+      }
       onNodesSelect(newSelection);
       onSelectionChange({ nodes: newSelection, edges: selectedEdges });
       setLastSelectedNode(node);

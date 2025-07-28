@@ -944,18 +944,19 @@ const NODE_TYPES: NodeMeta[] = [
               connectionLineType={viewport.zoom > 0.5 ? ConnectionLineType.SmoothStep : ConnectionLineType.Straight}
               // Dynamic edge options based on performance
               defaultEdgeOptions={{
-  type: viewport.zoom > 0.5 ? 'smoothstep' : 'straight',
-  style: {
-  stroke: isPerformanceGood ? '#ff7c00' : '#666',
-  strokeWidth: isPerformanceGood ? 2.5 : 2,
-  filter: isPerformanceGood ? 'drop-shadow(0 0 4px rgba(255, 124, 0, 0.2))' : 'none',
-},
-  markerEnd: {
-  type: 'arrow',
-  color: isPerformanceGood ? '#ff7c00' : '#666',
-  width: isPerformanceGood ? 16 : 12,
-  height: isPerformanceGood ? 16 : 12,
-}}
+                type: viewport.zoom > 0.5 ? 'smoothstep' : 'straight',
+                style: {
+                  stroke: isPerformanceGood ? '#ff7c00' : '#666',
+                  strokeWidth: isPerformanceGood ? 2.5 : 2,
+                  filter: isPerformanceGood ? 'drop-shadow(0 0 4px rgba(255, 124, 0, 0.2))' : 'none',
+                },
+                markerEnd: {
+                  type: 'arrow',
+                  color: isPerformanceGood ? '#ff7c00' : '#666',
+                  width: isPerformanceGood ? 16 : 12,
+                  height: isPerformanceGood ? 16 : 12,
+                }
+              }}
               // Professional zoom/pan settings with smooth transitions
               minZoom={0.05}
               maxZoom={6}
@@ -971,7 +972,7 @@ const NODE_TYPES: NodeMeta[] = [
                 gap={viewport.zoom > 0.8 ? 16 : viewport.zoom > 0.4 ? 24 : 32}
                 size={viewport.zoom > 0.8 ? 1 : viewport.zoom > 0.4 ? 1.5 : 2}
               />
-              {nodes.length < 200 && ()
+              {nodes.length < 200 && (
                 <MiniMap 
                   nodeColor={() => isPerformanceGood ? '#ff7c00' : '#363a45'} 
                   maskColor="#181b21BB"
@@ -983,11 +984,12 @@ const NODE_TYPES: NodeMeta[] = [
               )}
               <Controls 
                 style={{
-  button: {
-  backgroundColor: 'rgba(31, 41, 55, 0.9)',
-  border: '1px solid rgba(55, 65, 81, 0.6)',
-  color: '#e5e7eb',
-}}
+                  button: {
+                    backgroundColor: 'rgba(31, 41, 55, 0.9)',
+                    border: '1px solid rgba(55, 65, 81, 0.6)',
+                    color: '#e5e7eb',
+                  }
+                }}
               />
             </ReactFlow>
             {/* Professional UI Integration - Cinema 4D-inspired interface */}
@@ -999,35 +1001,34 @@ const NODE_TYPES: NodeMeta[] = [
               onNodesChange={(newNodes) => setNodes(newNodes)}
               onEdgesChange={(newEdges) => setEdges(newEdges)}
               onNodesSelect={(selectedNodes) => {
-  setNodes(prevNodes => )
-  prevNodes.map(node => ({
-  ...node,
-  selected: selectedNodes.some(s => s.id === node.id),
-}))
+                setNodes(prevNodes =>
+                  prevNodes.map(node => ({
+                    ...node,
+                    selected: selectedNodes.some(s => s.id === node.id),
+                  }))
                 );
               }}
               onEdgesSelect={(selectedEdges) => {
-  setEdges(prevEdges => )
-  prevEdges.map(edge => ({
-  ...edge,
-  selected: selectedEdges.some(s => s.id === edge.id),
-}))
+                setEdges(prevEdges =>
+                  prevEdges.map(edge => ({
+                    ...edge,
+                    selected: selectedEdges.some(s => s.id === edge.id),
+                  }))
                 );
               }}
               onNodeCreate={(nodeType, position, data) => {
                 const newNode: Node = {
-  id: `${nodeType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
-},
-  type: nodeType,
+                  id: `${nodeType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                  type: nodeType,
                   position,
                   data: data || {},
-                  draggable: true;
-  };
+                  draggable: true
+                };
                 setNodes(prevNodes => [...prevNodes, newNode]);
               }}
               onNodeDelete={(nodeIds) => {
                 setNodes(prevNodes => prevNodes.filter(n => !nodeIds.includes(n.id)));
-                setEdges(prevEdges => prevEdges.filter(e => )
+                setEdges(prevEdges => prevEdges.filter(e =>
                   !nodeIds.includes(e.source) && !nodeIds.includes(e.target)
                 ));
               }}

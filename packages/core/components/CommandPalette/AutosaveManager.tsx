@@ -76,6 +76,7 @@ export class AutosaveSystem {
     // Limit number of versions
     if (existingData.length > this.maxVersions) {
       existingData.splice(0, existingData.length - this.maxVersions);
+    }
     // Save to localStorage
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(existingData));
@@ -102,10 +103,14 @@ export class AutosaveSystem {
   getLatest(): AutosaveState | null {
     const data = this.getStoredData();
     return data.length > 0 ? data[data.length - 1] : null;
+  }
+
   // Check if there's a conflict (different session modified the data)
   hasConflict(): boolean {
     const latest = this.getLatest();
     return latest ? latest.metadata.sessionId !== this.sessionId : false;
+  }
+
   // Restore from autosave
   restore(version?: number): AutosaveState | null {
     const data = this.getStoredData();
@@ -114,39 +119,55 @@ export class AutosaveSystem {
       if (state) {
         this.notifyListeners({ type: 'restored', version });
         return state;
+      }
+    }
     // Return latest if no specific version requested
     const latest = this.getLatest();
     if (latest) {
       this.notifyListeners({ type: 'restored', version: latest.version });
+    }
     return latest;
+  }
   // Clear all autosaves
   clear(): void {
     try {
       localStorage.removeItem(this.storageKey);
       this.notifyListeners({ type: 'cleared' });
     } catch (error) {
-  console.error('Failed to clear autosave data:', error);
+      console.error('Failed to clear autosave data:', error);
+    }
+  }
+
   // Get next version number
-  private getNextVersion(): number {,
-  const data = this.getStoredData();
-  return data.length > 0 ? Math.max(...data.map(s => s.version)) + 1 : 1;
+  private getNextVersion(): number {
+    const data = this.getStoredData();
+    return data.length > 0 ? Math.max(...data.map(s => s.version)) + 1 : 1;
+  }
+
   // Subscribe to autosave events
-  subscribe(callback: (status: AutosaveStatus) => void): () => void {,
-  this.listeners.add(callback);
-  return () => this.listeners.delete(callback);
-  private notifyListeners(status: AutosaveStatus): void {,
-  this.listeners.forEach(listener => listener(status));
+  subscribe(callback: (status: AutosaveStatus) => void): () => void {
+    this.listeners.add(callback);
+    return () => this.listeners.delete(callback);
+  }
+
+  private notifyListeners(status: AutosaveStatus): void {
+    this.listeners.forEach(listener => listener(status));
+  }
+
   // Validate data integrity
-  validateChecksum(state: AutosaveState): boolean {,
-  const currentChecksum = this.generateChecksum(state.nodes, state.edges);
-  return currentChecksum === state.checksum;
+  validateChecksum(state: AutosaveState): boolean {
+    const currentChecksum = this.generateChecksum(state.nodes, state.edges);
+    return currentChecksum === state.checksum;
+  }
+}
   export interface AutosaveStatus {
   type: 'saved' | 'restored' | 'cleared' | 'error';
   timestamp?: number;
   version?: number;
   error?: string;
 }
-export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
+
+export const AutosaveManager: React.FC<AutosaveManagerProps> = ({
   nodes,
   edges,
   interval = 30000, // 30 seconds default
@@ -160,7 +181,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
   const [lastSave, setLastSave] = useState<number | null>(null);
   const [status, setStatus] = useState<AutosaveStatus | null>(null);
   const [showRecovery, setShowRecovery] = useState(false);
-  const [availableVersions, setAvailableVersions] = useState<AutosaveState>([]);
+  const [availableVersions, setAvailableVersions] = useState<AutosaveState[]>([]);
   const lastDataRef = useRef<string>('');
   const intervalRef = useRef<NodeJS.Timeout>();
   // Subscribe to autosave events
@@ -169,6 +190,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
       setStatus(newStatus);
       if (newStatus.type === 'saved') {
         setLastSave(Date.now());
+      }
     });
     return unsubscribe;
   }, [autosaveSystem]);
@@ -179,6 +201,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
     // Check for conflicts
     if (autosaveSystem.hasConflict() && versions.length > 0) {
       setShowRecovery(true);
+    }
   }, [autosaveSystem]);
   // Autosave logic
   useEffect(() => {
@@ -190,6 +213,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
         autosaveSystem.save(nodes, edges);
         lastDataRef.current = currentData;
         setAvailableVersions(autosaveSystem.getStoredData());
+      }
     };
     // Initial save
     saveIfChanged();
@@ -198,6 +222,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+      }
     };
   }, [nodes, edges, interval, disabled, autosaveSystem]);
   // Manual save
@@ -211,6 +236,7 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
     if (state && onRestore) {
       onRestore(state);
       setShowRecovery(false);
+    }
   }, [autosaveSystem, onRestore]);
   // Clear autosaves
   const handleClear = useCallback(() => {
@@ -218,71 +244,75 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
       autosaveSystem.clear();
       setAvailableVersions([]);
       setShowRecovery(false);
+    }
   }, [autosaveSystem]);
   // Theme styles
   const getThemeStyles = () => {
-  const themes = {
-  light: {,
-  background: '#ffffff',
-  secondary: '#f8fafc',
-  border: '#e5e7eb',
-  text: '#374151',
-  textSecondary: '#6b7280',
-  accent: '#3b82f6',
-  success: '#10b981',
-  warning: '#f59e0b',
-  error: '#ef4444',
-},
-  dark: {,
-  background: '#1f2937',
-  secondary: '#111827',
-  border: '#4b5563',
-  text: '#f9fafb',
-  textSecondary: '#9ca3af',
-  accent: '#60a5fa',
-  success: '#34d399',
-  warning: '#fbbf24',
-  error: '#f87171',
-},
-  cinema: {,
-  background: 'var(--color-bg-secondary)',
-  secondary: 'var(--color-bg-tertiary)',
-  border: 'var(--color-ui-border)',
-  text: 'var(--color-text-primary)',
-  textSecondary: 'var(--color-text-secondary)',
-  accent: 'var(--color-accent-orange)',
-  success: 'var(--color-accent-green)',
-  warning: 'var(--color-accent-orange)',
-  error: 'var(--color-accent-red)',
-};
+    const themes = {
+      light: {
+        background: '#ffffff',
+        secondary: '#f8fafc',
+        border: '#e5e7eb',
+        text: '#374151',
+        textSecondary: '#6b7280',
+        accent: '#3b82f6',
+        success: '#10b981',
+        warning: '#f59e0b',
+        error: '#ef4444',
+      },
+      dark: {
+        background: '#1f2937',
+        secondary: '#111827',
+        border: '#4b5563',
+        text: '#f9fafb',
+        textSecondary: '#9ca3af',
+        accent: '#60a5fa',
+        success: '#34d399',
+        warning: '#fbbf24',
+        error: '#f87171',
+      },
+      cinema: {
+        background: 'var(--color-bg-secondary)',
+        secondary: 'var(--color-bg-tertiary)',
+        border: 'var(--color-ui-border)',
+        text: 'var(--color-text-primary)',
+        textSecondary: 'var(--color-text-secondary)',
+        accent: 'var(--color-accent-orange)',
+        success: 'var(--color-accent-green)',
+        warning: 'var(--color-accent-orange)',
+        error: 'var(--color-accent-red)',
+      }
+    };
     return themes[theme];
   };
   const styles = getThemeStyles();
   const getStatusColor = () => {
-  if (!status) return styles.textSecondary;
-  switch (status.type) {
-  case 'saved': return styles.success;
-  case 'error': return styles.error;
-  default: return styles.textSecondary;
-};
+    if (!status) return styles.textSecondary;
+    switch (status.type) {
+      case 'saved': return styles.success;
+      case 'error': return styles.error;
+      default: return styles.textSecondary;
+    }
+  };
   const getStatusText = () => {
-  if (!status) return 'Ready';
-  switch (status.type) {
-  case 'saved': return 'Saved';
-  case 'error': return 'Error';
-  case 'restored': return 'Restored';
-  case 'cleared': return 'Cleared';
-  default: return 'Ready';
-};
+    if (!status) return 'Ready';
+    switch (status.type) {
+      case 'saved': return 'Saved';
+      case 'error': return 'Error';
+      case 'restored': return 'Restored';
+      case 'cleared': return 'Cleared';
+      default: return 'Ready';
+    }
+  };
   const formatTime = (timestamp: number) => {
     const now = Date.now();
     const diff = now - timestamp;
     if (diff < 60000) return 'Just now';
-    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;}
-    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;}
+    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
     return new Date(timestamp).toLocaleDateString();
   };
-  return;
+  return (
     <>
       {/* Autosave Status Indicator */}
       <div
@@ -291,9 +321,8 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
           top: '20px',
           right: '20px',
           background: styles.background,
-          border: `1px solid ${styles.border}`}
-},
-  borderRadius: '6px',
+          border: `1px solid ${styles.border}`,
+          borderRadius: '6px',
           padding: '8px 12px',
           display: 'flex',
           alignItems: 'center',
@@ -301,22 +330,22 @@ export const AutosaveManager: React.FC<AutosaveManagerProps> = ({)
           fontSize: '12px',
           fontFamily: 'var(--font-family-primary)',
           boxShadow: 'var(--shadow-sm)',
-          zIndex: 1000;
-  }}
+          zIndex: 1000
+        }}
       >
         <div
           style={{
-  width: '8px',
-  height: '8px',
-  borderRadius: '50%',
-  background: getStatusColor(),
-  transition: 'background var(--transition-fast)',
-}}
+            width: '8px',
+            height: '8px',
+            borderRadius: '50%',
+            background: getStatusColor(),
+            transition: 'background var(--transition-fast)'
+          }}
         />
         <span style={{ color: styles.text, fontWeight: '500' }}>
           {getStatusText()}
         </span>
-        {lastSave && ()
+        {lastSave && (
           <span style={{ color: styles.textSecondary }}>
             {formatTime(lastSave)}
           </span>
