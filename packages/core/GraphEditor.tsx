@@ -458,14 +458,15 @@ const NODE_TYPES: NodeMeta[] = [
           if (hasUnsavedChanges) {
             const confirmed = confirm('You have unsaved changes. Load the dropped project anyway?');
             if (!confirmed) return;
+          }
           try {
             const content = await file.text();
             const { deserializeProject } = await import('./utils/projectSerialization');
             const result = deserializeProject(content, {
-  skipValidation: false,
-  autoMigrate: true,
-  preserveIds: true,
-});
+              skipValidation: false,
+              autoMigrate: true,
+              preserveIds: true,
+            });
             if (result.success && result.data) {
               // Load the project data
               setNodes(result.data.graph.nodes);
@@ -475,22 +476,25 @@ const NODE_TYPES: NodeMeta[] = [
               setCurrentProject(result.data.metadata);
               updateProjectSettings(result.data.settings);
               markProjectSaved();
-              setStatusMessage(`Project "${result.data.metadata.name}" loaded successfully!`);}
+              setStatusMessage(`Project "${result.data.metadata.name}" loaded successfully!`);
               setTimeout(() => setStatusMessage(''), 3000);
               if (result.warnings && result.warnings.length > 0) {
-  console.warn('Project load warnings:', result.warnings);
-} else {
-              setStatusMessage(`Failed to load project: ${result.error}`);}
+                console.warn('Project load warnings:', result.warnings);
+              }
+            } else {
+              setStatusMessage(`Failed to load project: ${result.error}`);
               setTimeout(() => setStatusMessage(''), 5000);
+            }
           } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            setStatusMessage(`Failed to load project: ${errorMessage}`);}
+            setStatusMessage(`Failed to load project: ${errorMessage}`);
             setTimeout(() => setStatusMessage(''), 5000);
+          }
           return; // Exit early for file drops
         } else {
-  setStatusMessage('Only .psg files are supported for drag and drop');
-  setTimeout(() => setStatusMessage(''), 3000);
-  return;
+          setStatusMessage('Only .psg files are supported for drag and drop');
+          setTimeout(() => setStatusMessage(''), 3000);
+          return;
         }
         
         // Handle node type drops from palette (existing functionality)
@@ -539,8 +543,8 @@ const NODE_TYPES: NodeMeta[] = [
   }, []);
   // Autosave and restore logic handled by useAutosave hook
   // Enhanced nodes change handler with canvas optimization
-  const onNodesChange: OnNodesChange = useCallback()
-    (changes: NodeChange) => {
+  const onNodesChange: OnNodesChange = useCallback(
+    (changes: NodeChange[]) => {
   // Get canvas size for optimization
   const canvasSize = canvasRef.current ? {
   width: canvasRef.current.offsetWidth,

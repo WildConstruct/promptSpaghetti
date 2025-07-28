@@ -39,26 +39,27 @@ export class ServerProjectManager {
   /**
    * Save project to server
    */
-  static async saveProjectToServer(graph: Graph,)
+  static async saveProjectToServer(
+    graph: Graph,
     options: SaveProjectOptions,
     settings?: any,
     userId?: number
   ): Promise<SaveProjectResult & { projectId?: string }> {
-  try {
-  const now = new Date().toISOString();
-  const project: PSGFile = {,
-  metadata: {,
-  name: options.name,
-  description: options.description,
-  version: '1.0.0',
-  createdAt: now,
-  lastModified: now,
-  author: options.author,
-  tags: options.tags || [],
-  fileFormatVersion: '1.0.0',
-}
+    try {
+      const now = new Date().toISOString();
+      const project: PSGFile = {
+        metadata: {
+          name: options.name,
+          description: options.description,
+          version: '1.0.0',
+          createdAt: now,
+          lastModified: now,
+          author: options.author,
+          tags: options.tags || [],
+          fileFormatVersion: '1.0.0',
+        },
         graph,
-        settings: settings || {,
+        settings: settings || {
   autoSave: true,
   autoSaveInterval: 5000,
   theme: 'light',

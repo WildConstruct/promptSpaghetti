@@ -67,7 +67,7 @@ export interface GraphState {
   deleteNodeLabelConfig: (labelId: string) => void;
   setLabelPreferences: (preferences: Partial<NodeLabelPreferences>) => void;
   // Region groups operations (Epic 8.7 Task 3)
-  setRegionGroups: (groups: RegionGroup) => void;
+  setRegionGroups: (groups: RegionGroup[]) => void;
   addRegionGroup: (group: RegionGroup) => void;
   updateRegionGroup: (groupId: string, updates: Partial<RegionGroup>) => void;
   deleteRegionGroup: (groupId: string) => void;
@@ -337,20 +337,21 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     }),
   setLabelPreferences: (preferences: NodeLabelPreferences) =>
     set((state) => ({
-  annotations: {
-  ...state.annotations,
-  labelPreferences: {
-  ...state.annotations.labelPreferences,
-  ...preferences
-},
-  metadata: {
-  ...state.annotations.metadata,
-  modified: new Date().toISOString(),
-},
-  hasUnsavedChanges: true
-  })),
+      annotations: {
+        ...state.annotations,
+        labelPreferences: {
+          ...state.annotations.labelPreferences,
+          ...preferences
+        },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString(),
+        },
+      },
+      hasUnsavedChanges: true
+    }),
   // Region groups operations (Epic 8.7 Task 3)
-  setRegionGroups: (groups: RegionGroup) =>
+  setRegionGroups: (groups: RegionGroup[]) =>
     set((state) => ({
   annotations: {
   ...state.annotations,
