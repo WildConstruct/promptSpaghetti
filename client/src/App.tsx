@@ -7,6 +7,7 @@ import './professional-theme.css';
 import EnhancedGraphEditor from './components/EnhancedGraphEditor';
 import { NodePrototypePage } from './components/NodePrototype';
 import { ProfessionalMenuBar } from '../../packages/core/components/MenuBar/ProfessionalMenuBar';
+import { KeyboardShortcutsManager } from '../../packages/core/components/CommandPalette/KeyboardShortcutsManager';
 
 interface GraphEditorProps {
   initialNodes?: unknown[];
@@ -100,6 +101,7 @@ function MainApp(): React.ReactElement {
   const [gridVisible, setGridVisible] = useState(true);
   const [minimapVisible, setMinimapVisible] = useState(true);
   const [inspectorVisible, setInspectorVisible] = useState(true);
+  const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
 
   // Determine active tab based on current route (simplified, no auth)
   const getActiveTab = (): string => {
@@ -231,12 +233,38 @@ function MainApp(): React.ReactElement {
     
     // Help operations
     onKeyboardShortcuts: useCallback(() => {
-      // TODO: Show keyboard shortcuts modal
-      console.log('Show keyboard shortcuts');
+      // Trigger the help by simulating ? key press
+      const event = new KeyboardEvent('keydown', {
+        key: '?',
+        shiftKey: true,
+        bubbles: true
+      });
+      document.dispatchEvent(event);
     }, []),
     
     onAbout: useCallback(() => {
       alert('Prompt Spaghetti - Professional Graph Editor\nVersion 1.0.0\nCinema 4D-inspired interface');
+    }, []),
+    
+    // Additional handlers for KeyboardShortcutsManager
+    onDelete: useCallback(() => {
+      // TODO: Integrate with selection deletion
+      console.log('Delete selected items');
+    }, []),
+    
+    onDuplicate: useCallback(() => {
+      // TODO: Integrate with node duplication
+      console.log('Duplicate selected items');
+    }, []),
+    
+    onGenerateCharacter: useCallback(() => {
+      // TODO: Integrate with character generation
+      console.log('Generate character');
+    }, []),
+    
+    onCommandPalette: useCallback(() => {
+      // TODO: Integrate with command palette
+      console.log('Open command palette');
     }, []),
   };
 
@@ -253,6 +281,25 @@ function MainApp(): React.ReactElement {
         inspectorVisible={inspectorVisible}
         nodes={[]}
         edges={[]}
+      />
+      
+      {/* Keyboard Shortcuts Manager */}
+      <KeyboardShortcutsManager
+        onCommandPalette={menuBarHandlers.onCommandPalette}
+        onUndo={menuBarHandlers.onUndo}
+        onRedo={menuBarHandlers.onRedo}
+        onSave={menuBarHandlers.onSave}
+        onLoad={menuBarHandlers.onOpen}
+        onExport={() => menuBarHandlers.onExport('json')}
+        onSelectAll={menuBarHandlers.onSelectAll}
+        onDelete={menuBarHandlers.onDelete}
+        onDuplicate={menuBarHandlers.onDuplicate}
+        onFitView={menuBarHandlers.onFitView}
+        onZoomIn={menuBarHandlers.onZoomIn}
+        onZoomOut={menuBarHandlers.onZoomOut}
+        onGenerateCharacter={menuBarHandlers.onGenerateCharacter}
+        onToggleFullscreen={menuBarHandlers.onToggleFullscreen}
+        theme={theme}
       />
       
       {/* Tab Content Area - now hidden behind menu bar */}
