@@ -263,16 +263,17 @@ function MainApp(): React.ReactElement {
         setGeneratedGraph(null);
         setSelectedProjectFile(null);
         navigate('/');
+      }
     }, [navigate]),
     onFileAction: useCallback((action: string, file: PSGFile) => {
-      console.log(`File action: ${action}`, file);}
+      console.log(`File action: ${action}`, file);
       // Handle file actions like delete, rename, duplicate
     }, []),
     onRecentFileLoad: useCallback((file: PSGFile) => {
       // Load recent file directly
       projectManager.addToRecentFiles(file);
       setRecentFiles(projectManager.getRecentFiles(10));
-      alert(`Loading recent project: ${file.name}\n\nProject loading integration coming soon!`);}
+      alert(`Loading recent project: ${file.name}\n\nProject loading integration coming soon!`);
       navigate('/'); // Switch to editor tab
     }, [navigate, projectManager])
   };
