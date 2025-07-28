@@ -42,7 +42,9 @@ import { DemoModeManager } from './components/Demo/DemoModeManager';
 import { DemoPerformanceTester } from './components/Demo/DemoPerformanceTester';
 import { UnsavedChangesDialog } from './components/Dialogs/UnsavedChangesDialog';
 import { useUnsavedChanges } from './hooks/useUnsavedChanges';
+import { ProfessionalIntegration } from './components/CommandPalette/ProfessionalIntegration';
 import './styles/smoothAnimations.css';
+import '../../client/src/professional-theme.css';
 // SECURITY FIX: Safe CSS injection using controlled constants
 const ANIMATION_CSS = `
   @keyframes nodeCreatePulse {
@@ -835,7 +837,32 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection }) =>
                                                     border: '1px solid rgba(55, 65, 81, 0.6)',
                                                     color: '#e5e7eb'
                                                 }
-                                            } })] }), _jsx(StickyNotesManager, { disabled: false, readonly: false }), _jsx(NodeLabelsManager, { disabled: false, readonly: false, selectedNodeId: selectedNodeId }), _jsx(RegionGroupsManager, { disabled: false, readonly: false }), _jsx(ConnectionAnnotationsLayer, { canEdit: true, showTooltips: true, visible: true }), _jsxs("div", { style: {
+                                            } })] }), _jsx(ProfessionalIntegration, { nodes: nodes, edges: edges, selectedNodes: nodes.filter(n => n.selected), selectedEdges: edges.filter(e => e.selected), onNodesChange: (newNodes) => setNodes(newNodes), onEdgesChange: (newEdges) => setEdges(newEdges), onNodesSelect: (selectedNodes) => {
+                                        setNodes(prevNodes => prevNodes.map(node => ({
+                                            ...node,
+                                            selected: selectedNodes.some(s => s.id === node.id)
+                                        })));
+                                    }, onEdgesSelect: (selectedEdges) => {
+                                        setEdges(prevEdges => prevEdges.map(edge => ({
+                                            ...edge,
+                                            selected: selectedEdges.some(s => s.id === edge.id)
+                                        })));
+                                    }, onNodeCreate: (nodeType, position, data) => {
+                                        const newNode = {
+                                            id: `${nodeType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                                            type: nodeType,
+                                            position,
+                                            data: data || {},
+                                            draggable: true,
+                                        };
+                                        setNodes(prevNodes => [...prevNodes, newNode]);
+                                    }, onNodeDelete: (nodeIds) => {
+                                        setNodes(prevNodes => prevNodes.filter(n => !nodeIds.includes(n.id)));
+                                        setEdges(prevEdges => prevEdges.filter(e => !nodeIds.includes(e.source) && !nodeIds.includes(e.target)));
+                                    }, onExport: (format) => {
+                                        console.log(`Exporting in format: ${format}`);
+                                        // Export functionality would be implemented here
+                                    }, onSave: () => handleSaveProject(), onLoad: () => handleLoadProject(), theme: "cinema" }), _jsx(StickyNotesManager, { disabled: false, readonly: false }), _jsx(NodeLabelsManager, { disabled: false, readonly: false, selectedNodeId: selectedNodeId }), _jsx(RegionGroupsManager, { disabled: false, readonly: false }), _jsx(ConnectionAnnotationsLayer, { canEdit: true, showTooltips: true, visible: true }), _jsxs("div", { style: {
                                         position: 'absolute',
                                         bottom: 10,
                                         right: 10,

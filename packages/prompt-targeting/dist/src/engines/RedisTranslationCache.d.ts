@@ -33,7 +33,7 @@ export declare class RedisTranslationCache implements TranslationCache {
     private client;
     private config;
     private connected;
-    private stats;
+    private metrics;
     private logger;
     constructor(config?: RedisCacheConfig);
     /**

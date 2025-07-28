@@ -68,7 +68,9 @@ import { DemoPerformanceTester } from './components/Demo/DemoPerformanceTester';
 import { RecentProjectEntry } from './managers/RecentProjectsManager';
 import { UnsavedChangesDialog } from './components/Dialogs/UnsavedChangesDialog';
 import { useUnsavedChanges } from './hooks/useUnsavedChanges';
+import { ProfessionalIntegration } from './components/CommandPalette/ProfessionalIntegration';
 import './styles/smoothAnimations.css';
+import '../../client/src/professional-theme.css';
 
 // SECURITY FIX: Safe CSS injection using controlled constants
 const ANIMATION_CSS = `
@@ -1096,6 +1098,55 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
                 }}
               />
             </ReactFlow>
+
+            {/* Professional UI Integration - Cinema 4D-inspired interface */}
+            <ProfessionalIntegration
+              nodes={nodes}
+              edges={edges}
+              selectedNodes={nodes.filter(n => n.selected)}
+              selectedEdges={edges.filter(e => e.selected)}
+              onNodesChange={(newNodes) => setNodes(newNodes)}
+              onEdgesChange={(newEdges) => setEdges(newEdges)}
+              onNodesSelect={(selectedNodes) => {
+                setNodes(prevNodes => 
+                  prevNodes.map(node => ({
+                    ...node,
+                    selected: selectedNodes.some(s => s.id === node.id)
+                  }))
+                );
+              }}
+              onEdgesSelect={(selectedEdges) => {
+                setEdges(prevEdges => 
+                  prevEdges.map(edge => ({
+                    ...edge,
+                    selected: selectedEdges.some(s => s.id === edge.id)
+                  }))
+                );
+              }}
+              onNodeCreate={(nodeType, position, data) => {
+                const newNode: Node = {
+                  id: `${nodeType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                  type: nodeType,
+                  position,
+                  data: data || {},
+                  draggable: true,
+                };
+                setNodes(prevNodes => [...prevNodes, newNode]);
+              }}
+              onNodeDelete={(nodeIds) => {
+                setNodes(prevNodes => prevNodes.filter(n => !nodeIds.includes(n.id)));
+                setEdges(prevEdges => prevEdges.filter(e => 
+                  !nodeIds.includes(e.source) && !nodeIds.includes(e.target)
+                ));
+              }}
+              onExport={(format) => {
+                console.log(`Exporting in format: ${format}`);
+                // Export functionality would be implemented here
+              }}
+              onSave={() => handleSaveProject()}
+              onLoad={() => handleLoadProject()}
+              theme="cinema"
+            />
 
             {/* Epic 8.7: Collaboration Systems */}
             <StickyNotesManager

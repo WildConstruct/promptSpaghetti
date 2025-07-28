@@ -2,7 +2,18 @@
  * @fileoverview Core types and interfaces for Custom Node SDK
  * Defines the contract for creating custom nodes and extensions
  */
-import type { AdvancedExecutionContext, AdvancedNodeConfig, ValidationResult } from '@prompt-spaghetti/graph-core';
+import type { AdvancedExecutionContext, AdvancedNodeConfig } from '@promptscape/core';
+/**
+ * Validation result for custom node operations
+ */
+export interface ValidationResult {
+    /** Whether validation passed */
+    valid: boolean;
+    /** Validation error messages */
+    errors: string[];
+    /** Validation warning messages */
+    warnings: string[];
+}
 /**
  * Custom node metadata that describes the node's capabilities
  */

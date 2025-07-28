@@ -21,7 +21,7 @@ export declare const OpenAIConfigSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     maxTokens: number;
     temperature: number;
-    model: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k";
+    model: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo-16k";
     topP: number;
     frequencyPenalty: number;
     presencePenalty: number;
@@ -32,7 +32,7 @@ export declare const OpenAIConfigSchema: z.ZodObject<{
 }, {
     maxTokens?: number | undefined;
     temperature?: number | undefined;
-    model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
+    model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | undefined;
     apiKey?: string | undefined;
     organization?: string | undefined;
     baseURL?: string | undefined;
@@ -73,16 +73,16 @@ export declare const DALLEConfigSchema: z.ZodObject<{
     style: z.ZodDefault<z.ZodEnum<["vivid", "natural"]>>;
     n: z.ZodDefault<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    size: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792";
-    style: "vivid" | "natural";
     model: "dall-e-2" | "dall-e-3";
+    style: "vivid" | "natural";
     quality: "standard" | "hd";
+    size: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792";
     n: number;
 }, {
-    size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
-    style?: "vivid" | "natural" | undefined;
     model?: "dall-e-2" | "dall-e-3" | undefined;
+    style?: "vivid" | "natural" | undefined;
     quality?: "standard" | "hd" | undefined;
+    size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
     n?: number | undefined;
 }>;
 /**
@@ -107,7 +107,7 @@ export declare const GlobalConfigSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             maxTokens?: number | undefined;
             temperature?: number | undefined;
-            model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
+            model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | undefined;
             apiKey?: string | undefined;
             organization?: string | undefined;
             baseURL?: string | undefined;
@@ -118,7 +118,7 @@ export declare const GlobalConfigSchema: z.ZodObject<{
         }, {
             maxTokens?: number | undefined;
             temperature?: number | undefined;
-            model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
+            model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | undefined;
             apiKey?: string | undefined;
             organization?: string | undefined;
             baseURL?: string | undefined;
@@ -159,23 +159,23 @@ export declare const GlobalConfigSchema: z.ZodObject<{
             style: z.ZodOptional<z.ZodDefault<z.ZodEnum<["vivid", "natural"]>>>;
             n: z.ZodOptional<z.ZodDefault<z.ZodNumber>>;
         }, "strip", z.ZodTypeAny, {
-            size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
-            style?: "vivid" | "natural" | undefined;
             model?: "dall-e-2" | "dall-e-3" | undefined;
+            style?: "vivid" | "natural" | undefined;
             quality?: "standard" | "hd" | undefined;
+            size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
             n?: number | undefined;
         }, {
-            size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
-            style?: "vivid" | "natural" | undefined;
             model?: "dall-e-2" | "dall-e-3" | undefined;
+            style?: "vivid" | "natural" | undefined;
             quality?: "standard" | "hd" | undefined;
+            size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
             n?: number | undefined;
         }>>;
     }, "strip", z.ZodTypeAny, {
         openai?: {
             maxTokens?: number | undefined;
             temperature?: number | undefined;
-            model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
+            model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | undefined;
             apiKey?: string | undefined;
             organization?: string | undefined;
             baseURL?: string | undefined;
@@ -194,17 +194,17 @@ export declare const GlobalConfigSchema: z.ZodObject<{
             enableVariations?: boolean | undefined;
         } | undefined;
         dalle?: {
-            size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
-            style?: "vivid" | "natural" | undefined;
             model?: "dall-e-2" | "dall-e-3" | undefined;
+            style?: "vivid" | "natural" | undefined;
             quality?: "standard" | "hd" | undefined;
+            size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
             n?: number | undefined;
         } | undefined;
     }, {
         openai?: {
             maxTokens?: number | undefined;
             temperature?: number | undefined;
-            model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
+            model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | undefined;
             apiKey?: string | undefined;
             organization?: string | undefined;
             baseURL?: string | undefined;
@@ -223,10 +223,10 @@ export declare const GlobalConfigSchema: z.ZodObject<{
             enableVariations?: boolean | undefined;
         } | undefined;
         dalle?: {
-            size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
-            style?: "vivid" | "natural" | undefined;
             model?: "dall-e-2" | "dall-e-3" | undefined;
+            style?: "vivid" | "natural" | undefined;
             quality?: "standard" | "hd" | undefined;
+            size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
             n?: number | undefined;
         } | undefined;
     }>>;
@@ -285,12 +285,11 @@ export declare const GlobalConfigSchema: z.ZodObject<{
     customMappings: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
 }, "strip", z.ZodTypeAny, {
     qualityPreference: number;
-    stylePreference: "default" | "artistic" | "photorealistic" | "minimal";
     platformOverrides: {
         openai?: {
             maxTokens?: number | undefined;
             temperature?: number | undefined;
-            model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
+            model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | undefined;
             apiKey?: string | undefined;
             organization?: string | undefined;
             baseURL?: string | undefined;
@@ -309,15 +308,15 @@ export declare const GlobalConfigSchema: z.ZodObject<{
             enableVariations?: boolean | undefined;
         } | undefined;
         dalle?: {
-            size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
-            style?: "vivid" | "natural" | undefined;
             model?: "dall-e-2" | "dall-e-3" | undefined;
+            style?: "vivid" | "natural" | undefined;
             quality?: "standard" | "hd" | undefined;
+            size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
             n?: number | undefined;
         } | undefined;
     };
     enableOptimizations: boolean;
-    customMappings: Record<string, unknown>;
+    stylePreference: "default" | "artistic" | "photorealistic" | "minimal";
     pipeline: {
         skipValidation: boolean;
         skipOptimization: boolean;
@@ -334,14 +333,14 @@ export declare const GlobalConfigSchema: z.ZodObject<{
         enableMemoryTracking: boolean;
         enableEvents: boolean;
     };
+    customMappings: Record<string, unknown>;
 }, {
     qualityPreference?: number | undefined;
-    stylePreference?: "default" | "artistic" | "photorealistic" | "minimal" | undefined;
     platformOverrides?: {
         openai?: {
             maxTokens?: number | undefined;
             temperature?: number | undefined;
-            model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
+            model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | undefined;
             apiKey?: string | undefined;
             organization?: string | undefined;
             baseURL?: string | undefined;
@@ -360,15 +359,15 @@ export declare const GlobalConfigSchema: z.ZodObject<{
             enableVariations?: boolean | undefined;
         } | undefined;
         dalle?: {
-            size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
-            style?: "vivid" | "natural" | undefined;
             model?: "dall-e-2" | "dall-e-3" | undefined;
+            style?: "vivid" | "natural" | undefined;
             quality?: "standard" | "hd" | undefined;
+            size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
             n?: number | undefined;
         } | undefined;
     } | undefined;
     enableOptimizations?: boolean | undefined;
-    customMappings?: Record<string, unknown> | undefined;
+    stylePreference?: "default" | "artistic" | "photorealistic" | "minimal" | undefined;
     pipeline?: {
         skipValidation?: boolean | undefined;
         skipOptimization?: boolean | undefined;
@@ -385,6 +384,7 @@ export declare const GlobalConfigSchema: z.ZodObject<{
         enableMemoryTracking?: boolean | undefined;
         enableEvents?: boolean | undefined;
     } | undefined;
+    customMappings?: Record<string, unknown> | undefined;
 }>;
 export type OpenAIConfig = z.infer<typeof OpenAIConfigSchema>;
 export type MidjourneyConfig = z.infer<typeof MidjourneyConfigSchema>;

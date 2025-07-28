@@ -2,8 +2,9 @@
  * Validation system index file
  * Epic 10.2.3 - Validation Rules System with Severity Levels
  */
-import { ValidationRulesEngine, ValidationEngineConfig } from './ValidationRulesEngine';
-export { ValidationRulesEngine, ValidationSeverity, ValidationCategory, type ValidationRule, type ValidationRuleResult, type ValidationContext, type ValidationReport, type ValidationEngineConfig } from './ValidationRulesEngine';
+import { ValidationRulesEngine, ValidationEngineConfig, ValidationReport } from './ValidationRulesEngine';
+export { ValidationRulesEngine, ValidationSeverity, ValidationCategory } from './ValidationRulesEngine';
+export type { ValidationRule, ValidationRuleResult, ValidationContext, ValidationReport, ValidationEngineConfig } from './ValidationRulesEngine';
 export { MissingRequiredPropertiesRule, DuplicateContentRule, LanguageConsistencyRule, SensitiveContentRule, ProcessingTimeRule, MemoryUsageRule } from './AdditionalValidationRules';
 /**
  * Factory function to create a validation engine with recommended configuration
@@ -28,12 +29,7 @@ export declare function createPerformanceValidationEngine(): ValidationRulesEngi
 /**
  * Utility function to validate a graph with automatic platform detection
  */
-export declare function validateGraph(
-  graph: any,
-  targetPlatform?: string,
-  capabilities?: any,
-  config?: Partial<ValidationEngineConfig>
-): Promise<ValidationReport>;
+export declare function validateGraph(graph: any, targetPlatform?: string, capabilities?: any, config?: Partial<ValidationEngineConfig>): Promise<ValidationReport>;
 /**
  * Utility function to validate and auto-fix a graph
  */
@@ -46,41 +42,4 @@ export declare function validateAndFixGraph(graph: any, targetPlatform?: string,
     }>;
     modifiedGraph: any;
 }>;
-/**
- * Auto-detect platform from graph structure/content
- */
-declare function detectPlatformFromGraph(graph: any): string | null;
-/**
- * Generate basic capabilities for a platform
- */
-declare function generateBasicCapabilities(platform: string): any;
-/**
- * Calculate basic complexity score for a graph
- */
-declare function calculateBasicComplexity(graph: any): number;
-/**
- * Estimate token count for a graph
- */
-declare function estimateTokenCount(graph: any): number;
-/**
- * Validation utility functions
- */
-export declare const ValidationUtils: {
-    detectPlatformFromGraph: typeof detectPlatformFromGraph;
-    generateBasicCapabilities: typeof generateBasicCapabilities;
-    calculateBasicComplexity: typeof calculateBasicComplexity;
-    estimateTokenCount: typeof estimateTokenCount;
-    /**
-     * Check if a validation report indicates the graph is ready for production
-     */
-    isProductionReady(report: ValidationReport): boolean;
-    /**
-     * Get the most critical issues from a validation report
-     */
-    getCriticalIssues(report: ValidationReport): string[];
-    /**
-     * Generate a summary string from a validation report
-     */
-    generateSummary(report: ValidationReport): string;
-};
 //# sourceMappingURL=index.d.ts.map

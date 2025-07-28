@@ -11,11 +11,7 @@ export declare class AdaptorTestFramework {
     /**
      * Run comprehensive test suite for an adaptor
      */
-    testAdaptor(
-      adaptor: ModelAdaptor & AdaptorLifecycle,
-      context: PluginContext,
-      options?: AdaptorTestOptions
-    ): Promise<AdaptorTestResults>;
+    testAdaptor(adaptor: ModelAdaptor & AdaptorLifecycle, context: PluginContext, options?: AdaptorTestOptions): Promise<AdaptorTestResults>;
     /**
      * Test adaptor compliance with interfaces and specifications
      */

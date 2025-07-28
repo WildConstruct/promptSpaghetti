@@ -18,7 +18,10 @@ export class GraphStateContainer extends BaseStateContainer {
             maxHistorySize: 200,
             enablePersistence: true,
             persistenceKey: 'graph-editor-state',
-            enableDebug: true
+            enableDebug: true,
+            enableDevTools: true,
+            enableTimeTravel: true,
+            enablePerformanceProfiling: true
         });
         // Initialize with provided graph or empty state
         if (initialGraph) {

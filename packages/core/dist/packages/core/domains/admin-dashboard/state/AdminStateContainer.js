@@ -17,7 +17,10 @@ export class AdminStateContainer extends BaseStateContainer {
             maxHistorySize: 150,
             enablePersistence: true,
             persistenceKey: 'admin-dashboard-state',
-            enableDebug: true
+            enableDebug: true,
+            enableDevTools: true,
+            enableTimeTravel: true,
+            enablePerformanceProfiling: true
         });
         if (initialState) {
             this.state = { ...this.getInitialState(), ...initialState };

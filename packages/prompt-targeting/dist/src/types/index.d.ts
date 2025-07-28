@@ -2,7 +2,6 @@
  * Core types and interfaces for the Prompt Targeting System
  * Epic 10 - Cross-platform prompt translation
  */
-import { z } from 'zod';
 export type { Graph as PromptGraph } from '@promptscape/core/graphSchema';
 /**
  * Platform-specific capabilities and constraints
@@ -269,11 +268,7 @@ export interface MappingEngine {
     /**
      * Batch translate to multiple platforms
      */
-    translateBatch(
-      graph: any,
-      targetPlatforms: string[],
-      config?: AdaptorConfig
-    ): Promise<Record<string, PlatformPrompt>>;
+    translateBatch(graph: any, targetPlatforms: string[], config?: AdaptorConfig): Promise<Record<string, PlatformPrompt>>;
     /**
      * Validate translation without executing
      */
@@ -316,227 +311,11 @@ export interface TranslationCache {
 /**
  * Zod schemas for runtime validation
  */
-export declare const PlatformCapabilitiesSchema: z.ZodObject<{
-    platform: z.ZodString;
-    version: z.ZodString;
-    maxTokens: z.ZodOptional<z.ZodNumber>;
-    supportedAspectRatios: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    parameterRanges: z.ZodRecord<z.ZodString, z.ZodTuple<[z.ZodNumber, z.ZodNumber], null>>;
-    features: z.ZodArray<z.ZodString, "many">;
-    styleSupport: z.ZodBoolean;
-    negativePromptSupport: z.ZodBoolean;
-    customParameters: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
-}, "strip", z.ZodTypeAny, {
-    platform: string;
-    version: string;
-    parameterRanges: Record<string, [number, number]>;
-    features: string[];
-    styleSupport: boolean;
-    negativePromptSupport: boolean;
-    maxTokens?: number | undefined;
-    supportedAspectRatios?: string[] | undefined;
-    customParameters?: Record<string, unknown> | undefined;
-}, {
-    platform: string;
-    version: string;
-    parameterRanges: Record<string, [number, number]>;
-    features: string[];
-    styleSupport: boolean;
-    negativePromptSupport: boolean;
-    maxTokens?: number | undefined;
-    supportedAspectRatios?: string[] | undefined;
-    customParameters?: Record<string, unknown> | undefined;
-}>;
-export declare const ValidationResultSchema: z.ZodObject<{
-    valid: z.ZodBoolean;
-    errors: z.ZodArray<z.ZodObject<{
-        code: z.ZodString;
-        message: z.ZodString;
-        severity: z.ZodEnum<["error", "warning", "info"]>;
-        source: z.ZodOptional<z.ZodObject<{
-            nodeId: z.ZodOptional<z.ZodString>;
-            property: z.ZodOptional<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        }, {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        }>>;
-        suggestion: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        code: string;
-        message: string;
-        severity: "error" | "warning" | "info";
-        source?: {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        } | undefined;
-        suggestion?: string | undefined;
-    }, {
-        code: string;
-        message: string;
-        severity: "error" | "warning" | "info";
-        source?: {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        } | undefined;
-        suggestion?: string | undefined;
-    }>, "many">;
-    warnings: z.ZodArray<z.ZodObject<{
-        code: z.ZodString;
-        message: z.ZodString;
-        source: z.ZodOptional<z.ZodObject<{
-            nodeId: z.ZodOptional<z.ZodString>;
-            property: z.ZodOptional<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        }, {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        }>>;
-        optimization: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        code: string;
-        message: string;
-        source?: {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        } | undefined;
-        optimization?: string | undefined;
-    }, {
-        code: string;
-        message: string;
-        source?: {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        } | undefined;
-        optimization?: string | undefined;
-    }>, "many">;
-    compatibilityScore: z.ZodNumber;
-}, "strip", z.ZodTypeAny, {
-    valid: boolean;
-    errors: {
-        code: string;
-        message: string;
-        severity: "error" | "warning" | "info";
-        source?: {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        } | undefined;
-        suggestion?: string | undefined;
-    }[];
-    warnings: {
-        code: string;
-        message: string;
-        source?: {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        } | undefined;
-        optimization?: string | undefined;
-    }[];
-    compatibilityScore: number;
-}, {
-    valid: boolean;
-    errors: {
-        code: string;
-        message: string;
-        severity: "error" | "warning" | "info";
-        source?: {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        } | undefined;
-        suggestion?: string | undefined;
-    }[];
-    warnings: {
-        code: string;
-        message: string;
-        source?: {
-            nodeId?: string | undefined;
-            property?: string | undefined;
-        } | undefined;
-        optimization?: string | undefined;
-    }[];
-    compatibilityScore: number;
-}>;
-export declare const PlatformPromptSchema: z.ZodObject<{
-    platform: z.ZodString;
-    prompt: z.ZodString;
-    negativePrompt: z.ZodOptional<z.ZodString>;
-    parameters: z.ZodRecord<z.ZodString, z.ZodUnknown>;
-    metadata: z.ZodObject<{
-        sourceHash: z.ZodString;
-        timestamp: z.ZodDate;
-        qualityScore: z.ZodNumber;
-        optimizations: z.ZodArray<z.ZodString, "many">;
-    }, "strip", z.ZodTypeAny, {
-        sourceHash: string;
-        timestamp: Date;
-        qualityScore: number;
-        optimizations: string[];
-    }, {
-        sourceHash: string;
-        timestamp: Date;
-        qualityScore: number;
-        optimizations: string[];
-    }>;
-}, "strip", z.ZodTypeAny, {
-    platform: string;
-    prompt: string;
-    parameters: Record<string, unknown>;
-    metadata: {
-        sourceHash: string;
-        timestamp: Date;
-        qualityScore: number;
-        optimizations: string[];
-    };
-    negativePrompt?: string | undefined;
-}, {
-    platform: string;
-    prompt: string;
-    parameters: Record<string, unknown>;
-    metadata: {
-        sourceHash: string;
-        timestamp: Date;
-        qualityScore: number;
-        optimizations: string[];
-    };
-    negativePrompt?: string | undefined;
-}>;
-export declare const AdaptorConfigSchema: z.ZodObject<{
-    qualityPreference: z.ZodOptional<z.ZodNumber>;
-    stylePreference: z.ZodOptional<z.ZodEnum<["default", "artistic", "photorealistic", "minimal"]>>;
-    platformOverrides: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
-    enableOptimizations: z.ZodOptional<z.ZodBoolean>;
-    customMappings: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
-}, "strip", z.ZodTypeAny, {
-    qualityPreference?: number | undefined;
-    stylePreference?: "default" | "artistic" | "photorealistic" | "minimal" | undefined;
-    platformOverrides?: Record<string, unknown> | undefined;
-    enableOptimizations?: boolean | undefined;
-    customMappings?: Record<string, unknown> | undefined;
-}, {
-    qualityPreference?: number | undefined;
-    stylePreference?: "default" | "artistic" | "photorealistic" | "minimal" | undefined;
-    platformOverrides?: Record<string, unknown> | undefined;
-    enableOptimizations?: boolean | undefined;
-    customMappings?: Record<string, unknown> | undefined;
-}>;
-/**
- * Error classes for prompt targeting system
- */
 export declare class PromptTargetingError extends Error {
     code: string;
     platform?: string | undefined;
     details?: Record<string, unknown> | undefined;
-    constructor(
-      message: string,
-      code: string,
-      platform?: string | undefined,
-      details?: Record<string,
-      unknown> | undefined
-    );
+    constructor(message: string, code: string, platform?: string | undefined, details?: Record<string, unknown> | undefined);
 }
 export declare class AdaptorError extends PromptTargetingError {
     adaptorId: string;

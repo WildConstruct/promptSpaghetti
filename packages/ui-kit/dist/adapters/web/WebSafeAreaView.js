@@ -95,7 +95,7 @@ export const WebSafeAreaView = forwardRef(({ children, edges = ['top', 'bottom',
         ...getSafeAreaStyle(),
         ...style
     };
-    return (_jsxs(_Fragment, { children: [_jsx("style", { jsx: true, global: true, children: `
+    return (_jsxs(_Fragment, { children: [_jsx("style", { children: `
         :root {
           --safe-area-inset-top: env(safe-area-inset-top, ${safeAreaInsets.top}px);
           --safe-area-inset-bottom: env(safe-area-inset-bottom, ${safeAreaInsets.bottom}px);

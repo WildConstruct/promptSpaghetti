@@ -26,9 +26,9 @@ export declare function useCollaborativeReactFlow(): {
         x: number;
         y: number;
     }) => void;
-    isCollaborative: any;
-    collaborationEnabled: any;
-    connectionStatus: any;
+    isCollaborative: boolean;
+    collaborationEnabled: boolean;
+    connectionStatus: "error" | "disconnected" | "connecting" | "connected";
     connectedUsers: any;
     getUserCursors: () => {
         userId: string;
@@ -49,5 +49,11 @@ export declare function useNodeCollaborators(nodeId: string): UserPresence[];
 /**
  * Hook for showing connection status indicator
  */
-export declare function useCollaborationStatus(): any;
+export declare function useCollaborationStatus(): {
+    isCollaborative: boolean;
+    connectionStatus: "error" | "disconnected" | "connecting" | "connected";
+    isConnected: boolean;
+    connectedUserCount: number;
+    lastSyncTime: number;
+};
 //# sourceMappingURL=useCollaborativeReactFlow.d.ts.map

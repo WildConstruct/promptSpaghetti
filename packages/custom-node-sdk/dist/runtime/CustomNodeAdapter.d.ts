@@ -2,7 +2,7 @@
  * @fileoverview CustomNodeAdapter - Bridges custom nodes with PromptScape runtime
  * Wraps custom nodes to integrate with the AdvancedRuntimeNode system
  */
-import { AdvancedRuntimeNode, AdvancedExecutionContext, ValidationResult } from '@prompt-spaghetti/graph-core';
+import { AdvancedRuntimeNode, AdvancedExecutionContext } from '@promptscape/core';
 import { CustomNodeBase, CustomNodeConfig } from '../types';
 /**
  * Adapter that wraps a custom node to integrate with PromptScape's runtime system

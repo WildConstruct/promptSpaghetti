@@ -2,6 +2,7 @@ import React from 'react';
 import { Edge, Node } from 'reactflow';
 import { ValidationError } from './validation';
 import './styles/smoothAnimations.css';
+import '../../client/src/professional-theme.css';
 interface GraphEditorProps {
     initialNodes: Node[];
     initialEdges: Edge[];

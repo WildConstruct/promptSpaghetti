@@ -7,6 +7,7 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Node, Edge } from 'reactflow';
+import { PSGFile } from '../../projectManager';
 
 export interface MenuBarProps {
   // File operations
@@ -16,6 +17,7 @@ export interface MenuBarProps {
   onSaveAs?: () => void;
   onImport?: () => void;
   onExport?: (format: 'json' | 'png' | 'svg' | 'pdf') => void;
+  onRecentFileLoad?: (file: PSGFile) => void;
   onQuit?: () => void;
   
   // Edit operations
@@ -62,6 +64,7 @@ export interface MenuBarProps {
   gridVisible?: boolean;
   minimapVisible?: boolean;
   inspectorVisible?: boolean;
+  recentFiles?: PSGFile[];
 }
 
 interface MenuItemProps {
@@ -289,6 +292,7 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
   onSaveAs,
   onImport,
   onExport,
+  onRecentFileLoad,
   onQuit,
   
   // Edit operations
@@ -335,6 +339,7 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
   gridVisible = true,
   minimapVisible = true,
   inspectorVisible = true,
+  recentFiles = [],
 }) => {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
 
@@ -364,6 +369,25 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
         { label: 'Export as PDF', onClick: () => onExport?.('pdf') },
       ]
     },
+    ...(recentFiles.length > 0 ? [
+      { divider: true },
+      { 
+        label: 'Recent Files', 
+        submenu: [
+          ...recentFiles.slice(0, 10).map((file, index) => ({
+            label: `${index + 1}. ${file.metadata.title || file.name.replace('.psg', '')}`,
+            onClick: () => onRecentFileLoad?.(file)
+          })),
+          ...(recentFiles.length > 0 ? [
+            { divider: true },
+            { label: 'Clear Recent Files', onClick: () => {
+              // TODO: Implement clear recent files
+              console.log('Clear recent files');
+            }}
+          ] : [])
+        ]
+      }
+    ] : []),
     { divider: true },
     { label: 'Quit', shortcut: '⌘Q', onClick: onQuit },
   ];

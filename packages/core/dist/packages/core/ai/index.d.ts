@@ -41,4 +41,5 @@ export { default as ImageProcessor } from './utils/ImageProcessor';
 export type { ImageMetadata, ImageProcessingOptions, ImageVariationOptions, ImageBatchProcessingOptions } from './utils/ImageProcessor';
 export type { AIModelType, AIModelProvider, AIModelStatus, ModelCapabilities, ModelMetadata, CostEstimate, HealthStatus, AIRequest, AIResponse, ModelConfiguration, AIModelFactory as IAIModelFactory } from './BaseAIModel';
 export * from './performance';
+export declare function registerAndCreateModel(factory: any, registration: any, id: string, endpoint: string, apiKey: string): any;
 //# sourceMappingURL=index.d.ts.map

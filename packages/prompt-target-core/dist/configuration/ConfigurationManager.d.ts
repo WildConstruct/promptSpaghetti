@@ -30,12 +30,7 @@ export declare class ConfigurationManager {
     /**
      * Update specific configuration values
      */
-    updateConfiguration(
-      adaptorId: string,
-      updates: Record<string,
-      any>,
-      options?: UpdateConfigurationOptions
-    ): Promise<void>;
+    updateConfiguration(adaptorId: string, updates: Record<string, any>, options?: UpdateConfigurationOptions): Promise<void>;
     /**
      * Create configuration preset
      */
@@ -47,11 +42,7 @@ export declare class ConfigurationManager {
     /**
      * Import configuration from various formats
      */
-    importConfiguration(
-      data: string | object,
-      format: ConfigurationFormat,
-      options?: ImportOptions
-    ): Promise<ImportResult>;
+    importConfiguration(data: string | object, format: ConfigurationFormat, options?: ImportOptions): Promise<ImportResult>;
     /**
      * Export configurations in various formats
      */

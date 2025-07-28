@@ -676,8 +676,8 @@ class ConversionAnalyticsAPI {
         };
     }
 }
-processing: ProcessingConfig;
-ConversionAnalyticsInfrastructure => {
+// Factory function
+export function createConversionAnalyticsInfrastructure(epic1Analytics, config) {
     return new ConversionAnalyticsInfrastructure(epic1Analytics, config);
-};
+}
 export default ConversionAnalyticsInfrastructure;

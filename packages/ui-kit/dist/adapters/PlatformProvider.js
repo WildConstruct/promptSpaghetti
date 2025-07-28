@@ -10,7 +10,7 @@ export const PlatformProvider = ({ children, platform: overridePlatform, capabil
         return overridePlatform || detectPlatform();
     }, [overridePlatform]);
     const defaultCapabilities = useMemo(() => {
-        const isWebPlatform = detectedPlatform === 'web';
+        // const isWebPlatform = detectedPlatform === 'web';
         const isMobilePlatform = detectedPlatform === 'mobile';
         return {
             touchSupport: isMobilePlatform || (typeof window !== 'undefined' && 'ontouchstart' in window),

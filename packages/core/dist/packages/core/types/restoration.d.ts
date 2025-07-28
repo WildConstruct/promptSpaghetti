@@ -224,21 +224,21 @@ export declare const RestorationConfigSchema: z.ZodObject<{
     createBackup: z.ZodDefault<z.ZodBoolean>;
     notifyOnCompletion: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
+    selectedNodes?: string[];
+    selectedEdges?: string[];
     createBackup?: boolean;
     conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
     restorationType?: "full" | "partial" | "selective";
     restorationStrategy?: "replace" | "merge" | "selective";
-    selectedNodes?: string[];
-    selectedEdges?: string[];
     preserveCurrentChanges?: boolean;
     notifyOnCompletion?: boolean;
 }, {
+    selectedNodes?: string[];
+    selectedEdges?: string[];
     createBackup?: boolean;
     conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
     restorationType?: "full" | "partial" | "selective";
     restorationStrategy?: "replace" | "merge" | "selective";
-    selectedNodes?: string[];
-    selectedEdges?: string[];
     preserveCurrentChanges?: boolean;
     notifyOnCompletion?: boolean;
 }>;
@@ -257,32 +257,32 @@ export declare const CreateRestorationAttemptRequestSchema: z.ZodObject<{
         createBackup: z.ZodDefault<z.ZodBoolean>;
         notifyOnCompletion: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
+        selectedNodes?: string[];
+        selectedEdges?: string[];
         createBackup?: boolean;
         conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
         restorationType?: "full" | "partial" | "selective";
         restorationStrategy?: "replace" | "merge" | "selective";
-        selectedNodes?: string[];
-        selectedEdges?: string[];
         preserveCurrentChanges?: boolean;
         notifyOnCompletion?: boolean;
     }, {
+        selectedNodes?: string[];
+        selectedEdges?: string[];
         createBackup?: boolean;
         conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
         restorationType?: "full" | "partial" | "selective";
         restorationStrategy?: "replace" | "merge" | "selective";
-        selectedNodes?: string[];
-        selectedEdges?: string[];
         preserveCurrentChanges?: boolean;
         notifyOnCompletion?: boolean;
     }>;
 }, "strip", z.ZodTypeAny, {
     config?: {
+        selectedNodes?: string[];
+        selectedEdges?: string[];
         createBackup?: boolean;
         conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
         restorationType?: "full" | "partial" | "selective";
         restorationStrategy?: "replace" | "merge" | "selective";
-        selectedNodes?: string[];
-        selectedEdges?: string[];
         preserveCurrentChanges?: boolean;
         notifyOnCompletion?: boolean;
     };
@@ -291,12 +291,12 @@ export declare const CreateRestorationAttemptRequestSchema: z.ZodObject<{
     targetSnapshotId?: string;
 }, {
     config?: {
+        selectedNodes?: string[];
+        selectedEdges?: string[];
         createBackup?: boolean;
         conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
         restorationType?: "full" | "partial" | "selective";
         restorationStrategy?: "replace" | "merge" | "selective";
-        selectedNodes?: string[];
-        selectedEdges?: string[];
         preserveCurrentChanges?: boolean;
         notifyOnCompletion?: boolean;
     };
@@ -318,32 +318,32 @@ export declare const RestorationPreviewRequestSchema: z.ZodObject<{
         createBackup: z.ZodDefault<z.ZodBoolean>;
         notifyOnCompletion: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
+        selectedNodes?: string[];
+        selectedEdges?: string[];
         createBackup?: boolean;
         conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
         restorationType?: "full" | "partial" | "selective";
         restorationStrategy?: "replace" | "merge" | "selective";
-        selectedNodes?: string[];
-        selectedEdges?: string[];
         preserveCurrentChanges?: boolean;
         notifyOnCompletion?: boolean;
     }, {
+        selectedNodes?: string[];
+        selectedEdges?: string[];
         createBackup?: boolean;
         conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
         restorationType?: "full" | "partial" | "selective";
         restorationStrategy?: "replace" | "merge" | "selective";
-        selectedNodes?: string[];
-        selectedEdges?: string[];
         preserveCurrentChanges?: boolean;
         notifyOnCompletion?: boolean;
     }>;
 }, "strip", z.ZodTypeAny, {
     config?: {
+        selectedNodes?: string[];
+        selectedEdges?: string[];
         createBackup?: boolean;
         conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
         restorationType?: "full" | "partial" | "selective";
         restorationStrategy?: "replace" | "merge" | "selective";
-        selectedNodes?: string[];
-        selectedEdges?: string[];
         preserveCurrentChanges?: boolean;
         notifyOnCompletion?: boolean;
     };
@@ -352,12 +352,12 @@ export declare const RestorationPreviewRequestSchema: z.ZodObject<{
     targetSnapshotId?: string;
 }, {
     config?: {
+        selectedNodes?: string[];
+        selectedEdges?: string[];
         createBackup?: boolean;
         conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
         restorationType?: "full" | "partial" | "selective";
         restorationStrategy?: "replace" | "merge" | "selective";
-        selectedNodes?: string[];
-        selectedEdges?: string[];
         preserveCurrentChanges?: boolean;
         notifyOnCompletion?: boolean;
     };
@@ -397,21 +397,21 @@ export declare const RestorationBookmarkRequestSchema: z.ZodObject<{
         createBackup: z.ZodDefault<z.ZodBoolean>;
         notifyOnCompletion: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
+        selectedNodes?: string[];
+        selectedEdges?: string[];
         createBackup?: boolean;
         conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
         restorationType?: "full" | "partial" | "selective";
         restorationStrategy?: "replace" | "merge" | "selective";
-        selectedNodes?: string[];
-        selectedEdges?: string[];
         preserveCurrentChanges?: boolean;
         notifyOnCompletion?: boolean;
     }, {
+        selectedNodes?: string[];
+        selectedEdges?: string[];
         createBackup?: boolean;
         conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
         restorationType?: "full" | "partial" | "selective";
         restorationStrategy?: "replace" | "merge" | "selective";
-        selectedNodes?: string[];
-        selectedEdges?: string[];
         preserveCurrentChanges?: boolean;
         notifyOnCompletion?: boolean;
     }>;
@@ -422,12 +422,12 @@ export declare const RestorationBookmarkRequestSchema: z.ZodObject<{
     sourceSnapshotId?: string;
     targetSnapshotId?: string;
     restorationConfig?: {
+        selectedNodes?: string[];
+        selectedEdges?: string[];
         createBackup?: boolean;
         conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
         restorationType?: "full" | "partial" | "selective";
         restorationStrategy?: "replace" | "merge" | "selective";
-        selectedNodes?: string[];
-        selectedEdges?: string[];
         preserveCurrentChanges?: boolean;
         notifyOnCompletion?: boolean;
     };
@@ -438,12 +438,12 @@ export declare const RestorationBookmarkRequestSchema: z.ZodObject<{
     sourceSnapshotId?: string;
     targetSnapshotId?: string;
     restorationConfig?: {
+        selectedNodes?: string[];
+        selectedEdges?: string[];
         createBackup?: boolean;
         conflictResolution?: Record<string, "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current">;
         restorationType?: "full" | "partial" | "selective";
         restorationStrategy?: "replace" | "merge" | "selective";
-        selectedNodes?: string[];
-        selectedEdges?: string[];
         preserveCurrentChanges?: boolean;
         notifyOnCompletion?: boolean;
     };

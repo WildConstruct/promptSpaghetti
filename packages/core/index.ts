@@ -45,6 +45,14 @@ export { KeyboardShortcutsManager } from './components/CommandPalette/KeyboardSh
 export { ProfessionalMenuBar } from './components/MenuBar/ProfessionalMenuBar';
 export type { MenuBarProps } from './components/MenuBar/ProfessionalMenuBar';
 
+// Epic 3: Integrated File Management System
+export { IntegratedFileBrowser } from './components/FileManagement/IntegratedFileBrowser';
+export type { IntegratedFileBrowserProps } from './components/FileManagement/IntegratedFileBrowser';
+export { RecentFilesPanel } from './components/FileManagement/RecentFilesPanel';
+export type { RecentFilesPanelProps } from './components/FileManagement/RecentFilesPanel';
+export { WorkspaceManager } from './components/FileManagement/WorkspaceManager';
+export type { WorkspaceManagerProps, WorkspaceSession } from './components/FileManagement/WorkspaceManager';
+
 // Project Management System exports
 export { ProjectManager } from './projectManager';
 export { ServerProjectManager } from './serverProjectManager';

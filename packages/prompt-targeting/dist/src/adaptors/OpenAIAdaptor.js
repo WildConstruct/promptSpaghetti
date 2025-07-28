@@ -99,7 +99,10 @@ export class OpenAIAdaptor extends BaseAdaptor {
         if (estimatedTokens > modelCapabilities.maxTokens * 0.8) {
             warnings.push({
                 code: 'CONTENT_TOO_LONG',
-                message: `Content may exceed model context limit (estimated: ${estimatedTokens} tokens, limit: ${modelCapabilities.maxTokens})`,
+                message: `Content may exceed model context limit (
+          estimated: ${estimatedTokens} tokens,
+          limit: ${modelCapabilities.maxTokens}
+        )`,
                 optimization: 'Consider breaking content into smaller chunks'
             });
         }

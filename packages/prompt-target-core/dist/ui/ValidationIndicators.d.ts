@@ -10,11 +10,7 @@ export declare class ValidationIndicators {
     /**
      * Create validation indicator for a graph element
      */
-    createIndicator(
-      elementId: string,
-      elementType: 'node' | 'edge' | 'graph',
-      results: ValidationResult[]
-    ): ValidationIndicator;
+    createIndicator(elementId: string, elementType: 'node' | 'edge' | 'graph', results: ValidationResult[]): ValidationIndicator;
     /**
      * Update indicator with new validation results
      */

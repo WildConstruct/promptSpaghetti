@@ -346,5 +346,8 @@ export interface StageProcessingResult {
 export interface MetricCalculator {
     calculate(events: FlexibleConversionEvent[], query: ConversionMetricQuery): Promise<number>;
 }
+export declare function createConversionAnalyticsInfrastructure(epic1Analytics: any, config: {
+    processing: ProcessingConfig;
+}): ConversionAnalyticsInfrastructure;
 export default ConversionAnalyticsInfrastructure;
 //# sourceMappingURL=ConversionAnalyticsInfrastructure.d.ts.map

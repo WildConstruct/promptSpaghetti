@@ -9,6 +9,13 @@ export { Palette } from './Palette';
 export { PreviewModal } from './PreviewModal';
 export { nodeSchemas } from './nodeSchemas';
 export { useGraphStore } from './graphStore';
+// Professional Interface Integration
+export { ProfessionalIntegration } from './components/CommandPalette/ProfessionalIntegration';
+export { CommandPalette } from './components/CommandPalette/CommandPalette';
+export { UndoRedoManager } from './components/CommandPalette/UndoRedoManager';
+export { MultiSelectionManager } from './components/CommandPalette/MultiSelectionManager';
+export { AutosaveManager } from './components/CommandPalette/AutosaveManager';
+export { KeyboardShortcutsManager } from './components/CommandPalette/KeyboardShortcutsManager';
 // Project Management System exports
 export { ProjectManager } from './projectManager';
 export { ServerProjectManager } from './serverProjectManager';

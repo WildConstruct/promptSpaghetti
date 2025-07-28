@@ -57,5 +57,13 @@ export interface CollaborativeGraphState {
     getMetrics: () => any;
     getSyncState: () => any;
 }
-export declare const crdtAdapter: GraphCRDTAdapter;
+export declare const useCollaborativeGraphStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<CollaborativeGraphState>, "subscribe"> & {
+    subscribe: {
+        (listener: (selectedState: CollaborativeGraphState, previousSelectedState: CollaborativeGraphState) => void): () => void;
+        <U>(selector: (state: CollaborativeGraphState) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
+            equalityFn?: (a: U, b: U) => boolean;
+            fireImmediately?: boolean;
+        }): () => void;
+    };
+}>;
 //# sourceMappingURL=collaborativeGraphStore.d.ts.map

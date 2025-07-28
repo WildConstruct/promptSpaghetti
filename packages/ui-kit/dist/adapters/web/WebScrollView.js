@@ -46,7 +46,7 @@ export const WebScrollView = forwardRef(({ children, horizontal = false, showsVe
         }),
         ...contentContainerStyle
     };
-    return (_jsxs("div", { ref: ref, className: `web-scroll-view ${className || ''}`, style: scrollViewStyles, ...props, children: [_jsx("div", { className: "web-scroll-view-content", style: contentStyles, children: children }), _jsx("style", { jsx: true, children: `
+    return (_jsxs("div", { ref: ref, className: `web-scroll-view ${className || ''}`, style: scrollViewStyles, ...props, children: [_jsx("div", { className: "web-scroll-view-content", style: contentStyles, children: children }), _jsx("style", { children: `
         .web-scroll-view::-webkit-scrollbar {
           width: ${showsVerticalScrollIndicator ? '8px' : '0px'};
           height: ${showsHorizontalScrollIndicator ? '8px' : '0px'};

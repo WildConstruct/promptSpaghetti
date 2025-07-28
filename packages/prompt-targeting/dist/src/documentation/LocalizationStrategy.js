@@ -339,57 +339,47 @@ export class DocumentationLocalizationStrategy {
         return [`Troubleshooting item 1 (${language})`];
     }
 }
+return 'en';
 /**
- * Default localization strategy instance
+ * Format text for RTL languages
  */
-export const defaultLocalizationStrategy = new DocumentationLocalizationStrategy();
-/**
- * Utility functions for localization
- */
-export const LocalizationUtils = {
-    /**
-     * Detect user's preferred language
-     */
-    detectLanguage() {
-        if (typeof navigator !== 'undefined') {
-            return navigator.language.split('-')[0];
-        }
-        return 'en';
-    },
-    /**
-     * Format text for RTL languages
-     */
-    formatTextForRTL(text, language, config) {
-        if (config.rtlLanguages.includes(language)) {
-            return `\u202E${text}\u202C`; // Right-to-left override
-        }
-        return text;
-    },
-    /**
-     * Validate language code format
-     */
-    isValidLanguageCode(code) {
-        const iso639Pattern = /^[a-z]{2}(-[A-Z]{2})?$/;
-        return iso639Pattern.test(code);
-    },
-    /**
-     * Get language display name
-     */
-    getLanguageDisplayName(code) {
-        const names = {
-            'en': 'English',
-            'es': 'Español',
-            'fr': 'Français',
-            'de': 'Deutsch',
-            'ja': '日本語',
-            'ko': '한국어',
-            'zh': '中文',
-            'pt': 'Português',
-            'ru': 'Русский',
-            'ar': 'العربية'
-        };
-        return names[code] || code;
+formatTextForRTL(text, string, language, string, config, LocalizationConfig);
+string;
+{
+    if (config.rtlLanguages.includes(language)) {
+        return `\u202E${text}\u202C`; // Right-to-left override
     }
-};
+    return text;
+}
+/**
+ * Validate language code format
+ */
+isValidLanguageCode(code, string);
+boolean;
+{
+    const iso639Pattern = /^[a-z]{2}(-[A-Z]{2})?$/;
+    return iso639Pattern.test(code);
+}
+/**
+ * Get language display name
+ */
+getLanguageDisplayName(code, string);
+string;
+{
+    const names = {
+        'en': 'English',
+        'es': 'Español',
+        'fr': 'Français',
+        'de': 'Deutsch',
+        'ja': '日本語',
+        'ko': '한국어',
+        'zh': '中文',
+        'pt': 'Português',
+        'ru': 'Русский',
+        'ar': 'العربية'
+    };
+    return names[code] || code;
+}
+;
 export default DocumentationLocalizationStrategy;
 //# sourceMappingURL=LocalizationStrategy.js.map

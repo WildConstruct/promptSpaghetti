@@ -331,7 +331,7 @@ export declare const BranchSyncOperationSchema: z.ZodObject<{
     sourceBranchId?: string;
     targetBranchId?: string;
     filesChanged?: number;
-    operationType?: "push" | "sync" | "merge" | "rebase" | "pull";
+    operationType?: "push" | "merge" | "sync" | "rebase" | "pull";
     operationStatus?: "pending" | "completed" | "failed" | "cancelled" | "in_progress";
     initiatedBy?: string;
     startedAt?: Date;
@@ -346,7 +346,7 @@ export declare const BranchSyncOperationSchema: z.ZodObject<{
     sourceBranchId?: string;
     targetBranchId?: string;
     filesChanged?: number;
-    operationType?: "push" | "sync" | "merge" | "rebase" | "pull";
+    operationType?: "push" | "merge" | "sync" | "rebase" | "pull";
     operationStatus?: "pending" | "completed" | "failed" | "cancelled" | "in_progress";
     initiatedBy?: string;
     startedAt?: Date;
@@ -570,12 +570,12 @@ export declare const SyncBranchRequestSchema: z.ZodObject<{
     conflictResolution?: Record<string, unknown>;
     branchId?: string;
     sourceBranchId?: string;
-    operationType?: "push" | "sync" | "merge" | "rebase" | "pull";
+    operationType?: "push" | "merge" | "sync" | "rebase" | "pull";
 }, {
     conflictResolution?: Record<string, unknown>;
     branchId?: string;
     sourceBranchId?: string;
-    operationType?: "push" | "sync" | "merge" | "rebase" | "pull";
+    operationType?: "push" | "merge" | "sync" | "rebase" | "pull";
 }>;
 export declare const BranchFilterSchema: z.ZodObject<{
     projectId: z.ZodOptional<z.ZodString>;

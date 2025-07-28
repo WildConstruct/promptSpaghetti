@@ -17,37 +17,11 @@ export type { ContextMenuItem, TouchContextMenuProps, ContextMenuProviderProps }
 export { TouchContextMenu, ContextMenuProvider, graphContextMenuItems } from './TouchContextMenu';
 /**
  * Touch interaction system initialization
+ * @deprecated This function has implementation issues and will be fixed in a future version
  */
 export declare function initializeTouchSystem(options?: {
     enableHaptics?: boolean;
     enableDebugging?: boolean;
     customGestureConfig?: any;
 }): void;
-/**
- * Touch device detection utilities
- */
-export declare const touchUtils: {
-    /**
-     * Check if device supports touch
-     */
-    isTouchDevice(): boolean;
-    /**
-     * Check if device supports haptic feedback
-     */
-    supportsHaptics(): boolean;
-    /**
-     * Check if device supports force touch
-     */
-    supportsForceTouch(): boolean;
-    /**
-     * Get touch capabilities
-     */
-    getTouchCapabilities(): {
-        touch: boolean;
-        multiTouch: boolean;
-        haptics: boolean;
-        forceTouch: boolean;
-        maxTouchPoints: number;
-    };
-};
 //# sourceMappingURL=index.d.ts.map

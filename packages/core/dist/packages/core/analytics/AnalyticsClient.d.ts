@@ -169,4 +169,8 @@ export declare class AnalyticsClient extends EventEmitter {
      */
     private setupCacheCleanup;
 }
+/**
+ * Default analytics client instance
+ */
+export declare const defaultAnalyticsClient: AnalyticsClient;
 //# sourceMappingURL=AnalyticsClient.d.ts.map

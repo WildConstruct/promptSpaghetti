@@ -9,11 +9,7 @@ export declare class DocumentationGenerator {
     /**
      * Generate comprehensive documentation for an adaptor
      */
-    generateAdaptorDocumentation(
-      adaptor: ModelAdaptor,
-      testResults?: AdaptorTestResults,
-      options?: DocumentationOptions
-    ): Promise<AdaptorDocumentation>;
+    generateAdaptorDocumentation(adaptor: ModelAdaptor, testResults?: AdaptorTestResults, options?: DocumentationOptions): Promise<AdaptorDocumentation>;
     /**
      * Generate overview section
      */

@@ -42,7 +42,7 @@ export declare class WebAdapter implements PlatformAdapter {
     }) => {
         duration: number;
         easing: string;
-        fill: "backwards" | "both" | "forwards";
+        fill: "both" | "backwards" | "forwards";
     };
     ScrollView: string;
     SafeAreaView: string;

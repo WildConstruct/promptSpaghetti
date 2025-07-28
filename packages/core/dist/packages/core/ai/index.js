@@ -32,15 +32,14 @@ export { default as ConfigurationManager } from './ConfigurationManager';
 export { default as ImageProcessor } from './utils/ImageProcessor';
 // Performance optimization exports
 export * from './performance';
-;
-;
-;
-factory.registerModel(registration);
-return factory.createModel({
-    id,
-    type: 'text',
-    provider: 'custom',
-    endpoint,
-    apiKey
-});
+export function registerAndCreateModel(factory, registration, id, endpoint, apiKey) {
+    factory.registerModel(registration);
+    return factory.createModel({
+        id,
+        type: 'text',
+        provider: 'custom',
+        endpoint,
+        apiKey
+    });
+}
 ;

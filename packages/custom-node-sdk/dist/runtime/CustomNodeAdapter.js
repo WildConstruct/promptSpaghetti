@@ -2,7 +2,7 @@
  * @fileoverview CustomNodeAdapter - Bridges custom nodes with PromptScape runtime
  * Wraps custom nodes to integrate with the AdvancedRuntimeNode system
  */
-import { AdvancedRuntimeNode } from '@prompt-spaghetti/graph-core';
+import { AdvancedRuntimeNode } from '@promptscape/core';
 import { SecurityManager } from './SecurityManager';
 import { ValidationEngine } from './ValidationEngine';
 /**
@@ -16,9 +16,9 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
     constructor(id, customNode, customConfig) {
         // Convert CustomNodeConfig to AdvancedNodeConfig
         const advancedConfig = {
-            deterministic: customConfig.deterministic,
-            cacheable: customConfig.cacheable,
-            stateful: customConfig.stateful,
+            deterministic: customConfig.deterministic ?? true,
+            cacheable: customConfig.cacheable ?? true,
+            stateful: customConfig.stateful ?? false,
             performanceHints: customConfig.performanceHints
         };
         super(id, advancedConfig);
@@ -129,7 +129,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
      * Create a CustomNodeRuntime instance for the custom node
      */
     createCustomRuntime(ctx, inputs) {
-        const nodeId = this.nodeId;
+        const nodeId = this.id;
         return {
             context: ctx,
             inputs,
@@ -169,7 +169,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
             if (!ctx.executionMeta.nodeStats) {
                 ctx.executionMeta.nodeStats = new Map();
             }
-            ctx.executionMeta.nodeStats.set(this.nodeId, {
+            ctx.executionMeta.nodeStats.set(this.id, {
                 executionTime,
                 memoryUsed: metadata?.memoryUsed || 0,
                 customMetrics: metadata?.metrics || {}
@@ -180,13 +180,13 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
      * Log execution errors with context
      */
     logExecutionError(ctx, error, executionTime) {
-        console.error(`[${this.nodeId}] Execution failed after ${executionTime}ms:`, error);
+        console.error(`[${this.id}] Execution failed after ${executionTime}ms:`, error);
         if (ctx.executionMeta) {
             if (!ctx.executionMeta.errors) {
                 ctx.executionMeta.errors = [];
             }
             ctx.executionMeta.errors.push({
-                nodeId: this.nodeId,
+                nodeId: this.id,
                 error: error.message,
                 timestamp: new Date().toISOString(),
                 executionTime

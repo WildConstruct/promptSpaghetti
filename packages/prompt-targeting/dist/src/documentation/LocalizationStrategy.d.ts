@@ -126,13 +126,7 @@ export declare class DocumentationLocalizationStrategy {
     /**
      * Get localized string with fallback support
      */
-    getLocalizedString(
-      key: string,
-      language: string,
-      section?: keyof DocumentationTranslation['content'],
-      interpolations?: Record<string,
-      string>
-    ): Promise<string>;
+    getLocalizedString(key: string, language: string, section?: keyof DocumentationTranslation['content'], interpolations?: Record<string, string>): Promise<string>;
     /**
      * Load cultural adaptation for specific locale
      */
@@ -197,30 +191,5 @@ export declare class DocumentationLocalizationStrategy {
     private generateLocalizedExamples;
     private generateLocalizedTroubleshooting;
 }
-/**
- * Default localization strategy instance
- */
-export declare const defaultLocalizationStrategy: DocumentationLocalizationStrategy;
-/**
- * Utility functions for localization
- */
-export declare const LocalizationUtils: {
-    /**
-     * Detect user's preferred language
-     */
-    detectLanguage(): string;
-    /**
-     * Format text for RTL languages
-     */
-    formatTextForRTL(text: string, language: string, config: LocalizationConfig): string;
-    /**
-     * Validate language code format
-     */
-    isValidLanguageCode(code: string): boolean;
-    /**
-     * Get language display name
-     */
-    getLanguageDisplayName(code: string): string;
-};
 export default DocumentationLocalizationStrategy;
 //# sourceMappingURL=LocalizationStrategy.d.ts.map

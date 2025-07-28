@@ -10,7 +10,7 @@ export class RedisTranslationCache {
     client;
     config;
     connected = false;
-    stats = {
+    metrics = {
         hits: 0,
         misses: 0,
         sets: 0,
@@ -69,23 +69,23 @@ export class RedisTranslationCache {
      */
     async get(key) {
         if (!this.connected) {
-            this.stats.misses++;
+            this.metrics.misses++;
             return null;
         }
         try {
             const fullKey = this.buildKey(key);
             const value = await this.client.get(fullKey);
             if (value === null) {
-                this.stats.misses++;
+                this.metrics.misses++;
                 return null;
             }
-            this.stats.hits++;
+            this.metrics.hits++;
             const parsed = await this.deserializeValue(value);
             this.logger.log(`Cache hit for key: ${key}`);
             return parsed;
         }
         catch (error) {
-            this.stats.errors++;
+            this.metrics.errors++;
             this.logger.error(`Cache get error for key ${key}:`, error);
             return null;
         }
@@ -102,11 +102,11 @@ export class RedisTranslationCache {
             const serialized = await this.serializeValue(value);
             const expiration = ttl || this.config.defaultTTL;
             await this.client.setEx(fullKey, expiration, serialized);
-            this.stats.sets++;
+            this.metrics.sets++;
             this.logger.log(`Cached translation for key: ${key} (TTL: ${expiration}s)`);
         }
         catch (error) {
-            this.stats.errors++;
+            this.metrics.errors++;
             this.logger.error(`Cache set error for key ${key}:`, error);
         }
     }
@@ -123,7 +123,7 @@ export class RedisTranslationCache {
             return exists === 1;
         }
         catch (error) {
-            this.stats.errors++;
+            this.metrics.errors++;
             this.logger.error(`Cache exists check error for key ${key}:`, error);
             return false;
         }
@@ -138,11 +138,11 @@ export class RedisTranslationCache {
         try {
             const fullKey = this.buildKey(key);
             await this.client.del(fullKey);
-            this.stats.deletes++;
+            this.metrics.deletes++;
             this.logger.log(`Deleted cache entry for key: ${key}`);
         }
         catch (error) {
-            this.stats.errors++;
+            this.metrics.errors++;
             this.logger.error(`Cache delete error for key ${key}:`, error);
         }
     }
@@ -162,7 +162,7 @@ export class RedisTranslationCache {
             }
         }
         catch (error) {
-            this.stats.errors++;
+            this.metrics.errors++;
             this.logger.error('Cache clear error:', error);
         }
     }
@@ -181,11 +181,11 @@ export class RedisTranslationCache {
                 this.logger.error('Error getting cache size:', error);
             }
         }
-        const totalRequests = this.stats.hits + this.stats.misses;
-        const hitRate = totalRequests > 0 ? this.stats.hits / totalRequests : 0;
+        const totalRequests = this.metrics.hits + this.metrics.misses;
+        const hitRate = totalRequests > 0 ? this.metrics.hits / totalRequests : 0;
         return {
-            hits: this.stats.hits,
-            misses: this.stats.misses,
+            hits: this.metrics.hits,
+            misses: this.metrics.misses,
             size,
             hitRate
         };
@@ -218,9 +218,9 @@ export class RedisTranslationCache {
         }
         return {
             ...basicStats,
-            sets: this.stats.sets,
-            deletes: this.stats.deletes,
-            errors: this.stats.errors,
+            sets: this.metrics.sets,
+            deletes: this.metrics.deletes,
+            errors: this.metrics.errors,
             connected: this.connected,
             ...redisInfo
         };
@@ -237,7 +237,7 @@ export class RedisTranslationCache {
             await this.client.expire(fullKey, ttl);
         }
         catch (error) {
-            this.stats.errors++;
+            this.metrics.errors++;
             this.logger.error(`Cache expire error for key ${key}:`, error);
         }
     }
@@ -253,7 +253,7 @@ export class RedisTranslationCache {
             return await this.client.ttl(fullKey);
         }
         catch (error) {
-            this.stats.errors++;
+            this.metrics.errors++;
             this.logger.error(`Cache TTL error for key ${key}:`, error);
             return -1;
         }

@@ -376,9 +376,9 @@ export declare const NodeAddOperationSchema: z.ZodObject<{
     dependencies?: string[];
     initialData?: Record<string, unknown>;
     parentId?: string;
+    documentId?: string;
     clientId?: string;
     operationId?: string;
-    documentId?: string;
     operationVector?: Record<string, number>;
 }, {
     priority?: OperationPriority;
@@ -394,9 +394,9 @@ export declare const NodeAddOperationSchema: z.ZodObject<{
     dependencies?: string[];
     initialData?: Record<string, unknown>;
     parentId?: string;
+    documentId?: string;
     clientId?: string;
     operationId?: string;
-    documentId?: string;
     operationVector?: Record<string, number>;
 }>;
 /**
@@ -425,9 +425,9 @@ export declare const NodeUpdateOperationSchema: z.ZodObject<{
     userId?: string;
     nodeId?: string;
     dependencies?: string[];
+    documentId?: string;
     clientId?: string;
     operationId?: string;
-    documentId?: string;
     operationVector?: Record<string, number>;
     propertyPath?: string[];
     oldValue?: unknown;
@@ -441,9 +441,9 @@ export declare const NodeUpdateOperationSchema: z.ZodObject<{
     userId?: string;
     nodeId?: string;
     dependencies?: string[];
+    documentId?: string;
     clientId?: string;
     operationId?: string;
-    documentId?: string;
     operationVector?: Record<string, number>;
     propertyPath?: string[];
     oldValue?: unknown;
@@ -479,11 +479,11 @@ export declare const EdgeAddOperationSchema: z.ZodObject<{
     userId?: string;
     edgeId?: string;
     dependencies?: string[];
+    documentId?: string;
     clientId?: string;
     sourcePort?: string;
     targetPort?: string;
     operationId?: string;
-    documentId?: string;
     operationVector?: Record<string, number>;
     sourceNodeId?: string;
     targetNodeId?: string;
@@ -496,11 +496,11 @@ export declare const EdgeAddOperationSchema: z.ZodObject<{
     userId?: string;
     edgeId?: string;
     dependencies?: string[];
+    documentId?: string;
     clientId?: string;
     sourcePort?: string;
     targetPort?: string;
     operationId?: string;
-    documentId?: string;
     operationVector?: Record<string, number>;
     sourceNodeId?: string;
     targetNodeId?: string;
@@ -547,9 +547,9 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     dependencies?: string[];
     initialData?: Record<string, unknown>;
     parentId?: string;
+    documentId?: string;
     clientId?: string;
     operationId?: string;
-    documentId?: string;
     operationVector?: Record<string, number>;
 }, {
     priority?: OperationPriority;
@@ -565,9 +565,9 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     dependencies?: string[];
     initialData?: Record<string, unknown>;
     parentId?: string;
+    documentId?: string;
     clientId?: string;
     operationId?: string;
-    documentId?: string;
     operationVector?: Record<string, number>;
 }>, z.ZodObject<{
     type: z.ZodLiteral<"NODE_UPDATE">;
@@ -592,9 +592,9 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     userId?: string;
     nodeId?: string;
     dependencies?: string[];
+    documentId?: string;
     clientId?: string;
     operationId?: string;
-    documentId?: string;
     operationVector?: Record<string, number>;
     propertyPath?: string[];
     oldValue?: unknown;
@@ -608,9 +608,9 @@ export declare const MutationOperationSchema: z.ZodDiscriminatedUnion<"type", [z
     userId?: string;
     nodeId?: string;
     dependencies?: string[];
+    documentId?: string;
     clientId?: string;
     operationId?: string;
-    documentId?: string;
     operationVector?: Record<string, number>;
     propertyPath?: string[];
     oldValue?: unknown;
@@ -696,9 +696,9 @@ declare const _default: {
         dependencies?: string[];
         initialData?: Record<string, unknown>;
         parentId?: string;
+        documentId?: string;
         clientId?: string;
         operationId?: string;
-        documentId?: string;
         operationVector?: Record<string, number>;
     }, {
         priority?: OperationPriority;
@@ -714,9 +714,9 @@ declare const _default: {
         dependencies?: string[];
         initialData?: Record<string, unknown>;
         parentId?: string;
+        documentId?: string;
         clientId?: string;
         operationId?: string;
-        documentId?: string;
         operationVector?: Record<string, number>;
     }>;
     NodeUpdateOperationSchema: z.ZodObject<{
@@ -742,9 +742,9 @@ declare const _default: {
         userId?: string;
         nodeId?: string;
         dependencies?: string[];
+        documentId?: string;
         clientId?: string;
         operationId?: string;
-        documentId?: string;
         operationVector?: Record<string, number>;
         propertyPath?: string[];
         oldValue?: unknown;
@@ -758,9 +758,9 @@ declare const _default: {
         userId?: string;
         nodeId?: string;
         dependencies?: string[];
+        documentId?: string;
         clientId?: string;
         operationId?: string;
-        documentId?: string;
         operationVector?: Record<string, number>;
         propertyPath?: string[];
         oldValue?: unknown;
@@ -793,11 +793,11 @@ declare const _default: {
         userId?: string;
         edgeId?: string;
         dependencies?: string[];
+        documentId?: string;
         clientId?: string;
         sourcePort?: string;
         targetPort?: string;
         operationId?: string;
-        documentId?: string;
         operationVector?: Record<string, number>;
         sourceNodeId?: string;
         targetNodeId?: string;
@@ -810,11 +810,11 @@ declare const _default: {
         userId?: string;
         edgeId?: string;
         dependencies?: string[];
+        documentId?: string;
         clientId?: string;
         sourcePort?: string;
         targetPort?: string;
         operationId?: string;
-        documentId?: string;
         operationVector?: Record<string, number>;
         sourceNodeId?: string;
         targetNodeId?: string;
@@ -858,9 +858,9 @@ declare const _default: {
         dependencies?: string[];
         initialData?: Record<string, unknown>;
         parentId?: string;
+        documentId?: string;
         clientId?: string;
         operationId?: string;
-        documentId?: string;
         operationVector?: Record<string, number>;
     }, {
         priority?: OperationPriority;
@@ -876,9 +876,9 @@ declare const _default: {
         dependencies?: string[];
         initialData?: Record<string, unknown>;
         parentId?: string;
+        documentId?: string;
         clientId?: string;
         operationId?: string;
-        documentId?: string;
         operationVector?: Record<string, number>;
     }>, z.ZodObject<{
         type: z.ZodLiteral<"NODE_UPDATE">;
@@ -903,9 +903,9 @@ declare const _default: {
         userId?: string;
         nodeId?: string;
         dependencies?: string[];
+        documentId?: string;
         clientId?: string;
         operationId?: string;
-        documentId?: string;
         operationVector?: Record<string, number>;
         propertyPath?: string[];
         oldValue?: unknown;
@@ -919,9 +919,9 @@ declare const _default: {
         userId?: string;
         nodeId?: string;
         dependencies?: string[];
+        documentId?: string;
         clientId?: string;
         operationId?: string;
-        documentId?: string;
         operationVector?: Record<string, number>;
         propertyPath?: string[];
         oldValue?: unknown;

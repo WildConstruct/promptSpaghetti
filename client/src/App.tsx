@@ -8,6 +8,8 @@ import EnhancedGraphEditor from './components/EnhancedGraphEditor';
 import { NodePrototypePage } from './components/NodePrototype';
 import { ProfessionalMenuBar } from '../../packages/core/components/MenuBar/ProfessionalMenuBar';
 import { KeyboardShortcutsManager } from '../../packages/core/components/CommandPalette/KeyboardShortcutsManager';
+import { CommandPalette } from '../../packages/core/components/CommandPalette/CommandPalette';
+import { IntegratedFileBrowser, PSGFile, ProjectManager } from '../../packages/core';
 
 interface GraphEditorProps {
   initialNodes?: unknown[];
@@ -102,6 +104,16 @@ function MainApp(): React.ReactElement {
   const [minimapVisible, setMinimapVisible] = useState(true);
   const [inspectorVisible, setInspectorVisible] = useState(true);
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [selectedProjectFile, setSelectedProjectFile] = useState<PSGFile | null>(null);
+  const [recentFiles, setRecentFiles] = useState<PSGFile[]>([]);
+  
+  const projectManager = ProjectManager.getInstance();
+
+  // Load recent files on mount
+  useEffect(() => {
+    setRecentFiles(projectManager.getRecentFiles(10));
+  }, [projectManager]);
 
   // Determine active tab based on current route (simplified, no auth)
   const getActiveTab = (): string => {
@@ -143,9 +155,9 @@ function MainApp(): React.ReactElement {
     }, [navigate]),
     
     onOpen: useCallback(() => {
-      // TODO: Integrate with file browser
-      console.log('Open file');
-    }, []),
+      // Switch to Files tab to enable file selection
+      handleTabChange('files');
+    }, [handleTabChange]),
     
     onSave: useCallback(() => {
       // TODO: Integrate with save system
@@ -263,10 +275,230 @@ function MainApp(): React.ReactElement {
     }, []),
     
     onCommandPalette: useCallback(() => {
-      // TODO: Integrate with command palette
-      console.log('Open command palette');
+      setShowCommandPalette(true);
     }, []),
   };
+
+  // File browser handlers
+  const fileBrowserHandlers = {
+    onFileSelected: useCallback((file: PSGFile) => {
+      setSelectedProjectFile(file);
+    }, []),
+
+    onProjectLoad: useCallback((file: PSGFile) => {
+      // TODO: Integrate with ProjectManager to load .psg file
+      console.log('Loading project:', file.name);
+      // Add to recent files
+      projectManager.addToRecentFiles(file);
+      setRecentFiles(projectManager.getRecentFiles(10));
+      // This would involve deserializing the .psg file and setting the graph data
+      // For now, just show feedback
+      alert(`Loading project: ${file.name}\n\nProject loading integration coming soon!`);
+      navigate('/'); // Switch to editor tab
+    }, [navigate, projectManager]),
+
+    onNewProject: useCallback(() => {
+      if (confirm('Create a new project? Any unsaved changes will be lost.')) {
+        setGeneratedGraph(null);
+        setSelectedProjectFile(null);
+        navigate('/');
+      }
+    }, [navigate]),
+
+    onFileAction: useCallback((action: string, file: PSGFile) => {
+      console.log(`File action: ${action}`, file);
+      // Handle file actions like delete, rename, duplicate
+    }, []),
+
+    onRecentFileLoad: useCallback((file: PSGFile) => {
+      // Load recent file directly
+      projectManager.addToRecentFiles(file);
+      setRecentFiles(projectManager.getRecentFiles(10));
+      alert(`Loading recent project: ${file.name}\n\nProject loading integration coming soon!`);
+      navigate('/'); // Switch to editor tab
+    }, [navigate, projectManager])
+  };
+
+  // Command palette specific handlers
+  const commandPaletteHandlers = {
+    onClose: useCallback(() => {
+      setShowCommandPalette(false);
+    }, []),
+    
+    onGenerationStart: useCallback(async (flow: any, params: Record<string, any>) => {
+      // TODO: Integrate with generation flows
+      console.log('Starting generation flow:', flow.name, params);
+      setShowCommandPalette(false);
+    }, []),
+    
+    onNodeCreate: useCallback((nodeType: string, position: { x: number; y: number }, data?: any) => {
+      // TODO: Integrate with node creation
+      console.log('Creating node:', nodeType, position, data);
+      setShowCommandPalette(false);
+    }, []),
+    
+    onNodeDelete: useCallback((nodeIds: string[]) => {
+      // TODO: Integrate with node deletion
+      console.log('Deleting nodes:', nodeIds);
+      setShowCommandPalette(false);
+    }, []),
+    
+    onTemplateApply: useCallback((templateId: string) => {
+      // TODO: Integrate with template system
+      console.log('Applying template:', templateId);
+      setShowCommandPalette(false);
+    }, []),
+  };
+
+  // Custom actions for command palette that integrate with menu bar
+  const customCommandPaletteActions = [
+    // File operations
+    {
+      id: 'file-new',
+      title: 'New Graph',
+      description: 'Create a new graph project',
+      category: 'editing' as const,
+      icon: '📄',
+      shortcut: '⌘N',
+      keywords: ['new', 'create', 'file'],
+      action: () => {
+        setShowCommandPalette(false);
+        menuBarHandlers.onNew();
+      }
+    },
+    {
+      id: 'file-open',
+      title: 'Open Graph',
+      description: 'Open an existing graph project',
+      category: 'editing' as const,
+      icon: '📂',
+      shortcut: '⌘O',
+      keywords: ['open', 'load', 'file'],
+      action: () => {
+        setShowCommandPalette(false);
+        menuBarHandlers.onOpen();
+      }
+    },
+    {
+      id: 'file-save',
+      title: 'Save Graph',
+      description: 'Save the current graph project',
+      category: 'editing' as const,
+      icon: '💾',
+      shortcut: '⌘S',
+      keywords: ['save', 'file'],
+      action: () => {
+        setShowCommandPalette(false);
+        menuBarHandlers.onSave();
+      }
+    },
+    {
+      id: 'export-json',
+      title: 'Export as JSON',
+      description: 'Export graph to JSON format',
+      category: 'export' as const,
+      icon: '📦',
+      keywords: ['export', 'json', 'download'],
+      action: () => {
+        setShowCommandPalette(false);
+        menuBarHandlers.onExport('json');
+      }
+    },
+    
+    // View operations
+    {
+      id: 'view-fit',
+      title: 'Fit View',
+      description: 'Fit entire graph in view',
+      category: 'navigation' as const,
+      icon: '🔍',
+      shortcut: '⌘0',
+      keywords: ['fit', 'view', 'zoom', 'center'],
+      action: () => {
+        setShowCommandPalette(false);
+        menuBarHandlers.onFitView();
+      }
+    },
+    {
+      id: 'view-fullscreen',
+      title: 'Toggle Fullscreen',
+      description: 'Enter or exit fullscreen mode',
+      category: 'navigation' as const,
+      icon: '⛶',
+      shortcut: 'Alt+F',
+      keywords: ['fullscreen', 'full', 'screen', 'maximize'],
+      action: () => {
+        setShowCommandPalette(false);
+        menuBarHandlers.onToggleFullscreen();
+      }
+    },
+    {
+      id: 'theme-switch',
+      title: 'Switch Theme',
+      description: 'Change application theme',
+      category: 'editing' as const,
+      icon: '🎨',
+      keywords: ['theme', 'appearance', 'dark', 'light', 'cinema'],
+      action: () => {
+        setShowCommandPalette(false);
+        const nextTheme = theme === 'cinema' ? 'dark' : theme === 'dark' ? 'light' : 'cinema';
+        menuBarHandlers.onToggleTheme(nextTheme);
+      }
+    },
+    
+    // Navigation
+    {
+      id: 'nav-randomizer',
+      title: 'Go to LLM Randomizer',
+      description: 'Switch to the LLM Randomizer tab',
+      category: 'navigation' as const,
+      icon: '🎲',
+      keywords: ['randomizer', 'llm', 'navigate', 'tab'],
+      action: () => {
+        setShowCommandPalette(false);
+        menuBarHandlers.onViewRandomizer();
+      }
+    },
+    {
+      id: 'nav-files',
+      title: 'Go to Files',
+      description: 'Switch to the Files browser tab',
+      category: 'navigation' as const,
+      icon: '📁',
+      keywords: ['files', 'browser', 'navigate', 'tab'],
+      action: () => {
+        setShowCommandPalette(false);
+        menuBarHandlers.onViewFiles();
+      }
+    },
+    
+    // Help
+    {
+      id: 'help-shortcuts',
+      title: 'Show Keyboard Shortcuts',
+      description: 'Display keyboard shortcuts help',
+      category: 'navigation' as const,
+      icon: '⌨️',
+      shortcut: '?',
+      keywords: ['help', 'shortcuts', 'keyboard', 'keys'],
+      action: () => {
+        setShowCommandPalette(false);
+        menuBarHandlers.onKeyboardShortcuts();
+      }
+    },
+    {
+      id: 'help-about',
+      title: 'About',
+      description: 'Show application information',
+      category: 'navigation' as const,
+      icon: 'ℹ️',
+      keywords: ['about', 'info', 'version'],
+      action: () => {
+        setShowCommandPalette(false);
+        menuBarHandlers.onAbout();
+      }
+    }
+  ];
 
 
   return (
@@ -274,6 +506,7 @@ function MainApp(): React.ReactElement {
       {/* Professional Menu Bar */}
       <ProfessionalMenuBar
         {...menuBarHandlers}
+        onRecentFileLoad={fileBrowserHandlers.onRecentFileLoad}
         theme={theme}
         isFullscreen={isFullscreen}
         gridVisible={gridVisible}
@@ -281,6 +514,7 @@ function MainApp(): React.ReactElement {
         inspectorVisible={inspectorVisible}
         nodes={[]}
         edges={[]}
+        recentFiles={recentFiles}
       />
       
       {/* Keyboard Shortcuts Manager */}
@@ -302,6 +536,17 @@ function MainApp(): React.ReactElement {
         theme={theme}
       />
       
+      {/* Command Palette */}
+      <CommandPalette
+        isOpen={showCommandPalette}
+        nodes={[]}
+        edges={[]}
+        selectedNodes={[]}
+        onExport={menuBarHandlers.onExport}
+        customActions={customCommandPaletteActions}
+        {...commandPaletteHandlers}
+      />
+      
       {/* Tab Content Area - now hidden behind menu bar */}
       <div style={{ 
         display: 'flex', 
@@ -319,7 +564,10 @@ function MainApp(): React.ReactElement {
               padding: '8px 16px',
               border: 'none',
               backgroundColor: activeTab === 'editor' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
-              borderBottom: activeTab === 'editor' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
+              borderBottom: activeTab === 'editor' ? '2px solid var(
+                --color-accent-orange,
+                #ff7c00
+              )' : '2px solid transparent',
               cursor: 'pointer',
               fontSize: '12px',
               fontWeight: activeTab === 'editor' ? 'bold' : 'normal',
@@ -334,7 +582,10 @@ function MainApp(): React.ReactElement {
               padding: '8px 16px',
               border: 'none',
               backgroundColor: activeTab === 'randomizer' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
-              borderBottom: activeTab === 'randomizer' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
+              borderBottom: activeTab === 'randomizer' ? '2px solid var(
+                --color-accent-orange,
+                #ff7c00
+              )' : '2px solid transparent',
               cursor: 'pointer',
               fontSize: '12px',
               fontWeight: activeTab === 'randomizer' ? 'bold' : 'normal',
@@ -349,7 +600,10 @@ function MainApp(): React.ReactElement {
               padding: '8px 16px',
               border: 'none',
               backgroundColor: activeTab === 'files' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
-              borderBottom: activeTab === 'files' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
+              borderBottom: activeTab === 'files' ? '2px solid var(
+                --color-accent-orange,
+                #ff7c00
+              )' : '2px solid transparent',
               cursor: 'pointer',
               fontSize: '12px',
               fontWeight: activeTab === 'files' ? 'bold' : 'normal',
@@ -364,7 +618,10 @@ function MainApp(): React.ReactElement {
               padding: '8px 16px',
               border: 'none',
               backgroundColor: activeTab === 'prototype' ? 'var(--color-bg-primary, #1e1e1e)' : 'transparent',
-              borderBottom: activeTab === 'prototype' ? '2px solid var(--color-accent-orange, #ff7c00)' : '2px solid transparent',
+              borderBottom: activeTab === 'prototype' ? '2px solid var(
+                --color-accent-orange,
+                #ff7c00
+              )' : '2px solid transparent',
               cursor: 'pointer',
               fontSize: '12px',
               fontWeight: activeTab === 'prototype' ? 'bold' : 'normal',
@@ -376,7 +633,10 @@ function MainApp(): React.ReactElement {
         </div>
           
         {/* Status indicator */}
-        <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', color: 'var(--color-text-secondary, #666)', fontSize: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', color: 'var(
+          --color-text-secondary,
+          #666
+        )', fontSize: '12px' }}>
           {isEnhancedMode ? '🚀 Core Enhanced' : '🎨 Professional Mode'} | {theme === 'cinema' ? '🎬 Cinema 4D' : theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
         </div>
       </div>
@@ -404,88 +664,13 @@ function MainApp(): React.ReactElement {
         ) : activeTab === 'prototype' ? (
           <NodePrototypePage />
         ) : (
-          <div style={{ 
-            padding: '20px', 
-            height: '100%', 
-            overflow: 'auto',
-            backgroundColor: 'var(--color-bg-primary, #1e1e1e)',
-            color: 'var(--color-text-primary, #e8e8e8)'
-          }}>
-            <div style={{
-              fontSize: '24px',
-              fontWeight: 'bold',
-              marginBottom: '20px',
-              color: 'var(--color-text-primary, #e8e8e8)'
-            }}>
-              📁 File Browser
-            </div>
-            <div style={{
-              fontSize: '16px',
-              color: 'var(--color-text-secondary, #b8b8b8)',
-              marginBottom: '30px'
-            }}>
-              Manage your saved graphs and project files
-            </div>
-            
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-              gap: '16px',
-              marginBottom: '30px'
-            }}>
-              <div style={{
-                background: 'var(--color-bg-secondary, #2a2a2a)',
-                border: '1px solid var(--color-ui-border, #404040)',
-                borderRadius: '8px',
-                padding: '16px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}>
-                <div style={{ fontSize: '18px', marginBottom: '8px' }}>📊 Recent Graphs</div>
-                <div style={{ fontSize: '14px', color: 'var(--color-text-secondary, #b8b8b8)' }}>
-                  View and load recently saved graphs
-                </div>
-              </div>
-              
-              <div style={{
-                background: 'var(--color-bg-secondary, #2a2a2a)',
-                border: '1px solid var(--color-ui-border, #404040)',
-                borderRadius: '8px',
-                padding: '16px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}>
-                <div style={{ fontSize: '18px', marginBottom: '8px' }}>📂 Project Templates</div>
-                <div style={{ fontSize: '14px', color: 'var(--color-text-secondary, #b8b8b8)' }}>
-                  Browse pre-built graph templates
-                </div>
-              </div>
-              
-              <div style={{
-                background: 'var(--color-bg-secondary, #2a2a2a)',
-                border: '1px solid var(--color-ui-border, #404040)',
-                borderRadius: '8px',
-                padding: '16px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}>
-                <div style={{ fontSize: '18px', marginBottom: '8px' }}>💾 Export/Import</div>
-                <div style={{ fontSize: '14px', color: 'var(--color-text-secondary, #b8b8b8)' }}>
-                  Manage file imports and exports
-                </div>
-              </div>
-            </div>
-            
-            <div style={{
-              fontSize: '14px',
-              color: 'var(--color-text-secondary, #b8b8b8)',
-              fontStyle: 'italic',
-              textAlign: 'center',
-              padding: '20px'
-            }}>
-              Professional file management coming soon - use save/load in the Graph Editor for now
-            </div>
-          </div>
+          <IntegratedFileBrowser
+            theme={theme}
+            height="100%"
+            showCreateControls={true}
+            currentProject={selectedProjectFile?.name}
+            {...fileBrowserHandlers}
+          />
         )}
       </div>
     </div>

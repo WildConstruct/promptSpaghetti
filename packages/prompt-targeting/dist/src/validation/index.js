@@ -224,49 +224,36 @@ function estimateTokenCount(graph) {
     return Math.ceil(totalLength / 4);
 }
 /**
- * Validation utility functions
+ * Get the most critical issues from a validation report
  */
-export const ValidationUtils = {
-    detectPlatformFromGraph,
-    generateBasicCapabilities,
-    calculateBasicComplexity,
-    estimateTokenCount,
-    /**
-     * Check if a validation report indicates the graph is ready for production
-     */
-    isProductionReady(report) {
-        return report.valid &&
-            report.score >= 80 &&
-            report.summary.critical === 0 &&
-            report.summary.errors === 0;
-    },
-    /**
-     * Get the most critical issues from a validation report
-     */
-    getCriticalIssues(report) {
-        return report.results
-            .filter(r => !r.result.passed && (r.severity === ValidationSeverity.CRITICAL || r.severity === ValidationSeverity.ERROR))
-            .map(r => r.result.message);
-    },
-    /**
-     * Generate a summary string from a validation report
-     */
-    generateSummary(report) {
-        const { summary, score, rulesExecuted } = report;
-        const issues = summary.critical + summary.errors + summary.warnings + summary.info;
-        if (issues === 0) {
-            return `✅ All ${rulesExecuted} validation rules passed (Score: ${score}/100)`;
-        }
-        const parts = [];
-        if (summary.critical > 0)
-            parts.push(`${summary.critical} critical`);
-        if (summary.errors > 0)
-            parts.push(`${summary.errors} errors`);
-        if (summary.warnings > 0)
-            parts.push(`${summary.warnings} warnings`);
-        if (summary.info > 0)
-            parts.push(`${summary.info} info`);
-        return `⚠️ Found ${parts.join(', ')} (Score: ${score}/100)`;
+getCriticalIssues(report, ValidationReport);
+string[];
+{
+    return report.results
+        .filter(r => !r.result.passed && (r.severity === ValidationSeverity.CRITICAL || r.severity === ValidationSeverity.ERROR))
+        .map(r => r.result.message);
+}
+/**
+ * Generate a summary string from a validation report
+ */
+generateSummary(report, ValidationReport);
+string;
+{
+    const { summary, score, rulesExecuted } = report;
+    const issues = summary.critical + summary.errors + summary.warnings + summary.info;
+    if (issues === 0) {
+        return `✅ All ${rulesExecuted} validation rules passed (Score: ${score}/100)`;
     }
-};
+    const parts = [];
+    if (summary.critical > 0)
+        parts.push(`${summary.critical} critical`);
+    if (summary.errors > 0)
+        parts.push(`${summary.errors} errors`);
+    if (summary.warnings > 0)
+        parts.push(`${summary.warnings} warnings`);
+    if (summary.info > 0)
+        parts.push(`${summary.info} info`);
+    return `⚠️ Found ${parts.join(', ')} (Score: ${score}/100)`;
+}
+;
 //# sourceMappingURL=index.js.map
