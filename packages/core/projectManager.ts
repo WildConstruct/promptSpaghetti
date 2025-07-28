@@ -57,7 +57,7 @@ export interface PSGFile {
   description?: string;
   tags: string;
   author?: string;
-  version: string;,
+  version: string;
   created: Date;
   thumbnail?: string;
 };
